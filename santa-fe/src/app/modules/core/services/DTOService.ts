@@ -2282,7 +2282,7 @@ export class DTOService {
       },
       graph: {
         scatterGraph: null,
-        pieGraph: null
+        pieGraphLeft: null
       }
     }
 

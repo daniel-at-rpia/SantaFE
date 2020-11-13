@@ -861,6 +861,6 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   },
   graph: {
     scatterGraph: am4Charts.XYChart;
-    pieGraph: am4Charts.PieChart;
+    pieGraphLeft: am4Charts.PieChart;
   }
 }

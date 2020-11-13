@@ -204,9 +204,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   public onClickShowMoreTraceTrades() {
     this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = true;
     //trigger ngOnChange to re-render charts
-    if (this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
-      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
-      this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
+    if (this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft);
+      this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft = null;
     }
     if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
       this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
@@ -244,9 +244,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
       this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
     }
-    if (this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
-      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
-      this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
+    if (this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft) {
+      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft);
+      this.rowData.data.traceTradeVisualizer.graph.pieGraphLeft = null;
     }
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
     this.rowData.data.traceTradeVisualizer = copy;

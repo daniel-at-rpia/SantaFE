@@ -23,16 +23,16 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   }
   constructor(private graphService: GraphService) {};
   public ngOnDestroy() {
-    if (!!this.traceTrades && !!this.traceTrades.graph.pieGraph && !!this.traceTrades.graph.scatterGraph) {
+    if (!!this.traceTrades && !!this.traceTrades.graph.pieGraphLeft && !!this.traceTrades.graph.scatterGraph) {
       this.traceTrades.state.graphReceived = false;
       try {
         if (this.traceTrades.graph.scatterGraph) {
           this.graphService.destoryGraph(this.traceTrades.graph.scatterGraph);
           this.traceTrades.graph.scatterGraph = null;
         }
-        if (this.traceTrades.graph.pieGraph) {
-          this.graphService.destoryGraph(this.traceTrades.graph.pieGraph);
-          this.traceTrades.graph.pieGraph = null;
+        if (this.traceTrades.graph.pieGraphLeft) {
+          this.graphService.destoryGraph(this.traceTrades.graph.pieGraphLeft);
+          this.traceTrades.graph.pieGraphLeft = null;
         }
       } catch (err) {
         if (err && err.message === 'EventDispatched is disposed') {
@@ -50,7 +50,7 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
         if (!!this.showData && !this.traceTrades.state.graphReceived && this.traceTrades.data.displayList.length > 0 && !!this.traceTrades.state.showGraphs) {
           this.traceTrades.state.graphReceived = true;
           this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
-          this.traceTrades.graph.pieGraph = this.graphService.generateTraceTradeCounterPartyGraph(this.traceTrades)
+          this.traceTrades.graph.pieGraphLeft = this.graphService.generateTraceTradeCounterPartyGraph(this.traceTrades)
         }
       }
     }

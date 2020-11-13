@@ -927,9 +927,9 @@ export class SantaTable implements OnInit, OnChanges {
         fullWidthNode = params.api.getPinnedTopRow(params.node.rowIndex+1) as any;  // skip AgGrid's unnecessary type checking
       }
       if (targetRow.data.traceTradeVisualizer) {
-        if (targetRow.data.traceTradeVisualizer.graph.pieGraph) {
-          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraph);
-          targetRow.data.traceTradeVisualizer.graph.pieGraph = null;
+        if (targetRow.data.traceTradeVisualizer.graph.pieGraphLeft) {
+          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphLeft);
+          targetRow.data.traceTradeVisualizer.graph.pieGraphLeft = null;
         }
         if (targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
           this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
@@ -961,9 +961,9 @@ export class SantaTable implements OnInit, OnChanges {
 
   private getAllTraceTrades(targetRow: SecurityTableRowDTO, isPinnedFullWidth: boolean = false) {
     if (!!targetRow.data.traceTradeVisualizer) {
-      if (!!targetRow.data.traceTradeVisualizer.graph.pieGraph) {
-        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraph);
-        targetRow.data.traceTradeVisualizer.graph.pieGraph = null;
+      if (!!targetRow.data.traceTradeVisualizer.graph.pieGraphLeft) {
+        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphLeft);
+        targetRow.data.traceTradeVisualizer.graph.pieGraphLeft = null;
       }
       if (!!targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
         this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
