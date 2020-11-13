@@ -1812,7 +1812,7 @@ export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
 
 export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
 
-export const TRACE_SCATTER_GRAPH_ID = 'traceScatterGraphId';
+export const TRACE_SCATTER_GRAPH_ID = 'traceScatterGraphID';
 
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
