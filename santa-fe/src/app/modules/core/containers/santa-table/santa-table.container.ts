@@ -931,18 +931,7 @@ export class SantaTable implements OnInit, OnChanges {
         fullWidthNode = params.api.getPinnedTopRow(params.node.rowIndex+1) as any;  // skip AgGrid's unnecessary type checking
       }
       if (targetRow.data.traceTradeVisualizer) {
-        if (targetRow.data.traceTradeVisualizer.graph.pieGraphLeft) {
-          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphLeft);
-          targetRow.data.traceTradeVisualizer.graph.pieGraphLeft = null;
-        }
-        if (targetRow.data.traceTradeVisualizer.graph.pieGraphRight) {
-          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphRight);
-          targetRow.data.traceTradeVisualizer.graph.pieGraphRight = null;
-        }
-        if (targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
-          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
-          targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
-        }
+        this.graphService.destroyMultipleGraphs(targetRow.data.traceTradeVisualizer.graph);
         targetRow.data.traceTradeVisualizer.state.graphReceived = false;
       }
       fullWidthNode.data.rowDTO = this.utilityService.deepCopy(targetRow);
@@ -969,18 +958,7 @@ export class SantaTable implements OnInit, OnChanges {
 
   private getAllTraceTrades(targetRow: SecurityTableRowDTO, isPinnedFullWidth: boolean = false) {
     if (!!targetRow.data.traceTradeVisualizer) {
-      if (!!targetRow.data.traceTradeVisualizer.graph.pieGraphLeft) {
-        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphLeft);
-        targetRow.data.traceTradeVisualizer.graph.pieGraphLeft = null;
-      }
-      if (!!targetRow.data.traceTradeVisualizer.graph.pieGraphRight) {
-        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraphRight);
-        targetRow.data.traceTradeVisualizer.graph.pieGraphRight = null;
-      }
-      if (!!targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
-        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
-        targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
-      }
+      this.graphService.destroyMultipleGraphs(targetRow.data.traceTradeVisualizer.graph)
     }
     const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
     const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];

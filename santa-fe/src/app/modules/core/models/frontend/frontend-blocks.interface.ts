@@ -382,3 +382,7 @@ export interface TraceTradeBlock {
   iSpread: string;
   parSpread: string;
 }
+
+export interface VisualizerGraphsBlock {
+  [property: string]: am4charts.XYChart | am4charts.PieChart;
+}

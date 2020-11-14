@@ -27,21 +27,10 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   }
   constructor(private graphService: GraphService) {};
   public ngOnDestroy() {
-    if (!!this.traceTrades && !!this.traceTrades.graph.pieGraphLeft && !!this.traceTrades.graph.scatterGraph) {
+    if (!!this.traceTrades) {
       this.traceTrades.state.graphReceived = false;
       try {
-        if (this.traceTrades.graph.scatterGraph) {
-          this.graphService.destoryGraph(this.traceTrades.graph.scatterGraph);
-          this.traceTrades.graph.scatterGraph = null;
-        }
-        if (this.traceTrades.graph.pieGraphLeft) {
-          this.graphService.destoryGraph(this.traceTrades.graph.pieGraphLeft);
-          this.traceTrades.graph.pieGraphLeft = null;
-        }
-        if (this.traceTrades.graph.pieGraphRight) {
-          this.graphService.destoryGraph(this.traceTrades.graph.pieGraphRight);
-          this.traceTrades.graph.pieGraphRight = null;
-        }
+        this.graphService.destroyMultipleGraphs(this.traceTrades.graph)
       } catch (err) {
         if (err && err.message === 'EventDispatched is disposed') {
           console.log('dispose misbehavior captured');

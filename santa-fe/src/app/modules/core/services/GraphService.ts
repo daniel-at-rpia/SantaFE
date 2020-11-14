@@ -13,7 +13,8 @@ import { UtilityService } from './UtilityService';
 import {
   SecurityGroupPieChartBlock,
   SecurityGroupPieChartDataBlock,
-  ObligorChartCategoryBlock
+  ObligorChartCategoryBlock,
+  VisualizerGraphsBlock
 } from 'FEModels/frontend-blocks.interface';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import {
@@ -39,7 +40,7 @@ export class GraphService {
     private utility: UtilityService
   ) { }
 
-    public destoryGraph(chart: am4charts.XYChart|am4charts.PieChart) {
+    public destroyGraph(chart: am4charts.XYChart|am4charts.PieChart) {
       chart.dispose();
       return null;
     }
@@ -48,6 +49,15 @@ export class GraphService {
       chart.dispose()
       chart.series.clear();
       return chart;
+    }
+
+    public destroyMultipleGraphs(charts: VisualizerGraphsBlock) {
+      for (let key in charts) {
+        if (!!charts[key]) {
+          this.destroyGraph(charts[key]);
+          charts[key] = null; 
+        }
+      }
     }
 
   // Security Pie Chart 
