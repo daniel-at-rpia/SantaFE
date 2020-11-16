@@ -1348,7 +1348,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'lastTraceVolumeEstimated',
     content: {
-      label: 'Vol Estimated',
+      label: 'Vol (Estimated)',
       attrName: 'lastTraceVolumeEstimated',
       underlineAttrName: 'lastTraceVolumeEstimated',
       blockAttrName: 'lastTrace',
@@ -1370,7 +1370,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'lastTraceVolumeReported',
     content: {
-      label: 'Vol Reported',
+      label: 'Vol (Reported)',
       attrName: 'lastTraceVolumeReported',
       underlineAttrName: 'lastTraceVolumeReported',
       blockAttrName: 'lastTrace',
