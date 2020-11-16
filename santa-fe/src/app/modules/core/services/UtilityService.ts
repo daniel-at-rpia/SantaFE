@@ -677,7 +677,7 @@ export class UtilityService {
     }
     public parseNumberToMillions(number: number, hasUnitSuffix: boolean, decimal: number = 2): string {
       const value = this.round(number/1000000, decimal).toFixed(decimal);
-      if (value === 0) {
+      if (!number || value === 0) {
         return null;
       } else {
         return !!hasUnitSuffix ? `${value}MM` : `${value}`;
