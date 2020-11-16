@@ -9,7 +9,11 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { selectReloadFundDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { PortfolioMetricValues, PortfolioShortNames, BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  SUPPORTED_PORTFOLIO_LIST,
+  BEPortfolioTargetMetricValues
+} from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
@@ -40,9 +44,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
-    portfolioShortNames: PortfolioShortNames
+    supportedFundList: SUPPORTED_PORTFOLIO_LIST
   };
-  portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.FIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.SOF];
   
   constructor(
     private dtoService: DTOService,
@@ -143,7 +146,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private loadStencilFunds() {
-    this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
+    this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
       eachFund.data.portfolioShortName = eachPortfolioName;
       return eachFund;
@@ -159,7 +162,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     funds.sort((fundA, fundB) => {
       const fundAShortName = fundA.data.portfolioShortName;
       const fundBShortName = fundB.data.portfolioShortName;
-      return this.portfolioList.indexOf(fundAShortName) - this.portfolioList.indexOf(fundBShortName);
+      return this.constants.supportedFundList.indexOf(fundAShortName) - this.constants.supportedFundList.indexOf(fundBShortName);
     })
   }
 
@@ -262,10 +265,17 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
     this.state.fetchResult.fundList = [];
     serverReturn.forEach(eachFund => {
-      this.BICsDataProcessingService.setRawBICsData(eachFund);
-      const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-      this.state.fetchResult.fundList.push(newFund);
+      if (this.constants.supportedFundList.indexOf(eachFund.portfolioShortName) >= 0) {
+        this.BICsDataProcessingService.setRawBICsData(eachFund);
+        const newFund = this.dtoService.formStructureFundObject(eachFund, false);
+        this.state.fetchResult.fundList.push(newFund);
+      }
     })
-    this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
+    try {
+      this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
+    } catch (err) {
+      console.error('Sort fund failure');
+      this.restfulCommService.logError('Structuring Sort Fund Failure');
+    }
   }
 }

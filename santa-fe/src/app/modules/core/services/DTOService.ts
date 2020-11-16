@@ -1913,40 +1913,7 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
-      data: {
-        date: rawData.date,
-        portfolioId: rawData.portfolioId,
-        portfolioShortName: rawData.portfolioShortName,
-        portfolioNav: rawData.portfolioNav,
-        target: {
-          portfolioTargetId: rawData.target.portfolioTargetId,
-          date: rawData.target.date,
-          portfolioId: rawData.target.portfolioId,
-          target: {
-            cs01: rawData.target.target.Cs01 || 0,
-            creditLeverage: rawData.target.target.CreditLeverage || 0,
-            creditDuration: rawData.target.target.CreditDuration || 0
-          }
-        },
-        currentTotals :{
-          cs01: rawData.currentTotals.Cs01,
-          creditLeverage: rawData.currentTotals.CreditLeverage,
-          creditDuration: rawData.currentTotals.CreditDuration
-        },
-        indexId: rawData.indexId,
-        indexShortName: rawData.indexShortName,
-        indexNav: rawData.indexNav,
-        indexTotals: {
-          cs01: rawData.indexTotals.Cs01,
-          creditLeverage: rawData.indexTotals.CreditLeverage,
-          creditDuration: rawData.indexTotals.CreditDuration
-        },
-        children: [],
-        cs01TargetBar: null,
-        creditLeverageTargetBar: null,
-        creditDurationTargetBar: null,
-        originalBEData: rawData
-      },
+      data: null,
       api: {
         onSubmitMetricValues: null
       },
@@ -1971,29 +1938,67 @@ export class DTOService {
         autoScalingActive: false
       }
     };
-    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
-    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
-    object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
-    if (!!object.data.creditDurationTargetBar) {
-      const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
-      const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
-      object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
-        metric: PortfolioMetricValues.cs01,
-        current: parsedCs01CurrentTotal,
-        target: parsedCs01TargetTotal
+    try {
+      object.data = {
+        date: rawData.date,
+        portfolioId: rawData.portfolioId,
+        portfolioShortName: rawData.portfolioShortName,
+        portfolioNav: rawData.portfolioNav,
+        target: {
+          portfolioTargetId: rawData.target.portfolioTargetId,
+          date: rawData.target.date,
+          portfolioId: rawData.target.portfolioId,
+          target: {
+            cs01: !isStencil ? rawData.target.target.Cs01 : 0,
+            creditLeverage: !isStencil ? rawData.target.target.CreditLeverage : 0,
+            creditDuration: !isStencil ? rawData.target.target.CreditDuration : 0
+          }
+        },
+        currentTotals :{
+          cs01: !isStencil ? rawData.currentTotals.Cs01 : 0,
+          creditLeverage: !isStencil ? rawData.currentTotals.CreditLeverage : 0,
+          creditDuration: !isStencil ? rawData.currentTotals.CreditDuration : 0
+        },
+        indexId: rawData.indexId,
+        indexShortName: rawData.indexShortName,
+        indexNav: rawData.indexNav,
+        indexTotals: {
+          cs01: !isStencil ? rawData.indexTotals.Cs01 : 0,
+          creditLeverage: !isStencil ? rawData.indexTotals.CreditLeverage : 0,
+          creditDuration: !isStencil ? rawData.indexTotals.CreditDuration: 0
+        },
+        children: [],
+        cs01TargetBar: null,
+        creditLeverageTargetBar: null,
+        creditDurationTargetBar: null,
+        originalBEData: rawData
+      };
+      object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
+      object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
+      object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
+      if (!!object.data.creditDurationTargetBar) {
+        const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
+        const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
+        object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
+          metric: PortfolioMetricValues.cs01,
+          current: parsedCs01CurrentTotal,
+          target: parsedCs01TargetTotal
+        }
       }
+      this.processBreakdownDataForStructureFund(
+        object,
+        rawData,
+        isStencil,
+        selectedMetricValue
+      );
+      !isStencil && this.processOverrideDataForStructureFund(
+        object,
+        rawData,
+        selectedMetricValue
+      )
+    } catch (err) {
+      console.warn('Data issue on fund', object, err);
     }
-    this.processBreakdownDataForStructureFund(
-      object,
-      rawData,
-      isStencil,
-      selectedMetricValue
-    );
-    !isStencil && this.processOverrideDataForStructureFund(
-      object,
-      rawData,
-      selectedMetricValue
-    )
     return object;
   }
 
