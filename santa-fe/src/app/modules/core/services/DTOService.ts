@@ -32,7 +32,10 @@
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_HEIGHT_SLIM,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
-      traceTradeNumericalFilterSymbols
+      traceTradeNumericalFilterSymbols,
+      TRACE_SCATTER_GRAPH_ID,
+      TRACE_PIE_GRAPH_LEFT_ID,
+      TRACE_PIE_GRAPH_RIGHT_ID
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -2244,8 +2247,10 @@ export class DTOService {
     const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
-      eventTime: rawData.eventTime,
-      parsedEventTime: moment(rawData.eventTime).format(`HH:mm`),
+      tradeTime: rawData.eventTime,
+      displayTradeTime: moment(rawData.eventTime).format(`HH:mm`),
+      reportingTime: rawData.publishingTime,
+      displayReportingTime: moment(rawData.publishingTime).format(`ddd MMM DD - HH:mm`),
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
@@ -2273,12 +2278,13 @@ export class DTOService {
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false): DTOs.TraceTradesVisualizerDTO {
-    const object = {
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false, previousAvailableFiltersList: Array<string>): DTOs.TraceTradesVisualizerDTO {
+    const object: DTOs.TraceTradesVisualizerDTO = {
       data: {
         displayList: [],
-        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-scatterGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-scatterGraphId`,
-        pieGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-pieGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-pieGraphId`,
+        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_SCATTER_GRAPH_ID}`,
+        pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_LEFT_ID}`,
+        pieGraphRightId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_RIGHT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_RIGHT_ID}`,
         filterList: FilterTraceTradesOptions,
         availableFiltersList: []
       },
@@ -2290,15 +2296,16 @@ export class DTOService {
       },
       graph: {
         scatterGraph: null,
-        pieGraph: null
+        pieGraphLeft: null,
+        pieGraphRight: null
       }
     }
 
     if (targetRow.data.security.data.traceTrades.length > 0) {
       targetRow.data.security.data.traceTrades.sort((tradeA, tradeB) => {
-        if (tradeA.eventTime > tradeB.eventTime) {
+        if (tradeA.tradeTime > tradeB.tradeTime) {
           return -1
-        } else if (tradeB.eventTime > tradeA.eventTime) {
+        } else if (tradeB.tradeTime > tradeA.tradeTime) {
           return 1;
         } else {
           return 0;
@@ -2310,7 +2317,9 @@ export class DTOService {
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
       const isNumericOption = option.includes(numericFilter);
-      if (!!isNumericOption) {
+      if (previousAvailableFiltersList.indexOf(option) > -1 ) {
+        object.data.availableFiltersList.push(option)
+      } else if (!!isNumericOption) {
         const parsedAmount: number = this.utility.getTraceNumericFilterAmount(numericFilter, option);
         const isTradeAvailable = this.utility.getTraceTradesListBasedOnAmount(object.data.displayList, parsedAmount);
         isTradeAvailable.length > 0 && object.data.

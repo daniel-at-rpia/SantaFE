@@ -13,7 +13,8 @@ import { UtilityService } from './UtilityService';
 import {
   SecurityGroupPieChartBlock,
   SecurityGroupPieChartDataBlock,
-  ObligorChartCategoryBlock
+  ObligorChartCategoryBlock,
+  VisualizerGraphsBlock
 } from 'FEModels/frontend-blocks.interface';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import {
@@ -23,8 +24,14 @@ import {
   AmchartPieDataBlock
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
-import { HistoricalTradeVisualizerDTO, TraceTradesVisualizerDTO } from 'FEModels/frontend-models.interface';
-import { TraceTradeCounterPartyList, TradeSideValueEquivalent } from 'Core/constants/securityTableConstants.constant';
+import {
+  HistoricalTradeVisualizerDTO,
+  TraceTradesVisualizerDTO
+} from 'FEModels/frontend-models.interface';
+import {
+  TradeSideValueEquivalent,
+  traceTradePieGraphKeys
+} from 'Core/constants/securityTableConstants.constant';
 
 
 @Injectable()
@@ -33,7 +40,7 @@ export class GraphService {
     private utility: UtilityService
   ) { }
 
-    public destoryGraph(chart: am4charts.XYChart|am4charts.PieChart) {
+    public destroyGraph(chart: am4charts.XYChart|am4charts.PieChart) {
       chart.dispose();
       return null;
     }
@@ -42,6 +49,15 @@ export class GraphService {
       chart.dispose()
       chart.series.clear();
       return chart;
+    }
+
+    public destroyMultipleGraphs(charts: VisualizerGraphsBlock) {
+      for (let key in charts) {
+        if (!!charts[key]) {
+          this.destroyGraph(charts[key]);
+          charts[key] = null; 
+        }
+      }
     }
 
   // Security Pie Chart 
@@ -830,7 +846,7 @@ export class GraphService {
       const chart = am4core.create(dto.data.scatterGraphId, am4charts.XYChart);
       const reverseList = [...dto.data.displayList].reverse();
       const tradeData = reverseList.map(trade => {
-        const time = new Date(trade.eventTime);
+        const time = new Date(trade.tradeTime);
         const object = {
           date: time.getTime(),
           ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
@@ -898,35 +914,37 @@ export class GraphService {
       return chart;
     }
 
-    public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO): am4charts.PieChart {
-      const chart = am4core.create(dto.data.pieGraphId, am4charts.PieChart);
-      const counterPartyData = [];
-      TraceTradeCounterPartyList.forEach(counterParty => {
-        const counterPartyList = dto.data.displayList.filter(trade => trade.counterParty === counterParty);
-        if (counterPartyList.length > 0) {
+    public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO, graphID: string, categories: Array<string>, targetKey: traceTradePieGraphKeys): am4charts.PieChart {
+      const chart = am4core.create(graphID, am4charts.PieChart);
+      const chartData = [];
+      categories.forEach(category => {
+        const categoryList = dto.data.displayList.filter(trade => trade[targetKey] === category);
+        if (categoryList.length > 0) {
           let total = 0;
-          counterPartyList.forEach(trade => {
-            //estimated is preferred, but use actual if there is no estiamted value
+          categoryList.forEach(trade => {
+            //estimated is preferred, but use reported if there is no estimated value
             const value = !!trade.volumeEstimated ? trade.volumeEstimated : trade.volumeReported;
             total += value;
           })
           const object = {
-            counterParty: counterParty,
-            volume: total
+            [targetKey]: category,
+            volume: total,
+            ...(targetKey === traceTradePieGraphKeys.side && {color: category === TradeSideValueEquivalent.Bid ? am4core.color("#26A77B") : am4core.color('#BC2B5D')})
           }
-          counterPartyData.push(object);
+          chartData.push(object);
         }
       })
-      chart.data = counterPartyData;
+      chart.data = chartData;
       let pieSeries = chart.series.push(new am4charts.PieSeries());
       pieSeries.dataFields.value = "volume";
-      pieSeries.dataFields.category = "counterParty";
+      pieSeries.dataFields.category = targetKey;
       pieSeries.slices.template.stroke = am4core.color("#fff");
       pieSeries.slices.template.strokeWidth = 2;
       pieSeries.slices.template.strokeOpacity = 1;
 
       pieSeries.labels.template.maxWidth = 75;
       pieSeries.labels.template.wrap = true;
+      pieSeries.slices.template.propertyFields.fill = "color";
 
       // This creates initial animation
       pieSeries.hiddenState.properties.opacity = 1;

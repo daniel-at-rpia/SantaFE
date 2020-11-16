@@ -366,8 +366,10 @@ export interface StructureBucketDataBlock {
 
 export interface TraceTradeBlock {
   traceTradeId: string;
-  eventTime: string;
-  parsedEventTime: string;
+  tradeTime: string;
+  displayTradeTime: string;
+  reportingTime: string;
+  displayReportingTime: string;
   counterParty: TraceTradeCounterParty;
   side: string;
   volumeEstimated: number;
@@ -381,4 +383,8 @@ export interface TraceTradeBlock {
   gSpread: string;
   iSpread: string;
   parSpread: string;
+}
+
+export interface VisualizerGraphsBlock {
+  [property: string]: am4charts.XYChart | am4charts.PieChart;
 }

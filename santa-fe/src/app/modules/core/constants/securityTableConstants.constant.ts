@@ -1811,9 +1811,14 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
 
 export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
   {
-    headerKey: 'eventTime',
-    headerDisplayLabel: 'Time',
-    attrName: 'parsedEventTime',
+    headerKey: 'displayTradeTime',
+    headerDisplayLabel: 'Trade Time',
+    attrName: 'displayTradeTime',
+    size: 6
+  },{
+    headerKey: 'displayReportingTime',
+    headerDisplayLabel: 'Reporting Time',
+    attrName: 'displayReportingTime',
     size: 8
   },{
     headerKey: 'counterParty',
@@ -1874,6 +1879,12 @@ export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
 
 export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
 
+export const TRACE_SCATTER_GRAPH_ID = 'traceScatterGraphID';
+
+export const TRACE_PIE_GRAPH_LEFT_ID = 'tracePieGraphLeftID';
+
+export const TRACE_PIE_GRAPH_RIGHT_ID = 'tracePieGraphRightID';
+
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
   Client = 'Client',
@@ -1900,6 +1911,11 @@ export enum traceTradeFilterAmounts {
 export enum traceTradeNumericalFilterSymbols {
   greaterThan = '≥',
   lessThan = '≤'
+}
+
+export enum traceTradePieGraphKeys {
+  counterParty = 'counterParty',
+  side = 'side'
 }
 
 export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];

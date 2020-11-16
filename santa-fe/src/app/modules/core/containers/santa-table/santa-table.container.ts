@@ -37,7 +37,10 @@
       SECURITY_TABLE_FINAL_STAGE,
       SECURITY_TABLE_ICONS,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
-      AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
+      AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD,
+      TRACE_SCATTER_GRAPH_ID,
+      TRACE_PIE_GRAPH_LEFT_ID,
+      TRACE_PIE_GRAPH_RIGHT_ID
     } from 'Core/constants/securityTableConstants.constant';
     import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
@@ -118,7 +121,10 @@ export class SantaTable implements OnInit, OnChanges {
     agGridDetailRowDefaultCount: AGGRID_DETAIL_ROW_DEFAULT_COUNT,
     agGridDetailRowHeightOffsetOffTheRunCDS: AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS,
     agGridPinnedFullWidthRowKeyword: AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
-    agGridPinnedRowKeyword: AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD
+    agGridPinnedRowKeyword: AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD,
+    traceScatterGraphId: TRACE_SCATTER_GRAPH_ID,
+    tracePieGraphLeftId: TRACE_PIE_GRAPH_LEFT_ID,
+    tracePieGraphRightId: TRACE_PIE_GRAPH_RIGHT_ID
   };
 
   icons = SECURITY_TABLE_ICONS;
@@ -390,8 +396,9 @@ export class SantaTable implements OnInit, OnChanges {
           const copy: AgGridRow = this.utilityService.deepCopy(targetRow);
           copy.rowDTO.state.isExpanded = false;  // always reset the isExpanded flag
           if (copy.rowDTO.data.traceTradeVisualizer) {
-            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-pieGraphId`;
-            copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-scatterGraphId`;
+            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphLeftId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.tracePieGraphLeftId}`;
+            copy.rowDTO.data.traceTradeVisualizer.data.pieGraphRightId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.tracePieGraphRightId}`;
+            copy.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${copy.id}-${this.constants.agGridPinnedRowKeyword}-${this.constants.traceScatterGraphId}`;
           }
           this.tableData.data.agGridPinnedTopRowData.push(copy);
           const fullWidthCell: AgGridRow = this.utilityService.deepCopy(copy);
@@ -399,8 +406,9 @@ export class SantaTable implements OnInit, OnChanges {
           fullWidthCell.isFullWidth = true;
           if (!!fullWidthCell.rowDTO.data.traceTradeVisualizer) {
             fullWidthCell.rowDTO.data.traceTradeVisualizer.state.graphReceived = false;
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphId = `${fullWidthCell.id}-pieGraphId`;
-            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-scatterGraphId`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphLeftId = `${fullWidthCell.id}-${this.constants.tracePieGraphLeftId}`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.pieGraphRightId = `${fullWidthCell.id}-${this.constants.tracePieGraphRightId}`;
+            fullWidthCell.rowDTO.data.traceTradeVisualizer.data.scatterGraphId = `${fullWidthCell.id}-${this.constants.traceScatterGraphId}`;
           }
           fullWidthCell.rowDTO.style.rowHeight = 0;
           this.tableData.data.agGridPinnedTopRowData.push(fullWidthCell);
@@ -923,14 +931,7 @@ export class SantaTable implements OnInit, OnChanges {
         fullWidthNode = params.api.getPinnedTopRow(params.node.rowIndex+1) as any;  // skip AgGrid's unnecessary type checking
       }
       if (targetRow.data.traceTradeVisualizer) {
-        if (targetRow.data.traceTradeVisualizer.graph.pieGraph) {
-          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraph);
-          targetRow.data.traceTradeVisualizer.graph.pieGraph = null;
-        }
-        if (targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
-          this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
-          targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
-        }
+        this.graphService.destroyMultipleGraphs(targetRow.data.traceTradeVisualizer.graph);
         targetRow.data.traceTradeVisualizer.state.graphReceived = false;
       }
       fullWidthNode.data.rowDTO = this.utilityService.deepCopy(targetRow);
@@ -957,14 +958,7 @@ export class SantaTable implements OnInit, OnChanges {
 
   private getAllTraceTrades(targetRow: SecurityTableRowDTO, isPinnedFullWidth: boolean = false) {
     if (!!targetRow.data.traceTradeVisualizer) {
-      if (!!targetRow.data.traceTradeVisualizer.graph.pieGraph) {
-        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.pieGraph);
-        targetRow.data.traceTradeVisualizer.graph.pieGraph = null;
-      }
-      if (!!targetRow.data.traceTradeVisualizer.graph.scatterGraph) {
-        this.graphService.destoryGraph(targetRow.data.traceTradeVisualizer.graph.scatterGraph);
-        targetRow.data.traceTradeVisualizer.graph.scatterGraph = null;
-      }
+      this.graphService.destroyMultipleGraphs(targetRow.data.traceTradeVisualizer.graph)
     }
     const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
     const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
@@ -994,11 +988,8 @@ export class SantaTable implements OnInit, OnChanges {
           if (rawDataTrades.length > 0) {
             const traceTradeData: Array<TraceTradeBlock> = rawDataTrades.map(trade => this.dtoService.formTraceTradeBlockObject(trade, targetRow.data.security));
             targetRow.data.security.data.traceTrades = traceTradeData;
-            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow, isPinnedFullWidth);
+            targetRow.data.traceTradeVisualizer = this.dtoService.formTraceTradesVisualizerDTO(targetRow, isPinnedFullWidth, previousAvailableFiltersList);
             targetRow.data.traceTradeVisualizer.state.showGraphs = targetRow.data.security.data.traceTrades.length > 2;
-            if (previousAvailableFiltersList.length > 0) {
-              targetRow.data.traceTradeVisualizer.data.availableFiltersList = previousAvailableFiltersList;
-            }
             targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayAllState;
             if (!!previousTraceTradesDisplayAllState) {
               if (previousDisplayListCopy.length > 0) {

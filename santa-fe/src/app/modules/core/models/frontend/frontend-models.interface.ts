@@ -846,7 +846,8 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
     displayList: Array<TraceTradeBlock>;
     scatterGraphId: string;
-    pieGraphId: string;
+    pieGraphLeftId: string;
+    pieGraphRightId: string;
     filterList: Array<string>;
     availableFiltersList: Array<string>;
   },
@@ -858,6 +859,7 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   },
   graph: {
     scatterGraph: am4Charts.XYChart;
-    pieGraph: am4Charts.PieChart;
+    pieGraphLeft: am4Charts.PieChart;
+    pieGraphRight: am4Charts.PieChart;
   }
 }
