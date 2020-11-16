@@ -1346,13 +1346,14 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'lastTraceVolumeEstimated',
     content: {
-      label: 'Vol (Estimated)',
+      label: 'Vol Estimated (MM)',
       attrName: 'lastTraceVolumeEstimated',
       underlineAttrName: 'lastTraceVolumeEstimated',
       blockAttrName: 'lastTrace',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1367,13 +1368,14 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'lastTraceVolumeReported',
     content: {
-      label: 'Vol (Reported)',
+      label: 'Vol Reported (MM)',
       attrName: 'lastTraceVolumeReported',
       underlineAttrName: 'lastTraceVolumeReported',
       blockAttrName: 'lastTrace',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
