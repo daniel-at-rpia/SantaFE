@@ -2266,7 +2266,7 @@ export class DTOService {
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false): DTOs.TraceTradesVisualizerDTO {
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false, previousAvailableFiltersList: Array<string>): DTOs.TraceTradesVisualizerDTO {
     const object: DTOs.TraceTradesVisualizerDTO = {
       data: {
         displayList: [],
@@ -2305,7 +2305,9 @@ export class DTOService {
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
       const isNumericOption = option.includes(numericFilter);
-      if (!!isNumericOption) {
+      if (previousAvailableFiltersList.indexOf(option) > -1 ) {
+        object.data.availableFiltersList.push(option)
+      } else if (!!isNumericOption) {
         const parsedAmount: number = this.utility.getTraceNumericFilterAmount(numericFilter, option);
         const isTradeAvailable = this.utility.getTraceTradesListBasedOnAmount(object.data.displayList, parsedAmount);
         isTradeAvailable.length > 0 && object.data.
