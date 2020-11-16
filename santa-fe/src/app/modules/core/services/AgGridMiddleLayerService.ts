@@ -48,9 +48,6 @@
       DEFAULT_DRIVER_IDENTIFIER,
       TRACE_ALERT_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
-    import {
-      traceTradeNumericalFilterSymbols,
-    } from 'Core/constants/securityTableConstants.constant'
   //
 
 @Injectable()
