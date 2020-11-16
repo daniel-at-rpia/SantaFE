@@ -159,7 +159,8 @@ export class AgGridMiddleLayerService {
               if (params.context.componentParent.tableName === 'tradeMain') {
                 return this.utilityService.parseNumberToMillions(params.value, false);
               } else {
-                return this.utilityService.parseNumberToCommas(params.value);
+                const displayValue = !!params.value ? this.utilityService.parseNumberToCommas(params.value) : null;
+                return displayValue;
               }
             }
           }
