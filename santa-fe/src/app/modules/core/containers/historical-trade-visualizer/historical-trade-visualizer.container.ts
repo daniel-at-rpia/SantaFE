@@ -34,18 +34,7 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
     // }
     this.historyData.state.graphReceived = false;
     try {
-      if (this.historyData.graph.positionPie) {
-        this.graphService.destoryGraph(this.historyData.graph.positionPie);
-        this.historyData.graph.positionPie = null;
-      }
-      if (this.historyData.graph.volumeLeftPie) {
-        this.graphService.destoryGraph(this.historyData.graph.volumeLeftPie);
-        this.historyData.graph.volumeLeftPie = null;
-      }
-      if (this.historyData.graph.volumeRightPie) {
-        this.graphService.destoryGraph(this.historyData.graph.volumeRightPie);
-        this.historyData.graph.volumeRightPie = null;
-      }
+      this.graphService.destroyMultipleGraphs(this.historyData.graph);
     } catch(err) {
       if (err && err.message == 'EventDispatcher is disposed') {
         console.log('dispose misbehavior captured');

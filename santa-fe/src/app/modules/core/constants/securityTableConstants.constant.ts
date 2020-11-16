@@ -52,7 +52,8 @@ export const SecurityTableHeaderConfigGroups = {
   cs01: 'CS01 (k)',
   delta: 'Deltas',
   securityInfo: 'Security Info',
-  ownership: 'Ownership'
+  ownership: 'Ownership',
+  lastTrace: 'Trace Last Print (IG > 1MM / HY > 500k) (Vol in MM)'
 };
 
 export const SECURITY_TABLE_ICONS = {
@@ -265,29 +266,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
-    key: 'alertMessage',
-    content: {
-      label: 'Alert Message',
-      attrName: 'alertMessage',
-      underlineAttrName: 'alertMessage',
-      blockAttrName: 'alert',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: true,
-          disabled: false,
-          groupShow: false
-        }
-      }
-    }
-  },
-  {
     key: 'alertTraceCounterParty',
     content: {
       label: 'Counter Party',
@@ -309,75 +287,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         }
       }
     }
-  },
-  {
-    key: 'alertTraceSide',
-    content: {
-      label: 'Side',
-      attrName: 'alertTraceSide',
-      underlineAttrName: 'alertTraceSide',
-      blockAttrName: 'alert',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isDataTypeText: true,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: true,
-          disabled: false,
-          groupShow: true
-        }
-      }
-    }
-  },
-  {
-    key: 'alertTraceVolumeEstimated',
-    content: {
-      label: 'Vol Estimated (K)',
-      attrName: 'alertTraceVolumeEstimated',
-      underlineAttrName: 'alertTraceVolumeEstimated',
-      blockAttrName: 'alert',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: true,
-          disabled: false,
-          groupShow: true
-        }
-      }
-    }
-  },
-  {
-    key: 'alertTraceVolumeReported',
-    content: {
-      label: 'Vol Reported (K)',
-      attrName: 'alertTraceVolumeReported',
-      underlineAttrName: 'alertTraceVolumeReported',
-      blockAttrName: 'alert',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: true,
-          disabled: false,
-          groupShow: true
-        }
-      }
-    }
-  },
-  {
+  },{
     key: 'alertTracePrice',
     content: {
       label: 'Px',
@@ -398,8 +308,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         }
       }
     }
-  },
-  {
+  },{
     key: 'alertTraceSpread',
     content: {
       label: 'Sprd',
@@ -420,8 +329,71 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         }
       }
     }
-  },
-  {
+  },{
+    key: 'alertTraceVolumeEstimated',
+    content: {
+      label: 'Vol (Estimated)',
+      attrName: 'alertTraceVolumeEstimated',
+      underlineAttrName: 'alertTraceVolumeEstimated',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
+    key: 'alertTraceVolumeReported',
+    content: {
+      label: 'Vol (Reported)',
+      attrName: 'alertTraceVolumeReported',
+      underlineAttrName: 'alertTraceVolumeReported',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
+    key: 'alertMessage',
+    content: {
+      label: 'Alert Message',
+      attrName: 'alertMessage',
+      underlineAttrName: 'alertMessage',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: false
+        }
+      }
+    }
+  },{
     key: 'bestQuote',
     content: {
       label: 'Best Quote (Bid vs Ask)',
@@ -1330,6 +1302,94 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'lastTraceSpread',
+    content: {
+      label: 'Spread',
+      attrName: 'lastTraceSpread',
+      underlineAttrName: 'lastTraceSpread',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'lastTracePrice',
+    content: {
+      label: 'Price',
+      attrName: 'lastTracePrice',
+      underlineAttrName: 'lastTracePrice',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'lastTraceVolumeEstimated',
+    content: {
+      label: 'Vol (Estimated)',
+      attrName: 'lastTraceVolumeEstimated',
+      underlineAttrName: 'lastTraceVolumeEstimated',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'lastTraceVolumeReported',
+    content: {
+      label: 'Vol (Reported)',
+      attrName: 'lastTraceVolumeReported',
+      underlineAttrName: 'lastTraceVolumeReported',
+      blockAttrName: 'lastTrace',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDriverDependent: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
+      tableSpecifics: {
+        default: {
+          active: true,
+          disabled: false,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
     key: 'cs01CadCurrent',
     content: {
       label: 'CS01 Cad',
@@ -1337,6 +1397,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01CadCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1354,6 +1415,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01LocalCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1371,6 +1433,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01CadFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1389,6 +1452,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01LocalFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1529,6 +1593,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1548,6 +1613,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1566,6 +1632,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1616,7 +1683,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
 
 const POSITION_ALERT_HEADERS = ['hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition'];
 
-const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceSide', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
+const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
 
 const TRACE_ALERT_EXCLUDED_HEADERS = SecurityTableHeaderConfigs.filter(header => header.key.indexOf('Trace') === -1 && !!header.content.tableSpecifics.tradeAlert && !!header.content.tableSpecifics.tradeAlert.active).map(newHeader => newHeader.key);
 
@@ -1634,7 +1701,7 @@ export const SecurityTableAlertHeaderConfigs: SecurityTableSpecificAlertHeaderCo
     exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
   },
   trace: {
-    include: ['alertTime', 'alertMessage', ...TRACE_ALERT_HEADERS],
+    include: ['alertTime', 'alertMessage', 'alertSide',...TRACE_ALERT_HEADERS],
     exclude: TRACE_ALERT_EXCLUDED_HEADERS
   },
   all: {
@@ -1744,9 +1811,14 @@ export const TradeHistoryHeaderConfigList: Array<TradeHistoryHeaderConfigStub> =
 
 export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
   {
-    headerKey: 'eventTime',
-    headerDisplayLabel: 'Time',
-    attrName: 'parsedEventTime',
+    headerKey: 'displayTradeTime',
+    headerDisplayLabel: 'Trade Time',
+    attrName: 'displayTradeTime',
+    size: 6
+  },{
+    headerKey: 'displayReportingTime',
+    headerDisplayLabel: 'Reporting Time',
+    attrName: 'displayReportingTime',
     size: 8
   },{
     headerKey: 'counterParty',
@@ -1807,6 +1879,12 @@ export const AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD = 'fullWidth';
 
 export const AGGRID_PINNED_FULL_WIDTH_PINNED_ROW_KEYWORD = 'pinned';
 
+export const TRACE_SCATTER_GRAPH_ID = 'traceScatterGraphID';
+
+export const TRACE_PIE_GRAPH_LEFT_ID = 'tracePieGraphLeftID';
+
+export const TRACE_PIE_GRAPH_RIGHT_ID = 'tracePieGraphRightID';
+
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
   Client = 'Client',
@@ -1831,7 +1909,13 @@ export enum traceTradeFilterAmounts {
 }
 
 export enum traceTradeNumericalFilterSymbols {
-  greaterThan = '≥'
+  greaterThan = '≥',
+  lessThan = '≤'
+}
+
+export enum traceTradePieGraphKeys {
+  counterParty = 'counterParty',
+  side = 'side'
 }
 
 export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];

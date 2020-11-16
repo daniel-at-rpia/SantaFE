@@ -32,11 +32,12 @@
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
-      AlertSubTypes
+      AlertSubTypes,
+      TRACE_ALERT_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-    import { traceTradeFilterAmounts } from '../constants/securityTableConstants.constant';
+    import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
   // dependencies
 
 @Injectable()
@@ -61,6 +62,10 @@ export class UtilityService {
       } else {
         return null;
       }
+    }
+
+    public isObjectEmpty(object: object): boolean {
+      return _.isEmpty(object);
     }
 
     public deepObjectMerge(objectA: object, objectB: object): object {
@@ -672,7 +677,7 @@ export class UtilityService {
     }
     public parseNumberToMillions(number: number, hasUnitSuffix: boolean, decimal: number = 2): string {
       const value = this.round(number/1000000, decimal).toFixed(decimal);
-      if (value === 0) {
+      if (!number || value === 0) {
         return null;
       } else {
         return !!hasUnitSuffix ? `${value}MM` : `${value}`;
@@ -1065,6 +1070,12 @@ export class UtilityService {
       return newList;
     }
 
+    public formatTraceReportedValues(amount: number): string {
+      const reportedInteger = amount / TRACE_ALERT_REPORTED_THRESHOLD;
+      const roundedVolumeReported = Math.floor(reportedInteger);
+      return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
+    }
+
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;
@@ -1273,7 +1284,7 @@ export class UtilityService {
     }
 
     public sortOverrideRows(breakdownData: DTOs.PortfolioBreakdownDTO) {
-      breakdownData.data.displayCategoryList.sort((rowA, rowB) => {
+      breakdownData.data.rawCs01CategoryList.sort((rowA, rowB) => {
         if (rowA.data.displayCategory < rowB.data.displayCategory) {
           return -1
         } else if (rowA.data.displayCategory > rowB.data.displayCategory) {
@@ -1281,7 +1292,16 @@ export class UtilityService {
         } else {
           return 0;
         }
-      })
+      });
+      breakdownData.data.rawLeverageCategoryList.sort((rowA, rowB) => {
+        if (rowA.data.displayCategory < rowB.data.displayCategory) {
+          return -1
+        } else if (rowA.data.displayCategory > rowB.data.displayCategory) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
     }
 
   // structuring specific end

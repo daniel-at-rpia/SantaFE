@@ -27,6 +27,16 @@ export enum PortfolioShortNames {
   BBB = 'BBB'
 }
 
+export const SUPPORTED_PORTFOLIO_LIST: Array<PortfolioShortNames> = [
+  PortfolioShortNames.FIP,
+  PortfolioShortNames.BBB,
+  PortfolioShortNames.CIP,
+  PortfolioShortNames.STIP,
+  PortfolioShortNames.AGB,
+  PortfolioShortNames.DOF,
+  PortfolioShortNames.SOF
+];
+
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
   creditLeverage = 'Credit Leverage',

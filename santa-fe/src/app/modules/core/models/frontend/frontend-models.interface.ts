@@ -140,15 +140,10 @@ export interface SecurityDTO extends BasicDTOStructure {
         sendEmail: boolean;
       },
       alertTraceCounterParty?: TraceTradeCounterParty;
-      alertTraceSide?: string;
       alertTraceVolumeEstimated?: number;
       alertTraceVolumeReported?: number;
       alertTracePrice?: number;
       alertTraceSpread?: number;
-      alertTraceDisplayVolumeEstimated?: string;
-      alertTraceDisplayVolumeReported?: string;
-      alertTraceDisplayPrice?: string;
-      alertTraceDisplaySpread?: string;
     }
     tradeHistory: Array<TradeDTO>;
     traceTrades: Array<TraceTradeBlock>;
@@ -156,6 +151,12 @@ export interface SecurityDTO extends BasicDTOStructure {
     bicsLevel2: string;
     bicsLevel3: string;
     bicsLevel4: string;
+    lastTrace: {
+      lastTraceSpread: number;
+      lastTracePrice: number;
+      lastTraceVolumeEstimated: number;
+      lastTraceVolumeReported: number;
+    }
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -587,10 +588,6 @@ export interface AlertDTO extends BasicDTOStructure {
     traceVolumeReported?: number;
     tracePrice?: number;
     traceSpread?: number;
-    traceDisplayVolumeEstimated?: string;
-    traceDisplayVolumeReported?: string;
-    traceDisplayPrice?: string;
-    traceDisplaySpread?: string;
   },
   state: {
     isRead: boolean;
@@ -780,6 +777,8 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
       updatedCreditDuration: boolean;
       errorMessage: string;
     }
+    autoScalingAvailable: boolean;
+    autoScalingActive: boolean;
   }
 }
 
@@ -847,7 +846,8 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
     displayList: Array<TraceTradeBlock>;
     scatterGraphId: string;
-    pieGraphId: string;
+    pieGraphLeftId: string;
+    pieGraphRightId: string;
     filterList: Array<string>;
     availableFiltersList: Array<string>;
   },
@@ -859,6 +859,7 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   },
   graph: {
     scatterGraph: am4Charts.XYChart;
-    pieGraph: am4Charts.PieChart;
+    pieGraphLeft: am4Charts.PieChart;
+    pieGraphRight: am4Charts.PieChart;
   }
 }

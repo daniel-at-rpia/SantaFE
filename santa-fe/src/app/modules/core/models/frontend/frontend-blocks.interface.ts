@@ -10,7 +10,8 @@ import * as DTOs from 'FEModels/frontend-models.interface';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
-  ColumnApi
+  ColumnApi,
+  ValueFormatterParams
 } from 'ag-grid-community';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
@@ -166,6 +167,7 @@ export interface AgGridColumnDefinition {
   }
   children?: Array<AgGridColumnDefinition>;
   columnGroupShow?: string;
+  valueFormatter?: (params: ValueFormatterParams) => string;
 }
 
 export interface AgGridRowNode {
@@ -364,8 +366,10 @@ export interface StructureBucketDataBlock {
 
 export interface TraceTradeBlock {
   traceTradeId: string;
-  eventTime: string;
-  parsedEventTime: string;
+  tradeTime: string;
+  displayTradeTime: string;
+  reportingTime: string;
+  displayReportingTime: string;
   counterParty: TraceTradeCounterParty;
   side: string;
   volumeEstimated: number;
@@ -379,4 +383,8 @@ export interface TraceTradeBlock {
   gSpread: string;
   iSpread: string;
   parSpread: string;
+}
+
+export interface VisualizerGraphsBlock {
+  [property: string]: am4charts.XYChart | am4charts.PieChart;
 }

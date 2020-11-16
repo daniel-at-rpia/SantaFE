@@ -32,6 +32,10 @@ export interface BEFullSecurityDTO {
   security: BESecurityDTO;
   bestQuotes: BEBestQuoteDTO;
   positions: Array<BEPortfolioDTO>;
+  lastTraceSpread: number;
+  lastTracePrice: number;
+  lastTraceVolumeEstimated: number;
+  lastTraceVolumeReported: number;
 }
 
 export interface BEPortfolioDTO {
@@ -592,7 +596,7 @@ export interface BEMetricBreakdowns {
     Cs01?: BEStructuringBreakdownSingleEntry;
     CreditDuration?: BEStructuringBreakdownSingleEntry;
   },
-  view: string;
+  view?: string;
 }
 
 export interface BEStructuringBreakdownBlock {

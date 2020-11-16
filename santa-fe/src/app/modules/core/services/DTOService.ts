@@ -23,7 +23,8 @@
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
       AlertSubTypes,
-      ALERT_STATUS_SORTINGVALUE_UNIT
+      ALERT_STATUS_SORTINGVALUE_UNIT,
+      TRACE_ALERT_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -31,7 +32,10 @@
       AGGRID_ROW_HEIGHT,
       AGGRID_ROW_HEIGHT_SLIM,
       AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
-      traceTradeNumericalFilterSymbols
+      traceTradeNumericalFilterSymbols,
+      TRACE_SCATTER_GRAPH_ID,
+      TRACE_PIE_GRAPH_LEFT_ID,
+      TRACE_PIE_GRAPH_RIGHT_ID
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -248,7 +252,13 @@ export class DTOService {
         bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
         bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
         bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
-        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
+        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null,
+        lastTrace: {
+          lastTracePrice: null,
+          lastTraceSpread: null,
+          lastTraceVolumeReported: null,
+          lastTraceVolumeEstimated: null
+        }
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -404,6 +414,13 @@ export class DTOService {
     dto.data.cs01LocalFirmInK = this.utility.parseNumberToThousands(dto.data.cs01LocalFirm, false);
   }
 
+  public appendLastTraceInfoToSecurityDTO(dto: DTOs.SecurityDTO, rawData: BEModels.BEFullSecurityDTO) {
+    dto.data.lastTrace.lastTracePrice = rawData.lastTracePrice;
+    dto.data.lastTrace.lastTraceSpread = rawData.lastTraceSpread;
+    dto.data.lastTrace.lastTraceVolumeEstimated = rawData.lastTraceVolumeEstimated;
+    dto.data.lastTrace.lastTraceVolumeReported = rawData.lastTraceVolumeReported;
+  }
+
   public appendAlertInfoToSecurityDTO(
     dto: DTOs.SecurityDTO,
     targetAlert: DTOs.AlertDTO
@@ -429,12 +446,7 @@ export class DTOService {
       alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated,
       alertTraceVolumeReported: targetAlert.data.traceVolumeReported,
       alertTracePrice: targetAlert.data.tracePrice,
-      alertTraceSpread: targetAlert.data.traceSpread,
-      alertTraceDisplayPrice: targetAlert.data.traceDisplayPrice,
-      alertTraceSide: targetAlert.data.traceSide,
-      alertTraceDisplaySpread: targetAlert.data.traceDisplaySpread,
-      alertTraceDisplayVolumeReported: targetAlert.data.traceDisplayVolumeReported,
-      alertTraceDisplayVolumeEstimated: targetAlert.data.traceDisplayVolumeEstimated
+      alertTraceSpread: targetAlert.data.traceSpread
     };
   }
 
@@ -1551,19 +1563,12 @@ export class DTOService {
         }
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
-        const { counterParty, side, volumeEstimated, volumeReported, price, spread } = rawData.trade;
-        const parsedVolumeEstimated = !!volumeEstimated ? +(this.utility.parseNumberToThousands(volumeEstimated, false)) : null;
-        const parsedVolumeReported = !!volumeReported ? +(this.utility.parseNumberToThousands(volumeReported, false)) : null;
+        const { counterParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
         alertDTO.data.traceCounterParty = counterParty;
-        alertDTO.data.traceSide = TradeSideValueEquivalent[side];
-        alertDTO.data.traceVolumeEstimated = parsedVolumeEstimated;
-        alertDTO.data.traceVolumeReported = parsedVolumeReported;
+        alertDTO.data.traceVolumeEstimated = volumeEstimated;
+        alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
-        alertDTO.data.traceDisplayVolumeEstimated = !!alertDTO.data.traceVolumeEstimated ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeEstimated) : null;
-        alertDTO.data.traceDisplayVolumeReported = !!alertDTO.data.traceVolumeReported  ? this.utility.parseNumberToCommas(alertDTO.data.traceVolumeReported ) : null;
-        alertDTO.data.traceDisplayPrice = this.utility.parseTriCoreDriverNumber(alertDTO.data.tracePrice, TriCoreDriverConfig.Price.label, alertDTO.data.security, true) as string;
-        alertDTO.data.traceDisplaySpread = this.utility.parseTriCoreDriverNumber(alertDTO.data.traceSpread, TriCoreDriverConfig.Spread.label, alertDTO.data.security, true) as string;
       }
     }
     if (alertDTO.state.isMarketListVariant) {
@@ -1908,40 +1913,7 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
-      data: {
-        date: rawData.date,
-        portfolioId: rawData.portfolioId,
-        portfolioShortName: rawData.portfolioShortName,
-        portfolioNav: rawData.portfolioNav,
-        target: {
-          portfolioTargetId: rawData.target.portfolioTargetId,
-          date: rawData.target.date,
-          portfolioId: rawData.target.portfolioId,
-          target: {
-            cs01: rawData.target.target.Cs01 || 0,
-            creditLeverage: rawData.target.target.CreditLeverage || 0,
-            creditDuration: rawData.target.target.CreditDuration || 0
-          }
-        },
-        currentTotals :{
-          cs01: rawData.currentTotals.Cs01,
-          creditLeverage: rawData.currentTotals.CreditLeverage,
-          creditDuration: rawData.currentTotals.CreditDuration
-        },
-        indexId: rawData.indexId,
-        indexShortName: rawData.indexShortName,
-        indexNav: rawData.indexNav,
-        indexTotals: {
-          cs01: rawData.indexTotals.Cs01,
-          creditLeverage: rawData.indexTotals.CreditLeverage,
-          creditDuration: rawData.indexTotals.CreditDuration
-        },
-        children: [],
-        cs01TargetBar: null,
-        creditLeverageTargetBar: null,
-        creditDurationTargetBar: null,
-        originalBEData: rawData
-      },
+      data: null,
       api: {
         onSubmitMetricValues: null
       },
@@ -1959,32 +1931,74 @@ export class DTOService {
         modifiedFundTargets: {
           creditLeverage: rawData.target.target.CreditLeverage || 0,
           creditDuration: rawData.target.target.CreditDuration || 0
-        }
+        },
+        autoScalingAvailable: !isStencil 
+          ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
+          : false,
+        autoScalingActive: false
       }
     };
-    object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
-    object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
-    object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
-    if (!!object.data.creditDurationTargetBar) {
-      const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
-      const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
-      object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
-        metric: PortfolioMetricValues.cs01,
-        current: parsedCs01CurrentTotal,
-        target: parsedCs01TargetTotal
+    try {
+      object.data = {
+        date: rawData.date,
+        portfolioId: rawData.portfolioId,
+        portfolioShortName: rawData.portfolioShortName,
+        portfolioNav: rawData.portfolioNav,
+        target: {
+          portfolioTargetId: rawData.target.portfolioTargetId,
+          date: rawData.target.date,
+          portfolioId: rawData.target.portfolioId,
+          target: {
+            cs01: !isStencil ? rawData.target.target.Cs01 : 0,
+            creditLeverage: !isStencil ? rawData.target.target.CreditLeverage : 0,
+            creditDuration: !isStencil ? rawData.target.target.CreditDuration : 0
+          }
+        },
+        currentTotals :{
+          cs01: !isStencil ? rawData.currentTotals.Cs01 : 0,
+          creditLeverage: !isStencil ? rawData.currentTotals.CreditLeverage : 0,
+          creditDuration: !isStencil ? rawData.currentTotals.CreditDuration : 0
+        },
+        indexId: rawData.indexId,
+        indexShortName: rawData.indexShortName,
+        indexNav: rawData.indexNav,
+        indexTotals: {
+          cs01: !isStencil ? rawData.indexTotals.Cs01 : 0,
+          creditLeverage: !isStencil ? rawData.indexTotals.CreditLeverage : 0,
+          creditDuration: !isStencil ? rawData.indexTotals.CreditDuration: 0
+        },
+        children: [],
+        cs01TargetBar: null,
+        creditLeverageTargetBar: null,
+        creditDurationTargetBar: null,
+        originalBEData: rawData
+      };
+      object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
+      object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
+      object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
+      if (!!object.data.creditDurationTargetBar) {
+        const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
+        const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
+        object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
+          metric: PortfolioMetricValues.cs01,
+          current: parsedCs01CurrentTotal,
+          target: parsedCs01TargetTotal
+        }
       }
+      this.processBreakdownDataForStructureFund(
+        object,
+        rawData,
+        isStencil,
+        selectedMetricValue
+      );
+      !isStencil && this.processOverrideDataForStructureFund(
+        object,
+        rawData,
+        selectedMetricValue
+      )
+    } catch (err) {
+      console.warn('Data issue on fund', object, err);
     }
-    this.processBreakdownDataForStructureFund(
-      object,
-      rawData,
-      isStencil,
-      selectedMetricValue
-    );
-    !isStencil && this.processOverrideDataForStructureFund(
-      object,
-      rawData,
-      selectedMetricValue
-    )
     return object;
   }
 
@@ -2238,14 +2252,16 @@ export class DTOService {
     const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
-      eventTime: rawData.eventTime,
-      parsedEventTime: moment(rawData.eventTime).format(`HH:mm`),
+      tradeTime: rawData.eventTime,
+      displayTradeTime: moment(rawData.eventTime).format(`HH:mm`),
+      reportingTime: rawData.publishingTime,
+      displayReportingTime: moment(rawData.publishingTime).format(`ddd MMM DD - HH:mm`),
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeReported,
       displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
-      displayVolumeReported: !!rawData.volumeReported ? this.utility.parseNumberToCommas(rawData.volumeReported) : null,
+      displayVolumeReported: null,
       price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
       yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
       spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
@@ -2254,15 +2270,26 @@ export class DTOService {
       iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
       parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
     }
+    //Set specific display value for volume reported based on the availability of volume estimated
+    if (!!object.volumeReported) {
+      if (!!object.volumeEstimated) {
+        object.displayVolumeReported = this.utility.formatTraceReportedValues(object.volumeReported);
+      } else {
+        object.displayVolumeReported = this.utility.parseNumberToCommas(rawData.volumeReported);
+      }
+    } else {
+      object.displayVolumeReported = null;
+    }
     return object;
   }
 
-  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false): DTOs.TraceTradesVisualizerDTO {
-    const object = {
+  public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false, previousAvailableFiltersList: Array<string>): DTOs.TraceTradesVisualizerDTO {
+    const object: DTOs.TraceTradesVisualizerDTO = {
       data: {
         displayList: [],
-        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-scatterGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-scatterGraphId`,
-        pieGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-pieGraphId` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-pieGraphId`,
+        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_SCATTER_GRAPH_ID}`,
+        pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_LEFT_ID}`,
+        pieGraphRightId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_RIGHT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_RIGHT_ID}`,
         filterList: FilterTraceTradesOptions,
         availableFiltersList: []
       },
@@ -2274,15 +2301,16 @@ export class DTOService {
       },
       graph: {
         scatterGraph: null,
-        pieGraph: null
+        pieGraphLeft: null,
+        pieGraphRight: null
       }
     }
 
     if (targetRow.data.security.data.traceTrades.length > 0) {
       targetRow.data.security.data.traceTrades.sort((tradeA, tradeB) => {
-        if (tradeA.eventTime > tradeB.eventTime) {
+        if (tradeA.tradeTime > tradeB.tradeTime) {
           return -1
-        } else if (tradeB.eventTime > tradeA.eventTime) {
+        } else if (tradeB.tradeTime > tradeA.tradeTime) {
           return 1;
         } else {
           return 0;
@@ -2294,7 +2322,9 @@ export class DTOService {
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
       const isNumericOption = option.includes(numericFilter);
-      if (!!isNumericOption) {
+      if (previousAvailableFiltersList.indexOf(option) > -1 ) {
+        object.data.availableFiltersList.push(option)
+      } else if (!!isNumericOption) {
         const parsedAmount: number = this.utility.getTraceNumericFilterAmount(numericFilter, option);
         const isTradeAvailable = this.utility.getTraceTradesListBasedOnAmount(object.data.displayList, parsedAmount);
         isTradeAvailable.length > 0 && object.data.
@@ -2364,6 +2394,7 @@ export class DTOService {
           returnPack.displayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
           newBreakdown
         );
+        this.utility.sortOverrideRows(newBreakdown);
         object.data.children.unshift(newBreakdown);
       });
     }

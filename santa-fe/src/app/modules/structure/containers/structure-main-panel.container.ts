@@ -6,20 +6,23 @@ import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { selectReloadBreakdownDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
+import { selectReloadFundDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
-import { PortfolioMetricValues, PortfolioShortNames, BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  SUPPORTED_PORTFOLIO_LIST,
+  BEPortfolioTargetMetricValues
+} from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { 
-  PayloadUpdatePortfolioStructuresTargets,
+import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetTargetPostEditUpdatePack, StructureSetViewData, UpdateTargetPack, UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
@@ -41,9 +44,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
-    portfolioShortNames: PortfolioShortNames
+    supportedFundList: SUPPORTED_PORTFOLIO_LIST
   };
-  portfolioList: Array<PortfolioShortNames> = [this.constants.portfolioShortNames.FIP, this.constants.portfolioShortNames.BBB, this.constants.portfolioShortNames.CIP, this.constants.portfolioShortNames.STIP, this.constants.portfolioShortNames.AGB, this.constants.portfolioShortNames.DOF, this.constants.portfolioShortNames.SOF];
   
   constructor(
     private dtoService: DTOService,
@@ -92,9 +94,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
           breakdown.state.isStencil = true;
           const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
-          if (breakdown.data.displayCategoryList.length > 1 && breakdown.state.isOverrideVariant) {
-            this.utilityService.sortOverrideRows(breakdown);
-          }
           targetList.forEach(target => {
             target.data.moveVisualizer.state.isStencil = true;
             target.state.isStencil = true;
@@ -111,11 +110,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
-      select(selectReloadBreakdownDataPostEdit)
-    ).subscribe((updatePack: StructureSetTargetPostEditUpdatePack) => {
-      if (!!updatePack && !!updatePack.targetFund) {
-        const systemAlertMessage = `Successfully Updated Target for ${updatePack.targetBreakdownTitle}`;
-        this.reloadFund(updatePack.targetFund, systemAlertMessage);
+      select(selectReloadFundDataPostEdit)
+    ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
+      if (!!targetFund) {
+        this.reloadFund(targetFund);
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -136,72 +134,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
-  public getFundFromNewTargets(updateData: UpdateTargetPack) {
-    const { fund, updateTargetBlocks } = updateData;
-    const payload: PayloadUpdatePortfolioStructuresTargets = {
-      portfolioTarget: {
-        portfolioId: fund.data.originalBEData.target.portfolioId,
-        target: {}
-      }
-    }
-    updateTargetBlocks.forEach((targetBlock: UpdateTargetBlock ) => {
-      const { metric, target } = targetBlock
-      payload.portfolioTarget.target[metric] = target;
-    });
-    fund.state.isStencil = true;
-    fund.data.cs01TargetBar.state.isStencil = true;
-    fund.data.creditLeverageTargetBar.state.isStencil = true;
-    fund.data.creditDurationTargetBar.state.isStencil = true;
-    fund.data.children.forEach(breakdown => {
-      breakdown.state.isStencil = true;
-      breakdown.data.displayCategoryList.forEach(category => {
-        category.data.moveVisualizer.state.isStencil = true;
-        category.state.isStencil = true;
-      })
-    })
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
-      first(),
-      tap((serverReturn: BEPortfolioStructuringDTO) => {
-        const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
-        let messageModifier: string = '';
-        updateTargetBlocks.forEach(targetBlock => {
-          const { metric, target } = targetBlock;
-          const parsedTarget = !!target ? target : 'removed';
-          if (metric === BEPortfolioTargetMetricValues.CreditDuration) {
-            const parsedCS01Target = !!serverReturn.target.target.Cs01 ? this.utilityService.parseNumberToThousands(this.utilityService.round(serverReturn.target.target.Cs01), true, 0) : 'removed';
-            messageModifier += `${PortfolioMetricValues.creditDuration} target is ${parsedTarget}. ${PortfolioMetricValues.cs01} target is ${parsedCS01Target}. `
-          } else {
-            if (metric === BEPortfolioTargetMetricValues.Cs01) {
-              messageModifier += '';
-            } else {
-              messageModifier += `${PortfolioMetricValues.creditLeverage} target is ${parsedTarget}. `;
-            }
-          }
-        })
-        const systemAlertMessage = `Successfully updated ${updatedFund.data.portfolioShortName}. ${messageModifier}`;
-        this.reloadFund(serverReturn, systemAlertMessage);
-      }),
-      catchError(err => {
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update ${fund.data.portfolioShortName} target levels`, null);
-        alert.state.isError = true;
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-        fund.state.isStencil = false;
-        fund.data.cs01TargetBar.state.isStencil = false;
-        fund.data.creditLeverageTargetBar.state.isStencil = false;
-        fund.data.creditDurationTargetBar.state.isStencil = false;
-        fund.data.children.forEach(breakdown => {
-          breakdown.state.isStencil = false;
-          breakdown.data.displayCategoryList.forEach(category => {
-            category.data.moveVisualizer.state.isStencil = false;
-            category.state.isStencil = false;
-          })
-        })
-        this.restfulCommService.logError('Cannot retrieve fund with updated targets');
-        return of('error');
-      })
-    ).subscribe()
-  }
-
   private fullUpdate() {
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
     setTimeout(() => {
@@ -214,7 +146,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private loadStencilFunds() {
-    this.state.fetchResult.fundList = this.portfolioList.map((eachPortfolioName) => {
+    this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
       eachFund.data.portfolioShortName = eachPortfolioName;
       return eachFund;
@@ -230,7 +162,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     funds.sort((fundA, fundB) => {
       const fundAShortName = fundA.data.portfolioShortName;
       const fundBShortName = fundB.data.portfolioShortName;
-      return this.portfolioList.indexOf(fundAShortName) - this.portfolioList.indexOf(fundBShortName);
+      return this.constants.supportedFundList.indexOf(fundAShortName) - this.constants.supportedFundList.indexOf(fundBShortName);
     })
   }
 
@@ -269,8 +201,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
   
   private reloadFund(
-    serverReturn: BEPortfolioStructuringDTO,
-    systemAlertMessage: string
+    serverReturn: BEPortfolioStructuringDTO
   ) {
     const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
     updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
@@ -278,8 +209,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
     const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
     this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
-    const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${systemAlertMessage}`, null);
-    this.store$.dispatch(new CoreSendNewAlerts([alert]));
   }
 
   private updateViewData(data: StructureSetViewData) {
@@ -336,10 +265,17 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
     this.state.fetchResult.fundList = [];
     serverReturn.forEach(eachFund => {
-      this.BICsDataProcessingService.setRawBICsData(eachFund);
-      const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-      this.state.fetchResult.fundList.push(newFund);
+      if (this.constants.supportedFundList.indexOf(eachFund.portfolioShortName) >= 0) {
+        this.BICsDataProcessingService.setRawBICsData(eachFund);
+        const newFund = this.dtoService.formStructureFundObject(eachFund, false);
+        this.state.fetchResult.fundList.push(newFund);
+      }
     })
-    this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
+    try {
+      this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
+    } catch (err) {
+      console.error('Sort fund failure');
+      this.restfulCommService.logError('Structuring Sort Fund Failure');
+    }
   }
 }

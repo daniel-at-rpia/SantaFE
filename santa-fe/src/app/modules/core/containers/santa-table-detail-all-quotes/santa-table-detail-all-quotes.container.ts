@@ -204,14 +204,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   public onClickShowMoreTraceTrades() {
     this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = true;
     //trigger ngOnChange to re-render charts
-    if (this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
-      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
-      this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
-    }
-    if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
-      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
-      this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
-    }
+    this.graphService.destroyMultipleGraphs(this.rowData.data.traceTradeVisualizer.graph);
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer)
     this.rowData.data.traceTradeVisualizer = copy;
     this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
@@ -240,14 +233,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public filterTraceTradesByOptions(options: Array<string>) {
-    if (this.rowData.data.traceTradeVisualizer.graph.scatterGraph) {
-      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.scatterGraph);
-      this.rowData.data.traceTradeVisualizer.graph.scatterGraph = null;
-    }
-    if (this.rowData.data.traceTradeVisualizer.graph.pieGraph) {
-      this.graphService.destoryGraph(this.rowData.data.traceTradeVisualizer.graph.pieGraph);
-      this.rowData.data.traceTradeVisualizer.graph.pieGraph = null;
-    }
+    this.graphService.destroyMultipleGraphs(this.rowData.data.traceTradeVisualizer.graph)
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
     this.rowData.data.traceTradeVisualizer = copy;
     let numericalFiltersList: Array<number> = [];
@@ -286,9 +272,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       if (this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
         this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
         this.rowData.data.traceTradeVisualizer.data.displayList.sort((tradeA, tradeB) => {
-          if (tradeA.eventTime > tradeB.eventTime) {
+          if (tradeA.tradeTime > tradeB.tradeTime) {
             return -1
-          } else if (tradeB.eventTime > tradeA.eventTime) {
+          } else if (tradeB.tradeTime > tradeA.tradeTime) {
             return 1;
           } else {
             return 0;
@@ -331,12 +317,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     }
     const security = this.rowData.data.security;
     this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
-    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.positionPie);
-    this.rowData.data.historicalTradeVisualizer.graph.positionPie = null;
-    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.volumeLeftPie);
-    this.rowData.data.historicalTradeVisualizer.graph.volumeLeftPie = null;
-    this.graphService.destoryGraph(this.rowData.data.historicalTradeVisualizer.graph.volumeRightPie);
-    this.rowData.data.historicalTradeVisualizer.graph.volumeRightPie = null;
+    this.graphService.destroyMultipleGraphs(this.rowData.data.historicalTradeVisualizer.graph)
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllTradeHistory, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((allTradeHistory: Object) => {

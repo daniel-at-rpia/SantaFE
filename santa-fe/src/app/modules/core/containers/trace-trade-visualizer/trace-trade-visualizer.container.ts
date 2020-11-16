@@ -1,6 +1,10 @@
 import { Component, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { TraceTradesVisualizerDTO } from 'Core/models/frontend/frontend-models.interface';
-import { TradeTraceHeaderConfigList, TradeSideValueEquivalent, TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant'
+import {
+  TradeTraceHeaderConfigList,TradeSideValueEquivalent,
+  traceTradePieGraphKeys,
+  TraceTradeCounterPartyList
+} from 'Core/constants/securityTableConstants.constant'
 import { GraphService } from 'Core/services/GraphService';
 
 @Component({
@@ -23,17 +27,10 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
   }
   constructor(private graphService: GraphService) {};
   public ngOnDestroy() {
-    if (!!this.traceTrades && !!this.traceTrades.graph.pieGraph && !!this.traceTrades.graph.scatterGraph) {
+    if (!!this.traceTrades) {
       this.traceTrades.state.graphReceived = false;
       try {
-        if (this.traceTrades.graph.scatterGraph) {
-          this.graphService.destoryGraph(this.traceTrades.graph.scatterGraph);
-          this.traceTrades.graph.scatterGraph = null;
-        }
-        if (this.traceTrades.graph.pieGraph) {
-          this.graphService.destoryGraph(this.traceTrades.graph.pieGraph);
-          this.traceTrades.graph.pieGraph = null;
-        }
+        this.graphService.destroyMultipleGraphs(this.traceTrades.graph)
       } catch (err) {
         if (err && err.message === 'EventDispatched is disposed') {
           console.log('dispose misbehavior captured');
@@ -50,7 +47,8 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
         if (!!this.showData && !this.traceTrades.state.graphReceived && this.traceTrades.data.displayList.length > 0 && !!this.traceTrades.state.showGraphs) {
           this.traceTrades.state.graphReceived = true;
           this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
-          this.traceTrades.graph.pieGraph = this.graphService.generateTraceTradePieGraph(this.traceTrades)
+          this.traceTrades.graph.pieGraphLeft = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphLeftId, TraceTradeCounterPartyList, traceTradePieGraphKeys.counterParty);
+          this.traceTrades.graph.pieGraphRight = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphRightId, [this.constants.sideValueEquivalent.buy, this.constants.sideValueEquivalent.sell], traceTradePieGraphKeys.side);
         }
       }
     }
