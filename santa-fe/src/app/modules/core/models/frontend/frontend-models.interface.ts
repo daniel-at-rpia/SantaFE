@@ -780,6 +780,8 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
       updatedCreditDuration: boolean;
       errorMessage: string;
     }
+    autoScalingAvailable: boolean;
+    autoScalingActive: boolean;
   }
 }
 
