@@ -498,7 +498,11 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
             "cs01Cad":2656.86045534,
             "cs01Local":2016.5923759696393
           }
-        ]
+        ],
+        "lastTraceVolumeReported": null,
+        "lastTraceVolumeEstimated": null,
+        "lastTracePrice": null,
+        "lastTraceSpread": null
       },
       "338|5Y":{
         "securityIdentifier":"338|5Y",
@@ -689,7 +693,11 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
             "cs01Cad":-2032.2218189999999,
             "cs01Local":-1542.4833540796965
           }
-        ]
+        ],
+        "lastTraceVolumeReported": null,
+        "lastTraceVolumeEstimated": null,
+        "lastTracePrice": null,
+        "lastTraceSpread": null
       }
     }
   }
