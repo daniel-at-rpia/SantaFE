@@ -51,6 +51,7 @@ export class LiveDataProcessingService {
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
+      this.dtoService.appendLastTraceInfoToSecurityDTO(newSecurity, rawSecurityDTOMap[eachKey]);
       if (!!rawSecurityDTOMap[eachKey].positions) {
         rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
           // if (!eachPortfolio.security.isGovt) {
@@ -101,6 +102,7 @@ export class LiveDataProcessingService {
           newSecurity.api.onClickSearch = searchCallback;
           newSecurity.state.isTradeAlertTableVariant = true;
           newSecurity.state.isActionMenuMinorActionsDisabled = true;
+          this.dtoService.appendLastTraceInfoToSecurityDTO(newSecurity, rawSecurityDTOMap[targetSecurityId]);
           if (!!rawSecurityDTOMap[targetSecurityId].positions) {
             rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
               this.dtoService.appendPortfolioInfoToSecurityDTO(newSecurity, eachPortfolio);
