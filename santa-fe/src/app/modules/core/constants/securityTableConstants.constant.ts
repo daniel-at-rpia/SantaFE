@@ -53,7 +53,7 @@ export const SecurityTableHeaderConfigGroups = {
   delta: 'Deltas',
   securityInfo: 'Security Info',
   ownership: 'Ownership',
-  lastTrace: 'Trace Last Print (IG > 1MM / HY > 500k)'
+  lastTrace: 'Trace Last Print (IG > 1MM / HY > 500k) (Vol in MM)'
 };
 
 export const SECURITY_TABLE_ICONS = {
@@ -1311,6 +1311,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1332,6 +1333,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1346,7 +1348,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'lastTraceVolumeEstimated',
     content: {
-      label: 'Vol Estimated (MM)',
+      label: 'Vol Estimated',
       attrName: 'lastTraceVolumeEstimated',
       underlineAttrName: 'lastTraceVolumeEstimated',
       blockAttrName: 'lastTrace',
@@ -1368,7 +1370,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'lastTraceVolumeReported',
     content: {
-      label: 'Vol Reported (MM)',
+      label: 'Vol Reported',
       attrName: 'lastTraceVolumeReported',
       underlineAttrName: 'lastTraceVolumeReported',
       blockAttrName: 'lastTrace',
@@ -1395,6 +1397,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01CadCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1412,6 +1415,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01LocalCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1429,6 +1433,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01CadFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1447,6 +1452,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01LocalFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1587,6 +1593,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
@@ -1606,6 +1613,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true
@@ -1624,6 +1632,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
+      isColumnWidthNarrow: true,
       tableSpecifics: {
         default: {
           active: true,
