@@ -1318,9 +1318,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
-          active: false,
-          disabled: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -1341,9 +1339,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
-          active: false,
-          disabled: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -1361,12 +1357,10 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         default: {
           active: true,
           disabled: false,
-          groupShow: true
+          groupShow: false
         },
         tradeAlert: {
-          active: false,
-          disabled: true,
-          groupShow: false
+          active: false
         }
       }
     }
@@ -1384,12 +1378,10 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         default: {
           active: true,
           disabled: false,
-          groupShow: true
+          groupShow: false
         },
         tradeAlert: {
-          active: false,
-          disabled: true,
-          groupShow: false
+          active: false
         }
       }
     }

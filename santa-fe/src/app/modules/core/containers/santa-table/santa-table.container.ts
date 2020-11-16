@@ -426,10 +426,6 @@ export class SantaTable implements OnInit, OnChanges {
     this.agGridMiddleLayerService.selectedDriverType = this.activeTriCoreDriver;
     this.tableData.data.headers = [];
     this.tableData.data.allHeaders = [];
-    if (this.tableName === 'tradeAlert') {
-      const filteredHeaderList = this.securityTableHeaderConfigs.filter(header => !header.key.includes('lastTrace'));
-      this.securityTableHeaderConfigs = filteredHeaderList;
-    }
     this.securityTableHeaderConfigs.forEach((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics[this.tableName] || eachStub.content.tableSpecifics.default;
       if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
