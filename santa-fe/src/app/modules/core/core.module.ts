@@ -40,6 +40,7 @@ import { GlobalNav } from 'Core/containers/global-nav/global-nav.container';
 import { AppRoutingModule } from 'App/app-routing.module';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/trace-trade-visualizer.container';
+import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.container';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/tra
     SantaTableAlertStatusCell,
     SantaTableFullWidthCellRenderer,
     GlobalNav,
-    TraceTradeVisualizer
+    TraceTradeVisualizer,
+    GlobalWorkflow
   ],
   imports: [
     CommonModule,
@@ -105,7 +107,8 @@ import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/tra
     GlobalAlert,
     Alert,
     NumericFilter,
-    GlobalNav
+    GlobalNav,
+    GlobalWorkflow
   ]
 })
 export class CoreModule { }
