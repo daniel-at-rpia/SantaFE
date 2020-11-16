@@ -214,30 +214,12 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'Rory',
-    includedDefinitions: [
-      {
-        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
-        groupByActive: false,
-        selectedOptions: ['RS']
-      }
-    ]
-  },{
     displayTitle: 'Sarah',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['SP']
-      }
-    ]
-  },{
-    displayTitle: 'Stephen',
-    includedDefinitions: [
-      {
-        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
-        groupByActive: false,
-        selectedOptions: ['ST']
       }
     ]
   },{
