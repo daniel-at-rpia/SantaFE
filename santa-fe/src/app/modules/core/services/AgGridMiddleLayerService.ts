@@ -122,6 +122,23 @@ export class AgGridMiddleLayerService {
         enableRowGroup: false,
         hide: !isActiveByDefault
       };
+      if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
+        if (eachHeader.data.key === 'alertTraceVolumeEstimated') {
+          newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToCommas(params.value) : null);
+        }
+        if (eachHeader.data.key === 'alertTraceVolumeReported') {
+          newAgColumn.valueFormatter = (params: ValueFormatterParams) => {
+            if (!!params.data && !!params.data.alertTraceVolumeEstimated) {
+              const reportedInteger = params.value / TRACE_ALERT_REPORTED_THRESHOLD;
+              const roundedVolumeReported = Math.floor(reportedInteger);
+              return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
+            } else {
+              const displayValue = !!params.value ? this.utilityService.parseNumberToCommas(params.value) : null;
+              return displayValue;
+            }
+          }
+        }
+      }
       if (eachHeader.data.key === 'alertTime') {
         newAgColumn['sort'] = 'asc';
       }
