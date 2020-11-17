@@ -24,7 +24,7 @@
       AlertTypes,
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_ALERT_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,

@@ -46,7 +46,7 @@
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
-      TRACE_ALERT_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
   //
 

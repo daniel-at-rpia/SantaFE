@@ -33,7 +33,7 @@
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
       AlertSubTypes,
-      TRACE_ALERT_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
