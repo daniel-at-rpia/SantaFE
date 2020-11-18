@@ -1056,7 +1056,7 @@ export class UtilityService {
     }
 
     public checkIfTraceIsAvailable(targetRow: DTOs.SecurityTableRowDTO): boolean {
-      return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds'
+      return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds' && targetRow.data.security.data.securityType !== 'Stock'
     }
 
     public getTraceNumericFilterAmount(filterSymbol: string, filter: string): number {
