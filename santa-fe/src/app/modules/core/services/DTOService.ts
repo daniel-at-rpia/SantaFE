@@ -24,7 +24,7 @@
       AlertTypes,
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_ALERT_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -417,8 +417,8 @@ export class DTOService {
   public appendLastTraceInfoToSecurityDTO(dto: DTOs.SecurityDTO, rawData: BEModels.BEFullSecurityDTO) {
     dto.data.lastTrace.lastTracePrice = rawData.lastTracePrice;
     dto.data.lastTrace.lastTraceSpread = rawData.lastTraceSpread;
-    dto.data.lastTrace.lastTraceVolumeEstimated = rawData.lastTraceVolumeEstimated;
-    dto.data.lastTrace.lastTraceVolumeReported = rawData.lastTraceVolumeReported;
+    dto.data.lastTrace.lastTraceVolumeEstimated = !!rawData.lastTraceVolumeEstimated ? this.utility.round(rawData.lastTraceVolumeEstimated /TRACE_VOLUME_REPORTED_THRESHOLD, 2) : null;
+    dto.data.lastTrace.lastTraceVolumeReported = !!rawData.lastTraceVolumeReported ? this.utility.round(rawData.lastTraceVolumeReported /TRACE_VOLUME_REPORTED_THRESHOLD, 2).toFixed(2) : null;
   }
 
   public appendAlertInfoToSecurityDTO(
