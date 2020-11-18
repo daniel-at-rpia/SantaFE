@@ -11,8 +11,9 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { editingViewAvailableUsers } from 'Core/constants/securityDefinitionConstants.constant';
-import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import { editingViewAvailableUsers, StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -30,7 +31,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
-    structuringTeamPMList: StructuringTeamPMList
+    structuringTeamPMList: StructuringTeamPMList,
+    navigationModule: NavigationModule
   }
 
   constructor(
@@ -106,6 +108,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickEdit() {
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
+      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.structuring)
+    ));
     this.modalService.triggerModalOpen(this.constants.editModalId);
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
   }

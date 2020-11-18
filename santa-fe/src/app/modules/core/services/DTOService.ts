@@ -24,7 +24,8 @@
       AlertTypes,
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_ALERT_REPORTED_THRESHOLD
+      TRACE_ALERT_REPORTED_THRESHOLD,
+      NavigationModule
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -2398,5 +2399,18 @@ export class DTOService {
         object.data.children.unshift(newBreakdown);
       });
     }
+  }
+
+  public formGlobalWorkflow(
+    targetModule: NavigationModule
+  ): DTOs.GlobalWorkflowStateDTO {
+    const object: DTOs.GlobalWorkflowStateDTO = {
+      data: {
+        uuid: this.utility.generateUUID(),
+        module: targetModule
+      },
+      state: {}
+    };
+    return object;
   }
 }

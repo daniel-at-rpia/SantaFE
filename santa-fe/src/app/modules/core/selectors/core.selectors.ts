@@ -37,3 +37,13 @@ export const selectAlertCounts = createSelector(
   getCoreState,
   (state: CoreState) => state.alert.countByTypeArr
 );
+
+export const selectGlobalWorkflowNewState = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalWorkflow.newState
+);
+
+export const selectGlobalWorkflowUpdateCurrentState = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalWorkflow.currentStateUUID
+);

@@ -1,4 +1,8 @@
 import { SafeHtml } from '@angular/platform-browser';
+import * as agGrid from 'ag-grid-community';
+import * as moment from 'moment';
+import * as am4Charts from '@amcharts/amcharts4/charts';
+
 import {
   AgGridColumnDefinition,
   AgGridRow,
@@ -15,12 +19,13 @@ import {
   PortfolioBreakdownCategoryBlock,
   TraceTradeBlock
 } from 'FEModels/frontend-blocks.interface';
-import {AlertSubTypes, AlertTypes} from 'Core/constants/coreConstants.constant';
+import {
+  AlertSubTypes,
+  AlertTypes,
+  NavigationModule
+} from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
-import * as agGrid from 'ag-grid-community';
-import * as moment from 'moment';
-import * as am4Charts from '@amcharts/amcharts4/charts';
-import {Alert} from "Core/components/alert/alert.component";
+import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
@@ -861,5 +866,13 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
     scatterGraph: am4Charts.XYChart;
     pieGraphLeft: am4Charts.PieChart;
     pieGraphRight: am4Charts.PieChart;
+  }
+}
+
+// Even though this is not used for any component, but we still want it as a DTO because in the future it will likely be a component when we decide to visualize the workflow through UI
+export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
+  data: {
+    uuid: string;
+    module: NavigationModule;
   }
 }

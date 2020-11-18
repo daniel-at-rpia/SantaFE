@@ -6,6 +6,8 @@
     import { select, Store } from '@ngrx/store';
 
     import { UtilityService } from 'Core/services/UtilityService';
+    import { selectGlobalWorkflowNewState } from 'Core/selectors/core.selectors';
+    import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
   //
 
 @Component({
@@ -26,20 +28,28 @@ export class GlobalWorkflow implements OnInit, OnDestroy{
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private utilityService: UtilityService
-  ) {
-
-  }
+  ) {}
 
   public ngOnInit() {
-    this.subscriptions.proofOfConcept = interval(2000).subscribe(
-      count => {
-        this.router.navigateByUrl('/trade');
+    this.subscriptions.proofOfConcept = this.store$.pipe(
+      select(selectGlobalWorkflowNewState)
+    ).subscribe(
+      (newState: GlobalWorkflowStateDTO) => {
+        // console.log('test, navigate');
+        if (!!newState && !!newState.data.uuid && !!newState.data.module) {
+          this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+        }
       }
     );
   }
 
   public ngOnDestroy() {
-
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
+      }
+    }
   }
 
 }
