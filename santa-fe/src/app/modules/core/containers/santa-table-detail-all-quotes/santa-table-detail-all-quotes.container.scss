@@ -34,17 +34,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       background-color: $color_active;
     }
     &-traceBtn {
-      display: flex;
-      background-color: $color_disabled;
-      cursor: not-allowed;
-      box-shadow: none;
-      &>i,
-      &>span {
-        color: $color_gray_6;
-      }
-      &:hover {
-        box-shadow: none;
-      }
+      display: none;
     }
   }
   &__history {
@@ -220,6 +210,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
       &__viewSwitch {
         &-traceBtn {
           @include material();
+          display: flex;
           background-color: $color_white;
           cursor: pointer;
           &>i {
@@ -238,6 +229,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
         &-traceBtn {
           @include material('none');
           @extend .santaBtn--inverseLabelled;
+          display: flex;
           background-color: $color_active;
           &>i,
           &>span {
