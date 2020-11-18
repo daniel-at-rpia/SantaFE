@@ -10,6 +10,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
     import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
     import { SeniorityLegendList, RatingLegendList } from 'Core/stubs/securities.stub';
     import { SeniorityValueToLevelMapping, RatingValueToLevelMapping } from 'Core/constants/securityDefinitionConstants.constant';
     import { BESecurityDTO } from 'Core/models/backend/backend-models.interface';
@@ -105,6 +106,24 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
 
   public onClickNavCTA() {
     this.state.menuIsActive = false;
+  }
+
+  public onClickNavigateToStructuringModule() {
+    if (this.state.currentModule !== this.constants.moduleUrl.structuring) {
+      const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring);
+      this.state.menuIsActive = false;
+      this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+    }
+  }
+
+  public onClickNavigateToTradeModule() {
+    if (this.state.currentModule !== this.constants.moduleUrl.trade) {
+      const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.trade);
+      this.state.menuIsActive = false;
+      this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+    }
   }
 
   private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<GlobalNavLegendBlock> {
