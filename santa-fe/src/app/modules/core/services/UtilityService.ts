@@ -32,11 +32,12 @@
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
-      AlertSubTypes
+      AlertSubTypes,
+      TRACE_ALERT_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-    import { traceTradeFilterAmounts } from '../constants/securityTableConstants.constant';
+    import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
   // dependencies
 
 @Injectable()
@@ -676,7 +677,7 @@ export class UtilityService {
     }
     public parseNumberToMillions(number: number, hasUnitSuffix: boolean, decimal: number = 2): string {
       const value = this.round(number/1000000, decimal).toFixed(decimal);
-      if (value === 0) {
+      if (!number || value === 0) {
         return null;
       } else {
         return !!hasUnitSuffix ? `${value}MM` : `${value}`;
@@ -1067,6 +1068,12 @@ export class UtilityService {
     public getTraceTradesListBasedOnAmount(list: Array<TraceTradeBlock>, amount: number): Array<TraceTradeBlock> {
       const newList = list.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
       return newList;
+    }
+
+    public formatTraceReportedValues(amount: number): string {
+      const reportedInteger = amount / TRACE_ALERT_REPORTED_THRESHOLD;
+      const roundedVolumeReported = Math.floor(reportedInteger);
+      return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {

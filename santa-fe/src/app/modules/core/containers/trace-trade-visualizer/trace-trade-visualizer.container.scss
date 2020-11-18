@@ -125,9 +125,8 @@ button {
     overflow: hidden;
     max-width: 50rem;
     margin: 0 $spacing_small;
-    &-scatterGraph,
-    &-pieGraph {
-      flex: 1 1 auto;
+    &-scatterGraph {
+      flex: 0 1 50%;
       display: flex;
       flex-direction: column;
       margin-bottom: $spacing_small;
@@ -153,26 +152,86 @@ button {
         }
       }
     }
-    &-scatterGraph {
-      flex: 0 0 50%;
-    }
-    &-pieGraph {
+    &-pieGraphs {
+      flex: 0 1 50%;
       display: flex;
-      justify-content: center;
-      width: 50%;
-      &-title {
-        margin: 0 auto $spacing_small;
+      justify-content: space-between;
+      margin-bottom: $spacing_small;
+      overflow: hidden;
+      &-graphContainer {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
+        padding: $spacing_x_small;
+        &-left {
+          flex: 0 1 50%;
+          display: flex;
+          flex-direction: column;
+          margin-right: $spacing_small;
+          &-title {
+            flex: 0 0 auto;
+            text-align: center;
+            font-size: $font_size_normal;
+            color: $font_color_inverse;
+            margin-bottom: $spacing_small;
+          }
+          &-content {
+            @include mix_border_radius(10px);
+            display: flex;
+            flex: 1 0 auto;
+            background-color: $color_white;
+            &-graph {
+              @include mix_alive('light');
+              flex: 1 1 auto;
+              transform: scale(0.001);
+            }
+          }
+        }
+        &-right {
+          flex: 0 1 50%;
+          display: flex;
+          flex-direction: column;
+          &-title {
+            flex: 0 0 auto;
+            text-align: center;
+            font-size: $font_size_normal;
+            color: $font_color_inverse;
+            margin-bottom: $spacing_small;
+          }
+          &-content {
+            @include mix_border_radius(10px);
+            display: flex;
+            flex: 1 0 auto;
+            background-color: $color_white;
+            &-graph {
+              @include mix_alive('light');
+              flex: 1 1 auto;
+              transform: scale(0.001);
+            }
+          }
+        }
       }
     }
   }
   &--displayGraphsState {
     #{$blockName} {
       &__graphs {
-        &-scatterGraph,
-        &-pieGraph {
+        &-scatterGraph {
           &-graphContainer {
             &-content {
               transform: scale(1);
+            }
+          }
+        }
+        &-pieGraphs {
+          &-graphContainer {
+            &-left,
+            &-right {
+              &-content {
+                &-graph {
+                  transform: scale(1);
+                }
+              }
             }
           }
         }

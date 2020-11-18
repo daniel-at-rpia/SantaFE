@@ -46,17 +46,29 @@
   </section>
   <section class="sat-traceTradeVisualizer__graphs">
     <div class="sat-traceTradeVisualizer__graphs-scatterGraph">
-      <span class="sat-traceTradeVisualizer__graphs-scatterGraph-title">Buy vs Sell</span>
+      <span class="sat-traceTradeVisualizer__graphs-scatterGraph-title">Buy vs Sell Over Time</span>
       <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer">
         <div class="sat-traceTradeVisualizer__graphs-scatterGraph-graphContainer-content" id="{{ traceTrades.data.scatterGraphId }}"></div>
       </div>
     </div>
-    <div class="sat-traceTradeVisualizer__graphs-pieGraph">
-      <span class="sat-traceTradeVisualizer__graphs-pieGraph-title">
-        Volume Per Counter Party
-      </span>
-      <div class="sat-traceTradeVisualizer__graphs-pieGraph-graphContainer">
-        <div class="sat-traceTradeVisualizer__graphs-pieGraph-graphContainer" id="{{ traceTrades.data.pieGraphId }}"></div>
+    <div class="sat-traceTradeVisualizer__graphs-pieGraphs">
+      <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer">
+        <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left">
+          <span class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left-title">
+            Volume Per Counter Party
+          </span>
+          <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left-content">
+            <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-left-content-graph" id="{{ traceTrades.data.pieGraphLeftId }}"></div>
+          </div>
+        </div>
+        <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right">
+          <span class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right-title">
+            Buy Volume vs Sell Volume
+          </span>
+          <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right-content">
+            <div class="sat-traceTradeVisualizer__graphs-pieGraphs-graphContainer-right-content-graph" id="{{ traceTrades.data.pieGraphRightId }}"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
