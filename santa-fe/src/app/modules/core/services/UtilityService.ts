@@ -1236,7 +1236,7 @@ export class UtilityService {
         if (!!eachCs01Entry) {
           const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
           const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
-          if (highestVal > findCs01Max) {
+          if (highestVal > findCs01Max && highestVal >= 1000) {
             findCs01Max = highestVal;
           }
           if (lowestVal < findCs01Min) {
