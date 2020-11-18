@@ -2137,7 +2137,11 @@ export class DTOService {
         parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
       }
       if (parsedRawData.targetLevel != null) {
-        parsedRawData.targetLevel = !!isCs01 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : this.utility.round(parsedRawData.targetLevel, 2);
+        if (!!isCs01) {
+          parsedRawData.targetLevel = parsedRawData.targetLevel >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
+        } else {
+          parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
+        }
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
