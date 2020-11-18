@@ -45,7 +45,7 @@ export const APIUrlMap = {
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
-export const DevWhitelist = ['DZ', 'RC', 'MS', 'SC'];
+export const DevWhitelist = ['DZ', 'RC', 'SC'];
 
 export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
   {
