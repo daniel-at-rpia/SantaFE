@@ -1282,7 +1282,11 @@ export class DTOService {
     let moveDistance, leftEdge, rightEdge, endPinLocation;
     if (!!rawData && !isStencil) {
       leftEdge = 0
-      if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
+      if (totalDistance === 0) {
+        moveDistance = 0;
+        rightEdge = 0;
+        endPinLocation = 0;
+      } else if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
         // if target is set
         if (rawData.targetLevel > parsedCurrentLevel) {
           moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
