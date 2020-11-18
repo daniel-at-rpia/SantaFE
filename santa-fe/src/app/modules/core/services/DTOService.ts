@@ -2407,7 +2407,8 @@ export class DTOService {
     const object: DTOs.GlobalWorkflowStateDTO = {
       data: {
         uuid: this.utility.generateUUID(),
-        module: targetModule
+        module: targetModule,
+        title: `Generic step in ${targetModule}`
       },
       state: {}
     };

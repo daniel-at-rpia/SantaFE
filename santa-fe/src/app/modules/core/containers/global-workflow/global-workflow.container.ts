@@ -35,9 +35,12 @@ export class GlobalWorkflow implements OnInit, OnDestroy{
       select(selectGlobalWorkflowNewState)
     ).subscribe(
       (newState: GlobalWorkflowStateDTO) => {
-        // console.log('test, navigate');
         if (!!newState && !!newState.data.uuid && !!newState.data.module) {
-          this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+          // this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+          // don't block current thread
+          setTimeout(function(){
+            history.pushState(newState, newState.data.title, `/${newState.data.module}/${newState.data.uuid}`);
+          }, 1);
         }
       }
     );

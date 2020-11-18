@@ -21,6 +21,14 @@ const routes: Routes = [
         // loadChildren: () => import('./modules/structure/structure.module').then(mod => mod.StructureModule)
       },
       {
+        path: `${NavigationModule.trade}`,
+        component: TradePage
+      },
+      {
+        path: `${NavigationModule.structuring}`,
+        component: StructurePage
+      },
+      {
         path: '**',
         redirectTo: 'trade',
         pathMatch: 'full'
