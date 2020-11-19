@@ -23,7 +23,7 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
   state: GlobalWorkflowState;
   subscriptions = {
     navigationStartSub: null,
-    proofOfConcept: null
+    newStateSub: null
   };
 
   constructor(
@@ -39,7 +39,7 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.subscriptions.proofOfConcept = this.store$.pipe(
+    this.subscriptions.newStateSub = this.store$.pipe(
       select(selectGlobalWorkflowNewState)
     ).subscribe(
       (newState: GlobalWorkflowStateDTO) => {
