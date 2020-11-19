@@ -41,6 +41,7 @@ import { AppRoutingModule } from 'App/app-routing.module';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/trace-trade-visualizer.container';
 import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.container';
+import { GlobalWorkflowIOService } from 'Core/services/GlobalWorkflowIOService';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.
     RestfulCommService,
     AgGridMiddleLayerService,
     CountdownPipe,
-    BICsDataProcessingService
+    BICsDataProcessingService,
+    GlobalWorkflowIOService
   ],
   exports: [
     SantaTable,

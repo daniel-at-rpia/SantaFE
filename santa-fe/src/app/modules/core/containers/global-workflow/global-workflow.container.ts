@@ -5,7 +5,7 @@
     import { tap, first, withLatestFrom, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
-    import { UtilityService } from 'Core/services/UtilityService';
+    import * as GlobalServices from 'Core/services/index';
     import { selectGlobalWorkflowNewState } from 'Core/selectors/core.selectors';
     import { CoreGlobalWorkflowUpdateCurrentState } from 'Core/actions/core.actions';
     import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
@@ -30,11 +30,11 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
     private store$: Store<any>,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private utilityService: UtilityService
+    private utilityService: GlobalServices.UtilityService,
+    private GlobalWorkflowIOService: GlobalServices.GlobalWorkflowIOService
   ) {
     this.state = {
-      currentState: null,
-      temporaryStore: {}
+      currentState: null
     }
   }
 
@@ -71,7 +71,8 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
   private storeState(targetState: GlobalWorkflowStateDTO) {
     // temporarily putting it in the page state, eventually need to be put into indexedDB
     if (!!targetState) {
-      this.state.temporaryStore[targetState.data.uuid] = targetState;
+      // this.state.temporaryStore[targetState.data.uuid] = targetState;
+      this.GlobalWorkflowIOService.storeState(targetState);
     }
   }
 

@@ -51,7 +51,6 @@ export interface GlobalAlertState {
 
 export interface GlobalWorkflowState {
   currentState: DTOs.GlobalWorkflowStateDTO;
-  temporaryStore: object;
 }
 
 export interface MarketState {
