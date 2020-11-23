@@ -170,33 +170,35 @@ export class BICsDataProcessingService {
     const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
     const subBICsLevel = BICsLevels[breakdownRow.data.bicsLevel + 1];
     const selectedSubRawBreakdown: BEStructuringBreakdownBlock  = selectedSubRawBICsData[subBICsLevel];
-    const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = selectedSubRawBreakdown;
-    const object: BEStructuringBreakdownBlock = {
-      date,
-      groupOption,
-      indexId,
-      portfolioBreakdownId,
-      portfolioId,
-      breakdown: {}
-    }
-    subTierList.forEach(subTier => {
-      for (let category in selectedSubRawBreakdown.breakdown) {
-        if (!!category && selectedSubRawBreakdown.breakdown[category]) {
-          if (subTier === category) {
-            object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[category];
+    if (!!selectedSubRawBreakdown) {
+      const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = selectedSubRawBreakdown;
+      const object: BEStructuringBreakdownBlock = {
+        date,
+        groupOption,
+        indexId,
+        portfolioBreakdownId,
+        portfolioId,
+        breakdown: {}
+      }
+      subTierList.forEach(subTier => {
+        for (let category in selectedSubRawBreakdown.breakdown) {
+          if (!!category && selectedSubRawBreakdown.breakdown[category]) {
+            if (subTier === category) {
+              object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[category];
+            }
           }
         }
-      }
-    })
-    const definitionList = this.getBICsBreakdownDefinitionList(object);
-    const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
-    breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
-    breakdown.state.isEditingView = !!isEditingView;
-    this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow, isEditingView);
-    this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow, isEditingView);
-    breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
-    breakdown.data.title = breakdownRow.data.category;
-    return breakdown;
+      })
+      const definitionList = this.getBICsBreakdownDefinitionList(object);
+      const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
+      breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
+      breakdown.state.isEditingView = !!isEditingView;
+      this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow, isEditingView);
+      this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow, isEditingView);
+      breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+      breakdown.data.title = breakdownRow.data.category;
+      return breakdown;
+    }
   }
 
   public getShallowestLevel(category: string): number {
