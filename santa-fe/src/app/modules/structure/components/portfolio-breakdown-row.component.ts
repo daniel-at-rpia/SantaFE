@@ -18,6 +18,7 @@ export class PortfolioBreakdownRow {
   @Output() rowDiveIn = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() categoryClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() seeBondClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() enterSetViewModeClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   constants = {
     positive: PortfolioView.positive,
     improving: PortfolioView.improving,
@@ -51,6 +52,12 @@ export class PortfolioBreakdownRow {
   public onClickSeeBond() {
     this.breakdownRow.state.isSelected = false;
     !!this.seeBondClicked && this.seeBondClicked.emit(this.breakdownRow);
+  }
+
+  public onClickEnterSetViewMode() {
+    // this.breakdownRow.state.isEditingView = !this.breakdownRow.state.isEditingView;
+    this.breakdownRow.state.isSelected = false;
+    !!this.enterSetViewModeClicked && this.enterSetViewModeClicked.emit(this.breakdownRow);
   }
 
   public onClickSetView(view: PortfolioView) {

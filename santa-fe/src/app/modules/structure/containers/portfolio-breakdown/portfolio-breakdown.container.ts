@@ -170,6 +170,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     ));
   }
 
+  public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isEditingView = !targetRow.state.isEditingView;
+  }
+
   private toggleSetView(row: StructurePortfolioBreakdownRowDTO) {
     if (!row) {
       return null;
