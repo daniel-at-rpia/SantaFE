@@ -55,7 +55,6 @@ export class PortfolioBreakdownRow {
   }
 
   public onClickEnterSetViewMode() {
-    // this.breakdownRow.state.isEditingView = !this.breakdownRow.state.isEditingView;
     this.breakdownRow.state.isSelected = false;
     !!this.enterSetViewModeClicked && this.enterSetViewModeClicked.emit(this.breakdownRow);
   }

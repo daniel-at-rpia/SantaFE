@@ -50,6 +50,10 @@ export class StructurePopover implements OnInit {
     ));
   }
 
+  public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isEditingView = !targetRow.state.isEditingView;
+  }
+
   public closePopover() {
     this.popover.state.isActive = false;
     this.popover.data.mainRow.state.isSelected = false;
