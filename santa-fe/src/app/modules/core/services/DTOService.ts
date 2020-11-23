@@ -24,7 +24,7 @@
       AlertTypes,
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_ALERT_REPORTED_THRESHOLD,
+      TRACE_VOLUME_REPORTED_THRESHOLD,
       NavigationModule
     } from 'Core/constants/coreConstants.constant';
     import {
@@ -418,8 +418,8 @@ export class DTOService {
   public appendLastTraceInfoToSecurityDTO(dto: DTOs.SecurityDTO, rawData: BEModels.BEFullSecurityDTO) {
     dto.data.lastTrace.lastTracePrice = rawData.lastTracePrice;
     dto.data.lastTrace.lastTraceSpread = rawData.lastTraceSpread;
-    dto.data.lastTrace.lastTraceVolumeEstimated = rawData.lastTraceVolumeEstimated;
-    dto.data.lastTrace.lastTraceVolumeReported = rawData.lastTraceVolumeReported;
+    dto.data.lastTrace.lastTraceVolumeEstimated = !!rawData.lastTraceVolumeEstimated ? this.utility.round(rawData.lastTraceVolumeEstimated /TRACE_VOLUME_REPORTED_THRESHOLD, 2) : null;
+    dto.data.lastTrace.lastTraceVolumeReported = !!rawData.lastTraceVolumeReported ? this.utility.round(rawData.lastTraceVolumeReported /TRACE_VOLUME_REPORTED_THRESHOLD, 2).toFixed(2) : null;
   }
 
   public appendAlertInfoToSecurityDTO(
@@ -1283,7 +1283,11 @@ export class DTOService {
     let moveDistance, leftEdge, rightEdge, endPinLocation;
     if (!!rawData && !isStencil) {
       leftEdge = 0
-      if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
+      if (totalDistance === 0) {
+        moveDistance = 0;
+        rightEdge = 0;
+        endPinLocation = 0;
+      } else if (rawData.targetLevel !== null && rawData.targetLevel >= 0) {
         // if target is set
         if (rawData.targetLevel > parsedCurrentLevel) {
           moveDistance = this.utility.round(parsedCurrentLevel / totalDistance * 100, 2);
@@ -2133,7 +2137,11 @@ export class DTOService {
         parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
       }
       if (parsedRawData.targetLevel != null) {
-        parsedRawData.targetLevel = !!isCs01 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : this.utility.round(parsedRawData.targetLevel, 2);
+        if (!!isCs01) {
+          parsedRawData.targetLevel = parsedRawData.targetLevel >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
+        } else {
+          parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
+        }
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
