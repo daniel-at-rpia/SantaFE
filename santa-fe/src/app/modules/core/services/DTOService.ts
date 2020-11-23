@@ -2337,6 +2337,42 @@ export class DTOService {
     return object;
   }
 
+  public formCustomRawBreakdownData(rawData: BEModels.BEPortfolioStructuringDTO, targetBreakdown: BEModels.BEStructuringBreakdownBlock, identifiers: string[]): [BEModels.BEStructuringBreakdownBlock, string[]] {
+    const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
+    for (let category in customBreakdown.breakdown) {
+      if (!!customBreakdown.breakdown[category]) {
+        (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = 1;
+      }
+    }
+    const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
+    selectedBreakdowns.forEach((selectedBreakdown, i) => {
+      for (let category in selectedBreakdown.breakdown) {
+        if (!!selectedBreakdown.breakdown[category]) {
+          if (selectedBreakdown.breakdown[category].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel) {
+            // check if its the same name as another category to avoid overwriting those values
+            const categoryNameExists = Object.keys(customBreakdown.breakdown).find(key => key === category);
+            const level = i + 2;
+            if (!!categoryNameExists) {
+              const customCategory = `${category} Lv.${level}`
+              customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
+              (customBreakdown.breakdown[customCategory] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+            } else {
+              customBreakdown.breakdown[category] = selectedBreakdown.breakdown[category];
+              (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+            }
+          }
+        }
+      }
+    });
+    const customDefinitionList: Array<string>= [];
+    for (let category in customBreakdown.breakdown) {
+      if (!!customBreakdown.breakdown[category]) {
+        customDefinitionList.push(category)
+      }
+    }
+    return [customBreakdown, customDefinitionList];
+  }
+
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioStructureDTO,
     rawData: BEModels.BEPortfolioStructuringDTO,
