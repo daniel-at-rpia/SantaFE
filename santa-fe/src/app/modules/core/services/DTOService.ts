@@ -2209,7 +2209,10 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-
+      // Add level indicator to BICS rows
+      if (!!isBicsBreakdown && customLevel >= 2) {
+        eachCategoryBlock.displayCategory = `${eachCategoryBlock.displayCategory} (Lv.${customLevel})`;
+      }
       const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown, isDisplayInMainBreakdown);
       return eachCategoryBlockDTO;
     } else {
