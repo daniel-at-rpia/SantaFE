@@ -733,6 +733,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isOverrideVariant: boolean;
     isEditingViewAvail: boolean;
     isEditingView: boolean;
+    isDisplaySubLevels: boolean;
   }
 }
 
@@ -839,6 +840,7 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isBtnDiveIn: boolean;
     isStencil: boolean;
     isEditingView: boolean;
+    isDisplayInMainBreakdown: boolean;
   }
 }
 
