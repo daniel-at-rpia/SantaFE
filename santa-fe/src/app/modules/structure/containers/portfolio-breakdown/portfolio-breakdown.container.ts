@@ -69,6 +69,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   public loadData() {
+    if (this.breakdownData.data.title === 'BICS') {
+      this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.sortRegularBICSWithSubLevels(this.breakdownData.data.rawCs01CategoryList);
+      this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.sortRegularBICSWithSubLevels(this.breakdownData.data.rawLeverageCategoryList);
+    }
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     let popoverCategory;
     if (this.dataIsReady) {
