@@ -841,6 +841,7 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isStencil: boolean;
     isEditingView: boolean;
     isDisplayInMainBreakdown: boolean;
+    isWithinPopover: boolean;
   }
 }
 

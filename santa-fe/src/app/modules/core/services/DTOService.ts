@@ -2259,7 +2259,8 @@ export class DTOService {
         isBtnDiveIn: isDiveIn,
         isStencil: true,
         isEditingView: false,
-        isDisplayInMainBreakdown: inMainBreakdown
+        isDisplayInMainBreakdown: inMainBreakdown,
+        isWithinPopover: false
       }
     }
     return object;

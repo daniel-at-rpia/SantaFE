@@ -242,6 +242,7 @@ export class BICsDataProcessingService {
       breakdown.state.isEditingView = !!isEditingView;
       breakdown.state.isStencil = false;
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
+      breakdown.state.isWithinPopover = true;
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
     })
   }
