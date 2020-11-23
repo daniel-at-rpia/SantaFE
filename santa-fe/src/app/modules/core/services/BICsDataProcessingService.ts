@@ -245,6 +245,10 @@ export class BICsDataProcessingService {
       breakdown.state.isStencil = false;
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
       breakdown.state.isWithinPopover = true;
+      //Remove level indicator for popover rows
+      if (breakdown.data.displayCategory.includes('Lv.')){
+        breakdown.data.displayCategory = breakdown.data.displayCategory.split('(')[0].trim();
+      }
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
     })
   }
