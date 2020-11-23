@@ -2037,8 +2037,7 @@ export class DTOService {
         isPreviewVariant: false,
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
-        isEditingViewAvail: false,
-        isEditingView: false
+        isEditingViewAvail: false
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
@@ -2244,6 +2243,7 @@ export class DTOService {
         isBtnDiveIn: false,
         isStencil: true,
         isEditingView: false,
+        isEditingViewAvail: false,
         isDoveIn: false
       }
     }

@@ -122,7 +122,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
-          this.state.targetBreakdown.state.isEditingView = false;
           if (!!this.state.targetBreakdown.data.popover) {
             this.state.targetBreakdown.data.popover.state.isActive = false;
           }

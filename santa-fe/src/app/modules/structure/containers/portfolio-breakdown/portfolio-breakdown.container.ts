@@ -75,6 +75,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     let popoverCategory;
     if (this.dataIsReady) {
       this.utilityService.calculateAlignmentRating(this.breakdownData);
+      this.updateRowEditingViewAvailState();
       if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
         const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
         popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
@@ -129,7 +130,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     } else {
       this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
     breakdownRow.data.children = subBicsLevel;
     this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
     this.breakdownData.data.popover.state.isActive = true;
@@ -153,12 +154,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  public onClickSetView(breakdown: PortfolioBreakdownDTO) {
-    if (!breakdown.state.isPreviewVariant) {
-      this.breakdownData.state.isEditingView = !this.breakdownData.state.isEditingView;
-      breakdown.data.displayCategoryList.forEach(row => {
-        this.toggleSetView(row, this.breakdownData.state.isEditingView);
-      })
+  public onClickSetView(targetRow: StructurePortfolioBreakdownRowDTO) {
+    if (!this.breakdownData.state.isPreviewVariant) {
+      this.toggleSetView(targetRow);
     }
   }
 
@@ -172,32 +170,16 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     ));
   }
 
-  private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
+  private toggleSetView(row: StructurePortfolioBreakdownRowDTO) {
     if (!row) {
       return null;
     } else {
-      row.state.isEditingView = !!isEditing;
+      const toggleValue = !row.state.isEditingView;
+      row.state.isEditingView = toggleValue;
       const oppositeMainList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
       const matchedOppositeRow = oppositeMainList.find(category => category.data.category === row.data.category);
       if (!!matchedOppositeRow) {
-        matchedOppositeRow.state.isEditingView = !!isEditing;
-      }
-      if (row.data.children) {
-        row.data.children.state.isEditingView = !!isEditing;
-        const selectedChildList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
-        const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
-        if (selectedChildList.length > 0) {
-          selectedChildList.forEach(selectedRow => {
-            selectedRow.state.isEditingView = !!isEditing;
-            const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.category === selectedRow.data.category);
-            if (!!matchedOppositeCategory) {
-              matchedOppositeCategory.state.isEditingView = !!isEditing
-            }
-            this.toggleSetView(selectedRow, isEditing);
-          })
-        }
-      } else {
-        return null;
+        matchedOppositeRow.state.isEditingView = toggleValue;
       }
     }
   }
@@ -216,5 +198,14 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         })
       }
     }
+  }
+
+  private updateRowEditingViewAvailState() {
+    this.breakdownData.data.rawCs01CategoryList.forEach((eachRow) => {
+      eachRow.state.isEditingViewAvail = this.breakdownData.state.isEditingViewAvail;
+    });
+    this.breakdownData.data.rawLeverageCategoryList.forEach((eachRow) => {
+      eachRow.state.isEditingViewAvail = this.breakdownData.state.isEditingViewAvail;
+    });
   }
 }

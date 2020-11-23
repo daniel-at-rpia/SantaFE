@@ -217,31 +217,6 @@ $portfolioBreakdown_rating_height: 1rem;
       }
     }
   }
-  &--isEditingViewAvailableState {
-    #{$blockName} {
-      &__ctas {
-        &-editBtn {
-          margin-right: $spacing_large;
-        }
-        &-viewBtn {
-          display: flex;
-        }
-      }
-    }
-  }
-  &--editingView {
-    #{$blockName} {
-      &__ctas {
-        &-viewBtn {
-          @include material('none');
-          background-color: $color_active;
-          &>i, &>span {
-            color: $font_color_inverse;
-          }
-        }
-      }
-    }
-  }
   &--previewVariant {
     flex: 1 1 auto;
     width: auto;

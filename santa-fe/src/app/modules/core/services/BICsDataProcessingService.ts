@@ -90,7 +90,10 @@ export class BICsDataProcessingService {
     }
   }
 
-  public formSubLevelBreakdown(breakdownRow: StructurePortfolioBreakdownRowDTO, isDisplayCs01: boolean, isEditingView: boolean) {
+  public formSubLevelBreakdown(
+    breakdownRow: StructurePortfolioBreakdownRowDTO,
+    isDisplayCs01: boolean
+  ) {
     const categoryPortfolioID = breakdownRow.data.portfolioID;
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
     const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
@@ -117,9 +120,8 @@ export class BICsDataProcessingService {
     const definitionList = this.getBICsBreakdownDefinitionList(object);
     const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
     breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
-    breakdown.state.isEditingView = !!isEditingView;
-    this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow, isEditingView);
-    this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow, isEditingView);
+    this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
+    this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
     breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
     breakdown.data.title = breakdownRow.data.category;
     return breakdown;
@@ -160,12 +162,14 @@ export class BICsDataProcessingService {
     };
   }
 
-  private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {
+  private setBreakdownListProperties(
+    breakdownList: Array<StructurePortfolioBreakdownRowDTO>,
+    parentRow: StructurePortfolioBreakdownRowDTO
+  ) {
     breakdownList.forEach(breakdown => {
       breakdown.data.bicsLevel = parentRow.data.bicsLevel + 1;
       breakdown.data.diveInLevel = parentRow.data.diveInLevel + 1;
       breakdown.data.moveVisualizer.state.isStencil = false;
-      breakdown.state.isEditingView = !!isEditingView;
       breakdown.state.isStencil = false;
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);

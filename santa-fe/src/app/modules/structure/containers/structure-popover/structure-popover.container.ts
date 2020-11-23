@@ -38,7 +38,7 @@ export class StructurePopover implements OnInit {
     } else if (breakdownRow.data.children) {
       breakdownRow.state.isDoveIn = !breakdownRow.state.isDoveIn;
     } else {
-      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01, breakdownRow.state.isEditingView);
+      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01);
       breakdownRow.data.children = subBicsLevel;
       breakdownRow.state.isDoveIn = true;
     }
