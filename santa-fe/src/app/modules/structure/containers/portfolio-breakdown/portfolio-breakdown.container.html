@@ -55,7 +55,9 @@
         class="sat-portfolioBreakdown__categoryContent-list-item">
         <portfolio-breakdown-row
           [breakdownRow]="eachCategory"
-          (breakdownRowDiveIn)="updatePopoverData($event)">
+          (categoryClicked)="onClickBreakdownCategory($event)"
+          (rowDiveIn)="updatePopoverData($event)"
+          (seeBondClicked)="onClickSeeBond($event)">
         </portfolio-breakdown-row>
       </li>
     </ul>

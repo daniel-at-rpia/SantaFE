@@ -1,19 +1,21 @@
-<article [ngClass]="{
-  'sat-portfolioBreakdownRow': true,
-  'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
-  'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
-  'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
-  'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
-  'sat-portfolioBreakdownRow--isEditingView': breakdownRow.state.isEditingView,
-  'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0,
-  'sat-portfolioBreakdownRow--positive': breakdownRow.data.view === constants.positive,
-  'sat-portfolioBreakdownRow--improving': breakdownRow.data.view === constants.improving,
-  'sat-portfolioBreakdownRow--deteriorating': breakdownRow.data.view === constants.deteriorating,
-  'sat-portfolioBreakdownRow--negative': breakdownRow.data.view === constants.negative,
-  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral
+<article 
+  (mouseleave)="onMouseLeaveRow()"
+  [ngClass]="{
+    'sat-portfolioBreakdownRow': true,
+    'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
+    'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
+    'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
+    'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
+    'sat-portfolioBreakdownRow--isEditingView': breakdownRow.state.isEditingView,
+    'sat-portfolioBreakdownRow--negativeDiff': breakdownRow.data.diffToTarget < 0,
+    'sat-portfolioBreakdownRow--positive': breakdownRow.data.view === constants.positive,
+    'sat-portfolioBreakdownRow--improving': breakdownRow.data.view === constants.improving,
+    'sat-portfolioBreakdownRow--deteriorating': breakdownRow.data.view === constants.deteriorating,
+    'sat-portfolioBreakdownRow--negative': breakdownRow.data.view === constants.negative,
+    'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral
   }">
   <section class="sat-portfolioBreakdownRow__cta">
-    <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
+    <button (click)="onClickCategory(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
       <div class="sat-portfolioBreakdownRow__cta-btn-view">
         <span *ngIf="!!breakdownRow.data.view" class="sat-portfolioBreakdownRow__cta-btn-view-toolTip">{{ breakdownRow.data.view }}</span>
         <i [ngClass]="{
@@ -26,6 +28,23 @@
       </div>
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
     </button>
+    <div class="sat-portfolioBreakdownRow__cta-actionMenu">
+      <button (click)="onClickSeeBond()" class="sat-portfolioBreakdownRow__cta-actionMenu-bondBtn santaBtn--circleLabelled santaBtn--small">
+        <i class="fal fa-search-dollar"></i>
+        <span>See Bonds</span>
+      </button>
+      <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-diveInBtn santaBtn--circleLabelled">
+        <i class="fal fa-arrow-from-top"></i>
+        <span>Dive In</span>
+      </button>
+      <button class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn santaBtn--circleLabelled santaBtn--small">
+        <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon">
+          <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon-up fal fa-arrow-up"></i>
+          <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon-down fal fa-arrow-down"></i>
+        </i>
+        <span>Set View</span>
+      </button>
+    </div>
   </section>
   <section class="sat-portfolioBreakdownRow__utility">
     <div class="sat-portfolioBreakdownRow__utility-moveVisualizer">
@@ -54,9 +73,15 @@
       </button>
     </div>
   </section>
-    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--target">{{breakdownRow.data.diffToTargetDisplay}}</div>
-    <hr class="sat-portfolioBreakdownRow__cellDivider">
-    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--current">{{breakdownRow.data.currentPctDisplay}}</div>
-    <hr class="sat-portfolioBreakdownRow__cellDivider">
-    <div class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">{{breakdownRow.data.indexPctDisplay}}</div>
+  <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--target">
+    {{breakdownRow.data.diffToTargetDisplay}}
+  </section>
+  <hr class="sat-portfolioBreakdownRow__cellDivider">
+  <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--current">
+    {{breakdownRow.data.currentPctDisplay}}
+  </section>
+  <hr class="sat-portfolioBreakdownRow__cellDivider">
+  <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">
+    {{breakdownRow.data.indexPctDisplay}}
+  </section>
 </article>

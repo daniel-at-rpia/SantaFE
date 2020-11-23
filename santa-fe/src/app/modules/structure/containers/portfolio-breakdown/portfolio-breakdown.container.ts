@@ -108,9 +108,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickEdit() {
-    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
-      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade)
-    ));
     this.modalService.triggerModalOpen(this.constants.editModalId);
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
   }
@@ -135,7 +132,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
     breakdownRow.data.children = subBicsLevel;
     this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
-    this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
     this.breakdownData.data.popover.state.isActive = true;
   }
 
@@ -164,6 +160,16 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         this.toggleSetView(row, this.breakdownData.state.isEditingView);
       })
     }
+  }
+
+  public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isSelected = !targetRow.state.isSelected;
+  }
+
+  public onClickSeeBond() {
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
+      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade)
+    ));
   }
 
   private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {

@@ -25,8 +25,9 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       cursor: not-allowed;
       &-text {
         flex: 1 1 auto;
-        text-align: right;
+        text-align: left;
         word-break: break-word;
+        padding-left: $spacing_xx_small;
       }
       &-view {
         @include mix_border_radius(3px);
@@ -62,6 +63,36 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
                 }
               }
             }
+          }
+        }
+      }
+    }
+    &-actionMenu {
+      @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
+      @include mix_alive('custom', $animation_duration_light transform);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      transform: scale(0.01) translate(0, 0);
+      &-bondBtn {
+        margin-top: $spacing_medium;
+      }
+      &-diveInBtn {
+        visibility: hidden;
+        margin-bottom: $spacing_medium;
+      }
+      &-viewBtn {
+        margin-top: $spacing_medium;
+        &-icon {
+          display: flex;
+          &-up {
+            font-size: $font_size_normal;
+            margin-bottom: $spacing_x_small;
+          }
+          &-down {
+            font-size: $font_size_normal;
+            margin-top: $spacing_x_small;
           }
         }
       }
@@ -166,6 +197,17 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
           cursor: pointer;
           &:hover{
             @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
+          }
+        }
+        &-actionMenu {
+          &-bondBtn {
+            margin-right: $spacing_small;
+          }
+          &-diveInBtn {
+            visibility: visible;
+          }
+          &-viewBtn {
+            margin-left: $spacing_small;
           }
         }
       }
@@ -320,6 +362,9 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
           &:hover {
             box-shadow: none;
           }
+        }
+        &-actionMenu {
+          transform: scale(1) translate(0, -$spacing_small);
         }
       }
     }

@@ -2243,7 +2243,8 @@ export class DTOService {
         isSelected: false,
         isBtnDiveIn: false,
         isStencil: true,
-        isEditingView: false
+        isEditingView: false,
+        isDoveIn: false
       }
     }
     return object;

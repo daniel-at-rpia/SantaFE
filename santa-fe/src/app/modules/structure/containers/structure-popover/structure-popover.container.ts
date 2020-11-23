@@ -12,20 +12,26 @@ import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingServi
 
 export class StructurePopover implements OnInit {
   @Input() popover: StructurePopoverDTO
+
   constructor(
   private bicsDataProcessingService: BICsDataProcessingService
   ) {}
+
   public ngOnInit() {};
+
+  public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isSelected = !targetRow.state.isSelected;
+  }
 
   public getNextBicsLevel(breakdownRow: StructurePortfolioBreakdownRowDTO) {
     if (breakdownRow.data.diveInLevel === 0) {
       this.closePopover();
     } else if (breakdownRow.data.children) {
-      breakdownRow.state.isSelected = !breakdownRow.state.isSelected;
+      breakdownRow.state.isDoveIn = !breakdownRow.state.isDoveIn;
     } else {
       const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01, breakdownRow.state.isEditingView);
       breakdownRow.data.children = subBicsLevel;
-      breakdownRow.state.isSelected = true;
+      breakdownRow.state.isDoveIn = true;
     }
   }
 
