@@ -27,7 +27,8 @@
         <portfolio-breakdown-row
           [breakdownRow]="popover.data.mainRow"
           (categoryClicked)="onClickBreakdownCategory($event)"
-          (rowDiveIn)="getNextBicsLevel($event)">
+          (rowDiveIn)="getNextBicsLevel($event)"
+          (seeBondClicked)="onClickSeeBond($event)">
         </portfolio-breakdown-row>
       </li>
     </ul>
@@ -45,7 +46,8 @@
           <portfolio-breakdown-row
             [breakdownRow]="secondLevel"
             (categoryClicked)="onClickBreakdownCategory($event)"
-            (rowDiveIn)="getNextBicsLevel($event)">
+            (rowDiveIn)="getNextBicsLevel($event)"
+            (seeBondClicked)="onClickSeeBond($event)">
           </portfolio-breakdown-row>
           <div [ngClass]="{
             'sat-popover__levels-secondDiveIn': true,
@@ -61,7 +63,8 @@
                 <portfolio-breakdown-row
                   [breakdownRow]="thirdLevel"
                   (categoryClicked)="onClickBreakdownCategory($event)"
-                  (rowDiveIn)="getNextBicsLevel($event)">
+                  (rowDiveIn)="getNextBicsLevel($event)"
+                  (seeBondClicked)="onClickSeeBond($event)">
                 </portfolio-breakdown-row>
                 <div [ngClass]="{
                   'sat-popover__levels-thirdDiveIn': true,
@@ -72,7 +75,8 @@
                     class="sat-popover__levels-thirdDiveIn-list-item">
                       <portfolio-breakdown-row
                         [breakdownRow]="fourthLevel"
-                        (categoryClicked)="onClickBreakdownCategory($event)">
+                        (categoryClicked)="onClickBreakdownCategory($event)"
+                        (seeBondClicked)="onClickSeeBond($event)">
                       </portfolio-breakdown-row>
                     </li>
                   </ul>
