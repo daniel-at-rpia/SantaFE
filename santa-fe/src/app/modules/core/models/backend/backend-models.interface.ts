@@ -73,6 +73,8 @@ export interface BESecurityDTO {
     Default: BESecurityMetricDTO;
     Index?: BESecurityMetricDTO;
     FO?: BESecurityMetricDTO;
+    FTSE?: BESecurityMetricDTO;
+    BB?: BESecurityMetricDTO;
   };
   deltaMetrics: {
     Dod: BESecurityDeltaMetricDTO;
