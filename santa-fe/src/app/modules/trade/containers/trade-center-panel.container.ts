@@ -389,11 +389,11 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private fetchBICsHierarchy() {
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsHierarchy, {req: 'GET'}).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsCodeDictionary, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
         if (!!serverReturn) {
-          this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, {children: []}, 1);
+          this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, {children: []});
           this.dtoService.loadBICSOptionsIntoConfigurator(
             this.state.configurator.dto,
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),

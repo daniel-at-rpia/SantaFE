@@ -345,6 +345,7 @@ export interface StructureSetTargetPanelEditRowItemBlock {
 export interface BICsHierarchyBlock {
   name: string;
   bicsLevel: number;
+  code: string;
   children: Array<BICsHierarchyBlock>;
 }
 

@@ -31,8 +31,9 @@ export class BICsDataProcessingService {
   private subBicsLevelList: Array<string> = [];
   constructor(private dtoService: DTOService) {}
 
-  public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number,) {
-    this.iterateBICsData(data, parent, counter);
+  public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
+    this.setBICsLevelOneCategories(data, parent)
+    this.iterateBICsData(data, parent);
     this.formattedBICsHierarchyData = parent;
     return parent;
   }
@@ -188,20 +189,73 @@ export class BICsDataProcessingService {
     }
   }
 
-  private iterateBICsData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock, counter: number) {
-    if (counter < 5) {
-      for (let category in data) {
-        if (!!category) {
-          const BICsData: BICsHierarchyBlock = {
-            name: category,
-            bicsLevel: counter,
-            children: []
-          }
-          parent.children.push(BICsData);
-          this.iterateBICsData(data[category], BICsData, BICsData.bicsLevel + 1);
+  private setBICsLevelOneCategories(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock) {
+    for (let code in data) {
+      if (!!data[code]) {
+        const intiialLevel = 1;
+        const key = `item${intiialLevel}`;
+        const BICsData: BICsHierarchyBlock = {
+          name: data[code][key],
+          bicsLevel: intiialLevel,
+          code: code,
+          children: []
+        }
+        const isExists = parent.children.find(block => block.name === data[code][key])
+        if (!isExists) {
+          parent.children.push(BICsData);;
         }
       }
     }
+  }
+
+  private formCompleteHierarchyWithSubLevels(rawData: BEBICsHierarchyBlock, parent: BICsHierarchyBlock | Array<BICsHierarchyBlock> , counter: number) {
+    counter += 1;
+    const parentKey = `item${counter - 1}`;
+    const targetKey = `item${counter}`;
+    const keyAfterTarget = `item${counter + 1}`;
+    if (counter < 5) {
+      if (Array.isArray(parent)) {
+        parent.forEach(category => {
+          for (let code in rawData) {
+            if (!!rawData[code] && !!rawData[code][targetKey] && rawData[code][parentKey] === category.name && (!rawData[code][keyAfterTarget] === null || !rawData[code][keyAfterTarget])) {
+              const BICSData: BICsHierarchyBlock = {
+                name: rawData[code][targetKey],
+                bicsLevel: counter,
+                code: code,
+                children: []
+              }
+              const isExists = category.children.find(existingCategory => existingCategory.name === rawData[code][targetKey]);
+              if (!isExists) {
+                category.children.push(BICSData);
+              }
+              this.formCompleteHierarchyWithSubLevels(rawData, category.children, counter);
+            }
+          }
+        })
+      } else {
+        for (let code in rawData) {
+          if (!!rawData[code] && !!rawData[code][targetKey] && rawData[code][keyAfterTarget] === null) {
+            if (rawData[code][parentKey] === parent.name) {
+              const BICSData: BICsHierarchyBlock = {
+                name: rawData[code][targetKey],
+                bicsLevel: counter,
+                code: code,
+                children: []
+              }
+              parent.children.push(BICSData);
+              this.formCompleteHierarchyWithSubLevels(rawData, parent.children, counter)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private iterateBICsData(rawData: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
+    parent.children.forEach(category => {
+      let counter = 1;
+      this.formCompleteHierarchyWithSubLevels(rawData, category, counter)
+    })
   }
 
   private getSubLevels(category: string, bicsLevel: number, data: Array<BICsHierarchyBlock>): Array<string> {
