@@ -81,7 +81,7 @@ export class StructurePage implements OnInit, OnDestroy {
   }
 
   private fetchBICsHierarchy() {
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsHierarchy, {req: 'GET'}).pipe(
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsCodeDictionary, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
        if (!!serverReturn) {
