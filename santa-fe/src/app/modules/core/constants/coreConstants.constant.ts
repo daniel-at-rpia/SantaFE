@@ -34,7 +34,7 @@ export const APIUrlMap = {
   getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
   updatePortfolioTargets: 'portfolioStructuring/update-portfolio-target',
   updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
-  getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy',
+  getBICsCodeDictionary: 'portfolioStructuring/get-bics-code-dictionary',
   getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
   updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
   deletePortfolioOverride: 'portfolioStructuring/delete-portfolio-override',
