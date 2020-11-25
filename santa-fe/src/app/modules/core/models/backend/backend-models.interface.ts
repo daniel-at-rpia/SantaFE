@@ -39,7 +39,7 @@ export interface BEFullSecurityDTO {
 }
 
 export interface BEPortfolioDTO {
-  source: number;
+  source: string;
   partitionOptionValues: {
     PortfolioShortName: string;
     StrategyName: string;
@@ -114,34 +114,11 @@ export interface BESecurityDTO {
     cs01Local?: number;
     cs01Cad?: number;
     hedgeFactor: number;
-    metrics: {
-      [property: string]: {
-        [date: string]: {
-          backupPmName: string;
-          date: string;
-          hedgeFactor: number;
-          mark: {
-            driver: string;
-            enteredTime: string;
-            price: number;
-            spread: number;
-            user: string;
-            value: number;
-          };
-          owners: Array<string>;
-          partitionOptionValues: {
-            PortfolioShortName: Array<string>;
-            StrategyName: Array<string>;
-          };
-          primaryPmName: string;
-          researchName: string;
-          source: number;
-        }
-      }
-    };
+    strategies: Array<string>;
     strategyAsOfDate: string;
   }
   curveSubType?: string;  // CDS only
+  bicsCode: string;
   bicsLevel1: string;
   bicsLevel2: string;
   bicsLevel3: string;
@@ -362,7 +339,7 @@ export interface BEHistoricalSummaryDTO {
 }
 
 interface BEHistoricalInfoDTO {
-  databaseSource: string;
+  sourceInDb?: string;
   startDate: string;
   endDate: string;
   metricName: string;
