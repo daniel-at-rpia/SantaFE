@@ -54,7 +54,7 @@
         <portfolio-breakdown-row
           [breakdownRow]="eachCategory"
           (categoryClicked)="onClickBreakdownCategory($event)"
-          (rowDiveIn)="updatePopoverData($event)"
+          (rowDiveInClicked)="updatePopoverData($event)"
           (seeBondClicked)="onClickSeeBond($event)"
           (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
         </portfolio-breakdown-row>
@@ -65,13 +65,6 @@
     <button (click)="onClickEdit()" class="santaBtn--circleLabelled sat-portfolioBreakdown__ctas-editBtn">
       <i class="fal fa-pencil"></i>
       <span>Set Target</span>
-    </button>
-    <button (click)="onClickSetView(breakdownData)" class="santaBtn--circleLabelled sat-portfolioBreakdown__ctas-viewBtn">
-      <i class="sat-portfolioBreakdown__ctas-viewBtn-icon">
-        <i class="sat-portfolioBreakdown__ctas-viewBtn-icon-up fal fa-arrow-up"></i>
-        <i class="sat-portfolioBreakdown__ctas-viewBtn-icon-down fal fa-arrow-down"></i>
-      </i>
-      <span>Set Outlook</span>
     </button>
   </section>
   <section class="sat-portfolioBreakdown__popover">

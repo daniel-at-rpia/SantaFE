@@ -15,7 +15,7 @@ import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-
 
 export class PortfolioBreakdownRow {
   @Input() breakdownRow: StructurePortfolioBreakdownRowDTO;
-  @Output() rowDiveIn = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() rowDiveInClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() categoryClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() seeBondClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() enterSetViewModeClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
@@ -45,7 +45,7 @@ export class PortfolioBreakdownRow {
       return null;
     } else {
       this.breakdownRow.state.isSelected = false;
-      !!this.rowDiveIn && this.rowDiveIn.emit(row);
+      !!this.rowDiveInClicked && this.rowDiveInClicked.emit(row);
     }
   }
 

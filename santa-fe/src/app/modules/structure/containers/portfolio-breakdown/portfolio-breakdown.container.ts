@@ -154,12 +154,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  public onClickSetView(targetRow: StructurePortfolioBreakdownRowDTO) {
-    if (!this.breakdownData.state.isPreviewVariant) {
-      this.toggleSetView(targetRow);
-    }
-  }
-
   public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isSelected = !targetRow.state.isSelected;
   }
@@ -172,20 +166,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isEditingView = !targetRow.state.isEditingView;
-  }
-
-  private toggleSetView(row: StructurePortfolioBreakdownRowDTO) {
-    if (!row) {
-      return null;
-    } else {
-      const toggleValue = !row.state.isEditingView;
-      row.state.isEditingView = toggleValue;
-      const oppositeMainList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
-      const matchedOppositeRow = oppositeMainList.find(category => category.data.category === row.data.category);
-      if (!!matchedOppositeRow) {
-        matchedOppositeRow.state.isEditingView = toggleValue;
-      }
-    }
   }
 
   private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {

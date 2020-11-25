@@ -140,20 +140,6 @@ $portfolioBreakdown_rating_height: 1rem;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
-    &-viewBtn {
-      display: none;
-      &-icon {
-        display: flex;
-        &-up {
-          font-size: $font_size_normal;
-          margin-bottom: $spacing_x_small;
-        }
-        &-down {
-          font-size: $font_size_normal;
-          margin-top: $spacing_x_small;
-        }
-      }
-    }
   }
   &--goodRating {
     #{$blockName} {
