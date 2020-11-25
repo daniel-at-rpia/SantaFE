@@ -99,9 +99,6 @@ export class StructureFund implements OnInit {
 
   public showEditMenu() {
     this.fund.state.isEditingFund = true;
-    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
-      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.structuring)
-    ));
   }
 
   public closeEditMenu() {

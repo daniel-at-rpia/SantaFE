@@ -2411,7 +2411,8 @@ export class DTOService {
   }
 
   public formGlobalWorkflow(
-    targetModule: NavigationModule
+    targetModule: NavigationModule,
+    isRedirect: boolean
   ): DTOs.GlobalWorkflowStateDTO {
     const object: DTOs.GlobalWorkflowStateDTO = {
       data: {
@@ -2419,7 +2420,9 @@ export class DTOService {
         module: targetModule,
         title: `Generic step in ${targetModule}`
       },
-      state: {}
+      state: {
+        triggersRedirect: !!isRedirect
+      }
     };
     return object;
   }

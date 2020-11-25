@@ -46,7 +46,7 @@ export class StructurePopover implements OnInit {
 
   public onClickSeeBond() {
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
-      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade)
+      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)
     ));
   }
 

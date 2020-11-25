@@ -876,5 +876,8 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     uuid: string;
     module: NavigationModule;
     title: string;
+  },
+  state: {
+    triggersRedirect: boolean;
   }
 }

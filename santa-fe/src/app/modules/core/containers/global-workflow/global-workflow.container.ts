@@ -44,10 +44,13 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
     ).subscribe(
       (newState: GlobalWorkflowStateDTO) => {
         if (!!newState && !!newState.data.uuid && !!newState.data.module) {
-          // don't block current thread
-          setTimeout(function(){
-            history.pushState(newState, newState.data.title, `/${newState.data.module}/${newState.data.uuid}`);
-          }, 1);
+          // the states that triggers redirect don't need to be manually pushed into document history
+          if (!newState.state.triggersRedirect) {
+            // don't block current thread
+            setTimeout(function(){
+              history.pushState(newState, newState.data.title, `/${newState.data.module}/${newState.data.uuid}`);
+            }, 1);
+          }
           if (!this.state.currentState || this.state.currentState.data.uuid !== newState.data.uuid) {
             this.storeState(newState);
             // need to deepCopy because the one in ngrx store is readonly

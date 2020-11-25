@@ -160,7 +160,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickSeeBond() {
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
-      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade)
+      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)
     ));
   }
 
