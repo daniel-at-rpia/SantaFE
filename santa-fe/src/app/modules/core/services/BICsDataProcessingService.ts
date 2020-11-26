@@ -59,13 +59,13 @@ export class BICsDataProcessingService {
     if (!!this.formattedBICsHierarchyData) {
       let isFound = false;
       this.formattedBICsHierarchyData.children.forEach(mainCategory => {
-        let categoryTraversalList: Array<BICsHierarchyBlock> = [{name: mainCategory.name, bicsLevel: mainCategory.bicsLevel, children: mainCategory.children}];
+        let categoryTraversalList: Array<BICsHierarchyBlock> = [{name: mainCategory.name, bicsLevel: mainCategory.bicsLevel, children: mainCategory.children, code: mainCategory.code}];
         const traverseThroughCategories = (block: Array<BICsHierarchyBlock>, targetCategory: string) => {
           if (!!isFound)  {
             return;
           } else {
             block.forEach(newCategory => {
-              categoryTraversalList.push({name: newCategory.name, bicsLevel: newCategory.bicsLevel, children: newCategory.children});
+              categoryTraversalList.push({name: newCategory.name, bicsLevel: newCategory.bicsLevel, children: newCategory.children, code: mainCategory.code});
               if (newCategory.name === targetCategory) {
                 isFound = true;
                 this.getParentCategory(categoryTraversalList, hierarchyList, newCategory);
