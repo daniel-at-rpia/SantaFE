@@ -55,7 +55,7 @@ export class BICsDataProcessingService {
     }
   }
 
-  public getTargetSpecificHierarchyList(childCategory: string, hierarchyList: Array<BICsHierarchyBlock>): Array<BICsHierarchyBlock> {
+  public getTargetSpecificHierarchyList(childCategory: string, childBicsLevel: number, hierarchyList: Array<BICsHierarchyBlock>): Array<BICsHierarchyBlock> {
     if (!!this.formattedBICsHierarchyData) {
       let isFound = false;
       this.formattedBICsHierarchyData.children.forEach(mainCategory => {
@@ -66,7 +66,7 @@ export class BICsDataProcessingService {
           } else {
             block.forEach(newCategory => {
               categoryTraversalList.push({name: newCategory.name, bicsLevel: newCategory.bicsLevel, children: newCategory.children, code: mainCategory.code});
-              if (newCategory.name === targetCategory) {
+              if (newCategory.name === targetCategory && newCategory.bicsLevel === childBicsLevel) {
                 isFound = true;
                 this.getParentCategory(categoryTraversalList, hierarchyList, newCategory);
               } else {
@@ -100,7 +100,7 @@ export class BICsDataProcessingService {
       }
     })
     subRowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
-      const hierarchyList = this.getTargetSpecificHierarchyList(row.data.category, []);
+      const hierarchyList = this.getTargetSpecificHierarchyList(row.data.category, row.data.bicsLevel, []);
       const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
       if (!!parentLevel) {
         const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);

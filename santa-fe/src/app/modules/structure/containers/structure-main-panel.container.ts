@@ -278,7 +278,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           for (let subCategory in customBICSBreakdown.breakdown) {
             //After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed as well
             if (!!customBICSBreakdown.breakdown[subCategory] && (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel >= 2) {
-             const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(subCategory, []);
+             const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(subCategory, (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel,  []);
              targetHierarchyList.forEach((category: BICsHierarchyBlock) => {
               const formattedBEBicsKey = `BicsLevel${category.bicsLevel}`;
               const categoryBEData = eachFund.breakdowns[formattedBEBicsKey].breakdown[category.name];
