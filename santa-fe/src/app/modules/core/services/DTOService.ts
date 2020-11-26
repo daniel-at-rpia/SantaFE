@@ -221,7 +221,7 @@ export class DTOService {
           ask: null,
           displayAsk: null
         },
-        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.Index : false,
+        hasIndex: false,
         hedgeFactor: !isStencil && !!rawData.unitPosition ? rawData.unitPosition.hedgeFactor : null,
         alert: {
           alertId: null,
@@ -287,6 +287,7 @@ export class DTOService {
         if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
           object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
         }
+        object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
       }
     } catch (err) {
       console.warn('Data issue on security', object, err);
