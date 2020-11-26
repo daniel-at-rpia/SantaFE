@@ -2294,6 +2294,7 @@ export class DTOService {
   public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false, previousAvailableFiltersList: Array<string>): DTOs.TraceTradesVisualizerDTO {
     const object: DTOs.TraceTradesVisualizerDTO = {
       data: {
+        pristineRowList: [],
         displayList: [],
         scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_SCATTER_GRAPH_ID}`,
         pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_LEFT_ID}`,
@@ -2324,6 +2325,7 @@ export class DTOService {
           return 0;
         }
       })
+      object.data.pristineRowList = targetRow.data.security.data.traceTrades;
       const currentDate = moment();
       const currentMonthDay = currentDate.format('MMM DD');
       const dailyTraceTradesList = targetRow.data.security.data.traceTrades.filter(traceTrade => {
