@@ -85,7 +85,7 @@ export class BICsDataProcessingService {
     }
   }
 
-  public sortRegularBICSWithSubLevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+  public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
     const rowListCopy = this.utilityService.deepCopy(rowList);
     const primaryRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel === 1);
     const subRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel >= 2);

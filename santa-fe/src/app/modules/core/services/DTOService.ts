@@ -2182,11 +2182,11 @@ export class DTOService {
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
       const isDisplayInMainBreakdown = !!customLevel ? true : false;
-      // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'Lv.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
+      // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: categoryName.includes('Lv.') ? categoryName.split('Lv.')[0].trim() : categoryName,
-        displayCategory: categoryName.includes('Lv.') ? categoryName.split('Lv.')[0].trim() : categoryName,
+        category: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
+        displayCategory: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2380,9 +2380,10 @@ export class DTOService {
           if (selectedBreakdown.breakdown[category].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel) {
             // check if its the same name as another category to avoid overwriting those values
             const categoryNameExists = Object.keys(customBreakdown.breakdown).find(key => key === category);
+            // Adding 2 because of how the index starts at 0 and we want it to increment by 1
             const level = i + 2;
             if (!!categoryNameExists) {
-              const customCategory = `${category} Lv.${level}`
+              const customCategory = `${category} BICsSubLevel.${level}`
               customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
               (customBreakdown.breakdown[customCategory] as BEModels.BECustomMetricBreakdowns).customLevel = level;
             } else {
