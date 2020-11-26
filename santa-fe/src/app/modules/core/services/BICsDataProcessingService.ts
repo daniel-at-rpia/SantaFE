@@ -110,7 +110,31 @@ export class BICsDataProcessingService {
         primaryRowList.splice(subRowIndex, 0, row);
       }
     })
-    return primaryRowList;
+    const newRowList = this.formUIBranchForSubLevels(primaryRowList);
+    return newRowList;
+  }
+
+  public formUIBranchForSubLevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+    const rowListCopy = this.utilityService.deepCopy(rowList);
+    rowListCopy.forEach((row, i) => {
+      if (row.data.bicsLevel >= 2) {
+        const previousRow = rowListCopy[i-1];
+        if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
+          row.style.branchHeight = '55px';
+          row.style.top = '-27.5px';
+        } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
+        // needs to find the closest sibling element as the previous row is a child of a sibling element
+        const modifiedList: Array<StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
+        const findSiblingRows: Array<StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.displayCategory === row.data.parentRow.data.displayCategory);
+        const nearestSiblingRow: StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
+        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.displayCategory === nearestSiblingRow.data.displayCategory && eachRow.data.bicsLevel === nearestSiblingRow.data.bicsLevel); 
+        const indexDifference = i - sibilingRowIndex;
+        row.style.branchHeight = `${indexDifference * 55}px`;
+        row.style.top = `-${(indexDifference * 55 - 27.5)}px`;
+        }
+      }
+    })
+    return rowListCopy;
   }
   public returnAllBICSBasedOnHierarchyDepth(depth: number): Array<string> {
     const allBICSList = [];
