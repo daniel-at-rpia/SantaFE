@@ -343,6 +343,15 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       }
     }
   }
+  &--mainDisplayLevel2 {
+    padding-left: $spacing_medium;
+  }
+  &--mainDisplayLevel3 {
+    padding-left: $spacing_large;
+  }
+  &--mainDisplayLevel4 {
+    padding-left: $spacing_x_large;
+  }
   &--stencilState {
     #{$blockName} {
       &__cta {

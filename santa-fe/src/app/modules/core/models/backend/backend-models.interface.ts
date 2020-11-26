@@ -578,6 +578,9 @@ export interface BEMetricBreakdowns {
   view?: string;
 }
 
+export interface BECustomMetricBreakdowns extends BEMetricBreakdowns {
+  customLevel: number;
+}
 export interface BEStructuringBreakdownBlock {
   date: string;
   groupOption: string;
@@ -585,7 +588,7 @@ export interface BEStructuringBreakdownBlock {
   portfolioBreakdownId?: string;
   portfolioId: number;
   breakdown: {
-    [property: string]: BEMetricBreakdowns
+    [property: string]: BEMetricBreakdowns | BECustomMetricBreakdowns;
   }
 }
 
