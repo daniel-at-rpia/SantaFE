@@ -7,6 +7,14 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
+  position: relative;
+  &__branch {
+    position: absolute;
+    width: 1rem;
+    border-style: solid;
+    border-color: $color_gray_4;
+    border-width: 0 0 2px 2px;
+  }
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 8.5rem;
@@ -22,6 +30,7 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       box-shadow: none;
       text-align: right;
       flex-direction: row;
+      z-index: $z_index_base_item_solid;
       cursor: not-allowed;
       &-text {
         flex: 1 1 auto;
@@ -344,13 +353,43 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
     }
   }
   &--mainDisplayLevel2 {
-    padding-left: $spacing_medium;
+    #{$blockName} {
+      &__branch {
+        left: .5rem;
+      }
+      &__cta {
+        margin-left: 1rem;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
   }
   &--mainDisplayLevel3 {
-    padding-left: $spacing_large;
+    #{$blockName} {
+      &__branch {
+        left: 1.75rem;
+      }
+      &__cta {
+        margin-left: 2.5rem;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
   }
   &--mainDisplayLevel4 {
-    padding-left: $spacing_x_large;
+    #{$blockName} {
+      &__branch {
+        left: 3.25rem;
+      }
+      &__cta {
+        margin-left: 3.75rem;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
   }
   &--stencilState {
     #{$blockName} {
