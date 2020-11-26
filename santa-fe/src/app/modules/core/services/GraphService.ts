@@ -844,32 +844,47 @@ export class GraphService {
 
     public generateTradeTraceScatterGraph(dto: TraceTradesVisualizerDTO): am4charts.XYChart {
       const chart = am4core.create(dto.data.scatterGraphId, am4charts.XYChart);
+      chart.height = 120;
       const reverseList = [...dto.data.displayList].reverse();
       const tradeData = reverseList.map(trade => {
         const time = new Date(trade.tradeTime);
         const object = {
-          date: time.getTime(),
+          date: !!dto.state.isDisplayAllTraceTrades ? time : time.getTime(),
+          counterParty: trade.counterParty,
           ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
           ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
         }
         return object;
       });
       chart.data = tradeData;
-      chart.height = 160;
-      let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-      dateAxis.title.text = 'Time';
-      const currentDate = new Date();
-      const formattedDate = moment(currentDate).format('YYYY-MM-DD');
-      const minStr = `${formattedDate}, 06:00:00`;
-      const maxStr = `${formattedDate}, 18:00:00`;
-      const minDate = new Date(minStr);
-      const maxDate = new Date(maxStr);
-      dateAxis.min = minDate.getTime();
-      dateAxis.max = maxDate.getTime();
-      dateAxis.baseInterval = {
-        "timeUnit": "second",
-        "count": 1
-      };
+      if (!!dto.state.isDisplayAllTraceTrades) {
+        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.title.text = 'Day';
+        dateAxis.startLocation = -.5;
+        dateAxis.endLocation = 1.5;
+        dateAxis.baseInterval = {
+          "timeUnit": "hour",
+          "count": 2
+        }
+        dateAxis.gridIntervals.setAll([
+          { timeUnit: "day", count: .6}
+        ]);
+      } else {
+        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.title.text = 'Time';
+        const currentDate = new Date();
+        const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+        const minStr = `${formattedDate}, 06:00:00`;
+        const maxStr = `${formattedDate}, 18:00:00`;
+        const minDate = new Date(minStr);
+        const maxDate = new Date(maxStr);
+        dateAxis.min = minDate.getTime();
+        dateAxis.max = maxDate.getTime();
+        dateAxis.baseInterval = {
+          "timeUnit": "second",
+          "count": 1
+        };
+      }
       let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
       yAxis.title.text = 'Sprd';
       const sortedSpreadData = chart.data.map(data => {
@@ -901,7 +916,6 @@ export class GraphService {
       let bullet1 = series1.bullets.push(new am4charts.CircleBullet());
       bullet1.fill = am4core.color('#BC2B5D');
       bullet1.stroke = am4core.color('#eee');
-      bullet1.tooltipText = "Sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
       let series2 = chart.series.push(new am4charts.LineSeries());
       series2.dataFields.valueY = "buyY";
       series2.dataFields.dateX = "date";
@@ -910,7 +924,15 @@ export class GraphService {
       let bullet2 = series2.bullets.push(new am4charts.CircleBullet());
       bullet2.fill = am4core.color('#26A77B')
       bullet2.stroke = am4core.color('#eee')
-      bullet2.tooltipText = "Buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
+      if (!!dto.state.isDisplayAllTraceTrades) {
+        bullet1.tooltipText = "{counterParty} sell {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+        bullet2.tooltipText = "{counterParty} buy {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+        bullet1.circle.radius = 4;
+        bullet2.circle.radius = 4;
+      } else {
+        bullet1.tooltipText = "{counterParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
+        bullet2.tooltipText = "{counterParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
+      }
       return chart;
     }
 
