@@ -189,7 +189,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public onClickSwitchViewToTrace() {
-    if (this.rowData.data.traceTradeVisualizer && this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
+    if (this.rowData.data.traceTradeVisualizer && this.rowData.data.security.data.traceTrades.length > 0) {
       this.rowData.state.viewHistoryState = false;
       this.rowData.state.viewTraceState = true;
       this.restfulCommService.logEngagement(
