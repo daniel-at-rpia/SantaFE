@@ -835,6 +835,10 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
 
 export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
   data: PortfolioBreakdownCategoryBlock;
+  style?: {
+    branchHeight: string;
+    top: string;
+  }
   state: {
     isSelected: boolean;
     isBtnDiveIn: boolean;

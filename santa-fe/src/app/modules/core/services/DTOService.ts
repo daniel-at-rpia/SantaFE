@@ -2265,6 +2265,10 @@ export class DTOService {
   public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean, inMainBreakdown: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
     const object = {
       data: categoryRow,
+      style: {
+        branchHeight: null,
+        top: null
+      },
       state: {
         isSelected: false,
         isBtnDiveIn: isDiveIn,
