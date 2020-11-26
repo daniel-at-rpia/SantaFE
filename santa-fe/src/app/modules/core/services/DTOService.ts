@@ -2324,8 +2324,17 @@ export class DTOService {
           return 0;
         }
       })
-
-      object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
+      const currentDate = moment();
+      const currentMonthDay = currentDate.format('MMM DD');
+      const dailyTraceTradesList = targetRow.data.security.data.traceTrades.filter(traceTrade => {
+        if (!!traceTrade.tradeTime) {
+          const parsedTraceTradeMonthDay = moment(traceTrade.tradeTime).format('MMM DD');
+          if (currentMonthDay === parsedTraceTradeMonthDay) {
+            return traceTrade;
+          }
+        }
+      });
+      object.data.displayList = dailyTraceTradesList;
     }
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
