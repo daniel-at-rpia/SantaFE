@@ -34,7 +34,7 @@ export const APIUrlMap = {
   getPortfolioStructures: 'portfolioStructuring/get-portfolio-structures',
   updatePortfolioTargets: 'portfolioStructuring/update-portfolio-target',
   updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
-  getBICsHierarchy: 'portfolioStructuring/get-bics-hierarchy',
+  getBICsCodeDictionary: 'portfolioStructuring/get-bics-code-dictionary',
   getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
   updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
   deletePortfolioOverride: 'portfolioStructuring/delete-portfolio-override',
@@ -280,7 +280,7 @@ export const ALERT_COUNTDOWN = 5000;
 export const ALERT_PRESENT_LIST_SIZE_CAP = 20;
 export const ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD = 99;
 export const ALERT_STATUS_SORTINGVALUE_UNIT = 315360000;  // 10 years in seconds
-export const TRACE_ALERT_REPORTED_THRESHOLD = 1000000;
+export const TRACE_VOLUME_REPORTED_THRESHOLD = 1000000;
 
 export const QUANT_COMPARER_PERCENTILE = 90;
 export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;

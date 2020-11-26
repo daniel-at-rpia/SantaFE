@@ -49,22 +49,14 @@
     </div>
     <div class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver">
       <span class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-label">Driver :</span>
-      <ul class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list">
+      <div class="santaBtnGroup sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list">
         <button
-          (click)="onClickDriver('ZSpread')"
+          (click)="onClickDriver('Spread')"
           [ngClass]="{
             'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item': true,
-            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item--selected': state.config.driver === 'ZSpread'
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item--selected': state.config.driver === 'Spread'
           }">
-          Z Spread
-        </button>
-        <button
-          (click)="onClickDriver('GSpread')"
-          [ngClass]="{
-            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item': true,
-            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-driver-list-item--selected': state.config.driver === 'GSpread'
-          }">
-          G Spread
+          Spread
         </button>
         <button
           (click)="onClickDriver('Price')"
@@ -74,7 +66,7 @@
           }">
           Price
         </button>
-      </ul>
+      </div>
     </div>
   </section>
   <section class="sat-tradeMarketAnalysisPanel__group">
