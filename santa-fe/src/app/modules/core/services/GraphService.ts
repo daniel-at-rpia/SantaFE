@@ -961,23 +961,6 @@ export class GraphService {
         series3.cursorTooltipEnabled = false;
         let bullet3 = series3.bullets.push(new am4charts.CircleBullet());
         bullet3.circle.radius = 0;
-        // create trend lines for buy and sell
-        let trend = chart.series.push(new am4charts.LineSeries());
-        trend.dataFields.valueY = "sellY";
-        trend.dataFields.dateX = "date";
-        trend.strokeWidth = 2;
-        trend.stroke = am4core.color('#BC2B5D');;
-        trend.strokeOpacity = 0.5;
-        let reg1 = trend.plugins.push(new am4plugins_regression.Regression());
-        reg1.reorder = true;
-        let trend2 = chart.series.push(new am4charts.LineSeries());
-        trend2.dataFields.valueY = "buyY";
-        trend2.dataFields.dateX = "date";
-        trend2.strokeWidth = 2;
-        trend2.stroke = am4core.color('#26A77B');
-        trend2.strokeOpacity = 0.5;
-        let reg2 = trend2.plugins.push(new am4plugins_regression.Regression());
-        reg2.reorder = true;
       } else {
         bullet1.tooltipText = "{counterParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
         bullet2.tooltipText = "{counterParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
