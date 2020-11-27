@@ -19,7 +19,11 @@ import {
   DefinitionConfiguratorEmitterParams,
   BICSServiceConsolidateReturnPack,
 } from 'Core/models/frontend/frontend-adhoc-packages.interface';
-import { BICS_BRANCH_DEFAULT_HEIGHT } from 'Core/constants/structureConstants.constants';
+import {
+  BICS_BRANCH_DEFAULT_HEIGHT,
+  BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
+  BICS_BRANCH_CHARACTER_LIMIT
+} from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
@@ -117,13 +121,14 @@ export class BICsDataProcessingService {
 
   public formUIBranchForSubLevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
     const rowListCopy = this.utilityService.deepCopy(rowList);
-    rowListCopy.forEach((row, i) => {
+    rowListCopy.forEach((row: StructurePortfolioBreakdownRowDTO, i) => {
       if (row.data.bicsLevel >= 2) {
-        const previousRow = rowListCopy[i-1];
+        const previousRow: StructurePortfolioBreakdownRowDTO = rowListCopy[i-1];
+        const branchHeight = previousRow.data.displayCategory.length >= BICS_BRANCH_CHARACTER_LIMIT ? BICS_BRANCH_DEFAULT_HEIGHT_LARGE : BICS_BRANCH_DEFAULT_HEIGHT;
         if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
           // previous row is a parent or sibling element, so the branch needs to only extend to the button before it
-          row.style.branchHeight = `${BICS_BRANCH_DEFAULT_HEIGHT}px`;
-          row.style.top = `-${BICS_BRANCH_DEFAULT_HEIGHT/2}px`;
+          row.style.branchHeight = `${branchHeight}px`;
+          row.style.top = `-${branchHeight/2}px`;
         } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
         // needs to find the closest sibling element as the previous row is a child of a sibling element
         const modifiedList: Array<StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
@@ -131,8 +136,8 @@ export class BICsDataProcessingService {
         const nearestSiblingRow: StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
         const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.displayCategory === nearestSiblingRow.data.displayCategory && eachRow.data.bicsLevel === nearestSiblingRow.data.bicsLevel); 
         const indexDifference = i - sibilingRowIndex;
-        row.style.branchHeight = `${indexDifference * BICS_BRANCH_DEFAULT_HEIGHT}px`;
-        row.style.top = `-${(indexDifference * BICS_BRANCH_DEFAULT_HEIGHT) - (BICS_BRANCH_DEFAULT_HEIGHT / 2)}px`;
+        row.style.branchHeight = `${indexDifference * branchHeight}px`;
+        row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
         }
       }
     })
