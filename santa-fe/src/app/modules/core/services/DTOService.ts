@@ -1940,7 +1940,7 @@ export class DTOService {
         autoScalingAvailable: !isStencil 
           ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
           : false,
-        autoScalingActive: false
+        autoScalingActive: true
       }
     };
     try {
