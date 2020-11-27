@@ -1089,6 +1089,24 @@ export class UtilityService {
         return result;
       }
     }
+
+    public getDailyTraceTrades(traceTrades: Array<TraceTradeBlock>): Array<TraceTradeBlock> {
+      if (traceTrades.length > 0) {
+        const currentDate = moment();
+        const currentMonthDay = currentDate.format('MMM DD');
+        const dailyTraceTradesList = traceTrades.filter(trade => {
+          if (!!trade.tradeTime) {
+            const parsedTraceTradeMonthDay = moment(trade.tradeTime).format('MMM DD');
+            if (currentMonthDay === parsedTraceTradeMonthDay) {
+              return trade;
+            }
+          }
+        });
+        return dailyTraceTradesList;
+      } else {
+        return [];
+      }
+    }
   // trade specific end
 
   // structuring specific

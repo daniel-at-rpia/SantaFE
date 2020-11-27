@@ -58,8 +58,7 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType,
-      TRACE_INITIAL_LIMIT
+      AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
@@ -2326,17 +2325,7 @@ export class DTOService {
         }
       })
       object.data.pristineRowList = targetRow.data.security.data.traceTrades;
-      const currentDate = moment();
-      const currentMonthDay = currentDate.format('MMM DD');
-      const dailyTraceTradesList = targetRow.data.security.data.traceTrades.filter(traceTrade => {
-        if (!!traceTrade.tradeTime) {
-          const parsedTraceTradeMonthDay = moment(traceTrade.tradeTime).format('MMM DD');
-          if (currentMonthDay === parsedTraceTradeMonthDay) {
-            return traceTrade;
-          }
-        }
-      });
-      object.data.displayList = dailyTraceTradesList;
+      object.data.displayList = this.utility.getDailyTraceTrades(targetRow.data.security.data.traceTrades);
     }
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {

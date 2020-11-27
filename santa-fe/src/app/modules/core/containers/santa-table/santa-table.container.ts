@@ -42,7 +42,6 @@
       TRACE_PIE_GRAPH_LEFT_ID,
       TRACE_PIE_GRAPH_RIGHT_ID
     } from 'Core/constants/securityTableConstants.constant';
-    import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { SantaTableNumericFloatingFilter } from 'Core/components/santa-table-numeric-floating-filter/santa-table-numeric-floating-filter.component';
     import { SantaTableNumericFilter } from 'Core/components/santa-table-numeric-filter/santa-table-numeric-filter.component';
     import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
@@ -316,7 +315,7 @@ export class SantaTable implements OnInit, OnChanges {
         if (!!targetRow.data.traceTradeVisualizer) {
           targetRow.data.traceTradeVisualizer.state.selectedFiltersList = [];
           targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = false;
-          targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
+          targetRow.data.traceTradeVisualizer.data.displayList = this.utilityService.getDailyTraceTrades(targetRow.data.security.data.traceTrades);
         }
         this.setAgGridRowHeight(targetRow, params, isPinnedFullWidthCell, 0);
       }
