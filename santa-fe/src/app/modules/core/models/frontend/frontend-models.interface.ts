@@ -835,7 +835,7 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
 
 export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
   data: PortfolioBreakdownCategoryBlock;
-  style?: {
+  style: {
     branchHeight: string;
     top: string;
   }

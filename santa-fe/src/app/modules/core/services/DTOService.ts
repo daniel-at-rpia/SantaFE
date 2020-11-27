@@ -2267,8 +2267,8 @@ export class DTOService {
     const object = {
       data: categoryRow,
       style: {
-        branchHeight: null,
-        top: null
+        branchHeight: '0',
+        top: '0'
       },
       state: {
         isSelected: false,
