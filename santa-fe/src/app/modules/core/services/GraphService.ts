@@ -847,7 +847,7 @@ export class GraphService {
       chart.height = 126;
       if (!!dto.state.isDisplayAllTraceTrades) {
         const displayList = dto.data.displayList;
-        const reverseList = !!dto.data.pristineRowList ? dto.data.pristineRowList.reverse() : null;
+        const reverseList = !!dto.data.pristineRowList ? [...dto.data.pristineRowList].reverse() : null;
         if (reverseList.length > 0) {
           const tradeData = reverseList.map(trade => {
             const isInDisplayList = displayList.find(displayListTrade => displayListTrade.traceTradeId === trade.traceTradeId);
