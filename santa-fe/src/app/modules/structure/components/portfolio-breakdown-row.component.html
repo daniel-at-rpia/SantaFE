@@ -1,7 +1,7 @@
 <article [ngClass]="{
   'sat-portfolioBreakdownRow': true,
   'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
-  'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
+  'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn,
   'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
   'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
   'sat-portfolioBreakdownRow--isEditingView': breakdownRow.state.isEditingView,
@@ -10,7 +10,10 @@
   'sat-portfolioBreakdownRow--improving': breakdownRow.data.view === constants.improving,
   'sat-portfolioBreakdownRow--deteriorating': breakdownRow.data.view === constants.deteriorating,
   'sat-portfolioBreakdownRow--negative': breakdownRow.data.view === constants.negative,
-  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral
+  'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
+  'sat-portfolioBreakdownRow--mainDisplayLevel2': !!breakdownRow.state.isDisplayInMainBreakdown && !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2,
+  'sat-portfolioBreakdownRow--mainDisplayLevel3': !!breakdownRow.state.isDisplayInMainBreakdown && !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3,
+  'sat-portfolioBreakdownRow--mainDisplayLevel4': !!breakdownRow.state.isDisplayInMainBreakdown && !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4
   }">
   <section class="sat-portfolioBreakdownRow__cta">
     <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">

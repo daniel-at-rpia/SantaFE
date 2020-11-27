@@ -69,6 +69,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   public loadData() {
+    if (this.breakdownData.data.title === 'BICS') {
+      this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawCs01CategoryList);
+      this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
+    }
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     let popoverCategory;
     if (this.dataIsReady) {
@@ -127,9 +131,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     } else {
       this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
-    breakdownRow.data.children = subBicsLevel;
-    this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+    const breakdownRowCopy = this.utilityService.deepCopy(breakdownRow);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
+    breakdownRowCopy.data.children = subBicsLevel;
+    breakdownRowCopy.state.isWithinPopover = true;
+    this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
     this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
     this.breakdownData.data.popover.state.isActive = true;
   }

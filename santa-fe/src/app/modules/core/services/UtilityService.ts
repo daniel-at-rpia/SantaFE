@@ -361,7 +361,8 @@ export class UtilityService {
             //   keyToRetrieveMetric = 'gSpread';
             // }
           };
-          const rawValue = rawData.metrics && rawData.metrics['Index'] ? rawData.metrics['Index'][keyToRetrieveMetric] : null;
+          const indexMetricBlock = rawData.ccy === 'CAD' ? rawData.metrics['FTSE'] : rawData.metrics['BB'];
+          const rawValue = indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
             object.raw[eachMetric.label] = null;
           } else {
