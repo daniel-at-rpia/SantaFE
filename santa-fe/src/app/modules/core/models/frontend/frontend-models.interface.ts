@@ -147,15 +147,18 @@ export interface SecurityDTO extends BasicDTOStructure {
     }
     tradeHistory: Array<TradeDTO>;
     traceTrades: Array<TraceTradeBlock>;
-    bicsLevel1: string;
-    bicsLevel2: string;
-    bicsLevel3: string;
-    bicsLevel4: string;
     lastTrace: {
       lastTraceSpread: number;
       lastTracePrice: number;
       lastTraceVolumeEstimated: number;
       lastTraceVolumeReported: number;
+    }
+    bics: {
+      code: string;
+      bicsLevel1: string;
+      bicsLevel2: string;
+      bicsLevel3: string;
+      bicsLevel4: string;
     }
   }
   api: {
