@@ -13,9 +13,9 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
   align-items: center;
   position: relative;
   &__branch {
+    @include mix_border_generator(0 0 2px 2px, $color_gray_4);
     position: absolute;
     width: 1rem;
-    @include mix_border_generator(0 0 2px 2px, $color_gray_4);
   }
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
