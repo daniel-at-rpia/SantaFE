@@ -90,7 +90,7 @@ export class BICsDataProcessingService {
     }
   }
 
-  public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+  public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>): Array<StructurePortfolioBreakdownRowDTO> {
     const rowListCopy = this.utilityService.deepCopy(rowList);
     const primaryRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel === 1);
     const subRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel >= 2);
@@ -115,7 +115,10 @@ export class BICsDataProcessingService {
         primaryRowList.splice(subRowIndex, 0, row);
       }
     })
-    const newRowList = this.formUIBranchForSubLevels(primaryRowList);
+    const newRowList: Array<StructurePortfolioBreakdownRowDTO> = this.formUIBranchForSubLevels(primaryRowList);
+    newRowList.forEach(newRow => {
+      this.getDisplayedSubLevelsForCategory(newRow, newRowList);
+    })
     return newRowList;
   }
 
@@ -266,6 +269,28 @@ export class BICsDataProcessingService {
       deepestLevel: deepestLevel,
       consolidatedStrings: convertedToLowestLevelStrings
     };
+  }
+
+  public getDisplayedSubLevelsForCategory(row: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO>){
+    if (row.data.displayedSubLevelRows.length > 0) {
+      row.state.isShowingSubLevels = !row.state.isShowingSubLevels;
+      row.data.displayedSubLevelRows.forEach(subLevel => {
+        subLevel.state.isVisibleSubLevel = !subLevel.state.isVisibleSubLevel;
+      })
+    } else {
+      const rowIndex = rowList.findIndex(displayRow => displayRow.data.displayCategory === row.data.displayCategory && displayRow.data.bicsLevel === row.data.bicsLevel);
+      const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
+      if (rowIndex >= 0) {
+        for (let i = 0; i < modifiedDisplayList.length; i++) {
+          // stops the loop when you find the next adjacent sibling
+          if (modifiedDisplayList[i].data.bicsLevel === row.data.bicsLevel) {
+            break;
+          } else {
+            row.data.displayedSubLevelRows.push(modifiedDisplayList[i])
+          }
+        }
+      }
+    }
   }
 
   private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {
