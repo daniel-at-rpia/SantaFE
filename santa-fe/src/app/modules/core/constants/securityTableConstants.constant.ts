@@ -572,7 +572,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
-          active: false
+          active: true,
+          disabled: false,
+          groupShow: true
         },
         tradeAlert: {
           active: false
@@ -1319,7 +1321,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
@@ -1341,7 +1344,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
@@ -1363,7 +1367,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: false
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
@@ -1385,7 +1390,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: false
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
