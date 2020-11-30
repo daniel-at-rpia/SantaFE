@@ -844,7 +844,7 @@ export class GraphService {
 
     public generateTradeTraceScatterGraph(dto: TraceTradesVisualizerDTO): am4charts.XYChart {
       const chart = am4core.create(dto.data.scatterGraphId, am4charts.XYChart);
-      chart.height = 140;
+      chart.height = am4core.percent(100);
       if (!!dto.state.isDisplayAllTraceTrades) {
         const displayList = dto.data.displayList;
         const reverseList = !!dto.data.pristineRowList ? [...dto.data.pristineRowList].reverse() : null;
