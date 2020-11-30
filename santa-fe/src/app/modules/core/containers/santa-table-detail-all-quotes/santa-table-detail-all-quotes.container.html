@@ -2,8 +2,8 @@
   *ngIf="!!rowData"
   [ngClass]="{
     'santaTableDetailAllQuotes': true,
-    'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.quotes.primaryQuotes.length > 0 && rowData.data.quotes.primaryPresentQuotes.length < rowData.data.quotes.primaryQuotes.length) || (rowData.data.quotes.secondaryQuotes.length > 0 && rowData.data.quotes.secondaryPresentQuotes.length < rowData.data.quotes.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes,
-    'santaTableDetailAllQuotes--showMoreTraceTradesCta': rowData.state.viewTraceState && !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades,
+    'santaTableDetailAllQuotes--showMoreQuoteCta': ((rowData.data.quotes.primaryQuotes.length > 0 && rowData.data.quotes.primaryPresentQuotes.length < rowData.data.quotes.primaryQuotes.length) || (rowData.data.quotes.secondaryQuotes.length > 0 && rowData.data.quotes.secondaryPresentQuotes.length < rowData.data.quotes.secondaryQuotes.length)) && !rowData.state.presentingAllQuotes && !rowData.state.viewTraceState,
+    'santaTableDetailAllQuotes--showMoreTraceTradesCta': rowData.state.viewTraceState && !rowData.data.traceTradeVisualizer?.state.isDisplayAllTraceTrades,
     'santaTableDetailAllQuotes--securityIsCDSState': rowData.state.isCDSVariant,
     'santaTableDetailAllQuotes--securityIsOffTheRunCDSState': rowData.state.isCDSVariant && rowData.state.isCDSOffTheRun,
     'santaTableDetailAllQuotes--viewHistoryState': rowData.state.viewHistoryState,
