@@ -1257,6 +1257,20 @@ export class DTOService {
           object.data.identifier = identifier;
         }
         object.state.isColorCodeInversed = !!colorCodeInversed;
+        // temporary guard, only meant for Dec.4th demo, TODO: remove after the demo
+          if (object.data.start < object.data.min) {
+            object.data.min = object.data.start;
+          }
+          if (object.data.start > object.data.max) {
+            object.data.max = object.data.start;
+          }
+          if (object.data.end < object.data.min) {
+            object.data.min = object.data.end;
+          }
+          if (object.data.end > object.data.max) {
+            object.data.max = object.data.end;
+          }
+        // guard end
       } else {
         object.data.start = null;
         object.data.end = null;
