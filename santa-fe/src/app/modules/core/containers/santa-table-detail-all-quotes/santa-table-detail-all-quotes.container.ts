@@ -31,7 +31,6 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import { GraphService } from 'Core/services/GraphService';
-    import { TRACE_INITIAL_LIMIT } from 'Core/constants/tradeConstants.constant';
     import { traceTradeNumericalFilterSymbols } from 'Core/constants/securityTableConstants.constant';
   //
 
@@ -83,7 +82,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       this.rowData.data.traceTradeVisualizer.state.selectedFiltersList = [];
       this.rowData.data.traceTradeVisualizer.data.availableFiltersList = [];
       this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
-      this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? this.rowData.data.security.data.traceTrades.filter((row, i) => i < TRACE_INITIAL_LIMIT) : this.rowData.data.security.data.traceTrades;
+      this.rowData.data.traceTradeVisualizer.data.displayList = this.utilityService.getDailyTraceTrades(this.rowData.data.security.data.traceTrades);
     }
   }
 
@@ -189,7 +188,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public onClickSwitchViewToTrace() {
-    if (this.rowData.data.traceTradeVisualizer && this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
+    if (this.rowData.data.traceTradeVisualizer && this.rowData.data.security.data.traceTrades.length > 0) {
       this.rowData.state.viewHistoryState = false;
       this.rowData.state.viewTraceState = true;
       this.restfulCommService.logEngagement(
@@ -245,12 +244,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
           numericalFiltersList = [...numericalFiltersList, numericalAmount];
         }
       })
-      let processingTraceTradesList: Array<TraceTradeBlock> = [];
-      if (this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT && !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
-        processingTraceTradesList = this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT);
-      } else {
-        processingTraceTradesList = this.rowData.data.security.data.traceTrades;
-      }
+      const processingTraceTradesList: Array<TraceTradeBlock> = !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.utilityService.getDailyTraceTrades(this.rowData.data.security.data.traceTrades) : this.rowData.data.security.data.traceTrades;
       let filterListWithCounterParty: Array<TraceTradeBlock> = [];
       const checkNumericalFilter = /\d/;
       const optionsCounterPartyList = options.filter(option => !checkNumericalFilter.test(option));
@@ -283,11 +277,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       }
     } else {
       this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
-      if (this.rowData.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT && !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades) {
-        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT);
-      } else {
-        this.rowData.data.traceTradeVisualizer.data.displayList = this.rowData.data.security.data.traceTrades;
-      }
+      this.rowData.data.traceTradeVisualizer.data.displayList = !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.utilityService.getDailyTraceTrades(this.rowData.data.security.data.traceTrades) : this.rowData.data.security.data.traceTrades;
     }
   }
 
