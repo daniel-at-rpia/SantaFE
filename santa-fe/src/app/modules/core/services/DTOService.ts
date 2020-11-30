@@ -58,8 +58,7 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType,
-      TRACE_INITIAL_LIMIT
+      AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
@@ -2283,9 +2282,9 @@ export class DTOService {
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
       tradeTime: rawData.eventTime,
-      displayTradeTime: moment(rawData.eventTime).format(`HH:mm`),
+      displayTradeTime: moment(rawData.eventTime).format(`MMM DD - HH:mm`),
       reportingTime: rawData.publishingTime,
-      displayReportingTime: moment(rawData.publishingTime).format(`ddd MMM DD - HH:mm`),
+      displayReportingTime: moment(rawData.publishingTime).format(`MMM DD - HH:mm`),
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
@@ -2316,6 +2315,7 @@ export class DTOService {
   public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false, previousAvailableFiltersList: Array<string>): DTOs.TraceTradesVisualizerDTO {
     const object: DTOs.TraceTradesVisualizerDTO = {
       data: {
+        pristineRowList: [],
         displayList: [],
         scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_SCATTER_GRAPH_ID}`,
         pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_LEFT_ID}`,
@@ -2346,8 +2346,8 @@ export class DTOService {
           return 0;
         }
       })
-
-      object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
+      object.data.pristineRowList = targetRow.data.security.data.traceTrades;
+      object.data.displayList = this.utility.getDailyTraceTrades(targetRow.data.security.data.traceTrades);
     }
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {

@@ -851,6 +851,7 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
 
 export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
+    pristineRowList: Array<TraceTradeBlock>;
     displayList: Array<TraceTradeBlock>;
     scatterGraphId: string;
     pieGraphLeftId: string;
