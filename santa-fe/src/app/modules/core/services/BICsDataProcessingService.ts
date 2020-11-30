@@ -299,10 +299,9 @@ export class BICsDataProcessingService {
 
   public getDisplayedSubLevelsForCategory(row: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO>){
     if (row.data.displayedSubLevelRows.length > 0) {
-        row.state.isShowingSubLevels = !row.state.isShowingSubLevels;
-        row.data.displayedSubLevelRows.forEach(subLevel => {
-          subLevel.state.isVisibleSubLevel = !subLevel.state.isVisibleSubLevel;
-        })
+      row.data.displayedSubLevelRows.forEach(subLevel => {
+        subLevel.state.isVisibleSubLevel = !!row.state.isShowingSubLevels;
+      })
     } else {
       const rowIndex = rowList.findIndex(displayRow => displayRow.data.displayCategory === row.data.displayCategory && displayRow.data.bicsLevel === row.data.bicsLevel);
       const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
@@ -317,6 +316,16 @@ export class BICsDataProcessingService {
         }
       }
     }
+  }
+
+  public resetBICsSubLevelsState(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+    rowList.forEach(row => {
+      if (row.data.bicsLevel === 1) {
+        row.state.isShowingSubLevels = false;
+      } else {
+        row.state.isVisibleSubLevel = false;
+      }
+    })
   }
 
   private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {
