@@ -149,7 +149,7 @@
       <i class="fal fa-cloud-download"></i>
       <span>Show All Quotes ({{rowData.data.quotes.primaryQuotes.length - rowData.data.quotes.primaryPresentQuotes.length + rowData.data.quotes.secondaryQuotes.length - rowData.data.quotes.secondaryPresentQuotes.length}} More)</span>
     </button>
-    <button *ngIf="rowData.data.traceTradeVisualizer && rowData.data.security.data.traceTrades.length > 9" (click)="onClickShowMoreTraceTrades()" class="santaTableDetailAllQuotes__ctas-moreTraceTradesCta santaBtn--labelled">
+    <button *ngIf="rowData.data.traceTradeVisualizer && rowData.data.security.data.traceTrades.length > 0" (click)="onClickShowMoreTraceTrades()" class="santaTableDetailAllQuotes__ctas-moreTraceTradesCta santaBtn--labelled">
       <i class="fal fa-cloud-download"></i>
       <span>Show Trace Trades From Past Week ({{rowData.data.security.data.traceTrades.length - rowData.data.traceTradeVisualizer.data.displayList.length}} More)</span>
     </button>
