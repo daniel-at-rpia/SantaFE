@@ -2218,10 +2218,6 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      // Add level indicator to BICS rows
-      if (!!isBicsBreakdown && customLevel >= 2) {
-        eachCategoryBlock.displayCategory = `${eachCategoryBlock.displayCategory} (Lv.${customLevel})`;
-      }
       const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown, isDisplayInMainBreakdown);
       return eachCategoryBlockDTO;
     } else {
@@ -2266,6 +2262,10 @@ export class DTOService {
   public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean, inMainBreakdown: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
     const object = {
       data: categoryRow,
+      style: {
+        branchHeight: '0',
+        top: '0'
+      },
       state: {
         isSelected: false,
         isBtnDiveIn: isDiveIn,
