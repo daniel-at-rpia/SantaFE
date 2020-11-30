@@ -6,6 +6,7 @@ $portfolioBreakdown_rating_width: 12rem;
 $portfolioBreakdown_rating_thickness: 1.75rem;
 $portfolioBreakdown_categoryList_cell_width: 3.5rem;
 $portfolioBreakdown_rating_height: 1rem;
+$portfolioBreakdown_cta_font_size: .58rem;
 
 .sat-portfolioBreakdown {
   $blockName: &;
@@ -140,6 +141,11 @@ $portfolioBreakdown_rating_height: 1rem;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
+    &-editBtn {
+      &>span {
+        font-size: $portfolioBreakdown_cta_font_size;
+      }
+    }
     &-viewBtn {
       display: none;
       &-icon {
@@ -153,9 +159,15 @@ $portfolioBreakdown_rating_height: 1rem;
           margin-top: $spacing_x_small;
         }
       }
+      &>span {
+        font-size: $portfolioBreakdown_cta_font_size;
+      }
     }
     &-allSubLevelsBtn {
       display: none;
+      &>span {
+        font-size: $portfolioBreakdown_cta_font_size;
+      }
     }
   }
   &--goodRating {
