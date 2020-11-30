@@ -84,6 +84,7 @@
       KEYWORDSEARCH_DEBOUNCE_TIME,
       TriCoreDriverConfig
     } from 'Core/constants/coreConstants.constant';
+    import { SecurityTableHeaderConfigStub } from 'Core/models/frontend/frontend-stub-models.interface';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
 
@@ -496,7 +497,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             metric.content.tableSpecifics.tradeAlert.active = false;
           }
         })
-        this.state.table.alertMetrics = securityTableHeaderConfigsCopy;
+        const nonDisabledAlertHeaders: Array<SecurityTableHeaderConfigStub> = securityTableHeaderConfigsCopy.filter((header: SecurityTableHeaderConfigStub) => (!!header.content.tableSpecifics.default && !header.content.tableSpecifics.tradeAlert) || (!header.content.tableSpecifics.tradeAlert.disabled));
+        this.state.table.alertMetrics = nonDisabledAlertHeaders;
     }
 
     public onClickSpecificAlertTypeTab(
