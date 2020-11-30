@@ -2054,7 +2054,6 @@ export class DTOService {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
         customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel : null;
       }
-      object.state.isDisplaySubLevels = !!isCustomLevelAvailable;
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),

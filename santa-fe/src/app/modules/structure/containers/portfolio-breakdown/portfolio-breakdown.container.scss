@@ -154,6 +154,9 @@ $portfolioBreakdown_rating_height: 1rem;
         }
       }
     }
+    &-allSubLevelsBtn {
+      display: none;
+    }
   }
   &--goodRating {
     #{$blockName} {
@@ -225,6 +228,7 @@ $portfolioBreakdown_rating_height: 1rem;
         }
         &-viewBtn {
           display: flex;
+          margin-right: $spacing_large;
         }
       }
     }
@@ -233,6 +237,28 @@ $portfolioBreakdown_rating_height: 1rem;
     #{$blockName} {
       &__ctas {
         &-viewBtn {
+          @include material('none');
+          background-color: $color_active;
+          &>i, &>span {
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+  }
+  &--isBICs {
+    #{$blockName} {
+      &__ctas {
+        &-allSubLevelsBtn {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--displaySubLevelsState {
+    #{$blockName} {
+      &__ctas {
+        &-allSubLevelsBtn {
           @include material('none');
           background-color: $color_active;
           &>i, &>span {
