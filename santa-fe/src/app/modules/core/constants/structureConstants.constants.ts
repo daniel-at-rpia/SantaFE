@@ -37,6 +37,12 @@ export const SUPPORTED_PORTFOLIO_LIST: Array<PortfolioShortNames> = [
   PortfolioShortNames.SOF
 ];
 
+export const BICS_BRANCH_DEFAULT_HEIGHT = 50;
+
+export const BICS_BRANCH_DEFAULT_HEIGHT_LARGE = 55;
+
+export const BICS_BRANCH_CHARACTER_LIMIT = 26;
+
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
   creditLeverage = 'Credit Leverage',
