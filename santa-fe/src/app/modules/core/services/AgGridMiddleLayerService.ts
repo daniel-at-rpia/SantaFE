@@ -46,7 +46,7 @@
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
-      TRACE_ALERT_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
   //
 
@@ -125,27 +125,35 @@ export class AgGridMiddleLayerService {
       if (eachHeader.data.key === 'alertTime') {
         newAgColumn['sort'] = 'asc';
       }
-      if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported' || eachHeader.data.key === 'lastTraceVolumeEstimated' || eachHeader.data.key === 'lastTraceVolumeReported' ) {
+      if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
         if (eachHeader.data.key === 'alertTraceVolumeEstimated') {
           newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToCommas(params.value) : null);
         }
-        if (eachHeader.data.key === 'lastTraceVolumeEstimated') {
-          newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToMillions(params.value, false) : null);
-        }
-        if (eachHeader.data.key === 'alertTraceVolumeReported' || eachHeader.data.key === 'lastTraceVolumeReported') {
+        if (eachHeader.data.key === 'alertTraceVolumeReported') {
           newAgColumn.valueFormatter = (params: ValueFormatterParams) => {
-            if (!!params.data && !!params.data.alertTraceVolumeEstimated && params.context.componentParent.tableName === 'tradeAlert') {
-              return this.utilityService.formatTraceReportedValues(params.value);
-            } else if (!!params.data && !!params.data.lastTraceVolumeEstimated && params.context.componentParent.tableName === 'tradeMain') {
-              return this.utilityService.formatTraceReportedValues(params.value);
-            } else {
-              if (params.context.componentParent.tableName === 'tradeMain') {
-                return this.utilityService.parseNumberToMillions(params.value, false);
+            if (!!params.value) {
+              if (!!params.data && !!params.data.alertTraceVolumeEstimated) {
+                return this.utilityService.formatTraceReportedValues(params.value);
               } else {
-                const displayValue = !!params.value ? this.utilityService.parseNumberToCommas(params.value) : null;
-                return displayValue;
+                return this.utilityService.parseNumberToCommas(params.value)
               }
+            } else {
+              return null;
             }
+          }
+        }
+      }
+
+      if (eachHeader.data.key === 'lastTraceVolumeReported') {
+        newAgColumn.valueFormatter = (params: ValueFormatterParams) => {
+          if (!!params.value) {
+            if (!!params.data && !!params.data.lastTraceVolumeEstimated) {
+              return this.utilityService.formatTraceReportedValues(params.value, true)
+            } else {
+              return params.value;
+            }
+          } else {
+            return null;
           }
         }
       }

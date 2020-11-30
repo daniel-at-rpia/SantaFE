@@ -33,7 +33,7 @@
       DEFAULT_DRIVER_IDENTIFIER,
       AlertTypes,
       AlertSubTypes,
-      TRACE_ALERT_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
@@ -361,7 +361,8 @@ export class UtilityService {
             //   keyToRetrieveMetric = 'gSpread';
             // }
           };
-          const rawValue = rawData.metrics && rawData.metrics['Index'] ? rawData.metrics['Index'][keyToRetrieveMetric] : null;
+          const indexMetricBlock = rawData.ccy === 'CAD' ? rawData.metrics['FTSE'] : rawData.metrics['BB'];
+          const rawValue = indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
             object.raw[eachMetric.label] = null;
           } else {
@@ -1056,7 +1057,7 @@ export class UtilityService {
     }
 
     public checkIfTraceIsAvailable(targetRow: DTOs.SecurityTableRowDTO): boolean {
-      return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds'
+      return targetRow.data.security.data.currency === 'USD' && targetRow.data.security.data.securityType !== 'Cds' && targetRow.data.security.data.securityType !== 'Stock'
     }
 
     public getTraceNumericFilterAmount(filterSymbol: string, filter: string): number {
@@ -1070,10 +1071,15 @@ export class UtilityService {
       return newList;
     }
 
-    public formatTraceReportedValues(amount: number): string {
-      const reportedInteger = amount / TRACE_ALERT_REPORTED_THRESHOLD;
+    public formatTraceReportedValues(amount: number, isRounded: boolean = false): string {
+      if (!isRounded) {
+      const reportedInteger = amount / TRACE_VOLUME_REPORTED_THRESHOLD;
       const roundedVolumeReported = Math.floor(reportedInteger);
       return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
+      } else {
+        const displayValue = !!amount ? `${traceTradeNumericalFilterSymbols.greaterThan} ${Math.floor(amount)}MM` : null;
+        return displayValue;
+      }
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
@@ -1082,6 +1088,24 @@ export class UtilityService {
       } else {
         const result = 100 - Math.round(delta / maxAbsDelta * 100);
         return result;
+      }
+    }
+
+    public getDailyTraceTrades(traceTrades: Array<TraceTradeBlock>): Array<TraceTradeBlock> {
+      if (traceTrades.length > 0) {
+        const currentDate = moment();
+        const currentMonthDay = currentDate.format('MMM DD');
+        const dailyTraceTradesList = traceTrades.filter(trade => {
+          if (!!trade.tradeTime) {
+            const parsedTraceTradeMonthDay = moment(trade.tradeTime).format('MMM DD');
+            if (currentMonthDay === parsedTraceTradeMonthDay) {
+              return trade;
+            }
+          }
+        });
+        return dailyTraceTradesList;
+      } else {
+        return [];
       }
     }
   // trade specific end
@@ -1236,7 +1260,7 @@ export class UtilityService {
         if (!!eachCs01Entry) {
           const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
           const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
-          if (highestVal > findCs01Max) {
+          if (highestVal > findCs01Max && highestVal >= 1000) {
             findCs01Max = highestVal;
           }
           if (lowestVal < findCs01Min) {

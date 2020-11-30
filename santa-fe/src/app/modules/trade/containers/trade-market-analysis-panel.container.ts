@@ -46,7 +46,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   @Input() collapseGraph: boolean;
   state: TradeMarketAnalysisPanelState;
   subscriptions = {
-    // receiveSelectedSecuritySub: null
+    receiveSelectedSecuritySub: null
   }
   constants = {
     marketAnalysisGroupByOptions: MarketAnalysisGroupByOptions,
@@ -75,7 +75,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
         timeScope: 'Mom',
         groupByOptions: [],
         activeOptions: [],
-        driver: 'GSpread'
+        driver: 'Spread'
       },
       table: {
         numOfSecurities: 0,
@@ -105,12 +105,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-    // this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
-    //   select(selectSelectedSecurityForAnalysis),
-    //   delay(500)
-    // ).subscribe((targetSecurity) => {
-    //   !!targetSecurity && this.onSecuritySelected(targetSecurity);
-    // });
+    this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+      select(selectSelectedSecurityForAnalysis),
+      delay(500)
+    ).subscribe((targetSecurity) => {
+      !!targetSecurity && this.onSecuritySelected(targetSecurity);
+    });
   }
 
   public ngOnChanges() {
@@ -401,7 +401,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       } else {
         this.state.table.moveDistanceBasisList.push('');
       }
-      const targetFieldForCount = this.utilityService.isCDS(false, this.state.targetSecurity) ? 'Spread' : this.state.config.driver;
+      const targetFieldForCount = 'RatingDouble';
       try {
         this.state.table.numOfSecurities = rawData.Group.group.deltaMetrics[this.state.config.timeScope].propertyToNumSecurities[targetFieldForCount];
       } catch {

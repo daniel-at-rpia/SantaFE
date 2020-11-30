@@ -383,9 +383,7 @@ export const MarketAnalysisGroupByOpionsDefaultActiveList: Array<string> = [
   SecurityDefinitionMap.SENIORITY.key,
   SecurityDefinitionMap.RATING.key,
   SecurityDefinitionMap.SECTOR.key,
-  SecurityDefinitionMap.INDUSTRY.key,
-  SecurityDefinitionMap.TENOR.key,
-  SecurityDefinitionMap.COUNTRY.key
+  SecurityDefinitionMap.TENOR.key
 ];
 
 export const ALERT_MAX_SECURITY_SEARCH_COUNT = 100;
@@ -402,5 +400,3 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
-
-export const TRACE_INITIAL_LIMIT = 9;

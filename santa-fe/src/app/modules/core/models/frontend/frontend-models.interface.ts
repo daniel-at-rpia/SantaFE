@@ -733,6 +733,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isOverrideVariant: boolean;
     isEditingViewAvail: boolean;
     isEditingView: boolean;
+    isDisplaySubLevels: boolean;
   }
 }
 
@@ -834,16 +835,23 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
 
 export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
   data: PortfolioBreakdownCategoryBlock;
+  style: {
+    branchHeight: string;
+    top: string;
+  }
   state: {
     isSelected: boolean;
     isBtnDiveIn: boolean;
     isStencil: boolean;
     isEditingView: boolean;
+    isDisplayInMainBreakdown: boolean;
+    isWithinPopover: boolean;
   }
 }
 
 export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
+    pristineRowList: Array<TraceTradeBlock>;
     displayList: Array<TraceTradeBlock>;
     scatterGraphId: string;
     pieGraphLeftId: string;

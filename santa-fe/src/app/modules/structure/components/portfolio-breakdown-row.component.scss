@@ -2,17 +2,28 @@
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
+$portfolioBreakdownRowBranchLeftIncrement: 1.5rem;
+$portfolioBreakdownRowBranchLevel2Base: .5rem;
+$portfolioBreakdownRowBranchLevel3Base: $portfolioBreakdownRowBranchLevel2Base + $portfolioBreakdownRowBranchLeftIncrement;
+$portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base + $portfolioBreakdownRowBranchLeftIncrement;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
+  position: relative;
+  &__branch {
+    @include mix_border_generator(0 0 2px 2px, $color_gray_4);
+    position: absolute;
+    width: 1rem;
+  }
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 8.5rem;
     display: flex;
     margin-right: .5rem;
     &-btn {
+      @include mix_fixed_div(relative, $z_index_base_item_solid);
       @include mix_border_generator();
       flex: 1 1 auto;
       display: flex;
@@ -339,6 +350,45 @@ $portfolioBreakdownRowBtnMinHeight: 2.25rem;
       &__cell {
         &--target {
           background-color: $color_red_5;
+        }
+      }
+    }
+  }
+  &--mainDisplayLevel2 {
+    #{$blockName} {
+      &__branch {
+        left: $portfolioBreakdownRowBranchLevel2Base;
+      }
+      &__cta {
+        margin-left: $portfolioBreakdownRowBranchLevel2Base + $spacing_small;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
+  }
+  &--mainDisplayLevel3 {
+    #{$blockName} {
+      &__branch {
+        left: $portfolioBreakdownRowBranchLevel3Base;
+      }
+      &__cta {
+        margin-left: $portfolioBreakdownRowBranchLevel3Base + $spacing_small;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
+  }
+  &--mainDisplayLevel4 {
+    #{$blockName} {
+      &__branch {
+        left: $portfolioBreakdownRowBranchLevel4Base;
+      }
+      &__cta {
+        margin-left: $portfolioBreakdownRowBranchLevel4Base + $spacing_small;
+        &-btn {
+          margin-left: $spacing_x_small;
         }
       }
     }

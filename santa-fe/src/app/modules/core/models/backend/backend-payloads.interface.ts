@@ -118,7 +118,8 @@ export interface PayloadUpdatePortfolioStructuresTargets {
     target: {
       [metric in BEPortfolioTargetMetricValues]?: number;
     }
-  }
+  },
+  shouldAutoScale: boolean
 }
 
 export interface PayloadUpdateBreakdown {
