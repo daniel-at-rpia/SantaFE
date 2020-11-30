@@ -11,9 +11,13 @@
   'sat-portfolioBreakdownRow--deteriorating': breakdownRow.data.view === constants.deteriorating,
   'sat-portfolioBreakdownRow--negative': breakdownRow.data.view === constants.negative,
   'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
-  'sat-portfolioBreakdownRow--mainDisplayLevel2': !!breakdownRow.state.isDisplayInMainBreakdown && !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2,
-  'sat-portfolioBreakdownRow--mainDisplayLevel3': !!breakdownRow.state.isDisplayInMainBreakdown && !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3,
-  'sat-portfolioBreakdownRow--mainDisplayLevel4': !!breakdownRow.state.isDisplayInMainBreakdown && !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4
+  'sat-portfolioBreakdownRow--hasSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.data.displayedSubLevelRows.length > 0,
+  'sat-portfolioBreakdownRow--showSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.state.isShowingSubLevels,
+  'sat-portfolioBreakdownRow--mainDisplayLevel1': !breakdownRow.state.isWithinPopover &&  breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn,
+  'sat-portfolioBreakdownRow--mainDisplayLevel2': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2 && !!breakdownRow.state.isBtnDiveIn,
+  'sat-portfolioBreakdownRow--mainDisplayLevel3': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3 && !!breakdownRow.state.isBtnDiveIn,
+  'sat-portfolioBreakdownRow--mainDisplayLevel4': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4 && !!breakdownRow.state.isBtnDiveIn,
+  'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover
   }">
   <section class="sat-portfolioBreakdownRow__branch" *ngIf="breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover" [ngStyle]="{'height': breakdownRow.style.branchHeight, 'top': breakdownRow.style.top}"></section>
   <section class="sat-portfolioBreakdownRow__cta">
@@ -29,6 +33,9 @@
         }"></i>
       </div>
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
+    </button>
+    <button class="sat-portfolioBreakdownRow__cta-subLevelToggle" *ngIf="breakdownRow.data.bicsLevel === 1 && !breakdownRow.state.isWithinPopover" (click)="showSubLevels(breakdownRow)">
+      <i class="fas fa-pennant"></i>
     </button>
   </section>
   <section class="sat-portfolioBreakdownRow__utility">

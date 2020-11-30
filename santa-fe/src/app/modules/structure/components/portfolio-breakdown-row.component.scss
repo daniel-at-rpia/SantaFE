@@ -1,5 +1,9 @@
 @import "global.scss";
 
+button {
+  @extend .santaBtn;
+}
+
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
 $portfolioBreakdownRowBranchLeftIncrement: 1.5rem;
@@ -76,6 +80,13 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
           }
         }
       }
+    }
+    &-subLevelToggle {
+      @include mix_fixed_div(relative, $z_index_base_item_solid);
+      display: flex;
+      align-self: flex-start;
+      flex: 0 0 1rem;
+      visibility: hidden;
     }
   }
   &__cell {
@@ -354,7 +365,37 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
       }
     }
   }
+  &--hasSubLevels {
+    #{$blockName} {
+      &__cta {
+        &-subLevelToggle {
+          visibility: visible;
+        }
+      }
+    }
+  }
+  &--showSubLevels {
+    #{$blockName} {
+      &__cta {
+        &-subLevelToggle {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--mainDisplayLevel1 {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          flex: 0 0 6rem;
+        }
+      }
+    }
+  }
   &--mainDisplayLevel2 {
+    display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel2Base;
@@ -368,6 +409,7 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
     }
   }
   &--mainDisplayLevel3 {
+    display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel3Base;
@@ -381,6 +423,7 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
     }
   }
   &--mainDisplayLevel4 {
+    display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel4Base;
@@ -390,6 +433,15 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
         &-btn {
           margin-left: $spacing_x_small;
         }
+      }
+    }
+  }
+  &--visibleSubLevel {
+    &#{$blockName} {
+      &--mainDisplayLevel2,
+      &--mainDisplayLevel3,
+      &--mainDisplayLevel4 {
+        display: flex;
       }
     }
   }
