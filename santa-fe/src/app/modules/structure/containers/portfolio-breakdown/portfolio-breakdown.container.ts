@@ -167,6 +167,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public getMainDisplaySubLevels(row: StructurePortfolioBreakdownRowDTO) {
+    this.bicsDataProcessingService.getDisplayedSubLevelsForCategory(row, this.breakdownData.data.displayCategoryList);
+  }
+
   private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
     if (!row) {
       return null;

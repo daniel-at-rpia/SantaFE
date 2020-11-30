@@ -55,7 +55,8 @@
         class="sat-portfolioBreakdown__categoryContent-list-item">
         <portfolio-breakdown-row
           [breakdownRow]="eachCategory"
-          (breakdownRowDiveIn)="updatePopoverData($event)">
+          (breakdownRowDiveIn)="updatePopoverData($event)"
+          (viewMainDisplaySubLevels)="getMainDisplaySubLevels($event)">
         </portfolio-breakdown-row>
       </li>
     </ul>
