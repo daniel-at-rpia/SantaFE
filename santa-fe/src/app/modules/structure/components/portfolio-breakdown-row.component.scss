@@ -1,9 +1,5 @@
 @import "global.scss";
 
-button {
-  @extend .santaBtn;
-}
-
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
 $portfolioBreakdownRowBranchLeftIncrement: 1.5rem;

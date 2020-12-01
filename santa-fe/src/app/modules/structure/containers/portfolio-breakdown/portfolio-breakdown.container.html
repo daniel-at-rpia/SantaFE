@@ -12,7 +12,7 @@
     'sat-portfolioBreakdown--overrideVariant': breakdownData.state.isOverrideVariant,
     'sat-portfolioBreakdown--isEditingViewAvailableState': breakdownData.state.isEditingViewAvail,
     'sat-portfolioBreakdown--editingView': breakdownData.state.isEditingView,
-    'sat-portfolioBreakdown--displaySubLevelsState': breakdownData.state.isDisplaySubLevels
+    'sat-portfolioBreakdown--displayAllTargetState': breakdownData.state.isDisplaySubLevels
   }">
   <section class="sat-portfolioBreakdown__title">
     <div class="sat-portfolioBreakdown__title-definition">
@@ -37,7 +37,7 @@
   </section>
   <section class="sat-portfolioBreakdown__categoryHeader">
     <div class="sat-portfolioBreakdown__categoryHeader-cell">
-      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-pennant"></i>
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-flag-checkered"></i>
       <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Target</div>
     </div>
     <div class="sat-portfolioBreakdown__categoryHeader-cell">
@@ -75,8 +75,8 @@
       <span>Set Outlook</span>
     </button>
     <button (click)="onClickShowAllSubLevels()" class="santaBtn--circleLabelled sat-portfolioBreakdown__ctas-allSubLevelsBtn">
-      <i class="fal fa-pennant"></i>
-      <span>View Sub Levels</span>
+      <i class="fal fa-flag-checkered"></i>
+      <span>All Targets</span>
     </button>
   </section>
   <section class="sat-portfolioBreakdown__popover">
