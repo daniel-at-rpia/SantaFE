@@ -42,7 +42,6 @@ import { StructurePopover } from 'Structure/containers/structure-popover/structu
     ]),
     // Native modules
     CoreModule,
-    TradeModule,  // this is here because of move visualizer, TODO: move Move Visualizer to core module and remove this dependency
     FormModule
   ],
   providers: [

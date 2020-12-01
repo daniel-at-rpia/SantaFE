@@ -16,7 +16,6 @@ import { TradeUtilityPanel } from 'Trade/containers/trade-utility-panel.containe
 import { TradeMarketAnalysisPanel } from 'Trade/containers/trade-market-analysis-panel.container';
 import { TradeObligorGraphPanel } from 'Trade/containers/trade-obligor-graph-panel.container';
 import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
-import { MoveVisualizer } from 'Trade/components/move-visualizer/move-visualizer.component';
 import { ObligorGraph } from './components/obligor-graph/obligor-graph';
 import { HistoricalSummary } from 'Trade/containers/historical-summary.container';
 import {AlertCountSummary} from "Trade/components/alert-count-summary/alert-count-summary";
@@ -32,7 +31,6 @@ import { NavigationModule } from "Core/constants/coreConstants.constant";
     TradeUtilityPanel,
     TradeMarketAnalysisPanel,
     TradeObligorGraphPanel,
-    MoveVisualizer,
     ObligorGraph,
     HistoricalSummary,
     AlertWatchList
@@ -55,8 +53,6 @@ import { NavigationModule } from "Core/constants/coreConstants.constant";
   providers: [
     LiveDataProcessingService
   ],
-  exports: [
-    MoveVisualizer
-  ]
+  exports: []
 })
 export class TradeModule { }
