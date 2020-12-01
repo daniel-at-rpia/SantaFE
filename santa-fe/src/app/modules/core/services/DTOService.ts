@@ -2068,7 +2068,6 @@ export class DTOService {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
         customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel : null;
       }
-      object.state.isDisplaySubLevels = !!isCustomLevelAvailable;
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
@@ -2195,7 +2194,6 @@ export class DTOService {
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
-      const isDisplayInMainBreakdown = !!customLevel ? true : false;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
@@ -2223,7 +2221,8 @@ export class DTOService {
         },
         view: view,
         bucket: bucket,
-        parentRow: null
+        parentRow: null,
+        displayedSubLevelRows: []
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2231,7 +2230,7 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown, isDisplayInMainBreakdown);
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown);
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2272,7 +2271,7 @@ export class DTOService {
     return object;
   }
 
-  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean, inMainBreakdown: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
+  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
     const object = {
       data: categoryRow,
       style: {
@@ -2284,8 +2283,9 @@ export class DTOService {
         isBtnDiveIn: isDiveIn,
         isStencil: true,
         isEditingView: false,
-        isDisplayInMainBreakdown: inMainBreakdown,
-        isWithinPopover: false
+        isWithinPopover: false,
+        isVisibleSubLevel: false,
+        isShowingSubLevels: false
       }
     }
     return object;

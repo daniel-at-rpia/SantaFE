@@ -90,33 +90,62 @@ export class BICsDataProcessingService {
     }
   }
 
-  public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+  public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>): Array<StructurePortfolioBreakdownRowDTO> {
     const rowListCopy = this.utilityService.deepCopy(rowList);
     const primaryRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel === 1);
     const subRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel >= 2);
-    // subRowList should be sorted in ascending order to ensure that parentRow lookup can be done 
-    subRowList.sort((rowA: StructurePortfolioBreakdownRowDTO, rowB: StructurePortfolioBreakdownRowDTO) => {
-      if (rowA.data.bicsLevel < rowB.data.bicsLevel) {
-        return - 1
-      } else if (rowA.data.bicsLevel > rowB.data.bicsLevel) {
-        return 1;
+    const parsedRowList: Array<StructurePortfolioBreakdownRowDTO> = [];
+    if (subRowList.length > 0) {
+      subRowList.forEach((eachRow: StructurePortfolioBreakdownRowDTO) => {
+        if (!!eachRow.data.targetLevel) {
+          parsedRowList.push(eachRow);
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.category, eachRow.data.bicsLevel, []);
+          if (hierarchyList.length > 0) {
+            hierarchyList.forEach((listItem: BICsHierarchyBlock) => {
+              const ifExistsInParsedList = parsedRowList.find(parsedRow => !!parsedRow && parsedRow.data.displayCategory === listItem.name && parsedRow.data.bicsLevel === listItem.bicsLevel);
+              if (!ifExistsInParsedList && eachRow.data.bicsLevel >= 3) { // level 2 parent category is in the primary list already
+                const matchedRow = subRowList.find((subRow: StructurePortfolioBreakdownRowDTO) => subRow.data.displayCategory === listItem.name && subRow.data.bicsLevel === listItem.bicsLevel);
+                if (!!matchedRow) {
+                  parsedRowList.push(matchedRow);
+                }
+              }
+            })
+          }
+        }
+      })
+      if (parsedRowList.length > 0 ) {
+        // parsedRowList should be sorted in ascending order to ensure that parentRow lookup can be done
+        parsedRowList.sort((rowA: StructurePortfolioBreakdownRowDTO, rowB: StructurePortfolioBreakdownRowDTO) => {
+          if (rowA.data.bicsLevel < rowB.data.bicsLevel) {
+            return - 1
+          } else if (rowA.data.bicsLevel > rowB.data.bicsLevel) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        parsedRowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(row.data.category, row.data.bicsLevel, []);
+          const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
+          if (!!parentLevel) {
+            const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);
+            row.data.parentRow = primaryRowList.find(targetRow => targetRow.data.category === parentRow.name && targetRow.data.bicsLevel === parentRow.bicsLevel);
+            const parentIndex = primaryRowList.findIndex(primaryRow => primaryRow.data.category === parentRow.name && primaryRow.data.bicsLevel === parentRow.bicsLevel);
+            const subRowIndex = parentIndex + 1;
+            primaryRowList.splice(subRowIndex, 0, row);
+          }
+        })
+        const newRowList: Array<StructurePortfolioBreakdownRowDTO> = this.formUIBranchForSubLevels(primaryRowList);
+        newRowList.forEach(newRow => {
+          this.getDisplayedSubLevelsForCategory(newRow, newRowList);
+        })
+        return newRowList;
       } else {
-        return 0;
+        return rowList;
       }
-    })
-    subRowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
-      const hierarchyList = this.getTargetSpecificHierarchyList(row.data.category, row.data.bicsLevel, []);
-      const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
-      if (!!parentLevel) {
-        const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);
-        row.data.parentRow = primaryRowList.find(targetRow => targetRow.data.category === parentRow.name && targetRow.data.bicsLevel === parentRow.bicsLevel);
-        const parentIndex = primaryRowList.findIndex(primaryRow => primaryRow.data.category === parentRow.name && primaryRow.data.bicsLevel === parentRow.bicsLevel);
-        const subRowIndex = parentIndex + 1;
-        primaryRowList.splice(subRowIndex, 0, row);
-      }
-    })
-    const newRowList = this.formUIBranchForSubLevels(primaryRowList);
-    return newRowList;
+    } else {
+      return rowList;
+    }
   }
 
   public formUIBranchForSubLevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
@@ -266,6 +295,37 @@ export class BICsDataProcessingService {
       deepestLevel: deepestLevel,
       consolidatedStrings: convertedToLowestLevelStrings
     };
+  }
+
+  public getDisplayedSubLevelsForCategory(row: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO>){
+    if (row.data.displayedSubLevelRows.length > 0) {
+      row.data.displayedSubLevelRows.forEach(subLevel => {
+        subLevel.state.isVisibleSubLevel = !!row.state.isShowingSubLevels;
+      })
+    } else {
+      const rowIndex = rowList.findIndex(displayRow => displayRow.data.displayCategory === row.data.displayCategory && displayRow.data.bicsLevel === row.data.bicsLevel);
+      const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
+      if (rowIndex >= 0) {
+        for (let i = 0; i < modifiedDisplayList.length; i++) {
+          // stops the loop when you find the next adjacent sibling
+          if (modifiedDisplayList[i].data.bicsLevel === row.data.bicsLevel) {
+            break;
+          } else {
+            row.data.displayedSubLevelRows.push(modifiedDisplayList[i])
+          }
+        }
+      }
+    }
+  }
+
+  public resetBICsSubLevelsState(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+    rowList.forEach(row => {
+      if (row.data.bicsLevel === 1) {
+        row.state.isShowingSubLevels = false;
+      } else {
+        row.state.isVisibleSubLevel = false;
+      }
+    })
   }
 
   private setBreakdownListProperties(breakdownList: Array<StructurePortfolioBreakdownRowDTO>, parentRow: StructurePortfolioBreakdownRowDTO, isEditingView: boolean) {

@@ -70,6 +70,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public loadData() {
     if (this.breakdownData.data.title === 'BICS') {
+      // Resets BICS sublevel states
+      this.breakdownData.state.isDisplaySubLevels = false;
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawCs01CategoryList);
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawLeverageCategoryList);
       this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawCs01CategoryList);
       this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
     }
@@ -164,6 +168,25 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       breakdown.data.displayCategoryList.forEach(row => {
         this.toggleSetView(row, this.breakdownData.state.isEditingView);
       })
+    }
+  }
+
+  public getMainDisplaySubLevels(row: StructurePortfolioBreakdownRowDTO) {
+    row.state.isShowingSubLevels = !row.state.isShowingSubLevels;
+    this.bicsDataProcessingService.getDisplayedSubLevelsForCategory(row, this.breakdownData.data.displayCategoryList);
+  }
+
+  public onClickShowAllSubLevels() {
+    if (this.breakdownData.data.displayCategoryList.length > 0) {
+      this.breakdownData.state.isDisplaySubLevels = !this.breakdownData.state.isDisplaySubLevels;
+      this.breakdownData.data.displayCategoryList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
+        if (row.data.bicsLevel === 1 && row.data.displayedSubLevelRows.length > 0) {
+          row.state.isShowingSubLevels = !!this.breakdownData.state.isDisplaySubLevels;
+        }
+        if (row.data.bicsLevel >= 2) {
+          row.state.isVisibleSubLevel = !!this.breakdownData.state.isDisplaySubLevels;
+        }
+      });
     }
   }
 
