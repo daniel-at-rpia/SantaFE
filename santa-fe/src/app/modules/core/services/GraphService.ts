@@ -882,73 +882,29 @@ export class GraphService {
             chart.data = tradeDataList;
             let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
             dateAxis.title.text = 'Day';
-            dateAxis.dateFormats.setKey("day", "MMMM dd");
-            dateAxis.periodChangeDateFormats.setKey("day", "MMMM dd");
-            const customDateAxisList: Array<string> = [];
-            tradeDataList.forEach((item: TraceScatterGraphData) => {
-              const formattedDate = item.rawDate.split('T')[0];
-              const ifExists = customDateAxisList.find(tradeDate => tradeDate === formattedDate);
-              !ifExists && customDateAxisList.push(formattedDate);
-            });
-            dateAxis.renderer.grid.template.disabled = true;
-            dateAxis.renderer.labels.template.disabled = true;
-            //Specific functions to create custom grids for scatter graph
-            function createRange(start: Date, end: Date, label: string) {
-              let range = dateAxis.axisRanges.create();
-              range.date = start;
-              range.endDate = end;
-              range.label.text = label;
-              range.label.paddingTop = 5;
-              range.label.location = .5;
-              range.label.horizontalCenter = "middle";
-              range.grid.disabled = true;
-            }
-            function createRangeGrid(start: Date) {
-              var range = dateAxis.axisRanges.create();
-              range.date = start;
-              range.grid.strokeOpacity = 0.1;
-              range.tick.disabled = false;
-              range.tick.strokeOpacity = 0;
-              range.tick.length = 30;
-            }
-            function returnFormattedHours(dataList: Array<TraceScatterGraphData>, index: number): string {
-              const getTradeTime = dataList[index].rawDate.split('T')[1];
-              const getTradeHours = +(getTradeTime.substring(0,2));
-              const modifiedHours = index > 0 ? getTradeHours + 1 : getTradeHours;
-              const formattedHours = modifiedHours < 10 ? `0${modifiedHours}` : `${modifiedHours}`;
-              return formattedHours;
-            }
-            if (customDateAxisList.length > 0) {
-              customDateAxisList.forEach((customDate, i) => {
-                const label = moment(customDate).format('MMM DD');
-                if (i === 0) {
-                  const formattedHours = returnFormattedHours(tradeDataList, i);
-                  const formattedFullTime = `T${formattedHours}:00:00`;
-                  const startTime = new Date(`${customDate}${formattedFullTime}`);
-                  const endTime = new Date(`${customDate}T18:00:00`);
-                  createRange(startTime, endTime, label);
-                  createRangeGrid(startTime);
-                } else if (i === customDateAxisList.length - 1) {
-                  const formattedHours = returnFormattedHours(tradeDataList, tradeDataList.length - 1);
-                  const formattedFullTime = `T${formattedHours}:00:00`;
-                  const startTime = new Date(`${customDate}T00:00:00`);
-                  const endTime = new Date(`${customDate}${formattedFullTime}`);
-                  createRange(startTime, endTime, label);
-                  createRangeGrid(startTime);
-                  createRangeGrid(endTime);
-                } else {
-                  const startTime = new Date(`${customDate}T00:00:00`);
-                  const endTime = new Date(`${customDate}T18:00:00`);
-                  createRange(startTime, endTime, label);
-                  createRangeGrid(startTime)
-                }
-              })
-            }
-            dateAxis.skipEmptyPeriods = true;
+            dateAxis.dateFormats.setKey("day", "MMM dd");
+            dateAxis.periodChangeDateFormats.setKey("day", "MMM dd");
             dateAxis.baseInterval = {
-              "timeUnit": "hour",
+              "timeUnit": "minute",
               "count": 1
             }
+            dateAxis.gridIntervals.setAll([
+              { timeUnit: "day", count: 1 }
+            ]);
+            // for demo purposes - greyed out UI for weekends
+            let range1 = dateAxis.axisRanges.create();
+            range1.date = new Date(2020, 10, 28);
+            range1.endDate = new Date(2020, 10, 30);
+            range1.axisFill.fill = am4core.color("#9e9e9e");
+            range1.axisFill.fillOpacity = 0.2;
+            range1.grid.strokeOpacity = 0;
+
+            let range2 = dateAxis.axisRanges.create();
+            range2.date = new Date(2020, 11, 5);
+            range2.endDate = new Date(2020, 11, 7);
+            range2.axisFill.fill = am4core.color("#9e9e9e");
+            range2.axisFill.fillOpacity = 0.2;
+            range2.grid.strokeOpacity = 0;
           }
         }
       } else {
