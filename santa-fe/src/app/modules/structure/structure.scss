@@ -1,2 +1,54 @@
+@import "global.scss";
+
 // Sharable styling in Structure Module
 $portfolioBreakdownWidth: 34rem;
+
+$gaugePercentage: 15%;
+$gaugeDegree: 75deg;
+// option 1, kept for backup
+// $gaugeColor_1: #7ff7c1;
+// $gaugeColor_2: #31f5ff;
+// $gaugeColor_3: #5e9ce0;
+// $gaugeColor_4: #6e7bd5;
+// option 2
+$gaugeColor_1: #fc5c7d;
+$gaugeColor_2: #c86aaa;
+$gaugeColor_3: #a174cc;
+$gaugeColor_4: #6a82fb;
+@mixin mix_bics_subLevel_target_gauge(){
+  &--level-0 {
+    @include mix_gradient($gaugeColor_1, $gaugeColor_2, $gaugePercentage, $gaugeDegree);
+    opacity: 0.4;
+  }
+  &--level-1 {
+    @include mix_gradient($gaugeColor_1, $gaugeColor_2, $gaugePercentage, $gaugeDegree);
+    opacity: 0.6;
+  }
+  &--level-2 {
+    @include mix_gradient($gaugeColor_1, $gaugeColor_2, $gaugePercentage, $gaugeDegree);
+    opacity: 0.8;
+  }
+  &--level-3 {
+    @include mix_gradient($gaugeColor_2, $gaugeColor_3, $gaugePercentage, $gaugeDegree);
+    opacity: 0.8;
+  }
+  &--level-4 {
+    @include mix_gradient($gaugeColor_3, $gaugeColor_4, $gaugePercentage, $gaugeDegree);
+    opacity: 0.8;
+  }
+  &--level-5 {
+    background-color: $gaugeColor_4;
+  }
+  &--level-6 {
+    background-color: $gaugeColor_4;
+  }
+  &--level-7 {
+    background-color: $gaugeColor_4;
+  }
+  &--level-8 {
+    background-color: $gaugeColor_4;
+  }
+  &--level-9 {
+    background-color: $gaugeColor_4;
+  }
+}

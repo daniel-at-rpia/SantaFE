@@ -15,7 +15,6 @@
     'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
     'sat-portfolioBreakdownRow--hasSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.data.displayedSubLevelRows.length > 0,
     'sat-portfolioBreakdownRow--showSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.state.isShowingSubLevels,
-    'sat-portfolioBreakdownRow--mainPanelLevel1': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn,
     'sat-portfolioBreakdownRow--mainPanelLevel2': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2 && !!breakdownRow.state.isBtnDiveIn,
     'sat-portfolioBreakdownRow--mainPanelLevel3': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3 && !!breakdownRow.state.isBtnDiveIn,
     'sat-portfolioBreakdownRow--mainPanelLevel4': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4 && !!breakdownRow.state.isBtnDiveIn,
@@ -100,5 +99,14 @@
   <hr class="sat-portfolioBreakdownRow__cellDivider">
   <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">
     {{breakdownRow.data.indexPctDisplay}}
+  </section>
+  <section class="sat-portfolioBreakdownRow__subLevelTargetGauge">
+    <div class="sat-portfolioBreakdownRow__subLevelTargetGauge-content">
+      <span class="sat-portfolioBreakdownRow__subLevelTargetGauge-content-label"></span>
+      <ul class="sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList">
+        <li *ngFor="let eachScale of breakdownRow.data.displayedSubLevelRows; let level = index;" [ngClass]="'sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList-item sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList-item--level-' + level">
+        </li>
+      </ul>
+    </div>
   </section>
 </article>

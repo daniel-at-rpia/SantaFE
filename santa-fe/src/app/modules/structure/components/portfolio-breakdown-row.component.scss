@@ -1,4 +1,5 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
@@ -8,8 +9,9 @@ $portfolioBreakdownRowBranchLevel3Base: $portfolioBreakdownRowBranchLevel2Base +
 $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base + $portfolioBreakdownRowBranchLeftIncrement;
 .sat-portfolioBreakdownRow {
   $blockName: &;
-  display: flex;
   flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   position: relative;
   &__branch {
@@ -27,7 +29,7 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
       flex: 1 1 auto;
       display: flex;
       min-height: $portfolioBreakdownRowBtnMinHeight;
-      margin: 0 $spacing_x_small $spacing_small 0;
+      margin: $spacing_x_small;
       padding: $spacing_xx_small;
       text-align: right;
       flex-direction: row;
@@ -199,6 +201,30 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
         }
         &--negative {
           background-color: $color_red_6;
+        }
+      }
+    }
+  }
+  &__subLevelTargetGauge {
+    display: none;
+    flex: 0 0 100%;
+    &-content {
+      flex: 0 0 100%;
+      display: flex;
+      padding: $spacing_minimum 0 $spacing_x_small 0;
+      align-items: center;
+      overflow: hidden;
+      &-label {
+        color: $font_color_minor;
+      }
+      &-scaleList {
+        display: flex;
+        &-item {
+          @include mix_border_radius(3px);
+          @include mix_bics_subLevel_target_gauge;
+          width: 1.25rem;
+          height: 0.25rem;
+          margin-left: $spacing_x_small;
         }
       }
     }
@@ -420,22 +446,8 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
           }
         }
       }
-    }
-  }
-  &--showSubLevels {
-    #{$blockName} {
-      &__cta {
-        &-subLevelToggle {
-          @include material('none');
-          background-color: $color_active;
-          color: $font_color_inverse;
-        }
-      }
-    }
-  }
-  &--mainPanelLevel1 {
-    #{$blockName} {
-      &__cta {
+      &__subLevelTargetGauge {
+        display: flex;
       }
     }
   }
@@ -478,6 +490,20 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
         &-btn {
           margin-left: $spacing_x_small;
         }
+      }
+    }
+  }
+  &--showSubLevels {
+    #{$blockName} {
+      &__cta {
+        &-subLevelToggle {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+      &__subLevelTargetGauge {
+        display: none;
       }
     }
   }
