@@ -14,14 +14,16 @@ import {
   SecurityGroupPieChartBlock,
   SecurityGroupPieChartDataBlock,
   ObligorChartCategoryBlock,
-  VisualizerGraphsBlock
+  VisualizerGraphsBlock,
+  TraceTradeBlock
 } from 'FEModels/frontend-blocks.interface';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import {
   ObligorGraphCategoryData,
   ObligorGraphAxesZoomState,
   LilMarketGraphSeriesDataPack,
-  AmchartPieDataBlock
+  AmchartPieDataBlock,
+  TraceScatterGraphData
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
 import {
@@ -848,39 +850,112 @@ export class GraphService {
       if (!!dto.state.isDisplayAllTraceTrades) {
         const displayList = dto.data.displayList;
         const reverseList = !!dto.data.pristineRowList ? [...dto.data.pristineRowList].reverse() : null;
+        const tradeDataList: Array<TraceScatterGraphData> = [];
         if (reverseList.length > 0) {
-          const tradeData = reverseList.map(trade => {
+          reverseList.forEach(trade => {
             const isInDisplayList = displayList.find(displayListTrade => displayListTrade.traceTradeId === trade.traceTradeId);
             const isDisplaySell = !!isInDisplayList && trade.side === TradeSideValueEquivalent.Ask;
             const isDisplayBuy = !!isInDisplayList && trade.side === TradeSideValueEquivalent.Bid
             const time = new Date(trade.tradeTime);
-            const object = {
+            const object: TraceScatterGraphData = {
+              rawDate: trade.tradeTime,
               date: time,
               counterParty: trade.counterParty,
               ...(!!isDisplaySell && {sellY: +trade.spread}),
               ...(!!isDisplayBuy && {buyY: +trade.spread}),
               ...(!isInDisplayList && {nonActiveTrade: +trade.spread})
             }
-            return object;
+            if (!!object.sellY || !!object.buyY || !!object.nonActiveTrade) {
+              tradeDataList.push(object)
+            }
           });
-          chart.data = tradeData;
-          let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-          dateAxis.title.text = 'Day';
-          dateAxis.startLocation = -.5;
-          dateAxis.endLocation = 1.5;
-          dateAxis.baseInterval = {
-            "timeUnit": "hour",
-            "count": 2
+          if (tradeDataList.length > 0) {
+            tradeDataList.sort((tradeA, tradeB) => {
+              if (tradeA > tradeB) {
+                return 1;
+              } else if (tradeA < tradeB) {
+                return -1;
+              } else {
+                return 0;
+              }
+            });
+            chart.data = tradeDataList;
+            let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            dateAxis.title.text = 'Day';
+            dateAxis.dateFormats.setKey("day", "MMMM dd");
+            dateAxis.periodChangeDateFormats.setKey("day", "MMMM dd");
+            const customDateAxisList: Array<string> = [];
+            tradeDataList.forEach((item: TraceScatterGraphData) => {
+              const formattedDate = item.rawDate.split('T')[0];
+              const ifExists = customDateAxisList.find(tradeDate => tradeDate === formattedDate);
+              !ifExists && customDateAxisList.push(formattedDate);
+            });
+            dateAxis.renderer.grid.template.disabled = true;
+            dateAxis.renderer.labels.template.disabled = true;
+            //Specific functions to create custom grids for scatter graph
+            function createRange(start: Date, end: Date, label: string) {
+              let range = dateAxis.axisRanges.create();
+              range.date = start;
+              range.endDate = end;
+              range.label.text = label;
+              range.label.paddingTop = 5;
+              range.label.location = .5;
+              range.label.horizontalCenter = "middle";
+              range.grid.disabled = true;
+            }
+            function createRangeGrid(start: Date) {
+              var range = dateAxis.axisRanges.create();
+              range.date = start;
+              range.grid.strokeOpacity = 0.1;
+              range.tick.disabled = false;
+              range.tick.strokeOpacity = 0;
+              range.tick.length = 30;
+            }
+            function returnFormattedHours(dataList: Array<TraceScatterGraphData>, index: number): string {
+              const getTradeTime = dataList[index].rawDate.split('T')[1];
+              const getTradeHours = +(getTradeTime.substring(0,2));
+              const modifiedHours = index > 0 ? getTradeHours + 1 : getTradeHours;
+              const formattedHours = modifiedHours < 10 ? `0${modifiedHours}` : `${modifiedHours}`;
+              return formattedHours;
+            }
+            if (customDateAxisList.length > 0) {
+              customDateAxisList.forEach((customDate, i) => {
+                const label = moment(customDate).format('MMM DD');
+                if (i === 0) {
+                  const formattedHours = returnFormattedHours(tradeDataList, i);
+                  const formattedFullTime = `T${formattedHours}:00:00`;
+                  const startTime = new Date(`${customDate}${formattedFullTime}`);
+                  const endTime = new Date(`${customDate}T18:00:00`);
+                  createRange(startTime, endTime, label);
+                  createRangeGrid(startTime);
+                } else if (i === customDateAxisList.length - 1) {
+                  const formattedHours = returnFormattedHours(tradeDataList, tradeDataList.length - 1);
+                  const formattedFullTime = `T${formattedHours}:00:00`;
+                  const startTime = new Date(`${customDate}T00:00:00`);
+                  const endTime = new Date(`${customDate}${formattedFullTime}`);
+                  createRange(startTime, endTime, label);
+                  createRangeGrid(startTime);
+                  createRangeGrid(endTime);
+                } else {
+                  const startTime = new Date(`${customDate}T00:00:00`);
+                  const endTime = new Date(`${customDate}T18:00:00`);
+                  createRange(startTime, endTime, label);
+                  createRangeGrid(startTime)
+                }
+              })
+            }
+            dateAxis.skipEmptyPeriods = true;
+            dateAxis.baseInterval = {
+              "timeUnit": "hour",
+              "count": 1
+            }
           }
-          dateAxis.gridIntervals.setAll([
-            { timeUnit: "day", count: 1}
-          ]);
         }
       } else {
         const reverseList = [...dto.data.displayList].reverse();
         const tradeData = reverseList.map(trade => {
           const time = new Date(trade.tradeTime);
-          const object = {
+          const object: TraceScatterGraphData = {
             date: time.getTime(),
             counterParty: trade.counterParty,
             ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
