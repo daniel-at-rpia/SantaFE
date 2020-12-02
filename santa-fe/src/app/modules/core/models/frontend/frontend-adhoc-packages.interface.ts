@@ -143,3 +143,12 @@ export interface BICSServiceConsolidateReturnPack {
   deepestLevel: number;
   consolidatedStrings: Array<string>;
 }
+
+export interface TraceScatterGraphData {
+  date: Date | number;
+  counterParty: TraceTradeCounterParty;
+  rawDate?: string;
+  sellY?: number;
+  buyY?: number;
+  nonActiveTrade?: number;
+}
