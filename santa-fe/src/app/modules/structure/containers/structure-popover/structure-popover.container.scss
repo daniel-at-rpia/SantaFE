@@ -1,4 +1,6 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
+
 $portfolioBreakdownRow_borderWidth: $typical_border_width*2;
 $portfolioBreakdownRow_borderColor: $color_active;
 $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
@@ -9,7 +11,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
   @include mix_border_radius(10px);
   @include mix_alive('light');
   background-color: $color_white;
-  width: 29rem;
+  width: $portfolioBreakdownWidth - $spacing_medium*2;
   height: 38rem;
   top: 0;
   left: 0;

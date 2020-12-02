@@ -46,7 +46,7 @@
       @include mix_border_generator();
       flex: 1 1 auto;
       display: flex;
-      margin: $spacing_medium 0 $spacing_medium $spacing_medium;
+      margin: $spacing_large 0 $spacing_large $spacing_large;
       justify-content: center;
       &>structure-fund {
         display: flex;
