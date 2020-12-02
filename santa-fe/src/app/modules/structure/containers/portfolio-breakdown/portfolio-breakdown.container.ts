@@ -47,8 +47,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((initials) => {
-      this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
-      this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
+      // this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
+      // this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
   }
 
@@ -198,7 +198,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         matchedOppositeRow.state.isEditingView = !!isEditing;
       }
       if (row.data.children) {
-        row.data.children.state.isEditingView = !!isEditing;
         const selectedChildList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
         const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
         if (selectedChildList.length > 0) {
@@ -215,6 +214,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         return null;
       }
     }
+  }
+
   public onClickSeeBond() {
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
       this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)
