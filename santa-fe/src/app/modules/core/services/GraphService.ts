@@ -14,14 +14,16 @@ import {
   SecurityGroupPieChartBlock,
   SecurityGroupPieChartDataBlock,
   ObligorChartCategoryBlock,
-  VisualizerGraphsBlock
+  VisualizerGraphsBlock,
+  TraceTradeBlock
 } from 'FEModels/frontend-blocks.interface';
 import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
 import {
   ObligorGraphCategoryData,
   ObligorGraphAxesZoomState,
   LilMarketGraphSeriesDataPack,
-  AmchartPieDataBlock
+  AmchartPieDataBlock,
+  TraceScatterGraphData
 } from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
 import {
@@ -848,124 +850,177 @@ export class GraphService {
       if (!!dto.state.isDisplayAllTraceTrades) {
         const displayList = dto.data.displayList;
         const reverseList = !!dto.data.pristineRowList ? [...dto.data.pristineRowList].reverse() : null;
+        const tradeDataList: Array<TraceScatterGraphData> = [];
         if (reverseList.length > 0) {
-          const tradeData = reverseList.map(trade => {
+          reverseList.forEach(trade => {
             const isInDisplayList = displayList.find(displayListTrade => displayListTrade.traceTradeId === trade.traceTradeId);
             const isDisplaySell = !!isInDisplayList && trade.side === TradeSideValueEquivalent.Ask;
             const isDisplayBuy = !!isInDisplayList && trade.side === TradeSideValueEquivalent.Bid
             const time = new Date(trade.tradeTime);
-            const object = {
+            const object: TraceScatterGraphData = {
+              rawDate: trade.tradeTime,
               date: time,
               counterParty: trade.counterParty,
               ...(!!isDisplaySell && {sellY: +trade.spread}),
               ...(!!isDisplayBuy && {buyY: +trade.spread}),
               ...(!isInDisplayList && {nonActiveTrade: +trade.spread})
             }
-            return object;
+            if (!!object.sellY || !!object.buyY || !!object.nonActiveTrade) {
+              tradeDataList.push(object)
+            }
           });
-          chart.data = tradeData;
-          let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-          dateAxis.title.text = 'Day';
-          dateAxis.startLocation = -.5;
-          dateAxis.endLocation = 1.5;
-          dateAxis.baseInterval = {
-            "timeUnit": "hour",
-            "count": 2
+          if (tradeDataList.length > 0) {
+            tradeDataList.sort((tradeA, tradeB) => {
+              if (tradeA > tradeB) {
+                return 1;
+              } else if (tradeA < tradeB) {
+                return -1;
+              } else {
+                return 0;
+              }
+            });
+            chart.data = tradeDataList;
+            let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            dateAxis.title.text = 'Day';
+            dateAxis.dateFormats.setKey("day", "MMM dd");
+            dateAxis.periodChangeDateFormats.setKey("day", "MMM dd");
+            dateAxis.baseInterval = {
+              "timeUnit": "minute",
+              "count": 1
+            }
+            dateAxis.gridIntervals.setAll([
+              { timeUnit: "day", count: 1 }
+            ]);
+            // for demo purposes - greyed out UI for weekends
+            let range1 = dateAxis.axisRanges.create();
+            range1.date = new Date(2020, 10, 28);
+            range1.endDate = new Date(2020, 10, 30);
+            range1.axisFill.fill = am4core.color("#9e9e9e");
+            range1.axisFill.fillOpacity = 0.2;
+            range1.grid.strokeOpacity = 0;
+
+            let range2 = dateAxis.axisRanges.create();
+            range2.date = new Date(2020, 11, 5);
+            range2.endDate = new Date(2020, 11, 7);
+            range2.axisFill.fill = am4core.color("#9e9e9e");
+            range2.axisFill.fillOpacity = 0.2;
+            range2.grid.strokeOpacity = 0;
           }
-          dateAxis.gridIntervals.setAll([
-            { timeUnit: "day", count: 1}
-          ]);
         }
       } else {
-        const reverseList = [...dto.data.displayList].reverse();
-        const tradeData = reverseList.map(trade => {
-          const time = new Date(trade.tradeTime);
-          const object = {
-            date: time.getTime(),
-            counterParty: trade.counterParty,
-            ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
-            ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
+        const reverseList = dto.data.displayList.length > 0 ? [...dto.data.displayList].reverse() : null;
+        if (reverseList.length > 0) {
+          const tradeDataList: Array<TraceScatterGraphData> = [];
+          reverseList.forEach(trade => {
+            const time = new Date(trade.tradeTime);
+            const object: TraceScatterGraphData = {
+              date: time.getTime(),
+              counterParty: trade.counterParty,
+              ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
+              ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
+            }
+            if (!!object.sellY || !!object.buyY) {
+              tradeDataList.push(object);
+            }
+          });
+          if (tradeDataList.length > 0) {
+            chart.data = tradeDataList;
+            let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            dateAxis.title.text = 'Time';
+            const currentDate = new Date();
+            const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+            const minStr = `${formattedDate}, 06:00:00`;
+            const maxStr = `${formattedDate}, 18:00:00`;
+            const minDate = new Date(minStr);
+            const maxDate = new Date(maxStr);
+            dateAxis.min = minDate.getTime();
+            dateAxis.max = maxDate.getTime();
+            dateAxis.baseInterval = {
+              "timeUnit": "second",
+              "count": 1
+            };
           }
-          return object;
-        });
-        chart.data = tradeData;
-        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.title.text = 'Time';
-        const currentDate = new Date();
-        const formattedDate = moment(currentDate).format('YYYY-MM-DD');
-        const minStr = `${formattedDate}, 06:00:00`;
-        const maxStr = `${formattedDate}, 18:00:00`;
-        const minDate = new Date(minStr);
-        const maxDate = new Date(maxStr);
-        dateAxis.min = minDate.getTime();
-        dateAxis.max = maxDate.getTime();
-        dateAxis.baseInterval = {
-          "timeUnit": "second",
-          "count": 1
-        };
+        }
       }
-      let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
-      yAxis.title.text = 'Sprd';
-      const sortedSpreadData = chart.data.map(data => {
-        if (data.sellY) {
-          return data.sellY;
-        } else if (data.buyY) {
-          return data.buyY;
+      if (chart.data.length > 0) {
+        let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        yAxis.title.text = 'Sprd';
+        const sortedSpreadData = chart.data.map(data => {
+          if (data.sellY) {
+            return data.sellY;
+          } else if (data.buyY) {
+            return data.buyY;
+          } else {
+            return data.nonActiveTrade
+          }
+        }).sort();
+        const min = Math.floor(sortedSpreadData[0] / 10) * 10;
+        const max = Math.ceil(sortedSpreadData[sortedSpreadData.length - 1] / 10) * 10;
+        const parsedMin = min;
+        const parsedMax = max;
+        const initialIncrement = (parsedMax-parsedMin) / 4;
+        let modifiedIncrement: number;
+        if (initialIncrement % 1 !== 0 ) {
+          let base: number;
+          if (initialIncrement >= 100) {
+            base = 100;
+          } else if (initialIncrement >= 10) {
+            base = 10;
+          } else {
+            base = 5;
+          }
+          modifiedIncrement = base === 5 ? base : (Math.ceil(initialIncrement / base) * base);
         } else {
-          return data.nonActiveTrade
+          modifiedIncrement = initialIncrement;
         }
-      }).sort();
-      const yAxisMin = sortedSpreadData[0] - 5;
-      const yAxisMax = sortedSpreadData[sortedSpreadData.length - 1] + 5;
-      const yAxisMid = this.utility.round(((yAxisMax - yAxisMin)/2) + yAxisMin);
-      yAxis.min = yAxisMin;
-      yAxis.max = yAxisMax;
-      yAxis.strictMinMax = true;
-      yAxis.renderer.grid.template.disabled = true;
-      yAxis.renderer.labels.template.disabled = true;
-      function createGrid(value) {
-        var range = yAxis.axisRanges.create();
-        range.value = value;
-        range.label.text = "{value}";
-      }
-      createGrid(yAxisMin);
-      createGrid(yAxisMid);
-      createGrid(yAxisMax);
-      let series1 = chart.series.push(new am4charts.LineSeries());
-      series1.dataFields.valueY = "sellY";
-      series1.dataFields.dateX = "date";
-      series1.strokeOpacity = 0;
-      series1.cursorTooltipEnabled = false;
-      let bullet1 = series1.bullets.push(new am4charts.CircleBullet());
-      bullet1.fill = am4core.color('#BC2B5D');
-      bullet1.stroke = am4core.color('#eee');
-      let series2 = chart.series.push(new am4charts.LineSeries());
-      series2.dataFields.valueY = "buyY";
-      series2.dataFields.dateX = "date";
-      series2.strokeOpacity = 0;
-      series2.cursorTooltipEnabled = false;
-      let bullet2 = series2.bullets.push(new am4charts.CircleBullet());
-      bullet2.fill = am4core.color('#26A77B')
-      bullet2.stroke = am4core.color('#eee')
-      if (!!dto.state.isDisplayAllTraceTrades) {
-        bullet1.tooltipText = "{counterParty} sell {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
-        bullet2.tooltipText = "{counterParty} buy {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
-        bullet1.circle.radius = 4;
-        bullet2.circle.radius = 4;
-        // Create a third series with data.nonActiveTrade values to ensure that the x-axis stays the same
-        // bullet radius is set to 0 so they dont appear on the graph
-        let series3 = chart.series.push(new am4charts.LineSeries());
-        series3.dataFields.valueY = "nonActiveTrade";
-        series3.dataFields.dateX = "date";
-        series3.strokeOpacity = 0;
-        series3.cursorTooltipEnabled = false;
-        let bullet3 = series3.bullets.push(new am4charts.CircleBullet());
-        bullet3.circle.radius = 0;
+        const secondInterval = parsedMin + modifiedIncrement;
+        const thirdInterval = secondInterval + modifiedIncrement;
+        const fourthInterval = thirdInterval + modifiedIncrement;
+        const maxInterval = fourthInterval + modifiedIncrement;
+        yAxis.min = parsedMin;
+        yAxis.max = maxInterval;
+        yAxis.strictMinMax = true;
+        yAxis.renderer.grid.template.disabled = true;
+        yAxis.renderer.labels.template.disabled = true;
+        function createGrid(value) {
+          var range = yAxis.axisRanges.create();
+          range.value = value;
+          range.label.text = "{value}";
+        }
+        createGrid(yAxis.min);
+        createGrid(secondInterval);
+        createGrid(thirdInterval);
+        createGrid(fourthInterval);
+        createGrid(maxInterval);
+        let series1 = chart.series.push(new am4charts.LineSeries());
+        series1.dataFields.valueY = "sellY";
+        series1.dataFields.dateX = "date";
+        series1.strokeOpacity = 0;
+        series1.cursorTooltipEnabled = false;
+        let bullet1 = series1.bullets.push(new am4charts.CircleBullet());
+        bullet1.fill = am4core.color('#BC2B5D');
+        bullet1.stroke = am4core.color('#eee');
+        let series2 = chart.series.push(new am4charts.LineSeries());
+        series2.dataFields.valueY = "buyY";
+        series2.dataFields.dateX = "date";
+        series2.strokeOpacity = 0;
+        series2.cursorTooltipEnabled = false;
+        let bullet2 = series2.bullets.push(new am4charts.CircleBullet());
+        bullet2.fill = am4core.color('#26A77B')
+        bullet2.stroke = am4core.color('#eee')
+        if (!!dto.state.isDisplayAllTraceTrades) {
+          bullet1.tooltipText = "{counterParty} sell {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+          bullet2.tooltipText = "{counterParty} buy {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+          bullet1.circle.radius = 4;
+          bullet2.circle.radius = 4;
+        } else {
+          bullet1.tooltipText = "{counterParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
+          bullet2.tooltipText = "{counterParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
+        }
+        return chart;
       } else {
-        bullet1.tooltipText = "{counterParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
-        bullet2.tooltipText = "{counterParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
+        return null;
       }
-      return chart;
     }
 
     public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO, graphID: string, categories: Array<string>, targetKey: traceTradePieGraphKeys): am4charts.PieChart {
