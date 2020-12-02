@@ -35,11 +35,6 @@
       </div>
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
     </button>
-    <!--
-      <button class="sat-portfolioBreakdownRow__cta-subLevelToggle" *ngIf="breakdownRow.data.bicsLevel === 1 && !breakdownRow.state.isWithinPopover" (click)="showSubLevels(breakdownRow)">
-        <i class="fas fa-flag-checkered"></i>
-      </button>
-    -->
     <div class="sat-portfolioBreakdownRow__cta-actionMenu" (click)="onCollapseActionMenu()">
       <button (click)="onClickEnterSetViewMode()" class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn santaBtn--circleLabelled santaBtn--small">
         <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon">
