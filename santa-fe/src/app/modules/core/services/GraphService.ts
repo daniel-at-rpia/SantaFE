@@ -953,7 +953,8 @@ export class GraphService {
         }
       } else {
         const reverseList = [...dto.data.displayList].reverse();
-        const tradeData = reverseList.map(trade => {
+        const tradeDataList: Array<TraceScatterGraphData> = [];
+        reverseList.forEach(trade => {
           const time = new Date(trade.tradeTime);
           const object: TraceScatterGraphData = {
             date: time.getTime(),
@@ -961,23 +962,27 @@ export class GraphService {
             ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
             ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
           }
-          return object;
+          if (!!object.sellY || !!object.buyY) {
+            tradeDataList.push(object);
+          }
         });
-        chart.data = tradeData;
-        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.title.text = 'Time';
-        const currentDate = new Date();
-        const formattedDate = moment(currentDate).format('YYYY-MM-DD');
-        const minStr = `${formattedDate}, 06:00:00`;
-        const maxStr = `${formattedDate}, 18:00:00`;
-        const minDate = new Date(minStr);
-        const maxDate = new Date(maxStr);
-        dateAxis.min = minDate.getTime();
-        dateAxis.max = maxDate.getTime();
-        dateAxis.baseInterval = {
-          "timeUnit": "second",
-          "count": 1
-        };
+        if (tradeDataList.length > 0) {
+          chart.data = tradeDataList;
+          let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+          dateAxis.title.text = 'Time';
+          const currentDate = new Date();
+          const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+          const minStr = `${formattedDate}, 06:00:00`;
+          const maxStr = `${formattedDate}, 18:00:00`;
+          const minDate = new Date(minStr);
+          const maxDate = new Date(maxStr);
+          dateAxis.min = minDate.getTime();
+          dateAxis.max = maxDate.getTime();
+          dateAxis.baseInterval = {
+            "timeUnit": "second",
+            "count": 1
+          };
+        }
       }
       let yAxis = chart.yAxes.push(new am4charts.ValueAxis());
       yAxis.title.text = 'Sprd';
