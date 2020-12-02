@@ -2343,7 +2343,8 @@ export class DTOService {
         isDisplayAllTraceTrades: false,
         graphReceived: false,
         selectedFiltersList: [],
-        showGraphs: false
+        showGraphs: false,
+        isShowingDailyTradesOnly: false
       },
       graph: {
         scatterGraph: null,
@@ -2364,6 +2365,14 @@ export class DTOService {
       })
       object.data.pristineRowList = targetRow.data.security.data.traceTrades;
       object.data.displayList = this.utility.getDailyTraceTrades(targetRow.data.security.data.traceTrades);
+      // checks if only daily trades are available
+      const currentDate = moment();
+      const formattedCurrentDate = currentDate.format('YYYY-MM-DD');
+      const checkForDailyTrade = (trade: Blocks.TraceTradeBlock) => moment(trade.tradeTime).format('YYYY-MM-DD') === formattedCurrentDate;
+      const isDailyTradesOnly = targetRow.data.security.data.traceTrades.every(checkForDailyTrade);
+      if (!!isDailyTradesOnly) {
+        object.state.isShowingDailyTradesOnly = true;
+      }
     }
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {

@@ -871,6 +871,7 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
     graphReceived: boolean;
     selectedFiltersList: Array<string>;
     showGraphs: boolean;
+    isShowingDailyTradesOnly: boolean;
   },
   graph: {
     scatterGraph: am4Charts.XYChart;
