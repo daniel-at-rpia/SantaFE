@@ -23,9 +23,7 @@
     </div>
     <div class="sat-globalNav__menu-navigationCanvas">
       <a
-        routerLink="/trade"
-        routerLinkActive="active"
-        (click)="onClickNavCTA()"
+        (click)="onClickNavigateToTradeModule()"
         [ngClass]="{
           'sat-globalNav__menu-navigationCanvas-cta': true,
           'sat-globalNav__menu-navigationCanvas-cta--active': state.currentModule === this.constants.moduleUrl.trade
@@ -33,9 +31,7 @@
         Trade
       </a>
       <a
-        routerLink="/structuring"
-        routerLinkActive="active"
-        (click)="onClickNavCTA()"
+        (click)="onClickNavigateToStructuringModule()"
         [ngClass]="{
           'sat-globalNav__menu-navigationCanvas-cta': true,
           'sat-globalNav__menu-navigationCanvas-cta--active': state.currentModule === this.constants.moduleUrl.structuring

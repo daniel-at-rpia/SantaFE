@@ -49,6 +49,10 @@ export interface GlobalAlertState {
   secondaryStoreList: Array<DTOs.AlertDTO>;  // for alerts that are not suppose to be displayed, need this for calculating total count
 }
 
+export interface GlobalWorkflowState {
+  currentState: DTOs.GlobalWorkflowStateDTO;
+}
+
 export interface MarketState {
 }
 

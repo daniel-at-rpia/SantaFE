@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { TradePage } from 'Trade/trade.page';
+import { StructurePage } from 'Structure/structure.page';
 
 const routes: Routes = [
       {
@@ -9,14 +11,22 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: NavigationModule.trade,
-        redirectTo: NavigationModule.trade,
-        pathMatch: 'full'
+        path: `${NavigationModule.trade}/:stateId`,
+        component: TradePage
       },
       {
-        path: NavigationModule.structuring,
-        redirectTo: NavigationModule.structuring,
-        pathMatch: 'full'
+        path: `${NavigationModule.structuring}/:stateId`,
+        component: StructurePage
+        // this is for eventually we introduce lazy loading
+        // loadChildren: () => import('./modules/structure/structure.module').then(mod => mod.StructureModule)
+      },
+      {
+        path: `${NavigationModule.trade}`,
+        component: TradePage
+      },
+      {
+        path: `${NavigationModule.structuring}`,
+        component: StructurePage
       },
       {
         path: '**',

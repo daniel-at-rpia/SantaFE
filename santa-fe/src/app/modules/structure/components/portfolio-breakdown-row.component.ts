@@ -15,8 +15,11 @@ import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-
 
 export class PortfolioBreakdownRow {
   @Input() breakdownRow: StructurePortfolioBreakdownRowDTO;
-  @Output() breakdownRowDiveIn = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() viewMainDisplaySubLevels = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() rowDiveInClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() categoryClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() seeBondClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() enterSetViewModeClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   constants = {
     positive: PortfolioView.positive,
     improving: PortfolioView.improving,
@@ -28,12 +31,33 @@ export class PortfolioBreakdownRow {
     private store$: Store<any>
   ) {}
 
+  public onClickCategory() {
+    !!this.categoryClicked && this.categoryClicked.emit(this.breakdownRow);
+  }
+
+  public onMouseLeaveRow() {
+    // even though a component modifying its own state is against best practice,
+    // but mouse leave always should behave this way, it's redundant to use EventEmitter for this
+    this.breakdownRow.state.isSelected = false;
+  }
+
   public onClickDiveIn(row: StructurePortfolioBreakdownRowDTO) {
     if (!row.data.bicsLevel || row.state.isStencil) {
       return null;
     } else {
-      !!this.breakdownRowDiveIn && this.breakdownRowDiveIn.emit(row);
+      this.breakdownRow.state.isSelected = false;
+      !!this.rowDiveInClicked && this.rowDiveInClicked.emit(row);
     }
+  }
+
+  public onClickSeeBond() {
+    this.breakdownRow.state.isSelected = false;
+    !!this.seeBondClicked && this.seeBondClicked.emit(this.breakdownRow);
+  }
+
+  public onClickEnterSetViewMode() {
+    this.breakdownRow.state.isSelected = false;
+    !!this.enterSetViewModeClicked && this.enterSetViewModeClicked.emit(this.breakdownRow);
   }
 
   public onClickSetView(view: PortfolioView) {

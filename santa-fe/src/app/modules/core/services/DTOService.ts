@@ -24,7 +24,8 @@
       AlertTypes,
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_VOLUME_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD,
+      NavigationModule
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -2055,7 +2056,6 @@ export class DTOService {
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
         isEditingViewAvail: false,
-        isEditingView: false,
         isDisplaySubLevels: false
       }
     };
@@ -2282,10 +2282,12 @@ export class DTOService {
         isSelected: false,
         isBtnDiveIn: isDiveIn,
         isStencil: true,
-        isEditingView: false,
         isWithinPopover: false,
         isVisibleSubLevel: false,
-        isShowingSubLevels: false
+        isShowingSubLevels: false,
+        isEditingView: false,
+        isEditingViewAvail: false,
+        isDoveIn: false
       }
     }
     return object;
@@ -2483,5 +2485,22 @@ export class DTOService {
         object.data.children.unshift(newBreakdown);
       });
     }
+  }
+
+  public formGlobalWorkflow(
+    targetModule: NavigationModule,
+    isRedirect: boolean
+  ): DTOs.GlobalWorkflowStateDTO {
+    const object: DTOs.GlobalWorkflowStateDTO = {
+      data: {
+        uuid: this.utility.generateUUID(),
+        module: targetModule,
+        title: `Generic step in ${targetModule}`
+      },
+      state: {
+        triggersRedirect: !!isRedirect
+      }
+    };
+    return object;
   }
 }

@@ -27,6 +27,8 @@ import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent } from 'Structure/actions/structure.actions';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'structure-fund',
@@ -45,7 +47,8 @@ export class StructureFund implements OnInit {
     BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
     BECs01: BEPortfolioTargetMetricValues.Cs01,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
-    structuringTeamPMList: StructuringTeamPMList
+    structuringTeamPMList: StructuringTeamPMList,
+    navigationModule: NavigationModule
   }
   subscriptions = {
     ownerInitialsSub: null

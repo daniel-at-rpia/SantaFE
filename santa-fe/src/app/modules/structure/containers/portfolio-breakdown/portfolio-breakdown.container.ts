@@ -11,8 +11,9 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { editingViewAvailableUsers } from 'Core/constants/securityDefinitionConstants.constant';
-import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import { editingViewAvailableUsers, StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -30,7 +31,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
-    structuringTeamPMList: StructuringTeamPMList
+    structuringTeamPMList: StructuringTeamPMList,
+    navigationModule: NavigationModule
   }
 
   constructor(
@@ -45,8 +47,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((initials) => {
-      this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
-      this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
+      // this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
+      // this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
   }
 
@@ -81,6 +83,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     let popoverCategory;
     if (this.dataIsReady) {
       this.utilityService.calculateAlignmentRating(this.breakdownData);
+      this.updateRowEditingViewAvailState();
       if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
         const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
         popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
@@ -136,11 +139,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
     const breakdownRowCopy = this.utilityService.deepCopy(breakdownRow);
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01, this.breakdownData.state.isEditingView);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
     breakdownRowCopy.data.children = subBicsLevel;
     breakdownRowCopy.state.isWithinPopover = true;
     this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
-    this.breakdownData.data.popover.data.mainRow.state.isSelected = true;
     this.breakdownData.data.popover.state.isActive = true;
   }
 
@@ -162,13 +164,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  public onClickSetView(breakdown: PortfolioBreakdownDTO) {
-    if (!breakdown.state.isPreviewVariant) {
-      this.breakdownData.state.isEditingView = !this.breakdownData.state.isEditingView;
-      breakdown.data.displayCategoryList.forEach(row => {
-        this.toggleSetView(row, this.breakdownData.state.isEditingView);
-      })
-    }
+  public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isSelected = !targetRow.state.isSelected;
   }
 
   public getMainDisplaySubLevels(row: StructurePortfolioBreakdownRowDTO) {
@@ -201,7 +198,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         matchedOppositeRow.state.isEditingView = !!isEditing;
       }
       if (row.data.children) {
-        row.data.children.state.isEditingView = !!isEditing;
         const selectedChildList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
         const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
         if (selectedChildList.length > 0) {
@@ -220,6 +216,16 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public onClickSeeBond() {
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
+      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)
+    ));
+  }
+
+  public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isEditingView = !targetRow.state.isEditingView;
+  }
+
   private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
     if (!row) {
       return null;
@@ -234,5 +240,14 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         })
       }
     }
+  }
+
+  private updateRowEditingViewAvailState() {
+    this.breakdownData.data.rawCs01CategoryList.forEach((eachRow) => {
+      eachRow.state.isEditingViewAvail = this.breakdownData.state.isEditingViewAvail;
+    });
+    this.breakdownData.data.rawLeverageCategoryList.forEach((eachRow) => {
+      eachRow.state.isEditingViewAvail = this.breakdownData.state.isEditingViewAvail;
+    });
   }
 }
