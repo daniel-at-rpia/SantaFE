@@ -16,7 +16,7 @@ import {
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
-import { BEStructuringBreakdownBlock } from 'Core/models/backend/backend-models.interface';
+import { BEStructuringBreakdownBlock, BEMetricBreakdowns } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
 
 export interface SecurityPortfolioBlock {
@@ -305,9 +305,10 @@ export interface PortfolioBreakdownCategoryBlock {
   }
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
-  children?: DTOs.PortfolioBreakdownDTO;
+  parentRow: DTOs.StructurePortfolioBreakdownRowDTO;
+  children?: DTOs.PortfolioBreakdownDTO; // used in popover dive-in
+  displayedSubLevelRows?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used in regular BICS breakdown to display sublevels per category
 }
-
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
   legend: string;

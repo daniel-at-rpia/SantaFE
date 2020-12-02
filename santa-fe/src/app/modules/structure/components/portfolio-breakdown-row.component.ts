@@ -15,6 +15,7 @@ import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-
 
 export class PortfolioBreakdownRow {
   @Input() breakdownRow: StructurePortfolioBreakdownRowDTO;
+  @Output() viewMainDisplaySubLevels = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() rowDiveInClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() categoryClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() seeBondClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
@@ -70,4 +71,8 @@ export class PortfolioBreakdownRow {
     }
     this.store$.dispatch(new StructureSetView(viewData));
   }
+
+  public showSubLevels(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+    !!this.viewMainDisplaySubLevels && this.viewMainDisplaySubLevels.emit(breakdownRow);
+ }
 }

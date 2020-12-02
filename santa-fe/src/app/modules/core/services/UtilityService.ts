@@ -361,7 +361,8 @@ export class UtilityService {
             //   keyToRetrieveMetric = 'gSpread';
             // }
           };
-          const rawValue = rawData.metrics && rawData.metrics['Index'] ? rawData.metrics['Index'][keyToRetrieveMetric] : null;
+          const indexMetricBlock = rawData.ccy === 'CAD' ? rawData.metrics['FTSE'] : rawData.metrics['BB'];
+          const rawValue = indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
             object.raw[eachMetric.label] = null;
           } else {
@@ -1087,6 +1088,24 @@ export class UtilityService {
       } else {
         const result = 100 - Math.round(delta / maxAbsDelta * 100);
         return result;
+      }
+    }
+
+    public getDailyTraceTrades(traceTrades: Array<TraceTradeBlock>): Array<TraceTradeBlock> {
+      if (traceTrades.length > 0) {
+        const currentDate = moment();
+        const currentMonthDay = currentDate.format('MMM DD');
+        const dailyTraceTradesList = traceTrades.filter(trade => {
+          if (!!trade.tradeTime) {
+            const parsedTraceTradeMonthDay = moment(trade.tradeTime).format('MMM DD');
+            if (currentMonthDay === parsedTraceTradeMonthDay) {
+              return trade;
+            }
+          }
+        });
+        return dailyTraceTradesList;
+      } else {
+        return [];
       }
     }
   // trade specific end

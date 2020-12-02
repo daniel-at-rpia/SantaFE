@@ -140,6 +140,9 @@ $portfolioBreakdown_rating_height: 1rem;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
+    &-allSubLevelsBtn {
+      display: none;
+    }
   }
   &--goodRating {
     #{$blockName} {
@@ -199,6 +202,28 @@ $portfolioBreakdown_rating_height: 1rem;
         }
         &-text {
           color: $font_color_major;
+        }
+      }
+    }
+  }
+  &--isBICs {
+    #{$blockName} {
+      &__ctas {
+        &-allSubLevelsBtn {
+          display: flex;
+        }
+      }
+    }
+  }
+  &--displayAllTargetState {
+    #{$blockName} {
+      &__ctas {
+        &-allSubLevelsBtn {
+          @include material('none');
+          background-color: $color_active;
+          &>i, &>span {
+            color: $font_color_inverse;
+          }
         }
       }
     }

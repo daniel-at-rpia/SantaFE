@@ -71,6 +71,14 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   public loadData() {
+    if (this.breakdownData.data.title === 'BICS') {
+      // Resets BICS sublevel states
+      this.breakdownData.state.isDisplaySubLevels = false;
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawCs01CategoryList);
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawLeverageCategoryList);
+      this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawCs01CategoryList);
+      this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
+    }
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     let popoverCategory;
     if (this.dataIsReady) {
@@ -130,9 +138,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     } else {
       this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.breakdownData.state.isDisplayingCs01);
-    breakdownRow.data.children = subBicsLevel;
-    this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRow, this.breakdownData.state.isDisplayingCs01);
+    const breakdownRowCopy = this.utilityService.deepCopy(breakdownRow);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
+    breakdownRowCopy.data.children = subBicsLevel;
+    breakdownRowCopy.state.isWithinPopover = true;
+    this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
     this.breakdownData.data.popover.state.isActive = true;
   }
 
@@ -158,6 +168,53 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     targetRow.state.isSelected = !targetRow.state.isSelected;
   }
 
+  public getMainDisplaySubLevels(row: StructurePortfolioBreakdownRowDTO) {
+    row.state.isShowingSubLevels = !row.state.isShowingSubLevels;
+    this.bicsDataProcessingService.getDisplayedSubLevelsForCategory(row, this.breakdownData.data.displayCategoryList);
+  }
+
+  public onClickShowAllSubLevels() {
+    if (this.breakdownData.data.displayCategoryList.length > 0) {
+      this.breakdownData.state.isDisplaySubLevels = !this.breakdownData.state.isDisplaySubLevels;
+      this.breakdownData.data.displayCategoryList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
+        if (row.data.bicsLevel === 1 && row.data.displayedSubLevelRows.length > 0) {
+          row.state.isShowingSubLevels = !!this.breakdownData.state.isDisplaySubLevels;
+        }
+        if (row.data.bicsLevel >= 2) {
+          row.state.isVisibleSubLevel = !!this.breakdownData.state.isDisplaySubLevels;
+        }
+      });
+    }
+  }
+
+  private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
+    if (!row) {
+      return null;
+    } else {
+      row.state.isEditingView = !!isEditing;
+      const oppositeMainList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
+      const matchedOppositeRow = oppositeMainList.find(category => category.data.category === row.data.category);
+      if (!!matchedOppositeRow) {
+        matchedOppositeRow.state.isEditingView = !!isEditing;
+      }
+      if (row.data.children) {
+        row.data.children.state.isEditingView = !!isEditing;
+        const selectedChildList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
+        const oppositeChildList = selectedChildList === row.data.children.data.rawCs01CategoryList ?  row.data.children.data.rawLeverageCategoryList : row.data.children.data.rawCs01CategoryList;
+        if (selectedChildList.length > 0) {
+          selectedChildList.forEach(selectedRow => {
+            selectedRow.state.isEditingView = !!isEditing;
+            const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.category === selectedRow.data.category);
+            if (!!matchedOppositeCategory) {
+              matchedOppositeCategory.state.isEditingView = !!isEditing
+            }
+            this.toggleSetView(selectedRow, isEditing);
+          })
+        }
+      } else {
+        return null;
+      }
+    }
   public onClickSeeBond() {
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
       this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)

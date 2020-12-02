@@ -39,7 +39,7 @@ export interface BEFullSecurityDTO {
 }
 
 export interface BEPortfolioDTO {
-  source: number;
+  source: string;
   partitionOptionValues: {
     PortfolioShortName: string;
     StrategyName: string;
@@ -73,6 +73,8 @@ export interface BESecurityDTO {
     Default: BESecurityMetricDTO;
     Index?: BESecurityMetricDTO;
     FO?: BESecurityMetricDTO;
+    FTSE?: BESecurityMetricDTO;
+    BB?: BESecurityMetricDTO;
   };
   deltaMetrics: {
     Dod: BESecurityDeltaMetricDTO;
@@ -112,34 +114,11 @@ export interface BESecurityDTO {
     cs01Local?: number;
     cs01Cad?: number;
     hedgeFactor: number;
-    metrics: {
-      [property: string]: {
-        [date: string]: {
-          backupPmName: string;
-          date: string;
-          hedgeFactor: number;
-          mark: {
-            driver: string;
-            enteredTime: string;
-            price: number;
-            spread: number;
-            user: string;
-            value: number;
-          };
-          owners: Array<string>;
-          partitionOptionValues: {
-            PortfolioShortName: Array<string>;
-            StrategyName: Array<string>;
-          };
-          primaryPmName: string;
-          researchName: string;
-          source: number;
-        }
-      }
-    };
+    strategies: Array<string>;
     strategyAsOfDate: string;
   }
   curveSubType?: string;  // CDS only
+  bicsCode: string;
   bicsLevel1: string;
   bicsLevel2: string;
   bicsLevel3: string;
@@ -360,7 +339,7 @@ export interface BEHistoricalSummaryDTO {
 }
 
 interface BEHistoricalInfoDTO {
-  databaseSource: string;
+  sourceInDb?: string;
   startDate: string;
   endDate: string;
   metricName: string;
@@ -599,6 +578,9 @@ export interface BEMetricBreakdowns {
   view?: string;
 }
 
+export interface BECustomMetricBreakdowns extends BEMetricBreakdowns {
+  customLevel: number;
+}
 export interface BEStructuringBreakdownBlock {
   date: string;
   groupOption: string;
@@ -606,7 +588,7 @@ export interface BEStructuringBreakdownBlock {
   portfolioBreakdownId?: string;
   portfolioId: number;
   breakdown: {
-    [property: string]: BEMetricBreakdowns
+    [property: string]: BEMetricBreakdowns | BECustomMetricBreakdowns;
   }
 }
 

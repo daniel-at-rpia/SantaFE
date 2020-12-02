@@ -3,7 +3,7 @@
   [ngClass]="{
     'sat-portfolioBreakdownRow': true,
     'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
-    'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn && breakdownRow.data.bicsLevel < 4,
+    'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn,
     'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
     'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
     'sat-portfolioBreakdownRow--isEditingView': breakdownRow.state.isEditingView,
@@ -12,8 +12,16 @@
     'sat-portfolioBreakdownRow--improving': breakdownRow.data.view === constants.improving,
     'sat-portfolioBreakdownRow--deteriorating': breakdownRow.data.view === constants.deteriorating,
     'sat-portfolioBreakdownRow--negative': breakdownRow.data.view === constants.negative,
-    'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral
+    'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
+    'sat-portfolioBreakdownRow--hasSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.data.displayedSubLevelRows.length > 0,
+    'sat-portfolioBreakdownRow--showSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.state.isShowingSubLevels,
+    'sat-portfolioBreakdownRow--mainDisplayLevel1': !breakdownRow.state.isWithinPopover &&  breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--mainDisplayLevel2': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--mainDisplayLevel3': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--mainDisplayLevel4': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover
   }">
+  <section class="sat-portfolioBreakdownRow__branch" *ngIf="breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover" [ngStyle]="{'height': breakdownRow.style.branchHeight, 'top': breakdownRow.style.top}"></section>
   <section class="sat-portfolioBreakdownRow__cta">
     <button (click)="onClickCategory(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
       <div class="sat-portfolioBreakdownRow__cta-btn-view">
@@ -27,6 +35,9 @@
         }"></i>
       </div>
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
+    </button>
+    <button class="sat-portfolioBreakdownRow__cta-subLevelToggle" *ngIf="breakdownRow.data.bicsLevel === 1 && !breakdownRow.state.isWithinPopover" (click)="showSubLevels(breakdownRow)">
+      <i class="fas fa-flag-checkered"></i>
     </button>
     <div class="sat-portfolioBreakdownRow__cta-actionMenu">
       <button (click)="onClickSeeBond()" class="sat-portfolioBreakdownRow__cta-actionMenu-bondBtn santaBtn--circleLabelled santaBtn--small">

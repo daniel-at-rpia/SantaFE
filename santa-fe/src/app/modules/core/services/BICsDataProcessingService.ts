@@ -17,11 +17,16 @@ import {
 } from 'Core/models/frontend/frontend-models.interface';
 import {
   DefinitionConfiguratorEmitterParams,
-  BICSServiceConsolidateReturnPack
+  BICSServiceConsolidateReturnPack,
 } from 'Core/models/frontend/frontend-adhoc-packages.interface';
+import {
+  BICS_BRANCH_DEFAULT_HEIGHT,
+  BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
+  BICS_BRANCH_CHARACTER_LIMIT
+} from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+import { UtilityService } from './UtilityService';
 
 @Injectable()
 
@@ -29,7 +34,10 @@ export class BICsDataProcessingService {
   private bicsRawData: Array<BICsCategorizationBlock> = [];
   private formattedBICsHierarchyData: BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
-  constructor(private dtoService: DTOService) {}
+  constructor(
+    private dtoService: DTOService,
+    private utilityService: UtilityService
+  ) {}
 
   public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
     this.setBICsLevelOneCategories(data, parent)
@@ -38,6 +46,132 @@ export class BICsDataProcessingService {
     return parent;
   }
 
+  public getParentCategory(hierarchyData: Array<BICsHierarchyBlock>, hierarchyList: Array<BICsHierarchyBlock>, targetCategory: BICsHierarchyBlock) {
+    if (!!targetCategory) {
+      hierarchyData.forEach((block: BICsHierarchyBlock) => {
+        if (block.children.length > 0) {
+          const parentCategory = block.children.find(category => category.name === targetCategory.name && category.bicsLevel === targetCategory.bicsLevel);
+          if (!!parentCategory && block.bicsLevel === targetCategory.bicsLevel - 1) {
+            hierarchyList.push(block)
+            this.getParentCategory(hierarchyData, hierarchyList, block);
+          }
+        }
+      })
+    }
+  }
+
+  public getTargetSpecificHierarchyList(childCategory: string, childBicsLevel: number, hierarchyList: Array<BICsHierarchyBlock>): Array<BICsHierarchyBlock> {
+    if (!!this.formattedBICsHierarchyData) {
+      let isFound = false;
+      this.formattedBICsHierarchyData.children.forEach(mainCategory => {
+        let categoryTraversalList: Array<BICsHierarchyBlock> = [{name: mainCategory.name, bicsLevel: mainCategory.bicsLevel, children: mainCategory.children, code: mainCategory.code}];
+        const traverseThroughCategories = (block: Array<BICsHierarchyBlock>, targetCategory: string) => {
+          if (!!isFound)  {
+            return;
+          } else {
+            block.forEach(newCategory => {
+              categoryTraversalList.push({name: newCategory.name, bicsLevel: newCategory.bicsLevel, children: newCategory.children, code: mainCategory.code});
+              if (newCategory.name === targetCategory && newCategory.bicsLevel === childBicsLevel) {
+                isFound = true;
+                this.getParentCategory(categoryTraversalList, hierarchyList, newCategory);
+              } else {
+                if (!isFound ) {
+                  traverseThroughCategories(newCategory.children, childCategory);
+                }
+              }
+            })
+          }
+        }
+        if (mainCategory.children.length > 0) {
+          traverseThroughCategories(mainCategory.children, childCategory);
+        }
+      })
+      return hierarchyList;
+    }
+  }
+
+  public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>): Array<StructurePortfolioBreakdownRowDTO> {
+    const rowListCopy = this.utilityService.deepCopy(rowList);
+    const primaryRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel === 1);
+    const subRowList = rowListCopy.filter((row: StructurePortfolioBreakdownRowDTO) => row.data.bicsLevel >= 2);
+    const parsedRowList: Array<StructurePortfolioBreakdownRowDTO> = [];
+    if (subRowList.length > 0) {
+      subRowList.forEach((eachRow: StructurePortfolioBreakdownRowDTO) => {
+        if (!!eachRow.data.targetLevel) {
+          parsedRowList.push(eachRow);
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.category, eachRow.data.bicsLevel, []);
+          if (hierarchyList.length > 0) {
+            hierarchyList.forEach((listItem: BICsHierarchyBlock) => {
+              const ifExistsInParsedList = parsedRowList.find(parsedRow => !!parsedRow && parsedRow.data.displayCategory === listItem.name && parsedRow.data.bicsLevel === listItem.bicsLevel);
+              if (!ifExistsInParsedList && eachRow.data.bicsLevel >= 3) { // level 2 parent category is in the primary list already
+                const matchedRow = subRowList.find((subRow: StructurePortfolioBreakdownRowDTO) => subRow.data.displayCategory === listItem.name && subRow.data.bicsLevel === listItem.bicsLevel);
+                if (!!matchedRow) {
+                  parsedRowList.push(matchedRow);
+                }
+              }
+            })
+          }
+        }
+      })
+      if (parsedRowList.length > 0 ) {
+        // parsedRowList should be sorted in ascending order to ensure that parentRow lookup can be done
+        parsedRowList.sort((rowA: StructurePortfolioBreakdownRowDTO, rowB: StructurePortfolioBreakdownRowDTO) => {
+          if (rowA.data.bicsLevel < rowB.data.bicsLevel) {
+            return - 1
+          } else if (rowA.data.bicsLevel > rowB.data.bicsLevel) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        parsedRowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(row.data.category, row.data.bicsLevel, []);
+          const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
+          if (!!parentLevel) {
+            const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);
+            row.data.parentRow = primaryRowList.find(targetRow => targetRow.data.category === parentRow.name && targetRow.data.bicsLevel === parentRow.bicsLevel);
+            const parentIndex = primaryRowList.findIndex(primaryRow => primaryRow.data.category === parentRow.name && primaryRow.data.bicsLevel === parentRow.bicsLevel);
+            const subRowIndex = parentIndex + 1;
+            primaryRowList.splice(subRowIndex, 0, row);
+          }
+        })
+        const newRowList: Array<StructurePortfolioBreakdownRowDTO> = this.formUIBranchForSubLevels(primaryRowList);
+        newRowList.forEach(newRow => {
+          this.getDisplayedSubLevelsForCategory(newRow, newRowList);
+        })
+        return newRowList;
+      } else {
+        return rowList;
+      }
+    } else {
+      return rowList;
+    }
+  }
+
+  public formUIBranchForSubLevels(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+    const rowListCopy = this.utilityService.deepCopy(rowList);
+    rowListCopy.forEach((row: StructurePortfolioBreakdownRowDTO, i) => {
+      if (row.data.bicsLevel >= 2) {
+        const previousRow: StructurePortfolioBreakdownRowDTO = rowListCopy[i-1];
+        const branchHeight = previousRow.data.displayCategory.length >= BICS_BRANCH_CHARACTER_LIMIT ? BICS_BRANCH_DEFAULT_HEIGHT_LARGE : BICS_BRANCH_DEFAULT_HEIGHT;
+        if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
+          // previous row is a parent or sibling element, so the branch needs to only extend to the button before it
+          row.style.branchHeight = `${branchHeight}px`;
+          row.style.top = `-${branchHeight/2}px`;
+        } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
+        // needs to find the closest sibling element as the previous row is a child of a sibling element
+        const modifiedList: Array<StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
+        const findSiblingRows: Array<StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.displayCategory === row.data.parentRow.data.displayCategory);
+        const nearestSiblingRow: StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
+        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.displayCategory === nearestSiblingRow.data.displayCategory && eachRow.data.bicsLevel === nearestSiblingRow.data.bicsLevel); 
+        const indexDifference = i - sibilingRowIndex;
+        row.style.branchHeight = `${indexDifference * branchHeight}px`;
+        row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
+        }
+      }
+    })
+    return rowListCopy;
+  }
   public returnAllBICSBasedOnHierarchyDepth(depth: number): Array<string> {
     const allBICSList = [];
     this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
@@ -100,32 +234,34 @@ export class BICsDataProcessingService {
     const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
     const subBICsLevel = BICsLevels[breakdownRow.data.bicsLevel + 1];
     const selectedSubRawBreakdown: BEStructuringBreakdownBlock  = selectedSubRawBICsData[subBICsLevel];
-    const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = selectedSubRawBreakdown;
-    const object: BEStructuringBreakdownBlock = {
-      date,
-      groupOption,
-      indexId,
-      portfolioBreakdownId,
-      portfolioId,
-      breakdown: {}
-    }
-    subTierList.forEach(subTier => {
-      for (let category in selectedSubRawBreakdown.breakdown) {
-        if (!!category && selectedSubRawBreakdown.breakdown[category]) {
-          if (subTier === category) {
-            object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[category];
+    if (!!selectedSubRawBreakdown) {
+      const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = selectedSubRawBreakdown;
+      const object: BEStructuringBreakdownBlock = {
+        date,
+        groupOption,
+        indexId,
+        portfolioBreakdownId,
+        portfolioId,
+        breakdown: {}
+      }
+      subTierList.forEach(subTier => {
+        for (let category in selectedSubRawBreakdown.breakdown) {
+          if (!!category && selectedSubRawBreakdown.breakdown[category]) {
+            if (subTier === category) {
+              object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[category];
+            }
           }
         }
-      }
-    })
-    const definitionList = this.getBICsBreakdownDefinitionList(object);
-    const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
-    breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
-    this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
-    this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
-    breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
-    breakdown.data.title = breakdownRow.data.category;
-    return breakdown;
+      })
+      const definitionList = this.getBICsBreakdownDefinitionList(object);
+      const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
+      breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
+      this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
+      this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
+      breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+      breakdown.data.title = breakdownRow.data.category;
+      return breakdown;
+    }
   }
 
   public getShallowestLevel(category: string): number {
@@ -163,6 +299,37 @@ export class BICsDataProcessingService {
     };
   }
 
+  public getDisplayedSubLevelsForCategory(row: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO>){
+    if (row.data.displayedSubLevelRows.length > 0) {
+      row.data.displayedSubLevelRows.forEach(subLevel => {
+        subLevel.state.isVisibleSubLevel = !!row.state.isShowingSubLevels;
+      })
+    } else {
+      const rowIndex = rowList.findIndex(displayRow => displayRow.data.displayCategory === row.data.displayCategory && displayRow.data.bicsLevel === row.data.bicsLevel);
+      const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
+      if (rowIndex >= 0) {
+        for (let i = 0; i < modifiedDisplayList.length; i++) {
+          // stops the loop when you find the next adjacent sibling
+          if (modifiedDisplayList[i].data.bicsLevel === row.data.bicsLevel) {
+            break;
+          } else {
+            row.data.displayedSubLevelRows.push(modifiedDisplayList[i])
+          }
+        }
+      }
+    }
+  }
+
+  public resetBICsSubLevelsState(rowList: Array<StructurePortfolioBreakdownRowDTO>) {
+    rowList.forEach(row => {
+      if (row.data.bicsLevel === 1) {
+        row.state.isShowingSubLevels = false;
+      } else {
+        row.state.isVisibleSubLevel = false;
+      }
+    })
+  }
+
   private setBreakdownListProperties(
     breakdownList: Array<StructurePortfolioBreakdownRowDTO>,
     parentRow: StructurePortfolioBreakdownRowDTO
@@ -173,6 +340,7 @@ export class BICsDataProcessingService {
       breakdown.data.moveVisualizer.state.isStencil = false;
       breakdown.state.isStencil = false;
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
+      breakdown.state.isWithinPopover = true;
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
     })
   }

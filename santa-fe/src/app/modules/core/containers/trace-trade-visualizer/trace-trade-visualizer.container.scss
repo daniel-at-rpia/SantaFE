@@ -95,7 +95,6 @@ button {
             height: 1.75rem;
             line-height: $line_height_default;
             &-text {
-              @include mix_text_overflow_multi_line(2);
               @include mix_border_radius(3px);
               color: $font_color_inverse;
               &--positive {
@@ -178,7 +177,8 @@ button {
           &-content {
             @include mix_border_radius(10px);
             display: flex;
-            flex: 1 0 auto;
+            min-height: 0;
+            flex: 1 1 auto;
             background-color: $color_white;
             &-graph {
               @include mix_alive('light');
@@ -201,7 +201,8 @@ button {
           &-content {
             @include mix_border_radius(10px);
             display: flex;
-            flex: 1 0 auto;
+            min-height: 0;
+            flex: 1 1 auto;
             background-color: $color_white;
             &-graph {
               @include mix_alive('light');
