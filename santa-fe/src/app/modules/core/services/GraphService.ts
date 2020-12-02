@@ -954,11 +954,31 @@ export class GraphService {
             return data.nonActiveTrade
           }
         }).sort();
-        const yAxisMin = sortedSpreadData[0] - 5;
-        const yAxisMax = sortedSpreadData[sortedSpreadData.length - 1] + 5;
-        const yAxisMid = this.utility.round(((yAxisMax - yAxisMin)/2) + yAxisMin);
-        yAxis.min = yAxisMin;
-        yAxis.max = yAxisMax;
+        const min = Math.floor(sortedSpreadData[0] / 10) * 10;
+        const max = Math.ceil(sortedSpreadData[sortedSpreadData.length - 1] / 10) * 10;
+        const parsedMin = min;
+        const parsedMax = max;
+        const initialIncrement = (parsedMax-parsedMin) / 4;
+        let modifiedIncrement: number;
+        if (initialIncrement % 1 !== 0 ) {
+          let base: number;
+          if (initialIncrement >= 100) {
+            base = 100;
+          } else if (initialIncrement >= 10) {
+            base = 10;
+          } else {
+            base = 5;
+          }
+          modifiedIncrement = base === 5 ? base : (Math.ceil(initialIncrement / base) * base);
+        } else {
+          modifiedIncrement = initialIncrement;
+        }
+        const secondInterval = parsedMin + modifiedIncrement;
+        const thirdInterval = secondInterval + modifiedIncrement;
+        const fourthInterval = thirdInterval + modifiedIncrement;
+        const maxInterval = fourthInterval + modifiedIncrement;
+        yAxis.min = parsedMin;
+        yAxis.max = maxInterval;
         yAxis.strictMinMax = true;
         yAxis.renderer.grid.template.disabled = true;
         yAxis.renderer.labels.template.disabled = true;
@@ -967,9 +987,11 @@ export class GraphService {
           range.value = value;
           range.label.text = "{value}";
         }
-        createGrid(yAxisMin);
-        createGrid(yAxisMid);
-        createGrid(yAxisMax);
+        createGrid(yAxis.min);
+        createGrid(secondInterval);
+        createGrid(thirdInterval);
+        createGrid(fourthInterval);
+        createGrid(maxInterval);
         let series1 = chart.series.push(new am4charts.LineSeries());
         series1.dataFields.valueY = "sellY";
         series1.dataFields.dateX = "date";
