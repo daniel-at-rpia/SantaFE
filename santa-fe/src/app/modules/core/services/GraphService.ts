@@ -1027,15 +1027,6 @@ export class GraphService {
         bullet2.tooltipText = "{counterParty} buy {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
         bullet1.circle.radius = 4;
         bullet2.circle.radius = 4;
-        // Create a third series with data.nonActiveTrade values to ensure that the x-axis stays the same
-        // bullet radius is set to 0 so they dont appear on the graph
-        let series3 = chart.series.push(new am4charts.LineSeries());
-        series3.dataFields.valueY = "nonActiveTrade";
-        series3.dataFields.dateX = "date";
-        series3.strokeOpacity = 0;
-        series3.cursorTooltipEnabled = false;
-        let bullet3 = series3.bullets.push(new am4charts.CircleBullet());
-        bullet3.circle.radius = 0;
       } else {
         bullet1.tooltipText = "{counterParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
         bullet2.tooltipText = "{counterParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
