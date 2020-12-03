@@ -473,74 +473,82 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
       this.state.targetBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
-        const newRow: StructureSetTargetPanelEditRowBlock = {
-          targetBlockFromBreakdown: eachCategory.data,
-          rowIdentifier: eachCategory.data.category,
-          displayRowTitle: eachCategory.data.displayCategory,
-          modifiedDisplayRowTitle: eachCategory.data.displayCategory,
-          targetCs01: {
-            level: {
-              savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
-              savedUnderlineValue: !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null,
-              modifiedDisplayValue: null,
-              modifiedUnderlineValue: null,
-              isActive: false,
-              isImplied: false,
-              isFocused: false,
-              metric: this.constants.metric.cs01,
-              isPercent: false
+        if (eachCategory.data.bicsLevel > 1) {
+          // ignore sub level rows for bics
+        } else {
+          const newRow: StructureSetTargetPanelEditRowBlock = {
+            targetBlockFromBreakdown: eachCategory.data,
+            rowIdentifier: eachCategory.data.category,
+            displayRowTitle: eachCategory.data.displayCategory,
+            modifiedDisplayRowTitle: eachCategory.data.displayCategory,
+            targetCs01: {
+              level: {
+                savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
+                savedUnderlineValue: !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null,
+                modifiedDisplayValue: null,
+                modifiedUnderlineValue: null,
+                isActive: false,
+                isImplied: false,
+                isFocused: false,
+                metric: this.constants.metric.cs01,
+                isPercent: false
+              },
+              percent: {
+                savedDisplayValue: !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null,
+                savedUnderlineValue: !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null,
+                modifiedDisplayValue: null,
+                modifiedUnderlineValue: null,
+                isActive: false,
+                isImplied: false,
+                isFocused: false,
+                metric: this.constants.metric.cs01,
+                isPercent: true
+              }
             },
-            percent: {
-              savedDisplayValue: !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null,
-              savedUnderlineValue: !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null,
-              modifiedDisplayValue: null,
-              modifiedUnderlineValue: null,
-              isActive: false,
-              isImplied: false,
-              isFocused: false,
-              metric: this.constants.metric.cs01,
-              isPercent: true
-            }
-          },
-          targetCreditLeverage: {
-            level: {
-              savedDisplayValue: null,
-              savedUnderlineValue: null,
-              modifiedDisplayValue: null,
-              modifiedUnderlineValue: null,
-              isActive: false,
-              isImplied: false,
-              isFocused: false,
-              metric: this.constants.metric.creditLeverage,
-              isPercent: false
+            targetCreditLeverage: {
+              level: {
+                savedDisplayValue: null,
+                savedUnderlineValue: null,
+                modifiedDisplayValue: null,
+                modifiedUnderlineValue: null,
+                isActive: false,
+                isImplied: false,
+                isFocused: false,
+                metric: this.constants.metric.creditLeverage,
+                isPercent: false
+              },
+              percent: {
+                savedDisplayValue: null,
+                savedUnderlineValue: null,
+                modifiedDisplayValue: null,
+                modifiedUnderlineValue: null,
+                isActive: false,
+                isImplied: false,
+                isFocused: false,
+                metric: this.constants.metric.creditLeverage,
+                isPercent: true
+              }
             },
-            percent: {
-              savedDisplayValue: null,
-              savedUnderlineValue: null,
-              modifiedDisplayValue: null,
-              modifiedUnderlineValue: null,
-              isActive: false,
-              isImplied: false,
-              isFocused: false,
-              metric: this.constants.metric.creditLeverage,
-              isPercent: true
-            }
-          },
-          isLocked: false,
-          existInServer: true
-        };
-        this.state.editRowList.push(newRow);
+            isLocked: false,
+            existInServer: true
+          };
+          this.state.editRowList.push(newRow);
+        }
       });
       this.state.targetBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
-        const targetRow = this.state.editRowList.find((eachRow) => {
-          return eachRow.rowIdentifier === eachCategory.data.category;
-        });
-        if (!!targetRow) {
-          targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
-          targetRow.targetCreditLeverage.level.savedUnderlineValue = !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null;
-          targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
-          targetRow.targetCreditLeverage.percent.savedUnderlineValue = !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null;
-        };
+        if (eachCategory.data.bicsLevel > 1) {
+          // ignore sub levels
+        } else {
+          const targetRow = this.state.editRowList.find((eachRow) => {
+            return eachRow.rowIdentifier === eachCategory.data.category;
+          });
+          if (!!targetRow) {
+            targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
+            targetRow.targetCreditLeverage.level.savedUnderlineValue = !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null;
+            targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
+            targetRow.targetCreditLeverage.percent.savedUnderlineValue = !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null;
+          };
+        }
       });
     }
   }
