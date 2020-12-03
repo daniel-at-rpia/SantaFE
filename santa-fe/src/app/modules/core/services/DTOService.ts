@@ -2060,6 +2060,11 @@ export class DTOService {
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
+    if (rawData.groupOption === 'Tenor') {
+      // Tenor does not need to be sorted alphabetically
+    } else {
+      definitionList.sort();
+    }
     definitionList.forEach((eachCategoryText) => {
       let bucket: Blocks.StructureBucketDataBlock = {};
       let customLevel: number;
