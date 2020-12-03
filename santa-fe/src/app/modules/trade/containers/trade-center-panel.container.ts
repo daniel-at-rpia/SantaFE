@@ -211,12 +211,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       if (!!keyword && keyword.length >= 2) {
         this.state.filters.quickFilters.keyword = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-        this.restfulCommService.logEngagement(
-          EngagementActionList.applyKeywordSearch,
-          'n/a',
-          keyword,
-          'Trade - Center Panel'
-        );
+        // this.restfulCommService.logEngagement(
+        //   EngagementActionList.applyKeywordSearch,
+        //   'n/a',
+        //   keyword,
+        //   'Trade - Center Panel'
+        // );
       } else if (!keyword || keyword.length < 2) {
         this.state.filters.quickFilters.keyword = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
