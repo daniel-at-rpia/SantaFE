@@ -1,7 +1,7 @@
-  @import "global.scss";
-@import "modules/trade/trade.scss";
+@import "global.scss";
 
-$moveVisualizer_line_thickness: 0.5rem;
+$moveVisualizer_line_thickness: 0.75rem;
+$moveVisualizer_line_thickness_structuringVariant: 0.5rem;
 $moveVisualizer_line_padding_bottom: $spacing_x_small;
 $moveVisualizer_pin_end_width: 3rem;
 $moveVisualizer_pin_start_width: 1.2rem;
@@ -138,15 +138,24 @@ $moveVisualizer_line_stencilMaskAnimationDuration: $animation_duration_heavy;
       &__bar {
         &-leftEdge {
           background-color: $theme_color_1;
+          height: $moveVisualizer_line_thickness_structuringVariant;
         }
         &-moveDistance {
           @include mix_gradient($theme_color_1, $theme_color_2, 0%, 90deg);  // can't use mix_theme_background since that is optimized for a light background where here we are looking for high contrast with a black background
+          height: $moveVisualizer_line_thickness_structuringVariant;
           &-arrow {
             display: none;
           }
         }
+        &-rightEdge {
+          height: $moveVisualizer_line_thickness_structuringVariant;
+        }
+        &-stencilMask {
+          height: $moveVisualizer_line_thickness_structuringVariant;
+        }
       }
       &__pins {
+        margin-bottom: $moveVisualizer_line_thickness_structuringVariant + $moveVisualizer_line_padding_bottom;
         &-end {
           &-value {
             background-color: $theme_color_1;

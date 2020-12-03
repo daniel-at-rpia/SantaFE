@@ -572,7 +572,9 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
-          active: false
+          active: true,
+          disabled: false,
+          groupShow: true
         },
         tradeAlert: {
           active: false
@@ -1319,7 +1321,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
@@ -1341,7 +1344,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
@@ -1363,7 +1367,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: false
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
@@ -1385,7 +1390,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: false
         },
         tradeAlert: {
-          active: false
+          active: false,
+          disabled: true
         }
       }
     }
@@ -1814,12 +1820,12 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     headerKey: 'displayTradeTime',
     headerDisplayLabel: 'Trade Time',
     attrName: 'displayTradeTime',
-    size: 6
+    size: 7
   },{
     headerKey: 'displayReportingTime',
     headerDisplayLabel: 'Reporting Time',
     attrName: 'displayReportingTime',
-    size: 8
+    size: 7
   },{
     headerKey: 'counterParty',
     headerDisplayLabel: 'Counter Party',
@@ -1834,12 +1840,12 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     headerKey: 'displayVolumeEstimated',
     headerDisplayLabel: 'Vol (Estimated)',
     attrName: 'displayVolumeEstimated',
-    size: 8,
+    size: 7,
   },{
     headerKey: 'displayVolumeReported',
     headerDisplayLabel: 'Vol (Reported)',
     attrName: 'displayVolumeReported',
-    size: 8
+    size: 7
   },{
     headerKey: 'price',
     headerDisplayLabel: 'Px',

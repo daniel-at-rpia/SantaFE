@@ -9,12 +9,14 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
-    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import { selectUserInitials, selectGlobalWorkflowNewState } from 'Core/selectors/core.selectors';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
     import { SeniorityLegendList, RatingLegendList } from 'Core/stubs/securities.stub';
     import { SeniorityValueToLevelMapping, RatingValueToLevelMapping } from 'Core/constants/securityDefinitionConstants.constant';
     import { BESecurityDTO } from 'Core/models/backend/backend-models.interface';
     import { GlobalNavLegendBlock } from 'Core/models/frontend/frontend-blocks.interface';
     import { NavigationModule } from 'Core/constants/coreConstants.constant';
+    import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
 //
 
 declare const VERSION: string;
@@ -30,7 +32,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
   state: GlobalNavState;
   subscriptions = {
     userInitialsSub: null,
-    navigationStartSub: null
+    navigationStartSub: null,
+    newGlobalWorkflowStateSub: null
   };
   constants = {
     seniorityMapping: SeniorityValueToLevelMapping,
@@ -73,7 +76,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const removeForwardSlash = event.urlAfterRedirects.slice(1);
-        switch (removeForwardSlash) {
+        const modulePortion = removeForwardSlash.split('/').length > 0 ? removeForwardSlash.split('/')[0] : '';
+        switch (modulePortion) {
           case this.constants.moduleUrl.trade:
             this.state.currentModule = this.constants.moduleUrl.trade;
             break;
@@ -90,6 +94,27 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
+    this.subscriptions.newGlobalWorkflowStateSub = this.store$.pipe(
+      select(selectGlobalWorkflowNewState)
+    ).subscribe(
+      (newState: GlobalWorkflowStateDTO) => {
+        if (!!newState && !!newState.data.uuid && !!newState.data.module) {
+          // automatically navigate to new module as long as the new state is not in the same module as the currentModule
+          if (this.state.currentModule !== newState.data.module) {
+            switch (newState.data.module) {
+              case this.constants.moduleUrl.structuring:
+                this.router.navigateByUrl(`/${this.constants.moduleUrl.structuring}/${newState.data.uuid}`);
+                break;
+              case this.constants.moduleUrl.trade:
+                this.router.navigateByUrl(`/${this.constants.moduleUrl.trade}/${newState.data.uuid}`);
+                break;
+              default:
+                break;
+            }
+          }
+        }
+      }
+    );
   }
 
   public ngOnChanges() {
@@ -104,6 +129,24 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
 
   public onClickNavCTA() {
     this.state.menuIsActive = false;
+  }
+
+  public onClickNavigateToStructuringModule() {
+    if (this.state.currentModule !== this.constants.moduleUrl.structuring) {
+      const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring, true);
+      this.state.menuIsActive = false;
+      this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+    }
+  }
+
+  public onClickNavigateToTradeModule() {
+    if (this.state.currentModule !== this.constants.moduleUrl.trade) {
+      const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.trade, true);
+      this.state.menuIsActive = false;
+      this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+    }
   }
 
   private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<GlobalNavLegendBlock> {

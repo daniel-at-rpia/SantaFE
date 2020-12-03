@@ -1,6 +1,10 @@
 import { Action } from '@ngrx/store';
 import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
+import {
+  AlertDTO,
+  AlertCountSummaryDTO,
+  GlobalWorkflowStateDTO
+} from 'FEModels/frontend-models.interface';
 
 export enum CoreActions {
   UserLoggedIn = '[Core] User Logged In',
@@ -9,7 +13,9 @@ export enum CoreActions {
   FlushSecurityMap = '[Core] Fluahs Security Map',
   SendNewAlerts = '[Core] Send New Alerts',
   SendAlertCountsByType = '[Core] Send Alert Counts',
-  ReceivedNewAlerts = '[Core] Received New Alerts'
+  ReceivedNewAlerts = '[Core] Received New Alerts',
+  GlobalWorkflowSendNewState = '[Core] Global Workflow Send New State',
+  GlobalWorkflowUpdateCurrentState = '[Core] Global Workflow Update Current State'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -70,4 +76,24 @@ export class CoreSendAlertCountsByType implements Action {
 export class CoreReceivedNewAlerts implements Action {
   readonly type = CoreActions.ReceivedNewAlerts;
   constructor(){}
+}
+
+export class CoreGlobalWorkflowSendNewState implements Action {
+  readonly type = CoreActions.GlobalWorkflowSendNewState;
+  readonly newState: GlobalWorkflowStateDTO;
+  constructor(
+    newState: GlobalWorkflowStateDTO
+  ){
+    this.newState = newState;
+  }
+}
+
+export class CoreGlobalWorkflowUpdateCurrentState implements Action {
+  readonly type = CoreActions.GlobalWorkflowUpdateCurrentState;
+  readonly uuid: string;
+  constructor(
+    uuid: string
+  ){
+    this.uuid = uuid;
+  }
 }

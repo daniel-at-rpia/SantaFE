@@ -103,13 +103,16 @@
       }
       &:hover {
         @include mix_fixed_div(relative, $z_index_hovering_item_lift);
+        background-color: $color_active;
         transform: scale(1.5);
         &>i {
           transform: translate(0, -50%) scale(0.5);
+          color: $font_color_inverse;
         }
         &>span {
           transform: translate(0, 40%);
           opacity: 1;
+          color: $font_color_inverse;
         }
       }
     }

@@ -4,7 +4,11 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
+import {
+  AlertDTO,
+  AlertCountSummaryDTO,
+  GlobalWorkflowStateDTO
+} from 'FEModels/frontend-models.interface';
 import { CoreActions } from 'Core/actions/core.actions';
 import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
 
@@ -19,8 +23,12 @@ export interface CoreState {
   };
   securityMap: {
     valid: boolean;
-    mapContent: Array<SecurityMapEntry>
+    mapContent: Array<SecurityMapEntry>;
   };
+  globalWorkflow: {
+    newState: GlobalWorkflowStateDTO;
+    currentStateUUID: string;
+  }
 }
 
 const initialState: CoreState = {
@@ -35,6 +43,10 @@ const initialState: CoreState = {
   securityMap: {
     valid: false,
     mapContent: []
+  },
+  globalWorkflow: {
+    newState: null,
+    currentStateUUID: null
   }
 };
 
@@ -98,6 +110,22 @@ export function coreReducer(
           newAlerts: []
         }
       };
+    case CoreActions.GlobalWorkflowSendNewState:
+      return {
+        ...state,
+        globalWorkflow: {
+          ...state.globalWorkflow,
+          newState: action.newState
+        }
+      };
+    case CoreActions.GlobalWorkflowUpdateCurrentState:
+      return {
+        ...state,
+        globalWorkflow: {
+          ...state.globalWorkflow,
+          currentStateUUID: action.uuid
+        }
+      }
     default:
       return {
         ...state

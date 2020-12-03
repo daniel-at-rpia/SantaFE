@@ -135,24 +135,18 @@ $portfolioBreakdown_rating_height: 1rem;
   }
   &__ctas {
     @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
-    display: none;
+    display: flex;
     justify-content: center;
     left: 0;
     bottom: 0 - $iconButton_size_regular/2;
     width: 100%;
-    &-viewBtn {
+    &-editBtn {
       display: none;
-      &-icon {
-        display: flex;
-        &-up {
-          font-size: $font_size_normal;
-          margin-bottom: $spacing_x_small;
-        }
-        &-down {
-          font-size: $font_size_normal;
-          margin-top: $spacing_x_small;
-        }
-      }
+      margin: 0 $spacing_medium;
+    }
+    &-allSubLevelsBtn {
+      display: none;
+      margin: 0 $spacing_medium;
     }
   }
   &--goodRating {
@@ -198,7 +192,9 @@ $portfolioBreakdown_rating_height: 1rem;
   &--editableState {
     #{$blockName} {
       &__ctas {
-        display: flex;
+        &-editBtn {
+          display: flex;
+        }
       }
     }
   }
@@ -217,22 +213,19 @@ $portfolioBreakdown_rating_height: 1rem;
       }
     }
   }
-  &--isEditingViewAvailableState {
+  &--isBICs {
     #{$blockName} {
       &__ctas {
-        &-editBtn {
-          margin-right: $spacing_large;
-        }
-        &-viewBtn {
+        &-allSubLevelsBtn {
           display: flex;
         }
       }
     }
   }
-  &--editingView {
+  &--displayAllTargetState {
     #{$blockName} {
       &__ctas {
-        &-viewBtn {
+        &-allSubLevelsBtn {
           @include material('none');
           background-color: $color_active;
           &>i, &>span {

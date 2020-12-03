@@ -84,6 +84,7 @@
       KEYWORDSEARCH_DEBOUNCE_TIME,
       TriCoreDriverConfig
     } from 'Core/constants/coreConstants.constant';
+    import { SecurityTableHeaderConfigStub } from 'Core/models/frontend/frontend-stub-models.interface';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
 
@@ -289,12 +290,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         if (!!keyword && keyword.length >= 2 && keyword != this.state.filters.quickFilters.keyword) {
           this.state.filters.quickFilters.keyword = keyword;
           targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-          this.restfulCommService.logEngagement(
-            EngagementActionList.applyKeywordSearch,
-            'n/a',
-            keyword,
-            'Trade - Alert Panel'
-          );
+          // this.restfulCommService.logEngagement(
+          //   EngagementActionList.applyKeywordSearch,
+          //   'n/a',
+          //   keyword,
+          //   'Trade - Alert Panel'
+          // );
         } else if ((!keyword || keyword.length < 2) && !!this.state.filters.quickFilters.keyword && this.state.filters.quickFilters.keyword.length >= 2) {
           this.state.filters.quickFilters.keyword = keyword;
           targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
@@ -496,7 +497,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             metric.content.tableSpecifics.tradeAlert.active = false;
           }
         })
-        this.state.table.alertMetrics = securityTableHeaderConfigsCopy;
+        const nonDisabledAlertHeaders: Array<SecurityTableHeaderConfigStub> = securityTableHeaderConfigsCopy.filter((header: SecurityTableHeaderConfigStub) => (!!header.content.tableSpecifics.default && !header.content.tableSpecifics.tradeAlert) || (!header.content.tableSpecifics.tradeAlert.disabled));
+        this.state.table.alertMetrics = nonDisabledAlertHeaders;
     }
 
     public onClickSpecificAlertTypeTab(
