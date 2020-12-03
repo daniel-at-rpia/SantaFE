@@ -11,7 +11,6 @@
     'sat-portfolioBreakdown--previewVariant': breakdownData.state.isPreviewVariant,
     'sat-portfolioBreakdown--overrideVariant': breakdownData.state.isOverrideVariant,
     'sat-portfolioBreakdown--isEditingViewAvailableState': breakdownData.state.isEditingViewAvail,
-    'sat-portfolioBreakdown--editingView': breakdownData.state.isEditingView,
     'sat-portfolioBreakdown--displayAllTargetState': breakdownData.state.isDisplaySubLevels
   }">
   <section class="sat-portfolioBreakdown__title">
@@ -59,7 +58,7 @@
           (viewMainDisplaySubLevels)="getMainDisplaySubLevels($event)"
           (categoryClicked)="onClickBreakdownCategory($event)"
           (rowDiveInClicked)="updatePopoverData($event)"
-          (seeBondClicked)="onClickSeeBond($event)"
+          (seeBondClicked)="onClickSeeBond()"
           (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
         </portfolio-breakdown-row>
       </li>
