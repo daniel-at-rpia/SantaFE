@@ -1,7 +1,7 @@
 <article
   [ngClass]="{
     'sat-portfolioBreakdown': true,
-    'sat-portfolioBreakdown--isBics': breakdownData.state.isBICs, 
+    'sat-portfolioBreakdown--isBICs': breakdownData.state.isBICs,
     'sat-portfolioBreakdown--stencilState': breakdownData.state.isStencil,
     'sat-portfolioBreakdown--ratingAvailableState': breakdownData.state.isTargetAlignmentRatingAvail,
     'sat-portfolioBreakdown--goodRating': breakdownData.state.isTargetAlignmentRatingAvail && breakdownData.style.ratingFillWidth >= 80,
@@ -11,7 +11,8 @@
     'sat-portfolioBreakdown--previewVariant': breakdownData.state.isPreviewVariant,
     'sat-portfolioBreakdown--overrideVariant': breakdownData.state.isOverrideVariant,
     'sat-portfolioBreakdown--isEditingViewAvailableState': breakdownData.state.isEditingViewAvail,
-    'sat-portfolioBreakdown--editingView': breakdownData.state.isEditingView
+    'sat-portfolioBreakdown--editingView': breakdownData.state.isEditingView,
+    'sat-portfolioBreakdown--displayAllTargetState': breakdownData.state.isDisplaySubLevels
   }">
   <section class="sat-portfolioBreakdown__title">
     <div class="sat-portfolioBreakdown__title-definition">
@@ -36,7 +37,7 @@
   </section>
   <section class="sat-portfolioBreakdown__categoryHeader">
     <div class="sat-portfolioBreakdown__categoryHeader-cell">
-      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-pennant"></i>
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-flag-checkered"></i>
       <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Target</div>
     </div>
     <div class="sat-portfolioBreakdown__categoryHeader-cell">
@@ -55,7 +56,11 @@
         class="sat-portfolioBreakdown__categoryContent-list-item">
         <portfolio-breakdown-row
           [breakdownRow]="eachCategory"
-          (breakdownRowDiveIn)="updatePopoverData($event)">
+          (viewMainDisplaySubLevels)="getMainDisplaySubLevels($event)"
+          (categoryClicked)="onClickBreakdownCategory($event)"
+          (rowDiveInClicked)="updatePopoverData($event)"
+          (seeBondClicked)="onClickSeeBond($event)"
+          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
         </portfolio-breakdown-row>
       </li>
     </ul>
@@ -65,12 +70,9 @@
       <i class="fal fa-pencil"></i>
       <span>Set Target</span>
     </button>
-    <button (click)="onClickSetView(breakdownData)" class="santaBtn--circleLabelled sat-portfolioBreakdown__ctas-viewBtn">
-      <i class="sat-portfolioBreakdown__ctas-viewBtn-icon">
-        <i class="sat-portfolioBreakdown__ctas-viewBtn-icon-up fal fa-arrow-up"></i>
-        <i class="sat-portfolioBreakdown__ctas-viewBtn-icon-down fal fa-arrow-down"></i>
-      </i>
-      <span>Set Outlook</span>
+    <button (click)="onClickShowAllSubLevels()" class="santaBtn--circleLabelled sat-portfolioBreakdown__ctas-allSubLevelsBtn">
+      <i class="fal fa-flag-checkered"></i>
+      <span>All Targets</span>
     </button>
   </section>
   <section class="sat-portfolioBreakdown__popover">

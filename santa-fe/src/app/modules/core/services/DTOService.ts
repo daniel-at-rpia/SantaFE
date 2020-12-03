@@ -24,7 +24,8 @@
       AlertTypes,
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_VOLUME_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD,
+      NavigationModule
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -1257,6 +1258,20 @@ export class DTOService {
           object.data.identifier = identifier;
         }
         object.state.isColorCodeInversed = !!colorCodeInversed;
+        // temporary guard, only meant for Dec.4th demo, TODO: remove after the demo
+          if (object.data.start < object.data.min) {
+            object.data.min = object.data.start;
+          }
+          if (object.data.start > object.data.max) {
+            object.data.max = object.data.start;
+          }
+          if (object.data.end < object.data.min) {
+            object.data.min = object.data.end;
+          }
+          if (object.data.end > object.data.max) {
+            object.data.max = object.data.end;
+          }
+        // guard end
       } else {
         object.data.start = null;
         object.data.end = null;
@@ -2041,7 +2056,6 @@ export class DTOService {
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
         isEditingViewAvail: false,
-        isEditingView: false,
         isDisplaySubLevels: false
       }
     };
@@ -2054,7 +2068,6 @@ export class DTOService {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
         customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel : null;
       }
-      object.state.isDisplaySubLevels = !!isCustomLevelAvailable;
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
@@ -2181,7 +2194,6 @@ export class DTOService {
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
-      const isDisplayInMainBreakdown = !!customLevel ? true : false;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
@@ -2209,7 +2221,8 @@ export class DTOService {
         },
         view: view,
         bucket: bucket,
-        parentRow: null
+        parentRow: null,
+        displayedSubLevelRows: []
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2217,7 +2230,7 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown, isDisplayInMainBreakdown);
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown);
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2258,7 +2271,7 @@ export class DTOService {
     return object;
   }
 
-  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean, inMainBreakdown: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
+  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
     const object = {
       data: categoryRow,
       style: {
@@ -2269,9 +2282,12 @@ export class DTOService {
         isSelected: false,
         isBtnDiveIn: isDiveIn,
         isStencil: true,
+        isWithinPopover: false,
+        isVisibleSubLevel: false,
+        isShowingSubLevels: false,
         isEditingView: false,
-        isDisplayInMainBreakdown: inMainBreakdown,
-        isWithinPopover: false
+        isEditingViewAvail: false,
+        isDoveIn: false
       }
     }
     return object;
@@ -2327,7 +2343,8 @@ export class DTOService {
         isDisplayAllTraceTrades: false,
         graphReceived: false,
         selectedFiltersList: [],
-        showGraphs: false
+        showGraphs: false,
+        isShowingDailyTradesOnly: false
       },
       graph: {
         scatterGraph: null,
@@ -2348,6 +2365,14 @@ export class DTOService {
       })
       object.data.pristineRowList = targetRow.data.security.data.traceTrades;
       object.data.displayList = this.utility.getDailyTraceTrades(targetRow.data.security.data.traceTrades);
+      // checks if only daily trades are available
+      const currentDate = moment();
+      const formattedCurrentDate = currentDate.format('YYYY-MM-DD');
+      const checkForDailyTrade = (trade: Blocks.TraceTradeBlock) => moment(trade.tradeTime).format('YYYY-MM-DD') === formattedCurrentDate;
+      const isDailyTradesOnly = targetRow.data.security.data.traceTrades.every(checkForDailyTrade);
+      if (!!isDailyTradesOnly) {
+        object.state.isShowingDailyTradesOnly = true;
+      }
     }
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
@@ -2460,5 +2485,22 @@ export class DTOService {
         object.data.children.unshift(newBreakdown);
       });
     }
+  }
+
+  public formGlobalWorkflow(
+    targetModule: NavigationModule,
+    isRedirect: boolean
+  ): DTOs.GlobalWorkflowStateDTO {
+    const object: DTOs.GlobalWorkflowStateDTO = {
+      data: {
+        uuid: this.utility.generateUUID(),
+        module: targetModule,
+        title: `Generic step in ${targetModule}`
+      },
+      state: {
+        triggersRedirect: !!isRedirect
+      }
+    };
+    return object;
   }
 }

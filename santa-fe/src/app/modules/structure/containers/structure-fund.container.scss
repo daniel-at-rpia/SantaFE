@@ -138,7 +138,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       @include mix_enable_scrollbar('vertical');
       display: flex;
       flex-direction: column;
-      padding: $spacing_x_small $spacing_medium $spacing_large $spacing_medium;
+      padding: $spacing_small $spacing_large $spacing_large $spacing_large;
       &-item {
         margin: $spacing_small 0;
       }
