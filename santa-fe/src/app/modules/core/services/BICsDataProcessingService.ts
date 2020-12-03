@@ -342,6 +342,9 @@ export class BICsDataProcessingService {
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
       breakdown.state.isWithinPopover = true;
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
+      if (breakdown.data.bicsLevel >= 4) {
+        breakdown.state.isBtnDiveIn = false;
+      }
     })
   }
 

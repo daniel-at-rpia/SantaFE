@@ -1,4 +1,5 @@
 @import "global.scss";
+@import "modules/structure/structure.scss";
 
 $portfolioBreakdownRowCategory_cell_width: 3.5rem;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
@@ -6,10 +7,12 @@ $portfolioBreakdownRowBranchLeftIncrement: 1.5rem;
 $portfolioBreakdownRowBranchLevel2Base: .5rem;
 $portfolioBreakdownRowBranchLevel3Base: $portfolioBreakdownRowBranchLevel2Base + $portfolioBreakdownRowBranchLeftIncrement;
 $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base + $portfolioBreakdownRowBranchLeftIncrement;
+$portfolioBreakdownRow_cta_actionMenu_top: -0.45rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
-  display: flex;
   flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   position: relative;
   &__branch {
@@ -19,15 +22,15 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
   }
   &__cta {
     @include mix_fixed_div(relative, $z_index_base_item);
-    flex: 0 0 8.5rem;
+    flex: 0 0 9.5rem;
     display: flex;
-    margin-right: .5rem;
+    margin-right: $spacing_small;
     &-btn {
       @include mix_fixed_div(relative, $z_index_base_item_solid);
       flex: 1 1 auto;
       display: flex;
       min-height: $portfolioBreakdownRowBtnMinHeight;
-      margin: 0 $spacing_x_small $spacing_small 0;
+      margin: $spacing_x_small;
       padding: $spacing_xx_small;
       text-align: right;
       flex-direction: row;
@@ -75,13 +78,6 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
         }
       }
     }
-    &-subLevelToggle {
-      @include mix_fixed_div(relative, $z_index_base_item_solid);
-      display: flex;
-      align-self: flex-start;
-      flex: 0 0 1rem;
-      visibility: hidden;
-    }
     &-actionMenu {
       @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
       @include mix_alive('custom', $animation_duration_light transform);
@@ -89,16 +85,22 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
       align-items: center;
       justify-content: center;
       width: 100%;
-      transform: scale(0.01) translate(0, 0);
+      transform: scale(0.01);
+      top: $portfolioBreakdownRow_cta_actionMenu_top;
       &-bondBtn {
-        margin-top: $spacing_medium;
+        margin-top: 0;
       }
       &-diveInBtn {
         visibility: hidden;
-        margin-bottom: $spacing_medium;
+        margin: 0 $spacing_minimum 0 0;
+      }
+      &-subLevelToggle {
+        // visibility: hidden;
+        display: none;  // don't occupy the space in the default state
+        margin: 0 0 0 $spacing_minimum;
       }
       &-viewBtn {
-        margin-top: $spacing_medium;
+        margin-bottom: 0;
         &-icon {
           display: flex;
           &-up {
@@ -204,18 +206,49 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
       }
     }
   }
+  &__subLevelTargetGauge {
+    display: none;
+    flex: 0 0 100%;
+    &-content {
+      flex: 0 0 100%;
+      display: flex;
+      padding: $spacing_minimum 0 $spacing_x_small 0;
+      align-items: center;
+      overflow: hidden;
+      &-label {
+        color: $font_color_minor;
+      }
+      &-scaleList {
+        display: flex;
+        &-item {
+          @include mix_border_radius(3px);
+          @include mix_bics_subLevel_target_gauge;
+          width: 1.25rem;
+          height: 0.25rem;
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
+    &-tooltip {
+      @include mix_fixed_div(absolute, $z_index_tooltip);
+      @include mix_border_radius(3px);
+      display: none;
+      background-color: $color_active;
+      color: $font_color_inverse;
+      padding: $spacing_x_small $spacing_small;
+      top: 100%;
+      left: $spacing_large;
+    }
+    &:hover>&-tooltip {
+      display: flex;
+    }
+  }
   &--isBicsDiveIn {
     #{$blockName} {
       &__cta {
         &-actionMenu {
-          &-bondBtn {
-            margin-right: $spacing_small;
-          }
           &-diveInBtn {
             visibility: visible;
-          }
-          &-viewBtn {
-            margin-left: $spacing_small;
           }
         }
       }
@@ -223,6 +256,20 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
   }
   &--isEditingView {
     #{$blockName} {
+      &__cta {
+        &-actionMenu {
+          &-viewBtn {
+            @include material('none');
+            background-color: $color_active;
+            &-icon {
+              color: $font_color_inverse;
+            }
+            &>span {
+              color: $font_color_inverse;
+            }
+          }
+        }
+      }
       &__utility {
         &-ctas {
           transform: scale(1);
@@ -372,7 +419,17 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
           }
         }
         &-actionMenu {
-          transform: scale(1) translate(0, -$spacing_small);
+          transform: scale(1);
+          &-bondBtn {
+            margin: $spacing_large/2 0;
+          }
+          &-diveInBtn {
+            margin-left: $spacing_small;
+            margin-right: $spacing_small;
+          }
+          &-viewBtn {
+            margin: $spacing_large/2 0;
+          }
         }
       }
     }
@@ -399,33 +456,30 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
   &--hasSubLevels {
     #{$blockName} {
       &__cta {
-        &-subLevelToggle {
-          visibility: visible;
+        &-actionMenu {
+          left: -$spacing_small;
+          width: auto;
+          &-bondBtn {
+            margin: 0 0 $spacing_large 0;
+          }
+          &-diveInBtn {
+            margin: 0 $spacing_minimum $spacing_medium 0;
+          }
+          &-subLevelToggle {
+            display: flex;
+            margin-top: $spacing_medium;
+          }
+          &-viewBtn {
+            margin: $spacing_large 0 0 0;
+          }
         }
+      }
+      &__subLevelTargetGauge {
+        display: flex;
       }
     }
   }
-  &--showSubLevels {
-    #{$blockName} {
-      &__cta {
-        &-subLevelToggle {
-          @include material('none');
-          background-color: $color_active;
-          color: $font_color_inverse;
-        }
-      }
-    }
-  }
-  &--mainDisplayLevel1 {
-    #{$blockName} {
-      &__cta {
-        &-btn {
-          flex: 0 0 6rem;
-        }
-      }
-    }
-  }
-  &--mainDisplayLevel2 {
+  &--mainPanelLevel2 {
     display: none;
     #{$blockName} {
       &__branch {
@@ -439,7 +493,7 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
       }
     }
   }
-  &--mainDisplayLevel3 {
+  &--mainPanelLevel3 {
     display: none;
     #{$blockName} {
       &__branch {
@@ -453,7 +507,7 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
       }
     }
   }
-  &--mainDisplayLevel4 {
+  &--mainPanelLevel4 {
     display: none;
     #{$blockName} {
       &__branch {
@@ -467,11 +521,27 @@ $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base +
       }
     }
   }
+  &--showSubLevels {
+    #{$blockName} {
+      &__cta {
+        &-actionMenu {
+          &-subLevelToggle {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+      &__subLevelTargetGauge {
+        display: none;
+      }
+    }
+  }
   &--visibleSubLevel {
     &#{$blockName} {
-      &--mainDisplayLevel2,
-      &--mainDisplayLevel3,
-      &--mainDisplayLevel4 {
+      &--mainPanelLevel2,
+      &--mainPanelLevel3,
+      &--mainPanelLevel4 {
         display: flex;
       }
     }
