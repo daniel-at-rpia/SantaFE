@@ -22,7 +22,7 @@
   }">
   <section class="sat-portfolioBreakdownRow__branch" *ngIf="breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover" [ngStyle]="{'height': breakdownRow.style.branchHeight, 'top': breakdownRow.style.top}"></section>
   <section class="sat-portfolioBreakdownRow__cta">
-    <button (click)="onClickCategory(breakdownRow)" class="sat-portfolioBreakdownRow__cta-btn">
+    <button (click)="onClickCategory()" class="sat-portfolioBreakdownRow__cta-btn">
       <div class="sat-portfolioBreakdownRow__cta-btn-view">
         <span *ngIf="!!breakdownRow.data.view" class="sat-portfolioBreakdownRow__cta-btn-view-toolTip">{{ breakdownRow.data.view }}</span>
         <i [ngClass]="{
