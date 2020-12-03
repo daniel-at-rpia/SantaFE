@@ -16,7 +16,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
-import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import { BEPortfolioStructuringDTO, BECustomMetricBreakdowns } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
@@ -24,6 +24,10 @@ import {
 } from 'App/modules/core/models/backend/backend-payloads.interface';
 import { StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import {
+  SecurityDefinitionMap
+} from 'Core/constants/securityDefinitionConstants.constant';
+import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
 
 @Component({
     selector: 'structure-main-panel',
@@ -262,20 +266,67 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
-    this.state.fetchResult.fundList = [];
-    serverReturn.forEach(eachFund => {
-      if (this.constants.supportedFundList.indexOf(eachFund.portfolioShortName) >= 0) {
-        this.BICsDataProcessingService.setRawBICsData(eachFund);
-        const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-        this.state.fetchResult.fundList.push(newFund);
+  private formCustomBICsBreakdownWithSubLevels(rawData: BEPortfolioStructuringDTO, fund: PortfolioStructureDTO) {
+    // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
+    let [customBICSBreakdown, customBICSDefinitionList] = this.dtoService.formCustomRawBreakdownData(rawData, rawData.breakdowns.BicsLevel1, ['BicsLevel2', 'BicsLevel3', 'BicsLevel4']);
+    for (let subCategory in customBICSBreakdown.breakdown) {
+      // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
+      if (!!customBICSBreakdown.breakdown[subCategory] && (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel >= 2) {
+        const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(subCategory, (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel,  []);
+        targetHierarchyList.forEach((category: BICsHierarchyBlock) => {
+        const formattedBEBicsKey = `BicsLevel${category.bicsLevel}`;
+        const categoryBEData = rawData.breakdowns[formattedBEBicsKey].breakdown[category.name];
+        if (!!categoryBEData) {
+          const existingCategory = customBICSBreakdown.breakdown[category.name];
+            if (!!existingCategory) {
+              const matchedBICSLevel = (customBICSBreakdown.breakdown[category.name] as BECustomMetricBreakdowns).customLevel === category.bicsLevel;
+              if (!matchedBICSLevel) {
+                // category key exists but is not at the same level (ex. Health Care at Level 1 vs Health Care at Level 2)
+                const customCategory = `${category.name} BICsSubLevel.${category.bicsLevel}`
+                // check if custom category exists already
+                const customCategoryExists = customBICSBreakdown.breakdown[customCategory];
+                if (!customCategoryExists) {
+                  customBICSBreakdown.breakdown[customCategory] = categoryBEData;
+                  (customBICSBreakdown.breakdown[customCategory] as BECustomMetricBreakdowns).customLevel = category.bicsLevel;
+                  customBICSDefinitionList.push(customCategory);
+                }
+              }
+            } else {
+              customBICSBreakdown.breakdown[category.name] = categoryBEData;
+              (customBICSBreakdown.breakdown[category.name] as BECustomMetricBreakdowns).customLevel = category.bicsLevel;
+              customBICSDefinitionList.push(category.name);
+            }
+          }
+        })
       }
-    })
-    try {
-      this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
-    } catch (err) {
-      console.error('Sort fund failure');
-      this.restfulCommService.logError('Structuring Sort Fund Failure');
+    }
+    const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
+    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, customBICSDefinitionList, isCs01);
+    BICSBreakdown.data.title = 'BICS';
+    BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
+    BICSBreakdown.data.indexName = rawData.indexShortName;
+    // Place custom BICS breakdown at current Currency index since placement of overrides is dependent if they are added or removed
+    const currencyIndex = fund.data.children.findIndex(breakdown => breakdown.data.title === 'Currency');
+    fund.data.children.splice(currencyIndex, 0, BICSBreakdown);
+  }
+
+  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
+    if (!!serverReturn) {
+      this.state.fetchResult.fundList = [];
+      serverReturn.forEach(eachFund => {
+        if (this.constants.supportedFundList.indexOf(eachFund.portfolioShortName) >= 0) {
+          this.BICsDataProcessingService.setRawBICsData(eachFund);
+          const newFund = this.dtoService.formStructureFundObject(eachFund, false);
+          this.formCustomBICsBreakdownWithSubLevels(eachFund, newFund);
+          this.state.fetchResult.fundList.push(newFund);
+        }
+      })
+      try {
+        this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
+      } catch (err) {
+        console.error('Sort fund failure');
+        this.restfulCommService.logError('Structuring Sort Fund Failure');
+      }
     }
   }
 }

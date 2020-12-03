@@ -24,7 +24,8 @@
       AlertTypes,
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_VOLUME_REPORTED_THRESHOLD
+      TRACE_VOLUME_REPORTED_THRESHOLD,
+      NavigationModule
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -58,8 +59,7 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType,
-      TRACE_INITIAL_LIMIT
+      AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
   //
@@ -221,7 +221,7 @@ export class DTOService {
           ask: null,
           displayAsk: null
         },
-        hasIndex: !isStencil && rawData.metrics ? !!rawData.metrics.Index : false,
+        hasIndex: false,
         hedgeFactor: !isStencil && !!rawData.unitPosition ? rawData.unitPosition.hedgeFactor : null,
         alert: {
           alertId: null,
@@ -290,6 +290,7 @@ export class DTOService {
         if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
           object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
         }
+        object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
       }
     } catch (err) {
       console.warn('Data issue on security', object, err);
@@ -1260,6 +1261,20 @@ export class DTOService {
           object.data.identifier = identifier;
         }
         object.state.isColorCodeInversed = !!colorCodeInversed;
+        // temporary guard, only meant for Dec.4th demo, TODO: remove after the demo
+          if (object.data.start < object.data.min) {
+            object.data.min = object.data.start;
+          }
+          if (object.data.start > object.data.max) {
+            object.data.max = object.data.start;
+          }
+          if (object.data.end < object.data.min) {
+            object.data.min = object.data.end;
+          }
+          if (object.data.end > object.data.max) {
+            object.data.max = object.data.end;
+          }
+        // guard end
       } else {
         object.data.start = null;
         object.data.end = null;
@@ -1942,7 +1957,7 @@ export class DTOService {
         autoScalingAvailable: !isStencil 
           ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
           : false,
-        autoScalingActive: false
+        autoScalingActive: true
       }
     };
     try {
@@ -2044,17 +2059,26 @@ export class DTOService {
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
         isEditingViewAvail: false,
-        isEditingView: false
+        isDisplaySubLevels: false
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
     definitionList.forEach((eachCategoryText) => {
       let bucket: Blocks.StructureBucketDataBlock = {};
+      let customLevel: number;
+      let isCustomLevelAvailable: string;
+      if (!!rawData.breakdown[eachCategoryText]) {
+        isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
+        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel : null;
+      }
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
           eachCategoryText
         )
+      } else if (!!isCustomLevelAvailable) {
+        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel}`;
+        bucket[formattedBEKey] = [eachCategoryText];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
       }
@@ -2073,7 +2097,8 @@ export class DTOService {
           isOverride,
           object.data.diveInLevel,
           view,
-          bucket
+          bucket,
+          customLevel
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -2090,7 +2115,8 @@ export class DTOService {
           isOverride,
           object.data.diveInLevel,
           view,
-          bucket
+          bucket,
+          customLevel
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -2126,7 +2152,8 @@ export class DTOService {
     isOverride: boolean,
     diveInLevel: number,
     view: PortfolioView,
-    bucket: Blocks.StructureBucketDataBlock
+    bucket: Blocks.StructureBucketDataBlock,
+    customLevel: number = null,
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2170,10 +2197,11 @@ export class DTOService {
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
       const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
-      
+      // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
+      // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: `${categoryName}`,
-        displayCategory: `${categoryName}`,
+        category: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
+        displayCategory: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2184,7 +2212,7 @@ export class DTOService {
         indexPct: parsedRawData.indexPct,
         indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
         moveVisualizer: eachMoveVisualizer,
-        bicsLevel: !!isBicsBreakdown ? 1 : null,
+        bicsLevel: !!customLevel ? customLevel : null,
         children: null,
         portfolioID: portfolioID,
         diveInLevel: diveInLevel,
@@ -2195,7 +2223,9 @@ export class DTOService {
           targetPct: rawTargetPct
         },
         view: view,
-        bucket: bucket
+        bucket: bucket,
+        parentRow: null,
+        displayedSubLevelRows: []
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2203,9 +2233,7 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock);
-      eachCategoryBlockDTO.state.isBtnDiveIn = !!isBicsBreakdown;
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown);
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2246,14 +2274,23 @@ export class DTOService {
     return object;
   }
 
-  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock): DTOs.StructurePortfolioBreakdownRowDTO {
+  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
     const object = {
       data: categoryRow,
+      style: {
+        branchHeight: '0',
+        top: '0'
+      },
       state: {
         isSelected: false,
-        isBtnDiveIn: false,
+        isBtnDiveIn: isDiveIn,
         isStencil: true,
-        isEditingView: false
+        isWithinPopover: false,
+        isVisibleSubLevel: false,
+        isShowingSubLevels: false,
+        isEditingView: false,
+        isEditingViewAvail: false,
+        isDoveIn: false
       }
     }
     return object;
@@ -2264,9 +2301,9 @@ export class DTOService {
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
       tradeTime: rawData.eventTime,
-      displayTradeTime: moment(rawData.eventTime).format(`HH:mm`),
+      displayTradeTime: moment(rawData.eventTime).format(`MMM DD - HH:mm`),
       reportingTime: rawData.publishingTime,
-      displayReportingTime: moment(rawData.publishingTime).format(`ddd MMM DD - HH:mm`),
+      displayReportingTime: moment(rawData.publishingTime).format(`MMM DD - HH:mm`),
       counterParty: counterParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
@@ -2297,6 +2334,7 @@ export class DTOService {
   public formTraceTradesVisualizerDTO(targetRow: DTOs.SecurityTableRowDTO, isPinnedFullWidth: boolean = false, previousAvailableFiltersList: Array<string>): DTOs.TraceTradesVisualizerDTO {
     const object: DTOs.TraceTradesVisualizerDTO = {
       data: {
+        pristineRowList: [],
         displayList: [],
         scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_SCATTER_GRAPH_ID}`,
         pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_LEFT_ID}`,
@@ -2308,7 +2346,8 @@ export class DTOService {
         isDisplayAllTraceTrades: false,
         graphReceived: false,
         selectedFiltersList: [],
-        showGraphs: false
+        showGraphs: false,
+        isShowingDailyTradesOnly: false
       },
       graph: {
         scatterGraph: null,
@@ -2327,8 +2366,16 @@ export class DTOService {
           return 0;
         }
       })
-
-      object.data.displayList = targetRow.data.security.data.traceTrades.length > TRACE_INITIAL_LIMIT ? targetRow.data.security.data.traceTrades.filter((trade, i) => i < TRACE_INITIAL_LIMIT) : targetRow.data.security.data.traceTrades;
+      object.data.pristineRowList = targetRow.data.security.data.traceTrades;
+      object.data.displayList = this.utility.getDailyTraceTrades(targetRow.data.security.data.traceTrades);
+      // checks if only daily trades are available
+      const currentDate = moment();
+      const formattedCurrentDate = currentDate.format('YYYY-MM-DD');
+      const checkForDailyTrade = (trade: Blocks.TraceTradeBlock) => moment(trade.tradeTime).format('YYYY-MM-DD') === formattedCurrentDate;
+      const isDailyTradesOnly = targetRow.data.security.data.traceTrades.every(checkForDailyTrade);
+      if (!!isDailyTradesOnly) {
+        object.state.isShowingDailyTradesOnly = true;
+      }
     }
     const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
@@ -2348,6 +2395,43 @@ export class DTOService {
     return object;
   }
 
+  public formCustomRawBreakdownData(rawData: BEModels.BEPortfolioStructuringDTO, targetBreakdown: BEModels.BEStructuringBreakdownBlock, identifiers: string[]): [BEModels.BEStructuringBreakdownBlock, string[]] {
+    const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
+    for (let category in customBreakdown.breakdown) {
+      if (!!customBreakdown.breakdown[category]) {
+        (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = 1;
+      }
+    }
+    const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
+    selectedBreakdowns.forEach((selectedBreakdown, i) => {
+      for (let category in selectedBreakdown.breakdown) {
+        if (!!selectedBreakdown.breakdown[category]) {
+          if (selectedBreakdown.breakdown[category].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel) {
+            // check if its the same name as another category to avoid overwriting those values
+            const categoryNameExists = Object.keys(customBreakdown.breakdown).find(key => key === category);
+            // Adding 2 because of how the index starts at 0 and we want it to increment by 1
+            const level = i + 2;
+            if (!!categoryNameExists) {
+              const customCategory = `${category} BICsSubLevel.${level}`
+              customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
+              (customBreakdown.breakdown[customCategory] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+            } else {
+              customBreakdown.breakdown[category] = selectedBreakdown.breakdown[category];
+              (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+            }
+          }
+        }
+      }
+    });
+    const customDefinitionList: Array<string>= [];
+    for (let category in customBreakdown.breakdown) {
+      if (!!customBreakdown.breakdown[category]) {
+        customDefinitionList.push(category)
+      }
+    }
+    return [customBreakdown, customDefinitionList];
+  }
+
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioStructureDTO,
     rawData: BEModels.BEPortfolioStructuringDTO,
@@ -2355,11 +2439,6 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues
   ){
     const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const BICSBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.BicsLevel1, BICsLevel1DefinitionList, isDisplayCs01);
-    BICSBreakdown.data.title = 'BICS';
-    BICSBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
-    BICSBreakdown.data.indexName = rawData.indexShortName;
-    object.data.children.push(BICSBreakdown);
     const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency, isDisplayCs01);
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
@@ -2409,5 +2488,22 @@ export class DTOService {
         object.data.children.unshift(newBreakdown);
       });
     }
+  }
+
+  public formGlobalWorkflow(
+    targetModule: NavigationModule,
+    isRedirect: boolean
+  ): DTOs.GlobalWorkflowStateDTO {
+    const object: DTOs.GlobalWorkflowStateDTO = {
+      data: {
+        uuid: this.utility.generateUUID(),
+        module: targetModule,
+        title: `Generic step in ${targetModule}`
+      },
+      state: {
+        triggersRedirect: !!isRedirect
+      }
+    };
+    return object;
   }
 }

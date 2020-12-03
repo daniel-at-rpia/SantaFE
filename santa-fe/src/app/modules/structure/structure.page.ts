@@ -1,5 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+    import { ActivatedRoute } from '@angular/router';
     import {
       Observable,
       Subscription,
@@ -36,6 +37,7 @@
 export class StructurePage implements OnInit, OnDestroy {
   state: StructureState;
   subscriptions = {
+    routeChange: null
   };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID
@@ -61,7 +63,8 @@ export class StructurePage implements OnInit, OnDestroy {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private route: ActivatedRoute
   ) {
     this.state = this.initializePageState();
   }
@@ -70,6 +73,11 @@ export class StructurePage implements OnInit, OnDestroy {
     this.state = this.initializePageState();
     this.store$.dispatch(new StructureStoreResetEvent);
     this.fetchBICsHierarchy();
+    this.subscriptions.routeChange = this.route.paramMap.pipe(
+      tap(params => {
+        console.log('test, route in Structure', params.get('stateId'));
+      })
+    ).subscribe();
   }
 
   public ngOnDestroy() {

@@ -372,8 +372,8 @@ export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
   SecurityDefinitionMap.COUPON_TYPE,
   SecurityDefinitionMap.SENIORITY,
   SecurityDefinitionMap.RATING,
-  SecurityDefinitionMap.SECTOR,
-  SecurityDefinitionMap.INDUSTRY,
+  SecurityDefinitionMap.BICS_LEVEL_1,
+  SecurityDefinitionMap.BICS_LEVEL_2,
   SecurityDefinitionMap.TENOR,
   SecurityDefinitionMap.COUNTRY,
   SecurityDefinitionMap.QUOTED_TODAY
@@ -382,7 +382,7 @@ export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
 export const MarketAnalysisGroupByOpionsDefaultActiveList: Array<string> = [
   SecurityDefinitionMap.SENIORITY.key,
   SecurityDefinitionMap.RATING.key,
-  SecurityDefinitionMap.SECTOR.key,
+  SecurityDefinitionMap.BICS_LEVEL_1.key,
   SecurityDefinitionMap.TENOR.key
 ];
 
@@ -400,5 +400,3 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
-
-export const TRACE_INITIAL_LIMIT = 9;

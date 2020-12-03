@@ -1,7 +1,11 @@
-import {Component, EventEmitter, Input,OnInit, Output, ViewEncapsulation} from '@angular/core';
+import { Component, EventEmitter, Input,OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+
 import { PortfolioView } from 'App/modules/core/constants/structureConstants.constants';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import { DTOService, BICsDataProcessingService } from 'Core/services';
+import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 
 @Component({
   selector: 'structure-popover',
@@ -12,21 +16,42 @@ import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingServi
 
 export class StructurePopover implements OnInit {
   @Input() popover: StructurePopoverDTO
+  constants = {
+    navigationModule: NavigationModule
+  }
+
   constructor(
-  private bicsDataProcessingService: BICsDataProcessingService
+    private store$: Store<any>,
+    private dtoService: DTOService,
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {}
+
   public ngOnInit() {};
+
+  public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isSelected = !targetRow.state.isSelected;
+  }
 
   public getNextBicsLevel(breakdownRow: StructurePortfolioBreakdownRowDTO) {
     if (breakdownRow.data.diveInLevel === 0) {
       this.closePopover();
     } else if (breakdownRow.data.children) {
-      breakdownRow.state.isSelected = !breakdownRow.state.isSelected;
+      breakdownRow.state.isDoveIn = !breakdownRow.state.isDoveIn;
     } else {
-      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01, breakdownRow.state.isEditingView);
+      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01);
       breakdownRow.data.children = subBicsLevel;
-      breakdownRow.state.isSelected = true;
+      breakdownRow.state.isDoveIn = true;
     }
+  }
+
+  public onClickSeeBond() {
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
+      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)
+    ));
+  }
+
+  public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isEditingView = !targetRow.state.isEditingView;
   }
 
   public closePopover() {
