@@ -1062,10 +1062,12 @@ export class GraphService {
         bullet2.fill = am4core.color('#26A77B')
         bullet2.stroke = am4core.color('#eee')
         if (!!dto.state.isDisplayAllTraceTrades) {
-          bullet1.tooltipText = "{counterParty} sell {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
-          bullet2.tooltipText = "{counterParty} buy {valueY} on {dateX.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
-          bullet1.circle.radius = 4;
-          bullet2.circle.radius = 4;
+          series1.dataFields.valueX = "totalTime";
+          series2.dataFields.valueX = "totalTime";
+          bullet1.tooltipText = "{counterParty} sell {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+          bullet2.tooltipText = "{counterParty} buy {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+          bullet1.circle.radius = 4.5;
+          bullet2.circle.radius = 4.5;
         } else {
           bullet1.tooltipText = "{counterParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
           bullet2.tooltipText = "{counterParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
