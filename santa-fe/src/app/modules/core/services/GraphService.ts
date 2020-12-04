@@ -953,7 +953,16 @@ export class GraphService {
           } else {
             return data.nonActiveTrade
           }
-        }).sort();
+        });
+        sortedSpreadData.sort((a,b) => {
+          if (a < b) {
+            return - 1
+          } else if (a > b) {
+            return 1
+          } else {
+            return 0;
+          }
+        })
         const min = Math.floor(sortedSpreadData[0] / 10) * 10;
         const max = Math.ceil(sortedSpreadData[sortedSpreadData.length - 1] / 10) * 10;
         const parsedMin = min;
