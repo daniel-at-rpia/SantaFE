@@ -34,7 +34,7 @@ import {
   TradeSideValueEquivalent,
   traceTradePieGraphKeys
 } from 'Core/constants/securityTableConstants.constant';
-
+import { TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL } from 'Core/constants/securityTableConstants.constant';
 
 @Injectable()
 export class GraphService {
