@@ -966,8 +966,8 @@ export class GraphService {
             dateAxis.title.text = 'Time';
             const currentDate = new Date();
             const formattedDate = moment(currentDate).format('YYYY-MM-DD');
-            const minStr = `${formattedDate}, 06:00:00`;
-            const maxStr = `${formattedDate}, 18:00:00`;
+            const minStr = `${formattedDate}, 00:00:00`;
+            const maxStr = `${formattedDate}, 23:59:59`;
             const minDate = new Date(minStr);
             const maxDate = new Date(maxStr);
             dateAxis.min = minDate.getTime();
@@ -976,6 +976,12 @@ export class GraphService {
               "timeUnit": "second",
               "count": 1
             };
+            dateAxis.gridIntervals.setAll([
+              { timeUnit: "hour", count: 3 }
+            ]);
+            let label = dateAxis.renderer.labels.template;
+            label.wrap = true;
+            label.maxWidth = 55
           }
         }
       }
