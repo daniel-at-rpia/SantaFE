@@ -12,17 +12,18 @@ import { UtilityService } from 'Core/services/UtilityService';
 import {
   PortfolioMetricValues,
   SUPPORTED_PORTFOLIO_LIST,
-  BEPortfolioTargetMetricValues
+  BEPortfolioTargetMetricValues,
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
-import { BEPortfolioStructuringDTO, BECustomMetricBreakdowns } from 'App/modules/core/models/backend/backend-models.interface';
+import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetViewData, AdhocExtensionBEMetricBreakdowns } from 'FEModels/frontend-adhoc-packages.interface';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import {
   SecurityDefinitionMap
@@ -255,48 +256,96 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  private formCustomBICsBreakdownWithSubLevels(rawData: BEPortfolioStructuringDTO, fund: PortfolioStructureDTO) {
+  private formCustomBICsBreakdownWithSubLevels(
+    rawData: BEPortfolioStructuringDTO,
+    fund: PortfolioStructureDTO
+  ) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
-    let [customBICSBreakdown, customBICSDefinitionList] = this.dtoService.formCustomRawBreakdownData(rawData, rawData.breakdowns.BicsLevel1, ['BicsLevel2', 'BicsLevel3', 'BicsLevel4']);
-    for (let subCategory in customBICSBreakdown.breakdown) {
-      // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
-      if (!!customBICSBreakdown.breakdown[subCategory] && (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel >= 2) {
-        const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(subCategory, (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel,  []);
-        targetHierarchyList.forEach((category: BICsHierarchyBlock) => {
-        const formattedBEBicsKey = `BicsLevel${category.bicsLevel}`;
-        const categoryBEData = rawData.breakdowns[formattedBEBicsKey].breakdown[category.name];
-        if (!!categoryBEData) {
-          const existingCategory = customBICSBreakdown.breakdown[category.name];
-            if (!!existingCategory) {
-              const matchedBICSLevel = (customBICSBreakdown.breakdown[category.name] as BECustomMetricBreakdowns).customLevel === category.bicsLevel;
-              if (!matchedBICSLevel) {
-                // category key exists but is not at the same level (ex. Health Care at Level 1 vs Health Care at Level 2)
-                const customCategory = `${category.name} BICsSubLevel.${category.bicsLevel}`
-                // check if custom category exists already
-                const customCategoryExists = customBICSBreakdown.breakdown[customCategory];
-                if (!customCategoryExists) {
-                  customBICSBreakdown.breakdown[customCategory] = categoryBEData;
-                  (customBICSBreakdown.breakdown[customCategory] as BECustomMetricBreakdowns).customLevel = category.bicsLevel;
-                  customBICSDefinitionList.push(customCategory);
-                }
-              }
-            } else {
-              customBICSBreakdown.breakdown[category.name] = categoryBEData;
-              (customBICSBreakdown.breakdown[category.name] as BECustomMetricBreakdowns).customLevel = category.bicsLevel;
-              customBICSDefinitionList.push(category.name);
-            }
-          }
-        })
-      }
-    }
+    const {
+      customBreakdown: customBICSBreakdown,
+      customDefinitionList: customBICSDefinitionList
+    } = this.dtoService.formCustomRawBreakdownData(
+      rawData,
+      rawData.breakdowns['BicsCodeLevel1'],
+      ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+    );
+    this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
+      rawData,
+      customBICSBreakdown,
+      customBICSDefinitionList
+    );
+    const parsedCustomBICSDefinitionList = this.formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
+      customBICSBreakdown,
+      customBICSDefinitionList
+    );
     const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
-    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, customBICSDefinitionList, isCs01);
+    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, parsedCustomBICSDefinitionList, isCs01);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     BICSBreakdown.data.indexName = rawData.indexShortName;
     // Place custom BICS breakdown at current Currency index since placement of overrides is dependent if they are added or removed
     const currencyIndex = fund.data.children.findIndex(breakdown => breakdown.data.title === 'Currency');
     fund.data.children.splice(currencyIndex, 0, BICSBreakdown);
+  }
+
+  private formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
+    rawData: BEPortfolioStructuringDTO,
+    customBICSBreakdown: BEStructuringBreakdownBlock,
+    customBICSDefinitionList: Array<string>
+  ) {
+    // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
+    for (let subCategory in customBICSBreakdown.breakdown) {
+      const targetParsedCategory = '';
+      const targetLevel: number = (customBICSBreakdown.breakdown[subCategory] as AdhocExtensionBEMetricBreakdowns).customLevel;
+      if (!!customBICSBreakdown.breakdown[subCategory] && targetLevel >= 2) {
+        const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(
+          subCategory,
+          targetLevel,
+          []
+        );
+        targetHierarchyList.forEach((category: BICsHierarchyBlock) => {
+        const formattedBEBicsKey = `BicsLevel${category.bicsLevel}`;
+        const categoryBEData = rawData.breakdowns[formattedBEBicsKey].breakdown[category.name];
+        if (!!categoryBEData) {
+          const existingCategory = customBICSBreakdown.breakdown[category.name];
+            if (!!existingCategory) {
+              const matchedBICSLevel = (customBICSBreakdown.breakdown[category.name] as AdhocExtensionBEMetricBreakdowns).customLevel === category.bicsLevel;
+              if (!matchedBICSLevel) {
+                // category key exists but is not at the same level (ex. Health Care at Level 1 vs Health Care at Level 2)
+                const customCategory = `${category.name} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${category.bicsLevel}`
+                // check if custom category exists already
+                const customCategoryExists = customBICSBreakdown.breakdown[customCategory];
+                if (!customCategoryExists) {
+                  customBICSBreakdown.breakdown[customCategory] = categoryBEData;
+                  (customBICSBreakdown.breakdown[customCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
+                  customBICSDefinitionList.push(customCategory);
+                }
+              }
+            } else {
+              customBICSBreakdown.breakdown[category.name] = categoryBEData;
+              (customBICSBreakdown.breakdown[category.name] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
+              customBICSDefinitionList.push(category.name);
+            }
+          }
+        })
+      }
+    }
+  }
+
+  private formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
+    customBICSBreakdown: BEStructuringBreakdownBlock,
+    customBICSDefinitionList: Array<string>
+  ): Array<string> {
+    // convert bicsCode to bics names
+    const parsedCustomBICSDefinitionList = customBICSDefinitionList.map((eachCode) => {
+      return this.BICsDataProcessingService.BICSCodeToBICSName(eachCode);
+    })
+    const parsedCustomBICSDefinitionListNoNull = parsedCustomBICSDefinitionList.filter((eachName) => {return !!eachName});
+    for (let subCategory in customBICSBreakdown.breakdown) {
+      const name = this.BICsDataProcessingService.BICSCodeToBICSName(subCategory);
+      customBICSBreakdown.breakdown[name] = customBICSBreakdown.breakdown[subCategory];
+    }
+    return parsedCustomBICSDefinitionListNoNull;
   }
 
   private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
