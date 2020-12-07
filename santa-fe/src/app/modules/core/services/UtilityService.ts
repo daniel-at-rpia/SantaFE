@@ -1123,7 +1123,15 @@ export class UtilityService {
         }
         const traceTradesFilterData = optionsCounterPartyList.length > 0 ? filterListWithCounterParty : processingTraceTradesList;
         if (numericalFiltersList.length > 0) {
-          numericalFiltersList.sort();
+          numericalFiltersList.sort((tradeA: number, tradeB: number) => {
+            if (tradeA < tradeB) {
+              return - 1;
+            } else if (tradeA > tradeB) {
+              return 1;
+            } else {
+              return 0;
+            }
+          })
           const filteredWithAmountsList = this.getTraceTradesListBasedOnAmount(traceTradesFilterData, numericalFiltersList[numericalFiltersList.length - 1]);
           displayedList = [...filteredWithAmountsList];
         } else {
