@@ -117,7 +117,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectReloadFundDataPostEdit)
     ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
       if (!!targetFund) {
-        this.reloadFund(targetFund);
+        this.loadFund(targetFund);
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -202,17 +202,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         return of('error')
       })
     ).subscribe()
-  }
-  
-  private reloadFund(
-    serverReturn: BEPortfolioStructuringDTO
-  ) {
-    const updatedFund = this.dtoService.formStructureFundObject(serverReturn, false, this.state.selectedMetricValue);
-    updatedFund.data.cs01TargetBar.data.displayedCurrentValue = this.utilityService.parseNumberToThousands(updatedFund.data.currentTotals.cs01, true);
-    updatedFund.data.cs01TargetBar.data.displayedTargetValue = this.utilityService.parseNumberToThousands(updatedFund.data.target.target.cs01, true);
-    const selectedFund = this.state.fetchResult.fundList.find(fund => fund.data.portfolioId === updatedFund.data.portfolioId);
-    const selectedFundIndex = this.state.fetchResult.fundList.indexOf(selectedFund);
-    this.state.fetchResult.fundList[selectedFundIndex] = updatedFund;
   }
 
   private updateViewData(data: StructureSetViewData) {
@@ -314,12 +303,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
       serverReturn.forEach(eachFund => {
-        if (this.constants.supportedFundList.indexOf(eachFund.portfolioShortName) >= 0) {
-          this.BICsDataProcessingService.setRawBICsData(eachFund);
-          const newFund = this.dtoService.formStructureFundObject(eachFund, false);
-          this.formCustomBICsBreakdownWithSubLevels(eachFund, newFund);
-          this.state.fetchResult.fundList.push(newFund);
-        }
+        this.loadFund(eachFund);
       })
       try {
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
@@ -329,4 +313,21 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     }
   }
+
+  private loadFund(rawData: BEPortfolioStructuringDTO) {
+    if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
+      this.BICsDataProcessingService.setRawBICsData(rawData);
+      const newFund = this.dtoService.formStructureFundObject(rawData, false);
+      this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
+      const alreadyExist = this.state.fetchResult.fundList.findIndex((eachFund) => {
+        return eachFund.data.portfolioId === newFund.data.portfolioId;
+      })
+      if (alreadyExist >= 0) {
+        this.state.fetchResult.fundList[alreadyExist] = newFund;
+      } else {
+        this.state.fetchResult.fundList.push(newFund);
+      }
+    }
+  }
+
 }
