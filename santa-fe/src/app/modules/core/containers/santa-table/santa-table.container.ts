@@ -966,16 +966,10 @@ export class SantaTable implements OnInit, OnChanges {
     }
     const previousTraceTradesDisplayAllState = !!targetRow.data.traceTradeVisualizer ? targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades : false;
     const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
-    const previousDisplayListCopy = previousSelectedFilters.length > 0 ? this.utilityService.deepCopy(targetRow.data.traceTradeVisualizer.data.displayList) : [];
     const previousAvailableFiltersList = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.data.availableFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.data.availableFiltersList : [];
-    const setPreviousFilteredDisplayList = (row: SecurityTableRowDTO, traceData: Array<TraceTradeBlock>) => {
+    const setPreviousFilteredDisplayList = (row: SecurityTableRowDTO) => {
       row.data.traceTradeVisualizer.state.selectedFiltersList = previousSelectedFilters;
-      const previousDisplayList = [];
-      previousDisplayListCopy.forEach(copy => {
-        const equivalentNewTrade = traceData.find(newTrade => newTrade.traceTradeId === copy.traceTradeId);
-        !!equivalentNewTrade && previousDisplayList.push(equivalentNewTrade);
-      })
-      row.data.traceTradeVisualizer.data.displayList = previousDisplayList;
+      this.utilityService.filterTraceTrades(previousSelectedFilters, row);
     }
     const securityID = targetRow.data.security.data.securityID;
     const payload: PayloadGetAllTraceTrades = {
@@ -996,14 +990,14 @@ export class SantaTable implements OnInit, OnChanges {
             targetRow.data.traceTradeVisualizer.state.showGraphs = targetRow.data.security.data.traceTrades.length > 2;
             targetRow.data.traceTradeVisualizer.state.isDisplayAllTraceTrades = !!previousTraceTradesDisplayAllState;
             if (!!previousTraceTradesDisplayAllState) {
-              if (previousDisplayListCopy.length > 0) {
-                setPreviousFilteredDisplayList(targetRow, targetRow.data.security.data.traceTrades)
+              if (previousSelectedFilters.length > 0) {
+                setPreviousFilteredDisplayList(targetRow)
               } else {
                 targetRow.data.traceTradeVisualizer.data.displayList = targetRow.data.security.data.traceTrades;
               }
             } else {
-              if(previousDisplayListCopy.length > 0) {
-                setPreviousFilteredDisplayList(targetRow, targetRow.data.traceTradeVisualizer.data.displayList);
+              if(previousSelectedFilters.length > 0) {
+                setPreviousFilteredDisplayList(targetRow);
               }
             }
           }
