@@ -6,7 +6,11 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
-    import { StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      StructureOverrideToBreakdownConversionReturnPack,
+      CustomBreakdownReturnPack,
+      AdhocExtensionBEMetricBreakdowns
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
@@ -61,7 +65,14 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
+    import {
+      PortfolioShortNames,
+      PortfolioMetricValues,
+      PortfolioView,
+      PortfolioBreakdownGroupOptions,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+    } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -2028,7 +2039,7 @@ export class DTOService {
     isDisplayCs01: boolean,
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
-    const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
+    const isBicsBreakdown = rawData.groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
@@ -2071,7 +2082,7 @@ export class DTOService {
       let isCustomLevelAvailable: string;
       if (!!rawData.breakdown[eachCategoryText]) {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
-        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel : null;
+        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel : null;
       }
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
@@ -2079,7 +2090,7 @@ export class DTOService {
           eachCategoryText
         )
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel}`;
+        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
         bucket[formattedBEKey] = [eachCategoryText];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
@@ -2198,12 +2209,12 @@ export class DTOService {
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
-      const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
+      const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
-        displayCategory: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
+        category: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
+        displayCategory: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2235,7 +2246,7 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown);
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isBicsBreakdown);
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2397,11 +2408,15 @@ export class DTOService {
     return object;
   }
 
-  public formCustomRawBreakdownData(rawData: BEModels.BEPortfolioStructuringDTO, targetBreakdown: BEModels.BEStructuringBreakdownBlock, identifiers: string[]): [BEModels.BEStructuringBreakdownBlock, string[]] {
+  public formCustomRawBreakdownData(
+    rawData: BEModels.BEPortfolioStructuringDTO,
+    targetBreakdown: BEModels.BEStructuringBreakdownBlock,
+    identifiers: string[]
+  ): CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
     for (let category in customBreakdown.breakdown) {
       if (!!customBreakdown.breakdown[category]) {
-        (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = 1;
+        (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
       }
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
@@ -2416,10 +2431,10 @@ export class DTOService {
             if (!!categoryNameExists) {
               const customCategory = `${category} BICsSubLevel.${level}`
               customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[customCategory] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+              (customBreakdown.breakdown[customCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
             } else {
               customBreakdown.breakdown[category] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+              (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
             }
           }
         }
@@ -2431,7 +2446,10 @@ export class DTOService {
         customDefinitionList.push(category)
       }
     }
-    return [customBreakdown, customDefinitionList];
+    return {
+      customBreakdown: customBreakdown,
+      customDefinitionList: customDefinitionList
+    };
   }
 
   private processBreakdownDataForStructureFund(

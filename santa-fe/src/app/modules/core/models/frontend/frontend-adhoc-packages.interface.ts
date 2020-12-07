@@ -9,7 +9,11 @@ import {
 import { PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from 'FEModels/frontend-models.interface';
-import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
+import {
+  BEPortfolioStructuringDTO,
+  BEStructuringBreakdownBlock,
+  BEMetricBreakdowns
+} from 'BEModels/backend-models.interface';
 import {
   QuoteMetricBlock,
   AgGridRow,
@@ -152,4 +156,13 @@ export interface TraceScatterGraphData {
   sellY?: number;
   buyY?: number;
   nonActiveTrade?: number;
+}
+
+export interface AdhocExtensionBEMetricBreakdowns extends BEMetricBreakdowns {
+  customLevel: number;
+}
+
+export interface CustomBreakdownReturnPack {
+  customBreakdown: BEStructuringBreakdownBlock;
+  customDefinitionList: Array<string>;
 }
