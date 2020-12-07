@@ -649,6 +649,11 @@ export class SantaTable implements OnInit, OnChanges {
         return eachOldRow.data.rowId === eachNewRow.data.rowId;
       });
       if (!!matchedOldRow) {
+        if (!!matchedOldRow.data.traceTradeVisualizer) {
+          this.graphService.destroyMultipleGraphs(matchedOldRow.data.traceTradeVisualizer.graph)
+          const traceVisualizerCopy = this.utilityService.deepCopy(matchedOldRow.data.traceTradeVisualizer);
+          eachNewRow.data.traceTradeVisualizer = traceVisualizerCopy;
+        }
         realUpdates.push(eachNewRow);
         try {
           matchedOldRow.data = eachNewRow.data;
