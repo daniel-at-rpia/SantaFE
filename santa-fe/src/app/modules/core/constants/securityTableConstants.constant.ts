@@ -1891,6 +1891,8 @@ export const TRACE_PIE_GRAPH_LEFT_ID = 'tracePieGraphLeftID';
 
 export const TRACE_PIE_GRAPH_RIGHT_ID = 'tracePieGraphRightID';
 
+export const TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL = 1440; // 24hrs as minutes
+
 export enum TraceTradeCounterParty {
   Dealer = 'Dealer',
   Client = 'Client',
