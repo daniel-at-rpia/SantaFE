@@ -330,6 +330,41 @@ export class BICsDataProcessingService {
     })
   }
 
+  public BICSCodeToBICSName(bicsCode: string): string {
+    if (!!bicsCode && bicsCode.length >= 2) {
+      this.BICSCodeToBICSNameRecursion(bicsCode, this.formattedBICsHierarchyData.children);
+    } else {
+      return null;
+    }
+  }
+
+  private BICSCodeToBICSNameRecursion(
+    bicsCode: string,
+    formattedDataList: Array<BICsHierarchyBlock>
+  ): string {
+    // this recursion works under the assumption that all elements in that formattedDataList are of the same depth/level (length in bics code)
+    const sampleElementForLengthCompare = formattedDataList[0];
+    if (bicsCode.length === sampleElementForLengthCompare.code.length) {
+      // length are the same, we are at the right level, just compare directly
+      const match = formattedDataList.find((eachBlock) => {
+        return eachBlock.code === bicsCode;
+      });
+      return !!match ? match.name : null;
+    } else if (bicsCode.length < sampleElementForLengthCompare.code.length) {
+      // length is still short, dive in selectively by looking for match on the overlapped portion on bicscode
+      let name = null;
+      formattedDataList.forEach((eachBlock) => {
+        // equal to zero means it has to start with that code to indicate hierarchy, i.e, there is no hiarachy between '1110' and '10'
+        if (bicsCode.indexOf(eachBlock.code) === 0) {
+          name = this.BICSCodeToBICSNameRecursion(bicsCode, eachBlock.children);
+        }
+      });
+      return name;
+    } else {
+      return null;
+    }
+  }
+
   private setBreakdownListProperties(
     breakdownList: Array<StructurePortfolioBreakdownRowDTO>,
     parentRow: StructurePortfolioBreakdownRowDTO

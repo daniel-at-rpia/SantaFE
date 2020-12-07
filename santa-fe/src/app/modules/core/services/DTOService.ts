@@ -8,7 +8,8 @@
     import * as Blocks from 'FEModels/frontend-blocks.interface';
     import {
       StructureOverrideToBreakdownConversionReturnPack,
-      CustomBreakdownReturnPack
+      CustomBreakdownReturnPack,
+      AdhocExtensionBEMetricBreakdowns
     } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
@@ -2081,7 +2082,7 @@ export class DTOService {
       let isCustomLevelAvailable: string;
       if (!!rawData.breakdown[eachCategoryText]) {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
-        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel : null;
+        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel : null;
       }
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
@@ -2089,7 +2090,7 @@ export class DTOService {
           eachCategoryText
         )
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel}`;
+        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
         bucket[formattedBEKey] = [eachCategoryText];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
@@ -2415,7 +2416,7 @@ export class DTOService {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
     for (let category in customBreakdown.breakdown) {
       if (!!customBreakdown.breakdown[category]) {
-        (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = 1;
+        (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
       }
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
@@ -2430,10 +2431,10 @@ export class DTOService {
             if (!!categoryNameExists) {
               const customCategory = `${category} BICsSubLevel.${level}`
               customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[customCategory] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+              (customBreakdown.breakdown[customCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
             } else {
               customBreakdown.breakdown[category] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = level;
+              (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
             }
           }
         }

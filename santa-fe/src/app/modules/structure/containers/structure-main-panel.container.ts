@@ -17,13 +17,13 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
-import { BEPortfolioStructuringDTO, BECustomMetricBreakdowns } from 'App/modules/core/models/backend/backend-models.interface';
+import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetViewData } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureSetViewData, AdhocExtensionBEMetricBreakdowns } from 'FEModels/frontend-adhoc-packages.interface';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import {
   SecurityDefinitionMap
@@ -268,15 +268,21 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     );
     for (let subCategory in customBICSBreakdown.breakdown) {
       // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
-      if (!!customBICSBreakdown.breakdown[subCategory] && (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel >= 2) {
-        const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(subCategory, (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel,  []);
+      const targetParsedCategory = '';
+      const targetLevel: number = (customBICSBreakdown.breakdown[subCategory] as AdhocExtensionBEMetricBreakdowns).customLevel;
+      if (!!customBICSBreakdown.breakdown[subCategory] && targetLevel >= 2) {
+        const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(
+          this.BICsDataProcessingService.BICSCodeToBICSName(subCategory),
+          targetLevel,
+          []
+        );
         targetHierarchyList.forEach((category: BICsHierarchyBlock) => {
         const formattedBEBicsKey = `BicsLevel${category.bicsLevel}`;
         const categoryBEData = rawData.breakdowns[formattedBEBicsKey].breakdown[category.name];
         if (!!categoryBEData) {
           const existingCategory = customBICSBreakdown.breakdown[category.name];
             if (!!existingCategory) {
-              const matchedBICSLevel = (customBICSBreakdown.breakdown[category.name] as BECustomMetricBreakdowns).customLevel === category.bicsLevel;
+              const matchedBICSLevel = (customBICSBreakdown.breakdown[category.name] as AdhocExtensionBEMetricBreakdowns).customLevel === category.bicsLevel;
               if (!matchedBICSLevel) {
                 // category key exists but is not at the same level (ex. Health Care at Level 1 vs Health Care at Level 2)
                 const customCategory = `${category.name} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${category.bicsLevel}`
@@ -284,13 +290,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
                 const customCategoryExists = customBICSBreakdown.breakdown[customCategory];
                 if (!customCategoryExists) {
                   customBICSBreakdown.breakdown[customCategory] = categoryBEData;
-                  (customBICSBreakdown.breakdown[customCategory] as BECustomMetricBreakdowns).customLevel = category.bicsLevel;
+                  (customBICSBreakdown.breakdown[customCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
                   customBICSDefinitionList.push(customCategory);
                 }
               }
             } else {
               customBICSBreakdown.breakdown[category.name] = categoryBEData;
-              (customBICSBreakdown.breakdown[category.name] as BECustomMetricBreakdowns).customLevel = category.bicsLevel;
+              (customBICSBreakdown.breakdown[category.name] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
               customBICSDefinitionList.push(category.name);
             }
           }
