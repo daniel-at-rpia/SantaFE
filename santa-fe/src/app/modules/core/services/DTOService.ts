@@ -531,6 +531,7 @@ export class DTOService {
         prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr,
+        securityDTOAttrBlock: rawData.securityDTOAttrBlock,
         highlightSelectedOptionList: []
       },
       style: {

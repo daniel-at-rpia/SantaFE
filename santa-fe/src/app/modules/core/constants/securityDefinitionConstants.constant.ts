@@ -431,35 +431,41 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'BICS_CONSOLIDATED',
     displayName: 'All BICS',
     icon: 'fas fa-industry-alt',
-    optionList: []
+    optionList: [],
+    securityDTOAttr: 'code',
+    securityDTOAttrBlock: 'bics'
   },
   BICS_LEVEL_1: {
     key: 'BICS_LEVEL_1',
     displayName: 'BICS Lv.1',
     icon: 'fal fa-industry-alt',
     optionList: [],
-    securityDTOAttr: 'bicsLevel1'
+    securityDTOAttr: 'bicsLevel1',
+    securityDTOAttrBlock: 'bics'
   },
   BICS_LEVEL_2: {
     key: 'BICS_LEVEL_2',
     displayName: 'BICS Lv.2',
     icon: 'fal fa-industry-alt',
     optionList: [],
-    securityDTOAttr: 'bicsLevel2'
+    securityDTOAttr: 'bicsLevel2',
+    securityDTOAttrBlock: 'bics'
   },
   BICS_LEVEL_3: {
     key: 'BICS_LEVEL_3',
     displayName: 'BICS Lv.3',
     icon: 'fal fa-industry-alt',
     optionList: [],
-    securityDTOAttr: 'bicsLevel3'
+    securityDTOAttr: 'bicsLevel3',
+    securityDTOAttrBlock: 'bics'
   },
   BICS_LEVEL_4: {
     key: 'BICS_LEVEL_4',
     displayName: 'BICS Lv.4',
     icon: 'fal fa-industry-alt',
     optionList: [],
-    securityDTOAttr: 'bicsLevel4'
+    securityDTOAttr: 'bicsLevel4',
+    securityDTOAttrBlock: 'bics'
   },
   TICKER: {
     key: 'TICKER',
@@ -485,10 +491,7 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
   }, {
     label: 'BICS',
     list: [
-      SecurityDefinitionMap.BICS_LEVEL_1,
-      SecurityDefinitionMap.BICS_LEVEL_2,
-      SecurityDefinitionMap.BICS_LEVEL_3,
-      SecurityDefinitionMap.BICS_LEVEL_4
+      SecurityDefinitionMap.BICS_CONSOLIDATED
     ]
   },{
     label: 'Owner',

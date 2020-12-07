@@ -447,6 +447,7 @@ export class UtilityService {
           activeFilters.length > 0 && params.filterList.push({
             key: eachDefinition.data.key,
             targetAttribute: eachDefinition.data.securityDTOAttr,
+            targetAttributeBlock: eachDefinition.data.securityDTOAttrBlock,
             filterBy: activeFilters.map((eachFilter) => {
               return eachFilter.displayLabel;
             }),
