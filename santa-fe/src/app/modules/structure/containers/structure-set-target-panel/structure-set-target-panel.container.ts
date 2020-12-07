@@ -331,11 +331,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
       } else {
         const now = moment();
+        // TODO: form simpleBucket properly
         const payload: PayloadGetPortfolioOverride = {
           portfolioOverride: {
             date: now.format('YYYY-MM-DD'),
             portfolioId: this.state.targetFund.data.portfolioId,
-            bucket: bucket
+            bucket: bucket,
+            simpleBucket: null
           }
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
@@ -923,12 +925,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const now = moment();
     const payload: Array<PayloadUpdateOverride> = [];
     this.state.editRowList.forEach((eachRow) => {
+      // TODO: form simpleBucket properly
       const eachPayload: PayloadUpdateOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: eachRow.targetBlockFromBreakdown.bucket
+          bucket: eachRow.targetBlockFromBreakdown.bucket,
+          simpleBucket: null
         }
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
@@ -965,12 +969,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const payload: Array<PayloadDeleteOverride> = [];
     const now = moment();
     this.state.removalList.forEach((eachRow) => {
+      // TODO: form simpleBucket properly
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: eachRow.targetBlockFromBreakdown.bucket
+          bucket: eachRow.targetBlockFromBreakdown.bucket,
+          simpleBucket: null
         }
       };
       payload.push(eachPayload);

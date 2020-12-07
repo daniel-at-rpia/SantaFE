@@ -193,13 +193,13 @@ export class BICsDataProcessingService {
   }
 
   public setRawBICsData(rawData: BEPortfolioStructuringDTO) {
-    const { BicsLevel1, BicsLevel2, BicsLevel3, BicsLevel4 } = rawData.breakdowns;
+    const { BicsCodeLevel1, BicsCodeLevel2, BicsCodeLevel3, BicsCodeLevel4 } = rawData.breakdowns;
     const block: BICsCategorizationBlock = {
       portfolioID: rawData.portfolioId,
-      bicsLevel1: BicsLevel1,
-      bicsLevel2: BicsLevel2,
-      bicsLevel3: BicsLevel3,
-      bicsLevel4: BicsLevel4
+      bicsLevel1: BicsCodeLevel1,
+      bicsLevel2: BicsCodeLevel2,
+      bicsLevel3: BicsCodeLevel3,
+      bicsLevel4: BicsCodeLevel4
     }
     const existingPortfolioIndex = this.bicsRawData.findIndex(portfolio => portfolio.portfolioID === block.portfolioID);
     if (existingPortfolioIndex > -1) {

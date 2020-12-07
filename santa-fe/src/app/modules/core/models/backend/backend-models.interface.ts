@@ -599,6 +599,9 @@ export interface BEStructuringOverrideBlock {
   indexId?: number;
   bucket: {
     [property: string]: Array<string>;
+  };
+  simpleBucket: {
+    [property: string]: Array<string>;
   }
   breakdown?: BEMetricBreakdowns;
   title?: string;
@@ -627,18 +630,19 @@ export interface BEPortfolioStructuringDTO {
   indexNav: number;
   indexTotals: BEStructuringMetricTotalBlock;
   breakdowns: {
-    BicsLevel1: BEStructuringBreakdownBlock;
-    BicsLevel2?: BEStructuringBreakdownBlock;
-    BicsLevel3?: BEStructuringBreakdownBlock;
-    BicsLevel4?: BEStructuringBreakdownBlock;
-    BicsLevel5?: BEStructuringBreakdownBlock;
-    BicsLevel6?: BEStructuringBreakdownBlock;
-    BicsLevel7?: BEStructuringBreakdownBlock;
+    BicsCodeLevel1: BEStructuringBreakdownBlock;
+    BicsCodeLevel2?: BEStructuringBreakdownBlock;
+    BicsCodeLevel3?: BEStructuringBreakdownBlock;
+    BicsCodeLevel4?: BEStructuringBreakdownBlock;
+    BicsCodeLevel5?: BEStructuringBreakdownBlock;
+    BicsCodeLevel6?: BEStructuringBreakdownBlock;
+    BicsCodeLevel7?: BEStructuringBreakdownBlock;
     Ccy: BEStructuringBreakdownBlock;
     RatingNoNotch: BEStructuringBreakdownBlock;
     Tenor: BEStructuringBreakdownBlock;
   }
   overrides?: Array<BEStructuringOverrideBlock>;
+  isIndexValid: boolean;
 }
 
 export interface BEBICsCodeBlock {
