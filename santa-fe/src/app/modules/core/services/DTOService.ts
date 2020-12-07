@@ -6,7 +6,10 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
-    import { StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      StructureOverrideToBreakdownConversionReturnPack,
+      CustomBreakdownReturnPack
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
@@ -2397,7 +2400,11 @@ export class DTOService {
     return object;
   }
 
-  public formCustomRawBreakdownData(rawData: BEModels.BEPortfolioStructuringDTO, targetBreakdown: BEModels.BEStructuringBreakdownBlock, identifiers: string[]): [BEModels.BEStructuringBreakdownBlock, string[]] {
+  public formCustomRawBreakdownData(
+    rawData: BEModels.BEPortfolioStructuringDTO,
+    targetBreakdown: BEModels.BEStructuringBreakdownBlock,
+    identifiers: string[]
+  ): CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
     for (let category in customBreakdown.breakdown) {
       if (!!customBreakdown.breakdown[category]) {
@@ -2431,7 +2438,10 @@ export class DTOService {
         customDefinitionList.push(category)
       }
     }
-    return [customBreakdown, customDefinitionList];
+    return {
+      customBreakdown: customBreakdown,
+      customDefinitionList: customDefinitionList
+    };
   }
 
   private processBreakdownDataForStructureFund(

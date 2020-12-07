@@ -257,7 +257,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private formCustomBICsBreakdownWithSubLevels(rawData: BEPortfolioStructuringDTO, fund: PortfolioStructureDTO) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
-    let [customBICSBreakdown, customBICSDefinitionList] = this.dtoService.formCustomRawBreakdownData(rawData, rawData.breakdowns.BicsLevel1, ['BicsLevel2', 'BicsLevel3', 'BicsLevel4']);
+    const {
+      customBreakdown: customBICSBreakdown,
+      customDefinitionList: customBICSDefinitionList
+    } = this.dtoService.formCustomRawBreakdownData(
+      rawData,
+      rawData.breakdowns['BicsCodeLevel1'],
+      ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+    );
     for (let subCategory in customBICSBreakdown.breakdown) {
       // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
       if (!!customBICSBreakdown.breakdown[subCategory] && (customBICSBreakdown.breakdown[subCategory] as BECustomMetricBreakdowns).customLevel >= 2) {

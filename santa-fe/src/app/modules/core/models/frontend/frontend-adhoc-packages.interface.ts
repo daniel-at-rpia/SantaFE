@@ -153,3 +153,8 @@ export interface TraceScatterGraphData {
   buyY?: number;
   nonActiveTrade?: number;
 }
+
+export interface CustomBreakdownReturnPack {
+  customBreakdown: BEStructuringBreakdownBlock;
+  customDefinitionList: Array<string>;
+}
