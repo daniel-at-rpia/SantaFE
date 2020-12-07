@@ -35,12 +35,6 @@ export class PortfolioBreakdownRow {
     !!this.categoryClicked && this.categoryClicked.emit(this.breakdownRow);
   }
 
-  public onMouseLeaveRow() {
-    // even though a component modifying its own state is against best practice,
-    // but mouse leave always should behave this way, it's redundant to use EventEmitter for this
-    this.breakdownRow.state.isSelected = false;
-  }
-
   public onClickDiveIn(row: StructurePortfolioBreakdownRowDTO) {
     if (!row.data.bicsLevel || row.state.isStencil) {
       return null;

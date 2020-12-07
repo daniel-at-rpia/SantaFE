@@ -1,5 +1,4 @@
 <article 
-  (mouseleave)="onMouseLeaveRow()"
   [ngClass]="{
     'sat-portfolioBreakdownRow': true,
     'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
@@ -47,7 +46,7 @@
         <i class="fal fa-arrow-from-top"></i>
         <span>Dive In</span>
       </button>
-      <button (click)="showSubLevels(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-subLevelToggle santaBtn--circleLabelled">
+      <button (click)="showSubLevels(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-subLevelToggle santaBtn--circleLabelled santaBtn--small">
         <i class="fal fa-flag-checkered"></i>
         <span>Show Targets</span>
       </button>

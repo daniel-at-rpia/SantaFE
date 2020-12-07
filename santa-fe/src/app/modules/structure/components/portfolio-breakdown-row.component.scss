@@ -89,6 +89,7 @@ $portfolioBreakdownRow_cta_actionMenu_top: -0.45rem;
       top: $portfolioBreakdownRow_cta_actionMenu_top;
       &-bondBtn {
         margin-top: 0;
+        display: none;
       }
       &-diveInBtn {
         visibility: hidden;
@@ -97,7 +98,7 @@ $portfolioBreakdownRow_cta_actionMenu_top: -0.45rem;
       &-subLevelToggle {
         // visibility: hidden;
         display: none;  // don't occupy the space in the default state
-        margin: 0 0 0 $spacing_minimum;
+        // margin: 0 0 0 $spacing_minimum;
       }
       &-viewBtn {
         margin-bottom: 0;
@@ -457,20 +458,20 @@ $portfolioBreakdownRow_cta_actionMenu_top: -0.45rem;
     #{$blockName} {
       &__cta {
         &-actionMenu {
-          left: -$spacing_small;
-          width: auto;
+          // left: -$spacing_small;
+          // width: auto;
           &-bondBtn {
             margin: 0 0 $spacing_large 0;
           }
           &-diveInBtn {
-            margin: 0 $spacing_minimum $spacing_medium 0;
+            // margin: 0 $spacing_minimum $spacing_medium 0;
           }
           &-subLevelToggle {
             display: flex;
-            margin-top: $spacing_medium;
+            // margin-top: $spacing_medium;
           }
           &-viewBtn {
-            margin: $spacing_large 0 0 0;
+            // margin: $spacing_large 0 0 0;
           }
         }
       }
