@@ -64,7 +64,14 @@
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
+    import {
+      PortfolioShortNames,
+      PortfolioMetricValues,
+      PortfolioView,
+      PortfolioBreakdownGroupOptions,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+    } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -2031,7 +2038,7 @@ export class DTOService {
     isDisplayCs01: boolean,
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
-    const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
+    const isBicsBreakdown = rawData.groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
@@ -2201,12 +2208,12 @@ export class DTOService {
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
-      const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
+      const isBicsBreakdown = groupOption.indexOf('BicsCodeLevel') > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
-        displayCategory: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
+        category: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
+        displayCategory: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2238,7 +2245,7 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown);
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isBicsBreakdown);
       return eachCategoryBlockDTO;
     } else {
       return null;

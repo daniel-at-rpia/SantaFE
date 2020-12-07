@@ -12,7 +12,8 @@ import { UtilityService } from 'Core/services/UtilityService';
 import {
   PortfolioMetricValues,
   SUPPORTED_PORTFOLIO_LIST,
-  BEPortfolioTargetMetricValues
+  BEPortfolioTargetMetricValues,
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
@@ -278,7 +279,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
               const matchedBICSLevel = (customBICSBreakdown.breakdown[category.name] as BECustomMetricBreakdowns).customLevel === category.bicsLevel;
               if (!matchedBICSLevel) {
                 // category key exists but is not at the same level (ex. Health Care at Level 1 vs Health Care at Level 2)
-                const customCategory = `${category.name} BICsSubLevel.${category.bicsLevel}`
+                const customCategory = `${category.name} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${category.bicsLevel}`
                 // check if custom category exists already
                 const customCategoryExists = customBICSBreakdown.breakdown[customCategory];
                 if (!customCategoryExists) {
