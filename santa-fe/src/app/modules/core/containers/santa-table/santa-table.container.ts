@@ -968,8 +968,9 @@ export class SantaTable implements OnInit, OnChanges {
     const previousSelectedFilters = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.state.selectedFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.state.selectedFiltersList : [];
     const previousAvailableFiltersList = !!targetRow.data.traceTradeVisualizer && targetRow.data.traceTradeVisualizer.data.availableFiltersList.length > 0 ? targetRow.data.traceTradeVisualizer.data.availableFiltersList : [];
     const setPreviousFilteredDisplayList = (row: SecurityTableRowDTO) => {
+      row.data.traceTradeVisualizer.state.graphReceived = false;
       row.data.traceTradeVisualizer.state.selectedFiltersList = previousSelectedFilters;
-      this.utilityService.filterTraceTrades(previousSelectedFilters, row);
+      row.data.traceTradeVisualizer.data.displayList = this.utilityService.filterTraceTrades(previousSelectedFilters, row);
     }
     const securityID = targetRow.data.security.data.securityID;
     const payload: PayloadGetAllTraceTrades = {

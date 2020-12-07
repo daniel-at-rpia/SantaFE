@@ -232,10 +232,11 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public filterTraceTradesByOptions(options: Array<string>) {
-    this.graphService.destroyMultipleGraphs(this.rowData.data.traceTradeVisualizer.graph)
+    this.graphService.destroyMultipleGraphs(this.rowData.data.traceTradeVisualizer.graph);
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
     this.rowData.data.traceTradeVisualizer = copy;
-    this.utilityService.filterTraceTrades(options, this.rowData);
+    this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+    this.rowData.data.traceTradeVisualizer.data.displayList = this.utilityService.filterTraceTrades(options, this.rowData);
   }
 
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){

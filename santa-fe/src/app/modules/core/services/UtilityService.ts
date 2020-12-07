@@ -1100,7 +1100,8 @@ export class UtilityService {
       }
     }
     
-    public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO) {
+    public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<TraceTradeBlock> {
+      let displayedList: Array<TraceTradeBlock> = [];
       let numericalFiltersList: Array<number> = [];
       const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
       if (options.length > 0) {
@@ -1124,14 +1125,12 @@ export class UtilityService {
         if (numericalFiltersList.length > 0) {
           numericalFiltersList.sort();
           const filteredWithAmountsList = this.getTraceTradesListBasedOnAmount(traceTradesFilterData, numericalFiltersList[numericalFiltersList.length - 1]);
-          rowData.data.traceTradeVisualizer.data.displayList = filteredWithAmountsList;
+          displayedList = [...filteredWithAmountsList];
         } else {
-          rowData.data.traceTradeVisualizer.data.displayList = traceTradesFilterData;
+          displayedList = [...traceTradesFilterData];
         }
-  
-        if (rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
-          rowData.data.traceTradeVisualizer.state.graphReceived = false;
-          rowData.data.traceTradeVisualizer.data.displayList.sort((tradeA, tradeB) => {
+        if (displayedList.length > 0) {
+          displayedList.sort((tradeA, tradeB) => {
             if (tradeA.tradeTime > tradeB.tradeTime) {
               return -1
             } else if (tradeB.tradeTime > tradeA.tradeTime) {
@@ -1141,9 +1140,10 @@ export class UtilityService {
             }
           })
         }
+        return displayedList;
       } else {
-        rowData.data.traceTradeVisualizer.state.graphReceived = false;
-        rowData.data.traceTradeVisualizer.data.displayList = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
+        displayedList = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
+        return displayedList;
       }
     }
 
