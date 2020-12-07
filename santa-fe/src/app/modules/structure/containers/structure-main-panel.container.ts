@@ -17,7 +17,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
-import { BEPortfolioStructuringDTO } from 'App/modules/core/models/backend/backend-models.interface';
+import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
@@ -256,7 +256,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  private formCustomBICsBreakdownWithSubLevels(rawData: BEPortfolioStructuringDTO, fund: PortfolioStructureDTO) {
+  private formCustomBICsBreakdownWithSubLevels(
+    rawData: BEPortfolioStructuringDTO,
+    fund: PortfolioStructureDTO
+  ) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
     const {
       customBreakdown: customBICSBreakdown,
@@ -266,13 +269,37 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       rawData.breakdowns['BicsCodeLevel1'],
       ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
     );
+    this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
+      rawData,
+      customBICSBreakdown,
+      customBICSDefinitionList
+    );
+    const parsedCustomBICSDefinitionList = this.formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
+      customBICSBreakdown,
+      customBICSDefinitionList
+    );
+    const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
+    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, parsedCustomBICSDefinitionList, isCs01);
+    BICSBreakdown.data.title = 'BICS';
+    BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
+    BICSBreakdown.data.indexName = rawData.indexShortName;
+    // Place custom BICS breakdown at current Currency index since placement of overrides is dependent if they are added or removed
+    const currencyIndex = fund.data.children.findIndex(breakdown => breakdown.data.title === 'Currency');
+    fund.data.children.splice(currencyIndex, 0, BICSBreakdown);
+  }
+
+  private formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
+    rawData: BEPortfolioStructuringDTO,
+    customBICSBreakdown: BEStructuringBreakdownBlock,
+    customBICSDefinitionList: Array<string>
+  ) {
+    // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
     for (let subCategory in customBICSBreakdown.breakdown) {
-      // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
       const targetParsedCategory = '';
       const targetLevel: number = (customBICSBreakdown.breakdown[subCategory] as AdhocExtensionBEMetricBreakdowns).customLevel;
       if (!!customBICSBreakdown.breakdown[subCategory] && targetLevel >= 2) {
         const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(
-          this.BICsDataProcessingService.BICSCodeToBICSName(subCategory),
+          subCategory,
           targetLevel,
           []
         );
@@ -303,14 +330,22 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         })
       }
     }
-    const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
-    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, customBICSDefinitionList, isCs01);
-    BICSBreakdown.data.title = 'BICS';
-    BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
-    BICSBreakdown.data.indexName = rawData.indexShortName;
-    // Place custom BICS breakdown at current Currency index since placement of overrides is dependent if they are added or removed
-    const currencyIndex = fund.data.children.findIndex(breakdown => breakdown.data.title === 'Currency');
-    fund.data.children.splice(currencyIndex, 0, BICSBreakdown);
+  }
+
+  private formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
+    customBICSBreakdown: BEStructuringBreakdownBlock,
+    customBICSDefinitionList: Array<string>
+  ): Array<string> {
+    // convert bicsCode to bics names
+    const parsedCustomBICSDefinitionList = customBICSDefinitionList.map((eachCode) => {
+      return this.BICsDataProcessingService.BICSCodeToBICSName(eachCode);
+    })
+    const parsedCustomBICSDefinitionListNoNull = parsedCustomBICSDefinitionList.filter((eachName) => {return !!eachName});
+    for (let subCategory in customBICSBreakdown.breakdown) {
+      const name = this.BICsDataProcessingService.BICSCodeToBICSName(subCategory);
+      customBICSBreakdown.breakdown[name] = customBICSBreakdown.breakdown[subCategory];
+    }
+    return parsedCustomBICSDefinitionListNoNull;
   }
 
   private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {

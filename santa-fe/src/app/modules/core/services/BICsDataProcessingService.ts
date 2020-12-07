@@ -332,7 +332,7 @@ export class BICsDataProcessingService {
 
   public BICSCodeToBICSName(bicsCode: string): string {
     if (!!bicsCode && bicsCode.length >= 2) {
-      this.BICSCodeToBICSNameRecursion(bicsCode, this.formattedBICsHierarchyData.children);
+      return this.BICSCodeToBICSNameRecursion(bicsCode, this.formattedBICsHierarchyData.children);
     } else {
       return null;
     }
