@@ -2420,9 +2420,10 @@ export class DTOService {
     identifiers: string[]
   ): CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
-    for (let category in customBreakdown.breakdown) {
-      if (!!customBreakdown.breakdown[category]) {
-        (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
+    for (let code in customBreakdown.breakdown) {
+      if (!!customBreakdown.breakdown[code]) {
+        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
+        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
       }
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
