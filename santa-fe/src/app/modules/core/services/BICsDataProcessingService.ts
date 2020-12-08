@@ -18,6 +18,7 @@ import {
 import {
   DefinitionConfiguratorEmitterParams,
   BICSServiceConsolidateReturnPack,
+  ReversedBISCHierarchyDictionary
 } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
@@ -31,16 +32,19 @@ import { UtilityService } from './UtilityService';
 @Injectable()
 
 export class BICsDataProcessingService {
+  private reversedBICSHierarchyDictionary: ReversedBISCHierarchyDictionary = {};
   private bicsRawData: Array<BICsCategorizationBlock> = [];
   private formattedBICsHierarchyData: BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
+
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService
   ) {}
 
   public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
-    this.setBICsLevelOneCategories(data, parent)
+    this.buildReversedBICSHierarchyDictionary(data);
+    this.setBICsLevelOneCategories(data, parent);
     this.iterateBICsData(data, parent);
     this.formattedBICsHierarchyData = parent;
     return parent;
@@ -338,6 +342,10 @@ export class BICsDataProcessingService {
     }
   }
 
+  public BICSNameToBICSCode(bicsName: string): string {
+    return this.reversedBICSHierarchyDictionary[bicsName] || null;
+  }
+
   private BICSCodeToBICSNameRecursion(
     bicsCode: string,
     formattedDataList: Array<BICsHierarchyBlock>
@@ -556,6 +564,26 @@ export class BICsDataProcessingService {
       loopCategoryList = convertResult;
     }
     return loopCategoryList;
+  }
+
+  private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
+    // TODO: handle edge cases like health care lv.1 & health care lv.2
+    for (let eachCode in data) {
+      const block = data[eachCode];
+      let bicsName = null;
+      if (!!block.item4) {
+        bicsName = block.item4;
+      } else if (!!block.item3) {
+        bicsName = block.item3;
+      } else if (!!block.item2) {
+        bicsName = block.item2;
+      } else {
+        bicsName = block.item1;
+      }
+      if (!!bicsName) {
+        this.reversedBICSHierarchyDictionary[bicsName] = eachCode;
+      }
+    }
   }
 
 }
