@@ -22,7 +22,8 @@ import {
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
   BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
-  BICS_BRANCH_CHARACTER_LIMIT
+  BICS_BRANCH_CHARACTER_LIMIT,
+  BICS_DICTIONARY_KEY_PREFIX
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
@@ -51,48 +52,24 @@ export class BICsDataProcessingService {
     return parent;
   }
 
-  public getParentCategory(hierarchyData: Array<BICsHierarchyBlock>, hierarchyList: Array<BICsHierarchyBlock>, targetCategory: BICsHierarchyBlock) {
-    if (!!targetCategory) {
-      hierarchyData.forEach((block: BICsHierarchyBlock) => {
-        if (block.children.length > 0) {
-          const parentCategory = block.children.find(category => category.name === targetCategory.name && category.bicsLevel === targetCategory.bicsLevel);
-          if (!!parentCategory && block.bicsLevel === targetCategory.bicsLevel - 1) {
-            hierarchyList.push(block)
-            this.getParentCategory(hierarchyData, hierarchyList, block);
+  public getTargetSpecificHierarchyList(childCode: string, childBicsLevel: number): Array<BICsHierarchyBlock> {
+    const data = this.bicsDictionary[childCode];
+    const hierarchyDataList: Array<BICsHierarchyBlock> = [];
+    for (let item in data) {
+      if (!!data[item]) {
+        const itemLevel: number = +(item.split(BICS_DICTIONARY_KEY_PREFIX)[1]);
+        if (itemLevel < childBicsLevel) {
+          const object: BICsHierarchyBlock = {
+            name: data[item],
+            bicsLevel: itemLevel,
+            code: childCode.substring(0, itemLevel * 2),
+            children: null
           }
+          hierarchyDataList.push(object);
         }
-      })
+      }
     }
-  }
-
-  public getTargetSpecificHierarchyList(childCategory: string, childBicsLevel: number, hierarchyList: Array<BICsHierarchyBlock>): Array<BICsHierarchyBlock> {
-    if (!!this.formattedBICsHierarchyData) {
-      let isFound = false;
-      this.formattedBICsHierarchyData.children.forEach(mainCategory => {
-        let categoryTraversalList: Array<BICsHierarchyBlock> = [{name: mainCategory.name, bicsLevel: mainCategory.bicsLevel, children: mainCategory.children, code: mainCategory.code}];
-        const traverseThroughCategories = (block: Array<BICsHierarchyBlock>, targetCategory: string) => {
-          if (!!isFound)  {
-            return;
-          } else {
-            block.forEach(newCategory => {
-              categoryTraversalList.push({name: newCategory.name, bicsLevel: newCategory.bicsLevel, children: newCategory.children, code: mainCategory.code});
-              if (newCategory.name === targetCategory && newCategory.bicsLevel === childBicsLevel) {
-                isFound = true;
-                this.getParentCategory(categoryTraversalList, hierarchyList, newCategory);
-              } else {
-                if (!isFound ) {
-                  traverseThroughCategories(newCategory.children, childCategory);
-                }
-              }
-            })
-          }
-        }
-        if (mainCategory.children.length > 0) {
-          traverseThroughCategories(mainCategory.children, childCategory);
-        }
-      })
-      return hierarchyList;
-    }
+    return hierarchyDataList;
   }
 
   public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>): Array<StructurePortfolioBreakdownRowDTO> {

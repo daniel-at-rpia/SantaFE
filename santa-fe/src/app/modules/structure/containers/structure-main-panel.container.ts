@@ -13,7 +13,8 @@ import {
   PortfolioMetricValues,
   SUPPORTED_PORTFOLIO_LIST,
   BEPortfolioTargetMetricValues,
-  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
@@ -294,40 +295,28 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     customBICSDefinitionList: Array<string>
   ) {
     // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
-    for (let subCategory in customBICSBreakdown.breakdown) {
-      const targetParsedCategory = '';
-      const targetLevel: number = (customBICSBreakdown.breakdown[subCategory] as AdhocExtensionBEMetricBreakdowns).customLevel;
-      if (!!customBICSBreakdown.breakdown[subCategory] && targetLevel >= 2) {
+    for (let code in customBICSBreakdown.breakdown) {
+      const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel;
+      if (!!customBICSBreakdown.breakdown[code] && targetLevel >= 2) {
         const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(
-          subCategory,
-          targetLevel,
-          []
+          code,
+          targetLevel
         );
-        targetHierarchyList.forEach((category: BICsHierarchyBlock) => {
-        const formattedBEBicsKey = `BicsLevel${category.bicsLevel}`;
-        const categoryBEData = rawData.breakdowns[formattedBEBicsKey].breakdown[category.name];
-        if (!!categoryBEData) {
-          const existingCategory = customBICSBreakdown.breakdown[category.name];
-            if (!!existingCategory) {
-              const matchedBICSLevel = (customBICSBreakdown.breakdown[category.name] as AdhocExtensionBEMetricBreakdowns).customLevel === category.bicsLevel;
-              if (!matchedBICSLevel) {
-                // category key exists but is not at the same level (ex. Health Care at Level 1 vs Health Care at Level 2)
-                const customCategory = `${category.name} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${category.bicsLevel}`
-                // check if custom category exists already
-                const customCategoryExists = customBICSBreakdown.breakdown[customCategory];
-                if (!customCategoryExists) {
-                  customBICSBreakdown.breakdown[customCategory] = categoryBEData;
-                  (customBICSBreakdown.breakdown[customCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
-                  customBICSDefinitionList.push(customCategory);
-                }
+        if (targetHierarchyList.length > 0) {
+          targetHierarchyList.forEach((category: BICsHierarchyBlock) => {
+            const existingCategory = customBICSBreakdown.breakdown[category.code];
+            if (!existingCategory) {
+              const formattedBEBICSKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${category.bicsLevel}`;
+              const categoryBEData = rawData.breakdowns[formattedBEBICSKey].breakdown[category.code];
+              if (!!categoryBEData) {
+                customBICSBreakdown.breakdown[category.code] = categoryBEData;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).code = category.code;
+                customBICSDefinitionList.push(category.code);
               }
-            } else {
-              customBICSBreakdown.breakdown[category.name] = categoryBEData;
-              (customBICSBreakdown.breakdown[category.name] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
-              customBICSDefinitionList.push(category.name);
             }
-          }
-        })
+          });
+        }
       }
     }
   }
