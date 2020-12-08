@@ -23,7 +23,8 @@ import {
   BICS_BRANCH_DEFAULT_HEIGHT,
   BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
   BICS_BRANCH_CHARACTER_LIMIT,
-  BICS_DICTIONARY_KEY_PREFIX
+  BICS_DICTIONARY_KEY_PREFIX,
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
@@ -144,9 +145,9 @@ export class BICsDataProcessingService {
         } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
         // needs to find the closest sibling element as the previous row is a child of a sibling element
         const modifiedList: Array<StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
-        const findSiblingRows: Array<StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.displayCategory === row.data.parentRow.data.displayCategory);
+        const findSiblingRows: Array<StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.code === row.data.parentRow.data.code);
         const nearestSiblingRow: StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
-        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.displayCategory === nearestSiblingRow.data.displayCategory && eachRow.data.bicsLevel === nearestSiblingRow.data.bicsLevel); 
+        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.code === nearestSiblingRow.data.code);
         const indexDifference = i - sibilingRowIndex;
         row.style.branchHeight = `${indexDifference * branchHeight}px`;
         row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
@@ -288,7 +289,7 @@ export class BICsDataProcessingService {
         subLevel.state.isVisibleSubLevel = !!row.state.isShowingSubLevels;
       })
     } else {
-      const rowIndex = rowList.findIndex(displayRow => displayRow.data.displayCategory === row.data.displayCategory && displayRow.data.bicsLevel === row.data.bicsLevel);
+      const rowIndex = rowList.findIndex(displayRow => displayRow.data.code === row.data.code);
       const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
       if (rowIndex >= 0) {
         for (let i = 0; i < modifiedDisplayList.length; i++) {
