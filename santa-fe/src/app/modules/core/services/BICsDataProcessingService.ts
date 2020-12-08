@@ -292,11 +292,11 @@ export class BICsDataProcessingService {
       const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
       if (rowIndex >= 0) {
         for (let i = 0; i < modifiedDisplayList.length; i++) {
-          // stops the loop when you find the next adjacent sibling
-          if (modifiedDisplayList[i].data.bicsLevel === row.data.bicsLevel) {
-            break;
-          } else {
+          const isSubLevel = modifiedDisplayList[i].data.code.indexOf(row.data.code) === 0;
+          if (!!isSubLevel) {
             row.data.displayedSubLevelRows.push(modifiedDisplayList[i])
+          } else {
+            break;
           }
         }
       }
