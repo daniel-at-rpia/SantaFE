@@ -333,7 +333,13 @@ export class BICsDataProcessingService {
       const match = formattedDataList.find((eachBlock) => {
         return eachBlock.code === bicsCode;
       });
-      return !!match ? match.name : null;
+      if (!!match) {
+        // prevent overriding existing rows that have the same name (ex. Lv 1 and 2 Health Care) - would occur at lv 2+
+        const formattedName = bicsCode.length > 2 ? `${match.name} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${match.bicsLevel}` : match.name;
+        return formattedName;
+      } else {
+        return null;
+      }
     } else if (bicsCode.length > sampleElementForLengthCompare.code.length) {
       // length is still short, dive in selectively by looking for match on the overlapped portion on bicscode
       let name = null;
