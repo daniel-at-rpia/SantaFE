@@ -94,6 +94,7 @@ export class StructurePage implements OnInit, OnDestroy {
       tap((serverReturn: BEBICsHierarchyBlock) => {
        if (!!serverReturn) {
          this.updateBICsFetch(true);
+         this.bicsDataProcessingService.storeBICsDictionary(serverReturn);
          this.state.BICsData.formattedBICsHierarchy = this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, this.state.BICsData.formattedBICsHierarchy);
        }
       }),

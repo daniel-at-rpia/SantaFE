@@ -34,10 +34,15 @@ export class BICsDataProcessingService {
   private bicsRawData: Array<BICsCategorizationBlock> = [];
   private formattedBICsHierarchyData: BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
+  private bicsDictionary: BEBICsHierarchyBlock;
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService
   ) {}
+
+  public storeBICsDictionary(rawData: BEBICsHierarchyBlock) {
+    this.bicsDictionary = rawData;
+  }
 
   public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
     this.setBICsLevelOneCategories(data, parent)
