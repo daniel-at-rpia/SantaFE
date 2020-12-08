@@ -2080,9 +2080,11 @@ export class DTOService {
       let bucket: Blocks.StructureBucketDataBlock = {};
       let customLevel: number;
       let isCustomLevelAvailable: string;
+      let code: string;
       if (!!rawData.breakdown[eachCategoryText]) {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
         customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel : null;
+        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).code : null;
       }
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
@@ -2111,7 +2113,8 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
-          customLevel
+          customLevel,
+          code
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -2129,7 +2132,8 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
-          customLevel
+          customLevel,
+          code
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -2167,6 +2171,7 @@ export class DTOService {
     view: PortfolioView,
     bucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
+    code: string = null
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2238,7 +2243,8 @@ export class DTOService {
         view: view,
         bucket: bucket,
         parentRow: null,
-        displayedSubLevelRows: []
+        displayedSubLevelRows: [],
+        code: code
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;

@@ -308,6 +308,7 @@ export interface PortfolioBreakdownCategoryBlock {
   parentRow: DTOs.StructurePortfolioBreakdownRowDTO;
   children?: DTOs.PortfolioBreakdownDTO; // used in popover dive-in
   displayedSubLevelRows?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used in regular BICS breakdown to display sublevels per category
+  code: string;
 }
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
