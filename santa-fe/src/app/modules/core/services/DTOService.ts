@@ -2421,21 +2421,13 @@ export class DTOService {
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
     selectedBreakdowns.forEach((selectedBreakdown, i) => {
-      for (let category in selectedBreakdown.breakdown) {
-        if (!!selectedBreakdown.breakdown[category]) {
-          if (selectedBreakdown.breakdown[category].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel) {
-            // check if its the same name as another category to avoid overwriting those values
-            const categoryNameExists = Object.keys(customBreakdown.breakdown).find(key => key === category);
-            // Adding 2 because of how the index starts at 0 and we want it to increment by 1
+      for (let code in selectedBreakdown.breakdown) {
+        if (!!selectedBreakdown.breakdown[code]) {
+          if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel) {
             const level = i + 2;
-            if (!!categoryNameExists) {
-              const customCategory = `${category} BICsSubLevel.${level}`
-              customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[customCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
-            } else {
-              customBreakdown.breakdown[category] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
-            }
+            customBreakdown.breakdown[code] = selectedBreakdown.breakdown[code];
+            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
           }
         }
       }
