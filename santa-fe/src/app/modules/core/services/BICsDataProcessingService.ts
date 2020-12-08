@@ -350,7 +350,7 @@ export class BICsDataProcessingService {
         return eachBlock.code === bicsCode;
       });
       return !!match ? match.name : null;
-    } else if (bicsCode.length < sampleElementForLengthCompare.code.length) {
+    } else if (bicsCode.length > sampleElementForLengthCompare.code.length) {
       // length is still short, dive in selectively by looking for match on the overlapped portion on bicscode
       let name = null;
       formattedDataList.forEach((eachBlock) => {
