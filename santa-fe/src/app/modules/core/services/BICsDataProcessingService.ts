@@ -80,13 +80,14 @@ export class BICsDataProcessingService {
     if (subRowList.length > 0) {
       subRowList.forEach((eachRow: StructurePortfolioBreakdownRowDTO) => {
         if (!!eachRow.data.targetLevel) {
-          parsedRowList.push(eachRow);
-          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.category, eachRow.data.bicsLevel, []);
+          const ifExistsInParsedList = parsedRowList.find(parsedRow => parsedRow.data.code === eachRow.data.code)
+          !ifExistsInParsedList && parsedRowList.push(eachRow);
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.code, eachRow.data.bicsLevel);
           if (hierarchyList.length > 0) {
             hierarchyList.forEach((listItem: BICsHierarchyBlock) => {
-              const ifExistsInParsedList = parsedRowList.find(parsedRow => !!parsedRow && parsedRow.data.displayCategory === listItem.name && parsedRow.data.bicsLevel === listItem.bicsLevel);
-              if (!ifExistsInParsedList && eachRow.data.bicsLevel >= 3) { // level 2 parent category is in the primary list already
-                const matchedRow = subRowList.find((subRow: StructurePortfolioBreakdownRowDTO) => subRow.data.displayCategory === listItem.name && subRow.data.bicsLevel === listItem.bicsLevel);
+              const ifExistsInParsedList = parsedRowList.find(parsedRow => parsedRow.data.code === listItem.code);
+              if (!ifExistsInParsedList) {
+                const matchedRow = subRowList.find((subRow: StructurePortfolioBreakdownRowDTO) => subRow.data.code === listItem.code);
                 if (!!matchedRow) {
                   parsedRowList.push(matchedRow);
                 }
@@ -107,7 +108,7 @@ export class BICsDataProcessingService {
           }
         });
         parsedRowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
-          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(row.data.category, row.data.bicsLevel, []);
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
           const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
           if (!!parentLevel) {
             const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);
