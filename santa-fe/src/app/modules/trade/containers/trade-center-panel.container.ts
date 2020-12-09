@@ -702,9 +702,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     targetFilter: DefinitionConfiguratorEmitterParamsItem
   ): boolean {
     let includeFlag = false;
-    if (targetFilter.key === 'BICS_CONSOLIDATED') {
+    if (targetFilter.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
       targetFilter.filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] .indexOf(eachValue) === 0) {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
           includeFlag = true;
         }
       });

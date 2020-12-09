@@ -102,7 +102,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       if (this.configuratorData.state.showFiltersFromDefinition) {
         const definitionShown = this.configuratorData.state.showFiltersFromDefinition;
         // Don't clear out selectedList on BICS_CONSOLIDATED
-        if (definitionShown.state.isFilterLong && definitionShown.data.key !== 'BICS_CONSOLIDATED') {
+        if (definitionShown.state.isFilterLong && definitionShown.data.key !== this.constants.map.BICS_CONSOLIDATED.key) {
           this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList = [];
         }
         this.boostConfigurator.emit();
@@ -293,7 +293,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
 
   private convertBICSOptionsEmitterParamsToCode(params: DefinitionConfiguratorEmitterParams) {
     params.filterList.forEach((eachFilter) => {
-      if (eachFilter.key === 'BICS_CONSOLIDATED') {
+      if (eachFilter.key === this.constants.map.BICS_CONSOLIDATED.key) {
         eachFilter.filterBy = [];
         eachFilter.filterByBlocks.forEach((eachBlock) => {
           const targetCode = this.bicsDataProcessingService.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);

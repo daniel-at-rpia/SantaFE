@@ -18,7 +18,7 @@ import {
 import {
   DefinitionConfiguratorEmitterParams,
   BICSServiceConsolidateReturnPack,
-  ReversedBISCHierarchyDictionary
+  BISCHierarchyDictionaryByLevel
 } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
@@ -34,7 +34,7 @@ import { UtilityService } from './UtilityService';
 @Injectable()
 
 export class BICsDataProcessingService {
-  private reversedBICSHierarchyDictionary: ReversedBISCHierarchyDictionary = {
+  private reversedBICSHierarchyDictionary: BISCHierarchyDictionaryByLevel = {
     level1: {},
     level2: {},
     level3: {},
