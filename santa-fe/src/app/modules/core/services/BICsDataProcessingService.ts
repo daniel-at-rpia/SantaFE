@@ -34,7 +34,7 @@ import { UtilityService } from './UtilityService';
 @Injectable()
 
 export class BICsDataProcessingService {
-  private reversedBICSHierarchyDictionary: BISCHierarchyDictionaryByLevel = {
+  private reversedBICSHierarchyDictionary: BICSHierarchyDictionaryByLevel = {
     level1: {},
     level2: {},
     level3: {},
