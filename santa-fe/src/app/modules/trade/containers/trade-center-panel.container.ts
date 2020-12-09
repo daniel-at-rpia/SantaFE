@@ -397,7 +397,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
         if (!!serverReturn) {
-          this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, {children: []});
+          this.bicsDataProcessingService.loadBICSData(serverReturn, {children: []});
           this.dtoService.loadBICSOptionsIntoConfigurator(
             this.state.configurator.dto,
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),

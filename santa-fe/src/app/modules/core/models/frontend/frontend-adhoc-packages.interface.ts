@@ -161,6 +161,7 @@ export interface TraceScatterGraphData {
 
 export interface AdhocExtensionBEMetricBreakdowns extends BEMetricBreakdowns {
   customLevel: number;
+  code: string;
 }
 
 export interface CustomBreakdownReturnPack {

@@ -62,7 +62,7 @@ export enum BICsLevels {
 
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
 
-
+export const BICS_DICTIONARY_KEY_PREFIX = 'item';
 
 export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {

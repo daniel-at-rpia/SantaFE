@@ -23,7 +23,9 @@ import {
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
   BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
-  BICS_BRANCH_CHARACTER_LIMIT
+  BICS_BRANCH_CHARACTER_LIMIT,
+  BICS_DICTIONARY_KEY_PREFIX,
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
@@ -41,62 +43,39 @@ export class BICsDataProcessingService {
   private bicsRawData: Array<BICsCategorizationBlock> = [];
   private formattedBICsHierarchyData: BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
+  private bicsDictionary: BEBICsHierarchyBlock;
 
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService
   ) {}
 
-  public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
+  public loadBICSData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
+    this.bicsDictionary = data;
     this.buildReversedBICSHierarchyDictionary(data);
-    this.setBICsLevelOneCategories(data, parent);
+    this.setBICsLevelOneCategories(data, parent)
     this.iterateBICsData(data, parent);
     this.formattedBICsHierarchyData = parent;
-    return parent;
   }
 
-  public getParentCategory(hierarchyData: Array<BICsHierarchyBlock>, hierarchyList: Array<BICsHierarchyBlock>, targetCategory: BICsHierarchyBlock) {
-    if (!!targetCategory) {
-      hierarchyData.forEach((block: BICsHierarchyBlock) => {
-        if (block.children.length > 0) {
-          const parentCategory = block.children.find(category => category.name === targetCategory.name && category.bicsLevel === targetCategory.bicsLevel);
-          if (!!parentCategory && block.bicsLevel === targetCategory.bicsLevel - 1) {
-            hierarchyList.push(block)
-            this.getParentCategory(hierarchyData, hierarchyList, block);
+  public getTargetSpecificHierarchyList(childCode: string, childBicsLevel: number): Array<BICsHierarchyBlock> {
+    const data = this.bicsDictionary[childCode];
+    const hierarchyDataList: Array<BICsHierarchyBlock> = [];
+    for (let item in data) {
+      if (!!data[item]) {
+        const itemLevel: number = +(item.split(BICS_DICTIONARY_KEY_PREFIX)[1]);
+        if (itemLevel < childBicsLevel) {
+          const object: BICsHierarchyBlock = {
+            name: data[item],
+            bicsLevel: itemLevel,
+            code: childCode.substring(0, itemLevel * 2),
+            children: null
           }
+          hierarchyDataList.push(object);
         }
-      })
+      }
     }
-  }
-
-  public getTargetSpecificHierarchyList(childCategory: string, childBicsLevel: number, hierarchyList: Array<BICsHierarchyBlock>): Array<BICsHierarchyBlock> {
-    if (!!this.formattedBICsHierarchyData) {
-      let isFound = false;
-      this.formattedBICsHierarchyData.children.forEach(mainCategory => {
-        let categoryTraversalList: Array<BICsHierarchyBlock> = [{name: mainCategory.name, bicsLevel: mainCategory.bicsLevel, children: mainCategory.children, code: mainCategory.code}];
-        const traverseThroughCategories = (block: Array<BICsHierarchyBlock>, targetCategory: string) => {
-          if (!!isFound)  {
-            return;
-          } else {
-            block.forEach(newCategory => {
-              categoryTraversalList.push({name: newCategory.name, bicsLevel: newCategory.bicsLevel, children: newCategory.children, code: mainCategory.code});
-              if (newCategory.name === targetCategory && newCategory.bicsLevel === childBicsLevel) {
-                isFound = true;
-                this.getParentCategory(categoryTraversalList, hierarchyList, newCategory);
-              } else {
-                if (!isFound ) {
-                  traverseThroughCategories(newCategory.children, childCategory);
-                }
-              }
-            })
-          }
-        }
-        if (mainCategory.children.length > 0) {
-          traverseThroughCategories(mainCategory.children, childCategory);
-        }
-      })
-      return hierarchyList;
-    }
+    return hierarchyDataList;
   }
 
   public addSortedRegularBICsWithSublevels(rowList: Array<StructurePortfolioBreakdownRowDTO>): Array<StructurePortfolioBreakdownRowDTO> {
@@ -107,13 +86,14 @@ export class BICsDataProcessingService {
     if (subRowList.length > 0) {
       subRowList.forEach((eachRow: StructurePortfolioBreakdownRowDTO) => {
         if (!!eachRow.data.targetLevel) {
-          parsedRowList.push(eachRow);
-          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.category, eachRow.data.bicsLevel, []);
+          const ifExistsInParsedList = parsedRowList.find(parsedRow => parsedRow.data.code === eachRow.data.code)
+          !ifExistsInParsedList && parsedRowList.push(eachRow);
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.code, eachRow.data.bicsLevel);
           if (hierarchyList.length > 0) {
             hierarchyList.forEach((listItem: BICsHierarchyBlock) => {
-              const ifExistsInParsedList = parsedRowList.find(parsedRow => !!parsedRow && parsedRow.data.displayCategory === listItem.name && parsedRow.data.bicsLevel === listItem.bicsLevel);
-              if (!ifExistsInParsedList && eachRow.data.bicsLevel >= 3) { // level 2 parent category is in the primary list already
-                const matchedRow = subRowList.find((subRow: StructurePortfolioBreakdownRowDTO) => subRow.data.displayCategory === listItem.name && subRow.data.bicsLevel === listItem.bicsLevel);
+              const ifExistsInParsedList = parsedRowList.find(parsedRow => parsedRow.data.code === listItem.code);
+              if (!ifExistsInParsedList) {
+                const matchedRow = subRowList.find((subRow: StructurePortfolioBreakdownRowDTO) => subRow.data.code === listItem.code);
                 if (!!matchedRow) {
                   parsedRowList.push(matchedRow);
                 }
@@ -134,7 +114,7 @@ export class BICsDataProcessingService {
           }
         });
         parsedRowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
-          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(row.data.category, row.data.bicsLevel, []);
+          const hierarchyList: Array<BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
           const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
           if (!!parentLevel) {
             const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);
@@ -150,10 +130,10 @@ export class BICsDataProcessingService {
         })
         return newRowList;
       } else {
-        return rowList;
+        return primaryRowList;
       }
     } else {
-      return rowList;
+      return primaryRowList;
     }
   }
 
@@ -170,9 +150,9 @@ export class BICsDataProcessingService {
         } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
         // needs to find the closest sibling element as the previous row is a child of a sibling element
         const modifiedList: Array<StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
-        const findSiblingRows: Array<StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.displayCategory === row.data.parentRow.data.displayCategory);
+        const findSiblingRows: Array<StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.code === row.data.parentRow.data.code);
         const nearestSiblingRow: StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
-        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.displayCategory === nearestSiblingRow.data.displayCategory && eachRow.data.bicsLevel === nearestSiblingRow.data.bicsLevel); 
+        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.code === nearestSiblingRow.data.code);
         const indexDifference = i - sibilingRowIndex;
         row.style.branchHeight = `${indexDifference * branchHeight}px`;
         row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
@@ -314,15 +294,15 @@ export class BICsDataProcessingService {
         subLevel.state.isVisibleSubLevel = !!row.state.isShowingSubLevels;
       })
     } else {
-      const rowIndex = rowList.findIndex(displayRow => displayRow.data.displayCategory === row.data.displayCategory && displayRow.data.bicsLevel === row.data.bicsLevel);
+      const rowIndex = rowList.findIndex(displayRow => displayRow.data.code === row.data.code);
       const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
       if (rowIndex >= 0) {
         for (let i = 0; i < modifiedDisplayList.length; i++) {
-          // stops the loop when you find the next adjacent sibling
-          if (modifiedDisplayList[i].data.bicsLevel === row.data.bicsLevel) {
-            break;
-          } else {
+          const isSubLevel = modifiedDisplayList[i].data.code.indexOf(row.data.code) === 0;
+          if (!!isSubLevel) {
             row.data.displayedSubLevelRows.push(modifiedDisplayList[i])
+          } else {
+            break;
           }
         }
       }
@@ -367,8 +347,14 @@ export class BICsDataProcessingService {
       const match = formattedDataList.find((eachBlock) => {
         return eachBlock.code === bicsCode;
       });
-      return !!match ? match.name : null;
-    } else if (bicsCode.length < sampleElementForLengthCompare.code.length) {
+      if (!!match) {
+        // prevent overriding existing rows that have the same name (ex. Lv 1 and 2 Health Care) - would occur at lv 2+
+        const formattedName = bicsCode.length > 2 ? `${match.name} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${match.bicsLevel}` : match.name;
+        return formattedName;
+      } else {
+        return null;
+      }
+    } else if (bicsCode.length > sampleElementForLengthCompare.code.length) {
       // length is still short, dive in selectively by looking for match on the overlapped portion on bicscode
       let name = null;
       formattedDataList.forEach((eachBlock) => {
