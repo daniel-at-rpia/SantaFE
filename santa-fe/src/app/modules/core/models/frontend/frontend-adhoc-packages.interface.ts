@@ -169,5 +169,16 @@ export interface CustomBreakdownReturnPack {
 }
 
 export interface ReversedBISCHierarchyDictionary {
-  [property: string]: string;
+  level1: {
+    [property: string]: string;
+  }
+  level2: {
+    [property: string]: string;
+  }
+  level3: {
+    [property: string]: string;
+  }
+  level4: {
+    [property: string]: string;
+  }
 }

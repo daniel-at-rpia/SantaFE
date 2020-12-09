@@ -32,7 +32,12 @@ import { UtilityService } from './UtilityService';
 @Injectable()
 
 export class BICsDataProcessingService {
-  private reversedBICSHierarchyDictionary: ReversedBISCHierarchyDictionary = {};
+  private reversedBICSHierarchyDictionary: ReversedBISCHierarchyDictionary = {
+    level1: {},
+    level2: {},
+    level3: {},
+    level4: {}
+  };
   private bicsRawData: Array<BICsCategorizationBlock> = [];
   private formattedBICsHierarchyData: BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
@@ -342,8 +347,13 @@ export class BICsDataProcessingService {
     }
   }
 
-  public BICSNameToBICSCode(bicsName: string): string {
-    return this.reversedBICSHierarchyDictionary[bicsName] || null;
+  public BICSNameToBICSCode(bicsName: string, level: number): string {
+    if (level >= 1 && level <= 4) {
+      const targetBlock = this.reversedBICSHierarchyDictionary[`level${level}`];
+      return targetBlock[bicsName] || null;
+    } else {
+      return null;
+    }
   }
 
   private BICSCodeToBICSNameRecursion(
@@ -567,21 +577,24 @@ export class BICsDataProcessingService {
   }
 
   private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
-    // TODO: handle edge cases like health care lv.1 & health care lv.2
     for (let eachCode in data) {
       const block = data[eachCode];
       let bicsName = null;
+      let level = 1;
       if (!!block.item4) {
         bicsName = block.item4;
+        level = 4;
       } else if (!!block.item3) {
         bicsName = block.item3;
+        level = 3;
       } else if (!!block.item2) {
         bicsName = block.item2;
+        level = 2;
       } else {
         bicsName = block.item1;
       }
       if (!!bicsName) {
-        this.reversedBICSHierarchyDictionary[bicsName] = eachCode;
+        this.reversedBICSHierarchyDictionary[`level${level}`][bicsName] = eachCode;
       }
     }
   }
