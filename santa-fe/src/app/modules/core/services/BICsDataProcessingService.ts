@@ -42,15 +42,11 @@ export class BICsDataProcessingService {
     private utilityService: UtilityService
   ) {}
 
-  public storeBICsDictionary(rawData: BEBICsHierarchyBlock) {
-    this.bicsDictionary = rawData;
-  }
-
-  public formFormattedBICsHierarchy(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
+  public loadBICSData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
+    this.bicsDictionary = data;
     this.setBICsLevelOneCategories(data, parent)
     this.iterateBICsData(data, parent);
     this.formattedBICsHierarchyData = parent;
-    return parent;
   }
 
   public getTargetSpecificHierarchyList(childCode: string, childBicsLevel: number): Array<BICsHierarchyBlock> {
