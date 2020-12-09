@@ -18,7 +18,7 @@ import {
 import {
   DefinitionConfiguratorEmitterParams,
   BICSServiceConsolidateReturnPack,
-  BISCHierarchyDictionaryByLevel
+  BICSHierarchyDictionaryByLevel
 } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,

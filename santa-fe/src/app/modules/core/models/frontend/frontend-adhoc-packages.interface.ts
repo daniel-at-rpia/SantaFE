@@ -169,7 +169,7 @@ export interface CustomBreakdownReturnPack {
   customDefinitionList: Array<string>;
 }
 
-export interface BISCHierarchyDictionaryByLevel {
+export interface BICSHierarchyDictionaryByLevel {
   level1: {
     [property: string]: string;
   }
