@@ -2080,9 +2080,11 @@ export class DTOService {
       let bucket: Blocks.StructureBucketDataBlock = {};
       let customLevel: number;
       let isCustomLevelAvailable: string;
+      let code: string;
       if (!!rawData.breakdown[eachCategoryText]) {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
         customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel : null;
+        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).code : null;
       }
       if (!!isOverride) {
         bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
@@ -2111,7 +2113,8 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
-          customLevel
+          customLevel,
+          code
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -2129,7 +2132,8 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
-          customLevel
+          customLevel,
+          code
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -2167,6 +2171,7 @@ export class DTOService {
     view: PortfolioView,
     bucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
+    code: string = null
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2238,7 +2243,8 @@ export class DTOService {
         view: view,
         bucket: bucket,
         parentRow: null,
-        displayedSubLevelRows: []
+        displayedSubLevelRows: [],
+        code: code
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2414,28 +2420,21 @@ export class DTOService {
     identifiers: string[]
   ): CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
-    for (let category in customBreakdown.breakdown) {
-      if (!!customBreakdown.breakdown[category]) {
-        (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
+    for (let code in customBreakdown.breakdown) {
+      if (!!customBreakdown.breakdown[code]) {
+        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
+        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
       }
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
     selectedBreakdowns.forEach((selectedBreakdown, i) => {
-      for (let category in selectedBreakdown.breakdown) {
-        if (!!selectedBreakdown.breakdown[category]) {
-          if (selectedBreakdown.breakdown[category].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel) {
-            // check if its the same name as another category to avoid overwriting those values
-            const categoryNameExists = Object.keys(customBreakdown.breakdown).find(key => key === category);
-            // Adding 2 because of how the index starts at 0 and we want it to increment by 1
+      for (let code in selectedBreakdown.breakdown) {
+        if (!!selectedBreakdown.breakdown[code]) {
+          if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel) {
             const level = i + 2;
-            if (!!categoryNameExists) {
-              const customCategory = `${category} BICsSubLevel.${level}`
-              customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[customCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
-            } else {
-              customBreakdown.breakdown[category] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[category] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
-            }
+            customBreakdown.breakdown[code] = selectedBreakdown.breakdown[code];
+            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
           }
         }
       }
