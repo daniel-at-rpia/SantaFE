@@ -704,7 +704,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     let includeFlag = false;
     if (targetFilter.key === 'BICS_CONSOLIDATED') {
       targetFilter.filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] === eachValue) {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] .indexOf(eachValue) === 0) {
           includeFlag = true;
         }
       });

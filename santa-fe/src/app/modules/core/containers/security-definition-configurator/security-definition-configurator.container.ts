@@ -100,7 +100,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.clearSearchFilter();
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
-        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterLong) {
+        const definitionShown = this.configuratorData.state.showFiltersFromDefinition;
+        // Don't clear out selectedList on BICS_CONSOLIDATED
+        if (definitionShown.state.isFilterLong && definitionShown.data.key !== 'BICS_CONSOLIDATED') {
           this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList = [];
         }
         this.boostConfigurator.emit();
