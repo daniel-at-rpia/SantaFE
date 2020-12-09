@@ -33,7 +33,11 @@
       BEFetchAllTradeDataReturn,
       BEBICsHierarchyBlock
     } from 'BEModels/backend-models.interface';
-    import { DefinitionConfiguratorEmitterParams, SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      DefinitionConfiguratorEmitterParams,
+      SecurityMapEntry,
+      DefinitionConfiguratorEmitterParamsItem
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
@@ -581,7 +585,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           let securityLevelFilterResultCombined = true;
           if (this.state.filters.securityFilters.length > 0) {
             const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
-              return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
+              return this.filterBySecurityAttribute(eachRow, eachFilter);
             });
             // as long as one of the filters failed, this security will not show
             securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
@@ -597,13 +601,20 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     return filteredList;
   }
 
-  private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
+  private filterBySecurityAttribute(
+    targetRow: SecurityTableRowDTO,
+    targetFilter: DefinitionConfiguratorEmitterParamsItem
+  ): boolean {
+    const targetAttribute = targetFilter.targetAttribute;
+    const filterBy = targetFilter.filterBy;
     let includeFlag = false;
     if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList') {
       // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
       return true;
-    } else if (targetAttribute === 'seniority'){
+    } else if (targetAttribute === 'seniority') {
       return this.filterBySeniority(targetRow);
+    } else if (targetFilter.targetAttributeBlock === 'bics') {
+      return this.filterByBICS(targetRow, targetFilter);
     } else {
       filterBy.forEach((eachValue) => {
         if (targetRow.data.security.data[targetAttribute] === eachValue) {
@@ -682,6 +693,27 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       });
     } else {
       includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterByBICS(
+    targetRow: SecurityTableRowDTO,
+    targetFilter: DefinitionConfiguratorEmitterParamsItem
+  ): boolean {
+    let includeFlag = false;
+    if (targetFilter.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
+      targetFilter.filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      targetFilter.filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] === eachValue) {
+          includeFlag = true;
+        }
+      });
     }
     return includeFlag;
   }

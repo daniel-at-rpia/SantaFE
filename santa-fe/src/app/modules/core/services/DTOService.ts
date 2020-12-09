@@ -260,10 +260,13 @@ export class DTOService {
         },
         tradeHistory: [],
         traceTrades: [],
-        bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
-        bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
-        bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
-        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null,
+        bics: {
+          code: !isStencil ? rawData.bicsCode : null,
+          bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
+          bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
+          bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
+          bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
+        },
         lastTrace: {
           lastTracePrice: null,
           lastTraceSpread: null,
@@ -539,6 +542,7 @@ export class DTOService {
         prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr,
+        securityDTOAttrBlock: rawData.securityDTOAttrBlock,
         highlightSelectedOptionList: []
       },
       style: {
@@ -552,7 +556,7 @@ export class DTOService {
         groupByActive: false,
         filterActive: false,
         isMiniPillVariant: false,
-        isFilterLong: rawData.optionList.length > 5,
+        isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
         currentFilterPathInConsolidatedBICS: []
       }
     }

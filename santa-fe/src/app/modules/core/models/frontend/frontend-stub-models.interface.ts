@@ -23,6 +23,7 @@ export interface SecurityDefinitionStub {
   locked?: boolean;
   urlForGetLongOptionListFromServer?: string;
   securityDTOAttr?: string;
+  securityDTOAttrBlock?: string;
 }
 
 export interface SecurityDefinitionBundleStub {

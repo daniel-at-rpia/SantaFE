@@ -694,11 +694,32 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'bicsCode',
+    content: {
+      label: 'BICS Code',
+      attrName: 'code',
+      underlineAttrName: 'code',
+      blockAttrName: 'bics',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: false,
+          groupShow: false
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
     key: 'bicsLevel1',
     content: {
       label: 'BICS Lv.1',
       attrName: 'bicsLevel1',
       underlineAttrName: 'bicsLevel1',
+      blockAttrName: 'bics',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
@@ -718,6 +739,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       label: 'BICS Lv.2',
       attrName: 'bicsLevel2',
       underlineAttrName: 'bicsLevel2',
+      blockAttrName: 'bics',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
@@ -736,6 +758,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       label: 'BICS Lv.3',
       attrName: 'bicsLevel3',
       underlineAttrName: 'bicsLevel3',
+      blockAttrName: 'bics',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
@@ -754,6 +777,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       label: 'BICS Lv.4',
       attrName: 'bicsLevel4',
       underlineAttrName: 'bicsLevel4',
+      blockAttrName: 'bics',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,

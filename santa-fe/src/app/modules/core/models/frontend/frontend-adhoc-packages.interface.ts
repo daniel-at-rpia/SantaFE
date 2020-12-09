@@ -41,6 +41,7 @@ export interface DefinitionConfiguratorEmitterParams {
 export interface DefinitionConfiguratorEmitterParamsItem {
   key: string;
   targetAttribute: string;
+  targetAttributeBlock: string;
   filterBy: Array<string>;
   filterByBlocks: Array<SecurityDefinitionFilterBlock>;
 }
@@ -166,4 +167,19 @@ export interface AdhocExtensionBEMetricBreakdowns extends BEMetricBreakdowns {
 export interface CustomBreakdownReturnPack {
   customBreakdown: BEStructuringBreakdownBlock;
   customDefinitionList: Array<string>;
+}
+
+export interface BICSHierarchyDictionaryByLevel {
+  level1: {
+    [property: string]: string;
+  }
+  level2: {
+    [property: string]: string;
+  }
+  level3: {
+    [property: string]: string;
+  }
+  level4: {
+    [property: string]: string;
+  }
 }
