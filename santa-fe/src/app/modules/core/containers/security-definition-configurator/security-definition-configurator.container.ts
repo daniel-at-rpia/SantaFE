@@ -161,7 +161,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public triggerApplyFilter() {
     this.configuratorData.state.groupByDisabled && this.onClickDefinition(this.configuratorData.state.showFiltersFromDefinition);
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.configuratorData);
-    this.convertBICSOptionsEmitterParamsToCode(params);
+    this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
     this.clickedApplyFilter.emit(params);
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.canApplyFilter = false;
@@ -289,20 +289,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         return of('error');
       })
     ).subscribe();
-  }
-
-  private convertBICSOptionsEmitterParamsToCode(params: DefinitionConfiguratorEmitterParams) {
-    params.filterList.forEach((eachFilter) => {
-      if (eachFilter.key === this.constants.map.BICS_CONSOLIDATED.key) {
-        eachFilter.filterBy = [];
-        eachFilter.filterByBlocks.forEach((eachBlock) => {
-          const targetCode = this.bicsDataProcessingService.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
-          if (targetCode !== null) {
-            eachFilter.filterBy.push(targetCode);
-          }
-        });
-      }
-    })
   }
 
 }

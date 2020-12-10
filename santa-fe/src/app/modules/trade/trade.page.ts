@@ -24,12 +24,15 @@
     } from 'Core/services';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
-    import { CoreUserLoggedIn } from 'Core/actions/core.actions';
+    import { CoreUserLoggedIn, CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail, selectUserInitials } from 'Core/selectors/core.selectors';
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-    import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
-    import { TradeStoreResetEvent } from 'Trade/actions/trade.actions';
+    import {
+      TradeStoreResetEvent,
+      TradeCenterPanelLoadTableWithFilterEvent
+    } from 'Trade/actions/trade.actions';
     import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
   //
 
 @Component({
@@ -76,11 +79,12 @@ export class TradePage implements OnInit, OnDestroy {
     this.store$.dispatch(new TradeStoreResetEvent());
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       tap(params => {
-        console.log('test, route in Trade', params.get('stateId'));
         const state = this.globalWorkflowIOService.fetchState(params.get('stateId'));
         if (!!state) {
           if (state.data.workflowType === this.constants.globalWorkflowTypes.launchTradeToSeeBonds) {
-            console.log('test, workflow is', state);
+            if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
+              this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList));
+            }
           }
         }
       })

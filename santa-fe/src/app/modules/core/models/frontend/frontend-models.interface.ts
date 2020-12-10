@@ -892,7 +892,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     module: NavigationModule;
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
-      filter?: SecurityDefinitionConfiguratorDTO;
+      filterList?: Array<SecurityDefinitionDTO>;
     }
   },
   state: {

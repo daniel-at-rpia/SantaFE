@@ -30,6 +30,7 @@ import {
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 @Injectable()
 
@@ -348,6 +349,20 @@ export class BICsDataProcessingService {
     } else {
       return null;
     }
+  }
+
+  public convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params: DefinitionConfiguratorEmitterParams) {
+    params.filterList.forEach((eachFilter) => {
+      if (eachFilter.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+        eachFilter.filterBy = [];
+        eachFilter.filterByBlocks.forEach((eachBlock) => {
+          const targetCode = this.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
+          if (targetCode !== null) {
+            eachFilter.filterBy.push(targetCode);
+          }
+        });
+      }
+    })
   }
 
   private setBreakdownListProperties(

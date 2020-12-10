@@ -8,7 +8,12 @@ import {
   DTOService,
   BICsDataProcessingService
 } from 'Core/services';
-import { PortfolioBreakdownDTO, StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'FEModels/frontend-models.interface';
+import {
+  PortfolioBreakdownDTO,
+  StructurePopoverDTO,
+  StructurePortfolioBreakdownRowDTO,
+  SecurityDefinitionDTO
+} from 'FEModels/frontend-models.interface';
 import {
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
@@ -238,8 +243,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickSeeBond(targetRow: StructurePortfolioBreakdownRowDTO) {
     const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
-    const filter = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
-    filter.data.definitionList.forEach((eachBundle) => {
+    const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
+    const filterList: Array<SecurityDefinitionDTO> = [];
+    configurator.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
         if (this.breakdownData.state.isOverrideVariant) {
           // code...
@@ -252,11 +258,15 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
               selectedOptionList,
               targetRow.data.bicsLevel
             );
+            eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+              eachOption.isSelected = true;
+            })
+            filterList.push(eachDefinition);
           }
         }
       });
     });
-    newWorkflowState.data.stateInfo.filter = filter;
+    newWorkflowState.data.stateInfo.filterList = filterList;
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 
