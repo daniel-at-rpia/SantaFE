@@ -1,10 +1,14 @@
 import {Component, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import { PortfolioView } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioView,
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+} from 'Core/constants/structureConstants.constants';
 import { Store } from '@ngrx/store';
 import { StructureSetView } from 'Structure/actions/structure.actions';
 import * as moment from 'moment';
 import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
   selector: 'portfolio-breakdown-row',
@@ -25,10 +29,12 @@ export class PortfolioBreakdownRow {
     improving: PortfolioView.improving,
     neutral: PortfolioView.neutral,
     deteriorating: PortfolioView.deteriorating,
-    negative: PortfolioView.negative
+    negative: PortfolioView.negative,
+    subLevelPrefix: BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
   }
   constructor(
-    private store$: Store<any>
+    private store$: Store<any>,
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {}
 
   public onClickCategory() {
@@ -55,13 +61,21 @@ export class PortfolioBreakdownRow {
   }
 
   public onClickSetView(view: PortfolioView) {
-    const date = new Date();
-    const formattedDate = Number(moment(date).format('YYYYMMDD'));
+    const isBICSRow = this.breakdownRow.data.bicsLevel >= 1 && !!this.breakdownRow.data.code;
+    let displayCategory: string;
+    if (!!isBICSRow) {
+      const categoryName = this.bicsDataProcessingService.BICSCodeToBICSName(this.breakdownRow.data.code);
+      const includesSubLevelPrefix = categoryName.includes(this.constants.subLevelPrefix);
+      if (!!includesSubLevelPrefix) {
+        displayCategory = categoryName.split(this.constants.subLevelPrefix)[0].trim();
+      } else {
+        displayCategory = this.breakdownRow.data.displayCategory;
+      }
+    }
     const viewData: StructureSetViewData = {
-      yyyyMMdd: formattedDate,
       bucket: this.breakdownRow.data.bucket,
       view: view !== this.breakdownRow.data.view ? view : null,
-      displayCategory: this.breakdownRow.data.displayCategory
+      displayCategory: displayCategory
     }
     this.store$.dispatch(new StructureSetView(viewData));
   }
