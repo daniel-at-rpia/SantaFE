@@ -390,3 +390,8 @@ export interface TraceTradeBlock {
 export interface VisualizerGraphsBlock {
   [property: string]: am4charts.XYChart | am4charts.PieChart;
 }
+
+export interface PopoverMainCategoryRowsBlock {
+  cs01: DTOs.StructurePortfolioBreakdownRowDTO;
+  creditLeverage: DTOs.StructurePortfolioBreakdownRowDTO;
+}
