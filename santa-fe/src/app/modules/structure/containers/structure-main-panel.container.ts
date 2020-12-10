@@ -209,10 +209,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private updateViewData(data: StructureSetViewData) {
     const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.loadStencilFunds();
-    const { yyyyMMdd, bucket, view, displayCategory } = data;
+    const { bucket, view, displayCategory} = data;
     const payload: PayloadSetView = {
-      yyyyMMdd: yyyyMMdd,
-      bucket: bucket, 
+      bucket: bucket,
       view: view
     }
     const endpoint = this.restfulCommService.apiMap.setView;
