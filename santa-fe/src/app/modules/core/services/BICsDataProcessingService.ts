@@ -9,8 +9,7 @@ import {
   BEBICsHierarchyBlock,
   BEPortfolioStructuringDTO,
   BEStructuringBreakdownBlock,
-  BEMetricBreakdowns,
-  BECustomMetricBreakdowns
+  BEMetricBreakdowns
 } from 'Core/models/backend/backend-models.interface';
 import {
   PortfolioBreakdownDTO,
@@ -20,7 +19,8 @@ import {
 import {
   DefinitionConfiguratorEmitterParams,
   BICSServiceConsolidateReturnPack,
-  BICSHierarchyDictionaryByLevel
+  BICSHierarchyDictionaryByLevel,
+  AdhocExtensionBEMetricBreakdowns
 } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
@@ -273,7 +273,7 @@ export class BICsDataProcessingService {
         const breakdownData = rawData[bicsLevel].breakdown[code];
         if (!!breakdownData) {
           customRawBreakdown.breakdown[code] = breakdownData;
-          (customRawBreakdown.breakdown[code] as BECustomMetricBreakdowns).customLevel = level;
+          (customRawBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
         }
         const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [code], isCs01, false);
         const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
