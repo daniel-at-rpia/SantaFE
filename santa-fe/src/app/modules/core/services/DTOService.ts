@@ -2053,9 +2053,8 @@ export class DTOService {
         rawCs01CategoryList: [],
         rawLeverageCategoryList: [],
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
-        popover: null,
+        popoverMainRow: null,
         portfolioId: rawData.portfolioId,
-        selectedCategory: '',
         diveInLevel: 0,
         indexName: ''
       },
@@ -2071,7 +2070,8 @@ export class DTOService {
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
         isEditingViewAvail: false,
-        isDisplaySubLevels: false
+        isDisplaySubLevels: false,
+        isDisplayPopover: false
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
@@ -2184,13 +2184,15 @@ export class DTOService {
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
       if (!!isCs01) {
-        parsedRawData.currentLevel = rawCurrentLevel >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
+        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
+        parsedRawData.currentLevel = Math.abs(rawCurrentLevel) >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
       } else {
         parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
       }
       if (parsedRawData.targetLevel != null) {
         if (!!isCs01) {
-          parsedRawData.targetLevel = parsedRawData.targetLevel >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
+        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
+          parsedRawData.targetLevel = Math.abs(parsedRawData.targetLevel) >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
         } else {
           parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
         }

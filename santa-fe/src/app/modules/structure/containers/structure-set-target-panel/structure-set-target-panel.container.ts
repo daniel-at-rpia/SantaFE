@@ -122,8 +122,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
-          if (!!this.state.targetBreakdown.data.popover) {
-            this.state.targetBreakdown.data.popover.state.isActive = false;
+          if (!!this.state.targetBreakdown.data.popoverMainRow) {
+            this.state.targetBreakdown.data.popoverMainRow = null;
           }
           const selectedCategory = this.state.targetBreakdown.data.displayCategoryList.find(category => category.state.isSelected);
           if (!!selectedCategory) {
