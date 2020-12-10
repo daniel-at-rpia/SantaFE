@@ -2096,8 +2096,8 @@ export class DTOService {
           eachCategoryText
         )
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
-        bucket[formattedBEKey] = [eachCategoryText];
+        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
+        bucket[formattedBEKey] = [code];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
       }
