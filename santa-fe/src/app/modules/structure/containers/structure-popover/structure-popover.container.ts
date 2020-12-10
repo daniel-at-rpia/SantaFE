@@ -112,9 +112,65 @@ export class StructurePopover implements OnInit, OnChanges {
     targetRow.state.isEditingView = !targetRow.state.isEditingView;
   }
 
+  public createPopover(categoryRow: StructurePortfolioBreakdownRowDTO) {
+    const isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(categoryRow, isCs01);
+    categoryRow.data.children = subBicsLevel;
+    categoryRow.state.isWithinPopover = true;
+    this.popover = this.dtoService.formStructurePopoverObject(categoryRow, isCs01);
+    this.popover.state.isActive = true;
+  }
+
+  public switchPopoverSubLevels(block: PortfolioBreakdownCategoryBlock, activeMetric: PortfolioMetricValues) {
+    if (!block.children) {
+      return;
+    } else {
+      const isCs01 = activeMetric === PortfolioMetricValues.cs01;
+      const currentMetricList =  !!isCs01 ? block.children.data.rawCs01CategoryList : block.children.data.rawLeverageCategoryList;
+      const oppositeMetricList = !!isCs01 ? block.children.data.rawLeverageCategoryList : block.children.data.rawCs01CategoryList;
+      block.children.data.displayCategoryList = currentMetricList;
+      block.children.data.displayCategoryList.forEach(row => {
+        row.state.isStencil = true;
+        const selectedValue = oppositeMetricList.find(previousRow => previousRow.data.category === row.data.category);
+        row.state.isDoveIn = !!selectedValue.data.children && selectedValue.state.isDoveIn;
+        row.data.children = selectedValue.data.children;
+        row.data.moveVisualizer.state.isStencil = true;
+        if (!!row.data.children) {
+          row.data.children.data.displayCategoryList = isCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
+          this.switchPopoverSubLevels(row.data, activeMetric);
+        }
+      })
+    }
+  }
+
   public closePopover() {
     this.popover.state.isActive = false;
     this.popover.data.mainRow.state.isSelected = false;
+    !!this.resetPopover && this.resetPopover.emit();
+  }
+
+  private removeStencils() {
+    this.popover.data.mainRow.state.isStencil = false;
+    if (!!this.popover.data.mainRow.data.moveVisualizer) {
+      this.popover.data.mainRow.data.moveVisualizer.state.isStencil = false;
+    }
+    this.removePopoverRowStencils(this.popover.data.mainRow)
+  }
+
+  private removePopoverRowStencils(row: StructurePortfolioBreakdownRowDTO) {
+    if (!row) {
+      return null;
+    } else {
+      if (!!row.data.children) {
+        row.data.children.data.displayCategoryList.forEach(row => {
+          row.state.isStencil = false;
+          row.data.moveVisualizer.state.isStencil = false;
+          if (row.data.children) {
+            this.removePopoverRowStencils(row);
+          }
+        })
+      }
+    }
   }
 
 }
