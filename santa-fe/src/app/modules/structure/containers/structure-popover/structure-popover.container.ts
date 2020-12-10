@@ -31,13 +31,18 @@ export class StructurePopover implements OnInit, OnChanges {
   creditLeverageMainRow: StructurePortfolioBreakdownRowDTO;
   activeMetric: PortfolioMetricValues;
   constants = {
-    navigationModule: NavigationModule
+    navigationModule: NavigationModule,
+    mainRowMetricKeys: ['targetLevel', 'targetPct', 'diffToTarget', 'diffToTargetDisplay', 'currentLevel', 'currentPct', 'currentPctDisplay', 'indexPct', 'indexPctDisplay', 'moveVisualizer']
+  }
+  subscriptions = {
+    selectedMetricLevelSub: null
   }
 
   constructor(
     private store$: Store<any>,
     private dtoService: DTOService,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private utilityService: UtilityService
   ) {}
 
   public ngOnInit() {};
