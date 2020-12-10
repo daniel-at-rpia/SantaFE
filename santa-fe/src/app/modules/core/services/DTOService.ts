@@ -2038,9 +2038,8 @@ export class DTOService {
         rawCs01CategoryList: [],
         rawLeverageCategoryList: [],
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
-        popover: null,
+        popoverMainRow: null,
         portfolioId: rawData.portfolioId,
-        selectedCategory: '',
         diveInLevel: 0,
         indexName: ''
       },
@@ -2056,7 +2055,8 @@ export class DTOService {
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
         isEditingViewAvail: false,
-        isDisplaySubLevels: false
+        isDisplaySubLevels: false,
+        isDisplayPopover: false
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);

@@ -57,7 +57,7 @@
           [breakdownRow]="eachCategory"
           (viewMainDisplaySubLevels)="getMainDisplaySubLevels($event)"
           (categoryClicked)="onClickBreakdownCategory($event)"
-          (rowDiveInClicked)="updatePopoverData($event)"
+          (rowDiveInClicked)="getPopoverMainRow($event)"
           (seeBondClicked)="onClickSeeBond()"
           (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
         </portfolio-breakdown-row>
@@ -75,7 +75,10 @@
     </button>
   </section>
   <section class="sat-portfolioBreakdown__popover">
-    <structure-popover [popover]="breakdownData.data.popover">
+    <structure-popover
+      [mainRowData]="breakdownData.data.popoverMainRow"
+      [breakdownDisplayPopover]="breakdownData.state.isDisplayPopover"
+      (resetPopover)="resetPopoverMainRow()">
     </structure-popover>
   </section>
 </article>
