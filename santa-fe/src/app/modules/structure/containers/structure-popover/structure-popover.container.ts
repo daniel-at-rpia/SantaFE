@@ -1,11 +1,19 @@
-import { Component, EventEmitter, Input,OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
 import { Store, select } from '@ngrx/store';
-
-import { PortfolioView } from 'App/modules/core/constants/structureConstants.constants';
+import { PortfolioMetricValues } from 'App/modules/core/constants/structureConstants.constants';
+import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
-import { StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
+import {
+  StructurePopoverDTO,
+  StructurePortfolioBreakdownRowDTO
+} from 'Core/models/frontend/frontend-models.interface';
 import { DTOService, BICsDataProcessingService } from 'Core/services';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+import {
+  PortfolioBreakdownCategoryBlock,
+  PopoverMainCategoryRowsBlock
+} from 'Core/models/frontend/frontend-blocks.interface';
+import { UtilityService } from 'Core/services/UtilityService';
 
 @Component({
   selector: 'structure-popover',
@@ -14,8 +22,14 @@ import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructurePopover implements OnInit {
-  @Input() popover: StructurePopoverDTO
+export class StructurePopover implements OnInit, OnChanges {
+  @Input() selectedCategoryRowsFromBreakdown: PopoverMainCategoryRowsBlock;
+  @Input() breakdownDisplayPopover: boolean;
+  @Output() resetPopover = new EventEmitter();
+  popover: StructurePopoverDTO = null;
+  cs01MainRow: StructurePortfolioBreakdownRowDTO;
+  creditLeverageMainRow: StructurePortfolioBreakdownRowDTO;
+  activeMetric: PortfolioMetricValues;
   constants = {
     navigationModule: NavigationModule
   }
