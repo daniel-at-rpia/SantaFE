@@ -45,7 +45,46 @@ export class StructurePopover implements OnInit, OnChanges {
     private utilityService: UtilityService
   ) {}
 
-  public ngOnInit() {};
+  public ngOnInit() {
+    this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      select(selectMetricLevel)
+    ).subscribe((value) => {
+      if (!!value) {
+        this.activeMetric = value as PortfolioMetricValues;
+        if (!!this.popover && !!this.popover.data.mainRow && !!this.breakdownDisplayPopover) {
+          const isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
+          this.popover.data.mainRow = !!isCs01 ? this.changeMetricSpecificRowData(this.popover.data.mainRow, this.cs01MainRow) : this.changeMetricSpecificRowData(this.popover.data.mainRow, this.creditLeverageMainRow);
+          this.popover.state.isDisplayCs01 = !!isCs01;
+          this.switchPopoverSubLevels(this.popover.data.mainRow.data, this.activeMetric);
+          const flipStencil = this.removeStencils.bind(this);
+          setTimeout(() => {
+            flipStencil();
+          }, 1);
+        }
+      }
+    });
+  };
+
+  public ngOnChanges() {
+    if (!!this.selectedCategoryRowsFromBreakdown && !!this.breakdownDisplayPopover) {
+      this.cs01MainRow = this.selectedCategoryRowsFromBreakdown.cs01;
+      this.creditLeverageMainRow = this.selectedCategoryRowsFromBreakdown.creditLeverage;
+      if (this.activeMetric === PortfolioMetricValues.cs01) {
+        this.createPopover(this.cs01MainRow);
+      } else {
+        this.createPopover(this.creditLeverageMainRow);
+      }
+    }
+  }
+
+  public changeMetricSpecificRowData(mainRow: StructurePortfolioBreakdownRowDTO, targetRow: StructurePortfolioBreakdownRowDTO): StructurePortfolioBreakdownRowDTO {
+    const mainRowCopy = this.utilityService.deepCopy(mainRow);
+    const targetRowCopy = this.utilityService.deepCopy(targetRow);
+    this.constants.mainRowMetricKeys.forEach(key => {
+      mainRowCopy.data[key] = key === 'moveVisualizer' ? this.utilityService.deepCopy(targetRowCopy.data[key]) : targetRowCopy.data[key];
+    });
+    return mainRowCopy;
+  }
 
   public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isSelected = !targetRow.state.isSelected;
