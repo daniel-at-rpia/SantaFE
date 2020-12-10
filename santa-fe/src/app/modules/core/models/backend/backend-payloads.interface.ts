@@ -139,7 +139,6 @@ export interface PayloadGetPortfolioOverride {
 }
 
 export interface PayloadSetView {
-  yyyyMMdd: number;
   bucket: {
     [property: string]: Array<string>
   }
