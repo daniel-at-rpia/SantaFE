@@ -11,7 +11,7 @@ import { DTOService, BICsDataProcessingService } from 'Core/services';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import {
   PortfolioBreakdownCategoryBlock,
-  PopoverMainCategoryRowsBlock
+  BICSMainRowDataBlock
 } from 'Core/models/frontend/frontend-blocks.interface';
 import { UtilityService } from 'Core/services/UtilityService';
 
@@ -23,7 +23,7 @@ import { UtilityService } from 'Core/services/UtilityService';
 })
 
 export class StructurePopover implements OnInit, OnChanges {
-  @Input() selectedCategoryRowsFromBreakdown: PopoverMainCategoryRowsBlock;
+  @Input() mainRowData: BICSMainRowDataBlock;
   @Input() breakdownDisplayPopover: boolean;
   @Output() resetPopover = new EventEmitter();
   popover: StructurePopoverDTO = null;
@@ -66,9 +66,13 @@ export class StructurePopover implements OnInit, OnChanges {
   };
 
   public ngOnChanges() {
-    if (!!this.selectedCategoryRowsFromBreakdown && !!this.breakdownDisplayPopover) {
-      this.cs01MainRow = this.selectedCategoryRowsFromBreakdown.cs01;
-      this.creditLeverageMainRow = this.selectedCategoryRowsFromBreakdown.creditLeverage;
+    if (!!this.mainRowData && !!this.breakdownDisplayPopover) {
+      const mainRowData: BICSMainRowDataBlock = this.mainRowData;
+      mainRowData.isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
+      const { code, portfolioID, level, isCs01} = mainRowData;
+      const [cs01Row, creditLeverageRow] = this.bicsDataProcessingService.formBICSRow(code, portfolioID, level, isCs01);
+      this.cs01MainRow = cs01Row;
+      this.creditLeverageMainRow = creditLeverageRow;
       if (this.activeMetric === PortfolioMetricValues.cs01) {
         this.createPopover(this.cs01MainRow);
       } else {

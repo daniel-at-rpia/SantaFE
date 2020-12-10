@@ -391,7 +391,9 @@ export interface VisualizerGraphsBlock {
   [property: string]: am4charts.XYChart | am4charts.PieChart;
 }
 
-export interface PopoverMainCategoryRowsBlock {
-  cs01: DTOs.StructurePortfolioBreakdownRowDTO;
-  creditLeverage: DTOs.StructurePortfolioBreakdownRowDTO;
+export interface BICSMainRowDataBlock {
+  code: string;
+  portfolioID: number;
+  level: number;
+  isCs01?: boolean;
 }

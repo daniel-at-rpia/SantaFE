@@ -76,7 +76,7 @@
   </section>
   <section class="sat-portfolioBreakdown__popover">
     <structure-popover
-      [selectedCategoryRowsFromBreakdown]="breakdownData.data.popoverMainRow"
+      [mainRowData]="breakdownData.data.popoverMainRow"
       [breakdownDisplayPopover]="breakdownData.state.isDisplayPopover"
       (resetPopover)="resetPopoverMainRow()">
     </structure-popover>

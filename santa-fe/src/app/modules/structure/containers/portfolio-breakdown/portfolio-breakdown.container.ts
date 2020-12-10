@@ -1,19 +1,23 @@
 import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-
-import { PortfolioBreakdownDTO, StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'FEModels/frontend-models.interface';
-import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioBreakdownDTO,
+  StructurePortfolioBreakdownRowDTO
+} from 'FEModels/frontend-models.interface';
+import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { editingViewAvailableUsers, StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import {
+  editingViewAvailableUsers,
+  StructuringTeamPMList
+} from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { BICSMainRowDataBlock } from 'App/modules/core/models/frontend/frontend-blocks.interface';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -105,20 +109,13 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public getPopoverMainRow(breakdownRow: StructurePortfolioBreakdownRowDTO) {
     if (!!breakdownRow) {
-      this.breakdownData.state.isDisplayPopover = true;
-      if (!!this.breakdownData.state.isDisplayingCs01) {
-        const creditLeverageRow = this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.displayCategory === breakdownRow.data.displayCategory);
-        this.breakdownData.data.popoverMainRow = {
-          cs01: breakdownRow,
-          creditLeverage: !!creditLeverageRow ? creditLeverageRow : null
-        }
-      } else {
-        const cs01Row = this.breakdownData.data.rawCs01CategoryList.find(row => row.data.displayCategory === breakdownRow.data.displayCategory);
-        this.breakdownData.data.popoverMainRow = {
-          cs01: !!cs01Row ? cs01Row : null,
-          creditLeverage: breakdownRow
-        }
+      const rowProcessingData: BICSMainRowDataBlock = {
+        code: breakdownRow.data.displayCategory,
+        portfolioID: this.breakdownData.data.portfolioId,
+        level: breakdownRow.data.bicsLevel
       }
+      this.breakdownData.data.popoverMainRow = rowProcessingData;
+      this.breakdownData.state.isDisplayPopover = true;
     }
   }
 
