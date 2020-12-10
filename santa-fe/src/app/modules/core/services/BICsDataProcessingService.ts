@@ -274,11 +274,13 @@ export class BICsDataProcessingService {
           breakdown: {}
         }
         const breakdownData = rawData[bicsLevel].breakdown[code];
+        const categoryName = this.BICSCodeToBICSName(code);
         if (!!breakdownData) {
-          customRawBreakdown.breakdown[code] = breakdownData;
-          (customRawBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+          customRawBreakdown.breakdown[categoryName] = breakdownData;
+          (customRawBreakdown.breakdown[categoryName] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+          (customRawBreakdown.breakdown[categoryName] as AdhocExtensionBEMetricBreakdowns).code = code;
         }
-        const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [code], isCs01, false);
+        const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [categoryName], isCs01, false);
         const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
         const creditLeverageRow = customBreakdown.data.rawLeverageCategoryList[0];
         if (!!cs01Row && !!creditLeverageRow) {
