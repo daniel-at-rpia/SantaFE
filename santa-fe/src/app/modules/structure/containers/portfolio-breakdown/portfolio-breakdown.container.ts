@@ -80,24 +80,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
     }
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
-    let popoverCategory;
     if (this.dataIsReady) {
       this.utilityService.calculateAlignmentRating(this.breakdownData);
       this.updateRowEditingViewAvailState();
-      if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
-        const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
-        popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
-        const popoverRow = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === popoverCategory) : this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === popoverCategory);
-        this.updatePopoverData(popoverRow);
-        this.breakdownData.data.popover.data.mainRow.data.children = previousMetricData;
-        this.switchPopoverValues(this.breakdownData.data.popover.data.mainRow.data);
-      }
-      //handles a scenario where the user has the popover open in one metric, switches and closes the popover, then switches back, the category is still selected but there is no popover
-      const oppositeList =  this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
-      const matchedOppositeRow = oppositeList.find(row => row.data.category === popoverCategory);
-      if (!!matchedOppositeRow) {
-        matchedOppositeRow.state.isSelected = false;
-      }
       const flipStencil = this.removeStencil.bind(this);
       setTimeout(() => {
         flipStencil();
@@ -111,13 +96,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       eachCategory.data.moveVisualizer.state.isStencil = false;
       eachCategory.state.isStencil = false;
     });
-    if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.data.mainRow) {
-      this.breakdownData.data.popover.data.mainRow.state.isStencil = false;
-      if (!!this.breakdownData.data.popover.data.mainRow.data.moveVisualizer) {
-        this.breakdownData.data.popover.data.mainRow.data.moveVisualizer.state.isStencil = false;
-      }
-      this.removeRowStencils(this.breakdownData.data.popover.data.mainRow);
-    }
   }
 
   public onClickEdit() {
