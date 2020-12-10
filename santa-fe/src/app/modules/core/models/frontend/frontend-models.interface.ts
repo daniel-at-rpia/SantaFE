@@ -22,7 +22,8 @@ import {
 import {
   AlertSubTypes,
   AlertTypes,
-  NavigationModule
+  NavigationModule,
+  GlobalWorkflowTypes
 } from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import { Alert } from "Core/components/alert/alert.component";
@@ -889,7 +890,10 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   data: {
     uuid: string;
     module: NavigationModule;
-    title: string;
+    workflowType: GlobalWorkflowTypes;
+    stateInfo: {
+      filter?: SecurityDefinitionConfiguratorDTO;
+    }
   },
   state: {
     triggersRedirect: boolean;

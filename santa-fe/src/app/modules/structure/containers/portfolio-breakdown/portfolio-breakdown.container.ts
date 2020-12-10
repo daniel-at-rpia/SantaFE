@@ -3,17 +3,27 @@ import { of, Subscription } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
+import {
+  UtilityService,
+  DTOService,
+  BICsDataProcessingService
+} from 'Core/services';
 import { PortfolioBreakdownDTO, StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'FEModels/frontend-models.interface';
-import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  STRUCTURE_EDIT_MODAL_ID,
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
+} from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
-import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
-import { DTOService } from 'Core/services/DTOService';
 import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { editingViewAvailableUsers, StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import {
+  editingViewAvailableUsers,
+  StructuringTeamPMList,
+  SecurityDefinitionMap
+} from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -32,7 +42,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     structuringTeamPMList: StructuringTeamPMList,
-    navigationModule: NavigationModule
+    navigationModule: NavigationModule,
+    securityDefinitionMap: SecurityDefinitionMap,
+    bicsBreakdownId: BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+    globalWorkflowTypes: GlobalWorkflowTypes
   }
 
   constructor(
@@ -223,10 +236,28 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onClickSeeBond() {
-    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
-      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)
-    ));
+  public onClickSeeBond(targetRow: StructurePortfolioBreakdownRowDTO) {
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    const filter = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
+    filter.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (this.breakdownData.state.isOverrideVariant) {
+          // code...
+        } else if (this.breakdownData.data.backendGroupOptionIdentifier.indexOf(this.constants.bicsBreakdownId) === 0) {
+          if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
+            const selectedOptionList = [];
+            selectedOptionList.push(targetRow.data.category);
+            eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
+              eachDefinition.data.key,
+              selectedOptionList,
+              targetRow.data.bicsLevel
+            );
+          }
+        }
+      });
+    });
+    newWorkflowState.data.stateInfo.filter = filter;
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 
   public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {

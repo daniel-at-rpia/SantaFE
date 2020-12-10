@@ -29,7 +29,8 @@
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
       TRACE_VOLUME_REPORTED_THRESHOLD,
-      NavigationModule
+      NavigationModule,
+      GlobalWorkflowTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -2515,13 +2516,15 @@ export class DTOService {
 
   public formGlobalWorkflow(
     targetModule: NavigationModule,
-    isRedirect: boolean
+    isRedirect: boolean,
+    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
   ): DTOs.GlobalWorkflowStateDTO {
     const object: DTOs.GlobalWorkflowStateDTO = {
       data: {
         uuid: this.utility.generateUUID(),
         module: targetModule,
-        title: `Generic step in ${targetModule}`
+        workflowType: workflowType,
+        stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
       },
       state: {
         triggersRedirect: !!isRedirect

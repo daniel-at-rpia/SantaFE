@@ -284,3 +284,8 @@ export const TRACE_VOLUME_REPORTED_THRESHOLD = 1000000;
 
 export const QUANT_COMPARER_PERCENTILE = 90;
 export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;
+
+export enum GlobalWorkflowTypes {
+  genericType = 'Generic',
+  launchTradeToSeeBonds = 'Launch Trade To See Bonds'
+}

@@ -16,9 +16,12 @@
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import {
+      DTOService,
+      UtilityService,
+      RestfulCommService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { TradeState } from 'FEModels/frontend-page-states.interface';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
@@ -26,6 +29,7 @@
     import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { TradeStoreResetEvent } from 'Trade/actions/trade.actions';
+    import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -42,6 +46,9 @@ export class TradePage implements OnInit, OnDestroy {
     displayAlertThumbnailSub: null,
     ownerInitialsSub: null
   };
+  constants = {
+    globalWorkflowTypes: GlobalWorkflowTypes
+  }
 
   private initializePageState() {
     this.state = {
@@ -58,7 +65,8 @@ export class TradePage implements OnInit, OnDestroy {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private globalWorkflowIOService: GlobalWorkflowIOService 
   ) {
     this.initializePageState();
   }
@@ -69,6 +77,12 @@ export class TradePage implements OnInit, OnDestroy {
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       tap(params => {
         console.log('test, route in Trade', params.get('stateId'));
+        const state = this.globalWorkflowIOService.fetchState(params.get('stateId'));
+        if (!!state) {
+          if (state.data.workflowType === this.constants.globalWorkflowTypes.launchTradeToSeeBonds) {
+            console.log('test, workflow is', state);
+          }
+        }
       })
     ).subscribe();
 
