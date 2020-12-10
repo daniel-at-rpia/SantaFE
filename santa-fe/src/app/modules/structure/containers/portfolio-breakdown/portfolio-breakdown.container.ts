@@ -125,29 +125,23 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
   }
 
-  public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO) {
-    if (!!this.breakdownData.data.selectedCategory) {
-      if (breakdownRow.data.category !== this.breakdownData.data.selectedCategory) {
-        const previousRowCategory = this.breakdownData.data.selectedCategory;
-        this.breakdownData.data.selectedCategory = breakdownRow.data.category; 
-        const previousCs01Row = this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === previousRowCategory);
-        const previousLeverageRow = this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === previousRowCategory);
-        if (!!previousCs01Row) {
-          previousCs01Row.state.isSelected = false;
+  public getPopoverMainRow(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+    if (!!breakdownRow) {
+      this.breakdownData.state.isDisplayPopover = true;
+      if (!!this.breakdownData.state.isDisplayingCs01) {
+        const creditLeverageRow = this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.displayCategory === breakdownRow.data.displayCategory);
+        this.breakdownData.data.popoverMainRow = {
+          cs01: breakdownRow,
+          creditLeverage: !!creditLeverageRow ? creditLeverageRow : null
         }
-        if (!!previousLeverageRow) {
-          previousLeverageRow.state.isSelected = false;
+      } else {
+        const cs01Row = this.breakdownData.data.rawCs01CategoryList.find(row => row.data.displayCategory === breakdownRow.data.displayCategory);
+        this.breakdownData.data.popoverMainRow = {
+          cs01: !!cs01Row ? cs01Row : null,
+          creditLeverage: breakdownRow
         }
       }
-    } else {
-      this.breakdownData.data.selectedCategory = breakdownRow.data.category;
     }
-    const breakdownRowCopy = this.utilityService.deepCopy(breakdownRow);
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
-    breakdownRowCopy.data.children = subBicsLevel;
-    breakdownRowCopy.state.isWithinPopover = true;
-    this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
-    this.breakdownData.data.popover.state.isActive = true;
   }
 
   public switchPopoverValues(block: PortfolioBreakdownCategoryBlock) {

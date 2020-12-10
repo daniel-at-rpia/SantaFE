@@ -57,7 +57,7 @@
           [breakdownRow]="eachCategory"
           (viewMainDisplaySubLevels)="getMainDisplaySubLevels($event)"
           (categoryClicked)="onClickBreakdownCategory($event)"
-          (rowDiveInClicked)="updatePopoverData($event)"
+          (rowDiveInClicked)="getPopoverMainRow($event)"
           (seeBondClicked)="onClickSeeBond()"
           (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
         </portfolio-breakdown-row>
