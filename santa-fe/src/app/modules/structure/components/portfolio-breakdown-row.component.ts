@@ -1,9 +1,6 @@
 import {Component, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import {
-  PortfolioView,
-  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
-} from 'Core/constants/structureConstants.constants';
+import { PortfolioView } from 'Core/constants/structureConstants.constants';
 import { Store } from '@ngrx/store';
 import { StructureSetView } from 'Structure/actions/structure.actions';
 import * as moment from 'moment';
@@ -29,8 +26,7 @@ export class PortfolioBreakdownRow {
     improving: PortfolioView.improving,
     neutral: PortfolioView.neutral,
     deteriorating: PortfolioView.deteriorating,
-    negative: PortfolioView.negative,
-    subLevelPrefix: BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+    negative: PortfolioView.negative
   }
   constructor(
     private store$: Store<any>,
