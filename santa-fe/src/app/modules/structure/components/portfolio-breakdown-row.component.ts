@@ -61,21 +61,18 @@ export class PortfolioBreakdownRow {
   }
 
   public onClickSetView(view: PortfolioView) {
-    const isBICSRow = this.breakdownRow.data.bicsLevel >= 1 && !!this.breakdownRow.data.code;
-    let displayCategory: string;
-    if (!!isBICSRow) {
-      const categoryName = this.bicsDataProcessingService.BICSCodeToBICSName(this.breakdownRow.data.code);
-      const includesSubLevelPrefix = categoryName.includes(this.constants.subLevelPrefix);
-      if (!!includesSubLevelPrefix) {
-        displayCategory = categoryName.split(this.constants.subLevelPrefix)[0].trim();
-      } else {
-        displayCategory = this.breakdownRow.data.displayCategory;
-      }
+    const isRegularBICSRow = this.breakdownRow.data.bicsLevel >= 1 && !!this.breakdownRow.data.code;
+    let formattedDisplayCategory: string;
+    if (!!isRegularBICSRow) {
+      const level = this.breakdownRow.data.bicsLevel;
+      formattedDisplayCategory = `${this.breakdownRow.data.displayCategory} (Lv.${level})`;
+    } else {
+      formattedDisplayCategory = this.breakdownRow.data.displayCategory;
     }
     const viewData: StructureSetViewData = {
       bucket: this.breakdownRow.data.bucket,
       view: view !== this.breakdownRow.data.view ? view : null,
-      displayCategory: displayCategory
+      displayCategory: formattedDisplayCategory
     }
     this.store$.dispatch(new StructureSetView(viewData));
   }
