@@ -71,7 +71,9 @@
       PortfolioView,
       PortfolioBreakdownGroupOptions,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+      BICS_OVERRIDES_IDENTIFIER,
+      BICS_OVERRIDES_TITLE
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -2157,7 +2159,7 @@ export class DTOService {
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
-    newBreakdown.data.title = newBreakdown.data.title.replace('BICS Lv.4', 'BICS Override');
+    newBreakdown.data.title = newBreakdown.data.title.replace(BICS_OVERRIDES_IDENTIFIER, BICS_OVERRIDES_TITLE);
     return newBreakdown;
   }
 
