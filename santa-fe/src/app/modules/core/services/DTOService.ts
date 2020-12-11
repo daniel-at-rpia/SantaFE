@@ -2427,7 +2427,7 @@ export class DTOService {
   ): CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
     for (let code in customBreakdown.breakdown) {
-      if (!!customBreakdown.breakdown[code] && code !== 'None') {
+      if (!!customBreakdown.breakdown[code] && code !== 'None' && code !== '*') {
         (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
         (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
       }
@@ -2435,7 +2435,7 @@ export class DTOService {
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
     selectedBreakdowns.forEach((selectedBreakdown, i) => {
       for (let code in selectedBreakdown.breakdown) {
-        if (!!selectedBreakdown.breakdown[code] && code !== 'None') {
+        if (!!selectedBreakdown.breakdown[code] && code !== 'None' && code !== '*') {
           if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel) {
             const level = i + 2;
             customBreakdown.breakdown[code] = selectedBreakdown.breakdown[code];
