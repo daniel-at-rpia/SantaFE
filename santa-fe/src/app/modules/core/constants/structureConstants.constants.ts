@@ -47,6 +47,8 @@ export const BICS_BRANCH_DEFAULT_HEIGHT_LARGE = 55;
 
 export const BICS_BRANCH_CHARACTER_LIMIT = 26;
 
+export const BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST: Array<string> = ['None', '*'];
+
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
   creditLeverage = 'Credit Leverage',
