@@ -1946,7 +1946,7 @@ export class DTOService {
   public formStructureFundObject(
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
+    selectedMetricValue: PortfolioMetricValues
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: null,

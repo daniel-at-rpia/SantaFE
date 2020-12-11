@@ -67,7 +67,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const state: StructureMainPanelState = {
         ownerInitial: null,
         isUserPM: false,
-        selectedMetricValue: null,
+        selectedMetricValue: this.constants.cs01,
         fetchResult: {
           fundList: [],
           fetchFundDataFailed: false,
@@ -153,7 +153,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true);
+      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true, this.state.selectedMetricValue);
       eachFund.data.portfolioShortName = eachPortfolioName;
       return eachFund;
     });
@@ -354,7 +354,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private loadFund(rawData: BEPortfolioStructuringDTO) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.BICsDataProcessingService.setRawBICsData(rawData);
-      const newFund = this.dtoService.formStructureFundObject(rawData, false);
+      const newFund = this.dtoService.formStructureFundObject(rawData, false, this.state.selectedMetricValue);
       this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
       const alreadyExist = this.state.fetchResult.fundList.findIndex((eachFund) => {
         return eachFund.data.portfolioId === newFund.data.portfolioId;
