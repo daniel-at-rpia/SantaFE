@@ -222,7 +222,8 @@ export const BackendKeyToDisplayLabelDictionary = {
   'BicsLevel1': 'BICS Lv.1',
   'BicsLevel2': 'BICS Lv.2',
   'BicsLevel3': 'BICS Lv.3',
-  'BicsLevel4': 'BICS Lv.4'
+  'BicsLevel4': 'BICS Lv.4',
+  'BicsCode': 'BicsCode'
 }
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;

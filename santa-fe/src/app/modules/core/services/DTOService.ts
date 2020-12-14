@@ -71,7 +71,9 @@
       PortfolioView,
       PortfolioBreakdownGroupOptions,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+      BICS_OVERRIDES_IDENTIFIER,
+      BICS_OVERRIDES_TITLE
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -1944,7 +1946,7 @@ export class DTOService {
   public formStructureFundObject(
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
+    selectedMetricValue: PortfolioMetricValues
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: null,
@@ -2096,8 +2098,8 @@ export class DTOService {
           eachCategoryText
         )
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
-        bucket[formattedBEKey] = [eachCategoryText];
+        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
+        bucket[formattedBEKey] = [code];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
       }
@@ -2157,7 +2159,7 @@ export class DTOService {
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
-    newBreakdown.data.title = newBreakdown.data.title.replace('BICS Lv.4', 'BICS Override');
+    newBreakdown.data.title = newBreakdown.data.title.replace(BICS_OVERRIDES_IDENTIFIER, BICS_OVERRIDES_TITLE);
     return newBreakdown;
   }
 
