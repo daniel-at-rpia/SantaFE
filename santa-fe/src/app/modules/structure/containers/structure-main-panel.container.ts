@@ -313,22 +313,21 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
-  private getBreakdownDisplayListForFund(breakdowns: Array<PortfolioBreakdownDTO>): Array<PortfolioBreakdownDTO> {
-    const overrideBreakdowns = breakdowns.filter(breakdown => breakdown.state.isOverrideVariant);
-    const regularBreakdowns = breakdowns.filter(breakdown => !breakdown.state.isOverrideVariant);
-    if (regularBreakdowns.length > 0) {
-      regularBreakdowns.sort((breakdownA: PortfolioBreakdownDTO, breakdownB: PortfolioBreakdownDTO) => {
-        if (breakdownA.data.title < breakdownB.data.title) {
-          return -1;
-        } else if (breakdownA.data.title > breakdownB.data.title) {
-          return 1;
-        } else {
-          return 0;
-        }
-      })
-    }
-    const sortedBreakdownDisplayList = [...overrideBreakdowns, ...regularBreakdowns];
-    return sortedBreakdownDisplayList;
+  private getSortedBreakdownDisplayListForFund(breakdowns: Array<PortfolioBreakdownDTO>): Array<PortfolioBreakdownDTO> {
+    breakdowns.sort((breakdownA: PortfolioBreakdownDTO, breakdownB: PortfolioBreakdownDTO) => {
+      if (breakdownA.state.isOverrideVariant && !breakdownB.state.isOverrideVariant) {
+        return -4;
+      } else if (!breakdownA.state.isOverrideVariant && breakdownB.state.isOverrideVariant) {
+        return 4;
+      } else if (breakdownA.data.title < breakdownB.data.title) {
+        return -1;
+      } else if (breakdownA.data.title > breakdownB.data.title) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+    return breakdowns;
   }
 
   private loadFund(rawData: BEPortfolioStructuringDTO) {
@@ -338,7 +337,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       if (!!newFund) {
         this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
         if (newFund.data.children.length > 0) {
-          newFund.data.children = this.getBreakdownDisplayListForFund(newFund.data.children);
+          newFund.data.children = this.getSortedBreakdownDisplayListForFund(newFund.data.children);
         }
       }
       const alreadyExist = this.state.fetchResult.fundList.findIndex((eachFund) => {
