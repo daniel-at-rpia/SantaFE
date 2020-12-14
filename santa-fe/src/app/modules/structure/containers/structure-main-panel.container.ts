@@ -313,6 +313,24 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
+  private getBreakdownDisplayListForFund(breakdowns: Array<PortfolioBreakdownDTO>): Array<PortfolioBreakdownDTO> {
+    const overrideBreakdowns = breakdowns.filter(breakdown => breakdown.state.isOverrideVariant);
+    const regularBreakdowns = breakdowns.filter(breakdown => !breakdown.state.isOverrideVariant);
+    if (regularBreakdowns.length > 0) {
+      regularBreakdowns.sort((breakdownA: PortfolioBreakdownDTO, breakdownB: PortfolioBreakdownDTO) => {
+        if (breakdownA.data.title < breakdownB.data.title) {
+          return -1;
+        } else if (breakdownA.data.title > breakdownB.data.title) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
+    }
+    const sortedBreakdownDisplayList = [...overrideBreakdowns, ...regularBreakdowns];
+    return sortedBreakdownDisplayList;
+  }
+
   private loadFund(rawData: BEPortfolioStructuringDTO) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.BICsDataProcessingService.setRawBICsData(rawData);
