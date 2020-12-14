@@ -335,7 +335,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.BICsDataProcessingService.setRawBICsData(rawData);
       const newFund = this.dtoService.formStructureFundObject(rawData, false);
-      this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
+      if (!!newFund) {
+        this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
+        if (newFund.data.children.length > 0) {
+          newFund.data.children = this.getBreakdownDisplayListForFund(newFund.data.children);
+        }
+      }
       const alreadyExist = this.state.fetchResult.fundList.findIndex((eachFund) => {
         return eachFund.data.portfolioId === newFund.data.portfolioId;
       })
