@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { StructureSetView } from 'Structure/actions/structure.actions';
 import * as moment from 'moment';
 import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
+import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 
 @Component({
   selector: 'portfolio-breakdown-row',
@@ -28,7 +29,8 @@ export class PortfolioBreakdownRow {
     negative: PortfolioView.negative
   }
   constructor(
-    private store$: Store<any>
+    private store$: Store<any>,
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {}
 
   public onClickCategory() {
@@ -55,13 +57,18 @@ export class PortfolioBreakdownRow {
   }
 
   public onClickSetView(view: PortfolioView) {
-    const date = new Date();
-    const formattedDate = Number(moment(date).format('YYYYMMDD'));
+    const isRegularBICSRow = this.breakdownRow.data.bicsLevel >= 1 && !!this.breakdownRow.data.code;
+    let formattedDisplayCategory: string;
+    if (!!isRegularBICSRow) {
+      const level = this.breakdownRow.data.bicsLevel;
+      formattedDisplayCategory = `${this.breakdownRow.data.displayCategory} (Lv.${level})`;
+    } else {
+      formattedDisplayCategory = this.breakdownRow.data.displayCategory;
+    }
     const viewData: StructureSetViewData = {
-      yyyyMMdd: formattedDate,
       bucket: this.breakdownRow.data.bucket,
       view: view !== this.breakdownRow.data.view ? view : null,
-      displayCategory: this.breakdownRow.data.displayCategory
+      displayCategory: formattedDisplayCategory
     }
     this.store$.dispatch(new StructureSetView(viewData));
   }
