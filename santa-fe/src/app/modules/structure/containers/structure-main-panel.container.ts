@@ -117,7 +117,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectReloadFundDataPostEdit)
     ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
       if (!!targetFund) {
-        this.loadFund(targetFund);
+        const targetFundCopy = this.utilityService.deepCopy(targetFund);
+        this.loadFund(targetFundCopy);
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
