@@ -32,7 +32,8 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   }
 
   public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
-    return this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
+    const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
+    return handler;
   }
 
   public shouldReuseRoute(

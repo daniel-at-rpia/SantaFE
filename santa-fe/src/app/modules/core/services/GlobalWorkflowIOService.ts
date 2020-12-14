@@ -3,6 +3,8 @@ import { DetachedRouteHandle } from '@angular/router';
 
 import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
 import { UtilityService } from 'Core/services/UtilityService';
+import { DTOService } from 'Core/services/DTOService';
+import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 
 @Injectable()
 
@@ -10,11 +12,17 @@ export class GlobalWorkflowIOService {
   private temporaryStore: Map<string, GlobalWorkflowStateDTO> = new Map();
 
   constructor(
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private dtoService: DTOService
   ){}
 
   public storeState(targetState: GlobalWorkflowStateDTO) {
-    this.temporaryStore.set(targetState.data.uuid, this.utilityService.deepCopy(targetState));
+    const writableCopy = this.utilityService.deepCopy(targetState);
+    const exist = this.temporaryStore.get(writableCopy.data.uuid);
+    if (!!exist && exist.data.workflowType === GlobalWorkflowTypes.routeHandlerPlaceholder) {
+      writableCopy.api.routeHandler = exist.api.routeHandler;
+    }
+    this.temporaryStore.set(targetState.data.uuid, writableCopy);
   }
 
   public fetchState(targetUUID: string): GlobalWorkflowStateDTO {
@@ -28,10 +36,12 @@ export class GlobalWorkflowIOService {
   public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
     if (!!targetUUID) {
       const targetState = this.temporaryStore.get(targetUUID);
-      if (!!targetState && targetState.state.triggersRedirect) {
+      if (!!targetState) {
         targetState.api.routeHandler = targetHandler;
       } else {
-        console.warn('Attaching route handler to a null state or non-redirect state', targetState);
+        const newState = this.dtoService.formGlobalWorkflow(null, false, GlobalWorkflowTypes.routeHandlerPlaceholder);
+        newState.data.uuid = targetUUID;
+        this.storeState(newState);
       }
     }
   }
