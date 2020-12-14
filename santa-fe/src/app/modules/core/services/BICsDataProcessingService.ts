@@ -236,10 +236,13 @@ export class BICsDataProcessingService {
         breakdown: {}
       }
       subTierList.forEach(subTier => {
-        for (let category in selectedSubRawBreakdown.breakdown) {
-          if (!!category && selectedSubRawBreakdown.breakdown[category]) {
-            if (subTier === category) {
-              object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[category];
+        const categoryCode = this.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
+        for (let code in selectedSubRawBreakdown.breakdown) {
+          if (!!code && selectedSubRawBreakdown.breakdown[code]) {
+            if (categoryCode === code) {
+              object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[code];
+              (object.breakdown[subTier] as AdhocExtensionBEMetricBreakdowns).customLevel = breakdownRow.data.bicsLevel + 1;
+              (object.breakdown[subTier] as AdhocExtensionBEMetricBreakdowns).code = code;
             }
           }
         }
@@ -271,11 +274,13 @@ export class BICsDataProcessingService {
           breakdown: {}
         }
         const breakdownData = rawData[bicsLevel].breakdown[code];
+        const categoryName = this.BICSCodeToBICSName(code);
         if (!!breakdownData) {
-          customRawBreakdown.breakdown[code] = breakdownData;
-          (customRawBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+          customRawBreakdown.breakdown[categoryName] = breakdownData;
+          (customRawBreakdown.breakdown[categoryName] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+          (customRawBreakdown.breakdown[categoryName] as AdhocExtensionBEMetricBreakdowns).code = code;
         }
-        const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [code], isCs01, false);
+        const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [categoryName], isCs01, false);
         const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
         const creditLeverageRow = customBreakdown.data.rawLeverageCategoryList[0];
         if (!!cs01Row && !!creditLeverageRow) {
