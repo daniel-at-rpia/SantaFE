@@ -925,6 +925,9 @@ export class GraphService {
                   if (i === 0) {
                     createRange(i, TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL, label);
                     createRangeGrid(TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL);
+                    if (customDateAxisList.length === 1) {
+                      customDateAxis.max = TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
+                    }
                   } else {
                     const startRange: number = i * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
                     const endRange = (i + 1) * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
