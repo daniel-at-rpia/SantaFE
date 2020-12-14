@@ -129,7 +129,6 @@ export interface StructureSetTargetOverlayTransferPack {
 }
 
 export interface StructureSetViewData {
-  yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
   displayCategory: string;
