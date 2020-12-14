@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { RouteReuseStrategy } from '@angular/router';
 import { environment } from '../environments/environment';
 
 import { StoreModule } from '@ngrx/store';
@@ -19,6 +20,8 @@ import { StructureModule } from 'Structure/structure.module';
 import { AgGridModule } from 'ag-grid-angular';
 
 import { AppRoot } from './app.root';
+
+import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import { AppRoot } from './app.root';
     TradeModule,
     StructureModule
   ],
-  providers: [],
+  providers: [{
+    provide: RouteReuseStrategy,
+    useClass: SantaRouteReuseStrategy
+  }],
   bootstrap: [AppRoot]
 })
 export class AppModule { }
