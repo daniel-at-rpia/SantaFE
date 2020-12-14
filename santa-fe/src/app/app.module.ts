@@ -21,8 +21,6 @@ import { AgGridModule } from 'ag-grid-angular';
 
 import { AppRoot } from './app.root';
 
-import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
-
 @NgModule({
   declarations: [
     AppRoot
@@ -55,10 +53,7 @@ import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
     TradeModule,
     StructureModule
   ],
-  providers: [{
-    provide: RouteReuseStrategy,
-    useClass: SantaRouteReuseStrategy
-  }],
+  providers: [],
   bootstrap: [AppRoot]
 })
 export class AppModule { }

@@ -3,16 +3,23 @@ import {
   ActivatedRouteSnapshot,
   DetachedRouteHandle
 } from '@angular/router';
+import { Injectable } from '@angular/core';
 
+import { GlobalWorkflowIOService } from 'Core/services';
+
+@Injectable()
 export class SantaRouteReuseStrategy implements RouteReuseStrategy {
 
-  constructor() {}
+  constructor(
+    private globalWorkflowIOService: GlobalWorkflowIOService
+  ) {}
 
   private routeStore = {
     store: {}
   }
   
   public shouldAttach(route: ActivatedRouteSnapshot): boolean {
+    console.log('test, store is', this.globalWorkflowIOService.temporaryStore);
     return this.routeStore.store[this.getRouteIdentifier(route)];
   }
 

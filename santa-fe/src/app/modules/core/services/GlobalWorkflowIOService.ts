@@ -5,7 +5,7 @@ import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
 @Injectable()
 
 export class GlobalWorkflowIOService {
-  private temporaryStore: object = {};
+  public temporaryStore: object = {};
 
   constructor(){}
 

@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import {
+  RouterModule,
+  Routes,
+  RouteReuseStrategy
+} from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { FormModule } from 'App/modules/form/form.module';
@@ -43,6 +47,8 @@ import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/tra
 import { MoveVisualizer } from 'Core/components/move-visualizer/move-visualizer.component';
 import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.container';
 import { GlobalWorkflowIOService } from 'Core/services/GlobalWorkflowIOService';
+
+import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
 
 @NgModule({
   declarations: [
@@ -99,7 +105,11 @@ import { GlobalWorkflowIOService } from 'Core/services/GlobalWorkflowIOService';
     AgGridMiddleLayerService,
     CountdownPipe,
     BICsDataProcessingService,
-    GlobalWorkflowIOService
+    GlobalWorkflowIOService,
+    {
+      provide: RouteReuseStrategy,
+      useClass: SantaRouteReuseStrategy
+    }
   ],
   exports: [
     SantaTable,
