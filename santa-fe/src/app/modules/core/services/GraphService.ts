@@ -934,11 +934,10 @@ export class GraphService {
                         tradeData.totalTime = tradeData.totalTime + startRange;
                       }
                     })
-                    createRange(startRange, endRange, label);
-                    createRangeGrid(endRange);
-                    if (i === customDateAxisList.length - 1) {
-                     customDateAxis.max = endRange;
-                    }
+                  }
+                  // last day sets the max range of x-axis
+                  if (i === customDateAxisList.length - 1) {
+                    customDateAxis.max = endRange;
                   }
                 })
               }
