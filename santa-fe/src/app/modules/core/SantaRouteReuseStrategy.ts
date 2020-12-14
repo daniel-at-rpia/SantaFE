@@ -13,14 +13,14 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   constructor(
     private globalWorkflowIOService: GlobalWorkflowIOService
   ) {}
-
-  private routeStore = {
-    store: {}
-  }
   
   public shouldAttach(route: ActivatedRouteSnapshot): boolean {
-    console.log('test, store is', this.globalWorkflowIOService.temporaryStore);
-    return this.routeStore.store[this.getRouteIdentifier(route)];
+    const targetState = this.globalWorkflowIOService.fetchState(this.getRouteIdentifier(route));
+    if (!!targetState && !!targetState.api.routeHandler) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public shouldDetach(route: ActivatedRouteSnapshot): boolean {
@@ -28,11 +28,11 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   }
 
   public store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle) {
-    this.routeStore.store[this.getRouteIdentifier(route)] = handle;
+    this.globalWorkflowIOService.attachRouteHandlerToState(this.getRouteIdentifier(route), handle);
   }
 
   public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
-    return this.routeStore.store[this.getRouteIdentifier(route)];
+    return this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
   }
 
   public shouldReuseRoute(
@@ -43,10 +43,11 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   }
 
   private getRouteIdentifier(targetRoute: ActivatedRouteSnapshot): string {
-    let routeIdentifier = '';
-    targetRoute.url.forEach((eachSegment) => {
-      routeIdentifier = routeIdentifier === '' ? eachSegment.path : `${routeIdentifier}/${eachSegment.path}`;
-    });
-    return routeIdentifier;
+    if (!!targetRoute && !!targetRoute.params && !!targetRoute.params['stateId']) {
+      return targetRoute.params['stateId'];
+    } else {
+      console.warn('route does not have uuid', targetRoute);
+      return null;
+    }
   }
 }

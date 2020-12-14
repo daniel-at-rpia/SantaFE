@@ -2526,6 +2526,9 @@ export class DTOService {
         workflowType: workflowType,
         stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
       },
+      api: {
+        routeHandler: null
+      },
       state: {
         triggersRedirect: !!isRedirect
       }

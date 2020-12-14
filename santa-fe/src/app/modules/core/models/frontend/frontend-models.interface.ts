@@ -2,6 +2,7 @@ import { SafeHtml } from '@angular/platform-browser';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
+import { DetachedRouteHandle } from '@angular/router';
 
 import {
   AgGridColumnDefinition,
@@ -895,6 +896,9 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
       filterList?: Array<SecurityDefinitionDTO>;
     }
   },
+  api: {
+    routeHandler: DetachedRouteHandle;
+  }
   state: {
     triggersRedirect: boolean;
   }
