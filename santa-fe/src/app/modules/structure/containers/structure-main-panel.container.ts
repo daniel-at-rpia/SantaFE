@@ -15,7 +15,7 @@ import {
   BEPortfolioTargetMetricValues
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
-import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
+import { PortfolioBreakdownDTO, PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO, BECustomMetricBreakdowns } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -295,9 +295,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     BICSBreakdown.data.indexName = rawData.indexShortName;
-    // Place custom BICS breakdown at current Currency index since placement of overrides is dependent if they are added or removed
-    const currencyIndex = fund.data.children.findIndex(breakdown => breakdown.data.title === 'Currency');
-    fund.data.children.splice(currencyIndex, 0, BICSBreakdown);
+    fund.data.children.push(BICSBreakdown);
   }
 
   private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
