@@ -304,6 +304,7 @@ export interface PortfolioBreakdownCategoryBlock {
     targetPct: number;
   }
   bucket: StructureBucketDataBlock;
+  simpleBucket: StructureBucketDataBlock;
   view: PortfolioView;
   parentRow: DTOs.StructurePortfolioBreakdownRowDTO;
   children?: DTOs.PortfolioBreakdownDTO; // used in popover dive-in

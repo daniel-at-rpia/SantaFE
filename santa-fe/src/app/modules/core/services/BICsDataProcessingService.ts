@@ -320,7 +320,10 @@ export class BICsDataProcessingService {
     })
   }
 
-  public BICSCodeToBICSName(bicsCode: string): string {
+  public BICSCodeToBICSName(
+    bicsCode: string,
+    containSubLevelSuffixIdentifier: boolean = false
+  ): string {
     if (!!bicsCode && bicsCode.length >= 2) {
       const targetItemBlock = this.bicsDictionary[bicsCode];
       let bicsName = null;
@@ -336,7 +339,7 @@ export class BICsDataProcessingService {
         }
       }
       const formattedName = bicsCode.length > 2 ? `${bicsName} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${Math.floor(bicsCode.length/2)}` : bicsName;
-      return formattedName;
+      return containSubLevelSuffixIdentifier ? formattedName : bicsName;
     } else {
       return null;
     }

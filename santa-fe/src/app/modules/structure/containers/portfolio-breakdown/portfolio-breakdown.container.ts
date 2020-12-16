@@ -12,7 +12,8 @@ import {
   PortfolioBreakdownDTO,
   StructurePopoverDTO,
   StructurePortfolioBreakdownRowDTO,
-  SecurityDefinitionDTO
+  SecurityDefinitionDTO,
+  SecurityDefinitionConfiguratorDTO
 } from 'FEModels/frontend-models.interface';
 import {
   PortfolioMetricValues,
@@ -246,24 +247,17 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<SecurityDefinitionDTO> = [];
     if (this.breakdownData.state.isOverrideVariant) {
+      this.seeBondPackageOverrideDataTransfer(
+        configurator,
+        targetRow,
+        filterList
+      );
     } else if (this.breakdownData.data.backendGroupOptionIdentifier.indexOf(this.constants.bicsBreakdownId) === 0) {
-      configurator.data.definitionList.forEach((eachBundle) => {
-        eachBundle.data.list.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
-            const selectedOptionList = [];
-            selectedOptionList.push(targetRow.data.category);
-            eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
-              eachDefinition.data.key,
-              selectedOptionList,
-              targetRow.data.bicsLevel
-            );
-            eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
-              eachOption.isSelected = true;
-            })
-            filterList.push(eachDefinition);
-          }
-        });
-      });
+      this.seeBondPackageBICSBreakdownDataTransfer(
+        configurator,
+        targetRow,
+        filterList
+      );
     } else {
       // other regular breakdowns will come here (ccy, rating, tenor);
       const targetDefinition = this.utilityService.deepCopy(this.breakdownData.data.definition);
@@ -314,6 +308,80 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     });
     this.breakdownData.data.rawLeverageCategoryList.forEach((eachRow) => {
       eachRow.state.isEditingViewAvail = this.breakdownData.state.isEditingViewAvail;
+    });
+  }
+
+  private seeBondPackageBICSBreakdownDataTransfer(
+    configurator: SecurityDefinitionConfiguratorDTO,
+    targetRow: StructurePortfolioBreakdownRowDTO,
+    filterList: Array<SecurityDefinitionDTO>
+  ) {
+    configurator.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
+          const selectedOptionList = [];
+          selectedOptionList.push(targetRow.data.category);
+          eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
+            eachDefinition.data.key,
+            selectedOptionList,
+            targetRow.data.bicsLevel
+          );
+          eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+            eachOption.isSelected = true;
+          });
+          filterList.push(eachDefinition);
+        }
+      });
+    });
+  }
+
+  private seeBondPackageOverrideDataTransfer(
+    configurator: SecurityDefinitionConfiguratorDTO,
+    targetRow: StructurePortfolioBreakdownRowDTO,
+    filterList: Array<SecurityDefinitionDTO>
+  ) {
+    configurator.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        const backendKey = eachDefinition.data.backendDtoAttrName;
+        if (targetRow.data.simpleBucket[backendKey] && targetRow.data.simpleBucket[backendKey].length > 0) {
+          if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
+            // BICS Code requires special treatment
+            eachDefinition.data.highlightSelectedOptionList = targetRow.data.simpleBucket[backendKey].map((eachBICSCode) => {
+              // the simple bucket always contains BICS in its code form, so we need a bit extra work to convert that
+              const bicsLevel = Math.floor(eachBICSCode.length/2);
+              const bicsName = this.bicsDataProcessingService.BICSCodeToBICSName(eachBICSCode);
+              const eachOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+                this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key,
+                bicsName,
+                bicsLevel
+              );
+              return eachOption;
+            });
+            eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+              eachOption.isSelected = true;
+            });
+            filterList.push(eachDefinition);
+          } else {
+
+          }
+        }
+        if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
+          if (targetRow.data.simpleBucket['BicsCode'] && targetRow.data.simpleBucket['BI']) {
+
+          }
+          // const selectedOptionList = [];
+          // selectedOptionList.push(targetRow.data.category);
+          // eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
+          //   eachDefinition.data.key,
+          //   selectedOptionList,
+          //   targetRow.data.bicsLevel
+          // );
+          // eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+          //   eachOption.isSelected = true;
+          // })
+          // filterList.push(eachDefinition);
+        }
+      });
     });
   }
 }

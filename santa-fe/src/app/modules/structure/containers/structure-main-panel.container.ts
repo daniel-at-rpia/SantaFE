@@ -328,11 +328,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   ): Array<string> {
     // convert bicsCode to bics names
     const parsedCustomBICSDefinitionList = customBICSDefinitionList.map((eachCode) => {
-      return this.BICsDataProcessingService.BICSCodeToBICSName(eachCode);
+      return this.BICsDataProcessingService.BICSCodeToBICSName(eachCode, true);
     })
     const parsedCustomBICSDefinitionListNoNull = parsedCustomBICSDefinitionList.filter((eachName) => {return !!eachName});
     for (let subCategory in customBICSBreakdown.breakdown) {
-      const name = this.BICsDataProcessingService.BICSCodeToBICSName(subCategory);
+      const name = this.BICsDataProcessingService.BICSCodeToBICSName(subCategory, true);
       customBICSBreakdown.breakdown[name] = customBICSBreakdown.breakdown[subCategory];
     }
     return parsedCustomBICSDefinitionListNoNull;

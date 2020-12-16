@@ -518,18 +518,30 @@ export class DTOService {
     bicsLevel?: number
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
-      const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
-        isSelected: false,
-        isFilteredOut: false,
-        displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${eachOption}` : eachOption,
-        bicsLevel: bicsLevel || null,
-        shortKey: normalizedOption,
-        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
-      }
-      return newFilterDTO;
+      return this.generateSecurityDefinitionFilterIndividualOption(
+        name,
+        eachOption,
+        bicsLevel
+      );
     })
   };
+
+  public generateSecurityDefinitionFilterIndividualOption(
+    name: string,
+    option: string,
+    bicsLevel?: number
+  ): Blocks.SecurityDefinitionFilterBlock {
+    const normalizedOption = this.utility.normalizeDefinitionFilterOption(option);
+    const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
+      isSelected: false,
+      isFilteredOut: false,
+      displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
+      bicsLevel: bicsLevel || null,
+      shortKey: normalizedOption,
+      key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
+    }
+    return newFilterDTO;
+  }
 
   public formSecurityDefinitionObject(
     rawData: SecurityDefinitionStub
@@ -544,7 +556,8 @@ export class DTOService {
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr,
         securityDTOAttrBlock: rawData.securityDTOAttrBlock,
-        highlightSelectedOptionList: []
+        highlightSelectedOptionList: [],
+        backendDtoAttrName: rawData.backendDtoAttrName
       },
       style: {
         icon: rawData.icon,
@@ -2098,7 +2111,7 @@ export class DTOService {
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
           eachCategoryText
         )
-        simpleBucket = rawData.simpleBucket || {};
+        simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
         const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
         bucket[formattedBEKey] = [eachCategoryText];

@@ -1196,10 +1196,12 @@ export class UtilityService {
     public convertRawOverrideToRawBreakdown(
       overrideRawDataList: Array<BEStructuringOverrideBlock>
     ): StructureOverrideToBreakdownConversionReturnPack {
+      if (overrideRawDataList[0].portfolioId === 7) {
+        console.log('test');
+      }
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
       overrideRawDataList.forEach((eachRawOverride) => {
-        eachRawOverride
         const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride);
         const matchExistBreakdown = breakdownList.find((eachBEDTO) => {
           return eachBEDTO.groupOption === overrideBucketIdentifier;
@@ -1210,6 +1212,7 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
             date: eachRawOverride.date,
@@ -1217,8 +1220,6 @@ export class UtilityService {
             indexId: eachRawOverride.indexId,
             portfolioId: eachRawOverride.portfolioId,
             breakdown: {},
-            bucket: eachRawOverride.bucket,
-            simpleBucket: eachRawOverride.simpleBucket
           };
           const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
           displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier] = {};
@@ -1226,6 +1227,7 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          newConvertedBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
           breakdownList.push(newConvertedBreakdown);
         }
       });

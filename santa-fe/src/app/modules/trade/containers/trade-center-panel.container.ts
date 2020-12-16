@@ -848,7 +848,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
               if (!!findMatchInFilterOptionList) {
                 findMatchInFilterOptionList.isSelected = true;
               } else {
-                console.warn('Something is wrong, can not find the option we need to filter for', eachHighlightedFilterOption);
+                // it's common for BICS to not find the selected option from the entire option list, because the option list only contain level.1 on default. This is already handled at the convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode() level
               }
             });
             eachDefinition.state.filterActive = true;

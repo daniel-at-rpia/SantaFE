@@ -230,6 +230,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
     securityDTOAttrBlock: string;
+    backendDtoAttrName: string;
   }
   style: {
     icon: string;
