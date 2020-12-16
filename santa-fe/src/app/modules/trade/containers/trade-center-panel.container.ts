@@ -841,6 +841,16 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           if (eachDefinition.data.key === eachFilterDefinition.data.key) {
             // deepCopy is necessary because the array was already set to readonly because it's from the store
             eachDefinition.data.highlightSelectedOptionList = this.utilityService.deepCopy(eachFilterDefinition.data.highlightSelectedOptionList);
+            eachDefinition.data.highlightSelectedOptionList.forEach((eachHighlightedFilterOption) => {
+              const findMatchInFilterOptionList = eachDefinition.data.filterOptionList.find((eachFilterOption) => {
+                return eachFilterOption.shortKey === eachHighlightedFilterOption.shortKey;
+              });
+              if (!!findMatchInFilterOptionList) {
+                findMatchInFilterOptionList.isSelected = true;
+              } else {
+                console.warn('Something is wrong, can not find the option we need to filter for', eachHighlightedFilterOption);
+              }
+            });
             eachDefinition.state.filterActive = true;
           }
         });
@@ -848,6 +858,6 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
     this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-    this.state.filters.securityFilters = params.filterList;
+    this.onApplyFilter(params, false);
   }
 }

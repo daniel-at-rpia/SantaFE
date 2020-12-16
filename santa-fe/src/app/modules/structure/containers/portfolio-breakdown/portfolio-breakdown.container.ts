@@ -245,11 +245,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<SecurityDefinitionDTO> = [];
-    configurator.data.definitionList.forEach((eachBundle) => {
-      eachBundle.data.list.forEach((eachDefinition) => {
-        if (this.breakdownData.state.isOverrideVariant) {
-          // code...
-        } else if (this.breakdownData.data.backendGroupOptionIdentifier.indexOf(this.constants.bicsBreakdownId) === 0) {
+    if (this.breakdownData.state.isOverrideVariant) {
+      // code...
+    } else if (this.breakdownData.data.backendGroupOptionIdentifier.indexOf(this.constants.bicsBreakdownId) === 0) {
+      configurator.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list.forEach((eachDefinition) => {
           if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
             const selectedOptionList = [];
             selectedOptionList.push(targetRow.data.category);
@@ -263,10 +263,19 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
             })
             filterList.push(eachDefinition);
           }
-        }
+        });
       });
+    }
+    const fundDefinition = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.PORTFOLIO);
+    fundDefinition.data.filterOptionList.forEach((eachOption) => {
+      if (eachOption.shortKey === this.breakdownData.data.portfolioName) {
+        eachOption.isSelected = true;
+        fundDefinition.data.highlightSelectedOptionList.push(eachOption);
+      }
     });
+    filterList.push(fundDefinition);
     newWorkflowState.data.stateInfo.filterList = filterList;
+    console.log('test, filterList is', filterList);
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 

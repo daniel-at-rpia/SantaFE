@@ -2056,6 +2056,7 @@ export class DTOService {
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
         popover: null,
         portfolioId: rawData.portfolioId,
+        portfolioName: '',
         selectedCategory: '',
         diveInLevel: 0,
         indexName: ''
@@ -2467,18 +2468,21 @@ export class DTOService {
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
     currencyBreakdown.data.indexName = rawData.indexShortName;
+    currencyBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(currencyBreakdown);
     currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
     tenorBreakdown.data.indexName = rawData.indexShortName;
+    tenorBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(tenorBreakdown);
     tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
     ratingBreakdown.data.indexName = rawData.indexShortName;
+    ratingBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(ratingBreakdown);
     ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
   }
@@ -2504,6 +2508,7 @@ export class DTOService {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
         const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
         newBreakdown.data.indexName = rawData.indexShortName;
+        newBreakdown.data.portfolioName = rawData.portfolioShortName;
         this.utility.updateDisplayLabelForOverrideConvertedBreakdown(
           returnPack.displayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
           newBreakdown
