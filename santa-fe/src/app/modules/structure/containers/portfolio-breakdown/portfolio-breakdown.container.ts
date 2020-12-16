@@ -246,7 +246,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<SecurityDefinitionDTO> = [];
     if (this.breakdownData.state.isOverrideVariant) {
-      // code...
     } else if (this.breakdownData.data.backendGroupOptionIdentifier.indexOf(this.constants.bicsBreakdownId) === 0) {
       configurator.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {

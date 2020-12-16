@@ -1216,7 +1216,9 @@ export class UtilityService {
             groupOption: overrideBucketIdentifier,
             indexId: eachRawOverride.indexId,
             portfolioId: eachRawOverride.portfolioId,
-            breakdown: {}
+            breakdown: {},
+            bucket: eachRawOverride.bucket,
+            simpleBucket: eachRawOverride.simpleBucket
           };
           const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
           displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier] = {};

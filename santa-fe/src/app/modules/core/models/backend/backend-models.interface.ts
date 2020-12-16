@@ -587,6 +587,12 @@ export interface BEStructuringBreakdownBlock {
   breakdown: {
     [property: string]: BEMetricBreakdowns;
   }
+  bucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
+    [property: string]: Array<string>;
+  };
+  simpleBucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
+    [property: string]: Array<string>;
+  }
 }
 
 export interface BEStructuringOverrideBlock {

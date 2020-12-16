@@ -2084,6 +2084,7 @@ export class DTOService {
     }
     definitionList.forEach((eachCategoryText) => {
       let bucket: Blocks.StructureBucketDataBlock = {};
+      let simpleBucket: Blocks.StructureBucketDataBlock = {};
       let customLevel: number;
       let isCustomLevelAvailable: string;
       let code: string;
@@ -2097,6 +2098,7 @@ export class DTOService {
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
           eachCategoryText
         )
+        simpleBucket = rawData.simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
         const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
         bucket[formattedBEKey] = [eachCategoryText];
@@ -2119,6 +2121,7 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
+          simpleBucket,
           customLevel,
           code
         )
@@ -2138,6 +2141,7 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
+          simpleBucket,
           customLevel,
           code
         )
@@ -2176,6 +2180,7 @@ export class DTOService {
     diveInLevel: number,
     view: PortfolioView,
     bucket: Blocks.StructureBucketDataBlock,
+    simpleBucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
     code: string = null
   ): DTOs.StructurePortfolioBreakdownRowDTO {
@@ -2248,6 +2253,7 @@ export class DTOService {
         },
         view: view,
         bucket: bucket,
+        simpleBucket: simpleBucket,
         parentRow: null,
         displayedSubLevelRows: [],
         code: code
