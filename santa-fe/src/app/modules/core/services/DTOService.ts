@@ -73,7 +73,9 @@
       PortfolioView,
       PortfolioBreakdownGroupOptions,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+      BICS_OVERRIDES_IDENTIFIER,
+      BICS_OVERRIDES_TITLE
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -1973,7 +1975,7 @@ export class DTOService {
   public formStructureFundObject(
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
+    selectedMetricValue: PortfolioMetricValues
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: null,
@@ -2082,10 +2084,9 @@ export class DTOService {
         rawCs01CategoryList: [],
         rawLeverageCategoryList: [],
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
-        popover: null,
+        popoverMainRow: null,
         portfolioId: rawData.portfolioId,
         portfolioName: '',
-        selectedCategory: '',
         diveInLevel: 0,
         indexName: ''
       },
@@ -2101,7 +2102,8 @@ export class DTOService {
         isBICs: !!isBicsBreakdown,
         isOverrideVariant: false,
         isEditingViewAvail: false,
-        isDisplaySubLevels: false
+        isDisplaySubLevels: false,
+        isDisplayPopover: false
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
@@ -2128,8 +2130,8 @@ export class DTOService {
         )
         simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
-        bucket[formattedBEKey] = [eachCategoryText];
+        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
+        bucket[formattedBEKey] = [code];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
       }
@@ -2191,7 +2193,7 @@ export class DTOService {
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
-    newBreakdown.data.title = newBreakdown.data.title.replace('BICS Lv.4', 'BICS Override');
+    newBreakdown.data.title = newBreakdown.data.title.replace(BICS_OVERRIDES_IDENTIFIER, BICS_OVERRIDES_TITLE);
     return newBreakdown;
   }
 
@@ -2219,13 +2221,15 @@ export class DTOService {
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
       if (!!isCs01) {
-        parsedRawData.currentLevel = rawCurrentLevel >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
+        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
+        parsedRawData.currentLevel = Math.abs(rawCurrentLevel) >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
       } else {
         parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
       }
       if (parsedRawData.targetLevel != null) {
         if (!!isCs01) {
-          parsedRawData.targetLevel = parsedRawData.targetLevel >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
+        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
+          parsedRawData.targetLevel = Math.abs(parsedRawData.targetLevel) >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
         } else {
           parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
         }

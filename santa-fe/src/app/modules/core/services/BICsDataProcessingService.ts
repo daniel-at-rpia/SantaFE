@@ -8,7 +8,8 @@ import {
 import {
   BEBICsHierarchyBlock,
   BEPortfolioStructuringDTO,
-  BEStructuringBreakdownBlock
+  BEStructuringBreakdownBlock,
+  BEMetricBreakdowns
 } from 'Core/models/backend/backend-models.interface';
 import {
   PortfolioBreakdownDTO,
@@ -18,7 +19,8 @@ import {
 import {
   DefinitionConfiguratorEmitterParams,
   BICSServiceConsolidateReturnPack,
-  BICSHierarchyDictionaryByLevel
+  BICSHierarchyDictionaryByLevel,
+  AdhocExtensionBEMetricBreakdowns
 } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
@@ -235,10 +237,13 @@ export class BICsDataProcessingService {
         breakdown: {}
       }
       subTierList.forEach(subTier => {
-        for (let category in selectedSubRawBreakdown.breakdown) {
-          if (!!category && selectedSubRawBreakdown.breakdown[category]) {
-            if (subTier === category) {
-              object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[category];
+        const categoryCode = this.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
+        for (let code in selectedSubRawBreakdown.breakdown) {
+          if (!!code && selectedSubRawBreakdown.breakdown[code]) {
+            if (categoryCode === code) {
+              object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[code];
+              (object.breakdown[subTier] as AdhocExtensionBEMetricBreakdowns).customLevel = breakdownRow.data.bicsLevel + 1;
+              (object.breakdown[subTier] as AdhocExtensionBEMetricBreakdowns).code = code;
             }
           }
         }
@@ -251,6 +256,42 @@ export class BICsDataProcessingService {
       breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
       breakdown.data.title = breakdownRow.data.category;
       return breakdown;
+    }
+  }
+
+  public formBICSRow(code: string, portfolioID: number, level: number, isCs01: boolean): Array<StructurePortfolioBreakdownRowDTO> {
+    const rawData: BICsCategorizationBlock = this.bicsRawData.find(bicsData => bicsData.portfolioID === portfolioID);
+    if (!!rawData) {
+      const bicsLevel = BICsLevels[level];
+      const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
+      if (!!rawBreakdown) {
+        const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
+        const customRawBreakdown: BEStructuringBreakdownBlock = {
+          date,
+          groupOption,
+          indexId,
+          portfolioBreakdownId,
+          portfolioId,
+          breakdown: {}
+        }
+        const breakdownData = rawData[bicsLevel].breakdown[code];
+        const categoryName = this.BICSCodeToBICSName(code);
+        if (!!breakdownData) {
+          customRawBreakdown.breakdown[categoryName] = breakdownData;
+          (customRawBreakdown.breakdown[categoryName] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+          (customRawBreakdown.breakdown[categoryName] as AdhocExtensionBEMetricBreakdowns).code = code;
+        }
+        const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [categoryName], isCs01, false);
+        const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
+        const creditLeverageRow = customBreakdown.data.rawLeverageCategoryList[0];
+        if (!!cs01Row && !!creditLeverageRow) {
+          cs01Row.state.isStencil = false;
+          cs01Row.data.moveVisualizer.state.isStencil = false;
+          creditLeverageRow.state.isStencil = false;
+          creditLeverageRow.data.moveVisualizer.state.isStencil = false;
+          return [cs01Row, creditLeverageRow];
+        }
+      }
     }
   }
 

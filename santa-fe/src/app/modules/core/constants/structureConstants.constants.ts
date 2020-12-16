@@ -41,6 +41,10 @@ export const BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER = 'BicsCodeLevel';
 
 export const BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX = 'BicsSubLevel.';
 
+export const BICS_OVERRIDES_IDENTIFIER = 'BicsCode';
+
+export const BICS_OVERRIDES_TITLE = 'BICS Override'
+
 export const BICS_BRANCH_DEFAULT_HEIGHT = 50;
 
 export const BICS_BRANCH_DEFAULT_HEIGHT_LARGE = 55;

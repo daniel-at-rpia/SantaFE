@@ -18,7 +18,8 @@ import {
   SecurityCostPortfolioBlock, 
   PortfolioMetricTotals,
   PortfolioBreakdownCategoryBlock,
-  TraceTradeBlock
+  TraceTradeBlock,
+  BICSMainRowDataBlock
 } from 'FEModels/frontend-blocks.interface';
 import {
   AlertSubTypes,
@@ -727,10 +728,9 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     rawCs01CategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     rawLeverageCategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     backendGroupOptionIdentifier: string;
-    popover: StructurePopoverDTO;
+    popoverMainRow: BICSMainRowDataBlock;
     portfolioId: number;
     portfolioName: string;
-    selectedCategory: string;
     diveInLevel: number;
     indexName: string;
   },
@@ -747,6 +747,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isOverrideVariant: boolean;
     isEditingViewAvail: boolean;
     isDisplaySubLevels: boolean;
+    isDisplayPopover: boolean;
   }
 }
 

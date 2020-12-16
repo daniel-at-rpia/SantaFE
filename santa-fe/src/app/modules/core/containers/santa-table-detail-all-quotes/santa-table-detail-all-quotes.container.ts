@@ -232,53 +232,11 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   public filterTraceTradesByOptions(options: Array<string>) {
-    this.graphService.destroyMultipleGraphs(this.rowData.data.traceTradeVisualizer.graph)
+    this.graphService.destroyMultipleGraphs(this.rowData.data.traceTradeVisualizer.graph);
     const copy = this.utilityService.deepCopy(this.rowData.data.traceTradeVisualizer);
     this.rowData.data.traceTradeVisualizer = copy;
-    let numericalFiltersList: Array<number> = [];
-    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
-    if (options.length > 0) {
-      options.forEach((option) => {
-        if (option.includes(numericFilter)) {
-          const numericalAmount: number = this.utilityService.getTraceNumericFilterAmount(numericFilter, option);
-          numericalFiltersList = [...numericalFiltersList, numericalAmount];
-        }
-      })
-      const processingTraceTradesList: Array<TraceTradeBlock> = !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.utilityService.getDailyTraceTrades(this.rowData.data.security.data.traceTrades) : this.rowData.data.security.data.traceTrades;
-      let filterListWithCounterParty: Array<TraceTradeBlock> = [];
-      const checkNumericalFilter = /\d/;
-      const optionsCounterPartyList = options.filter(option => !checkNumericalFilter.test(option));
-      if (optionsCounterPartyList.length > 0) {
-        optionsCounterPartyList.forEach(counterParty => {
-          const counterPartyFilterList = processingTraceTradesList.filter(trade => trade.counterParty === counterParty);
-          filterListWithCounterParty = [...filterListWithCounterParty, ...counterPartyFilterList];
-        })
-      }
-      const traceTradesFilterData = optionsCounterPartyList.length > 0 ? filterListWithCounterParty : processingTraceTradesList;
-      if (numericalFiltersList.length > 0) {
-        numericalFiltersList.sort();
-        const filteredWithAmountsList = this.utilityService.getTraceTradesListBasedOnAmount(traceTradesFilterData, numericalFiltersList[numericalFiltersList.length - 1]);
-        this.rowData.data.traceTradeVisualizer.data.displayList = filteredWithAmountsList;
-      } else {
-        this.rowData.data.traceTradeVisualizer.data.displayList = traceTradesFilterData;
-      }
-
-      if (this.rowData.data.traceTradeVisualizer.data.displayList.length > 0) {
-        this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
-        this.rowData.data.traceTradeVisualizer.data.displayList.sort((tradeA, tradeB) => {
-          if (tradeA.tradeTime > tradeB.tradeTime) {
-            return -1
-          } else if (tradeB.tradeTime > tradeA.tradeTime) {
-            return 1;
-          } else {
-            return 0;
-          }
-        })
-      }
-    } else {
-      this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
-      this.rowData.data.traceTradeVisualizer.data.displayList = !this.rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.utilityService.getDailyTraceTrades(this.rowData.data.security.data.traceTrades) : this.rowData.data.security.data.traceTrades;
-    }
+    this.rowData.data.traceTradeVisualizer.state.graphReceived = false;
+    this.rowData.data.traceTradeVisualizer.data.displayList = this.utilityService.filterTraceTrades(options, this.rowData);
   }
 
   private updateQuoteUponClick(params: ClickedSpecificQuoteEmitterParams, targetQuoteList: Array<SecurityQuoteDTO>){

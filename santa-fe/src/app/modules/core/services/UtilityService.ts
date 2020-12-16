@@ -1083,15 +1083,6 @@ export class UtilityService {
       }
     }
 
-    private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
-      if (delta < 0) {
-        return 100;
-      } else {
-        const result = 100 - Math.round(delta / maxAbsDelta * 100);
-        return result;
-      }
-    }
-
     public getDailyTraceTrades(traceTrades: Array<TraceTradeBlock>): Array<TraceTradeBlock> {
       if (traceTrades.length > 0) {
         const currentDate = moment();
@@ -1107,6 +1098,70 @@ export class UtilityService {
         return dailyTraceTradesList;
       } else {
         return [];
+      }
+    }
+    
+    public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<TraceTradeBlock> {
+      let displayedList: Array<TraceTradeBlock> = [];
+      let numericalFiltersList: Array<number> = [];
+      const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
+      if (options.length > 0) {
+        options.forEach((option) => {
+          if (option.includes(numericFilter)) {
+            const numericalAmount: number = this.getTraceNumericFilterAmount(numericFilter, option);
+            numericalFiltersList = [...numericalFiltersList, numericalAmount];
+          }
+        })
+        const processingTraceTradesList: Array<TraceTradeBlock> = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
+        let filterListWithCounterParty: Array<TraceTradeBlock> = [];
+        const checkNumericalFilter = /\d/;
+        const optionsCounterPartyList = options.filter(option => !checkNumericalFilter.test(option));
+        if (optionsCounterPartyList.length > 0) {
+          optionsCounterPartyList.forEach(counterParty => {
+            const counterPartyFilterList = processingTraceTradesList.filter(trade => trade.counterParty === counterParty);
+            filterListWithCounterParty = [...filterListWithCounterParty, ...counterPartyFilterList];
+          })
+        }
+        const traceTradesFilterData = optionsCounterPartyList.length > 0 ? filterListWithCounterParty : processingTraceTradesList;
+        if (numericalFiltersList.length > 0) {
+          numericalFiltersList.sort((tradeA: number, tradeB: number) => {
+            if (tradeA < tradeB) {
+              return - 1;
+            } else if (tradeA > tradeB) {
+              return 1;
+            } else {
+              return 0;
+            }
+          })
+          const filteredWithAmountsList = this.getTraceTradesListBasedOnAmount(traceTradesFilterData, numericalFiltersList[numericalFiltersList.length - 1]);
+          displayedList = [...filteredWithAmountsList];
+        } else {
+          displayedList = [...traceTradesFilterData];
+        }
+        if (displayedList.length > 0) {
+          displayedList.sort((tradeA, tradeB) => {
+            if (tradeA.tradeTime > tradeB.tradeTime) {
+              return -1
+            } else if (tradeB.tradeTime > tradeA.tradeTime) {
+              return 1;
+            } else {
+              return 0;
+            }
+          })
+        }
+        return displayedList;
+      } else {
+        displayedList = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
+        return displayedList;
+      }
+    }
+
+    private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
+      if (delta < 0) {
+        return 100;
+      } else {
+        const result = 100 - Math.round(delta / maxAbsDelta * 100);
+        return result;
       }
     }
   // trade specific end

@@ -129,7 +129,6 @@ export interface StructureSetTargetOverlayTransferPack {
 }
 
 export interface StructureSetViewData {
-  yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
   displayCategory: string;
@@ -151,8 +150,9 @@ export interface BICSServiceConsolidateReturnPack {
 }
 
 export interface TraceScatterGraphData {
-  date: Date | number;
   counterParty: TraceTradeCounterParty;
+  date: Date | number;
+  totalTime?: number;
   rawDate?: string;
   sellY?: number;
   buyY?: number;
