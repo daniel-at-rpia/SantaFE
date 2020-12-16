@@ -28,10 +28,10 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'USD'
   ];
 
-  const FilterOptionsCouponType = [
+  export const FilterOptionsCouponType = [
     'Float',
-    'Fixed',
-    'None'
+    'Fixed For Life',
+    'Fixed To Float'
   ];
 
   export const FilterOptionsRating = [
@@ -300,6 +300,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-ticket-alt',
     optionList: FilterOptionsCouponType,
     locked: true,
+    securityDTOAttr: 'couponType',
     backendDtoAttrName: FrontendKayToBackendKeyDictionary['COUPON_TYPE']
   },
   CURRENCY: {
@@ -497,7 +498,6 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
     label: 'Basic',
     list: [
       SecurityDefinitionMap.PORTFOLIO,
-      SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.TENOR,
@@ -526,6 +526,8 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
   },{
     label: 'Bond',
     list: [
+      SecurityDefinitionMap.TICKER,
+      SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.SECURITY_TYPE,
       SecurityDefinitionMap.BACKEND_TENOR,
       SecurityDefinitionMap.BAIL_IN_STATUS,

@@ -1196,9 +1196,6 @@ export class UtilityService {
     public convertRawOverrideToRawBreakdown(
       overrideRawDataList: Array<BEStructuringOverrideBlock>
     ): StructureOverrideToBreakdownConversionReturnPack {
-      if (overrideRawDataList[0].portfolioId === 7) {
-        console.log('test');
-      }
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
       overrideRawDataList.forEach((eachRawOverride) => {

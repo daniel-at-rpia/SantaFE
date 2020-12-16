@@ -55,7 +55,8 @@
       FilterOptionsTenor,
       BICsLevel1DefinitionList,
       FilterTraceTradesOptions,
-      DEFINITION_LONG_THRESHOLD
+      DEFINITION_LONG_THRESHOLD,
+      FilterOptionsCouponType
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
@@ -125,6 +126,7 @@ export class DTOService {
         ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
+        couponType: null,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
@@ -303,6 +305,9 @@ export class DTOService {
           object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
         }
         object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
+        if (!!rawData.metrics.Default) {
+          object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+        }
       }
     } catch (err) {
       console.warn('Data issue on security', object, err);
@@ -585,6 +590,16 @@ export class DTOService {
     targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
+    if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
+      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+        const exist = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+          return eachSelectedOption.shortKey === eachOption.shortKey;
+        });
+        if (!!exist) {
+          eachOption.isSelected = true;
+        }
+      });
+    }
     return targetDefinition;
   }
 

@@ -362,24 +362,15 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
             });
             filterList.push(eachDefinition);
           } else {
-
+            eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
+              eachDefinition.data.key,
+              targetRow.data.simpleBucket[backendKey]
+            );
+            eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+              eachOption.isSelected = true;
+            });
+            filterList.push(eachDefinition);
           }
-        }
-        if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
-          if (targetRow.data.simpleBucket['BicsCode'] && targetRow.data.simpleBucket['BI']) {
-
-          }
-          // const selectedOptionList = [];
-          // selectedOptionList.push(targetRow.data.category);
-          // eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
-          //   eachDefinition.data.key,
-          //   selectedOptionList,
-          //   targetRow.data.bicsLevel
-          // );
-          // eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
-          //   eachOption.isSelected = true;
-          // })
-          // filterList.push(eachDefinition);
         }
       });
     });
