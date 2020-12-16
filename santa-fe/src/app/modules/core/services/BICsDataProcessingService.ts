@@ -143,10 +143,10 @@ export class BICsDataProcessingService {
         })
         return newRowList;
       } else {
-        return rowList;
+        return primaryRowList;
       }
     } else {
-      return rowList;
+      return primaryRowList;
     }
   }
 
