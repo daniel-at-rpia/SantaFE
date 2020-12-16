@@ -14,26 +14,33 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     private globalWorkflowIOService: GlobalWorkflowIOService
   ) {}
   
+  /*
+    Temporarily turn off all functionalities due to the problem with ngdestory requires more time to solve
+  */
+
   public shouldAttach(route: ActivatedRouteSnapshot): boolean {
-    const targetState = this.globalWorkflowIOService.fetchState(this.getRouteIdentifier(route));
-    if (!!targetState && !!targetState.api.routeHandler) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
+    // const targetState = this.globalWorkflowIOService.fetchState(this.getRouteIdentifier(route));
+    // if (!!targetState && !!targetState.api.routeHandler) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 
   public shouldDetach(route: ActivatedRouteSnapshot): boolean {
-    return true;
+    return false;
+    // return true;
   }
 
   public store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle) {
-    this.globalWorkflowIOService.attachRouteHandlerToState(this.getRouteIdentifier(route), handle);
+    // this.globalWorkflowIOService.attachRouteHandlerToState(this.getRouteIdentifier(route), handle);
   }
 
   public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
-    const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
-    return handler;
+    return null;
+    // const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
+    // return handler;
   }
 
   public shouldReuseRoute(
@@ -41,6 +48,11 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     currentRoute: ActivatedRouteSnapshot
   ): boolean {
     return futureRoute.routeConfig === currentRoute.routeConfig;
+    // if (!!futureRoute.routeConfig && !!currentRoute.routeConfig && futureRoute.routeConfig === currentRoute.routeConfig) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 
   private getRouteIdentifier(targetRoute: ActivatedRouteSnapshot): string {
