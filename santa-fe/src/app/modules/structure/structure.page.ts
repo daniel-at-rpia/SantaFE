@@ -75,7 +75,6 @@ export class StructurePage implements OnInit, OnDestroy {
     this.fetchBICsHierarchy();
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       tap(params => {
-        console.log('test, route in Structure', params.get('stateId'));
       })
     ).subscribe();
   }

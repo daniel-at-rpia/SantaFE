@@ -229,7 +229,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     });
     filterList.push(fundDefinition);
     newWorkflowState.data.stateInfo.filterList = filterList;
-    console.log('test, filterList is', filterList);
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 
