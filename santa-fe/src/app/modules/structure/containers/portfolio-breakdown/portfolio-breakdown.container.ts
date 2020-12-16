@@ -265,6 +265,16 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
           }
         });
       });
+    } else {
+      // other regular breakdowns will come here (ccy, rating, tenor);
+      const targetDefinition = this.utilityService.deepCopy(this.breakdownData.data.definition);
+      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+        if (eachOption.shortKey === targetRow.data.category) {
+          eachOption.isSelected = true;
+          targetDefinition.data.highlightSelectedOptionList.push(eachOption);
+        }
+      });
+      filterList.push(targetDefinition);
     }
     const fundDefinition = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.PORTFOLIO);
     fundDefinition.data.filterOptionList.forEach((eachOption) => {
