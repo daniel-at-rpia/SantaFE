@@ -15,7 +15,7 @@ import {
   BEPortfolioTargetMetricValues
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
-import { PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
+import { PortfolioBreakdownDTO, PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO, BECustomMetricBreakdowns } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -117,7 +117,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectReloadFundDataPostEdit)
     ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
       if (!!targetFund) {
-        this.loadFund(targetFund);
+        const targetFundCopy = this.utilityService.deepCopy(targetFund);
+        this.loadFund(targetFundCopy);
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -294,9 +295,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     BICSBreakdown.data.indexName = rawData.indexShortName;
-    // Place custom BICS breakdown at current Currency index since placement of overrides is dependent if they are added or removed
-    const currencyIndex = fund.data.children.findIndex(breakdown => breakdown.data.title === 'Currency');
-    fund.data.children.splice(currencyIndex, 0, BICSBreakdown);
+    fund.data.children.push(BICSBreakdown);
   }
 
   private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
@@ -314,11 +313,33 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
+  private getSortedBreakdownDisplayListForFund(breakdowns: Array<PortfolioBreakdownDTO>): Array<PortfolioBreakdownDTO> {
+    breakdowns.sort((breakdownA: PortfolioBreakdownDTO, breakdownB: PortfolioBreakdownDTO) => {
+      if (breakdownA.state.isOverrideVariant && !breakdownB.state.isOverrideVariant) {
+        return -4;
+      } else if (!breakdownA.state.isOverrideVariant && breakdownB.state.isOverrideVariant) {
+        return 4;
+      } else if (breakdownA.data.title < breakdownB.data.title) {
+        return -1;
+      } else if (breakdownA.data.title > breakdownB.data.title) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+    return breakdowns;
+  }
+
   private loadFund(rawData: BEPortfolioStructuringDTO) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.BICsDataProcessingService.setRawBICsData(rawData);
       const newFund = this.dtoService.formStructureFundObject(rawData, false);
-      this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
+      if (!!newFund) {
+        this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
+        if (newFund.data.children.length > 0) {
+          newFund.data.children = this.getSortedBreakdownDisplayListForFund(newFund.data.children);
+        }
+      }
       const alreadyExist = this.state.fetchResult.fundList.findIndex((eachFund) => {
         return eachFund.data.portfolioId === newFund.data.portfolioId;
       })

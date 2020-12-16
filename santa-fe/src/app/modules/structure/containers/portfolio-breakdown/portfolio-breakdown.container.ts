@@ -1,19 +1,23 @@
 import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-
-import { PortfolioBreakdownDTO, StructurePopoverDTO, StructurePortfolioBreakdownRowDTO } from 'FEModels/frontend-models.interface';
-import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioBreakdownDTO,
+  StructurePortfolioBreakdownRowDTO
+} from 'FEModels/frontend-models.interface';
+import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioBreakdownCategoryBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { editingViewAvailableUsers, StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+import {
+  editingViewAvailableUsers,
+  StructuringTeamPMList
+} from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { BICSMainRowDataBlock } from 'App/modules/core/models/frontend/frontend-blocks.interface';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -80,24 +84,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
     }
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
-    let popoverCategory;
     if (this.dataIsReady) {
       this.utilityService.calculateAlignmentRating(this.breakdownData);
       this.updateRowEditingViewAvailState();
-      if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.state.isActive) {
-        const previousMetricData = this.utilityService.deepCopy(this.breakdownData.data.popover.data.mainRow.data.children);
-        popoverCategory = this.breakdownData.data.popover.data.mainRow.data.category; 
-        const popoverRow = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === popoverCategory) : this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === popoverCategory);
-        this.updatePopoverData(popoverRow);
-        this.breakdownData.data.popover.data.mainRow.data.children = previousMetricData;
-        this.switchPopoverValues(this.breakdownData.data.popover.data.mainRow.data);
-      }
-      //handles a scenario where the user has the popover open in one metric, switches and closes the popover, then switches back, the category is still selected but there is no popover
-      const oppositeList =  this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
-      const matchedOppositeRow = oppositeList.find(row => row.data.category === popoverCategory);
-      if (!!matchedOppositeRow) {
-        matchedOppositeRow.state.isSelected = false;
-      }
       const flipStencil = this.removeStencil.bind(this);
       setTimeout(() => {
         flipStencil();
@@ -111,13 +100,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       eachCategory.data.moveVisualizer.state.isStencil = false;
       eachCategory.state.isStencil = false;
     });
-    if (!!this.breakdownData.data.popover && !!this.breakdownData.data.popover.data.mainRow) {
-      this.breakdownData.data.popover.data.mainRow.state.isStencil = false;
-      if (!!this.breakdownData.data.popover.data.mainRow.data.moveVisualizer) {
-        this.breakdownData.data.popover.data.mainRow.data.moveVisualizer.state.isStencil = false;
-      }
-      this.removeRowStencils(this.breakdownData.data.popover.data.mainRow);
-    }
   }
 
   public onClickEdit() {
@@ -125,47 +107,21 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
   }
 
-  public updatePopoverData(breakdownRow: StructurePortfolioBreakdownRowDTO) {
-    if (!!this.breakdownData.data.selectedCategory) {
-      if (breakdownRow.data.category !== this.breakdownData.data.selectedCategory) {
-        const previousRowCategory = this.breakdownData.data.selectedCategory;
-        this.breakdownData.data.selectedCategory = breakdownRow.data.category; 
-        const previousCs01Row = this.breakdownData.data.rawCs01CategoryList.find(row => row.data.category === previousRowCategory);
-        const previousLeverageRow = this.breakdownData.data.rawLeverageCategoryList.find(row => row.data.category === previousRowCategory);
-        if (!!previousCs01Row) {
-          previousCs01Row.state.isSelected = false;
-        }
-        if (!!previousLeverageRow) {
-          previousLeverageRow.state.isSelected = false;
-        }
+  public getPopoverMainRow(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+    if (!!breakdownRow) {
+      const rowProcessingData: BICSMainRowDataBlock = {
+        code: breakdownRow.data.displayCategory,
+        portfolioID: this.breakdownData.data.portfolioId,
+        level: breakdownRow.data.bicsLevel
       }
-    } else {
-      this.breakdownData.data.selectedCategory = breakdownRow.data.category;
+      this.breakdownData.data.popoverMainRow = rowProcessingData;
+      this.breakdownData.state.isDisplayPopover = true;
     }
-    const breakdownRowCopy = this.utilityService.deepCopy(breakdownRow);
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
-    breakdownRowCopy.data.children = subBicsLevel;
-    breakdownRowCopy.state.isWithinPopover = true;
-    this.breakdownData.data.popover = this.dtoService.formStructurePopoverObject(breakdownRowCopy, this.breakdownData.state.isDisplayingCs01);
-    this.breakdownData.data.popover.state.isActive = true;
   }
 
-  public switchPopoverValues(block: PortfolioBreakdownCategoryBlock) {
-    if (!block.children) return;
-    const currentMetricList =  this.breakdownData.state.isDisplayingCs01 ? block.children.data.rawCs01CategoryList : block.children.data.rawLeverageCategoryList;
-    const oppositeMetricList = this.breakdownData.state.isDisplayingCs01 ? block.children.data.rawLeverageCategoryList : block.children.data.rawCs01CategoryList;
-    block.children.data.displayCategoryList = currentMetricList;
-    block.children.data.displayCategoryList.forEach(row => {
-      row.state.isStencil = true;
-      const selectedValue = oppositeMetricList.find(previousRow => previousRow.data.category === row.data.category);
-      row.state.isSelected = !!selectedValue.data.children && selectedValue.state.isSelected;
-      row.data.children = selectedValue.data.children;
-      row.data.moveVisualizer.state.isStencil = true;
-      if (!!row.data.children) {
-        row.data.children.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? row.data.children.data.rawCs01CategoryList : row.data.children.data.rawLeverageCategoryList;
-        this.switchPopoverValues(row.data);
-      }
-    })
+  public resetPopoverMainRow() {
+    this.breakdownData.state.isDisplayPopover = false;
+    this.breakdownData.data.popoverMainRow = null;
   }
 
   public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
