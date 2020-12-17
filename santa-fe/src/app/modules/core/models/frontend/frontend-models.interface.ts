@@ -2,6 +2,7 @@ import { SafeHtml } from '@angular/platform-browser';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
+import { DetachedRouteHandle } from '@angular/router';
 
 import {
   AgGridColumnDefinition,
@@ -23,7 +24,8 @@ import {
 import {
   AlertSubTypes,
   AlertTypes,
-  NavigationModule
+  NavigationModule,
+  GlobalWorkflowTypes
 } from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import { Alert } from "Core/components/alert/alert.component";
@@ -54,6 +56,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     ratingValue: string;
     ratingBucket: string;
     seniorityLevel: number;
+    couponType: string;
     currency: string;
     sector: string;
     industry: string;
@@ -229,6 +232,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
     securityDTOAttrBlock: string;
+    backendDtoAttrName: string;
   }
   style: {
     icon: string;
@@ -726,6 +730,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     backendGroupOptionIdentifier: string;
     popoverMainRow: BICSMainRowDataBlock;
     portfolioId: number;
+    portfolioName: string;
     diveInLevel: number;
     indexName: string;
   },
@@ -890,8 +895,14 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   data: {
     uuid: string;
     module: NavigationModule;
-    title: string;
+    workflowType: GlobalWorkflowTypes;
+    stateInfo: {
+      filterList?: Array<SecurityDefinitionDTO>;
+    }
   },
+  api: {
+    routeHandler: DetachedRouteHandle;
+  }
   state: {
     triggersRedirect: boolean;
   }

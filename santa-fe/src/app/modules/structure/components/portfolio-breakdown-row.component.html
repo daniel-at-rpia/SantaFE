@@ -35,25 +35,29 @@
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
     </button>
     <div class="sat-portfolioBreakdownRow__cta-actionMenu" (click)="onCollapseActionMenu()">
-      <button (click)="onClickEnterSetViewMode()" class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn santaBtn--circleLabelled santaBtn--small">
-        <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon">
-          <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon-up fal fa-arrow-up"></i>
-          <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon-down fal fa-arrow-down"></i>
-        </i>
-        <span>Set View</span>
-      </button>
-      <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-diveInBtn santaBtn--circleLabelled">
-        <i class="fal fa-arrow-from-top"></i>
-        <span>Dive In</span>
-      </button>
-      <button (click)="showSubLevels(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-subLevelToggle santaBtn--circleLabelled santaBtn--small">
-        <i class="fal fa-flag-checkered"></i>
-        <span>Show Targets</span>
-      </button>
-      <button (click)="onClickSeeBond()" class="sat-portfolioBreakdownRow__cta-actionMenu-bondBtn santaBtn--circleLabelled santaBtn--small">
-        <i class="fal fa-search-dollar"></i>
-        <span>See Bonds</span>
-      </button>
+      <div class="sat-portfolioBreakdownRow__cta-actionMenu-top">
+        <button (click)="onClickEnterSetViewMode()" class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn santaBtn--circleLabelled santaBtn--small">
+          <i class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn-icon">
+            <i class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn-icon-up fal fa-arrow-up"></i>
+            <i class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn-icon-down fal fa-arrow-down"></i>
+          </i>
+          <span>Set View</span>
+        </button>
+        <button (click)="showSubLevels(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-top-subLevelToggle santaBtn--circleLabelled santaBtn--small">
+          <i class="fal fa-flag-checkered"></i>
+          <span>Show Targets</span>
+        </button>
+        <button (click)="onClickSeeBond()" class="sat-portfolioBreakdownRow__cta-actionMenu-top-bondBtn santaBtn--circleLabelled santaBtn--small">
+          <i class="fal fa-search-dollar"></i>
+          <span>See Bonds</span>
+        </button>
+      </div>
+      <div class="sat-portfolioBreakdownRow__cta-actionMenu-bottom">
+        <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-bottom-diveInBtn santaBtn--circleLabelled">
+          <i class="fal fa-arrow-from-top"></i>
+          <span>Dive In</span>
+        </button>
+      </div>
     </div>
   </section>
   <section class="sat-portfolioBreakdownRow__utility">

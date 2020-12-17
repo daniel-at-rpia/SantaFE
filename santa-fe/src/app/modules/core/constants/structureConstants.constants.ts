@@ -88,6 +88,7 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinit
     label: 'Bond',
     list: [
       SecurityDefinitionMap.TICKER,
+      SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.RATING_BUCKET,
       SecurityDefinitionMap.SENIORITY
     ]

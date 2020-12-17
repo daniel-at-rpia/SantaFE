@@ -29,7 +29,8 @@
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
       TRACE_VOLUME_REPORTED_THRESHOLD,
-      NavigationModule
+      NavigationModule,
+      GlobalWorkflowTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -54,7 +55,8 @@
       FilterOptionsTenor,
       BICsLevel1DefinitionList,
       FilterTraceTradesOptions,
-      DEFINITION_LONG_THRESHOLD
+      DEFINITION_LONG_THRESHOLD,
+      FilterOptionsCouponType
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
@@ -127,6 +129,7 @@ export class DTOService {
         ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
+        couponType: null,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
@@ -305,6 +308,9 @@ export class DTOService {
           object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
         }
         object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
+        if (!!rawData.metrics.Default) {
+          object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+        }
       }
     } catch (err) {
       console.warn('Data issue on security', object, err);
@@ -520,18 +526,30 @@ export class DTOService {
     bicsLevel?: number
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
-      const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
-        isSelected: false,
-        isFilteredOut: false,
-        displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${eachOption}` : eachOption,
-        bicsLevel: bicsLevel || null,
-        shortKey: normalizedOption,
-        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
-      }
-      return newFilterDTO;
+      return this.generateSecurityDefinitionFilterIndividualOption(
+        name,
+        eachOption,
+        bicsLevel
+      );
     })
   };
+
+  public generateSecurityDefinitionFilterIndividualOption(
+    name: string,
+    option: string,
+    bicsLevel?: number
+  ): Blocks.SecurityDefinitionFilterBlock {
+    const normalizedOption = this.utility.normalizeDefinitionFilterOption(option);
+    const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
+      isSelected: false,
+      isFilteredOut: false,
+      displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
+      bicsLevel: bicsLevel || null,
+      shortKey: normalizedOption,
+      key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
+    }
+    return newFilterDTO;
+  }
 
   public formSecurityDefinitionObject(
     rawData: SecurityDefinitionStub
@@ -546,7 +564,8 @@ export class DTOService {
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr,
         securityDTOAttrBlock: rawData.securityDTOAttrBlock,
-        highlightSelectedOptionList: []
+        highlightSelectedOptionList: [],
+        backendDtoAttrName: rawData.backendDtoAttrName
       },
       style: {
         icon: rawData.icon,
@@ -574,6 +593,16 @@ export class DTOService {
     targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
+    if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
+      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+        const exist = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+          return eachSelectedOption.shortKey === eachOption.shortKey;
+        });
+        if (!!exist) {
+          eachOption.isSelected = true;
+        }
+      });
+    }
     return targetDefinition;
   }
 
@@ -2058,6 +2087,7 @@ export class DTOService {
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
         popoverMainRow: null,
         portfolioId: rawData.portfolioId,
+        portfolioName: '',
         diveInLevel: 0,
         indexName: ''
       },
@@ -2085,6 +2115,7 @@ export class DTOService {
     }
     definitionList.forEach((eachCategoryText) => {
       let bucket: Blocks.StructureBucketDataBlock = {};
+      let simpleBucket: Blocks.StructureBucketDataBlock = {};
       let customLevel: number;
       let isCustomLevelAvailable: string;
       let code: string;
@@ -2098,6 +2129,7 @@ export class DTOService {
           this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
           eachCategoryText
         )
+        simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
         const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
         bucket[formattedBEKey] = [code];
@@ -2120,6 +2152,7 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
+          simpleBucket,
           customLevel,
           code
         )
@@ -2139,6 +2172,7 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
+          simpleBucket,
           customLevel,
           code
         )
@@ -2177,6 +2211,7 @@ export class DTOService {
     diveInLevel: number,
     view: PortfolioView,
     bucket: Blocks.StructureBucketDataBlock,
+    simpleBucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
     code: string = null
   ): DTOs.StructurePortfolioBreakdownRowDTO {
@@ -2251,6 +2286,7 @@ export class DTOService {
         },
         view: view,
         bucket: bucket,
+        simpleBucket: simpleBucket,
         parentRow: null,
         displayedSubLevelRows: [],
         code: code
@@ -2473,18 +2509,21 @@ export class DTOService {
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
     currencyBreakdown.data.indexName = rawData.indexShortName;
+    currencyBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(currencyBreakdown);
     currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
     tenorBreakdown.data.indexName = rawData.indexShortName;
+    tenorBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(tenorBreakdown);
     tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
     ratingBreakdown.data.indexName = rawData.indexShortName;
+    ratingBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(ratingBreakdown);
     ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
   }
@@ -2510,6 +2549,7 @@ export class DTOService {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
         const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
         newBreakdown.data.indexName = rawData.indexShortName;
+        newBreakdown.data.portfolioName = rawData.portfolioShortName;
         this.utility.updateDisplayLabelForOverrideConvertedBreakdown(
           returnPack.displayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
           newBreakdown
@@ -2522,13 +2562,18 @@ export class DTOService {
 
   public formGlobalWorkflow(
     targetModule: NavigationModule,
-    isRedirect: boolean
+    isRedirect: boolean,
+    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
   ): DTOs.GlobalWorkflowStateDTO {
     const object: DTOs.GlobalWorkflowStateDTO = {
       data: {
         uuid: this.utility.generateUUID(),
         module: targetModule,
-        title: `Generic step in ${targetModule}`
+        workflowType: workflowType,
+        stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
+      },
+      api: {
+        routeHandler: null
       },
       state: {
         triggersRedirect: !!isRedirect

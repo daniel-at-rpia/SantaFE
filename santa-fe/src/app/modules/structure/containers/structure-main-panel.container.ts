@@ -284,6 +284,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     BICSBreakdown.data.indexName = rawData.indexShortName;
+    BICSBreakdown.data.portfolioName = rawData.portfolioShortName;
     fund.data.children.push(BICSBreakdown);
   }
 
@@ -326,11 +327,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   ): Array<string> {
     // convert bicsCode to bics names
     const parsedCustomBICSDefinitionList = customBICSDefinitionList.map((eachCode) => {
-      return this.BICsDataProcessingService.BICSCodeToBICSName(eachCode);
+      return this.BICsDataProcessingService.BICSCodeToBICSName(eachCode, true);
     })
     const parsedCustomBICSDefinitionListNoNull = parsedCustomBICSDefinitionList.filter((eachName) => {return !!eachName});
     for (let subCategory in customBICSBreakdown.breakdown) {
-      const name = this.BICsDataProcessingService.BICSCodeToBICSName(subCategory);
+      const name = this.BICsDataProcessingService.BICSCodeToBICSName(subCategory, true);
       customBICSBreakdown.breakdown[name] = customBICSBreakdown.breakdown[subCategory];
     }
     return parsedCustomBICSDefinitionListNoNull;

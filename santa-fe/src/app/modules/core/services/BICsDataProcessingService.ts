@@ -32,6 +32,7 @@ import {
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 @Injectable()
 
@@ -360,7 +361,10 @@ export class BICsDataProcessingService {
     })
   }
 
-  public BICSCodeToBICSName(bicsCode: string): string {
+  public BICSCodeToBICSName(
+    bicsCode: string,
+    containSubLevelSuffixIdentifier: boolean = false
+  ): string {
     if (!!bicsCode && bicsCode.length >= 2) {
       const targetItemBlock = this.bicsDictionary[bicsCode];
       let bicsName = null;
@@ -376,7 +380,7 @@ export class BICsDataProcessingService {
         }
       }
       const formattedName = bicsCode.length > 2 ? `${bicsName} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${Math.floor(bicsCode.length/2)}` : bicsName;
-      return formattedName;
+      return containSubLevelSuffixIdentifier ? formattedName : bicsName;
     } else {
       return null;
     }
@@ -389,6 +393,20 @@ export class BICsDataProcessingService {
     } else {
       return null;
     }
+  }
+
+  public convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params: DefinitionConfiguratorEmitterParams) {
+    params.filterList.forEach((eachFilter) => {
+      if (eachFilter.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+        eachFilter.filterBy = [];
+        eachFilter.filterByBlocks.forEach((eachBlock) => {
+          const targetCode = this.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
+          if (targetCode !== null) {
+            eachFilter.filterBy.push(targetCode);
+          }
+        });
+      }
+    })
   }
 
   private setBreakdownListProperties(

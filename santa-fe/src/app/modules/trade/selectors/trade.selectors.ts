@@ -79,3 +79,13 @@ export const selectKeywordSearchInMainTable = createSelector(
   getTradeState,
   (state: TradeState) => state.keywordSearchInMainTable
 );
+
+export const selectCenterPanelFilterListForTableLoad = createSelector(
+  getTradeState,
+  (state: TradeState) => state.centerPanel.filterListForTableLoad
+);
+
+export const selectBICSDataLoaded = createSelector(
+  getTradeState,
+  (state: TradeState) => state.bicsDataLoaded
+);

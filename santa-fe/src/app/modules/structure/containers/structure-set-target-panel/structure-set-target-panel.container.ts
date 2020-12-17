@@ -683,7 +683,21 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const rowBreakdownMetricData = !!isCs01 ? rowBreakdownData.metricBreakdowns.Cs01 : rowBreakdownData.metricBreakdowns.CreditLeverage;
         const { diveInLevel } = this.state.targetBreakdown.data;
         const { isOverrideVariant } = this.state.targetBreakdown.state;
-        const newCategoryBlock = this.dtoService.formPortfolioBreakdownCategoryBlock(minValue, maxValue, false, editRowListEquivalent.rowIdentifier, rowBreakdownMetricData, isCs01, portfolioId, groupOption, isOverrideVariant, diveInLevel, rowBreakdownData.view as PortfolioView, row.data.bucket);
+        const newCategoryBlock = this.dtoService.formPortfolioBreakdownCategoryBlock(
+          minValue,
+          maxValue,
+          false,
+          editRowListEquivalent.rowIdentifier,
+          rowBreakdownMetricData,
+          isCs01,
+          portfolioId,
+          groupOption,
+          isOverrideVariant,
+          diveInLevel,
+          rowBreakdownData.view as PortfolioView,
+          row.data.bucket,
+          row.data.simpleBucket
+        );
         row.data = newCategoryBlock.data;
         row.state = newCategoryBlock.state;
         row.data.displayCategory = editRowListEquivalent.displayRowTitle;
