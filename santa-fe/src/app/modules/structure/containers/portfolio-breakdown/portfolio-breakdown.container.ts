@@ -5,7 +5,8 @@ import { Store, select } from '@ngrx/store';
 import {
   UtilityService,
   DTOService,
-  BICsDataProcessingService
+  BICsDataProcessingService,
+  BICSDictionaryLookupService
 } from 'Core/services';
 import {
   PortfolioBreakdownDTO,
@@ -58,7 +59,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     private utilityService: UtilityService,
     private store$: Store<any>,
     private bicsDataProcessingService: BICsDataProcessingService,
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) { }
 
   public ngOnInit() {
@@ -299,7 +301,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
             eachDefinition.data.highlightSelectedOptionList = targetRow.data.simpleBucket[backendKey].map((eachBICSCode) => {
               // the simple bucket always contains BICS in its code form, so we need a bit extra work to convert that
               const bicsLevel = Math.floor(eachBICSCode.length/2);
-              const bicsName = this.bicsDataProcessingService.BICSCodeToBICSName(eachBICSCode);
+              const bicsName = this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBICSCode);
               const eachOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
                 this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key,
                 bicsName,

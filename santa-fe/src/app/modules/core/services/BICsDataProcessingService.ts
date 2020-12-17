@@ -33,36 +33,30 @@ import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
 
 @Injectable()
 
 export class BICsDataProcessingService {
-  private reversedBICSHierarchyDictionary: BICSHierarchyDictionaryByLevel = {
-    level1: {},
-    level2: {},
-    level3: {},
-    level4: {}
-  };
   private bicsRawData: Array<BICsCategorizationBlock> = [];
   private formattedBICsHierarchyData: BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
-  private bicsDictionary: BEBICsHierarchyBlock;
 
   constructor(
     private dtoService: DTOService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {}
 
   public loadBICSData(data: BEBICsHierarchyBlock, parent: BICsHierarchyAllDataBlock | BICsHierarchyBlock) {
-    this.bicsDictionary = data;
-    this.buildReversedBICSHierarchyDictionary(data);
-    this.setBICsLevelOneCategories(data, parent)
+    this.bicsDictionaryLookupService.loadBICSData(data);
+    this.setBICsLevelOneCategories(data, parent);
     this.iterateBICsData(data, parent);
     this.formattedBICsHierarchyData = parent;
   }
 
   public getTargetSpecificHierarchyList(childCode: string, childBicsLevel: number): Array<BICsHierarchyBlock> {
-    const data = this.bicsDictionary[childCode];
+    const data = this.bicsDictionaryLookupService.returnDictionary()[childCode];
     const hierarchyDataList: Array<BICsHierarchyBlock> = [];
     for (let item in data) {
       if (!!data[item]) {
@@ -237,7 +231,7 @@ export class BICsDataProcessingService {
         breakdown: {}
       }
       subTierList.forEach(subTier => {
-        const categoryCode = this.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
+        const categoryCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
         for (let code in selectedSubRawBreakdown.breakdown) {
           if (!!code && selectedSubRawBreakdown.breakdown[code]) {
             if (categoryCode === code) {
@@ -275,7 +269,7 @@ export class BICsDataProcessingService {
           breakdown: {}
         }
         const breakdownData = rawData[bicsLevel].breakdown[code];
-        const categoryName = this.BICSCodeToBICSName(code);
+        const categoryName = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
         if (!!breakdownData) {
           customRawBreakdown.breakdown[categoryName] = breakdownData;
           (customRawBreakdown.breakdown[categoryName] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
@@ -336,46 +330,12 @@ export class BICsDataProcessingService {
     })
   }
 
-  public BICSCodeToBICSName(
-    bicsCode: string,
-    containSubLevelSuffixIdentifier: boolean = false
-  ): string {
-    if (!!bicsCode && bicsCode.length >= 2) {
-      const targetItemBlock = this.bicsDictionary[bicsCode];
-      let bicsName = null;
-      if (!!targetItemBlock) {
-        if (!!targetItemBlock.item4) {
-          bicsName = targetItemBlock.item4;
-        } else if (!!targetItemBlock.item3) {
-          bicsName = targetItemBlock.item3;
-        } else if (!!targetItemBlock.item2) {
-          bicsName = targetItemBlock.item2;
-        } else {
-          bicsName = targetItemBlock.item1;
-        }
-      }
-      const formattedName = bicsCode.length > 2 ? `${bicsName} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${Math.floor(bicsCode.length/2)}` : bicsName;
-      return containSubLevelSuffixIdentifier ? formattedName : bicsName;
-    } else {
-      return null;
-    }
-  }
-
-  public BICSNameToBICSCode(bicsName: string, level: number): string {
-    if (level >= 1 && level <= 4) {
-      const targetBlock = this.reversedBICSHierarchyDictionary[`level${level}`];
-      return targetBlock[bicsName] || null;
-    } else {
-      return null;
-    }
-  }
-
   public convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params: DefinitionConfiguratorEmitterParams) {
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
         eachFilter.filterBy = [];
         eachFilter.filterByBlocks.forEach((eachBlock) => {
-          const targetCode = this.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
+          const targetCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
           if (targetCode !== null) {
             eachFilter.filterBy.push(targetCode);
           }
@@ -576,28 +536,4 @@ export class BICsDataProcessingService {
     }
     return loopCategoryList;
   }
-
-  private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
-    for (let eachCode in data) {
-      const block = data[eachCode];
-      let bicsName = null;
-      let level = 1;
-      if (!!block.item4) {
-        bicsName = block.item4;
-        level = 4;
-      } else if (!!block.item3) {
-        bicsName = block.item3;
-        level = 3;
-      } else if (!!block.item2) {
-        bicsName = block.item2;
-        level = 2;
-      } else {
-        bicsName = block.item1;
-      }
-      if (!!bicsName) {
-        this.reversedBICSHierarchyDictionary[`level${level}`][bicsName] = eachCode;
-      }
-    }
-  }
-
 }
