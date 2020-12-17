@@ -922,23 +922,22 @@ export class GraphService {
               if (customDateAxisList.length > 0) {
                 customDateAxisList.forEach((customDate, i) => {
                   const label = moment(customDate).format('MMM DD');
-                  if (i === 0) {
-                    createRange(i, TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL, label);
-                    createRangeGrid(TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL);
-                  } else {
-                    const startRange: number = i * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
-                    const endRange = (i + 1) * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
+                  const startRange: number = i * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
+                  const endRange = (i + 1) * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
+                  createRange(startRange, endRange, label);
+                  createRangeGrid(endRange);
+                  //subsequent days after the first require reformatting of data
+                  if (i > 0) {
                     tradeDataList.forEach(tradeData => {
                       const formattedTradeDate = moment(tradeData.rawDate).format('YYYY-MM-DD');
                       if (formattedTradeDate === customDate) {
                         tradeData.totalTime = tradeData.totalTime + startRange;
                       }
                     })
-                    createRange(startRange, endRange, label);
-                    createRangeGrid(endRange);
-                    if (i === customDateAxisList.length - 1) {
-                     customDateAxis.max = endRange;
-                    }
+                  }
+                  // last day sets the max range of x-axis
+                  if (i === customDateAxisList.length - 1) {
+                    customDateAxis.max = endRange;
                   }
                 })
               }
