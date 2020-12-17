@@ -597,7 +597,7 @@ export interface BEStructuringOverrideBlock {
   date: string;
   portfolioId: number;
   indexId?: number;
-  bucket: {
+  bucket?: {  // this is optional because in some API calls where FE passes this to BE, we just pass with "simple bucket" only and BE will form "bucket" itself
     [property: string]: Array<string>;
   };
   simpleBucket: {

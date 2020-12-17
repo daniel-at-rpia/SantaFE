@@ -191,6 +191,7 @@ export const FrontendKayToBackendKeyDictionary = {
   'BICS_LEVEL_2': 'BicsLevel2',
   'BICS_LEVEL_3': 'BicsLevel3',
   'BICS_LEVEL_4': 'BicsLevel4',
+  'BICS_CONSOLIDATED': 'BicsCode',
 
   // metrics
   'SPREAD': 'oasSpread',

@@ -305,31 +305,6 @@ export class BICsDataProcessingService {
     );
   }
 
-  public consolidateBICS(
-    definitionBlockList: Array<SecurityDefinitionFilterBlock>
-  ): BICSServiceConsolidateReturnPack {
-    let deepestLevel = 4;
-    // temporarily disable this, always set level to 4
-    // definitionBlockList.forEach((eachBlock) =>{
-    //   if (eachBlock.bicsLevel > deepestLevel) {
-    //     deepestLevel = eachBlock.bicsLevel;
-    //   }
-    // });
-    let convertedToLowestLevelStrings = [];
-    definitionBlockList.forEach((eachBlock) => {
-      if (eachBlock.bicsLevel < deepestLevel) {
-        const eachResult:Array<string> = this.convertCategoryToChildren(eachBlock.shortKey, eachBlock.bicsLevel, deepestLevel);
-        convertedToLowestLevelStrings = convertedToLowestLevelStrings.concat(eachResult);
-      } else {
-        convertedToLowestLevelStrings.push(eachBlock.shortKey);
-      }
-    });
-    return {
-      deepestLevel: deepestLevel,
-      consolidatedStrings: convertedToLowestLevelStrings
-    };
-  }
-
   public getDisplayedSubLevelsForCategory(row: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO>){
     if (row.data.displayedSubLevelRows.length > 0) {
       row.data.displayedSubLevelRows.forEach(subLevel => {

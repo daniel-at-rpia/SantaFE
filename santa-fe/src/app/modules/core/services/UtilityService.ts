@@ -297,6 +297,7 @@ export class UtilityService {
       if (!!this.keyDictionary[frontendKey]) {
         return this.keyDictionary[frontendKey];
       } else {
+        console.warn('failed to find key for', frontendKey);
         return 'n/a';
       }
     }
