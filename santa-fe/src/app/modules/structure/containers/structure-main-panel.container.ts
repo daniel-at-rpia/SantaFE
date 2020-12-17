@@ -295,7 +295,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
     for (let code in customBICSBreakdown.breakdown) {
       const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel;
-      if (!!customBICSBreakdown.breakdown[code] && targetLevel >= 2) {
+      // level 3+ since level 2 parent categories would already be in the breakdown
+      if (!!customBICSBreakdown.breakdown[code] && targetLevel >= 3) {
         const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(
           code,
           targetLevel
