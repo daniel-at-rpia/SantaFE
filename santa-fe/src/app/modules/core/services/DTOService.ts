@@ -54,7 +54,7 @@
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
-      TraceTradeCounterParty,
+      TraceTradeParty,
       TradeSideValueEquivalent
     } from 'Core/constants/securityTableConstants.constant';
     import {
@@ -443,7 +443,8 @@ export class DTOService {
       alertTradeTrader: targetAlert.data.trader,
       alertStatus: targetAlert.data.status,
       shortcutConfig: dto.data.alert.shortcutConfig,
-      alertTraceCounterParty: targetAlert.data.traceCounterParty,
+      alertTraceContraParty: targetAlert.data.traceContraParty,
+      alertTraceReportingParty: targetAlert.data.traceReportingParty,
       alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated,
       alertTraceVolumeReported: targetAlert.data.traceVolumeReported,
       alertTracePrice: targetAlert.data.tracePrice,
@@ -1438,7 +1439,8 @@ export class DTOService {
         dealer: null,
         status: null,
         isMarketListTraded: false,
-        traceCounterParty: null,
+        traceContraParty: null,
+        traceReportingParty: null,
         traceSide: null,
         traceVolumeEstimated: null,
         traceVolumeReported: null,
@@ -1582,8 +1584,9 @@ export class DTOService {
         }
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
-        const { counterParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
-        alertDTO.data.traceCounterParty = counterParty;
+        const { contraParty, reportingParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
+        alertDTO.data.traceContraParty = contraParty;
+        alertDTO.data.traceReportingParty = reportingParty;
         alertDTO.data.traceVolumeEstimated = volumeEstimated;
         alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
@@ -2301,14 +2304,16 @@ export class DTOService {
   }
 
   public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
-    const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
+    const contraParty = !!rawData.contraParty ? rawData.contraParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.contraParty] : null;
+    const reportingParty = !!rawData.reportingParty ? rawData.reportingParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.reportingParty] : null;
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
       tradeTime: rawData.eventTime,
       displayTradeTime: moment(rawData.eventTime).format(`MMM DD - HH:mm`),
       reportingTime: rawData.publishingTime,
       displayReportingTime: moment(rawData.publishingTime).format(`MMM DD - HH:mm`),
-      counterParty: counterParty,
+      contraParty: contraParty,
+      reportingParty: reportingParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeReported,
@@ -2392,8 +2397,8 @@ export class DTOService {
         isTradeAvailable.length > 0 && object.data.
         availableFiltersList.push(option);
       } else {
-        const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);
-        !!isCounterPartyAvailable && object.data.availableFiltersList.push(option);
+        const isContraPartyAvailable = object.data.displayList.find(trade => trade.contraParty === option);
+        !!isContraPartyAvailable && object.data.availableFiltersList.push(option);
       }
     })
     return object;

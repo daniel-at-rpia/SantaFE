@@ -1,7 +1,7 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
 import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
-import { TraceTradeCounterParty } from '../../constants/securityTableConstants.constant';
+import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
   securityDtos: BEFullSecurityCollection;
@@ -661,7 +661,8 @@ export interface BEGetAllTraceTradesBlock {
 
 export interface BETraceTradesBlock {
   actionFlag: string;
-  counterParty: TraceTradeCounterParty;
+  contraParty: TraceTradeParty;
+  reportingParty: TraceTradeParty;
   creationTime: string;
   discriminator: string;
   eventDate: string;
