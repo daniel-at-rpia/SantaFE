@@ -344,6 +344,7 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   isFocused: boolean;
   metric: PortfolioMetricValues;
   isPercent: boolean;
+  isSaved: boolean;
 }
 
 export interface BICsHierarchyBlock {

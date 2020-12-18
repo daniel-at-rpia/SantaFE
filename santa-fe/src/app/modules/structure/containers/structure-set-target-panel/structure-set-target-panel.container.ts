@@ -177,6 +177,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
     if (newValue !== targetItem.modifiedDisplayValue) {
+      targetItem.isSaved = false;
       targetItem.isFocused = true;
       this.setTarget(
         newValue,
@@ -190,6 +191,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem: StructureSetTargetPanelEditRowItemBlock,
     notOneOffEdit?: boolean
   ) {
+    targetItem.isSaved = true;
     targetItem.isFocused = false;
     targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
     targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue === 0 ? null : targetItem.modifiedUnderlineValue;
@@ -521,7 +523,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           isImplied: false,
           isFocused: false,
           metric: this.constants.metric.cs01,
-          isPercent: false
+          isPercent: false,
+          isSaved: false
         },
         percent: {
           savedDisplayValue: !!row.data.targetPct ? `${row.data.targetPct}` : null,
@@ -532,7 +535,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           isImplied: false,
           isFocused: false,
           metric: this.constants.metric.cs01,
-          isPercent: true
+          isPercent: true,
+          isSaved: false
         }
       },
       targetCreditLeverage: {
@@ -545,7 +549,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           isImplied: false,
           isFocused: false,
           metric: this.constants.metric.creditLeverage,
-          isPercent: false
+          isPercent: false,
+          isSaved: false
         },
         percent: {
           savedDisplayValue: null,
@@ -556,7 +561,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           isImplied: false,
           isFocused: false,
           metric: this.constants.metric.creditLeverage,
-          isPercent: true
+          isPercent: true,
+          isSaved: false
         }
       },
       isLocked: false,
@@ -1171,11 +1177,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private cs01ModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
-    return targetRow.targetCs01.level.isActive || targetRow.targetCs01.level.isImplied;
+    return (targetRow.targetCs01.level.isActive || targetRow.targetCs01.level.isImplied) && (targetRow.targetCs01.level.isSaved || targetRow.targetCs01.percent.isSaved);
   }
 
   private creditLeverageModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
-    return targetRow.targetCreditLeverage.level.isActive || targetRow.targetCreditLeverage.level.isImplied;
+    return (targetRow.targetCreditLeverage.level.isActive || targetRow.targetCreditLeverage.level.isImplied) && (targetRow.targetCreditLeverage.level.isSaved || targetRow.targetCreditLeverage.percent.isSaved);
   }
 
   private retrieveRawBreakdownDataForTargetBreakdown(): BEStructuringBreakdownBlock {
