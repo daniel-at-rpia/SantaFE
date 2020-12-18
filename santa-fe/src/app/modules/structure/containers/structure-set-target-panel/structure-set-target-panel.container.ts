@@ -252,7 +252,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onClickDistributeEvenly() {
     const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked;
+      return !eachRow.isLocked && (eachRow.rowDTO.data.bicsLevel < 2|| !eachRow.rowDTO.data.bicsLevel)
     });
     if (unlockedList.length > 0) {
       const totalNumberOfRows = unlockedList.length;
@@ -274,13 +274,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
       });
       this.calculateAllocation();
-      this.refreshPreview();
+      if (!this.state.targetBreakdown.state.isBICs) {
+        this.refreshPreview();
+      } else {
+        this.refreshEditRows()
+      }
     }
   }
 
   public onClickDistributeProportionally() {
     const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked;
+      return !eachRow.isLocked && (eachRow.rowDTO.data.bicsLevel < 2|| !eachRow.rowDTO.data.bicsLevel);
     });
     if (unlockedList.length > 0) {
       const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
