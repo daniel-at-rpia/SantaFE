@@ -479,6 +479,76 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetRow.state.isSelected = !targetRow.state.isSelected;
   }
 
+  private createEditRow(row: StructurePortfolioBreakdownRowDTO): StructureSetTargetPanelEditRowBlock {
+    const newRow: StructureSetTargetPanelEditRowBlock = {
+      targetBlockFromBreakdown: row.data,
+      rowIdentifier: row.data.category,
+      displayRowTitle: row.data.displayCategory,
+      modifiedDisplayRowTitle: row.data.displayCategory,
+      targetCs01: {
+        level: {
+          savedDisplayValue: !!row.data.targetLevel ? `${row.data.targetLevel}` : null,
+          savedUnderlineValue: !!row.data.raw.targetLevel ? row.data.raw.targetLevel : null,
+          modifiedDisplayValue: null,
+          modifiedUnderlineValue: null,
+          isActive: false,
+          isImplied: false,
+          isFocused: false,
+          metric: this.constants.metric.cs01,
+          isPercent: false
+        },
+        percent: {
+          savedDisplayValue: !!row.data.targetPct ? `${row.data.targetPct}` : null,
+          savedUnderlineValue: !!row.data.raw.targetPct ? row.data.raw.targetPct : null,
+          modifiedDisplayValue: null,
+          modifiedUnderlineValue: null,
+          isActive: false,
+          isImplied: false,
+          isFocused: false,
+          metric: this.constants.metric.cs01,
+          isPercent: true
+        }
+      },
+      targetCreditLeverage: {
+        level: {
+          savedDisplayValue: null,
+          savedUnderlineValue: null,
+          modifiedDisplayValue: null,
+          modifiedUnderlineValue: null,
+          isActive: false,
+          isImplied: false,
+          isFocused: false,
+          metric: this.constants.metric.creditLeverage,
+          isPercent: false
+        },
+        percent: {
+          savedDisplayValue: null,
+          savedUnderlineValue: null,
+          modifiedDisplayValue: null,
+          modifiedUnderlineValue: null,
+          isActive: false,
+          isImplied: false,
+          isFocused: false,
+          metric: this.constants.metric.creditLeverage,
+          isPercent: true
+        }
+      },
+      isLocked: false,
+      existInServer: true,
+      rowDTO: null
+    };
+
+    if (this.state.targetBreakdown.state.isBICs) {
+      // append current metric row to rowDTO property
+      const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+      const matchedRow = selectedList.find(selectedRow => selectedRow.data.code === row.data.code);
+      if (!!matchedRow) {
+        newRow.rowDTO = matchedRow;
+      }
+    }
+    return newRow;
+  }
+
   private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
     const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
     row[rowTargetMetric].level.modifiedDisplayValue = '';
@@ -494,62 +564,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (eachCategory.data.bicsLevel > 1) {
           // ignore sub level rows for bics
         } else {
-          const newRow: StructureSetTargetPanelEditRowBlock = {
-            targetBlockFromBreakdown: eachCategory.data,
-            rowIdentifier: eachCategory.data.category,
-            displayRowTitle: eachCategory.data.displayCategory,
-            modifiedDisplayRowTitle: eachCategory.data.displayCategory,
-            targetCs01: {
-              level: {
-                savedDisplayValue: !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null,
-                savedUnderlineValue: !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null,
-                modifiedDisplayValue: null,
-                modifiedUnderlineValue: null,
-                isActive: false,
-                isImplied: false,
-                isFocused: false,
-                metric: this.constants.metric.cs01,
-                isPercent: false
-              },
-              percent: {
-                savedDisplayValue: !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null,
-                savedUnderlineValue: !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null,
-                modifiedDisplayValue: null,
-                modifiedUnderlineValue: null,
-                isActive: false,
-                isImplied: false,
-                isFocused: false,
-                metric: this.constants.metric.cs01,
-                isPercent: true
-              }
-            },
-            targetCreditLeverage: {
-              level: {
-                savedDisplayValue: null,
-                savedUnderlineValue: null,
-                modifiedDisplayValue: null,
-                modifiedUnderlineValue: null,
-                isActive: false,
-                isImplied: false,
-                isFocused: false,
-                metric: this.constants.metric.creditLeverage,
-                isPercent: false
-              },
-              percent: {
-                savedDisplayValue: null,
-                savedUnderlineValue: null,
-                modifiedDisplayValue: null,
-                modifiedUnderlineValue: null,
-                isActive: false,
-                isImplied: false,
-                isFocused: false,
-                metric: this.constants.metric.creditLeverage,
-                isPercent: true
-              }
-            },
-            isLocked: false,
-            existInServer: true
-          };
+          const newRow = this.createEditRow(eachCategory);
           this.state.editRowList.push(newRow);
         }
       });
