@@ -607,14 +607,28 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.remainingUnallocatedCS01 = this.state.targetFund.data.target.target.cs01;
     this.state.totalUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
     this.state.remainingUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
-    this.state.editRowList.forEach((eachRow) => {
-      if (eachRow.targetCs01.level.savedUnderlineValue != null) {
-        this.state.remainingUnallocatedCS01 = this.state.remainingUnallocatedCS01 - eachRow.targetCs01.level.savedUnderlineValue;
+    if (this.state.targetBreakdown.state.isBICs) {
+      const filteredList = this.state.editRowList.filter(editRow => editRow.rowDTO.data.bicsLevel < 2);
+      if (filteredList.length > 0) {
+        filteredList.forEach((eachRow) => {
+          if (eachRow.targetCs01.level.savedUnderlineValue != null) {
+            this.state.remainingUnallocatedCS01 = this.state.remainingUnallocatedCS01 - eachRow.targetCs01.level.savedUnderlineValue;
+          }
+          if (eachRow.targetCreditLeverage.level.savedUnderlineValue != null) {
+            this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.savedUnderlineValue;
+          }
+        });
       }
-      if (eachRow.targetCreditLeverage.level.savedUnderlineValue != null) {
-        this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.savedUnderlineValue;
-      }
-    });
+    } else {
+      this.state.editRowList.forEach((eachRow) => {
+        if (eachRow.targetCs01.level.savedUnderlineValue != null) {
+          this.state.remainingUnallocatedCS01 = this.state.remainingUnallocatedCS01 - eachRow.targetCs01.level.savedUnderlineValue;
+        }
+        if (eachRow.targetCreditLeverage.level.savedUnderlineValue != null) {
+          this.state.remainingUnallocatedCreditLeverage = this.state.remainingUnallocatedCreditLeverage - eachRow.targetCreditLeverage.level.savedUnderlineValue;
+        }
+      });
+    }
     if (this.state.remainingUnallocatedCS01 > 0) {
       this.state.displayPercentageUnallocatedCS01 = this.utilityService.round(this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 * 100, 0);
       this.state.displayRemainingUnallocatedCS01 = `${this.utilityService.round(this.state.remainingUnallocatedCS01/1000, 1)} k`;
