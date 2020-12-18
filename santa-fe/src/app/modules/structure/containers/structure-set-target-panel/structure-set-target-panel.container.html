@@ -5,7 +5,8 @@
     'sat-structureSetTargetPanel--cs01ActiveState': state.activeMetric === constants.metric.cs01,
     'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage,
     'sat-structureSetTargetPanel--editingOverrideState': state.targetBreakdownIsOverride,
-    'sat-structureSetTargetPanel--displayConfiguratorState': state.configurator.display
+    'sat-structureSetTargetPanel--displayConfiguratorState': state.configurator.display,
+    'sat-structureSetTargetPanel--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-distribution">
@@ -108,8 +109,17 @@
               'sat-structureSetTargetEditRow--evenState': categoryIndex%2 === 0,
               'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
               'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride,
-              'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved
+              'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved,
+              'sat-structureSetTargetEditRow--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs
             }">
+            <section class="sat-structureSetTargetEditRow__details">
+              <portfolio-breakdown-row *ngIf="eachCategory.rowDTO"
+                [breakdownRow]="eachCategory.rowDTO"
+                (categoryClicked)="onClickEditCategory($event)"
+                (rowDiveInClicked)="getSubLevelEditRows($event)"
+                >
+              </portfolio-breakdown-row>
+            </section>
             <section class="sat-structureSetTargetEditRow__remove">
               <button (click)="onSelectForRemoval(eachCategory)" class="sat-structureSetTargetEditRow__remove-btn santaBtn--iconOnly fal fa-times"></button>
             </section>
