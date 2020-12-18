@@ -208,12 +208,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       targetItem,
       counterPartyItem
     );
+    const identifier = this.state.targetBreakdown.state.isBICs ? targetCategory.rowDTO.data.code : targetCategory.rowIdentifier;
     if (targetItem.metric === this.constants.metric.cs01) {
-      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
-      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.Cs01.targetPct = targetCategory.targetCs01.percent.savedUnderlineValue;
+      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
+      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.Cs01.targetPct = targetCategory.targetCs01.percent.savedUnderlineValue;
     } else {
-      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.CreditLeverage.targetLevel = targetCategory.targetCreditLeverage.level.savedUnderlineValue;
-      this.state.targetBreakdownRawData.breakdown[targetCategory.rowIdentifier].metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
+      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetLevel = targetCategory.targetCreditLeverage.level.savedUnderlineValue;
+      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
     }
     if (!notOneOffEdit) {
       targetCategory.isLocked = true;
