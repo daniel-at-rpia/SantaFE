@@ -46,7 +46,10 @@ import {
 } from 'BEModels/backend-payloads.interface';
 import { StructureReloadFundDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { CustomeBreakdownConfiguratorDefinitionLayout } from 'Core/constants/structureConstants.constants';
+import {
+  CustomeBreakdownConfiguratorDefinitionLayout,
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
+} from 'Core/constants/structureConstants.constants';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import * as moment from 'moment';
 
@@ -470,6 +473,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.calculateAllocation();
     this.setBtnText();
     this.refreshPreview();
+  }
+
+  public onClickEditCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isSelected = !targetRow.state.isSelected;
   }
 
   private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
