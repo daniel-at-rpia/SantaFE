@@ -2075,7 +2075,7 @@ export class DTOService {
     isDisplayCs01: boolean,
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
-    const isBicsBreakdown = rawData.groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
+    const isBicsBreakdown = rawData.groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1 && !isOverride;
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
