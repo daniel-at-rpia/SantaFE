@@ -331,6 +331,7 @@ export interface StructureSetTargetPanelEditRowBlock {
   };
   isLocked: boolean;
   existInServer: boolean;
+  rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {

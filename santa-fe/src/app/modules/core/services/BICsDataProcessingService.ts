@@ -201,6 +201,33 @@ export class BICsDataProcessingService {
     }
   }
 
+  public getBICSCategoryRawData(portfolioId: number, level: number, code: string): BEMetricBreakdowns {
+    const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
+    if (!!rawData) {
+      const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
+      const targetRawData = rawData[groupOption].breakdown[code];
+      return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
+    }
+  }
+
+  public formRawBreakdownDetailsObject(portfolioID: number, level: number): BEStructuringBreakdownBlock {
+    const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioID);
+    if (!!rawData) {
+      const targetedRawBreakdown: BEStructuringBreakdownBlock = rawData[`${BICS_BREAKDOWN_FRONTEND_KEY}${level}`];
+      const breakdown: BEStructuringBreakdownBlock = {
+        date: targetedRawBreakdown.date,
+        groupOption: targetedRawBreakdown.groupOption,
+        indexId: targetedRawBreakdown.indexId,
+        portfolioBreakdownId: targetedRawBreakdown.portfolioBreakdownId,
+        portfolioId: targetedRawBreakdown.portfolioId,
+        breakdown: {}
+      }
+      return breakdown;
+    } else {
+      return null;
+    }
+  }
+
   public getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
     const definitionList = [];
     for (const category in rawData.breakdown) {
