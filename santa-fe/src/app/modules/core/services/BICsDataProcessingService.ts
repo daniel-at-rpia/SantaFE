@@ -27,7 +27,9 @@ import {
   BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
   BICS_BRANCH_CHARACTER_LIMIT,
   BICS_DICTIONARY_KEY_PREFIX,
-  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+  BICS_BREAKDOWN_FRONTEND_KEY
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
