@@ -575,6 +575,56 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return newRow;
   }
 
+  public getSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
+    if (!!targetRow) {
+      const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+      const subBreakdown = this.bicsService.formSubLevelBreakdown(targetRow, isCs01, this.state.targetBreakdown.data.displayCategoryList);
+      targetRow.data.children = subBreakdown;
+      if (targetRow.data.children.data.displayCategoryList.length > 0) {
+        targetRow.data.children.data.displayCategoryList.forEach(displayRow => {
+          subBreakdown.data.rawCs01CategoryList.forEach(subRawCs01Row => {
+            subRawCs01Row.state.isVisibleSubLevel = true;
+            subRawCs01Row.state.isWithinPopover = false;
+            this.state.targetBreakdown.data.rawCs01CategoryList.push(subRawCs01Row);
+            const existsInRawBreakdown = Object.keys(this.state.targetBreakdownRawData.breakdown).find(key => key === subRawCs01Row.data.displayCategory);
+            if (!existsInRawBreakdown) {
+              const rawData = this.bicsService.getBICSCategoryRawData(this.state.targetBreakdown.data.portfolioId, subRawCs01Row.data.bicsLevel, subRawCs01Row.data.code);
+              if (!!rawData) {
+                this.state.targetBreakdownRawData.breakdown[subRawCs01Row.data.code] = rawData;
+              }
+            }
+          })
+          subBreakdown.data.rawLeverageCategoryList.forEach(subRawLeverageRow => {
+            subRawLeverageRow.state.isVisibleSubLevel = true;
+            subRawLeverageRow.state.isWithinPopover = false;
+            this.state.targetBreakdown.data.rawLeverageCategoryList.push(subRawLeverageRow);
+            const existsInRawBreakdown = Object.keys(this.state.targetBreakdownRawData.breakdown).find(key => key === subRawLeverageRow.data.code);
+            if (!existsInRawBreakdown) {
+              const rawData = this.bicsService.getBICSCategoryRawData(this.state.targetBreakdown.data.portfolioId, subRawLeverageRow.data.bicsLevel, subRawLeverageRow.data.code);
+              if (!!rawData) {
+                this.state.targetBreakdownRawData.breakdown[subRawLeverageRow.data.category] = rawData;
+              }
+            }
+          })
+          const newEditRow = this.createEditRow(displayRow);
+          const oppositeMetricList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
+          const oppositeMetricEditRow = oppositeMetricList.find(leverageRow => leverageRow.data.code === displayRow.data.code);
+          if (!!oppositeMetricEditRow) {
+            newEditRow.targetCreditLeverage.level.savedDisplayValue = !!oppositeMetricEditRow.data.targetLevel ? `${oppositeMetricEditRow.data.targetLevel}` : null;
+            newEditRow.targetCreditLeverage.level.savedUnderlineValue = !!oppositeMetricEditRow.data.raw.targetLevel ? oppositeMetricEditRow.data.raw.targetLevel : null;
+            newEditRow.targetCreditLeverage.percent.savedDisplayValue = !!oppositeMetricEditRow.data.targetPct ? `${oppositeMetricEditRow.data.targetPct}` : null;
+            newEditRow.targetCreditLeverage.percent.savedUnderlineValue = !!oppositeMetricEditRow.data.raw.targetPct ? oppositeMetricEditRow.data.raw.targetPct : null;
+          }
+          const parentIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === targetRow.data.code);
+          const editRowIndex = parentIndex + 1;
+          if (parentIndex >= 0) {
+            this.state.editRowList.splice(editRowIndex, 0, newEditRow);
+          }
+        })
+      }
+    }
+  }
+
   private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
     const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
     row[rowTargetMetric].level.modifiedDisplayValue = '';
@@ -836,29 +886,33 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitRegularBreakdownChangesUpdate():boolean {
-    const payload: PayloadUpdateBreakdown = this.traverseEditRowsToFormUpdateBreakdownPayload();
-    if (!!payload) {
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn: BEPortfolioStructuringDTO) => {
-          this.store$.dispatch(
-            new CoreSendNewAlerts([
-              this.dtoService.formSystemAlertObject(
-                'Structuring',
-                'Updated',
-                `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
-                null
-              )]
-            )
-          );
-          this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
-        }),
-        catchError(err => {
-          console.error('update breakdown failed');
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-          return of('error');
-        })
-      ).subscribe();
+    const payloads: Array<PayloadUpdateBreakdown> = this.traverseEditRowsToFormUpdateBreakdownPayload();
+    if (!!payloads && payloads.length > 0) {
+      payloads.forEach((payload, i) => {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEPortfolioStructuringDTO) => {
+            const payloadBrakdownLevel = payload.portfolioBreakdown.groupOption.includes(`${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}`) ? payload.portfolioBreakdown.groupOption.split(`${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}`)[1] : null;
+            const formattedAlertMessage = this.state.targetBreakdown.state.isBICs ? `Successfully Updated Targets for ${this.state.targetBreakdown.data.title} Lv.${payloadBrakdownLevel} in ${this.state.targetFund.data.portfolioShortName}` : `Successfully Updated Target for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`;
+            this.store$.dispatch(
+              new CoreSendNewAlerts([
+                this.dtoService.formSystemAlertObject(
+                  'Structuring',
+                  'Updated',
+                  formattedAlertMessage,
+                  null
+                )]
+              )
+            );
+            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+          }),
+          catchError(err => {
+            console.error('update breakdown failed');
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
+            return of('error');
+          })
+        ).subscribe();
+      })
       return true;
     } else {
       this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
@@ -982,17 +1036,35 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     });
   }
 
-  private traverseEditRowsToFormUpdateBreakdownPayload(): PayloadUpdateBreakdown {
+  private traverseEditRowsToFormUpdateBreakdownPayload(): Array<PayloadUpdateBreakdown> {
     const now = moment();
-    const payload: PayloadUpdateBreakdown = {
-      portfolioBreakdown: {
-        date: now.format('YYYY-MM-DD'),
-        groupOption: this.state.targetBreakdownRawData.groupOption,
-        indexId: this.state.targetBreakdownRawData.indexId,
-        portfolioId: this.state.targetBreakdownRawData.portfolioId,
-        breakdown: {}
+    let payloads: Array<PayloadUpdateBreakdown> = []
+    if (this.state.targetBreakdown.state.isBICs) {
+      const sortedListByLevel = this.state.targetBreakdown.data.displayCategoryList.sort((categoryA: StructurePortfolioBreakdownRowDTO, categoryB: StructurePortfolioBreakdownRowDTO) => categoryA.data.bicsLevel - categoryB.data.bicsLevel);
+      const highestLevel = sortedListByLevel[sortedListByLevel.length-1].data.bicsLevel;
+      for (let i = 1; i < highestLevel + 1; i++) {
+        const rawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, i);
+        const payload: PayloadUpdateBreakdown = {
+          portfolioBreakdown: {
+            date: moment(rawBreakdown.date).format('YYYY-MM-DD'),
+            groupOption: rawBreakdown.groupOption,
+            portfolioId: rawBreakdown.portfolioId,
+            breakdown: {}
+          }
+        };
+        payloads.push(payload);
       }
-    };
+    } else {
+      const payload: PayloadUpdateBreakdown = {
+        portfolioBreakdown: {
+          date: now.format('YYYY-MM-DD'),
+          groupOption: this.state.targetBreakdownRawData.groupOption,
+          portfolioId: this.state.targetBreakdownRawData.portfolioId,
+          breakdown: {}
+        }
+      };
+      payloads.push(payload)
+    }
     let hasModification = false;
     this.state.editRowList.forEach((eachRow) => {
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
@@ -1003,23 +1075,36 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+            targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
           if (!eachRow.targetCs01.level.savedUnderlineValue) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
-              targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+              targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
+            targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }
-        payload.portfolioBreakdown.breakdown[eachRow.rowIdentifier] = modifiedMetricBreakdowns;
+        if (this.state.targetBreakdown.state.isBICs) {
+          const rowLevel = eachRow.rowDTO.data.bicsLevel;
+          const BEGroupOption = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${rowLevel}`;
+          const selectedBreakdown = payloads.find(breakdown => breakdown.portfolioBreakdown.groupOption === BEGroupOption);
+          if (!!selectedBreakdown) {
+            selectedBreakdown.portfolioBreakdown.breakdown[eachRow.rowDTO.data.code] = modifiedMetricBreakdowns;
+          }
+        } else {
+          payloads[0].portfolioBreakdown.breakdown[eachRow.rowIdentifier] = modifiedMetricBreakdowns;
+        }
       }
     });
-    return hasModification ? payload : null;
+    if (this.state.targetBreakdown.state.isBICs) {
+      const payloadsWithChanges = payloads.filter(payload => Object.entries(payload.portfolioBreakdown.breakdown).length > 0);
+      payloads = payloadsWithChanges;
+    }
+    return hasModification ? payloads : null;
   }
 
   private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
@@ -1046,17 +1131,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
-            targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+            targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
           if (!eachRow.targetCs01.level.savedUnderlineValue) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
-              targetLevel: eachRow.targetCs01.level.savedUnderlineValue
+              targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
           modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
-            targetLevel: eachRow.targetCreditLeverage.level.savedUnderlineValue
+            targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
