@@ -119,6 +119,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state = this.initializePageState();
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
+        const { rawLeverageCategoryList, rawCs01CategoryList } = this.state.targetBreakdown.data;
+        if (this.state.targetBreakdown.state.isBICs) {
+          const cs01LevelOneList = rawCs01CategoryList.filter(row => row.data.bicsLevel === 1);
+          const leverageLevelOneList = rawLeverageCategoryList.filter(row => row.data.bicsLevel === 1);
+          this.state.targetBreakdown.data.rawCs01CategoryList = cs01LevelOneList;
+          this.state.targetBreakdown.data.rawLeverageCategoryList = leverageLevelOneList;
+          this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+        }
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.state.isPreviewVariant = true;
