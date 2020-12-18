@@ -1744,15 +1744,15 @@ export const SecurityTableAlertHeaderConfigs: SecurityTableSpecificAlertHeaderCo
   },
   mark: {
     include: ['cs01CadFirm'],
-    exclude: ['alertTradeTrader', ...POSITION_ALERT_HEADERS, ...TRACE_ALERT_HEADERS]
+    exclude: ['alertTradeTrader', 'alertIsBenchmarkHedged', ...POSITION_ALERT_HEADERS, ...TRACE_ALERT_HEADERS]
   },
   trade: {
     include: ['cs01CadFirm'],
-    exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
+    exclude: ['alertType', 'alertStatus', 'alertIsBenchmarkHedged', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
   },
   trace: {
     include: ['alertTime', 'alertMessage', 'alertSide',...TRACE_ALERT_HEADERS],
-    exclude: TRACE_ALERT_EXCLUDED_HEADERS
+    exclude: ['alertIsBenchmarkHedged', ...TRACE_ALERT_EXCLUDED_HEADERS]
   },
   all: {
     include: ['cs01CadFirm'],
