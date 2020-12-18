@@ -723,15 +723,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue === 0 ? null : counterPartyItem.modifiedUnderlineValue;
   }
 
-  private updateTargetBreakdownLists(list: Array<StructurePortfolioBreakdownRowDTO>, minValue: number, maxValue: number, isCs01: boolean) {
+  private updateTargetBreakdownLists(list: Array<StructurePortfolioBreakdownRowDTO>, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean = false) {
+    const [cs01Min, cs01Max, creditLeverageMin, creditLeverageMax] = this.utilityService.getCompareValuesForStructuringVisualizer(rawBreakdownData);
+    const minValue = !!isCs01 ? cs01Min : creditLeverageMin;
+    const maxValue = !!isCs01 ? cs01Max : creditLeverageMax;
     list.forEach(row => {
       const editRowListEquivalent = this.state.editRowList.find(editRowList => editRowList.rowIdentifier === row.data.category);
       if (!!editRowListEquivalent) {
-        const { breakdown, portfolioId, groupOption } = this.state.targetBreakdownRawData;
-        const rowBreakdownData = breakdown[row.data.category];
+        const { breakdown, portfolioId, groupOption } = rawBreakdownData;
+        const rowBreakdownData = !!isBICS ? breakdown[row.data.code] : breakdown[row.data.category];
         const rowBreakdownMetricData = !!isCs01 ? rowBreakdownData.metricBreakdowns.Cs01 : rowBreakdownData.metricBreakdowns.CreditLeverage;
         const { diveInLevel } = this.state.targetBreakdown.data;
         const { isOverrideVariant } = this.state.targetBreakdown.state;
+        const level = !!isBICS ? row.data.bicsLevel : null;
+        const code = !!isBICS ? row.data.code : null;
         const newCategoryBlock = this.dtoService.formPortfolioBreakdownCategoryBlock(
           minValue,
           maxValue,
@@ -745,11 +750,24 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           diveInLevel,
           rowBreakdownData.view as PortfolioView,
           row.data.bucket,
-          row.data.simpleBucket
+          row.data.simpleBucket,
+          level,
+          code
         );
         row.data = newCategoryBlock.data;
         row.state = newCategoryBlock.state;
         row.data.displayCategory = editRowListEquivalent.displayRowTitle;
+        if (!!isBICS) {
+          if (row.data.bicsLevel >= 2) {
+            row.state.isVisibleSubLevel = true;
+            row.state.isWithinPopover = false;
+          }
+          editRowListEquivalent.rowDTO.data = row.data;
+          setTimeout(() => {
+            editRowListEquivalent.rowDTO.state.isStencil = false;
+            editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
+          }, 300)
+        }
       }
     })
   }
@@ -759,16 +777,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
       category.data.moveVisualizer.state.isStencil = true;
     })
-    const [cs01Min, cs01Max, creditLeverageMin, creditLeverageMax] = this.utilityService.getCompareValuesForStructuringVisualizer(this.state.targetBreakdownRawData);
     const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
     setTimeout(() => {
       if (!!isCs01) {
-        this.updateTargetBreakdownLists(this.state.targetBreakdown.data.rawCs01CategoryList, cs01Min, cs01Max, isCs01);
+        this.updateTargetBreakdownLists(this.state.targetBreakdown.data.rawCs01CategoryList, this.state.targetBreakdownRawData, isCs01);
       } else {
-        this.updateTargetBreakdownLists(this.state.targetBreakdown.data.rawLeverageCategoryList, creditLeverageMin, creditLeverageMax, isCs01);
+        this.updateTargetBreakdownLists(this.state.targetBreakdown.data.rawLeverageCategoryList, this.state.targetBreakdownRawData, isCs01);
       }
       this.utilityService.calculateAlignmentRating(this.state.targetBreakdown);
-      this.state.targetBreakdown.data.displayCategoryList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
       this.state.targetBreakdown.state.isStencil = false;
       this.state.targetBreakdown.data.displayCategoryList.forEach(category => {
         category.state.isStencil = false;
