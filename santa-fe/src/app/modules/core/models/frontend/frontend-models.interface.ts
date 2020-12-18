@@ -138,6 +138,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertQuoteDealer: string;
       alertTradeTrader: string;
       alertStatus: string;
+      alertIsBenchmarkHedged?: string;
       shortcutConfig: {
         numericFilterDTO: NumericFilterDTO;
         driver: string;
@@ -589,6 +590,7 @@ export interface AlertDTO extends BasicDTOStructure {
     dealer: string;
     status: string;
     isMarketListTraded: boolean;
+    isBenchmarkHedged: boolean;
     traceContraParty?: TraceTradeParty;
     traceReportingParty?: TraceTradeParty;
     traceSide?: string;

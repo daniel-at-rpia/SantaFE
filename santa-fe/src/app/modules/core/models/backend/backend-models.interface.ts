@@ -519,9 +519,9 @@ interface BEAlertRegularQuoteBlock extends BEQuoteBaseBlock {
   coupon: number,
   maturity: string,
   equityReferencePrice: boolean,
-  isGreyMarket: boolean
+  isGreyMarket: boolean,
+  isBenchmarkHedged?: boolean
 }
-
 interface BEAlertCDSQuoteBlock extends BEQuoteBaseBlock {
   class: string,
   msG1MessageID: string,
@@ -532,7 +532,8 @@ interface BEAlertCDSQuoteBlock extends BEQuoteBaseBlock {
   bloombergGlobalIdentifier: string,
   senoirity: string,
   term: string,
-  upfrontPoints?: number
+  upfrontPoints?: number,
+  isBenchmarkHedged?: boolean
 }
 
 export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
@@ -557,7 +558,8 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
   priceType: string,
   isNatural: string,
   ioiQualifier: string,
-  isTraded: boolean
+  isTraded: boolean,
+  isBenchmarkHedged?: boolean
 }
 
 export interface BEStructuringBreakdownSingleEntry {

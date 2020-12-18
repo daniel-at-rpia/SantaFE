@@ -36,7 +36,8 @@
       traceTradeNumericalFilterSymbols,
       TRACE_SCATTER_GRAPH_ID,
       TRACE_PIE_GRAPH_LEFT_ID,
-      TRACE_PIE_GRAPH_RIGHT_ID
+      TRACE_PIE_GRAPH_RIGHT_ID,
+      benchMarkHedgedDisplayOptions
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -448,7 +449,8 @@ export class DTOService {
       alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated,
       alertTraceVolumeReported: targetAlert.data.traceVolumeReported,
       alertTracePrice: targetAlert.data.tracePrice,
-      alertTraceSpread: targetAlert.data.traceSpread
+      alertTraceSpread: targetAlert.data.traceSpread,
+      alertIsBenchmarkHedged: targetAlert.data.isBenchmarkHedged ? benchMarkHedgedDisplayOptions.yes : benchMarkHedgedDisplayOptions.no
     };
   }
 
@@ -1439,6 +1441,7 @@ export class DTOService {
         dealer: null,
         status: null,
         isMarketListTraded: false,
+        isBenchmarkHedged: false,
         traceContraParty: null,
         traceReportingParty: null,
         traceSide: null,
@@ -1480,6 +1483,16 @@ export class DTOService {
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
     const momentTime = !!rawData.trade ? moment(rawData.trade.eventTime): moment(rawData.timeStamp);
+    // check for isBenchmarkHedged
+    // field is available for Market Access data only
+    // for other venues (ex. MsG1/JPM), set this to false
+    let isBenchmarkHedged: boolean;
+    if (rawData.quote) {
+      const isBenchmarkHedgedAvailable = Object.keys(rawData.quote).find(key => key === 'isBenchmarkHedged');
+      isBenchmarkHedged = !!isBenchmarkHedgedAvailable ? rawData.quote.isBenchmarkHedged : false;
+    } else {
+      isBenchmarkHedged = false;
+    }
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
@@ -1501,7 +1514,8 @@ export class DTOService {
         trader: null,
         dealer: null,
         status: null,
-        isMarketListTraded: false
+        isMarketListTraded: false,
+        isBenchmarkHedged: isBenchmarkHedged
       },
       api: {
         onMouseEnterAlert: null,
