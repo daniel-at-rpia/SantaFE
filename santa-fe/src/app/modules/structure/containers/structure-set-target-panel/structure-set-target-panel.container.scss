@@ -266,6 +266,19 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
       }
     }
   }
+  &--bicsBreakdownVariant {
+    #{$blockName} {
+      &__main {
+        &-preview,
+        &-configurator {
+          display: none;
+        }
+        &-edit {
+          flex: 1 1 auto;
+        }
+      }
+    }
+  }
 }
 
 .sat-structureSetTargetEditRow {
@@ -273,6 +286,10 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
   @include mix_alive('custom', $animation_duration_light background-color);
   display: flex;
   background-color: $color_gray_2;
+  &__details {
+    flex: 0 0 65%;
+    display: none;
+  }
   &__remove {
     @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 auto;
@@ -339,6 +356,21 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
       santa-input {
         flex: 1 1 auto;
         z-index: $z_index_base_item_lift;
+      }
+    }
+  }
+  &--bicsBreakdownVariant {
+    #{$blockName} {
+      &__details {
+        display: flex;
+        & > portfolio-breakdown-row {
+          flex: 1 1 auto;
+        }
+      }
+      &__label {
+        &-text {
+          display: none;
+        }
       }
     }
   }
