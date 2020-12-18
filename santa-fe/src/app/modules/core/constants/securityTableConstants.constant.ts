@@ -174,6 +174,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'alertIsBenchmarkHedged',
+    content: {
+      label: 'Is Benchmark Hedged',
+      attrName: 'alertIsBenchmarkHedged',
+      underlineAttrName: 'alertIsBenchmarkHedged',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      isDataTypeText: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: false
+        }
+      }
+    }
+  },{
     key: 'alertLevel',
     content: {
       label: 'Level',
