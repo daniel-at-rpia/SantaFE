@@ -222,7 +222,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!notOneOffEdit) {
       targetCategory.isLocked = true;
       this.calculateAllocation();
-      this.refreshPreview();
+      if (this.state.targetBreakdown.state.isBICs) {
+        this.refreshEditRows();
+      } else {
+        this.refreshPreview();
+      }
+    }
+  }
+
+  public refreshEditRows() {
+    const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+    if (!!isCs01) {
+      this.updateTargetBreakdownLists(this.state.targetBreakdown.data.rawCs01CategoryList, this.state.targetBreakdownRawData, isCs01, true);
+    } else {
+      this.updateTargetBreakdownLists(this.state.targetBreakdown.data.rawLeverageCategoryList, this.state.targetBreakdownRawData, isCs01, true);
     }
   }
 
@@ -233,7 +246,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric = !this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric;
       this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === this.constants.metric.cs01;
       this.setBtnText();
-      this.refreshPreview();
+      this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+      if (this.state.targetBreakdown.state.isBICs) {
+        this.refreshEditRows();
+      } else {
+        this.refreshPreview();
+      }
     }
   }
 
@@ -309,7 +327,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
       });
       this.calculateAllocation();
-      this.refreshPreview();
+      if (this.state.targetBreakdown.state.isBICs) {
+        this.refreshEditRows();
+      } else {
+        this.refreshPreview();
+      }
     }
   }
 
