@@ -1975,4 +1975,9 @@ export enum traceTradePieGraphKeys {
   side = 'side'
 }
 
+export enum benchMarkHedgedDisplayOptions {
+  yes = 'Y',
+  no = 'N'
+}
+
 export const TraceTradePartyList: Array<TraceTradeParty> = [TraceTradeParty.Dealer, TraceTradeParty.Client, TraceTradeParty.ClientAffiliate, TraceTradeParty.ATS];
