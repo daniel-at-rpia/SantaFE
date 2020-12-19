@@ -1076,7 +1076,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         hasModification = true;
         const modifiedMetricBreakdowns: BEMetricBreakdowns = {
-          view: null,
           metricBreakdowns: {}
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
