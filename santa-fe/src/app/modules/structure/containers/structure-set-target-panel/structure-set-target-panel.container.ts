@@ -255,7 +255,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.setBtnText();
       this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
       if (this.state.targetBreakdown.state.isBICs) {
-        this.refreshEditRows();
+        const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+        this.changeEditRowsBasedOnMetric(selectedList);
       } else {
         this.refreshPreview();
       }
@@ -471,6 +472,21 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetRow: StructureSetTargetPanelEditRowBlock
   ) {
     targetRow.modifiedDisplayRowTitle = targetName;
+  }
+
+  private changeEditRowsBasedOnMetric(list: Array<StructurePortfolioBreakdownRowDTO>) {
+    this.state.editRowList.forEach(editRow => {
+      const selectedRow = list.find(rawCs01 => rawCs01.data.code === editRow.rowDTO.data.code);
+      if (!!selectedRow) {
+        selectedRow.state.isStencil = true;
+        selectedRow.data.moveVisualizer.state.isStencil = true;
+        editRow.rowDTO = selectedRow;
+        setTimeout(() => {
+          selectedRow.state.isStencil = false;
+          selectedRow.data.moveVisualizer.state.isStencil = false;
+        }, 300)
+      }
+    })
   }
 
   private checkIfEvenRow(editRow: StructureSetTargetPanelEditRowBlock): boolean {
