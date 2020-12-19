@@ -272,7 +272,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onClickDistributeEvenly() {
     const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked && (eachRow.rowDTO.data.bicsLevel < 2|| !eachRow.rowDTO.data.bicsLevel)
+      return !eachRow.isLocked && (eachRow.rowDTO.data.bicsLevel < 2 || !eachRow.rowDTO.data.bicsLevel)
     });
     if (unlockedList.length > 0) {
       const totalNumberOfRows = unlockedList.length;
