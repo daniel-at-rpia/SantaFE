@@ -806,7 +806,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const minValue = !!isCs01 ? cs01Min : creditLeverageMin;
     const maxValue = !!isCs01 ? cs01Max : creditLeverageMax;
     list.forEach(row => {
-      const editRowListEquivalent = this.state.editRowList.find(editRowList => editRowList.rowIdentifier === row.data.category);
+      const editRowListEquivalent = !!isBICS ? this.state.editRowList.find(editRowList => editRowList.rowDTO.data.code === row.data.code) : this.state.editRowList.find(editRowList => editRowList.rowIdentifier === row.data.category);
       if (!!editRowListEquivalent) {
         const { breakdown, portfolioId, groupOption } = rawBreakdownData;
         const rowBreakdownData = !!isBICS ? breakdown[row.data.code] : breakdown[row.data.category];
