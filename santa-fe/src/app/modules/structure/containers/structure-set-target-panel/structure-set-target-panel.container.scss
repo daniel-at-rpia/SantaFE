@@ -6,6 +6,8 @@ $structureSetTargetPanel_configurator_container_leftPadding: $spacing_large;
 $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $structureSetTargetPanel_configurator_container_leftPadding;
 $structureSetTargetPanel_highlight_color: $color_blue_gray_1;
 $structureSetTargetPanel_highlight_border: 2px solid $color_active;
+$structureSetTargetPanel_bics_variant_edit_section_width: 2 * ($structureSetTargetPanel_edit_column_size + ($spacing_large + ($spacing_large / 2)));
+$structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetTargetPanel_bics_variant_edit_section_width});
 
 .sat-structureSetTargetPanel {
   $blockName: &;
@@ -287,7 +289,7 @@ $structureSetTargetPanel_highlight_border: 2px solid $color_active;
   display: flex;
   background-color: $color_gray_2;
   &__details {
-    flex: 0 0 65%;
+    flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
     display: none;
   }
   &__remove {
