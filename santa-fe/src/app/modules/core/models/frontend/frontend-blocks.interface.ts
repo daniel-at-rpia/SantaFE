@@ -330,6 +330,7 @@ export interface StructureSetTargetPanelEditRowBlock {
     percent: StructureSetTargetPanelEditRowItemBlock;
   };
   isLocked: boolean;
+  isEven: boolean;
   existInServer: boolean;
   rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
 }

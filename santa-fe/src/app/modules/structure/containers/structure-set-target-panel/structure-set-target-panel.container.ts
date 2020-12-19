@@ -473,6 +473,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetRow.modifiedDisplayRowTitle = targetName;
   }
 
+  private checkIfEvenRow(editRow: StructureSetTargetPanelEditRowBlock): boolean {
+    const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+    if (!!this.state.targetBreakdown.state.isBICs) {
+      const levelOneList = selectedList.filter(row => row.data.bicsLevel === 1);
+      return levelOneList.findIndex(row => row.data.code === editRow.rowDTO.data.code) % 2 === 0;
+    } else {
+      return selectedList.findIndex(row => row.data.category === editRow.rowIdentifier) % 2 === 0;
+    }
+  }
+
   private setBtnText () {
     const metricList = [this.constants.metric.cs01, this.constants.metric.creditLeverage];
     const metricPercentageData = metricList.map(metric => {
@@ -575,16 +585,24 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
       },
       isLocked: false,
+      isEven: false,
       existInServer: true,
       rowDTO: null
     };
-
     if (this.state.activeMetric === this.constants.metric.cs01) {
       newRow.rowDTO = row;
     } else {
       const matchedRow = this.state.targetBreakdown.data.rawLeverageCategoryList.find(selectedRow => selectedRow.data.code === row.data.code);
       if (!!matchedRow) {
         newRow.rowDTO = matchedRow;
+      }
+    }
+    newRow.isEven = this.checkIfEvenRow(newRow);
+    if (newRow.isEven) {
+      const oppositeList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
+      const oppositeRow = oppositeList.find(oppositeRowItem => oppositeRowItem.data.code === newRow.rowDTO.data.code);
+      if (!!oppositeRow) {
+        oppositeRow.data.moveVisualizer.style.backgroundColor = this.constants.evenEditRowHighlightColor;
       }
     }
     return newRow;
