@@ -131,6 +131,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           this.state.targetBreakdown.data.rawCs01CategoryList = cs01LevelOneList;
           this.state.targetBreakdown.data.rawLeverageCategoryList = leverageLevelOneList;
           this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+        } else {
+          rawCs01CategoryList.forEach(rawCs01 => rawCs01.state.isWithinSetTargetPreview = true);
+          rawLeverageCategoryList.forEach(rawLeverage => rawLeverage.state.isWithinSetTargetPreview = true);
         }
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {

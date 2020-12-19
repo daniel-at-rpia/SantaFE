@@ -548,6 +548,15 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
       }
     }
   }
+  &--isWithinSetTargetPreview {
+    #{$blockName} {
+      &__cta {
+        &-actionMenu {
+          display: none;
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__cta {
