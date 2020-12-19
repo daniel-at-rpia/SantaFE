@@ -707,19 +707,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
       });
     }
-    if (this.state.remainingUnallocatedCS01 > 0) {
+    if (this.state.remainingUnallocatedCS01) {
       this.state.displayPercentageUnallocatedCS01 = this.utilityService.round(this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 * 100, 0);
       this.state.displayRemainingUnallocatedCS01 = `${this.utilityService.round(this.state.remainingUnallocatedCS01/1000, 1)} k`;
-    } else {
-      this.state.displayPercentageUnallocatedCS01 = 0;
-      this.state.displayRemainingUnallocatedCS01 = '0 k';
     }
-    if (this.state.remainingUnallocatedCreditLeverage > 0) {
+
+    if (this.state.remainingUnallocatedCreditLeverage) {
       this.state.displayPercentageUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage * 100, 0);
       this.state.displayRemainingUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage, 2);
-    } else {
-      this.state.displayPercentageUnallocatedCreditLeverage = 0;
-      this.state.displayRemainingUnallocatedCreditLeverage = '0';
     }
     this.setBtnText();
   }
