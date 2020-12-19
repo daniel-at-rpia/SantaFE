@@ -841,7 +841,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         row.data = newCategoryBlock.data;
         row.state = newCategoryBlock.state;
         row.data.displayCategory = editRowListEquivalent.displayRowTitle;
+        row.state.isWithinSetTargetPreview = !!isBICS;
         if (!!isBICS) {
+          row.state.isWithinEditRow = true;
           if (row.data.bicsLevel >= 2) {
             row.state.isVisibleSubLevel = true;
             row.state.isWithinPopover = false;
