@@ -530,6 +530,24 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
       }
     }
   }
+  &--isWithinEditRow {
+    #{$blockName} {
+      &__branch {
+        display: none;
+      }
+      &__cta {
+        &-actionMenu {
+          top: 0;
+          &-top {
+            display: none;
+          }
+          &-bottom {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__cta {
