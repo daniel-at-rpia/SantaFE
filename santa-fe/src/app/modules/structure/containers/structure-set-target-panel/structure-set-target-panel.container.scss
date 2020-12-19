@@ -334,6 +334,8 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
   &__details {
     flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
     display: none;
+    align-items: center;
+    padding: $spacing_x_small 0;
   }
   &__remove {
     @include mix_fixed_div(relative, $z_index_base_item);
