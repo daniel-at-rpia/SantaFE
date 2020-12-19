@@ -19,7 +19,7 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
   &__utilities {
     @include mix_border_generator(0 0 $typical_border_width 0);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-top: -$spacing_small;
     padding-bottom: $spacing_medium;
@@ -31,6 +31,7 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
       align-self: stretch;
       padding: $spacing_small $spacing_medium;
       background-color: $color_disabled;
+      margin: 0 auto;
       &-label {
         display: none;
         align-items: center;
@@ -65,6 +66,9 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
         }
       }
     }
+    &-clearTargets {
+      display: flex;
+    }
   }
   &__main {
     @include mix_fixed_div(relative, $z_index_base_item);
@@ -77,15 +81,8 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
       flex-wrap: wrap;
       display: flex;
       padding-right: $spacing_large;
-      margin-right: 0;
+      margin: 5rem 0 0 0;
       overflow: hidden;
-      &-clearTargets {
-        flex: 0 0 100%;
-        align-self: flex-start;
-        display: flex;
-        justify-content: flex-end;
-        margin-top: $spacing_small;
-      }
       &>portfolio-breakdown {
         flex: 1 1 auto;
       }

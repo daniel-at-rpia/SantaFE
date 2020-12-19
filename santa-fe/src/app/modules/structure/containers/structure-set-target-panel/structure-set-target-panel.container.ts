@@ -505,7 +505,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.clearAllTargetSelected = true;
     this.calculateAllocation();
     this.setBtnText();
-    this.refreshPreview();
+    if (this.state.targetBreakdown.state.isBICs) {
+      this.refreshEditRows();
+    } else {
+      this.refreshPreview();
+    }
   }
 
   public onClickEditCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
