@@ -570,10 +570,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       rowDTO: null
     };
 
-    if (this.state.targetBreakdown.state.isBICs) {
-      // append current metric row to rowDTO property
-      const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
-      const matchedRow = selectedList.find(selectedRow => selectedRow.data.code === row.data.code);
+    if (this.state.activeMetric === this.constants.metric.cs01) {
+      newRow.rowDTO = row;
+    } else {
+      const matchedRow = this.state.targetBreakdown.data.rawLeverageCategoryList.find(selectedRow => selectedRow.data.code === row.data.code);
       if (!!matchedRow) {
         newRow.rowDTO = matchedRow;
       }
