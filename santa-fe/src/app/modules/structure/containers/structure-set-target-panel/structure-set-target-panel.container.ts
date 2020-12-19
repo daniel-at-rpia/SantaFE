@@ -126,6 +126,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (this.state.targetBreakdown.state.isBICs) {
           const cs01LevelOneList = rawCs01CategoryList.filter(row => row.data.bicsLevel === 1);
           const leverageLevelOneList = rawLeverageCategoryList.filter(row => row.data.bicsLevel === 1);
+          cs01LevelOneList.forEach(cs01Row => cs01Row.state.isWithinEditRow = true);
+          leverageLevelOneList.forEach(cs01Row => cs01Row.state.isWithinEditRow = true);
           this.state.targetBreakdown.data.rawCs01CategoryList = cs01LevelOneList;
           this.state.targetBreakdown.data.rawLeverageCategoryList = leverageLevelOneList;
           this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
@@ -591,6 +593,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           subBreakdown.data.rawCs01CategoryList.forEach(subRawCs01Row => {
             subRawCs01Row.state.isVisibleSubLevel = true;
             subRawCs01Row.state.isWithinPopover = false;
+            subRawCs01Row.state.isWithinEditRow = true;
             this.state.targetBreakdown.data.rawCs01CategoryList.push(subRawCs01Row);
             const existsInRawBreakdown = Object.keys(this.state.targetBreakdownRawData.breakdown).find(key => key === subRawCs01Row.data.code);
             if (!existsInRawBreakdown) {
@@ -603,6 +606,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           subBreakdown.data.rawLeverageCategoryList.forEach(subRawLeverageRow => {
             subRawLeverageRow.state.isVisibleSubLevel = true;
             subRawLeverageRow.state.isWithinPopover = false;
+            subRawLeverageRow.state.isWithinEditRow = true;
             this.state.targetBreakdown.data.rawLeverageCategoryList.push(subRawLeverageRow);
             const existsInRawBreakdown = Object.keys(this.state.targetBreakdownRawData.breakdown).find(key => key === subRawLeverageRow.data.code);
             if (!existsInRawBreakdown) {

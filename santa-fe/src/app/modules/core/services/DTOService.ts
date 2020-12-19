@@ -2354,7 +2354,8 @@ export class DTOService {
         isShowingSubLevels: false,
         isEditingView: false,
         isEditingViewAvail: false,
-        isDoveIn: false
+        isDoveIn: false,
+        isWithinEditRow: false
       }
     }
     return object;
