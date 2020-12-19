@@ -54,6 +54,20 @@
       <div class="sat-structureSetTargetPanel__main-edit-content">
         <div class="sat-structureSetTargetPanel__main-edit-content-border"></div>
         <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-content-header">
+          <div class="sat-structureSetTargetPanel__main-edit-content-header-categories">
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-flag-checkered"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Target</div>
+            </div>
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-chart-pie"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Current %</div>
+            </div>
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-analytics"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Index %</div>
+            </div>
+          </div>
           <button (click)="onClickNewOverrideRow()" class="sat-structureSetTargetPanel__main-edit-content-header-createRow santaBtn--labelled santaBtn--inverseLabelled">
             <i class="fal fa-plus"></i>
             <span>New Override Row</span>

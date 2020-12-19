@@ -8,6 +8,7 @@ $structureSetTargetPanel_highlight_color: $color_blue_gray_1;
 $structureSetTargetPanel_highlight_border: 2px solid $color_active;
 $structureSetTargetPanel_bics_variant_edit_section_width: 2 * ($structureSetTargetPanel_edit_column_size + ($spacing_large + ($spacing_large / 2)));
 $structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetTargetPanel_bics_variant_edit_section_width});
+$structureSetTargetPanel_categoryList_cell_width: 3.5rem;
 
 .sat-structureSetTargetPanel {
   $blockName: &;
@@ -131,6 +132,38 @@ $structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetT
           display: flex;
           justify-content: flex-end;
           margin-right: $scroll_bar_width;
+          &-categories {
+            display: none;
+            justify-content: flex-end;
+            align-items: flex-end;
+            flex: 0 0 100%;
+            margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
+            &-cell {
+              @include mix_fixed_div(relative, $z_index_base_item);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: $structureSetTargetPanel_categoryList_cell_width;
+              &-icon {
+                color: $font_color_minor;
+                font-size: $font_size_large;
+              }
+              &-tooltip {
+                @include mix_fixed_div(absolute, $z_index_hovering_item);
+                @include mix_border_radius(3px);
+                display: none;
+                top: -100%;
+                color: $font_color_inverse;
+                line-height: $line_height_small;
+                width: 4.25rem;
+                background-color: $color_active;
+                text-align: center;
+              }
+              &:hover>&-tooltip {
+                display: block;
+              }
+            }
+          }
           &-item {
             flex: 0 0 $structureSetTargetPanel_edit_column_size;
             display: flex;
@@ -277,6 +310,16 @@ $structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetT
         }
         &-edit {
           flex: 1 1 auto;
+          &-content {
+            &-header {
+              justify-content: space-between;
+              &-categories {
+                flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
+                display: flex;
+                margin-right: $spacing_x_large;
+              }
+            }
+          }
         }
       }
     }
