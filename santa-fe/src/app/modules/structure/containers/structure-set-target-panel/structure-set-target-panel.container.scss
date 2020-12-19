@@ -136,8 +136,17 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
             display: none;
             justify-content: flex-end;
             align-items: flex-end;
+            flex-wrap: wrap;
             flex: 0 0 100%;
             margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
+            &-index {
+              flex: 0 0 100%;
+              text-align: right;
+              &-text {
+                display: inline-block;
+                width: 6rem;
+              }
+            }
             &-cell {
               @include mix_fixed_div(relative, $z_index_base_item);
               display: flex;

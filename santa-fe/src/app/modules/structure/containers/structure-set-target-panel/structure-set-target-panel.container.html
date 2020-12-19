@@ -55,6 +55,9 @@
         <div class="sat-structureSetTargetPanel__main-edit-content-border"></div>
         <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-content-header">
           <div class="sat-structureSetTargetPanel__main-edit-content-header-categories">
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-index">
+              <span class="sat-structureSetTargetPanel__main-edit-content-header-categories-index-text">{{state.targetBreakdown.data.indexName}}</span>
+            </div>
             <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
               <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-flag-checkered"></i>
               <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Target</div>
