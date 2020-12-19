@@ -592,7 +592,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             subRawCs01Row.state.isVisibleSubLevel = true;
             subRawCs01Row.state.isWithinPopover = false;
             this.state.targetBreakdown.data.rawCs01CategoryList.push(subRawCs01Row);
-            const existsInRawBreakdown = Object.keys(this.state.targetBreakdownRawData.breakdown).find(key => key === subRawCs01Row.data.displayCategory);
+            const existsInRawBreakdown = Object.keys(this.state.targetBreakdownRawData.breakdown).find(key => key === subRawCs01Row.data.code);
             if (!existsInRawBreakdown) {
               const rawData = this.bicsService.getBICSCategoryRawData(this.state.targetBreakdown.data.portfolioId, subRawCs01Row.data.bicsLevel, subRawCs01Row.data.code);
               if (!!rawData) {
