@@ -626,7 +626,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public getSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
     if (!!targetRow) {
-      if (!targetRow.data.children || targetRow.data.children.data.displayCategoryList.length > 0) {
+      if (!targetRow.data.children || targetRow.data.children.data.displayCategoryList.length === 0) {
         const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
         const subBreakdown = this.bicsService.formSubLevelBreakdown(targetRow, isCs01, this.state.targetBreakdown.data.displayCategoryList);
         targetRow.data.children = subBreakdown;
