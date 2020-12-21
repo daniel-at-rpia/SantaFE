@@ -2125,10 +2125,7 @@ export class DTOService {
         code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).code : null;
       }
       if (!!isOverride) {
-        bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
-          this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
-          eachCategoryText
-        )
+        bucket = rawData.breakdown[eachCategoryText].bucket || {};
         simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
         const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;

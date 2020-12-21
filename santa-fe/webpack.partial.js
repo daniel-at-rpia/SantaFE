@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "2.1.2";
+const version = "2.1.2-alpha";
 module.exports = {
   output: {
     filename: `[name].${version}.min.js`
