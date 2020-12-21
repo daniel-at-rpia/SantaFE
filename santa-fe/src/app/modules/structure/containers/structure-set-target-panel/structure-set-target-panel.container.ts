@@ -729,10 +729,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private calculateAllocation() {
-    this.state.totalUnallocatedCS01 = this.state.targetFund.data.target.target.cs01;
-    this.state.remainingUnallocatedCS01 = this.state.targetFund.data.target.target.cs01;
-    this.state.totalUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
-    this.state.remainingUnallocatedCreditLeverage = this.state.targetFund.data.target.target.creditLeverage;
+    // use fund's current levels if target is not provided - ultimatelly BE does the calculations but FE has to match those changes visually
+    this.state.totalUnallocatedCS01 = !!this.state.targetFund.data.target.target.cs01 ? this.state.targetFund.data.target.target.cs01 : this.state.targetFund.data.currentTotals.cs01;
+    this.state.remainingUnallocatedCS01 = !!this.state.targetFund.data.target.target.cs01 ? this.state.targetFund.data.target.target.cs01 : this.state.targetFund.data.currentTotals.cs01;
+    this.state.totalUnallocatedCreditLeverage = !!this.state.targetFund.data.target.target.creditLeverage ? this.state.targetFund.data.target.target.creditLeverage : this.state.targetFund.data.currentTotals.creditLeverage;
+    this.state.remainingUnallocatedCreditLeverage = !!this.state.targetFund.data.target.target.creditLeverage ? this.state.targetFund.data.target.target.creditLeverage : this.state.targetFund.data.currentTotals.creditLeverage;
+
     if (this.state.targetBreakdown.state.isBICs) {
       const filteredList = this.state.editRowList.filter(editRow => editRow.rowDTO.data.bicsLevel < 2);
       if (filteredList.length > 0) {
