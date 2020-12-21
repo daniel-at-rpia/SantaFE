@@ -489,10 +489,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         selectedRow.state.isStencil = true;
         selectedRow.data.moveVisualizer.state.isStencil = true;
         editRow.rowDTO = selectedRow;
-        setTimeout(() => {
-          selectedRow.state.isStencil = false;
-          selectedRow.data.moveVisualizer.state.isStencil = false;
-        }, 300)
+        selectedRow.state.isStencil = false;
+        selectedRow.data.moveVisualizer.state.isStencil = false;
       }
     })
   }
@@ -625,9 +623,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (newRow.isEven) {
       const oppositeList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
       const oppositeRow = oppositeList.find(oppositeRowItem => oppositeRowItem.data.code === newRow.rowDTO.data.code);
-      if (!!oppositeRow) {
-        oppositeRow.data.moveVisualizer.style.backgroundColor = this.constants.evenEditRowHighlightColor;
-      }
     }
     return newRow;
   }
@@ -904,10 +899,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             }
           }
           editRowListEquivalent.rowDTO.data = row.data;
-          setTimeout(() => {
-            editRowListEquivalent.rowDTO.state.isStencil = false;
-            editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
-          }, 300)
+          editRowListEquivalent.rowDTO.state.isStencil = false;
+          editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
         }
       }
     })
