@@ -38,6 +38,7 @@
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
+    import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
   // dependencies
 
 @Injectable()
@@ -52,7 +53,8 @@ export class UtilityService {
 
   constructor(
     private countdownPipe: CountdownPipe,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){}
 
   // shared
@@ -297,6 +299,7 @@ export class UtilityService {
       if (!!this.keyDictionary[frontendKey]) {
         return this.keyDictionary[frontendKey];
       } else {
+        console.warn('failed to find key for', frontendKey);
         return 'n/a';
       }
     }
@@ -1169,7 +1172,7 @@ export class UtilityService {
   // structuring specific
     public formBucketIdentifierForOverride(rawData: BEStructuringOverrideBlock): string {
       const list = [];
-      for (let eachIdentifier in rawData.bucket) {
+      for (let eachIdentifier in rawData.simpleBucket) {
         list.push(eachIdentifier);
       }
       list.sort((identifierA, identifierB) => {
@@ -1206,24 +1209,35 @@ export class UtilityService {
     }
 
     public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
-      const list = [];
-      for (let eachIdentifier in rawData.bucket) {
-        list.push(eachIdentifier);
-      }
-      list.sort((identifierA, identifierB) => {
-        if (identifierA > identifierB) {
-          return 1;
-        } else if (identifierB < identifierA) {
-          return -1;
-        } else {
-          return 0;
+      if (!!rawData.simpleBucket) {
+        const list = [];
+        for (let eachIdentifier in rawData.simpleBucket) {
+          list.push(eachIdentifier);
         }
-      });
-      let categoryKey = '';
-      list.forEach((eachIdentifier) => {
-        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.bucket[eachIdentifier]}`;
-      });
-      return categoryKey;
+        list.sort((identifierA, identifierB) => {
+          if (identifierA > identifierB) {
+            return 1;
+          } else if (identifierB < identifierA) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+        let categoryKey = '';
+        list.forEach((eachIdentifier) => {
+          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName ) {
+            const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
+              return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode);
+            });
+            categoryKey = categoryKey === '' ? `${valueArray}` : `${categoryKey} ~ ${valueArray}`;
+          } else {
+            categoryKey = categoryKey === '' ? `${rawData.simpleBucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.simpleBucket[eachIdentifier]}`;
+          }
+        });
+        return categoryKey;
+      } else {
+        return 'n/a';
+      }
     }
 
     public populateBEBucketObjectFromRowIdentifier(
@@ -1264,6 +1278,7 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          matchExistBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
@@ -1279,6 +1294,7 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          newConvertedBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           newConvertedBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
           breakdownList.push(newConvertedBreakdown);
         }

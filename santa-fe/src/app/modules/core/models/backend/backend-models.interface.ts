@@ -579,6 +579,9 @@ export interface BEMetricBreakdowns {
   simpleBucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
     [property: string]: Array<string>;
   }
+  bucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
+    [property: string]: Array<string>;
+  }
 }
 
 export interface BEStructuringBreakdownBlock {
@@ -597,7 +600,7 @@ export interface BEStructuringOverrideBlock {
   date: string;
   portfolioId: number;
   indexId?: number;
-  bucket: {
+  bucket?: {  // this is optional because in some API calls where FE passes this to BE, we just pass with "simple bucket" only and BE will form "bucket" itself
     [property: string]: Array<string>;
   };
   simpleBucket: {

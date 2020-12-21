@@ -307,45 +307,33 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
       this.state.configurator.newOverrideNameCache = null;
-      const convertedParams = this.convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(params);
-      const bucket = {}
+      const simpleBucket = {}
       let bucketToString = '';
-      let hasBICSConsolidate = false;
-      convertedParams.filterList.forEach((eachItem) => {
+      params.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
-          bucket[property] = eachItem.filterBy;
+          simpleBucket[property] = eachItem.filterBy;
         }
-        // because bics consolidated are all converted to level 4 already
-        if (eachItem.key === this.constants.definitionMap.BICS_LEVEL_4.key) {
-          hasBICSConsolidate = true;
-          bucketToString = bucketToString === '' ? `${this.state.configurator.newOverrideNameCache}` : `${bucketToString} ~ ${this.state.configurator.newOverrideNameCache}`;
-        } else {
-          eachItem.filterBy.forEach((eachValue) => {
-            bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
-          });
-        }
+        eachItem.filterBy.forEach((eachValue) => {
+          bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
+        });
       });
+      // this check does not work on BICS and that's by design, because we want to allow overrides to be created with the same bics definitions due to they may carry different context
       if (this.overrideCheckRowAlreadyExist(bucketToString)) {
         const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
       } else {
         const now = moment();
-        // TODO: form simpleBucket properly
         const payload: PayloadGetPortfolioOverride = {
           portfolioOverride: {
             date: now.format('YYYY-MM-DD'),
             portfolioId: this.state.targetFund.data.portfolioId,
-            bucket: bucket,
-            simpleBucket: null
+            simpleBucket: simpleBucket
           }
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
           tap((serverReturn: BEStructuringOverrideBlock) => {
-            if (hasBICSConsolidate) {
-              serverReturn.title = bucketToString;
-            }
             const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
             const rawBreakdownList = returnPack.list;
             this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
@@ -369,6 +357,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdownBucketIdentifier],
               newBreakdown
             );
+            this.utilityService.sortOverrideRows(newBreakdown);
             this.state.targetBreakdown = newBreakdown;
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
             this.loadEditRows();
@@ -939,14 +928,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const now = moment();
     const payload: Array<PayloadUpdateOverride> = [];
     this.state.editRowList.forEach((eachRow) => {
-      // TODO: form simpleBucket properly
       const eachPayload: PayloadUpdateOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: eachRow.targetBlockFromBreakdown.bucket,
-          simpleBucket: null
+          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
@@ -983,14 +970,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const payload: Array<PayloadDeleteOverride> = [];
     const now = moment();
     this.state.removalList.forEach((eachRow) => {
-      // TODO: form simpleBucket properly
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: eachRow.targetBlockFromBreakdown.bucket,
-          simpleBucket: null
+          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
       };
       payload.push(eachPayload);
@@ -1058,42 +1043,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!targetRow) {
       targetRow.existInServer = false;
     }
-  }
-
-  private convertConsolidatedBICSDefinitionConfiguratorParamToRegularParam(params: DefinitionConfiguratorEmitterParams): DefinitionConfiguratorEmitterParams {
-    const targetIndex = params.filterList.findIndex((eachItem) => {
-      return eachItem.key === this.constants.definitionMap.BICS_CONSOLIDATED.key;
-    });
-    if (targetIndex >= 0) {
-      const consolidatedBICS = params.filterList[targetIndex];
-      let displayName = '';
-      consolidatedBICS.filterByBlocks.forEach((eachBlock, index) => {
-        displayName = index === 0 ? `${eachBlock.displayLabel}` : `${displayName} + ${eachBlock.displayLabel}`;
-      });
-      this.state.configurator.newOverrideNameCache = displayName;
-      const result = this.bicsService.consolidateBICS(consolidatedBICS.filterByBlocks);
-      const convertedCategoryStringList: Array<string> = result.consolidatedStrings;
-      switch (result.deepestLevel) {
-        case 1:
-          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_1.key;
-          break;
-        case 2:
-          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_2.key;
-          break;
-        case 3:
-          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_3.key;
-          break;
-        case 4:
-          consolidatedBICS.key = this.constants.definitionMap.BICS_LEVEL_4.key;
-          break;
-        default:
-          params.filterList.splice(targetIndex, 1);
-          break;
-      };
-      consolidatedBICS.filterBy = convertedCategoryStringList;
-      consolidatedBICS.filterByBlocks = [];  // the blocks are no longer needed once consolidated, so can just set as null
-    }
-    return params;
   }
 
 }
