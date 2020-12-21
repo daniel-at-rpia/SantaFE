@@ -520,7 +520,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     );
     if (!!this.state.targetFund.data.target.target.cs01 || !!this.state.targetFund.data.target.target.creditLeverage) {
       metricPercentageData.forEach(data => {
-        this.state[data.btnText] = !!this.state.targetFund.data.target.target[data.formattedMetric] ? `${data.percentage}% unallocated` : 'N/A';
+        this.state[data.btnText] = `${data.percentage}% unallocated`;
       })
     } else {
       metricPercentageData.forEach(data => {
