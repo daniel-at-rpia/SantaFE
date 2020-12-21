@@ -950,23 +950,26 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private submitRegularBreakdownChangesUpdate():boolean {
     const payloads: Array<PayloadUpdateBreakdown> = this.traverseEditRowsToFormUpdateBreakdownPayload();
     if (!!payloads && payloads.length > 0) {
-      payloads.forEach((payload, i) => {
+      const necessaryUpdateNumOfCalls = payloads.length;
+      let callCount = 0;
+      payloads.forEach((payload) => {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
           first(),
           tap((serverReturn: BEPortfolioStructuringDTO) => {
-            const payloadBrakdownLevel = payload.portfolioBreakdown.groupOption.includes(`${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}`) ? payload.portfolioBreakdown.groupOption.split(`${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}`)[1] : null;
-            const formattedAlertMessage = this.state.targetBreakdown.state.isBICs ? `Successfully Updated Targets for ${this.state.targetBreakdown.data.title} Lv.${payloadBrakdownLevel} in ${this.state.targetFund.data.portfolioShortName}` : `Successfully Updated Target for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`;
-            this.store$.dispatch(
-              new CoreSendNewAlerts([
-                this.dtoService.formSystemAlertObject(
-                  'Structuring',
-                  'Updated',
-                  formattedAlertMessage,
-                  null
-                )]
-              )
-            );
-            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+            callCount++;
+            if (callCount === necessaryUpdateNumOfCalls) {
+              this.store$.dispatch(
+                new CoreSendNewAlerts([
+                  this.dtoService.formSystemAlertObject(
+                    'Structuring',
+                    'Updated',
+                    `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`,
+                    null
+                  )]
+                )
+              );
+              this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+            }
           }),
           catchError(err => {
             console.error('update breakdown failed');
