@@ -497,6 +497,15 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
   &--evenState {
     background-color: $color_blue_gray_1;
   }
+  &--bicsLevel2Row {
+    background-color: $color_gray_3;
+  }
+  &--bicsLevel3Row {
+    background-color: $color_gray_4;
+  }
+  &--bicsLevel4Row {
+    background-color: $color_gray_5;
+  }
   &--lockedState {
     background-color: $color_green_1;
     #{$blockName} {
