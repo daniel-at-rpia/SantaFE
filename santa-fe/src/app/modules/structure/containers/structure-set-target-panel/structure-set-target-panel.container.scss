@@ -208,6 +208,7 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
           flex-direction: column;
           padding-bottom: $spacing_x_large;
           margin-top: $spacing_small;
+          padding: .5rem;
         }
       }
     }
@@ -346,7 +347,7 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
     flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
     display: none;
     align-items: center;
-    padding: $spacing_x_small 0;
+    padding: $spacing_x_small 0 $spacing_small $spacing_medium;
   }
   &__remove {
     @include mix_fixed_div(relative, $z_index_base_item);
