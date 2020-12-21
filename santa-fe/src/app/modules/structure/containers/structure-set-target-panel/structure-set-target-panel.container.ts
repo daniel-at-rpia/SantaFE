@@ -15,6 +15,7 @@ import {
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { PortfolioBreakdownDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import {
+  BICsHierarchyBlock,
   StructureSetTargetPanelEditRowBlock,
   StructureSetTargetPanelEditRowItemBlock
 } from 'FEModels/frontend-blocks.interface';
@@ -633,7 +634,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public getSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
     if (!!targetRow) {
-      if (!targetRow.data.children || targetRow.data.children.data.displayCategoryList.length === 0) {
+      if (!targetRow.state.isDoveIn) {
+        targetRow.state.isDoveIn = true;
+        const oppositeRowList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
+        const oppositeRow = oppositeRowList.find(row => row.data.code === targetRow.data.code);
+        if (!!oppositeRow) {
+          oppositeRow.state.isDoveIn = true;
+        }
         const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
         const subBreakdown = this.bicsService.formSubLevelBreakdown(targetRow, isCs01, this.state.targetBreakdown.data.displayCategoryList);
         targetRow.data.children = subBreakdown;
@@ -882,6 +889,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           if (row.data.bicsLevel >= 2) {
             row.state.isVisibleSubLevel = true;
             row.state.isWithinPopover = false;
+            const hierarchyList: Array<BICsHierarchyBlock> = this.bicsService.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
+            const parentRow = hierarchyList.find(selectRow => selectRow.bicsLevel === row.data.bicsLevel - 1);
+            if (!!parentRow) {
+              const oppositeList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
+              const selectedParentRowInCurrentList = list.find(selectedListRow => selectedListRow.data.code === parentRow.code);
+              const selectedParentRowInOppositeList = oppositeList.find(oppositeListRow => oppositeListRow.data.code === parentRow.code)
+              if (!!selectedParentRowInCurrentList) {
+                selectedParentRowInCurrentList.state.isDoveIn = true;
+              }
+              if (!!selectedParentRowInOppositeList) {
+                selectedParentRowInOppositeList.state.isDoveIn = true;
+              }
+            }
           }
           editRowListEquivalent.rowDTO.data = row.data;
           setTimeout(() => {
