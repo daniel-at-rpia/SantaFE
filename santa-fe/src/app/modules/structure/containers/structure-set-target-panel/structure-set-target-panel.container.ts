@@ -318,6 +318,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
         });
       });
+      // this check does not work on BICS and that's by design, because we want to allow overrides to be created with the same bics definitions due to they may carry different context
       if (this.overrideCheckRowAlreadyExist(bucketToString)) {
         const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
