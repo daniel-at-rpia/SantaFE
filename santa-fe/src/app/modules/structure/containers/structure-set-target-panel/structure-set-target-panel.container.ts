@@ -360,6 +360,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdownBucketIdentifier],
               newBreakdown
             );
+            this.utilityService.sortOverrideRows(newBreakdown);
             this.state.targetBreakdown = newBreakdown;
             const prevEditRowsForInheritance = this.utilityService.deepCopy(this.state.editRowList);
             this.loadEditRows();
@@ -930,14 +931,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const now = moment();
     const payload: Array<PayloadUpdateOverride> = [];
     this.state.editRowList.forEach((eachRow) => {
-      // TODO: form simpleBucket properly
       const eachPayload: PayloadUpdateOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: eachRow.targetBlockFromBreakdown.bucket,
-          simpleBucket: null
+          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
@@ -974,14 +973,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const payload: Array<PayloadDeleteOverride> = [];
     const now = moment();
     this.state.removalList.forEach((eachRow) => {
-      // TODO: form simpleBucket properly
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
           indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          bucket: eachRow.targetBlockFromBreakdown.bucket,
-          simpleBucket: null
+          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
       };
       payload.push(eachPayload);
