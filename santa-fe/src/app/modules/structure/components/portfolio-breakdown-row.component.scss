@@ -535,6 +535,9 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
       &__branch {
         display: none;
       }
+      &__cellDivider {
+        border-color: $color_white;
+      }
       &__cta {
         &-actionMenu {
           top: 0;
