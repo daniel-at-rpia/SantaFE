@@ -12,8 +12,7 @@ $portfolioBreakdown_rating_height: 1rem;
   @include mix_fixed_div(relative, $z_index_base_item);
   @include mix_border_generator($portfolioBreakdown_borderWidth);
   @include mix_border_radius(10px);
-  // display: flex;
-  display: none;
+  display: flex;
   flex-direction: column;
   width: $portfolioBreakdownWidth;
   background-color: $color_gray_2;
@@ -200,7 +199,6 @@ $portfolioBreakdown_rating_height: 1rem;
     }
   }
   &--overrideVariant {
-    display: flex;
     border-color: $color_active;
     background-color: $color_white;
     #{$blockName} {
