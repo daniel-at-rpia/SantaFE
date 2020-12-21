@@ -239,7 +239,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
                         "user": null,
                         "value": 117.0,
                         "spread": 117.0,
-                        "price": 118.306421
+                        "price": 118.306421,
+                        "yield": 0.4
                     },
                     "hedgeFactor": 1.0,
                     "strategies": [
