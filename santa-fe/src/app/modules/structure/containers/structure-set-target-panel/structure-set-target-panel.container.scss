@@ -328,6 +328,11 @@ $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
           }
         }
       }
+      &__utilities { //disable for now due to sub levels
+        &-clearTargets {
+          display: none;
+        }
+      }
     }
   }
 }
