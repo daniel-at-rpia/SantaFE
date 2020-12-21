@@ -309,7 +309,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.configurator.newOverrideNameCache = null;
       const simpleBucket = {}
       let bucketToString = '';
-      let hasBICSConsolidate = false;
       params.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
@@ -334,9 +333,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
           tap((serverReturn: BEStructuringOverrideBlock) => {
-            if (hasBICSConsolidate) {
-              serverReturn.title = bucketToString;
-            }
             const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
             const rawBreakdownList = returnPack.list;
             this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);

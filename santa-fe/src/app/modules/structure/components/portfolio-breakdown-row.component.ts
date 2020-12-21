@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { StructureSetView } from 'Structure/actions/structure.actions';
 import * as moment from 'moment';
 import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import { BICsDataProcessingService, UtilityService } from 'Core/services';
 
 @Component({
   selector: 'portfolio-breakdown-row',
@@ -30,7 +30,8 @@ export class PortfolioBreakdownRow {
   }
   constructor(
     private store$: Store<any>,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private utilityService: UtilityService
   ) {}
 
   public onClickCategory() {
@@ -66,7 +67,10 @@ export class PortfolioBreakdownRow {
       formattedDisplayCategory = this.breakdownRow.data.displayCategory;
     }
     const viewData: StructureSetViewData = {
-      bucket: this.breakdownRow.data.bucket,
+      bucket: 
+        (!this.breakdownRow.data.simpleBucket || this.utilityService.isObjectEmpty(this.breakdownRow.data.simpleBucket))
+          ? this.breakdownRow.data.bucket 
+          : this.breakdownRow.data.simpleBucket,
       view: view !== this.breakdownRow.data.view ? view : null,
       displayCategory: formattedDisplayCategory
     }
