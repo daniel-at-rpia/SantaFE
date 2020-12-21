@@ -126,8 +126,15 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (this.state.targetBreakdown.state.isBICs) {
           const cs01LevelOneList = rawCs01CategoryList.filter(row => row.data.bicsLevel === 1);
           const leverageLevelOneList = rawLeverageCategoryList.filter(row => row.data.bicsLevel === 1);
-          cs01LevelOneList.forEach(cs01Row => cs01Row.state.isWithinEditRow = true);
-          leverageLevelOneList.forEach(cs01Row => cs01Row.state.isWithinEditRow = true);
+          // set displayedRows to be empty for now
+          cs01LevelOneList.forEach(cs01Row => {
+            cs01Row.state.isWithinEditRow = true;
+            cs01Row.data.displayedSubLevelRows = [];
+          });
+          leverageLevelOneList.forEach(creditLeverageRow => {
+            creditLeverageRow.state.isWithinEditRow = true;
+            creditLeverageRow.data.displayedSubLevelRows = [];
+          });
           this.state.targetBreakdown.data.rawCs01CategoryList = cs01LevelOneList;
           this.state.targetBreakdown.data.rawLeverageCategoryList = leverageLevelOneList;
           this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
