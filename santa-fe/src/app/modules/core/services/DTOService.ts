@@ -1483,16 +1483,6 @@ export class DTOService {
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
     const momentTime = !!rawData.trade ? moment(rawData.trade.eventTime): moment(rawData.timeStamp);
-    // check for isBenchmarkHedged
-    // field is available for Market Access data only
-    // for other venues (ex. MsG1/JPM), set this to false
-    let isBenchmarkHedged: boolean;
-    if (rawData.quote) {
-      const isBenchmarkHedgedAvailable = Object.keys(rawData.quote).find(key => key === 'isBenchmarkHedged');
-      isBenchmarkHedged = !!isBenchmarkHedgedAvailable ? rawData.quote.isBenchmarkHedged : false;
-    } else {
-      isBenchmarkHedged = false;
-    }
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
@@ -1515,7 +1505,7 @@ export class DTOService {
         dealer: null,
         status: null,
         isMarketListTraded: false,
-        isBenchmarkHedged: isBenchmarkHedged
+        isBenchmarkHedged: false
       },
       api: {
         onMouseEnterAlert: null,
@@ -1606,6 +1596,13 @@ export class DTOService {
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
       }
+    }
+    // check for isBenchmarkHedged
+    // field is available for Market Access data only
+    // for other venues (ex. MsG1/JPM), set this to false
+    if (rawData.quote) {
+      const isBenchmarkHedgedAvailable = Object.keys(rawData.quote).find(key => key === 'isBenchmarkHedged');
+      alertDTO.data.isBenchmarkHedged = !!isBenchmarkHedgedAvailable ? rawData.quote.isBenchmarkHedged : false;
     }
     if (alertDTO.state.isMarketListVariant) {
       const quoteBlock = rawData.quote as BEModels.BEAlertMarketListQuoteBlock;
