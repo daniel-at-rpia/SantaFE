@@ -1278,6 +1278,7 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          matchExistBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
@@ -1293,6 +1294,7 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          newConvertedBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           newConvertedBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
           breakdownList.push(newConvertedBreakdown);
         }
