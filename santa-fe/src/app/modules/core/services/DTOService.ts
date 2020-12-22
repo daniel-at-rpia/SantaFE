@@ -129,6 +129,7 @@ export class DTOService {
         ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
+        tenor: !isStencil? this.utility.determineNumericalTenor(rawData) : 2,
         couponType: null,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,

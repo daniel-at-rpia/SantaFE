@@ -56,6 +56,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     ratingValue: string;
     ratingBucket: string;
     seniorityLevel: number;
+    tenor: number;
     couponType: string;
     currency: string;
     sector: string;

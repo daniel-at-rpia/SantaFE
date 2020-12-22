@@ -817,6 +817,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'securityType',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
+      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
@@ -857,6 +858,26 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       tableSpecifics: {
         default: {
           active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'tenor',
+    content: {
+      label: 'Tenor (yrs)',
+      attrName: 'tenor',
+      underlineAttrName: 'tenor',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: false,
+      isColumnWidthNarrow: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
         },
         tradeAlert: {
           active: false
