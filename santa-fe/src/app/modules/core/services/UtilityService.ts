@@ -1373,25 +1373,30 @@ export class UtilityService {
 
     public calculateAlignmentRating(breakdownData: DTOs.PortfolioBreakdownDTO) {
       const targetList = breakdownData.state.isDisplayingCs01 ? breakdownData.data.rawCs01CategoryList : breakdownData.data.rawLeverageCategoryList;
-      let totalLevel = 0;
-      targetList.forEach((eachCategory) => {
-        totalLevel = totalLevel + eachCategory.data.currentLevel;
-      });
-      const targetListWithTargets = targetList.filter((eachCategory) => {
-        return !!eachCategory.data.targetLevel;
-      });
-      if (targetListWithTargets.length > 0) {
-        let misalignmentAggregate = 0;
-        targetListWithTargets.forEach((eachCategory) => {
-          const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
-          misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
-        });
-        misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
-        breakdownData.style.ratingFillWidth = 100 - this.round(misalignmentAggregate, 0);
-        breakdownData.data.ratingHoverText = `${100 - this.round(misalignmentAggregate, 0)}`;
-        breakdownData.state.isTargetAlignmentRatingAvail = true;
-      } else {
-        breakdownData.state.isTargetAlignmentRatingAvail = false;
+      if (targetList.length > 0) {
+        const filteredList = breakdownData.state.isBICs ? targetList.filter(row => row.data.bicsLevel < 2 || !row.data.bicsLevel) : targetList;
+        if (filteredList.length > 0 ) {
+          let totalLevel = 0;
+          filteredList.forEach((eachCategory) => {
+            totalLevel = totalLevel + eachCategory.data.currentLevel;
+          });
+          const filteredListWithTargets = filteredList.filter((eachCategory) => {
+            return !!eachCategory.data.targetLevel;
+          });
+          if (filteredListWithTargets.length > 0) {
+            let misalignmentAggregate = 0;
+            filteredListWithTargets.forEach((eachCategory) => {
+              const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
+              misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
+            });
+            misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
+            breakdownData.style.ratingFillWidth = 100 - this.round(misalignmentAggregate, 0);
+            breakdownData.data.ratingHoverText = `${100 - this.round(misalignmentAggregate, 0)}`;
+            breakdownData.state.isTargetAlignmentRatingAvail = true;
+          } else {
+            breakdownData.state.isTargetAlignmentRatingAvail = false;
+          }
+        }
       }
     }
 

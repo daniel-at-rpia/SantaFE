@@ -6,7 +6,11 @@
     'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage,
     'sat-structureSetTargetPanel--editingOverrideState': state.targetBreakdownIsOverride,
     'sat-structureSetTargetPanel--displayConfiguratorState': state.configurator.display,
-    'sat-structureSetTargetPanel--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs
+    'sat-structureSetTargetPanel--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--ratingAvailableState': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--goodRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 80 &&state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--averageRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 60 && state.targetBreakdown?.style.ratingFillWidth < 80 && state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-distribution">
@@ -54,6 +58,14 @@
       <div class="sat-structureSetTargetPanel__main-edit-content">
         <div class="sat-structureSetTargetPanel__main-edit-content-border"></div>
         <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-content-header">
+          <div class="sat-structureSetTargetPanel__main-edit-content-header-rating">
+            <div
+              class="sat-structureSetTargetPanel__main-edit-content-header-rating-fill"
+              [ngStyle]="{
+                'width': state.targetBreakdown?.style.ratingFillWidth + '%'
+              }">
+            </div>
+          </div>
           <div class="sat-structureSetTargetPanel__main-edit-content-header-categories">
             <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-index">
               <span class="sat-structureSetTargetPanel__main-edit-content-header-categories-index-text">{{state.targetBreakdown.data.indexName}}</span>

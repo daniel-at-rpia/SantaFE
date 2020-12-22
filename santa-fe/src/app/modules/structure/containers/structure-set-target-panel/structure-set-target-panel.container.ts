@@ -461,6 +461,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       this.updateTargetBreakdownLists(this.state.targetBreakdown.data.rawLeverageCategoryList, this.state.targetBreakdownRawData, isCs01, true);
     }
+    this.utilityService.calculateAlignmentRating(this.state.targetBreakdown);
   }
 
   public getSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
@@ -1254,6 +1255,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private updateEditRowDTOReferenceBasedOnMetric(list: Array<StructurePortfolioBreakdownRowDTO>) {
+    this.utilityService.calculateAlignmentRating(this.state.targetBreakdown);
     this.state.editRowList.forEach(editRow => {
       const selectedRow = list.find(row => row.data.code === editRow.rowDTO.data.code);
       if (!!selectedRow) {
