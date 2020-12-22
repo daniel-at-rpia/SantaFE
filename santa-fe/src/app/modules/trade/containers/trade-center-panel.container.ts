@@ -366,7 +366,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       } else if (eachFilter.targetAttribute === 'strategyList') {
         this.state.filters.quickFilters.strategy = eachFilter.filterBy;
       } else if (eachFilter.targetAttribute === 'tenor') {
-        this.state.filters.quickFilters.tenor = eachFilter.filterBy;
+        this.state.filters.quickFilters.tenor = eachFilter.filterByBlocks.map((eachFilterBlock) => {
+          return eachFilterBlock.shortKey;
+        });
       }
     });
     this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
