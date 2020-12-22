@@ -310,13 +310,15 @@ export class DTOService {
         if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
           object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
         }
-        object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
-        if (!!rawData.metrics.Default) {
-          object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+        if (!!rawData.metrics) {
+          object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
+          if (!!rawData.metrics.Default) {
+            object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+          }
         }
       }
     } catch (err) {
-      console.warn('Data issue on security', object, err);
+      console.warn('Data issue on security', object, rawData, err);
     }
     return object;
   }
