@@ -37,6 +37,8 @@ export const SUPPORTED_PORTFOLIO_LIST: Array<PortfolioShortNames> = [
   PortfolioShortNames.SOF
 ];
 
+export const BICS_BREAKDOWN_FRONTEND_KEY = 'bicsLevel';
+
 export const BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER = 'BicsCodeLevel';
 
 export const BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX = 'BicsSubLevel.';

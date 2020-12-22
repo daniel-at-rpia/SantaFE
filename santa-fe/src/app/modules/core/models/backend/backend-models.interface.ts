@@ -563,8 +563,8 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
 }
 
 export interface BEStructuringBreakdownSingleEntry {
-  targetLevel: number;
-  targetPct?: number;
+  targetLevel?: number;
+  targetPct: number;
   currentLevel?: number;
   currentPct?: number;
   indexLevel?: number;

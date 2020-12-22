@@ -100,7 +100,7 @@ export class StructurePopover implements OnInit, OnChanges {
     } else if (breakdownRow.data.children) {
       breakdownRow.state.isDoveIn = !breakdownRow.state.isDoveIn;
     } else {
-      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01);
+      const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(breakdownRow, this.popover.state.isDisplayCs01, [breakdownRow]);
       breakdownRow.data.children = subBicsLevel;
       breakdownRow.state.isDoveIn = true;
     }
@@ -118,7 +118,7 @@ export class StructurePopover implements OnInit, OnChanges {
 
   public createPopover(categoryRow: StructurePortfolioBreakdownRowDTO) {
     const isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
-    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(categoryRow, isCs01);
+    const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(categoryRow, isCs01, [categoryRow]);
     categoryRow.data.children = subBicsLevel;
     categoryRow.state.isWithinPopover = true;
     this.popover = this.dtoService.formStructurePopoverObject(categoryRow, isCs01);

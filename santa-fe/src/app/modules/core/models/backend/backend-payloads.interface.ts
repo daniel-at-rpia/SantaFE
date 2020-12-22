@@ -4,7 +4,8 @@ import { PortfolioView, BEPortfolioTargetMetricValues} from 'Core/constants/stru
 import {
   BEPortfolioStructuringDTO,
   BEStructuringBreakdownBlock,
-  BEStructuringOverrideBlock
+  BEStructuringOverrideBlock,
+  BEMetricBreakdowns
 } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
@@ -123,7 +124,14 @@ export interface PayloadUpdatePortfolioStructuresTargets {
 }
 
 export interface PayloadUpdateBreakdown {
-  portfolioBreakdown: BEStructuringBreakdownBlock;
+  portfolioBreakdown: {
+    date: string;
+    groupOption: string;
+    portfolioId: number;
+    breakdown: {
+      [property: string]: BEMetricBreakdowns;
+    }
+  };
 }
 
 export interface PayloadUpdateOverride {

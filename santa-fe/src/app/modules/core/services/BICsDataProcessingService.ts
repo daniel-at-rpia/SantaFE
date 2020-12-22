@@ -27,7 +27,9 @@ import {
   BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
   BICS_BRANCH_CHARACTER_LIMIT,
   BICS_DICTIONARY_KEY_PREFIX,
-  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+  BICS_BREAKDOWN_FRONTEND_KEY
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
@@ -195,6 +197,33 @@ export class BICsDataProcessingService {
     }
   }
 
+  public getBICSCategoryRawData(portfolioId: number, level: number, code: string): BEMetricBreakdowns {
+    const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
+    if (!!rawData) {
+      const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
+      const targetRawData = rawData[groupOption].breakdown[code];
+      return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
+    }
+  }
+
+  public formRawBreakdownDetailsObject(portfolioID: number, level: number): BEStructuringBreakdownBlock {
+    const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioID);
+    if (!!rawData) {
+      const targetedRawBreakdown: BEStructuringBreakdownBlock = rawData[`${BICS_BREAKDOWN_FRONTEND_KEY}${level}`];
+      const breakdown: BEStructuringBreakdownBlock = {
+        date: targetedRawBreakdown.date,
+        groupOption: targetedRawBreakdown.groupOption,
+        indexId: targetedRawBreakdown.indexId,
+        portfolioBreakdownId: targetedRawBreakdown.portfolioBreakdownId,
+        portfolioId: targetedRawBreakdown.portfolioId,
+        breakdown: {}
+      }
+      return breakdown;
+    } else {
+      return null;
+    }
+  }
+
   public getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
     const definitionList = [];
     for (const category in rawData.breakdown) {
@@ -213,7 +242,8 @@ export class BICsDataProcessingService {
 
   public formSubLevelBreakdown(
     breakdownRow: StructurePortfolioBreakdownRowDTO,
-    isDisplayCs01: boolean
+    isDisplayCs01: boolean,
+    existingDisplayList?: Array<StructurePortfolioBreakdownRowDTO>
   ) {
     const categoryPortfolioID = breakdownRow.data.portfolioID;
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
@@ -230,6 +260,16 @@ export class BICsDataProcessingService {
         portfolioId,
         breakdown: {}
       }
+      // Allows the visualziers to be formed relative to any existing categories/parents
+      // Doesnt affect the actual breakdown being created since that's derived from the definition list
+      if (!!existingDisplayList && existingDisplayList.length > 0) {
+        existingDisplayList.forEach(existingRow => {
+          const selectedRawData = selectedSubRawBICsData[`${BICS_BREAKDOWN_FRONTEND_KEY}${existingRow.data.bicsLevel}`];
+          if (!!selectedRawData.breakdown[existingRow.data.code]) {
+            object.breakdown[existingRow.data.displayCategory] = selectedRawData.breakdown[existingRow.data.code];
+          }
+        })
+      }
       subTierList.forEach(subTier => {
         const categoryCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
         for (let code in selectedSubRawBreakdown.breakdown) {
@@ -241,8 +281,8 @@ export class BICsDataProcessingService {
             }
           }
         }
-      })
-      const definitionList = this.getBICsBreakdownDefinitionList(object);
+      });
+      const definitionList = subTierList
       const breakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
       breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
       this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
