@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="sat-structureSetTargetPanel__utilities-clearTargets">
-      <button (click)="clearAllRowTargets()" class="santaBtn--labelled sat-structureSetTargetPanel__main-preview-clearTargets-btn"><i class="fal fa-eraser"></i>Clear All Targets</button>
+      <button (click)="clearAllRowTargets()" class="sat-structureSetTargetPanel__utilities-clearTargets-btn"><i class="fal fa-eraser"></i>Clear All Targets</button>
     </div>
   </section>
   <section class="sat-structureSetTargetPanel__main">
@@ -133,7 +133,8 @@
               'sat-structureSetTargetEditRow--bicsLevel4Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 4
             }">
             <section class="sat-structureSetTargetEditRow__details">
-              <portfolio-breakdown-row *ngIf="eachCategory.rowDTO"
+              <portfolio-breakdown-row
+                *ngIf="eachCategory.rowDTO"
                 [breakdownRow]="eachCategory.rowDTO"
                 (categoryClicked)="onClickEditCategory($event)"
                 (rowDiveInClicked)="getSubLevelEditRows($event)"
