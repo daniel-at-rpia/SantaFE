@@ -121,7 +121,8 @@ export const AlertSample: Array<BEAlertDTO> = [
         "quantityAfterTrade":11879000.0,
         "wgtAvgSpread":158.26,
         "wgtAvgPrice":102.9298,
-        "isCancelled":false
+        "isCancelled":false,
+        "isValid":true
       },
       {
         "partitionOptionValue":{
@@ -139,7 +140,8 @@ export const AlertSample: Array<BEAlertDTO> = [
         "quantityAfterTrade":4201000.0,
         "wgtAvgSpread":158.26,
         "wgtAvgPrice":102.9299,
-        "isCancelled":false
+        "isCancelled":false,
+        "isValid":false
       }
     ],
     "alertConfigId":"7dc03f68-fbb6-4c06-90d5-c18b188c19f6",

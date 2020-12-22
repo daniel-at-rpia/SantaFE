@@ -9,7 +9,11 @@ import {
 import { PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from 'FEModels/frontend-models.interface';
-import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
+import {
+  BEPortfolioStructuringDTO,
+  BEStructuringBreakdownBlock,
+  BEMetricBreakdowns
+} from 'BEModels/backend-models.interface';
 import {
   QuoteMetricBlock,
   AgGridRow,
@@ -17,7 +21,7 @@ import {
   SecurityDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
-import { TraceTradeCounterParty } from '../../constants/securityTableConstants.constant';
+import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -37,6 +41,7 @@ export interface DefinitionConfiguratorEmitterParams {
 export interface DefinitionConfiguratorEmitterParamsItem {
   key: string;
   targetAttribute: string;
+  targetAttributeBlock: string;
   filterBy: Array<string>;
   filterByBlocks: Array<SecurityDefinitionFilterBlock>;
 }
@@ -124,7 +129,6 @@ export interface StructureSetTargetOverlayTransferPack {
 }
 
 export interface StructureSetViewData {
-  yyyyMMdd: number;
   bucket: StructureBucketDataBlock;
   view: PortfolioView;
   displayCategory: string;
@@ -146,11 +150,46 @@ export interface BICSServiceConsolidateReturnPack {
 }
 
 export interface TraceScatterGraphData {
-  counterParty: TraceTradeCounterParty;
+  contraParty: TraceTradeParty;
   date: Date | number;
   totalTime?: number;
   rawDate?: string;
   sellY?: number;
   buyY?: number;
   nonActiveTrade?: number;
+}
+
+export interface AdhocExtensionBEMetricBreakdowns extends BEMetricBreakdowns {
+  customLevel: number;
+  code: string;
+}
+
+export interface CustomBreakdownReturnPack {
+  customBreakdown: BEStructuringBreakdownBlock;
+  customDefinitionList: Array<string>;
+}
+
+export interface BICSHierarchyDictionaryByLevel {
+  level1: {
+    [property: string]: string;
+  }
+  level2: {
+    [property: string]: string;
+  }
+  level3: {
+    [property: string]: string;
+  }
+  level4: {
+    [property: string]: string;
+  }
+}
+
+export interface SecurityDefinitionFilterOptionTenorRange {
+  [property:string]: SecurityDefinitionFilterOptionTenorRangeItem
+}
+
+interface SecurityDefinitionFilterOptionTenorRangeItem {
+  displayLabel: string;
+  min: number;
+  max: number;
 }

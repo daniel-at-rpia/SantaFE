@@ -6,7 +6,11 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
-    import { StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      StructureOverrideToBreakdownConversionReturnPack,
+      CustomBreakdownReturnPack,
+      AdhocExtensionBEMetricBreakdowns
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       SecurityDefinitionStub,
       SecurityDefinitionBundleStub,
@@ -25,7 +29,8 @@
       AlertSubTypes,
       ALERT_STATUS_SORTINGVALUE_UNIT,
       TRACE_VOLUME_REPORTED_THRESHOLD,
-      NavigationModule
+      NavigationModule,
+      GlobalWorkflowTypes
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -36,7 +41,8 @@
       traceTradeNumericalFilterSymbols,
       TRACE_SCATTER_GRAPH_ID,
       TRACE_PIE_GRAPH_LEFT_ID,
-      TRACE_PIE_GRAPH_RIGHT_ID
+      TRACE_PIE_GRAPH_RIGHT_ID,
+      benchMarkHedgedDisplayOptions
     } from 'Core/constants/securityTableConstants.constant';
     import {
       GroupMetricOptions
@@ -50,18 +56,30 @@
       FilterOptionsTenor,
       BICsLevel1DefinitionList,
       FilterTraceTradesOptions,
-      DEFINITION_LONG_THRESHOLD
+      DEFINITION_LONG_THRESHOLD,
+      FilterOptionsCouponType,
+      FilterOptionsTenorRange
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
-      TraceTradeCounterParty,
+      TraceTradeParty,
       TradeSideValueEquivalent
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
-    import { PortfolioShortNames, PortfolioMetricValues, PortfolioView, PortfolioBreakdownGroupOptions } from 'Core/constants/structureConstants.constants';
+    import {
+      PortfolioShortNames,
+      PortfolioMetricValues,
+      PortfolioView,
+      PortfolioBreakdownGroupOptions,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+      BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
+      BICS_OVERRIDES_IDENTIFIER,
+      BICS_OVERRIDES_TITLE
+    } from 'Core/constants/structureConstants.constants';
   //
 
 @Injectable()
@@ -113,6 +131,8 @@ export class DTOService {
         ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
+        tenor: !isStencil? this.utility.determineNumericalTenor(rawData) : 2,
+        couponType: null,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
         sector: !isStencil ? rawData.sector : null,
@@ -249,10 +269,13 @@ export class DTOService {
         },
         tradeHistory: [],
         traceTrades: [],
-        bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
-        bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
-        bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
-        bicsLevel4: !isStencil ? rawData.bicsLevel4 : null,
+        bics: {
+          code: !isStencil ? rawData.bicsCode : null,
+          bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
+          bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
+          bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
+          bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
+        },
         lastTrace: {
           lastTracePrice: null,
           lastTraceSpread: null,
@@ -287,10 +310,15 @@ export class DTOService {
         if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
           object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
         }
-        object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
+        if (!!rawData.metrics) {
+          object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
+          if (!!rawData.metrics.Default) {
+            object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+          }
+        }
       }
     } catch (err) {
-      console.warn('Data issue on security', object, err);
+      console.warn('Data issue on security', object, rawData, err);
     }
     return object;
   }
@@ -443,11 +471,13 @@ export class DTOService {
       alertTradeTrader: targetAlert.data.trader,
       alertStatus: targetAlert.data.status,
       shortcutConfig: dto.data.alert.shortcutConfig,
-      alertTraceCounterParty: targetAlert.data.traceCounterParty,
+      alertTraceContraParty: targetAlert.data.traceContraParty,
+      alertTraceReportingParty: targetAlert.data.traceReportingParty,
       alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated,
       alertTraceVolumeReported: targetAlert.data.traceVolumeReported,
       alertTracePrice: targetAlert.data.tracePrice,
-      alertTraceSpread: targetAlert.data.traceSpread
+      alertTraceSpread: targetAlert.data.traceSpread,
+      alertIsBenchmarkHedged: targetAlert.data.isBenchmarkHedged ? benchMarkHedgedDisplayOptions.yes : benchMarkHedgedDisplayOptions.no
     };
   }
 
@@ -503,18 +533,33 @@ export class DTOService {
     bicsLevel?: number
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
     return options.map((eachOption) => {
-      const normalizedOption = this.utility.normalizeDefinitionFilterOption(eachOption);
-      const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
-        isSelected: false,
-        isFilteredOut: false,
-        displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${eachOption}` : eachOption,
-        bicsLevel: bicsLevel || null,
-        shortKey: normalizedOption,
-        key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
-      }
-      return newFilterDTO;
+      return this.generateSecurityDefinitionFilterIndividualOption(
+        name,
+        eachOption,
+        bicsLevel
+      );
     })
   };
+
+  public generateSecurityDefinitionFilterIndividualOption(
+    definitionKey: string,
+    option: string,
+    bicsLevel?: number
+  ): Blocks.SecurityDefinitionFilterBlock {
+    const normalizedOption = this.utility.normalizeDefinitionFilterOption(option);
+    const newFilterDTO: Blocks.SecurityDefinitionFilterBlock = {
+      isSelected: false,
+      isFilteredOut: false,
+      displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
+      bicsLevel: bicsLevel || null,
+      shortKey: normalizedOption,
+      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`
+    }
+    if (definitionKey === SecurityDefinitionMap.TENOR.key) {
+      newFilterDTO.displayLabel = FilterOptionsTenorRange[newFilterDTO.shortKey].displayLabel;
+    }
+    return newFilterDTO;
+  }
 
   public formSecurityDefinitionObject(
     rawData: SecurityDefinitionStub
@@ -528,7 +573,9 @@ export class DTOService {
         prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr,
-        highlightSelectedOptionList: []
+        securityDTOAttrBlock: rawData.securityDTOAttrBlock,
+        highlightSelectedOptionList: [],
+        backendDtoAttrName: rawData.backendDtoAttrName
       },
       style: {
         icon: rawData.icon,
@@ -541,7 +588,7 @@ export class DTOService {
         groupByActive: false,
         filterActive: false,
         isMiniPillVariant: false,
-        isFilterLong: rawData.optionList.length > 5,
+        isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
         currentFilterPathInConsolidatedBICS: []
       }
     }
@@ -556,6 +603,16 @@ export class DTOService {
     targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
+    if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
+      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+        const exist = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+          return eachSelectedOption.shortKey === eachOption.shortKey;
+        });
+        if (!!exist) {
+          eachOption.isSelected = true;
+        }
+      });
+    }
     return targetDefinition;
   }
 
@@ -1438,7 +1495,9 @@ export class DTOService {
         dealer: null,
         status: null,
         isMarketListTraded: false,
-        traceCounterParty: null,
+        isBenchmarkHedged: false,
+        traceContraParty: null,
+        traceReportingParty: null,
         traceSide: null,
         traceVolumeEstimated: null,
         traceVolumeReported: null,
@@ -1499,7 +1558,8 @@ export class DTOService {
         trader: null,
         dealer: null,
         status: null,
-        isMarketListTraded: false
+        isMarketListTraded: false,
+        isBenchmarkHedged: false
       },
       api: {
         onMouseEnterAlert: null,
@@ -1582,13 +1642,21 @@ export class DTOService {
         }
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
-        const { counterParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
-        alertDTO.data.traceCounterParty = counterParty;
+        const { contraParty, reportingParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
+        alertDTO.data.traceContraParty = contraParty;
+        alertDTO.data.traceReportingParty = reportingParty;
         alertDTO.data.traceVolumeEstimated = volumeEstimated;
         alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
       }
+    }
+    // check for isBenchmarkHedged
+    // field is available for Market Access data only
+    // for other venues (ex. MsG1/JPM), set this to false
+    if (rawData.quote) {
+      const isBenchmarkHedgedAvailable = Object.keys(rawData.quote).find(key => key === 'isBenchmarkHedged');
+      alertDTO.data.isBenchmarkHedged = !!isBenchmarkHedgedAvailable ? rawData.quote.isBenchmarkHedged : false;
     }
     if (alertDTO.state.isMarketListVariant) {
       const quoteBlock = rawData.quote as BEModels.BEAlertMarketListQuoteBlock;
@@ -1929,7 +1997,7 @@ export class DTOService {
   public formStructureFundObject(
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues = PortfolioMetricValues.cs01
+    selectedMetricValue: PortfolioMetricValues
   ): DTOs.PortfolioStructureDTO {
     const object: DTOs.PortfolioStructureDTO = {
       data: null,
@@ -2028,7 +2096,7 @@ export class DTOService {
     isDisplayCs01: boolean,
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
-    const isBicsBreakdown = rawData.groupOption.indexOf('BicsLevel') > -1;
+    const isBicsBreakdown = rawData.groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1 && !isOverride;
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
@@ -2040,6 +2108,7 @@ export class DTOService {
         backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
         popoverMainRow: null,
         portfolioId: rawData.portfolioId,
+        portfolioName: '',
         diveInLevel: 0,
         indexName: ''
       },
@@ -2067,20 +2136,21 @@ export class DTOService {
     }
     definitionList.forEach((eachCategoryText) => {
       let bucket: Blocks.StructureBucketDataBlock = {};
+      let simpleBucket: Blocks.StructureBucketDataBlock = {};
       let customLevel: number;
       let isCustomLevelAvailable: string;
+      let code: string;
       if (!!rawData.breakdown[eachCategoryText]) {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
-        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel : null;
+        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel : null;
+        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).code : null;
       }
       if (!!isOverride) {
-        bucket = this.utility.populateBEBucketObjectFromRowIdentifier(
-          this.utility.formBEBucketObjectFromBucketIdentifier(rawData.groupOption),
-          eachCategoryText
-        )
+        bucket = rawData.breakdown[eachCategoryText].bucket || {};
+        simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `BicsLevel${(rawData.breakdown[eachCategoryText] as BEModels.BECustomMetricBreakdowns).customLevel}`;
-        bucket[formattedBEKey] = [eachCategoryText];
+        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
+        bucket[formattedBEKey] = [code];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
       }
@@ -2100,7 +2170,9 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
-          customLevel
+          simpleBucket,
+          customLevel,
+          code
         )
         : null;
       !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
@@ -2118,7 +2190,9 @@ export class DTOService {
           object.data.diveInLevel,
           view,
           bucket,
-          customLevel
+          simpleBucket,
+          customLevel,
+          code
         )
         : null;
       !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
@@ -2138,7 +2212,7 @@ export class DTOService {
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
-    newBreakdown.data.title = newBreakdown.data.title.replace('BICS Lv.4', 'BICS Override');
+    newBreakdown.data.title = newBreakdown.data.title.replace(BICS_OVERRIDES_IDENTIFIER, BICS_OVERRIDES_TITLE);
     return newBreakdown;
   }
 
@@ -2155,7 +2229,9 @@ export class DTOService {
     diveInLevel: number,
     view: PortfolioView,
     bucket: Blocks.StructureBucketDataBlock,
+    simpleBucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
+    code: string = null
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
@@ -2200,12 +2276,12 @@ export class DTOService {
       eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
 
-      const isBicsBreakdown = groupOption.indexOf('BicsLevel') > -1;
+      const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
-        displayCategory: categoryName.includes('BICsSubLevel.') ? categoryName.split('BICsSubLevel.')[0].trim() : categoryName,
+        category: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
+        displayCategory: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2228,8 +2304,10 @@ export class DTOService {
         },
         view: view,
         bucket: bucket,
+        simpleBucket: simpleBucket,
         parentRow: null,
-        displayedSubLevelRows: []
+        displayedSubLevelRows: [],
+        code: code
       };
       if (eachCategoryBlock.diffToTarget < 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
@@ -2237,7 +2315,7 @@ export class DTOService {
       if (eachCategoryBlock.diffToTarget > 0) {
         eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
       }
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock,isBicsBreakdown);
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isBicsBreakdown);
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2294,21 +2372,25 @@ export class DTOService {
         isShowingSubLevels: false,
         isEditingView: false,
         isEditingViewAvail: false,
-        isDoveIn: false
+        isDoveIn: false,
+        isWithinEditRow: false,
+        isWithinSetTargetPreview: false
       }
     }
     return object;
   }
 
   public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
-    const counterParty = !!rawData.counterParty ? rawData.counterParty === TraceTradeCounterParty.ClientAffiliate ? TraceTradeCounterParty.ClientAffiliate : TraceTradeCounterParty[rawData.counterParty] : null;
+    const contraParty = !!rawData.contraParty ? rawData.contraParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.contraParty] : null;
+    const reportingParty = !!rawData.reportingParty ? rawData.reportingParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.reportingParty] : null;
     const object: Blocks.TraceTradeBlock = {
       traceTradeId: rawData.traceTradeID,
       tradeTime: rawData.eventTime,
       displayTradeTime: moment(rawData.eventTime).format(`MMM DD - HH:mm`),
       reportingTime: rawData.publishingTime,
       displayReportingTime: moment(rawData.publishingTime).format(`MMM DD - HH:mm`),
-      counterParty: counterParty,
+      contraParty: contraParty,
+      reportingParty: reportingParty,
       side: TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeReported,
@@ -2392,37 +2474,36 @@ export class DTOService {
         isTradeAvailable.length > 0 && object.data.
         availableFiltersList.push(option);
       } else {
-        const isCounterPartyAvailable = object.data.displayList.find(trade => trade.counterParty === option);
-        !!isCounterPartyAvailable && object.data.availableFiltersList.push(option);
+        const isContraPartyAvailable = object.data.displayList.find(trade => trade.contraParty === option);
+        !!isContraPartyAvailable && object.data.availableFiltersList.push(option);
       }
     })
     return object;
   }
 
-  public formCustomRawBreakdownData(rawData: BEModels.BEPortfolioStructuringDTO, targetBreakdown: BEModels.BEStructuringBreakdownBlock, identifiers: string[]): [BEModels.BEStructuringBreakdownBlock, string[]] {
+  public formCustomRawBreakdownData(
+    rawData: BEModels.BEPortfolioStructuringDTO,
+    targetBreakdown: BEModels.BEStructuringBreakdownBlock,
+    identifiers: string[]
+  ): CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
-    for (let category in customBreakdown.breakdown) {
-      if (!!customBreakdown.breakdown[category]) {
-        (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = 1;
+    for (let code in customBreakdown.breakdown) {
+      const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
+      if (!!customBreakdown.breakdown[code] && !!isCodeValid) {
+        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
+        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
       }
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
     selectedBreakdowns.forEach((selectedBreakdown, i) => {
-      for (let category in selectedBreakdown.breakdown) {
-        if (!!selectedBreakdown.breakdown[category]) {
-          if (selectedBreakdown.breakdown[category].metricBreakdowns.Cs01.targetLevel >= 1000 || !!selectedBreakdown.breakdown[category].metricBreakdowns.CreditLeverage.targetLevel) {
-            // check if its the same name as another category to avoid overwriting those values
-            const categoryNameExists = Object.keys(customBreakdown.breakdown).find(key => key === category);
-            // Adding 2 because of how the index starts at 0 and we want it to increment by 1
+      for (let code in selectedBreakdown.breakdown) {
+        const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
+        if (!!selectedBreakdown.breakdown[code] && !!isCodeValid) {
+          if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel <= -1000 || !!selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel) {
             const level = i + 2;
-            if (!!categoryNameExists) {
-              const customCategory = `${category} BICsSubLevel.${level}`
-              customBreakdown.breakdown[customCategory] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[customCategory] as BEModels.BECustomMetricBreakdowns).customLevel = level;
-            } else {
-              customBreakdown.breakdown[category] = selectedBreakdown.breakdown[category];
-              (customBreakdown.breakdown[category] as BEModels.BECustomMetricBreakdowns).customLevel = level;
-            }
+            customBreakdown.breakdown[code] = selectedBreakdown.breakdown[code];
+            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
           }
         }
       }
@@ -2433,7 +2514,10 @@ export class DTOService {
         customDefinitionList.push(category)
       }
     }
-    return [customBreakdown, customDefinitionList];
+    return {
+      customBreakdown: customBreakdown,
+      customDefinitionList: customDefinitionList
+    };
   }
 
   private processBreakdownDataForStructureFund(
@@ -2447,18 +2531,25 @@ export class DTOService {
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
     currencyBreakdown.data.indexName = rawData.indexShortName;
+    currencyBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(currencyBreakdown);
     currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
     tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
     tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
     tenorBreakdown.data.indexName = rawData.indexShortName;
+    tenorBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(tenorBreakdown);
     tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    tenorBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
+      const targetRange = FilterOptionsTenorRange[eachCategory.data.category];
+      eachCategory.data.displayCategory = targetRange.displayLabel;
+    });
     const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
     ratingBreakdown.data.indexName = rawData.indexShortName;
+    ratingBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(ratingBreakdown);
     ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
   }
@@ -2484,6 +2575,7 @@ export class DTOService {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
         const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
         newBreakdown.data.indexName = rawData.indexShortName;
+        newBreakdown.data.portfolioName = rawData.portfolioShortName;
         this.utility.updateDisplayLabelForOverrideConvertedBreakdown(
           returnPack.displayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
           newBreakdown
@@ -2496,13 +2588,18 @@ export class DTOService {
 
   public formGlobalWorkflow(
     targetModule: NavigationModule,
-    isRedirect: boolean
+    isRedirect: boolean,
+    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
   ): DTOs.GlobalWorkflowStateDTO {
     const object: DTOs.GlobalWorkflowStateDTO = {
       data: {
         uuid: this.utility.generateUUID(),
         module: targetModule,
-        title: `Generic step in ${targetModule}`
+        workflowType: workflowType,
+        stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
+      },
+      api: {
+        routeHandler: null
       },
       state: {
         triggersRedirect: !!isRedirect

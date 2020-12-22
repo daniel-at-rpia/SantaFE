@@ -17,7 +17,7 @@ import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.const
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock, BEMetricBreakdowns } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -304,10 +304,12 @@ export interface PortfolioBreakdownCategoryBlock {
     targetPct: number;
   }
   bucket: StructureBucketDataBlock;
+  simpleBucket: StructureBucketDataBlock;
   view: PortfolioView;
   parentRow: DTOs.StructurePortfolioBreakdownRowDTO;
   children?: DTOs.PortfolioBreakdownDTO; // used in popover dive-in
   displayedSubLevelRows?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used in regular BICS breakdown to display sublevels per category
+  code: string;
 }
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
@@ -328,7 +330,9 @@ export interface StructureSetTargetPanelEditRowBlock {
     percent: StructureSetTargetPanelEditRowItemBlock;
   };
   isLocked: boolean;
+  isEven: boolean;
   existInServer: boolean;
+  rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
@@ -341,6 +345,7 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   isFocused: boolean;
   metric: PortfolioMetricValues;
   isPercent: boolean;
+  isSaved: boolean;
 }
 
 export interface BICsHierarchyBlock {
@@ -372,7 +377,8 @@ export interface TraceTradeBlock {
   displayTradeTime: string;
   reportingTime: string;
   displayReportingTime: string;
-  counterParty: TraceTradeCounterParty;
+  contraParty: TraceTradeParty;
+  reportingParty: TraceTradeParty;
   side: string;
   volumeEstimated: number;
   volumeReported: number;

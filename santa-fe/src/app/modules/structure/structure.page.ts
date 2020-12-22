@@ -75,7 +75,6 @@ export class StructurePage implements OnInit, OnDestroy {
     this.fetchBICsHierarchy();
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       tap(params => {
-        console.log('test, route in Structure', params.get('stateId'));
       })
     ).subscribe();
   }
@@ -94,7 +93,7 @@ export class StructurePage implements OnInit, OnDestroy {
       tap((serverReturn: BEBICsHierarchyBlock) => {
        if (!!serverReturn) {
          this.updateBICsFetch(true);
-         this.state.BICsData.formattedBICsHierarchy = this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, this.state.BICsData.formattedBICsHierarchy);
+         this.bicsDataProcessingService.loadBICSData(serverReturn, this.state.BICsData.formattedBICsHierarchy);
        }
       }),
       catchError(err => {

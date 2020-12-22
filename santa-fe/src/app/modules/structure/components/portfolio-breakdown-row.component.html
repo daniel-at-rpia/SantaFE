@@ -16,8 +16,10 @@
     'sat-portfolioBreakdownRow--showSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.state.isShowingSubLevels,
     'sat-portfolioBreakdownRow--mainPanelLevel2': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2 && !!breakdownRow.state.isBtnDiveIn,
     'sat-portfolioBreakdownRow--mainPanelLevel3': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3 && !!breakdownRow.state.isBtnDiveIn,
-    'sat-portfolioBreakdownRow--mainPanelLevel4': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4 && !!breakdownRow.state.isBtnDiveIn,
-    'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover
+    'sat-portfolioBreakdownRow--mainPanelLevel4': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4,
+    'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover,
+    'sat-portfolioBreakdownRow--isWithinEditRow': !!breakdownRow.state.isWithinEditRow,
+    'sat-portfolioBreakdownRow--isWithinSetTargetPreview': !!breakdownRow.state.isWithinSetTargetPreview
   }">
   <section class="sat-portfolioBreakdownRow__branch" *ngIf="breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover" [ngStyle]="{'height': breakdownRow.style.branchHeight, 'top': breakdownRow.style.top}"></section>
   <section class="sat-portfolioBreakdownRow__cta">
@@ -35,25 +37,29 @@
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
     </button>
     <div class="sat-portfolioBreakdownRow__cta-actionMenu" (click)="onCollapseActionMenu()">
-      <button (click)="onClickEnterSetViewMode()" class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn santaBtn--circleLabelled santaBtn--small">
-        <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon">
-          <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon-up fal fa-arrow-up"></i>
-          <i class="sat-portfolioBreakdownRow__cta-actionMenu-viewBtn-icon-down fal fa-arrow-down"></i>
-        </i>
-        <span>Set View</span>
-      </button>
-      <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-diveInBtn santaBtn--circleLabelled">
-        <i class="fal fa-arrow-from-top"></i>
-        <span>Dive In</span>
-      </button>
-      <button (click)="showSubLevels(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-subLevelToggle santaBtn--circleLabelled santaBtn--small">
-        <i class="fal fa-flag-checkered"></i>
-        <span>Show Targets</span>
-      </button>
-      <button (click)="onClickSeeBond()" class="sat-portfolioBreakdownRow__cta-actionMenu-bondBtn santaBtn--circleLabelled santaBtn--small">
-        <i class="fal fa-search-dollar"></i>
-        <span>See Bonds</span>
-      </button>
+      <div class="sat-portfolioBreakdownRow__cta-actionMenu-top">
+        <button (click)="onClickEnterSetViewMode()" class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn santaBtn--circleLabelled santaBtn--small">
+          <i class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn-icon">
+            <i class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn-icon-up fal fa-arrow-up"></i>
+            <i class="sat-portfolioBreakdownRow__cta-actionMenu-top-viewBtn-icon-down fal fa-arrow-down"></i>
+          </i>
+          <span>Set View</span>
+        </button>
+        <button (click)="showSubLevels(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-top-subLevelToggle santaBtn--circleLabelled santaBtn--small">
+          <i class="fal fa-flag-checkered"></i>
+          <span>Show Targets</span>
+        </button>
+        <button (click)="onClickSeeBond()" class="sat-portfolioBreakdownRow__cta-actionMenu-top-bondBtn santaBtn--circleLabelled santaBtn--small">
+          <i class="fal fa-search-dollar"></i>
+          <span>See Bonds</span>
+        </button>
+      </div>
+      <div class="sat-portfolioBreakdownRow__cta-actionMenu-bottom">
+        <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-bottom-diveInBtn santaBtn--circleLabelled">
+          <i class="fal fa-arrow-from-top"></i>
+          <span>Dive In</span>
+        </button>
+      </div>
     </div>
   </section>
   <section class="sat-portfolioBreakdownRow__utility">

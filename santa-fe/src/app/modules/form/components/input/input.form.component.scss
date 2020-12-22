@@ -31,8 +31,8 @@
   &--grayedOutState {
     #{$blockName} {
       &__inputElement {
-        background-color: $color_gray_2;
-        border-color: $color_border_gray;
+        background-color: transparent;
+        border-color: $color_white;
         color: $color_disabled;
       }
     }

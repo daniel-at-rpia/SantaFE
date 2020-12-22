@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { RouteReuseStrategy } from '@angular/router';
 import { environment } from '../environments/environment';
 
 import { StoreModule } from '@ngrx/store';

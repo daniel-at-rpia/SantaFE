@@ -37,11 +37,23 @@ export const SUPPORTED_PORTFOLIO_LIST: Array<PortfolioShortNames> = [
   PortfolioShortNames.SOF
 ];
 
+export const BICS_BREAKDOWN_FRONTEND_KEY = 'bicsLevel';
+
+export const BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER = 'BicsCodeLevel';
+
+export const BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX = 'BicsSubLevel.';
+
+export const BICS_OVERRIDES_IDENTIFIER = 'BicsCode';
+
+export const BICS_OVERRIDES_TITLE = 'BICS Override'
+
 export const BICS_BRANCH_DEFAULT_HEIGHT = 50;
 
 export const BICS_BRANCH_DEFAULT_HEIGHT_LARGE = 55;
 
 export const BICS_BRANCH_CHARACTER_LIMIT = 26;
+
+export const BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST: Array<string> = ['None', '*'];
 
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
@@ -58,7 +70,7 @@ export enum BICsLevels {
 
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
 
-
+export const BICS_DICTIONARY_KEY_PREFIX = 'item';
 
 export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
@@ -78,6 +90,7 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinit
     label: 'Bond',
     list: [
       SecurityDefinitionMap.TICKER,
+      SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.RATING_BUCKET,
       SecurityDefinitionMap.SENIORITY
     ]

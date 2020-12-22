@@ -133,20 +133,26 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
 
   public onClickNavigateToStructuringModule() {
     if (this.state.currentModule !== this.constants.moduleUrl.structuring) {
-      const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring, true);
       this.state.menuIsActive = false;
-      this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
-      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+      const navigateToStructuring = () => {
+        const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring, true);
+        this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+        this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+      };
+      setTimeout(navigateToStructuring.bind(this), 500);
     }
   }
 
   public onClickNavigateToTradeModule() {
     if (this.state.currentModule !== this.constants.moduleUrl.trade) {
-      const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.trade, true);
       this.state.menuIsActive = false;
-      this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
-      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
-    }
+      const navigateToTrade = () => {
+        const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.trade, true);
+        this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
+        this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+      }
+      setTimeout(navigateToTrade.bind(this), 500);
+    };
   }
 
   private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<GlobalNavLegendBlock> {

@@ -2,6 +2,7 @@ import { SafeHtml } from '@angular/platform-browser';
 import * as agGrid from 'ag-grid-community';
 import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
+import { DetachedRouteHandle } from '@angular/router';
 
 import {
   AgGridColumnDefinition,
@@ -23,14 +24,15 @@ import {
 import {
   AlertSubTypes,
   AlertTypes,
-  NavigationModule
+  NavigationModule,
+  GlobalWorkflowTypes
 } from 'Core/constants/coreConstants.constant';
 import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -54,6 +56,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     ratingValue: string;
     ratingBucket: string;
     seniorityLevel: number;
+    tenor: number;
+    couponType: string;
     currency: string;
     sector: string;
     industry: string;
@@ -138,6 +142,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertQuoteDealer: string;
       alertTradeTrader: string;
       alertStatus: string;
+      alertIsBenchmarkHedged?: string;
       shortcutConfig: {
         numericFilterDTO: NumericFilterDTO;
         driver: string;
@@ -145,7 +150,8 @@ export interface SecurityDTO extends BasicDTOStructure {
         isUrgent: boolean;
         sendEmail: boolean;
       },
-      alertTraceCounterParty?: TraceTradeCounterParty;
+      alertTraceContraParty?: TraceTradeParty;
+      alertTraceReportingParty?: TraceTradeParty;
       alertTraceVolumeEstimated?: number;
       alertTraceVolumeReported?: number;
       alertTracePrice?: number;
@@ -153,15 +159,18 @@ export interface SecurityDTO extends BasicDTOStructure {
     }
     tradeHistory: Array<TradeDTO>;
     traceTrades: Array<TraceTradeBlock>;
-    bicsLevel1: string;
-    bicsLevel2: string;
-    bicsLevel3: string;
-    bicsLevel4: string;
     lastTrace: {
       lastTraceSpread: number;
       lastTracePrice: number;
       lastTraceVolumeEstimated: number;
       lastTraceVolumeReported: number;
+    }
+    bics: {
+      code: string;
+      bicsLevel1: string;
+      bicsLevel2: string;
+      bicsLevel3: string;
+      bicsLevel4: string;
     }
   }
   api: {
@@ -225,6 +234,8 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     filterOptionList: Array<SecurityDefinitionFilterBlock>;
     highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
+    securityDTOAttrBlock: string;
+    backendDtoAttrName: string;
   }
   style: {
     icon: string;
@@ -588,7 +599,9 @@ export interface AlertDTO extends BasicDTOStructure {
     dealer: string;
     status: string;
     isMarketListTraded: boolean;
-    traceCounterParty?: TraceTradeCounterParty;
+    isBenchmarkHedged: boolean;
+    traceContraParty?: TraceTradeParty;
+    traceReportingParty?: TraceTradeParty;
     traceSide?: string;
     traceVolumeEstimated?: number;
     traceVolumeReported?: number;
@@ -722,6 +735,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     backendGroupOptionIdentifier: string;
     popoverMainRow: BICSMainRowDataBlock;
     portfolioId: number;
+    portfolioName: string;
     diveInLevel: number;
     indexName: string;
   },
@@ -854,6 +868,8 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isShowingSubLevels: boolean;
     isEditingViewAvail: boolean;
     isDoveIn: boolean;
+    isWithinEditRow: boolean;
+    isWithinSetTargetPreview: boolean;
   }
 }
 
@@ -886,8 +902,14 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   data: {
     uuid: string;
     module: NavigationModule;
-    title: string;
+    workflowType: GlobalWorkflowTypes;
+    stateInfo: {
+      filterList?: Array<SecurityDefinitionDTO>;
+    }
   },
+  api: {
+    routeHandler: DetachedRouteHandle;
+  }
   state: {
     triggersRedirect: boolean;
   }

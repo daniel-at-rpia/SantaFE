@@ -1,6764 +1,1891 @@
 import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
-import {PortfolioShortNames} from 'Core/constants/structureConstants.constants';
+import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+
+// always remove bics lv 2+ to save space
 
 export const PortfolioStructuringSample: BEPortfolioStructuringDTO = 
-  {
-    "date":"2020-09-23T00:00:00-04:00",
-    "portfolioId":5,
-    "portfolioShortName":PortfolioShortNames.FIP,
-    "portfolioNav":752202919.2976391,
-    "currentTotals":{
-      "CreditLeverage":0.7567398373447978,
-      "Cs01":124965.828569423,
-      "CreditDuration":1.8940384
-    },
-    "indexId":25,
-    "indexShortName":"DEX BBB",
-    "indexNav":821605479760.9755,
-    "indexTotals":{
-      "CreditLeverage":0.7179490792140522,
-      "Cs01":169992574.48114464,
-      "CreditDuration":1.39403848
-    },
-    "target":{
-      "portfolioTargetId":"d6a4963d-e9ea-4014-ab74-46aee700b9e8",
-      "date":"2020-09-23T00:00:00",
-      "portfolioId":5,
-      "target":{
-        "Cs01":150000.0,
-        "CreditLeverage":0.85,
-        "CreditDuration":2.94390384
-      }
-    },
-    "breakdowns":{
-      "Ccy":{
-        "portfolioBreakdownId":"f94f74c2-37f9-4a28-aadf-4c836d11224b",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "groupOption":"Ccy",
-        "breakdown":{
-          "CAD":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":80000.0,
-                "targetPct":0.5333333333333333,
-                "currentLevel":90688.34418346899,
-                "currentPct":0.7257051405303839,
-                "indexLevel":169992574.48114464,
-                "indexPct":1.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.5553861678063698,
-                "currentPct":0.7339195591381507,
-                "indexLevel":0.7179490792140522,
-                "indexPct":1.0
-              }
-            }
-          },
-          "EUR":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "GBP":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "USD":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":57000.0,
-                "targetPct":0.38,
-                "currentLevel":34277.484385954,
-                "currentPct":0.27429485946961596,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.20135366953842793,
-                "currentPct":0.2660804408618493,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          }
-        }
-      },
-      "BicsLevel1":{
-        "portfolioBreakdownId":"556375c5-5483-46eb-817e-21b3e74b9b57",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "groupOption":"BicsLevel1",
-        "breakdown":{
-          "Energy":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":8113.473637313001,
-                "currentPct":0.06492553788658853,
-                "indexLevel":5085173.121111002,
-                "indexPct":0.02991408969851823
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.045806655609051346,
-                "currentPct":0.06053157683593733,
-                "indexLevel":0.023167501761986304,
-                "indexPct":0.0322690040738656
-              }
-            }
-          },
-          "Materials":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":260157.10638999997,
-                "indexPct":0.0015304027672035539
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001160486826813016,
-                "indexPct":0.0016163915525644456
-              }
-            }
-          },
-          "Utilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":12567.758050920002,
-                "currentPct":0.10056955725251052,
-                "indexLevel":4523360.025443541,
-                "indexPct":0.026609162425181496
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.062204104513074385,
-                "currentPct":0.0822001187770586,
-                "indexLevel":0.020084846288959957,
-                "indexPct":0.027975307539842644
-              }
-            }
-          },
-          "Financials":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":51686.03811435701,
-                "currentPct":0.4136013717193382,
-                "indexLevel":46268563.08117826,
-                "indexPct":0.2721799068129903
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.2755762235079001,
-                "currentPct":0.36416243721861535,
-                "indexLevel":0.1952834594117482,
-                "indexPct":0.27200182445463605
-              }
-            }
-          },
-          "Government":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":94260572.6724007,
-                "indexPct":0.5544981771121771
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.015595287434012511,
-                "currentPct":0.020608519155978753,
-                "indexLevel":0.3943542927441778,
-                "indexPct":0.5492789170728966
-              }
-            }
-          },
-          "Technology":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Health Care":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":11753.797376305,
-                "currentPct":0.09405609125998267,
-                "indexLevel":92137.399947,
-                "indexPct":0.0005420083802379248
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.04984270337777177,
-                "currentPct":0.06586504491775771,
-                "indexLevel":0.0005449568366441008,
-                "indexPct":0.00075904664052313
-              }
-            }
-          },
-          "Industrials":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":1907860.20162,
-                "indexPct":0.011223197292253594
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.008292738162216455,
-                "indexPct":0.011550593770932361
-              }
-            }
-          },
-          "Real Estate":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":2699.424104892,
-                "currentPct":0.021601298017180536,
-                "indexLevel":6313534.8122700015,
-                "indexPct":0.03714006233237141
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.017873205687094967,
-                "currentPct":0.023618692719822143,
-                "indexLevel":0.02624151286980506,
-                "indexPct":0.03655066024812229
-              }
-            }
-          },
-          "Communications":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":27200.741477909,
-                "currentPct":0.21766543533777324,
-                "indexLevel":4599755.771500016,
-                "indexPct":0.027058568796545963
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.13270615793684715,
-                "currentPct":0.17536562949094678,
-                "indexLevel":0.01989045647852453,
-                "indexPct":0.027704550440121548
-              }
-            }
-          },
-          "Not Classified":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.050294002639772434,
-                "currentPct":0.06646141799041655,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Consumer Staples":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":9173.925003697,
-                "currentPct":0.07341146862880644,
-                "indexLevel":2344427.701434,
-                "indexPct":0.013791353584647552
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.07109574787458987,
-                "currentPct":0.09395005306453307,
-                "indexLevel":0.009415497668723601,
-                "indexPct":0.01311443658236997
-              }
-            }
-          },
-          "Consumer Discretionary":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1770.67080403,
-                "currentPct":0.014169239897819978,
-                "indexLevel":4337032.58785,
-                "indexPct":0.025513070797872163
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.026440310125152716,
-                "currentPct":0.03493976241283246,
-                "indexLevel":0.01951333016445334,
-                "indexPct":0.027179267624125692
-              }
-            }
-          }
-        }
-      },
-      "BicsLevel2":{
-        "portfolioBreakdownId":"fbe68236-bdb0-4922-9edc-3f6d5fc3cd2b",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "groupOption":"BicsLevel2",
-        "breakdown":{
-          "Media":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":5095.2096334650005,
-                "currentPct":0.040772823193297426,
-                "indexLevel":1059728.906525,
-                "indexPct":0.006233971747057363
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.027867980845013705,
-                "currentPct":0.03682636947302149,
-                "indexLevel":0.0037776209232476686,
-                "indexPct":0.005261683638320252
-              }
-            }
-          },
-          "Banking":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":35147.006878545,
-                "currentPct":0.2812529415512944,
-                "indexLevel":38831749.84268966,
-                "indexPct":0.2284320357004584
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.1661844747520808,
-                "currentPct":0.21960582296708295,
-                "indexLevel":0.1640785724520774,
-                "indexPct":0.22853789663146623
-              }
-            }
-          },
-          "National":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":38255309.15865974,
-                "indexPct":0.22504106003114255
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.16036767255133177,
-                "indexPct":0.2233691457991537
-              }
-            }
-          },
-          "Insurance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":6686.713193799,
-                "currentPct":0.05350833320073808,
-                "indexLevel":2707675.89404165,
-                "indexPct":0.015928200995285132
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.040311428428672684,
-                "currentPct":0.053269864277417915,
-                "indexLevel":0.01071340496432578,
-                "indexPct":0.014922235120147906
-              }
-            }
-          },
-          "Materials":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":260157.10638999997,
-                "indexPct":0.0015304027672035539
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001160486826813016,
-                "indexPct":0.0016163915525644456
-              }
-            }
-          },
-          "Oil & Gas":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":8113.473637313001,
-                "currentPct":0.06492553788658853,
-                "indexLevel":5085173.121111002,
-                "indexPct":0.02991408969851823
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.045806655609051346,
-                "currentPct":0.06053157683593733,
-                "indexLevel":0.023167501761986304,
-                "indexPct":0.0322690040738656
-              }
-            }
-          },
-          "Utilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":12567.758050920002,
-                "currentPct":0.10056955725251052,
-                "indexLevel":4523360.025443541,
-                "indexPct":0.026609162425181496
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.062204104513074385,
-                "currentPct":0.0822001187770586,
-                "indexLevel":0.020084846288959957,
-                "indexPct":0.027975307539842644
-              }
-            }
-          },
-          "Health Care":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":11753.797376305,
-                "currentPct":0.09405609125998267,
-                "indexLevel":92137.399947,
-                "indexPct":0.0005420083802379248
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.04984270337777177,
-                "currentPct":0.06586504491775771,
-                "indexLevel":0.0005449568366441008,
-                "indexPct":0.00075904664052313
-              }
-            }
-          },
-          "Real Estate":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":2699.424104892,
-                "currentPct":0.021601298017180536,
-                "indexLevel":6313534.8122700015,
-                "indexPct":0.03714006233237141
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.017873205687094967,
-                "currentPct":0.023618692719822143,
-                "indexLevel":0.02624151286980506,
-                "indexPct":0.03655066024812229
-              }
-            }
-          },
-          "Supranationals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.012864947280506257,
-                "indexPct":0.017919024695441738
-              }
-            }
-          },
-          "Regional & Local":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":56005263.51374101,
-                "indexPct":0.32945711708103487
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.015595287434012511,
-                "currentPct":0.020608519155978753,
-                "indexLevel":0.2211216729123399,
-                "indexPct":0.3079907465783013
-              }
-            }
-          },
-          "Renewable Energy":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Financial Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":9852.318042013001,
-                "currentPct":0.07884009696730562,
-                "indexLevel":4729137.344446918,
-                "indexPct":0.02781967011724661
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0690803203271466,
-                "currentPct":0.09128674997411447,
-                "indexLevel":0.02049148199534504,
-                "indexPct":0.02854169270302195
-              }
-            }
-          },
-          "Telecommunications":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":22105.531844443998,
-                "currentPct":0.17689261214447582,
-                "indexLevel":3540026.8649750166,
-                "indexPct":0.020824597049488604
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.10483817709183346,
-                "currentPct":0.13853926001792533,
-                "indexLevel":0.01611283555527686,
-                "indexPct":0.022442866801801298
-              }
-            }
-          },
-          "Industrial Products":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":769495.7769499999,
-                "indexPct":0.004526643468390741
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.004009869645658227,
-                "indexPct":0.005585172767472424
-              }
-            }
-          },
-          "Industrial Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":1138364.42467,
-                "indexPct":0.006696553823862854
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.004282868516558227,
-                "indexPct":0.005965421003459935
-              }
-            }
-          },
-          "Consumer Staple Products":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":114.282908324,
-                "currentPct":0.0009145132684053045,
-                "indexLevel":550891.2152,
-                "indexPct":0.0032406781112730553
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.029859048079921378,
-                "currentPct":0.0394574814307239,
-                "indexLevel":0.002028291078322422,
-                "indexPct":0.0028251182946606988
-              }
-            }
-          },
-          "Retail & Wholesale - Staples":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":9059.642095373,
-                "currentPct":0.07249695536040113,
-                "indexLevel":1793536.4862339995,
-                "indexPct":0.010550675473374493
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0412366997946685,
-                "currentPct":0.05449257163380918,
-                "indexLevel":0.007387206590401179,
-                "indexPct":0.01028931828770927
-              }
-            }
-          },
-          "Software & Technology Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Consumer Discretionary Products":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1770.67080403,
-                "currentPct":0.014169239897819978,
-                "indexLevel":3948352.6898749997,
-                "indexPct":0.023226618585701495
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.026440310125152716,
-                "currentPct":0.03493976241283246,
-                "indexLevel":0.018119954938507852,
-                "indexPct":0.02523849596456617
-              }
-            }
-          },
-          "Consumer Discretionary Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":254805.387875,
-                "indexPct":0.0014989206949346055
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0010004461682012287,
-                "indexPct":0.0013934778902376052
-              }
-            }
-          },
-          "Retail & Wholesale - Discretionary":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":133874.51009999998,
-                "indexPct":0.0007875315172360612
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00039292905774425906,
-                "indexPct":0.0005472937693219183
-              }
-            }
-          },
-          "Technology Hardware & Semiconductors":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          }
-        }
-      },
-      "BicsLevel3":{
-        "portfolioBreakdownId":"74ce7f47-637a-41c7-8e1c-6c9a928adbb9",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "groupOption":"BicsLevel3",
-        "breakdown":{
-          "Local":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":1182324.5172754994,
-                "indexPct":0.006955153899423068
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.005032788849714141,
-                "indexPct":0.007009952370471173
-              }
-            }
-          },
-          "Steel":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Banking":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":35147.006878545,
-                "currentPct":0.2812529415512944,
-                "indexLevel":38831749.84268966,
-                "indexPct":0.2284320357004584
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.1661844747520808,
-                "currentPct":0.21960582296708295,
-                "indexLevel":0.1640785724520774,
-                "indexPct":0.22853789663146623
-              }
-            }
-          },
-          "Regional":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":54822938.99646551,
-                "indexPct":0.32250196318161184
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.015595287434012511,
-                "currentPct":0.020608519155978753,
-                "indexLevel":0.21608888406262572,
-                "indexPct":0.3009807942078301
-              }
-            }
-          },
-          "Software":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Chemicals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Insurance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":6686.713193799,
-                "currentPct":0.05350833320073808,
-                "indexLevel":2707675.89404165,
-                "indexPct":0.015928200995285132
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.040311428428672684,
-                "currentPct":0.053269864277417915,
-                "indexLevel":0.01071340496432578,
-                "indexPct":0.014922235120147906
-              }
-            }
-          },
-          "Semiconductors":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Supranationals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.012864947280506257,
-                "indexPct":0.017919024695441738
-              }
-            }
-          },
-          "Food Production":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":550891.2152,
-                "indexPct":0.0032406781112730553
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.002028291078322422,
-                "indexPct":0.0028251182946606988
-              }
-            }
-          },
-          "Metals & Mining":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":260157.10638999997,
-                "indexPct":0.0015304027672035539
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001160486826813016,
-                "indexPct":0.0016163915525644456
-              }
-            }
-          },
-          "Asset Management":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":2092685.8311932178,
-                "indexPct":0.01231045436884854
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.009233990937437521,
-                "indexPct":0.012861623762434637
-              }
-            }
-          },
-          "Renewable Energy":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Cable & Satellite":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":5095.2096334650005,
-                "currentPct":0.040772823193297426,
-                "indexLevel":420488.60412499995,
-                "indexPct":0.0024735704215812088
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.027867980845013705,
-                "currentPct":0.03682636947302149,
-                "indexLevel":0.00198404410042912,
-                "indexPct":0.0027634886064636754
-              }
-            }
-          },
-          "Consumer Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":254805.387875,
-                "indexPct":0.0014989206949346055
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0010004461682012287,
-                "indexPct":0.0013934778902376052
-              }
-            }
-          },
-          "Home Construction":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Specialty Finance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":2448.354911595,
-                "currentPct":0.019592195239475814,
-                "indexLevel":2636451.5132536995,
-                "indexPct":0.015509215748398066
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.01189704693458321,
-                "currentPct":0.015721449231914153,
-                "indexLevel":0.011257491057907519,
-                "indexPct":0.01568006894058731
-              }
-            }
-          },
-          "Electric Utilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":12567.758050920002,
-                "currentPct":0.10056955725251052,
-                "indexLevel":3794288.9264135417,
-                "indexPct":0.02232032156695409
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.062204104513074385,
-                "currentPct":0.0822001187770586,
-                "indexLevel":0.01700205971329488,
-                "indexPct":0.023681428398664776
-              }
-            }
-          },
-          "Governmental Banks":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":308547.158601736,
-                "indexPct":0.0018150625669591212
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0013892992318186906,
-                "indexPct":0.001935094384882524
-              }
-            }
-          },
-          "Sovereign Agencies":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":37946762.000058,
-                "indexPct":0.22322599746418342
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.1589783733195131,
-                "indexPct":0.2214340514142712
-              }
-            }
-          },
-          "Telecommunications":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":22105.531844443998,
-                "currentPct":0.17689261214447582,
-                "indexLevel":3540026.8649750166,
-                "indexPct":0.020824597049488604
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.10483817709183346,
-                "currentPct":0.13853926001792533,
-                "indexLevel":0.01611283555527686,
-                "indexPct":0.022442866801801298
-              }
-            }
-          },
-          "Tobacco & Cannabis":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Aerospace & Defense":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Oil & Gas Producers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":8113.473637313001,
-                "currentPct":0.06492553788658853,
-                "indexLevel":5085173.121111002,
-                "indexPct":0.02991408969851823
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.045806655609051346,
-                "currentPct":0.06053157683593733,
-                "indexLevel":0.023167501761986304,
-                "indexPct":0.0322690040738656
-              }
-            }
-          },
-          "Technology Hardware":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Technology Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Investment Companies":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Real Estate Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":273537.2399,
-                "indexPct":0.0016091128729292842
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00111247808043577,
-                "indexPct":0.0015495222609013077
-              }
-            }
-          },
-          "Sovereign Government":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Entertainment Content":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Gas & Water Utilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":684505.20883,
-                "indexPct":0.004026677111745987
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0028335874392869153,
-                "indexPct":0.00394678051873662
-              }
-            }
-          },
-          "Advertising & Marketing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Beverages Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":114.282908324,
-                "currentPct":0.0009145132684053045,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.029859048079921378,
-                "currentPct":0.0394574814307239,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Diversified Industrials":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Machinery Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":769495.7769499999,
-                "indexPct":0.004526643468390741
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.004009869645658227,
-                "indexPct":0.005585172767472424
-              }
-            }
-          },
-          "Automotive Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1770.67080403,
-                "currentPct":0.014169239897819978,
-                "indexLevel":3948352.6898749997,
-                "indexPct":0.023226618585701495
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.026440310125152716,
-                "currentPct":0.03493976241283246,
-                "indexLevel":0.018119954938507852,
-                "indexPct":0.02523849596456617
-              }
-            }
-          },
-          "E-Commerce Discretionary":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Internet Media & Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Publishing & Broadcasting":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":639240.3023999999,
-                "indexPct":0.003760401325476153
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001793576822818549,
-                "indexPct":0.0024981950318565768
-              }
-            }
-          },
-          "Retail - Consumer Staples":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":9059.642095373,
-                "currentPct":0.07249695536040113,
-                "indexLevel":1572002.4557339996,
-                "indexPct":0.009247477194413361
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0412366997946685,
-                "currentPct":0.05449257163380918,
-                "indexLevel":0.006727299009018282,
-                "indexPct":0.009370161761865814
-              }
-            }
-          },
-          "Apparel & Textile Products":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Engineering & Construction":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":148055.55105,
-                "indexPct":0.000870953048989926
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0004058010447995021,
-                "indexPct":0.0005652225994129522
-              }
-            }
-          },
-          "Transportation & Logistics":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":699105.87217,
-                "indexPct":0.004112567118321653
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.002909496744587732,
-                "indexPct":0.004052511283631416
-              }
-            }
-          },
-          "Commercial Support Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":291203.00145,
-                "indexPct":0.001713033656551274
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0009675707271709935,
-                "indexPct":0.0013476871204155666
-              }
-            }
-          },
-          "Industrial Support Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Wholesale - Consumer Staples":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":221534.0305,
-                "indexPct":0.0013031982789611335
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.000659907581382897,
-                "indexPct":0.0009191565258434569
-              }
-            }
-          },
-          "Leisure Facilities & Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Elec & Gas Marketing & Trading":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":44565.890199999994,
-                "indexPct":0.00026216374648142755
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00024919913637816134,
-                "indexPct":0.00034709862244124997
-              }
-            }
-          },
-          "Leisure Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Oil & Gas Services & Equipment":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Biotechnology & Pharmaceuticals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":10497.976630897,
-                "currentPct":0.08400677810146313,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.04540821207939365,
-                "currentPct":0.060005050399777014,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Real Estate Owners & Developers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":2520407.49049,
-                "indexPct":0.014826574032323752
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.009937313181656556,
-                "indexPct":0.013841250681085986
-              }
-            }
-          },
-          "Retail - Consumer Discretionary":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Household Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Industrial Intermediate Products":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Institutional Financial Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":7403.963130417999,
-                "currentPct":0.059247901727829795,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.05718327339256339,
-                "currentPct":0.07556530074220032,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Health Care Facilities & Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1255.820745408,
-                "currentPct":0.010049313158519544,
-                "indexLevel":92137.399947,
-                "indexPct":0.0005420083802379248
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0044344912983781196,
-                "currentPct":0.005859994517980698,
-                "indexLevel":0.0005449568366441008,
-                "indexPct":0.00075904664052313
-              }
-            }
-          },
-          "Electrical Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Wholesale - Consumer Discretionary":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":133874.51009999998,
-                "indexPct":0.0007875315172360612
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00039292905774425906,
-                "indexPct":0.0005472937693219183
-              }
-            }
-          },
-          "Construction Materials Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Containers & Packaging Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Home & Office Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Real Estate Investment Trusts (REIT)":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":2699.424104892,
-                "currentPct":0.021601298017180536,
-                "indexLevel":3519590.0818799995,
-                "indexPct":0.020704375427118366
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.017873205687094967,
-                "currentPct":0.023618692719822143,
-                "indexLevel":0.015191721607712736,
-                "indexPct":0.021159887306135
-              }
-            }
-          },
-          "Transportation Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Medical Equipment & Devices Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Forestry, Paper & Wood Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          }
-        }
-      },
-      "BicsLevel4":{
-        "portfolioBreakdownId":"0ac30444-52bf-4a45-be68-5a692578bdc8",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "groupOption":"BicsLevel4",
-        "breakdown":{
-          "Iron":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "SPAC":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Banks":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":24289.933173445,
-                "currentPct":0.19437260130637288,
-                "indexLevel":32835520.694584813,
-                "indexPct":0.1931585588065018
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.10182122138885409,
-                "currentPct":0.13455247941765314,
-                "indexLevel":0.13657201826929752,
-                "indexPct":0.19022521544119064
-              }
-            }
-          },
-          "Music":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Defense":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Lodging":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Tobacco":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Airlines":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Trucking":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Film & TV":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Hotel REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Publishing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":639240.3023999999,
-                "indexPct":0.003760401325476153
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001793576822818549,
-                "indexPct":0.0024981950318565768
-              }
-            }
-          },
-          "Air Freight":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Base Metals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":260157.10638999997,
-                "indexPct":0.0015304027672035539
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001160486826813016,
-                "indexPct":0.0016163915525644456
-              }
-            }
-          },
-          "Coal Mining":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Office REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":210244.41989999998,
-                "indexPct":0.0012367859039826474
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0008472032540514485,
-                "indexPct":0.0011800325100756346
-              }
-            }
-          },
-          "Reinsurance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1255.056245772,
-                "currentPct":0.010043195489035399,
-                "indexLevel":317681.36160165,
-                "indexPct":0.0018687955198707037
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.007726650890037621,
-                "currentPct":0.010210445530591358,
-                "indexLevel":0.0014290351392131349,
-                "indexPct":0.0019904407994749676
-              }
-            }
-          },
-          "Restaurants":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Retail REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":2699.424104892,
-                "currentPct":0.021601298017180536,
-                "indexLevel":1874510.173945,
-                "indexPct":0.011027012089595233
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.017873205687094967,
-                "currentPct":0.023618692719822143,
-                "indexLevel":0.00826764937373126,
-                "indexPct":0.011515648690269175
-              }
-            }
-          },
-          "Video Games":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Cruise Lines":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Homebuilding":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Managed Care":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Rail Freight":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":243266.18758000003,
-                "indexPct":0.0014310400811476786
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0009541592976936662,
-                "indexPct":0.001329006924471853
-              }
-            }
-          },
-          "Shipbuilding":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Biotechnology":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Central Banks":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Food Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Gas Utilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":684505.20883,
-                "indexPct":0.004026677111745987
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0028335874392869153,
-                "indexPct":0.00394678051873662
-              }
-            }
-          },
-          "Life Insurance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":5431.656948027,
-                "currentPct":0.043465137711702684,
-                "indexLevel":2252556.17924,
-                "indexPct":0.013250909259509159
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.032584777538635055,
-                "currentPct":0.04305941874682655,
-                "indexLevel":0.008872796811872308,
-                "indexPct":0.012358532197834239
-              }
-            }
-          },
-          "Mass Merchants":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":318665.41745,
-                "indexPct":0.001874584336537276
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0014952023474300465,
-                "indexPct":0.0020826022216880106
-              }
-            }
-          },
-          "Private Equity":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":303847.3948182176,
-                "indexPct":0.00178741569004192
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001390511053546309,
-                "indexPct":0.0019367822785823737
-              }
-            }
-          },
-          "Specialty REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":113820.78684999999,
-                "indexPct":0.0006695632864988749
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00044845707103510584,
-                "indexPct":0.0006246363203446649
-              }
-            }
-          },
-          "Supranationals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.012864947280506257,
-                "indexPct":0.017919024695441738
-              }
-            }
-          },
-          "Import & Export":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Industrial REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":117897.78425,
-                "indexPct":0.0006935466717287529
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0003065998690433332,
-                "indexPct":0.00042704960270855406
-              }
-            }
-          },
-          "Integrated Oils":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":393924.13125,
-                "indexPct":0.0023173019907036796
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0018899575809204025,
-                "indexPct":0.0026324395916620755
-              }
-            }
-          },
-          "Marine Shipping":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Mining Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Precious Metals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Steel Producers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Travel Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Water Utilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Casinos & Gaming":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Consumer Finance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":1330313.7305837001,
-                "indexPct":0.007825716709356953
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0047787645443823495,
-                "indexPct":0.006656132980369197
-              }
-            }
-          },
-          "Data Center REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Funeral Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Health Care REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":395090.30272499996,
-                "indexPct":0.0023241621225568465
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0017307704169204137,
-                "indexPct":0.0024107147248034772
-              }
-            }
-          },
-          "Local Government":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":1182324.5172754994,
-                "indexPct":0.006955153899423068
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.005032788849714141,
-                "indexPct":0.007009952370471173
-              }
-            }
-          },
-          "Mortgage Finance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":582.17761305,
-                "currentPct":0.004658694458434126,
-                "indexLevel":334973.852771,
-                "indexPct":0.001970520499459551
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0023993578862804934,
-                "currentPct":0.0031706509527755443,
-                "indexLevel":0.0013727774185526703,
-                "indexPct":0.0019120818708416856
-              }
-            }
-          },
-          "Power Generation":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":777166.5304,
-                "indexPct":0.004571767518505359
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0026575675543634688,
-                "indexPct":0.0037016100881036595
-              }
-            }
-          },
-          "Residential REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Transit Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Waste Management":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Cable & Satellite":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":5095.2096334650005,
-                "currentPct":0.040772823193297426,
-                "indexLevel":420488.60412499995,
-                "indexPct":0.0024735704215812088
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.027867980845013705,
-                "currentPct":0.03682636947302149,
-                "indexLevel":0.00198404410042912,
-                "indexPct":0.0027634886064636754
-              }
-            }
-          },
-          "Department Stores":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Diversified Banks":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":10857.0737051,
-                "currentPct":0.08688034024492149,
-                "indexLevel":5996229.148104847,
-                "indexPct":0.035273476893956573
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.06436325336322674,
-                "currentPct":0.08505334354942984,
-                "indexLevel":0.02750655418277989,
-                "indexPct":0.03831268119027558
-              }
-            }
-          },
-          "Printing Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Regional Agencies":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":464763.4554269393,
-                "indexPct":0.002734022099762306
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001913419067773001,
-                "indexPct":0.0026651180747632474
-              }
-            }
-          },
-          "Security Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Self-Storage REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Wealth Management":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Commercial Finance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":119704.3755,
-                "indexPct":0.0007041741432845789
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0006481096074905855,
-                "indexPct":0.0009027236419051881
-              }
-            }
-          },
-          "Food & Drug Stores":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":9059.642095373,
-                "currentPct":0.07249695536040113,
-                "indexLevel":1253337.038284,
-                "indexPct":0.007372892857876087
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0412366997946685,
-                "currentPct":0.05449257163380918,
-                "indexLevel":0.005232096661588235,
-                "indexPct":0.007287559540177803
-              }
-            }
-          },
-          "Forestry & Logging":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Logistics Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Online Marketplace":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Paper & Pulp Mills":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Sovereign Agencies":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":37946762.000058,
-                "indexPct":0.22322599746418342
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.1589783733195131,
-                "indexPct":0.2214340514142712
-              }
-            }
-          },
-          "Cement & Aggregates":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Commercial Vehicles":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Export-Import Banks":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":308547.158601736,
-                "indexPct":0.0018150625669591212
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0013892992318186906,
-                "indexPct":0.001935094384882524
-              }
-            }
-          },
-          "Regional Government":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":54358175.541038565,
-                "indexPct":0.31976794108184947
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.015595287434012511,
-                "currentPct":0.020608519155978753,
-                "indexLevel":0.21417546499485268,
-                "indexPct":0.29831567613306675
-              }
-            }
-          },
-          "Application Software":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Automotive Retailers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Consumer Electronics":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Educational Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Engineering Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Health Care Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Home Products Stores":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Information Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Investment Companies":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Real Estate Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":273537.2399,
-                "indexPct":0.0016091128729292842
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00111247808043577,
-                "indexPct":0.0015495222609013077
-              }
-            }
-          },
-          "Refining & Marketing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":252241.6815,
-                "indexPct":0.001483839410456004
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001273571830733669,
-                "indexPct":0.0017739027287671488
-              }
-            }
-          },
-          "Sovereign Government":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Building Construction":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Consumer Goods Rental":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":254805.387875,
-                "indexPct":0.0014989206949346055
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0010004461682012287,
-                "indexPct":0.0013934778902376052
-              }
-            }
-          },
-          "Investment Management":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":1788838.436375,
-                "indexPct":0.010523038678806619
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.007843479883891212,
-                "indexPct":0.010924841483852265
-              }
-            }
-          },
-          "Large Pharmaceuticals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":10497.976630897,
-                "currentPct":0.08400677810146313,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.04540821207939365,
-                "currentPct":0.060005050399777014,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Midstream - Oil & Gas":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":8113.473637313001,
-                "currentPct":0.06492553788658853,
-                "indexLevel":4123198.726861,
-                "indexPct":0.024255169612237035
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.045806655609051346,
-                "currentPct":0.06053157683593733,
-                "indexLevel":0.01809150563886735,
-                "indexPct":0.02519887017429195
-              }
-            }
-          },
-          "Professional Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Semiconductor Devices":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Agricultural Chemicals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Agricultural Producers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Automotive Wholesalers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Electronics Components":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Health Care Facilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1255.820745408,
-                "currentPct":0.010049313158519544,
-                "indexLevel":92137.399947,
-                "indexPct":0.0005420083802379248
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0044344912983781196,
-                "currentPct":0.005859994517980698,
-                "indexLevel":0.0005449568366441008,
-                "indexPct":0.00075904664052313
-              }
-            }
-          },
-          "Multi Asset Class REIT":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":808026.61421,
-                "indexPct":0.004753305352756013
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0035910416229311746,
-                "indexPct":0.005001805457933497
-              }
-            }
-          },
-          "Railroad Rolling Stock":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Advertising & Marketing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Diversified Industrials":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Furniture Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Infrastructure Software":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Institutional Brokerage":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":7403.963130417999,
-                "currentPct":0.059247901727829795,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.05718327339256339,
-                "currentPct":0.07556530074220032,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Non-Profit Organization":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Technology Distributors":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Auto Parts Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":92761.219525,
-                "indexPct":0.0005456780674575227
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0005433600140177697,
-                "indexPct":0.0007568224958413384
-              }
-            }
-          },
-          "Communications Equipment":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Entertainment Facilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Exploration & Production":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":315808.5815,
-                "indexPct":0.0018577786851215025
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0019124667114648827,
-                "indexPct":0.0026637915791444208
-              }
-            }
-          },
-          "Health Care Supply Chain":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Housewares Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Other Financial Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1866.1772985450002,
-                "currentPct":0.014933500781041689,
-                "indexLevel":851459.5543990001,
-                "indexPct":0.005008804396296986
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.009497689048302716,
-                "currentPct":0.012550798279138605,
-                "indexLevel":0.004457839487481915,
-                "indexPct":0.006209130447471243
-              }
-            }
-          },
-          "Specialty Apparel Stores":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Automobiles Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1770.67080403,
-                "currentPct":0.014169239897819978,
-                "indexLevel":3855591.4703499996,
-                "indexPct":0.022680940518243972
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.026440310125152716,
-                "currentPct":0.03493976241283246,
-                "indexLevel":0.017576594924490083,
-                "indexPct":0.024481673468724832
-              }
-            }
-          },
-          "Hotel Owners & Developers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Internet Media & Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Life Science & Diagnostics":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Local TV & Radio Broadcast":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Office Owners & Developers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Retail Owners & Developers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Toys & Games Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Computer Hardware & Storage":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Drilling & Drilling Support":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Home Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Infrastructure Construction":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":148055.55105,
-                "indexPct":0.000870953048989926
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0004058010447995021,
-                "indexPct":0.0005652225994129522
-              }
-            }
-          },
-          "Packaged Food Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":550891.2152,
-                "indexPct":0.0032406781112730553
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.002028291078322422,
-                "indexPct":0.0028251182946606988
-              }
-            }
-          },
-          "Semiconductor Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Wood Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Catalog & TV Based Retailers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Electric Transmission & Dist":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":5319.7703356600005,
-                "currentPct":0.04256980005301751,
-                "indexLevel":1466230.9070585044,
-                "indexPct":0.00862526443601298
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.02271835044602922,
-                "currentPct":0.03002134858624857,
-                "indexLevel":0.007396662281209301,
-                "indexPct":0.010302488707564776
-              }
-            }
-          },
-          "Government Development Banks":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Insurance Brokers & Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Sporting Goods Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Building Maintenance Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Data & Transaction Processors":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Integrated Electric Utilities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":7247.98771526,
-                "currentPct":0.057999757199493004,
-                "indexLevel":1550891.4889550381,
-                "indexPct":0.009123289612435755
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.039485754067045166,
-                "currentPct":0.052178770190810034,
-                "indexLevel":0.006947829877722111,
-                "indexPct":0.00967732960299634
-              }
-            }
-          },
-          "Office Supplies Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Property & Casualty Insurance":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":137438.3532,
-                "indexPct":0.0008084962159052688
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0004115730132403402,
-                "indexPct":0.0005732621228387037
-              }
-            }
-          },
-          "Specialty Technology Hardware":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Aircraft & Parts Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Apparel & Footwear Wholesalers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":133874.51009999998,
-                "indexPct":0.0007875315172360612
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00039292905774425906,
-                "indexPct":0.0005472937693219183
-              }
-            }
-          },
-          "Elec & Gas Marketing & Trading":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":44565.890199999994,
-                "indexPct":0.00026216374648142755
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.00024919913637816134,
-                "indexPct":0.00034709862244124997
-              }
-            }
-          },
-          "Rubber & Plastic Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Building Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Electronics & Appliances Stores":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Industrial Maintenance Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Medical Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Mineral & Precious Stone Mining":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Residential Owners & Developers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Transport Operations & Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":455839.68458999996,
-                "indexPct":0.0026815270371739744
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.001955337446894066,
-                "indexPct":0.002723504359159564
-              }
-            }
-          },
-          "Building Materials Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Agricultural Products Wholesalers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Alcoholic Beverages Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":114.282908324,
-                "currentPct":0.0009145132684053045,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.029859048079921378,
-                "currentPct":0.0394574814307239,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Other Commercial Support Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":291203.00145,
-                "indexPct":0.001713033656551274
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0009675707271709935,
-                "indexPct":0.0013476871204155666
-              }
-            }
-          },
-          "Specialty Chemicals Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Health Care Supplies Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Household Appliances Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Electrical Components Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Engine & Transmission Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Recreational Vehicles Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Renewable Energy Project Developers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Specialty & Generic Pharmaceuticals":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Agricultural Machinery Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":689235.21355,
-                "indexPct":0.004054501884295241
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0033825576027176865,
-                "indexPct":0.004711417147328352
-              }
-            }
-          },
-          "Containers & Packaging Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Flow Control Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Food & Beverage Products Wholesalers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":221534.0305,
-                "indexPct":0.0013031982789611335
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.000659907581382897,
-                "indexPct":0.0009191565258434569
-              }
-            }
-          },
-          "Information Technology (IT) Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Metalworking Machinery Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":20568.475,
-                "indexPct":0.00012099631447302675
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0002518271641277184,
-                "indexPct":0.00035075908782193404
-              }
-            }
-          },
-          "Personal Care Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Wireless Telecommunications Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":222.13132104800002,
-                "currentPct":0.0017775364961037977,
-                "indexLevel":306387.10620000004,
-                "indexPct":0.0018023558213360908
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.01688118958064758,
-                "currentPct":0.022307784984439645,
-                "indexLevel":0.0015785613338135413,
-                "indexPct":0.002198709322869544
-              }
-            }
-          },
-          "Wireline Telecommunications Services":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":21883.400523395998,
-                "currentPct":0.17511507564837203,
-                "indexLevel":3233639.7587750168,
-                "indexPct":0.019022241228152516
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.08795698751118589,
-                "currentPct":0.11623147503348569,
-                "indexLevel":0.01453427422146332,
-                "indexPct":0.020244157478931754
-              }
-            }
-          },
-          "Measurement Instruments Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Multi Asset Class Owners & Developers":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":223671.3405,
-                "indexPct":0.001315771239906772
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0006184682338630811,
-                "indexPct":0.0008614374636988545
-              }
-            }
-          },
-          "Non-Alcoholic Beverages Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Apparel, Footwear & Accessories Design":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Other Specialty Retail - Discretionary":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Industrial Wholesale & Equipment Rental":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Electrical Power Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Renewable Energy Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Textile & Textile Products Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Fabricated Metal & Hardware Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Material Handling Machinery Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Other Machinery & Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Pollution Control Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Factory Automation Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Basic & Diversified Chemicals Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Oilfield Services & Equipment Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Industrial Automation Controls Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Construction & Mining Machinery Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":59692.0884,
-                "indexPct":0.00035114526962247384
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0003754848788128216,
-                "indexPct":0.0005229965323221385
-              }
-            }
-          },
-          "Institutional Trust, Fiduciary & Custody Activities":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "Commercial & Residential Building Equipment & Systems Manufacturing":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          }
-        }
-      },
-      "RatingNoNotch":{
-        "portfolioBreakdownId":"7fa124b9-8d40-4bcd-8583-99819acb4272",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "groupOption":"RatingNoNotch",
-        "breakdown":{
-          "A":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":39308.971007745,
-                "currentPct":0.31455775917099976,
-                "indexLevel":27940920.780085765,
-                "indexPct":0.16436553693811454
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.25194358444813497,
-                "currentPct":0.33293289452308883,
-                "indexLevel":0.11059198841643916,
-                "indexPct":0.15403876349769205
-              }
-            }
-          },
-          "B":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "D":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "AA":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":8182.852304792,
-                "currentPct":0.06548071899708273,
-                "indexLevel":70780650.23486176,
-                "indexPct":0.4163749531466309
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.048804889198580406,
-                "currentPct":0.064493616947436,
-                "indexLevel":0.2968979163254285,
-                "indexPct":0.4135361753655933
-              }
-            }
-          },
-          "BB":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":151015.60629999998,
-                "indexPct":0.0008883658992807974
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0004107369875967432,
-                "indexPct":0.0005720976591353556
-              }
-            }
-          },
-          "NR":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":1837.233858822,
-                "currentPct":0.014701889947469526,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.010126008776318115,
-                "currentPct":0.013381096483366902,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "AAA":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":46580561.34486391,
-                "indexPct":0.2740152708848501
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.2066538444391683,
-                "indexPct":0.28783913848792014
-              }
-            }
-          },
-          "BBB":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":75636.77139806398,
-                "currentPct":0.6052596318844479,
-                "indexLevel":24539426.515033063,
-                "indexPct":0.14435587313112283
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.4458653549217645,
-                "currentPct":0.5891923920461085,
-                "indexLevel":0.1033945930454198,
-                "indexPct":0.14401382498965964
-              }
-            }
-          },
-          "CCC":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          }
-        }
-      },
-      "Tenor":{
-        "portfolioBreakdownId":"269df6f1-1b20-42be-857b-a96a61fdbc25",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "groupOption":"Tenor",
-        "breakdown":{
-          "2Y":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":27519.601367613,
-                "currentPct":0.22021701198359897,
-                "indexLevel":32153521.8705157,
-                "indexPct":0.18914662577854027
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.33377952095375657,
-                "currentPct":0.4410756570248788,
-                "indexLevel":0.23643559896035307,
-                "indexPct":0.32932084712634785
-              }
-            }
-          },
-          "3Y":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":82798.028974326,
-                "currentPct":0.6625653582437435,
-                "indexLevel":72892101.5999598,
-                "indexPct":0.42879579783083355
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.3703793526757429,
-                "currentPct":0.489440801709749,
-                "indexLevel":0.2937791430084355,
-                "indexPct":0.4091921718599308
-              }
-            }
-          },
-          "5Y":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":12083.781675215,
-                "currentPct":0.09669668751487552,
-                "indexLevel":64946951.01066898,
-                "indexPct":0.3820575763906253
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.038677813679021324,
-                "currentPct":0.05111111080755529,
-                "indexLevel":0.18773433724526406,
-                "indexPct":0.26148698101372203
-              }
-            }
-          },
-          "7Y":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "10Y":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "20Y":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          },
-          "30Y":{
-            "view":null,
-            "metricBreakdowns":{
-              "Cs01":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              },
-              "CreditLeverage":{
-                "targetLevel":null,
-                "targetPct":null,
-                "currentLevel":0.0,
-                "currentPct":0.0,
-                "indexLevel":0.0,
-                "indexPct":0.0
-              }
-            }
-          }
-        }
-      }
-    },
-    "overrides":[
-      {
-        "portfolioOverrideId":"140ee72e-95e4-494f-ad54-e6b93f16249f",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "bucket":{
-          "Ccy":[
-            "CAD"
-          ],
-          "Tenor":[
-            "2Y"
-          ]
-        },
-        "breakdown":{
-          "view":null,
-          "metricBreakdowns":{
-            "Cs01":{
-              "targetLevel":360000.0,
-              "targetPct":2.4,
-              "currentLevel":20684.709860773,
-              "currentPct":0.16552292812816347,
-              "indexLevel":32153521.8705157,
-              "indexPct":0.18914662577854027
+{
+  "date": "2020-12-07T00:00:00-05:00",
+  "portfolioId": 5,
+  "portfolioShortName": PortfolioShortNames.FIP,
+  "portfolioNav": 837001170.5624204,
+  "currentTotals": {
+    "Cs01": 140816.58623445002,
+    "CreditDuration": 1.6823941373920512,
+    "CreditLeverage": 0.7849391613657498
+  },
+  "indexId": 25,
+  "indexShortName": "DEX Short Universe",
+  "indexNav": 810244059723.7443,
+  "indexTotals": {
+    "Cs01": 160144783.74157196,
+    "CreditDuration": 1.9765005595495997,
+    "CreditLeverage": 0.3379507054299231
+  },
+  "target": {
+    "portfolioTargetId": "afa4bc54-f3f2-44b7-81cf-2ba180526592",
+    "date": "2020-12-07T00:00:00",
+    "portfolioId": 5,
+    "target": {
+      "Cs01": 167382.31477197527,
+      "CreditDuration": 2.0,
+      "CreditLeverage": null
+    }
+  },
+  "breakdowns": {
+    "Ccy": {
+      "portfolioBreakdownId": "f1836cbc-4759-4990-a9cd-9494f467fa10",
+      "date": "2020-12-07T00:00:00-05:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "groupOption": "Ccy",
+      "breakdown": {
+        "CAD": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 95894.783147659,
+              "currentPct": 0.6809906823618116,
+              "indexLevel": 160144783.74157196,
+              "indexPct": 1.0
             },
-            "CreditLeverage":{
-              "targetLevel":null,
-              "targetPct":null,
-              "currentLevel":0.26420269332663,
-              "currentPct":0.3491327934493949,
-              "indexLevel":0.23643559896035307,
-              "indexPct":0.32932084712634785
-            }
-          }
-        }
-      },
-      {
-        "portfolioOverrideId":"c49cea31-0ca5-4f49-b9d7-9b89039bfadb",
-        "date":"2020-09-23T00:00:00",
-        "portfolioId":5,
-        "indexId":25,
-        "bucket":{
-          "Ccy":[
-            "CAD"
-          ],
-          "Tenor":[
-            "3Y"
-          ]
-        },
-        "breakdown":{
-          "view":null,
-          "metricBreakdowns":{
-            "Cs01":{
-              "targetLevel":45000.0,
-              "targetPct":0.3,
-              "currentLevel":56082.61878865901,
-              "currentPct":0.4487836349398756,
-              "indexLevel":72892101.5999598,
-              "indexPct":0.42879579783083355
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 1.1456947316241242,
+              "currentPct": 0.6809906823618115,
+              "indexLevel": 1.9765005595495997,
+              "indexPct": 1.0
             },
-            "CreditLeverage":{
-              "targetLevel":null,
-              "targetPct":null,
-              "currentLevel":0.2423796520244005,
-              "currentPct":0.3202945583978337,
-              "indexLevel":0.2937791430084355,
-              "indexPct":0.4091921718599308
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.5002538288817171,
+              "currentPct": 0.637315416918814,
+              "indexLevel": 0.3379507054299231,
+              "indexPct": 1.0
             }
-          }
+          },
+          "view": "Neutral"
+        },
+        "USD": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 44921.803086791,
+              "currentPct": 0.3190093176381883,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.5366994057679265,
+              "currentPct": 0.3190093176381882,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.2846853324840323,
+              "currentPct": 0.36268458308118545,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "EUR": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "GBP": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
         }
       }
-    ]
-  }
+    },
+    "BicsCodeLevel1": {
+      "portfolioBreakdownId": "0c1d41a0-abfa-4746-b8f9-69081cd96dda",
+      "date": "2020-12-07T00:00:00-05:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "groupOption": "BicsCodeLevel1",
+      "breakdown": {
+        "50": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 1448.8238159999999,
+              "currentPct": 0.01028872986302769,
+              "indexLevel": 89761455.81081392,
+              "indexPct": 0.5605019015521812
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.017309698802768305,
+              "currentPct": 0.010288729863027687,
+              "indexLevel": 1.1078323220465007,
+              "indexPct": 0.5605019015521812
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.02773801453360549,
+              "indexPct": 0.08207710203864983
+            }
+          },
+          "view": null
+        },
+        "None": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "12": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 12346.583128861,
+              "currentPct": 0.0876784721105565,
+              "indexLevel": 2209304.168866,
+              "indexPct": 0.013795667378284311
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.1475097474542927,
+              "currentPct": 0.08767847211055649,
+              "indexLevel": 0.027267144292539097,
+              "indexPct": 0.01379566737828431
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.053973884122651805,
+              "currentPct": 0.06876186942786788,
+              "indexLevel": 0.009039565466875786,
+              "indexPct": 0.026748177534874875
+            }
+          },
+          "view": null
+        },
+        "15": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 3529.632673421,
+              "currentPct": 0.025065461163391665,
+              "indexLevel": 6110369.872825001,
+              "indexPct": 0.03815528504934258
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.04216998491231827,
+              "currentPct": 0.02506546116339166,
+              "indexLevel": 0.07541394224980008,
+              "indexPct": 0.038155285049342576
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.04478022850323113,
+              "currentPct": 0.05704929847724257,
+              "indexLevel": 0.026884650996487455,
+              "indexPct": 0.0795519895787352
+            }
+          },
+          "view": null
+        },
+        "14": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 58579.23356672499,
+              "currentPct": 0.41599668855197613,
+              "indexLevel": 41636379.2586065,
+              "indexPct": 0.25999210393137595
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.6998703899943516,
+              "currentPct": 0.4159966885519761,
+              "indexLevel": 0.5138745388988422,
+              "indexPct": 0.2599921039313759
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.2748109628142615,
+              "currentPct": 0.35010479326334787,
+              "indexLevel": 0.18355776010617061,
+              "indexPct": 0.5431495101413033
+            }
+          },
+          "view": null
+        },
+        "17": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 2087801.8578200005,
+              "indexPct": 0.013036964483271074
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.025767567596013532,
+              "indexPct": 0.013036964483271072
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.007618534969518522,
+              "indexPct": 0.022543332051420405
+            }
+          },
+          "view": null
+        },
+        "10": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 28933.387439808,
+              "currentPct": 0.20546860432787287,
+              "indexLevel": 3625204.5097693084,
+              "indexPct": 0.022637043961540173
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.3456791753393403,
+              "currentPct": 0.2054686043278728,
+              "indexLevel": 0.04474213005653303,
+              "indexPct": 0.02263704396154017
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.12591907015523637,
+              "currentPct": 0.16041889149236013,
+              "indexLevel": 0.017277117724696475,
+              "indexPct": 0.051123188817485773
+            }
+          },
+          "view": null
+        },
+        "19": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 23.636769016000002,
+              "currentPct": 0.00016785500663001724,
+              "indexLevel": 893757.1146999999,
+              "indexPct": 0.005580931790711767
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.00028239827908624484,
+              "currentPct": 0.0001678550066300172,
+              "indexLevel": 0.011030714807149957,
+              "indexPct": 0.005580931790711767
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.006912885302791216,
+              "currentPct": 0.008806905863587167,
+              "indexLevel": 0.0027967095331406775,
+              "indexPct": 0.008275495473763994
+            }
+          },
+          "view": null
+        },
+        "11": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 2551.65908717,
+              "currentPct": 0.01812044415649774,
+              "indexLevel": 4321128.361925,
+              "indexPct": 0.02698263571855122
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.03048572901583185,
+              "currentPct": 0.018120444156497738,
+              "indexLevel": 0.053331194595839494,
+              "indexPct": 0.026982635718551216
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.028352934877928705,
+              "currentPct": 0.036121187823775026,
+              "indexLevel": 0.02047173099751627,
+              "indexPct": 0.06057608600483083
+            }
+          },
+          "view": null
+        },
+        "16": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 13240.871607059,
+              "currentPct": 0.09402920466353197,
+              "indexLevel": 84806.781325,
+              "indexPct": 0.000529563182412822
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.1581941826695635,
+              "currentPct": 0.09402920466353197,
+              "indexLevel": 0.0010466819263558092,
+              "indexPct": 0.0005295631824128219
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.05560351302434123,
+              "currentPct": 0.07083799071458514,
+              "indexLevel": 0.0005550375668577347,
+              "indexPct": 0.0016423625041754094
+            }
+          },
+          "view": null
+        },
+        "13": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 5286.220196675,
+              "currentPct": 0.03753975535150244,
+              "indexLevel": 4417623.178420999,
+              "indexPct": 0.027585183077519303
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.06315666432249957,
+              "currentPct": 0.03753975535150243,
+              "indexLevel": 0.05452212978799504,
+              "indexPct": 0.027585183077519296
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0744414466899044,
+              "currentPct": 0.09483721841624068,
+              "indexLevel": 0.019933804081805707,
+              "indexPct": 0.05898435411296736
+            }
+          },
+          "view": null
+        },
+        "20": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 14876.537949715,
+              "currentPct": 0.1056447848050128,
+              "indexLevel": 4832038.074680312,
+              "indexPct": 0.030172934527033013
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.17773616660199837,
+              "currentPct": 0.10564478480501278,
+              "indexLevel": 0.05963682197593418,
+              "indexPct": 0.03017293452703301
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.12014423587540317,
+              "currentPct": 0.15306184452099317,
+              "indexLevel": 0.021418199953236735,
+              "indexPct": 0.06337669846254539
+            }
+          },
+          "view": null
+        },
+        "18": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 164914.75182,
+              "indexPct": 0.0010297853477770804
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.002035371316097378,
+              "indexPct": 0.0010297853477770802
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.000659579500011654,
+              "indexPct": 0.0019517032792476987
+            }
+          },
+          "view": null
+        }
+      }
+    },
+    "RatingNoNotch": {
+      "portfolioBreakdownId": "aa8390a0-63a7-4d79-bf1b-e4e3b1400b20",
+      "date": "2020-12-07T00:00:00-05:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "groupOption": "RatingNoNotch",
+      "breakdown": {
+        "AAA": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 44365679.23511027,
+              "indexPct": 0.27703480687016213
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.5475594507935906,
+              "indexPct": 0.2770348068701621
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.03026257900948661,
+              "indexPct": 0.08954731717748052
+            }
+          },
+          "view": null
+        },
+        "NR": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "AA": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 7179.737777946,
+              "currentPct": 0.050986449607521564,
+              "indexLevel": 66622010.3079309,
+              "indexPct": 0.4160111166370541
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0857793039061295,
+              "currentPct": 0.05098644960752155,
+              "indexLevel": 0.8222462048119911,
+              "indexPct": 0.41601111663705403
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.01934610063628628,
+              "currentPct": 0.02464662433534996,
+              "indexLevel": 0.10113945392312847,
+              "indexPct": 0.2992728001394883
+            }
+          },
+          "view": null
+        },
+        "BB": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 145224.33185,
+              "indexPct": 0.0009068314837175756
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0017923529349849817,
+              "indexPct": 0.0009068314837175755
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.000418309413605032,
+              "indexPct": 0.001237782335956011
+            }
+          },
+          "view": null
+        },
+        "A": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 46995.412957342,
+              "currentPct": 0.33373492579274605,
+              "indexLevel": 25040407.022233497,
+              "indexPct": 0.15636105302462788
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.5614736825966871,
+              "currentPct": 0.33373492579274594,
+              "indexLevel": 0.3090477087949416,
+              "indexPct": 0.15636105302462786
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.235266201966623,
+              "currentPct": 0.2997253972617102,
+              "indexLevel": 0.10070917857278561,
+              "indexPct": 0.2979996104599595
+            }
+          },
+          "view": null
+        },
+        "BBB": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 86641.43549916199,
+              "currentPct": 0.6152786245997321,
+              "indexLevel": 23971462.844447363,
+              "indexPct": 0.14968619198443872
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 1.035141150889234,
+              "currentPct": 0.6152786245997321,
+              "indexLevel": 0.2958548422140919,
+              "indexPct": 0.14968619198443872
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.5303268587628402,
+              "currentPct": 0.6756279784029395,
+              "indexLevel": 0.1054211845109174,
+              "indexPct": 0.3119424898871157
+            }
+          },
+          "view": null
+        },
+        "CCC": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "B": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "D": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "CC": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "C": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        }
+      }
+    },
+    "Tenor": {
+      "portfolioBreakdownId": "c3f4bc2c-20f7-4b90-b706-e4737facceb0",
+      "date": "2020-12-07T00:00:00-05:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "groupOption": "Tenor",
+      "breakdown": {
+        "2Y": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 44349.290906223,
+              "currentPct": 0.31494365892654475,
+              "indexLevel": 34364738.55604251,
+              "indexPct": 0.2145854379590496
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.5298593653868207,
+              "currentPct": 0.31494365892654475,
+              "indexLevel": 0.42412823819725737,
+              "indexPct": 0.21458543795904955
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.39955222715452665,
+              "currentPct": 0.5090231788911237,
+              "indexLevel": 0.12024367700735226,
+              "indexPct": 0.35580241459885276
+            }
+          },
+          "view": null
+        },
+        "5Y": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 60139517.885575436,
+              "indexPct": 0.3755321683322729
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.7422395408376117,
+              "indexPct": 0.3755321683322728
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0771195601171429,
+              "indexPct": 0.2281976598304047
+            }
+          },
+          "view": null
+        },
+        "3Y": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 96467.29532822702,
+              "currentPct": 0.6850563410734553,
+              "indexLevel": 65640527.299954124,
+              "indexPct": 0.4098823937086782
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 1.1525347720052306,
+              "currentPct": 0.6850563410734553,
+              "indexLevel": 0.8101327805147317,
+              "indexPct": 0.4098823937086782
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.385386934211223,
+              "currentPct": 0.49097682110887614,
+              "indexLevel": 0.14058746830542793,
+              "indexPct": 0.41599992557074245
+            }
+          },
+          "view": null
+        },
+        "30Y": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "7Y": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "10Y": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        },
+        "20Y": {
+          "metricBreakdowns": {
+            "Cs01": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditDuration": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            },
+            "CreditLeverage": {
+              "targetLevel": null,
+              "targetPct": null,
+              "currentLevel": 0.0,
+              "currentPct": 0.0,
+              "indexLevel": 0.0,
+              "indexPct": 0.0
+            }
+          },
+          "view": null
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "portfolioOverrideId": "485f7c29-b344-4de8-8aba-eef5e28494af",
+      "date": "2020-12-07T00:00:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "bucket": {
+        "Ccy": [
+          "USD"
+        ],
+        "Tenor": [
+          "10Y",
+          "20Y",
+          "2Y",
+          "30Y",
+          "3Y",
+          "5Y",
+          "7Y"
+        ],
+        "CouponType": [
+          "Float"
+        ]
+      },
+      "simpleBucket": {
+        "Ccy": [
+          "USD"
+        ],
+        "Tenor": [
+          "10Y",
+          "20Y",
+          "2Y",
+          "30Y",
+          "3Y",
+          "5Y",
+          "7Y"
+        ],
+        "CouponType": [
+          "Float"
+        ]
+      },
+      "title": "USD FRNs",
+      "breakdown": {
+        "metricBreakdowns": {
+          "Cs01": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 34888.716493622,
+            "currentPct": 0.24775999352473055,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          },
+          "CreditDuration": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.41682996058629923,
+            "currentPct": 0.24775999352473055,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          },
+          "CreditLeverage": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.1719628235319327,
+            "currentPct": 0.21907790055056892,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          }
+        },
+        "view": null
+      }
+    },
+    {
+      "portfolioOverrideId": "4b62b2d8-c306-4e6b-af8a-75f1ce52b52c",
+      "date": "2020-12-07T00:00:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "bucket": {
+        "Ticker": [
+          "A",
+          "ABMD",
+          "AJG",
+          "AMGN",
+          "ATVI",
+          "AVGO",
+          "CB",
+          "CCL",
+          "CDNS",
+          "COO",
+          "CTXS",
+          "DXC",
+          "ETN",
+          "GE",
+          "GM",
+          "GOOGL",
+          "HIG",
+          "INFO",
+          "IPG",
+          "JCI",
+          "KO",
+          "LNT",
+          "LRCX",
+          "LVS",
+          "MCHP",
+          "MDLZ",
+          "MET",
+          "MOS",
+          "NCLH",
+          "NFLX",
+          "NVDA",
+          "OKE",
+          "PFG",
+          "PKI",
+          "RE",
+          "SLB",
+          "SNPS",
+          "SRE",
+          "STX",
+          "STZ",
+          "TAP",
+          "TMO",
+          "UAL",
+          "VTRS",
+          "VZ",
+          "WDC",
+          "WLTW",
+          "WU",
+          "WYNN",
+          "XLNX"
+        ]
+      },
+      "simpleBucket": {
+        "Ticker": [
+          "A",
+          "ABMD",
+          "AJG",
+          "AMGN",
+          "ATVI",
+          "AVGO",
+          "CB",
+          "CCL",
+          "CDNS",
+          "COO",
+          "CTXS",
+          "DXC",
+          "ETN",
+          "GE",
+          "GM",
+          "GOOGL",
+          "HIG",
+          "INFO",
+          "IPG",
+          "JCI",
+          "KO",
+          "LNT",
+          "LRCX",
+          "LVS",
+          "MCHP",
+          "MDLZ",
+          "MET",
+          "MOS",
+          "NCLH",
+          "NFLX",
+          "NVDA",
+          "OKE",
+          "PFG",
+          "PKI",
+          "RE",
+          "SLB",
+          "SNPS",
+          "SRE",
+          "STX",
+          "STZ",
+          "TAP",
+          "TMO",
+          "UAL",
+          "VTRS",
+          "VZ",
+          "WDC",
+          "WLTW",
+          "WU",
+          "WYNN",
+          "XLNX"
+        ]
+      },
+      "title": "Biden Tax Increases",
+      "breakdown": {
+        "metricBreakdowns": {
+          "Cs01": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 541.05422276,
+            "currentPct": 0.0038422620319681776,
+            "indexLevel": 439321.50165,
+            "indexPct": 0.002743276998387532
+          },
+          "CreditDuration": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.0064641991169073305,
+            "currentPct": 0.0038422620319681767,
+            "indexLevel": 0.005422088522312503,
+            "indexPct": 0.002743276998387532
+          },
+          "CreditLeverage": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.004410222014647364,
+            "currentPct": 0.005618552662060875,
+            "indexLevel": 0.002697945696442777,
+            "indexPct": 0.00798325215214625
+          }
+        },
+        "view": null
+      }
+    },
+    {
+      "portfolioOverrideId": "81c1087b-5308-4ef7-879a-a57efe28c4a7",
+      "date": "2020-12-07T00:00:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "bucket": {
+        "Ccy": [
+          "USD"
+        ],
+        "Tenor": [
+          "10Y",
+          "20Y",
+          "30Y",
+          "3Y",
+          "5Y",
+          "7Y"
+        ],
+        "CouponType": [
+          "Float"
+        ]
+      },
+      "simpleBucket": {
+        "Ccy": [
+          "USD"
+        ],
+        "Tenor": [
+          "10Y",
+          "20Y",
+          "30Y",
+          "3Y",
+          "5Y",
+          "7Y"
+        ],
+        "CouponType": [
+          "Float"
+        ]
+      },
+      "title": "USD FRNs Beyond Libor Cessation",
+      "breakdown": {
+        "metricBreakdowns": {
+          "Cs01": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 20405.500068536996,
+            "currentPct": 0.14490835642445718,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          },
+          "CreditDuration": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.24379296930762454,
+            "currentPct": 0.14490835642445718,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          },
+          "CreditLeverage": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.08705228353655392,
+            "currentPct": 0.11090322386908033,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          }
+        },
+        "view": null
+      }
+    },
+    {
+      "portfolioOverrideId": "85a3b98a-a62d-43d4-96bd-3e62e49fd41c",
+      "date": "2020-12-07T00:00:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "bucket": {
+        "BicsCode": [
+          "101010",
+          "10101010",
+          "101011",
+          "10101110",
+          "101012",
+          "10101210",
+          "10101211",
+          "10101212",
+          "101014",
+          "10101410",
+          "101110",
+          "10111010",
+          "10111011",
+          "111110",
+          "11111010",
+          "11111011",
+          "11111012",
+          "11111013",
+          "11111014",
+          "11111015",
+          "11111016",
+          "11111017",
+          "11111018",
+          "111211",
+          "11121110",
+          "11121111",
+          "11121112",
+          "11121113",
+          "11121114",
+          "11121115",
+          "11121116",
+          "11121117",
+          "11121118",
+          "121111",
+          "12111110",
+          "12111111",
+          "141010",
+          "14101010",
+          "14101011",
+          "171111",
+          "17111110",
+          "17111111",
+          "17111112",
+          "17111113",
+          "17111114",
+          "17111115",
+          "17111116",
+          "171112",
+          "17111210",
+          "17111211",
+          "17111212",
+          "17111213",
+          "17111214",
+          "17111215",
+          "17111216",
+          "17111217",
+          "17111218",
+          "191010",
+          "19101010",
+          "19101011",
+          "19101012",
+          "19101013",
+          "19101014",
+          "19101015",
+          "19101016",
+          "191011",
+          "19101110",
+          "19101111"
+        ]
+      },
+      "simpleBucket": {
+        "BicsCode": [
+          "101010",
+          "101011",
+          "101012",
+          "101014",
+          "101110",
+          "111110",
+          "111211",
+          "121111",
+          "141010",
+          "171111",
+          "171112",
+          "191010",
+          "191011",
+          "14101010"
+        ]
+      },
+      "title": "Biden Tax Increases",
+      "breakdown": {
+        "metricBreakdowns": {
+          "Cs01": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 82037.156364245,
+            "currentPct": 0.5825816301757147,
+            "indexLevel": 42525372.26702316,
+            "indexPct": 0.26554328697740787
+          },
+          "CreditDuration": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.9801319191599266,
+            "currentPct": 0.5825816301757147,
+            "indexLevel": 0.5248464552954865,
+            "indexPct": 0.2655432869774078
+          },
+          "CreditLeverage": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.3665827918086327,
+            "currentPct": 0.4670206429384913,
+            "indexLevel": 0.1866837075973369,
+            "indexPct": 0.5523992244959149
+          }
+        },
+        "view": null
+      }
+    },
+    {
+      "portfolioOverrideId": "9afc367d-70f7-4d89-b566-a9d5d7bf2c41",
+      "date": "2020-12-07T00:00:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "bucket": {
+        "Country": [
+          "Ireland",
+          "United Kingdom Great"
+        ],
+        "BicsLevel1": [
+          "Financials"
+        ]
+      },
+      "simpleBucket": {
+        "Country": [
+          "Ireland",
+          "United Kingdom Great"
+        ],
+        "BicsLevel1": [
+          "Financials"
+        ]
+      },
+      "title": "UK Fins",
+      "breakdown": {
+        "metricBreakdowns": {
+          "Cs01": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 9261.633188701,
+            "currentPct": 0.06577089699704133,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          },
+          "CreditDuration": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.1106525715188388,
+            "currentPct": 0.06577089699704133,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          },
+          "CreditLeverage": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.04345529155914257,
+            "currentPct": 0.05536134989561843,
+            "indexLevel": 0.0,
+            "indexPct": 0.0
+          }
+        },
+        "view": "Positive"
+      }
+    },
+    {
+      "portfolioOverrideId": "a6f76027-b9e9-4cdf-82eb-9aaf524bca7c",
+      "date": "2020-12-07T00:00:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "bucket": {
+        "BicsLevel4": [
+          "Agricultural Chemicals",
+          "Aircraft & Parts",
+          "Airlines",
+          "Auto Parts",
+          "Automobiles",
+          "Automotive Retailers",
+          "Base Metals",
+          "Building Construction",
+          "Building Maintenance Services",
+          "Building Materials",
+          "Building Products",
+          "Cable & Satellite",
+          "Casinos & Gaming",
+          "Cement & Aggregates",
+          "Chemicals Distribution",
+          "Commercial Finance",
+          "Commercial Vehicles",
+          "Consumer Finance",
+          "Consumer Goods Rental",
+          "Containers & Packaging",
+          "Courier Services",
+          "Data Center REIT",
+          "Defense",
+          "Department Stores",
+          "Diversified Industrials",
+          "Drilling & Drilling Support",
+          "Educational Services",
+          "Electronics & Appliances Stores",
+          "Engineering Services",
+          "Entertainment Facilities",
+          "Exploration & Production",
+          "Fabricated Metal & Hardware",
+          "Film & TV",
+          "Food Services",
+          "Furniture",
+          "Gaming REIT",
+          "Health Care Owners & Develop",
+          "Health Care REIT",
+          "Home Products Stores",
+          "Homebuilding",
+          "Hotel REIT",
+          "Household Appliances",
+          "Industrial Owners & Developers",
+          "Industrial REIT",
+          "Industrial Wholesale & Rental",
+          "Infrastructure Construction",
+          "Infrastructure REIT",
+          "Integrated Oils",
+          "Iron",
+          "Local TV & Radio Broadcast",
+          "Lodging",
+          "Logistics Services",
+          "Marine Shipping",
+          "Metal Svc Centers & Processors",
+          "Midstream - Oil & Gas",
+          "Mineral & Precious Stone Mining",
+          "Mining Services",
+          "Multi Asset Class Owners & Develop",
+          "Multi Asset Class REIT",
+          "Music",
+          "Non-Profit Organization",
+          "Office Owners & Developers",
+          "Office REIT",
+          "Oilfield Services & Equipment",
+          "Other Commercial Support Svcs",
+          "Paper & Pulp Mills",
+          "Precious Metals",
+          "Professional Services",
+          "Publishing",
+          "Rail Freight",
+          "Railroad Rolling Stock",
+          "Real Estate Services",
+          "Refining & Marketing",
+          "Residential Owners & Developers",
+          "Residential REIT",
+          "Restaurants",
+          "Retail Owners & Developers",
+          "Retail REIT",
+          "Security Services",
+          "Self-Storage REIT",
+          "Specialty Apparel Stores",
+          "Specialty Chemicals",
+          "Specialty REIT",
+          "Steel Producers",
+          "Timber REIT",
+          "Toys & Games",
+          "Transit Services",
+          "Transport Operations & Services",
+          "Trucking",
+          "Video Games",
+          "Waste Management"
+        ]
+      },
+      "simpleBucket": {
+        "BicsLevel4": [
+          "Agricultural Chemicals",
+          "Aircraft & Parts",
+          "Airlines",
+          "Auto Parts",
+          "Automobiles",
+          "Automotive Retailers",
+          "Base Metals",
+          "Building Construction",
+          "Building Maintenance Services",
+          "Building Materials",
+          "Building Products",
+          "Cable & Satellite",
+          "Casinos & Gaming",
+          "Cement & Aggregates",
+          "Chemicals Distribution",
+          "Commercial Finance",
+          "Commercial Vehicles",
+          "Consumer Finance",
+          "Consumer Goods Rental",
+          "Containers & Packaging",
+          "Courier Services",
+          "Data Center REIT",
+          "Defense",
+          "Department Stores",
+          "Diversified Industrials",
+          "Drilling & Drilling Support",
+          "Educational Services",
+          "Electronics & Appliances Stores",
+          "Engineering Services",
+          "Entertainment Facilities",
+          "Exploration & Production",
+          "Fabricated Metal & Hardware",
+          "Film & TV",
+          "Food Services",
+          "Furniture",
+          "Gaming REIT",
+          "Health Care Owners & Develop",
+          "Health Care REIT",
+          "Home Products Stores",
+          "Homebuilding",
+          "Hotel REIT",
+          "Household Appliances",
+          "Industrial Owners & Developers",
+          "Industrial REIT",
+          "Industrial Wholesale & Rental",
+          "Infrastructure Construction",
+          "Infrastructure REIT",
+          "Integrated Oils",
+          "Iron",
+          "Local TV & Radio Broadcast",
+          "Lodging",
+          "Logistics Services",
+          "Marine Shipping",
+          "Metal Svc Centers & Processors",
+          "Midstream - Oil & Gas",
+          "Mineral & Precious Stone Mining",
+          "Mining Services",
+          "Multi Asset Class Owners & Develop",
+          "Multi Asset Class REIT",
+          "Music",
+          "Non-Profit Organization",
+          "Office Owners & Developers",
+          "Office REIT",
+          "Oilfield Services & Equipment",
+          "Other Commercial Support Svcs",
+          "Paper & Pulp Mills",
+          "Precious Metals",
+          "Professional Services",
+          "Publishing",
+          "Rail Freight",
+          "Railroad Rolling Stock",
+          "Real Estate Services",
+          "Refining & Marketing",
+          "Residential Owners & Developers",
+          "Residential REIT",
+          "Restaurants",
+          "Retail Owners & Developers",
+          "Retail REIT",
+          "Security Services",
+          "Self-Storage REIT",
+          "Specialty Apparel Stores",
+          "Specialty Chemicals",
+          "Specialty REIT",
+          "Steel Producers",
+          "Timber REIT",
+          "Toys & Games",
+          "Transit Services",
+          "Transport Operations & Services",
+          "Trucking",
+          "Video Games",
+          "Waste Management"
+        ]
+      },
+      "title": "COVID Sensitive",
+      "breakdown": {
+        "metricBreakdowns": {
+          "Cs01": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 23560.934835885,
+            "currentPct": 0.16731647503979147,
+            "indexLevel": 15907754.365033604,
+            "indexPct": 0.09933357798718057
+          },
+          "CreditDuration": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.2814922566960486,
+            "currentPct": 0.16731647503979144,
+            "indexLevel": 0.19633287247372613,
+            "indexPct": 0.09933357798718054
+          },
+          "CreditLeverage": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.20506354614373595,
+            "currentPct": 0.2612476943906544,
+            "indexLevel": 0.0701251742724402,
+            "indexPct": 0.2075011921730734
+          }
+        },
+        "view": null
+      }
+    },
+    {
+      "portfolioOverrideId": "e78705d6-abee-4da7-9ca5-4ca0bc80a50e",
+      "date": "2020-12-07T00:00:00",
+      "portfolioId": 5,
+      "indexId": 25,
+      "bucket": {
+        "BicsLevel4": [
+          "Aircraft & Parts",
+          "Auto Parts",
+          "Automobiles",
+          "Casinos & Gaming",
+          "Commercial Finance",
+          "Cruise Lines",
+          "Data Center REIT",
+          "Defense",
+          "Entertainment Facilities",
+          "Gaming REIT",
+          "Health Care Owners & Develop",
+          "Health Care REIT",
+          "Hotel Owners & Developers",
+          "Hotel REIT",
+          "Industrial Owners & Developers",
+          "Industrial REIT",
+          "Infrastructure REIT",
+          "Lodging",
+          "Multi Asset Class Own & Develop",
+          "Multi Asset Class REIT",
+          "Office Owners & Developers",
+          "Office REIT",
+          "Real Estate Services",
+          "Residential Owners & Developers",
+          "Residential REIT",
+          "Restaurants",
+          "Retail Owners & Developers",
+          "Retail REIT",
+          "Self-Storage Owners & Develop",
+          "Self-Storage REIT",
+          "Specialty Owners & Developers",
+          "Specialty REIT",
+          "Timber REIT",
+          "Travel Services"
+        ]
+      },
+      "simpleBucket": {
+        "BicsLevel4": [
+          "Aircraft & Parts",
+          "Auto Parts",
+          "Automobiles",
+          "Casinos & Gaming",
+          "Commercial Finance",
+          "Cruise Lines",
+          "Data Center REIT",
+          "Defense",
+          "Entertainment Facilities",
+          "Gaming REIT",
+          "Health Care Owners & Develop",
+          "Health Care REIT",
+          "Hotel Owners & Developers",
+          "Hotel REIT",
+          "Industrial Owners & Developers",
+          "Industrial REIT",
+          "Infrastructure REIT",
+          "Lodging",
+          "Multi Asset Class Own & Develop",
+          "Multi Asset Class REIT",
+          "Office Owners & Developers",
+          "Office REIT",
+          "Real Estate Services",
+          "Residential Owners & Developers",
+          "Residential REIT",
+          "Restaurants",
+          "Retail Owners & Developers",
+          "Retail REIT",
+          "Self-Storage Owners & Develop",
+          "Self-Storage REIT",
+          "Specialty Owners & Developers",
+          "Specialty REIT",
+          "Timber REIT",
+          "Travel Services"
+        ]
+      },
+      "title": "Targeted COVID",
+      "breakdown": {
+        "metricBreakdowns": {
+          "Cs01": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 5519.773463281,
+            "currentPct": 0.039198318968554975,
+            "indexLevel": 10270544.013850002,
+            "indexPct": 0.06413286635937973
+          },
+          "CreditDuration": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.06594702202832052,
+            "currentPct": 0.03919831896855497,
+            "indexLevel": 0.1267586462448337,
+            "indexPct": 0.06413286635937972
+          },
+          "CreditLeverage": {
+            "targetLevel": null,
+            "targetPct": null,
+            "currentLevel": 0.07033560090508038,
+            "currentPct": 0.08960643622710887,
+            "indexLevel": 0.046948694163360914,
+            "indexPct": 0.1389217226329954
+          }
+        },
+        "view": null
+      }
+    }
+  ],
+  "isIndexValid": true
+}
