@@ -1,7 +1,7 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { of, Subscription, Subject } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
     import { DTOService } from 'Core/services/DTOService';
@@ -18,7 +18,8 @@
       SearchShortcutDTO,
       AlertDTO,
       SecurityTableDTO,
-      AlertCountSummaryDTO
+      AlertCountSummaryDTO,
+      SecurityDefinitionDTO
     } from 'FEModels/frontend-models.interface';
     import {
       TableFetchResultBlock,
@@ -33,7 +34,11 @@
       BEFetchAllTradeDataReturn,
       BEBICsHierarchyBlock
     } from 'BEModels/backend-models.interface';
-    import { DefinitionConfiguratorEmitterParams, SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      DefinitionConfiguratorEmitterParams,
+      SecurityMapEntry,
+      DefinitionConfiguratorEmitterParamsItem
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
@@ -49,7 +54,11 @@
       SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/securityTableConstants.constant';
-    import { SecurityDefinitionMap, FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      SecurityDefinitionMap,
+      FullOwnerList,
+      FilterOptionsTenorRange
+    } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioShortcuts,
       OwnershipShortcuts,
@@ -62,7 +71,9 @@
       selectBestQuoteValidWindow,
       selectNewAlertsForAlertTable,
       selectLiveUpdateProcessingRawDataToMainTable,
-      selectKeywordSearchInMainTable
+      selectKeywordSearchInMainTable,
+      selectCenterPanelFilterListForTableLoad,
+      selectBICSDataLoaded
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdatePassRawDataToMainTableEvent,
@@ -71,7 +82,8 @@
       TradeSecurityTableRowDTOListForAnalysisEvent,
       TradeSelectedSecurityForAlertConfigEvent,
       TradeTogglePresetEvent,
-      TradeAlertTableReceiveNewAlertsEvent
+      TradeAlertTableReceiveNewAlertsEvent,
+      TradeBICSDataLoadedEvent
     } from 'Trade/actions/trade.actions';
     import { SecurityTableHeaderConfigStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
@@ -91,7 +103,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     securityIDListFromAnalysisSub: null,
     validWindowSub: null,
     keywordSearchSub: null,
-    receiveKeywordSearchInMainTable: null
+    receiveKeywordSearchInMainTable: null,
+    selectCenterPanelFilterListForTableLoadSub: null
   };
   keywordChanged$: Subject<string> = new Subject<string>();
   constants = {
@@ -105,7 +118,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     alertTypes: AlertTypes,
     keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
     userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
-    devWhitelist: DevWhitelist
+    devWhitelist: DevWhitelist,
+    filterOptionTenorRange: FilterOptionsTenorRange
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -154,7 +168,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           portfolios: [],
           keyword: '',
           owner: [],
-          strategy: []
+          strategy: [],
+          tenor: []
         },
         securityFilters: []
       }
@@ -211,12 +226,6 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       if (!!keyword && keyword.length >= 2) {
         this.state.filters.quickFilters.keyword = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-        // this.restfulCommService.logEngagement(
-        //   EngagementActionList.applyKeywordSearch,
-        //   'n/a',
-        //   keyword,
-        //   'Trade - Center Panel'
-        // );
       } else if (!keyword || keyword.length < 2) {
         this.state.filters.quickFilters.keyword = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
@@ -245,6 +254,17 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           this.constants.ownershipShortcuts.splice(0, 1);
         }
         this.fetchBICsHierarchy();
+      }
+    });
+
+    this.subscriptions.selectCenterPanelFilterListForTableLoadSub = this.store$.pipe(
+      select(selectCenterPanelFilterListForTableLoad),
+      combineLatest(
+        this.store$.pipe(select(selectBICSDataLoaded))
+      )
+    ).subscribe(([filterList, bicsLoaded]) => {
+      if (!!filterList && filterList.length > 0 && bicsLoaded) {
+        this.autoLoadTable(filterList);
       }
     });
   }
@@ -345,7 +365,11 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.state.filters.quickFilters.owner = eachFilter.filterBy;
       } else if (eachFilter.targetAttribute === 'strategyList') {
         this.state.filters.quickFilters.strategy = eachFilter.filterBy;
-      };
+      } else if (eachFilter.targetAttribute === 'tenor') {
+        this.state.filters.quickFilters.tenor = eachFilter.filterByBlocks.map((eachFilterBlock) => {
+          return eachFilterBlock.shortKey;
+        });
+      }
     });
     this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
     if (!!logEngagement) {
@@ -393,7 +417,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
         if (!!serverReturn) {
-          this.bicsDataProcessingService.formFormattedBICsHierarchy(serverReturn, {children: []});
+          this.bicsDataProcessingService.loadBICSData(serverReturn, {children: []});
           this.dtoService.loadBICSOptionsIntoConfigurator(
             this.state.configurator.dto,
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),
@@ -402,6 +426,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(4)
           )
           this.populateSearchShortcuts();
+          this.store$.dispatch(new TradeBICSDataLoadedEvent());
         }
       }),
       catchError(err => {
@@ -573,22 +598,27 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     const filteredList: Array<SecurityTableRowDTO> = [];
     targetPrinstineList.forEach((eachRow) => {
       try {
-        if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
-        || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
-          let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-          let ownerFlag = this.filterByOwner(eachRow);
-          let strategyFlag = this.filterByStrategy(eachRow);
-          let securityLevelFilterResultCombined = true;
-          if (this.state.filters.securityFilters.length > 0) {
-            const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
-              return this.filterBySecurityAttribute(eachRow, eachFilter.targetAttribute, eachFilter.filterBy);
-            });
-            // as long as one of the filters failed, this security will not show
-            securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
-              return eachResult;
-            }).length === securityLevelFilterResult.length;
+        if (!!eachRow && !!eachRow.data && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
+          if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
+          || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
+            let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
+            let ownerFlag = this.filterByOwner(eachRow);
+            let strategyFlag = this.filterByStrategy(eachRow);
+            let tenorFlag = this.filterByTenor(eachRow);
+            let securityLevelFilterResultCombined = true;
+            if (this.state.filters.securityFilters.length > 0) {
+              const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
+                return this.filterBySecurityAttribute(eachRow, eachFilter);
+              });
+              // as long as one of the filters failed, this security will not show
+              securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+                return eachResult;
+              }).length === securityLevelFilterResult.length;
+            }
+            strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && tenorFlag && filteredList.push(eachRow);
           }
-          strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+        } else {
+          filteredList.push(eachRow);
         }
       } catch(err) {
         console.error('filter issue', err ? err.message : '', eachRow);
@@ -597,13 +627,20 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     return filteredList;
   }
 
-  private filterBySecurityAttribute(targetRow: SecurityTableRowDTO, targetAttribute: string, filterBy: Array<string>): boolean {
+  private filterBySecurityAttribute(
+    targetRow: SecurityTableRowDTO,
+    targetFilter: DefinitionConfiguratorEmitterParamsItem
+  ): boolean {
+    const targetAttribute = targetFilter.targetAttribute;
+    const filterBy = targetFilter.filterBy;
     let includeFlag = false;
-    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList') {
-      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList' || targetAttribute === 'tenor') {
+      // bypass those filters since they are handled via individual functions
       return true;
-    } else if (targetAttribute === 'seniority'){
+    } else if (targetAttribute === 'seniority') {
       return this.filterBySeniority(targetRow);
+    } else if (targetFilter.targetAttributeBlock === 'bics') {
+      return this.filterByBICS(targetRow, targetFilter);
     } else {
       filterBy.forEach((eachValue) => {
         if (targetRow.data.security.data[targetAttribute] === eachValue) {
@@ -677,6 +714,42 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.state.filters.quickFilters.strategy.forEach((eachStrategy) => {
         const strategyExist = targetRow.data.security.data.strategyList.indexOf(eachStrategy) > -1;
         if (!!strategyExist) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterByBICS(
+    targetRow: SecurityTableRowDTO,
+    targetFilter: DefinitionConfiguratorEmitterParamsItem
+  ): boolean {
+    let includeFlag = false;
+    if (targetFilter.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
+      targetFilter.filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      targetFilter.filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] === eachValue) {
+          includeFlag = true;
+        }
+      });
+    }
+    return includeFlag;
+  }
+
+  private filterByTenor(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    if (this.state.filters.quickFilters.tenor.length > 0) {
+      this.state.filters.quickFilters.tenor.forEach((eachTenor) => {
+        const targetRange = this.constants.filterOptionTenorRange[eachTenor];
+        if (!!targetRow && !!targetRow.data.security && targetRow.data.security.data.tenor >= targetRange.min && targetRow.data.security.data.tenor <= targetRange.max) {
           includeFlag = true;
         }
       });
@@ -784,5 +857,33 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         }
       })
     ).subscribe();
+  }
+
+  private autoLoadTable(filterList: Array<SecurityDefinitionDTO>) {
+    this.onSelectPreset(this.state.presets.portfolioShortcutList[0]);
+    filterList.forEach((eachFilterDefinition) => {
+      this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
+        eachBundle.data.list.forEach((eachDefinition) => {
+          if (eachDefinition.data.key === eachFilterDefinition.data.key) {
+            // deepCopy is necessary because the array was already set to readonly because it's from the store
+            eachDefinition.data.highlightSelectedOptionList = this.utilityService.deepCopy(eachFilterDefinition.data.highlightSelectedOptionList);
+            eachDefinition.data.highlightSelectedOptionList.forEach((eachHighlightedFilterOption) => {
+              const findMatchInFilterOptionList = eachDefinition.data.filterOptionList.find((eachFilterOption) => {
+                return eachFilterOption.shortKey === eachHighlightedFilterOption.shortKey;
+              });
+              if (!!findMatchInFilterOptionList) {
+                findMatchInFilterOptionList.isSelected = true;
+              } else {
+                // it's common for BICS to not find the selected option from the entire option list, because the option list only contain level.1 on default. This is already handled at the convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode() level
+              }
+            });
+            eachDefinition.state.filterActive = true;
+          }
+        });
+      })
+    });
+    const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+    this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
+    this.onApplyFilter(params, false);
   }
 }

@@ -2,7 +2,8 @@ import { Action } from '@ngrx/store';
 
 import {
   SecurityTableRowDTO,
-  SecurityDTO
+  SecurityDTO,
+  SecurityDefinitionDTO
 } from 'FEModels/frontend-models.interface';
 
 export enum TradeActions {
@@ -23,7 +24,9 @@ export enum TradeActions {
   SelectSecurityForAlertConfigEvent = '[Trade] Select Security For Alert Config Event',
   AlertTableSendNewAlerts = '[Trade] Alert Table Send New Alerts',
   AlertTableReceiveNewAlerts = '[Trade] Alert Table Receive New Alerts',
-  KeywordSearchThisSecurity = '[Trade] Keyword Search This Security'
+  KeywordSearchThisSecurity = '[Trade] Keyword Search This Security',
+  CenterPanelLoadTableWithFilter = '[Trade] Center Panel Load Table With Filter',
+  BICSDataLoaded = '[Trade] BICS Data Loaded'
 }
 
 export class TradeStoreResetEvent implements Action {
@@ -142,4 +145,17 @@ export class TradeKeywordSearchThisSecurityEvent implements Action {
   constructor(keyword: string){
     this.keyword = keyword;
   }
+}
+
+export class TradeCenterPanelLoadTableWithFilterEvent implements Action {
+  readonly type = TradeActions.CenterPanelLoadTableWithFilter;
+  readonly filterList: Array<SecurityDefinitionDTO>;
+  constructor(filterList: Array<SecurityDefinitionDTO>){
+    this.filterList = filterList;
+  }
+}
+
+export class TradeBICSDataLoadedEvent implements Action {
+  readonly type = TradeActions.BICSDataLoaded;
+  constructor(){}
 }

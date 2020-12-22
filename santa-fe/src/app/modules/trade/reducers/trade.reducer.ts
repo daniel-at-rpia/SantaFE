@@ -7,10 +7,12 @@ import {
 import {
   SecurityTableRowDTO,
   SecurityDTO,
-  AlertDTO
+  AlertDTO,
+  SecurityDefinitionDTO
 } from 'FEModels/frontend-models.interface';
 import { TradeActions } from 'Trade/actions/trade.actions';
 
+// TODO: technical debt, re-org this by putting specific things for particular panels
 export interface TradeState {
   presetSelected: boolean;
   liveUpdateSecondCount: number;
@@ -34,6 +36,10 @@ export interface TradeState {
     liveUpdateProcessingRawData: boolean;
   },
   keywordSearchInMainTable: string;
+  bicsDataLoaded: boolean;
+  centerPanel: {
+    filterListForTableLoad: Array<SecurityDefinitionDTO>
+  }
 }
 
 const initialState: TradeState = {
@@ -58,7 +64,11 @@ const initialState: TradeState = {
     liveUpdateInProgress: false,
     liveUpdateProcessingRawData: false
   },
-  keywordSearchInMainTable: ''
+  keywordSearchInMainTable: '',
+  bicsDataLoaded: false,
+  centerPanel: {
+    filterListForTableLoad: []
+  }
 };
 
 export function tradeReducer(
@@ -203,6 +213,19 @@ export function tradeReducer(
       return {
         ...state,
         keywordSearchInMainTable: action.keyword
+      }
+    case TradeActions.CenterPanelLoadTableWithFilter:
+      return {
+        ...state,
+        centerPanel: {
+          ...state.centerPanel,
+          filterListForTableLoad: action.filterList
+        }
+      }
+    case TradeActions.BICSDataLoaded:
+      return {
+        ...state,
+        bicsDataLoaded: true
       }
     default:
       return state;

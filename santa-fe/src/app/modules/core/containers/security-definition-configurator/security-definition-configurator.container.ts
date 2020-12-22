@@ -100,9 +100,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.clearSearchFilter();
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
-        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterLong) {
-          this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList = [];
-        }
+        const definitionShown = this.configuratorData.state.showFiltersFromDefinition;
         this.boostConfigurator.emit();
       } else {
         this.buryConfigurator.emit();
@@ -159,6 +157,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public triggerApplyFilter() {
     this.configuratorData.state.groupByDisabled && this.onClickDefinition(this.configuratorData.state.showFiltersFromDefinition);
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.configuratorData);
+    this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
     this.clickedApplyFilter.emit(params);
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.canApplyFilter = false;

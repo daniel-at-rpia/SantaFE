@@ -191,6 +191,7 @@ export const FrontendKayToBackendKeyDictionary = {
   'BICS_LEVEL_2': 'BicsLevel2',
   'BICS_LEVEL_3': 'BicsLevel3',
   'BICS_LEVEL_4': 'BicsLevel4',
+  'BICS_CONSOLIDATED': 'BicsCode',
 
   // metrics
   'SPREAD': 'oasSpread',
@@ -222,7 +223,8 @@ export const BackendKeyToDisplayLabelDictionary = {
   'BicsLevel1': 'BICS Lv.1',
   'BicsLevel2': 'BICS Lv.2',
   'BicsLevel3': 'BICS Lv.3',
-  'BicsLevel4': 'BICS Lv.4'
+  'BicsLevel4': 'BICS Lv.4',
+  'BicsCode': 'BicsCode'
 }
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;
@@ -284,3 +286,9 @@ export const TRACE_VOLUME_REPORTED_THRESHOLD = 1000000;
 
 export const QUANT_COMPARER_PERCENTILE = 90;
 export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;
+
+export enum GlobalWorkflowTypes {
+  genericType = 'Generic',
+  launchTradeToSeeBonds = 'Launch Trade To See Bonds',
+  routeHandlerPlaceholder = 'Placeholder for Route Handler'
+}

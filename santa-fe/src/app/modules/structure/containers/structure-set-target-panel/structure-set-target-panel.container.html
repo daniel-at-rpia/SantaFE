@@ -5,7 +5,12 @@
     'sat-structureSetTargetPanel--cs01ActiveState': state.activeMetric === constants.metric.cs01,
     'sat-structureSetTargetPanel--creditLeverageActiveState': state.activeMetric === constants.metric.creditLeverage,
     'sat-structureSetTargetPanel--editingOverrideState': state.targetBreakdownIsOverride,
-    'sat-structureSetTargetPanel--displayConfiguratorState': state.configurator.display
+    'sat-structureSetTargetPanel--displayConfiguratorState': state.configurator.display,
+    'sat-structureSetTargetPanel--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--ratingAvailableState': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--goodRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 80 &&state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--averageRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 60 && state.targetBreakdown?.style.ratingFillWidth < 80 && state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-distribution">
@@ -29,12 +34,12 @@
         <button (click)="onClickDistributeProportionally()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-proportionally">Proportionally</button>
       </div>
     </div>
+    <div class="sat-structureSetTargetPanel__utilities-clearTargets">
+      <button (click)="clearAllRowTargets()" class="sat-structureSetTargetPanel__utilities-clearTargets-btn"><i class="fal fa-eraser"></i>Clear All Targets</button>
+    </div>
   </section>
   <section class="sat-structureSetTargetPanel__main">
     <div class="sat-structureSetTargetPanel__main-preview">
-      <div class="sat-structureSetTargetPanel__main-preview-clearTargets">
-        <button (click)="clearAllRowTargets()" class="santaBtn--labelled sat-structureSetTargetPanel__main-preview-clearTargets-btn"><i class="fal fa-eraser"></i>Clear All Targets</button>
-      </div>
       <portfolio-breakdown
         *ngIf="state.targetBreakdown"
         [breakdownData]="state.targetBreakdown"
@@ -53,6 +58,31 @@
       <div class="sat-structureSetTargetPanel__main-edit-content">
         <div class="sat-structureSetTargetPanel__main-edit-content-border"></div>
         <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-content-header">
+          <div class="sat-structureSetTargetPanel__main-edit-content-header-rating">
+            <div
+              class="sat-structureSetTargetPanel__main-edit-content-header-rating-fill"
+              [ngStyle]="{
+                'width': state.targetBreakdown?.style.ratingFillWidth + '%'
+              }">
+            </div>
+          </div>
+          <div class="sat-structureSetTargetPanel__main-edit-content-header-categories">
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-index">
+              <span class="sat-structureSetTargetPanel__main-edit-content-header-categories-index-text">{{state.targetBreakdown.data.indexName}}</span>
+            </div>
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-flag-checkered"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Target</div>
+            </div>
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-chart-pie"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Current %</div>
+            </div>
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-analytics"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Index %</div>
+            </div>
+          </div>
           <button (click)="onClickNewOverrideRow()" class="sat-structureSetTargetPanel__main-edit-content-header-createRow santaBtn--labelled santaBtn--inverseLabelled">
             <i class="fal fa-plus"></i>
             <span>New Override Row</span>
@@ -105,11 +135,24 @@
               'sat-structureSetTargetEditRow--focusedCs01PercentState': eachCategory.targetCs01.percent.isFocused,
               'sat-structureSetTargetEditRow--focusedCreditLeverageLevelState': eachCategory.targetCreditLeverage.level.isFocused,
               'sat-structureSetTargetEditRow--focusedCreditLeveragePercentState': eachCategory.targetCreditLeverage.percent.isFocused,
-              'sat-structureSetTargetEditRow--evenState': categoryIndex%2 === 0,
+              'sat-structureSetTargetEditRow--evenState': eachCategory.isEven,
               'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
               'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride,
-              'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved
+              'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved,
+              'sat-structureSetTargetEditRow--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs,
+              'sat-structureSetTargetEditRow--bicsLevel2Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 2,
+              'sat-structureSetTargetEditRow--bicsLevel3Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 3,
+              'sat-structureSetTargetEditRow--bicsLevel4Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 4
             }">
+            <section class="sat-structureSetTargetEditRow__details">
+              <portfolio-breakdown-row
+                *ngIf="eachCategory.rowDTO"
+                [breakdownRow]="eachCategory.rowDTO"
+                (categoryClicked)="onClickEditCategory($event)"
+                (rowDiveInClicked)="getSubLevelEditRows($event)"
+                >
+              </portfolio-breakdown-row>
+            </section>
             <section class="sat-structureSetTargetEditRow__remove">
               <button (click)="onSelectForRemoval(eachCategory)" class="sat-structureSetTargetEditRow__remove-btn santaBtn--iconOnly fal fa-times"></button>
             </section>

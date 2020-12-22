@@ -38,6 +38,7 @@
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
+    import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
   // dependencies
 
 @Injectable()
@@ -52,7 +53,8 @@ export class UtilityService {
 
   constructor(
     private countdownPipe: CountdownPipe,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){}
 
   // shared
@@ -297,6 +299,7 @@ export class UtilityService {
       if (!!this.keyDictionary[frontendKey]) {
         return this.keyDictionary[frontendKey];
       } else {
+        console.warn('failed to find key for', frontendKey);
         return 'n/a';
       }
     }
@@ -447,6 +450,7 @@ export class UtilityService {
           activeFilters.length > 0 && params.filterList.push({
             key: eachDefinition.data.key,
             targetAttribute: eachDefinition.data.securityDTOAttr,
+            targetAttributeBlock: eachDefinition.data.securityDTOAttrBlock,
             filterBy: activeFilters.map((eachFilter) => {
               return eachFilter.displayLabel;
             }),
@@ -558,6 +562,21 @@ export class UtilityService {
 
     public parseNumberToCommas(value: number): string {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    public determineNumericalTenor(rawSecurity: BESecurityDTO): number {
+      // return in years
+      if (!!rawSecurity) {
+        if (this.isCDS(false, rawSecurity)) {
+          const tenor = !!rawSecurity.metrics && !!rawSecurity.metrics.Default ? rawSecurity.metrics.Default.workoutTerm : null;
+          return !!tenor ? this.round(tenor, 1) : null;
+        } else {
+          const stringTenor = !!rawSecurity.metrics && !!rawSecurity.metrics.Default ? rawSecurity.metrics.Default.tenor : null;
+          return !!stringTenor ? parseFloat(stringTenor) : null;
+        }
+      } else {
+        return null;
+      }
     }
   // shared end
 
@@ -1168,7 +1187,7 @@ export class UtilityService {
   // structuring specific
     public formBucketIdentifierForOverride(rawData: BEStructuringOverrideBlock): string {
       const list = [];
-      for (let eachIdentifier in rawData.bucket) {
+      for (let eachIdentifier in rawData.simpleBucket) {
         list.push(eachIdentifier);
       }
       list.sort((identifierA, identifierB) => {
@@ -1205,24 +1224,35 @@ export class UtilityService {
     }
 
     public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
-      const list = [];
-      for (let eachIdentifier in rawData.bucket) {
-        list.push(eachIdentifier);
-      }
-      list.sort((identifierA, identifierB) => {
-        if (identifierA > identifierB) {
-          return 1;
-        } else if (identifierB < identifierA) {
-          return -1;
-        } else {
-          return 0;
+      if (!!rawData.simpleBucket) {
+        const list = [];
+        for (let eachIdentifier in rawData.simpleBucket) {
+          list.push(eachIdentifier);
         }
-      });
-      let categoryKey = '';
-      list.forEach((eachIdentifier) => {
-        categoryKey = categoryKey === '' ? `${rawData.bucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.bucket[eachIdentifier]}`;
-      });
-      return categoryKey;
+        list.sort((identifierA, identifierB) => {
+          if (identifierA > identifierB) {
+            return 1;
+          } else if (identifierB < identifierA) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+        let categoryKey = '';
+        list.forEach((eachIdentifier) => {
+          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName ) {
+            const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
+              return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode);
+            });
+            categoryKey = categoryKey === '' ? `${valueArray}` : `${categoryKey} ~ ${valueArray}`;
+          } else {
+            categoryKey = categoryKey === '' ? `${rawData.simpleBucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.simpleBucket[eachIdentifier]}`;
+          }
+        });
+        return categoryKey;
+      } else {
+        return 'n/a';
+      }
     }
 
     public populateBEBucketObjectFromRowIdentifier(
@@ -1253,7 +1283,6 @@ export class UtilityService {
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
       overrideRawDataList.forEach((eachRawOverride) => {
-        eachRawOverride
         const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride);
         const matchExistBreakdown = breakdownList.find((eachBEDTO) => {
           return eachBEDTO.groupOption === overrideBucketIdentifier;
@@ -1264,13 +1293,15 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          matchExistBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
+          matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
             date: eachRawOverride.date,
             groupOption: overrideBucketIdentifier,
             indexId: eachRawOverride.indexId,
             portfolioId: eachRawOverride.portfolioId,
-            breakdown: {}
+            breakdown: {},
           };
           const categoryKey = this.formCategoryKeyForOverride(eachRawOverride);
           displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier] = {};
@@ -1278,6 +1309,8 @@ export class UtilityService {
             displayLabelToCategoryPerBreakdownMap[overrideBucketIdentifier][categoryKey] = eachRawOverride.title;
           }
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
+          newConvertedBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
+          newConvertedBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
           breakdownList.push(newConvertedBreakdown);
         }
       });
@@ -1340,25 +1373,30 @@ export class UtilityService {
 
     public calculateAlignmentRating(breakdownData: DTOs.PortfolioBreakdownDTO) {
       const targetList = breakdownData.state.isDisplayingCs01 ? breakdownData.data.rawCs01CategoryList : breakdownData.data.rawLeverageCategoryList;
-      let totalLevel = 0;
-      targetList.forEach((eachCategory) => {
-        totalLevel = totalLevel + eachCategory.data.currentLevel;
-      });
-      const targetListWithTargets = targetList.filter((eachCategory) => {
-        return !!eachCategory.data.targetLevel;
-      });
-      if (targetListWithTargets.length > 0) {
-        let misalignmentAggregate = 0;
-        targetListWithTargets.forEach((eachCategory) => {
-          const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
-          misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
-        });
-        misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
-        breakdownData.style.ratingFillWidth = 100 - this.round(misalignmentAggregate, 0);
-        breakdownData.data.ratingHoverText = `${100 - this.round(misalignmentAggregate, 0)}`;
-        breakdownData.state.isTargetAlignmentRatingAvail = true;
-      } else {
-        breakdownData.state.isTargetAlignmentRatingAvail = false;
+      if (targetList.length > 0) {
+        const filteredList = breakdownData.state.isBICs ? targetList.filter(row => row.data.bicsLevel < 2 || !row.data.bicsLevel) : targetList;
+        if (filteredList.length > 0 ) {
+          let totalLevel = 0;
+          filteredList.forEach((eachCategory) => {
+            totalLevel = totalLevel + eachCategory.data.currentLevel;
+          });
+          const filteredListWithTargets = filteredList.filter((eachCategory) => {
+            return !!eachCategory.data.targetLevel;
+          });
+          if (filteredListWithTargets.length > 0) {
+            let misalignmentAggregate = 0;
+            filteredListWithTargets.forEach((eachCategory) => {
+              const misalignmentPercentage = eachCategory.data.diffToTarget / totalLevel * 100;
+              misalignmentAggregate = misalignmentAggregate + Math.abs(misalignmentPercentage);
+            });
+            misalignmentAggregate = misalignmentAggregate > 100 ? 100 : misalignmentAggregate;
+            breakdownData.style.ratingFillWidth = 100 - this.round(misalignmentAggregate, 0);
+            breakdownData.data.ratingHoverText = `${100 - this.round(misalignmentAggregate, 0)}`;
+            breakdownData.state.isTargetAlignmentRatingAvail = true;
+          } else {
+            breakdownData.state.isTargetAlignmentRatingAvail = false;
+          }
+        }
       }
     }
 

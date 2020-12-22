@@ -304,10 +304,12 @@ export interface PortfolioBreakdownCategoryBlock {
     targetPct: number;
   }
   bucket: StructureBucketDataBlock;
+  simpleBucket: StructureBucketDataBlock;
   view: PortfolioView;
   parentRow: DTOs.StructurePortfolioBreakdownRowDTO;
   children?: DTOs.PortfolioBreakdownDTO; // used in popover dive-in
   displayedSubLevelRows?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used in regular BICS breakdown to display sublevels per category
+  code: string;
 }
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
@@ -328,7 +330,9 @@ export interface StructureSetTargetPanelEditRowBlock {
     percent: StructureSetTargetPanelEditRowItemBlock;
   };
   isLocked: boolean;
+  isEven: boolean;
   existInServer: boolean;
+  rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
@@ -341,6 +345,7 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   isFocused: boolean;
   metric: PortfolioMetricValues;
   isPercent: boolean;
+  isSaved: boolean;
 }
 
 export interface BICsHierarchyBlock {
