@@ -330,7 +330,9 @@ export interface StructureSetTargetPanelEditRowBlock {
     percent: StructureSetTargetPanelEditRowItemBlock;
   };
   isLocked: boolean;
+  isEven: boolean;
   existInServer: boolean;
+  rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
@@ -343,6 +345,7 @@ export interface StructureSetTargetPanelEditRowItemBlock {
   isFocused: boolean;
   metric: PortfolioMetricValues;
   isPercent: boolean;
+  isSaved: boolean;
 }
 
 export interface BICsHierarchyBlock {

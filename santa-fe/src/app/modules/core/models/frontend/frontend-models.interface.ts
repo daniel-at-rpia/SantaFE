@@ -868,6 +868,8 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isShowingSubLevels: boolean;
     isEditingViewAvail: boolean;
     isDoveIn: boolean;
+    isWithinEditRow: boolean;
+    isWithinSetTargetPreview: boolean;
   }
 }
 
