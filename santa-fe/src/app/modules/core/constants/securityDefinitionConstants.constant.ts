@@ -7,7 +7,7 @@ import {
 } from 'FEModels/frontend-stub-models.interface';
 import { TraceTradeCounterParty, traceTradeNumericalFilters } from 'Core/constants/securityTableConstants.constant';
 import { FrontendKayToBackendKeyDictionary } from 'Core/constants/coreConstants.constant';
-
+import { SecurityDefinitionFilterOptionTenorRange } from 'FEModels/frontend-adhoc-packages.interface';
 import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
 // internal constants
@@ -56,21 +56,52 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
   export const FilterOptionsTenor = [
-    // '0.25Y','0.5Y','0.75Y','1Y',
     '2Y',
     '3Y',
-    // '4Y',
     '5Y',
-    // '6Y',
     '7Y',
-    // '8Y',
-    // '9Y',
     '10Y',
-    // '15Y','25Y',
     '20Y',
     '30Y',
-    // '40Y','50Y'
   ];
+
+  export const FilterOptionsTenorRange: SecurityDefinitionFilterOptionTenorRange  = {
+    '2Y': {
+      displayLabel: '2Y (<= 2.5)',
+      min: 0,
+      max: 2.5
+    },
+    '3Y': {
+      displayLabel: '3Y (2.6 ~ 4.0)',
+      min: 2.6,
+      max: 4.0
+    },
+    '5Y': {
+      displayLabel: '5Y (4.1 ~ 6.0)',
+      min: 4.1,
+      max: 6.0
+    },
+    '7Y': {
+      displayLabel: '7Y (6.1 ~ 8.5)',
+      min: 6.1,
+      max: 8.5
+    },
+    '10Y': {
+      displayLabel: '10Y (8.6 ~ 15.0)',
+      min: 8.6,
+      max: 15.0
+    },
+    '20Y': {
+      displayLabel: '20Y (15.1 ~ 25.0)',
+      min: 15.1,
+      max: 25.0
+    },
+    '30Y': {
+      displayLabel: '30Y (25.1 ~ 99.9)',
+      min: 25.1,
+      max: 99.9
+    }
+  }
 
   const FilterOptionsSecurityType = [
     'Bond',
@@ -377,6 +408,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Tenor',
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor,
+    securityDTOAttr: 'tenor',
     backendDtoAttrName: FrontendKayToBackendKeyDictionary['TENOR']
   },
   PORTFOLIO: {
