@@ -863,7 +863,7 @@ export class GraphService {
               rawDate: trade.tradeTime,
               totalTime: totalTime,
               date: date,
-              counterParty: trade.counterParty,
+              contraParty: trade.contraParty,
               ...(!!isTradeSell && {sellY: +trade.spread}),
               ...(!!isTradeBuy && {buyY: +trade.spread})
             }
@@ -951,7 +951,7 @@ export class GraphService {
             const time = new Date(trade.tradeTime);
             const object: TraceScatterGraphData = {
               date: time.getTime(),
-              counterParty: trade.counterParty,
+              contraParty: trade.contraParty,
               ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
               ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
             }
@@ -1063,13 +1063,13 @@ export class GraphService {
         if (!!dto.state.isDisplayAllTraceTrades) {
           series1.dataFields.valueX = "totalTime";
           series2.dataFields.valueX = "totalTime";
-          bullet1.tooltipText = "{counterParty} sell {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
-          bullet2.tooltipText = "{counterParty} buy {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+          bullet1.tooltipText = "{contraParty} sell {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
+          bullet2.tooltipText = "{contraParty} buy {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
           bullet1.circle.radius = 4.5;
           bullet2.circle.radius = 4.5;
         } else {
-          bullet1.tooltipText = "{counterParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
-          bullet2.tooltipText = "{counterParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
+          bullet1.tooltipText = "{contraParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
+          bullet2.tooltipText = "{contraParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
         }
         return chart;
       } else {

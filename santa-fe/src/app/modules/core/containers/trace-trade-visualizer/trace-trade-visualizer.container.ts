@@ -3,7 +3,7 @@ import { TraceTradesVisualizerDTO } from 'Core/models/frontend/frontend-models.i
 import {
   TradeTraceHeaderConfigList,TradeSideValueEquivalent,
   traceTradePieGraphKeys,
-  TraceTradeCounterPartyList
+  TraceTradePartyList
 } from 'Core/constants/securityTableConstants.constant'
 import { GraphService } from 'Core/services/GraphService';
 
@@ -47,7 +47,7 @@ export class TraceTradeVisualizer implements OnChanges, OnDestroy{
         if (!!this.showData && !this.traceTrades.state.graphReceived && this.traceTrades.data.displayList.length > 0 && !!this.traceTrades.state.showGraphs) {
           this.traceTrades.state.graphReceived = true;
           this.traceTrades.graph.scatterGraph = this.graphService.generateTradeTraceScatterGraph(this.traceTrades);
-          this.traceTrades.graph.pieGraphLeft = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphLeftId, TraceTradeCounterPartyList, traceTradePieGraphKeys.counterParty);
+          this.traceTrades.graph.pieGraphLeft = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphLeftId, TraceTradePartyList, traceTradePieGraphKeys.contraParty);
           this.traceTrades.graph.pieGraphRight = this.graphService.generateTraceTradePieGraph(this.traceTrades, this.traceTrades.data.pieGraphRightId, [this.constants.sideValueEquivalent.buy, this.constants.sideValueEquivalent.sell], traceTradePieGraphKeys.side);
         }
       }

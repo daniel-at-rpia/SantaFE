@@ -5,8 +5,11 @@ import {
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
-import { TraceTradeCounterParty, traceTradeNumericalFilters } from 'Core/constants/securityTableConstants.constant';
 import { FrontendKayToBackendKeyDictionary } from 'Core/constants/coreConstants.constant';
+import {
+  TraceTradeParty,
+  traceTradeNumericalFilters
+} from 'Core/constants/securityTableConstants.constant';
 
 import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
@@ -577,10 +580,10 @@ export const RatingValueToLevelMapping = [
 ];
 
 export const FilterTraceTradesOptions = [
-  TraceTradeCounterParty.Dealer,
-  TraceTradeCounterParty.Client,
-  TraceTradeCounterParty.ClientAffiliate,
-  TraceTradeCounterParty.ATS,
+  TraceTradeParty.Dealer,
+  TraceTradeParty.Client,
+  TraceTradeParty.ClientAffiliate,
+  TraceTradeParty.ATS,
   traceTradeNumericalFilters.filter250K,
   traceTradeNumericalFilters.filter1M,
   traceTradeNumericalFilters.filter5M

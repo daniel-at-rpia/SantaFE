@@ -219,8 +219,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
         isTradeAvailable.length > 0 && this.rowData.data.traceTradeVisualizer.data.
         availableFiltersList.push(option);
       } else {
-        const isCounterPartyAvailable = this.rowData.data.traceTradeVisualizer.data.displayList.find(trade => trade.counterParty === option);
-        !!isCounterPartyAvailable && this.rowData.data.traceTradeVisualizer.data.availableFiltersList.push(option);
+        const isContraPartyAvailable = this.rowData.data.traceTradeVisualizer.data.displayList.find(trade => trade.contraParty === option);
+        !!isContraPartyAvailable && this.rowData.data.traceTradeVisualizer.data.availableFiltersList.push(option);
       }
     })
   }
