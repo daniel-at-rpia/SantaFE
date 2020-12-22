@@ -99,6 +99,7 @@ export interface BESecurityDTO {
       value: number;
       price: number;
       spread: number;
+      yield: number;
     },
     primaryPmName: string;
     backupPmName: string;
@@ -162,7 +163,7 @@ export interface BESecurityGroupDTO {
 }
 
 interface BEGroupMetricDTO {
-  tenor: string;
+  tenor?: string;
   backendTenor?: string;
   propertyToNumSecurities: {
     WorkoutTerm: number;
@@ -231,6 +232,7 @@ interface BESecurityMetricDTO {
   gSpread?: number;
   spread?: number;
   yieldWorst?: number;
+  tenor?: string;
   amtOutstanding?: number;
   marketValue?: number;
 }
@@ -446,6 +448,7 @@ export interface BETradeBlock {
   wgtAvgPrice: number;
   trader: string;
   isCancelled: boolean;
+  isValid: boolean;
 }
 
 interface BEAlertMarketListBlock {

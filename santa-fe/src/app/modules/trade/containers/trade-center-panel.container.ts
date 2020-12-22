@@ -54,7 +54,11 @@
       SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE
     } from 'Core/constants/securityTableConstants.constant';
-    import { SecurityDefinitionMap, FullOwnerList } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      SecurityDefinitionMap,
+      FullOwnerList,
+      FilterOptionsTenorRange
+    } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioShortcuts,
       OwnershipShortcuts,
@@ -114,7 +118,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     alertTypes: AlertTypes,
     keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
     userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
-    devWhitelist: DevWhitelist
+    devWhitelist: DevWhitelist,
+    filterOptionTenorRange: FilterOptionsTenorRange
   }
 
   private initializePageState(): TradeCenterPanelState {
@@ -163,7 +168,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           portfolios: [],
           keyword: '',
           owner: [],
-          strategy: []
+          strategy: [],
+          tenor: []
         },
         securityFilters: []
       }
@@ -359,7 +365,11 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         this.state.filters.quickFilters.owner = eachFilter.filterBy;
       } else if (eachFilter.targetAttribute === 'strategyList') {
         this.state.filters.quickFilters.strategy = eachFilter.filterBy;
-      };
+      } else if (eachFilter.targetAttribute === 'tenor') {
+        this.state.filters.quickFilters.tenor = eachFilter.filterByBlocks.map((eachFilterBlock) => {
+          return eachFilterBlock.shortKey;
+        });
+      }
     });
     this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
     if (!!logEngagement) {
@@ -594,6 +604,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
             let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
             let ownerFlag = this.filterByOwner(eachRow);
             let strategyFlag = this.filterByStrategy(eachRow);
+            let tenorFlag = this.filterByTenor(eachRow);
             let securityLevelFilterResultCombined = true;
             if (this.state.filters.securityFilters.length > 0) {
               const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
@@ -604,7 +615,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
                 return eachResult;
               }).length === securityLevelFilterResult.length;
             }
-            strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && filteredList.push(eachRow);
+            strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && tenorFlag && filteredList.push(eachRow);
           }
         } else {
           filteredList.push(eachRow);
@@ -623,8 +634,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     const targetAttribute = targetFilter.targetAttribute;
     const filterBy = targetFilter.filterBy;
     let includeFlag = false;
-    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList') {
-      // bypass portfolio filter since it is handled via this.filterByPortfolio() and this.filterByOwner() and this.filterByStrategy()
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList' || targetAttribute === 'tenor') {
+      // bypass those filters since they are handled via individual functions
       return true;
     } else if (targetAttribute === 'seniority') {
       return this.filterBySeniority(targetRow);
@@ -729,6 +740,21 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           includeFlag = true;
         }
       });
+    }
+    return includeFlag;
+  }
+
+  private filterByTenor(targetRow: SecurityTableRowDTO): boolean {
+    let includeFlag = false;
+    if (this.state.filters.quickFilters.tenor.length > 0) {
+      this.state.filters.quickFilters.tenor.forEach((eachTenor) => {
+        const targetRange = this.constants.filterOptionTenorRange[eachTenor];
+        if (!!targetRow && !!targetRow.data.security && targetRow.data.security.data.tenor >= targetRange.min && targetRow.data.security.data.tenor <= targetRange.max) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
     }
     return includeFlag;
   }

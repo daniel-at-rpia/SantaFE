@@ -57,7 +57,8 @@
       BICsLevel1DefinitionList,
       FilterTraceTradesOptions,
       DEFINITION_LONG_THRESHOLD,
-      FilterOptionsCouponType
+      FilterOptionsCouponType,
+      FilterOptionsTenorRange
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
@@ -130,6 +131,7 @@ export class DTOService {
         ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
         ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
+        tenor: !isStencil? this.utility.determineNumericalTenor(rawData) : 2,
         couponType: null,
         currency: !isStencil ? rawData.ccy : null,
         country: !isStencil ? rawData.country : null,
@@ -538,7 +540,7 @@ export class DTOService {
   };
 
   public generateSecurityDefinitionFilterIndividualOption(
-    name: string,
+    definitionKey: string,
     option: string,
     bicsLevel?: number
   ): Blocks.SecurityDefinitionFilterBlock {
@@ -549,7 +551,10 @@ export class DTOService {
       displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
       bicsLevel: bicsLevel || null,
       shortKey: normalizedOption,
-      key: `${this.utility.formDefinitionFilterOptionKey(name, normalizedOption)}~${bicsLevel}`
+      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`
+    }
+    if (definitionKey === SecurityDefinitionMap.TENOR.key) {
+      newFilterDTO.displayLabel = FilterOptionsTenorRange[newFilterDTO.shortKey].displayLabel;
     }
     return newFilterDTO;
   }
@@ -2534,6 +2539,10 @@ export class DTOService {
     tenorBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(tenorBreakdown);
     tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    tenorBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
+      const targetRange = FilterOptionsTenorRange[eachCategory.data.category];
+      eachCategory.data.displayCategory = targetRange.displayLabel;
+    });
     const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
     ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
     ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;

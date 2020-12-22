@@ -183,3 +183,13 @@ export interface BICSHierarchyDictionaryByLevel {
     [property: string]: string;
   }
 }
+
+export interface SecurityDefinitionFilterOptionTenorRange {
+  [property:string]: SecurityDefinitionFilterOptionTenorRangeItem
+}
+
+interface SecurityDefinitionFilterOptionTenorRangeItem {
+  displayLabel: string;
+  min: number;
+  max: number;
+}

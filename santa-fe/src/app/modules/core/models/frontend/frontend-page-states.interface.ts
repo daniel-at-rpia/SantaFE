@@ -137,6 +137,7 @@ export interface TradeCenterPanelState {
       keyword: string;
       owner: Array<string>;
       strategy: Array<string>;
+      tenor: Array<string>;
     }
     securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
   }
