@@ -563,6 +563,21 @@ export class UtilityService {
     public parseNumberToCommas(value: number): string {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+    public determineNumericalTenor(rawSecurity: BESecurityDTO): number {
+      // return in years
+      if (!!rawSecurity) {
+        if (this.isCDS(false, rawSecurity)) {
+          const tenor = !!rawSecurity.metrics && !!rawSecurity.metrics.Default ? rawSecurity.metrics.Default.workoutTerm : null;
+          return !!tenor ? this.round(tenor, 1) : null;
+        } else {
+          const stringTenor = !!rawSecurity.metrics && !!rawSecurity.metrics.Default ? rawSecurity.metrics.Default.tenor : null;
+          return !!stringTenor ? parseFloat(stringTenor) : null;
+        }
+      } else {
+        return null;
+      }
+    }
   // shared end
 
   // market specific
