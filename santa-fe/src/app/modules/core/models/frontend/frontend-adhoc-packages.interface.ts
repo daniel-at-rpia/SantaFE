@@ -21,7 +21,7 @@ import {
   SecurityDefinitionFilterBlock
 } from 'FEModels/frontend-blocks.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
-import { TraceTradeCounterParty } from '../../constants/securityTableConstants.constant';
+import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -150,7 +150,7 @@ export interface BICSServiceConsolidateReturnPack {
 }
 
 export interface TraceScatterGraphData {
-  counterParty: TraceTradeCounterParty;
+  contraParty: TraceTradeParty;
   date: Date | number;
   totalTime?: number;
   rawDate?: string;

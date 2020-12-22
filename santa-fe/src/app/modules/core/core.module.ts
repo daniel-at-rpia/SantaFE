@@ -9,11 +9,16 @@ import { FormsModule } from '@angular/forms';
 
 import { FormModule } from 'App/modules/form/form.module';
 
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { GraphService } from 'Core/services/GraphService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { AgGridMiddleLayerService } from 'Core/services/AgGridMiddleLayerService';
+import {
+  DTOService,
+  UtilityService,
+  GraphService,
+  RestfulCommService,
+  AgGridMiddleLayerService,
+  BICsDataProcessingService,
+  GlobalWorkflowIOService,
+  BICSDictionaryLookupService
+} from 'Core/services';
 
 import { AgGridModule } from 'ag-grid-angular';
 
@@ -42,11 +47,9 @@ import { SantaTableAlertStatusCell } from 'Core/components/santa-table-alert-sta
 import { SantaTableFullWidthCellRenderer } from 'Core/components/santa-table-full-width-cell-renderer/santa-table-full-width-cell-renderer.component';
 import { GlobalNav } from 'Core/containers/global-nav/global-nav.container';
 import { AppRoutingModule } from 'App/app-routing.module';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/trace-trade-visualizer.container';
 import { MoveVisualizer } from 'Core/components/move-visualizer/move-visualizer.component';
 import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.container';
-import { GlobalWorkflowIOService } from 'Core/services/GlobalWorkflowIOService';
 
 import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
 
@@ -106,6 +109,7 @@ import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
     CountdownPipe,
     BICsDataProcessingService,
     GlobalWorkflowIOService,
+    BICSDictionaryLookupService,
     {
       provide: RouteReuseStrategy,
       useClass: SantaRouteReuseStrategy

@@ -236,10 +236,12 @@ $portfolioBreakdown_rating_height: 1rem;
     }
   }
   &--previewVariant {
+    display: flex;
     flex: 1 1 auto;
     width: auto;
   }
   &--stencilState {
+    display: flex;
     #{$blockName} {
       &__rating {
         background-color: $color_white;

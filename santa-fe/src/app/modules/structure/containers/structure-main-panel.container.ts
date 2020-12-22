@@ -7,8 +7,12 @@ import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface
 import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import { selectReloadFundDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { UtilityService } from 'Core/services/UtilityService';
+import {
+  RestfulCommService,
+  UtilityService,
+  BICsDataProcessingService,
+  BICSDictionaryLookupService
+} from 'Core/services';
 import {
   PortfolioMetricValues,
   SUPPORTED_PORTFOLIO_LIST,
@@ -25,7 +29,6 @@ import {
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
 import { StructureSetViewData, AdhocExtensionBEMetricBreakdowns } from 'FEModels/frontend-adhoc-packages.interface';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import {
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
@@ -58,8 +61,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     private store$: Store<any>,
     private restfulCommService: RestfulCommService,
     private utilityService: UtilityService,
-    private BICsDataProcessingService: BICsDataProcessingService
-    ) {
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
+  ) {
     this.state = this.initializePageState();
   }
   
@@ -298,7 +302,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel;
       // level 3+ since level 2 parent categories would already be in the breakdown
       if (!!customBICSBreakdown.breakdown[code] && targetLevel >= 3) {
-        const targetHierarchyList: Array<BICsHierarchyBlock> = this.BICsDataProcessingService.getTargetSpecificHierarchyList(
+        const targetHierarchyList: Array<BICsHierarchyBlock> = this.bicsDataProcessingService.getTargetSpecificHierarchyList(
           code,
           targetLevel
         );
@@ -327,11 +331,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   ): Array<string> {
     // convert bicsCode to bics names
     const parsedCustomBICSDefinitionList = customBICSDefinitionList.map((eachCode) => {
-      return this.BICsDataProcessingService.BICSCodeToBICSName(eachCode, true);
+      return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachCode, true);
     })
     const parsedCustomBICSDefinitionListNoNull = parsedCustomBICSDefinitionList.filter((eachName) => {return !!eachName});
     for (let subCategory in customBICSBreakdown.breakdown) {
-      const name = this.BICsDataProcessingService.BICSCodeToBICSName(subCategory, true);
+      const name = this.bicsDictionaryLookupService.BICSCodeToBICSName(subCategory, true);
       customBICSBreakdown.breakdown[name] = customBICSBreakdown.breakdown[subCategory];
     }
     return parsedCustomBICSDefinitionListNoNull;
@@ -371,7 +375,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadFund(rawData: BEPortfolioStructuringDTO) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
-      this.BICsDataProcessingService.setRawBICsData(rawData);
+      this.bicsDataProcessingService.setRawBICsData(rawData);
       const newFund = this.dtoService.formStructureFundObject(rawData, false, this.state.selectedMetricValue);
       if (!!newFund) {
         this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
