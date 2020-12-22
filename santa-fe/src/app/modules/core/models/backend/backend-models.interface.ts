@@ -1,7 +1,7 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
 import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
-import { TraceTradeCounterParty } from '../../constants/securityTableConstants.constant';
+import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 export interface BEFetchAllTradeDataReturn {
   numberOfSecurities: number;
   securityDtos: BEFullSecurityCollection;
@@ -519,9 +519,9 @@ interface BEAlertRegularQuoteBlock extends BEQuoteBaseBlock {
   coupon: number,
   maturity: string,
   equityReferencePrice: boolean,
-  isGreyMarket: boolean
+  isGreyMarket: boolean,
+  isBenchmarkHedged?: boolean
 }
-
 interface BEAlertCDSQuoteBlock extends BEQuoteBaseBlock {
   class: string,
   msG1MessageID: string,
@@ -532,7 +532,8 @@ interface BEAlertCDSQuoteBlock extends BEQuoteBaseBlock {
   bloombergGlobalIdentifier: string,
   senoirity: string,
   term: string,
-  upfrontPoints?: number
+  upfrontPoints?: number,
+  isBenchmarkHedged?: boolean
 }
 
 export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
@@ -557,7 +558,8 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
   priceType: string,
   isNatural: string,
   ioiQualifier: string,
-  isTraded: boolean
+  isTraded: boolean,
+  isBenchmarkHedged?: boolean
 }
 
 export interface BEStructuringBreakdownSingleEntry {
@@ -661,7 +663,8 @@ export interface BEGetAllTraceTradesBlock {
 
 export interface BETraceTradesBlock {
   actionFlag: string;
-  counterParty: TraceTradeCounterParty;
+  contraParty: TraceTradeParty;
+  reportingParty: TraceTradeParty;
   creationTime: string;
   discriminator: string;
   eventDate: string;

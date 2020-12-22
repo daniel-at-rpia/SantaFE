@@ -24,6 +24,7 @@ export const AGGRID_SECURITY_CARD_COLUMN_WIDTH = 285;
 export const AGGRID_QUOTE_COLUMN_WIDTH = 244;    // $securityTable_cell_width_best_quote + $spacing_small * 2
 export const AGGRID_ALERT_SIDE_COLUMN_WIDTH = 115;
 export const AGGRID_ALERT_STATUS_COLUMN_WIDTH = 155;  // can not use simple text because cancelled status would wrap into 2 lines
+export const AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH = 155;
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 140;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
 export const AGGRID_NARROW_COLUMN_WIDTH = 95;
@@ -174,6 +175,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'alertIsBenchmarkHedged',
+    content: {
+      label: 'Is Benchmark Hedged',
+      attrName: 'alertIsBenchmarkHedged',
+      underlineAttrName: 'alertIsBenchmarkHedged',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      isDataTypeText: true,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: false
+        }
+      }
+    }
+  },{
     key: 'alertLevel',
     content: {
       label: 'Level',
@@ -266,11 +289,33 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
-    key: 'alertTraceCounterParty',
+    key: 'alertTraceReportingParty',
     content: {
-      label: 'Counter Party',
-      attrName: 'alertTraceCounterParty',
-      underlineAttrName: 'alertTraceCounterParty',
+      label: 'Reporting Party',
+      attrName: 'alertTraceReportingParty',
+      underlineAttrName: 'alertTraceReportingParty',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
+    key: 'alertTraceContraParty',
+    content: {
+      label: 'Contra Party',
+      attrName: 'alertTraceContraParty',
+      underlineAttrName: 'alertTraceContraParty',
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
@@ -1689,7 +1734,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
 
 const POSITION_ALERT_HEADERS = ['hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition'];
 
-const TRACE_ALERT_HEADERS = ['alertTraceCounterParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
+const TRACE_ALERT_HEADERS = ['alertTraceReportingParty', 'alertTraceContraParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
 
 const TRACE_ALERT_EXCLUDED_HEADERS = SecurityTableHeaderConfigs.filter(header => header.key.indexOf('Trace') === -1 && !!header.content.tableSpecifics.tradeAlert && !!header.content.tableSpecifics.tradeAlert.active).map(newHeader => newHeader.key);
 
@@ -1700,15 +1745,15 @@ export const SecurityTableAlertHeaderConfigs: SecurityTableSpecificAlertHeaderCo
   },
   mark: {
     include: ['cs01CadFirm'],
-    exclude: ['alertTradeTrader', ...POSITION_ALERT_HEADERS, ...TRACE_ALERT_HEADERS]
+    exclude: ['alertTradeTrader', 'alertIsBenchmarkHedged', ...POSITION_ALERT_HEADERS, ...TRACE_ALERT_HEADERS]
   },
   trade: {
     include: ['cs01CadFirm'],
-    exclude: ['alertType', 'alertStatus', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
+    exclude: ['alertType', 'alertStatus', 'alertIsBenchmarkHedged', 'hfPosition', 'nlfPosition', ...TRACE_ALERT_HEADERS]
   },
   trace: {
     include: ['alertTime', 'alertMessage', 'alertSide',...TRACE_ALERT_HEADERS],
-    exclude: TRACE_ALERT_EXCLUDED_HEADERS
+    exclude: ['alertIsBenchmarkHedged', ...TRACE_ALERT_EXCLUDED_HEADERS]
   },
   all: {
     include: ['cs01CadFirm'],
@@ -1827,15 +1872,20 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     attrName: 'displayReportingTime',
     size: 7
   },{
-    headerKey: 'counterParty',
-    headerDisplayLabel: 'Counter Party',
-    attrName: 'counterParty',
-    size: 7
-  },{
     headerKey: 'side',
     headerDisplayLabel: 'Side',
     attrName: 'side',
     applyQuantColorCodes: true
+  },{
+    headerKey: 'reportingParty',
+    headerDisplayLabel: 'Reporting Party',
+    attrName: 'reportingParty',
+    size: 7
+  },{
+    headerKey: 'contraParty',
+    headerDisplayLabel: 'Contra Party',
+    attrName: 'contraParty',
+    size: 7
   },{
     headerKey: 'displayVolumeEstimated',
     headerDisplayLabel: 'Vol (Estimated)',
@@ -1893,7 +1943,7 @@ export const TRACE_PIE_GRAPH_RIGHT_ID = 'tracePieGraphRightID';
 
 export const TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL = 1440; // 24hrs as minutes
 
-export enum TraceTradeCounterParty {
+export enum TraceTradeParty {
   Dealer = 'Dealer',
   Client = 'Client',
   ClientAffiliate = 'Client Affiliate',
@@ -1922,8 +1972,13 @@ export enum traceTradeNumericalFilterSymbols {
 }
 
 export enum traceTradePieGraphKeys {
-  counterParty = 'counterParty',
+  contraParty = 'contraParty',
   side = 'side'
 }
 
-export const TraceTradeCounterPartyList: Array<TraceTradeCounterParty> = [TraceTradeCounterParty.Dealer, TraceTradeCounterParty.Client, TraceTradeCounterParty.ClientAffiliate, TraceTradeCounterParty.ATS];
+export enum benchMarkHedgedDisplayOptions {
+  yes = 'Y',
+  no = 'N'
+}
+
+export const TraceTradePartyList: Array<TraceTradeParty> = [TraceTradeParty.Dealer, TraceTradeParty.Client, TraceTradeParty.ClientAffiliate, TraceTradeParty.ATS];

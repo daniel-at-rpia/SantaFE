@@ -30,7 +30,7 @@ import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeCounterParty } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -138,6 +138,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertQuoteDealer: string;
       alertTradeTrader: string;
       alertStatus: string;
+      alertIsBenchmarkHedged?: string;
       shortcutConfig: {
         numericFilterDTO: NumericFilterDTO;
         driver: string;
@@ -145,7 +146,8 @@ export interface SecurityDTO extends BasicDTOStructure {
         isUrgent: boolean;
         sendEmail: boolean;
       },
-      alertTraceCounterParty?: TraceTradeCounterParty;
+      alertTraceContraParty?: TraceTradeParty;
+      alertTraceReportingParty?: TraceTradeParty;
       alertTraceVolumeEstimated?: number;
       alertTraceVolumeReported?: number;
       alertTracePrice?: number;
@@ -588,7 +590,9 @@ export interface AlertDTO extends BasicDTOStructure {
     dealer: string;
     status: string;
     isMarketListTraded: boolean;
-    traceCounterParty?: TraceTradeCounterParty;
+    isBenchmarkHedged: boolean;
+    traceContraParty?: TraceTradeParty;
+    traceReportingParty?: TraceTradeParty;
     traceSide?: string;
     traceVolumeEstimated?: number;
     traceVolumeReported?: number;
