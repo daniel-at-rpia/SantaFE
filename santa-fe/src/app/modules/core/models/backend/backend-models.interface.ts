@@ -163,7 +163,7 @@ export interface BESecurityGroupDTO {
 }
 
 interface BEGroupMetricDTO {
-  tenor: string;
+  tenor?: string;
   backendTenor?: string;
   propertyToNumSecurities: {
     WorkoutTerm: number;
