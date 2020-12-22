@@ -1116,16 +1116,16 @@ export class UtilityService {
           }
         })
         const processingTraceTradesList: Array<TraceTradeBlock> = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
-        let filterListWithCounterParty: Array<TraceTradeBlock> = [];
+        let filterListWithContraParty: Array<TraceTradeBlock> = [];
         const checkNumericalFilter = /\d/;
-        const optionsCounterPartyList = options.filter(option => !checkNumericalFilter.test(option));
-        if (optionsCounterPartyList.length > 0) {
-          optionsCounterPartyList.forEach(counterParty => {
-            const counterPartyFilterList = processingTraceTradesList.filter(trade => trade.counterParty === counterParty);
-            filterListWithCounterParty = [...filterListWithCounterParty, ...counterPartyFilterList];
+        const optionsContraPartyList = options.filter(option => !checkNumericalFilter.test(option));
+        if (optionsContraPartyList.length > 0) {
+          optionsContraPartyList.forEach(contraParty => {
+            const contraPartyFilterList = processingTraceTradesList.filter(trade => trade.contraParty === contraParty);
+            filterListWithContraParty = [...filterListWithContraParty, ...contraPartyFilterList];
           })
         }
-        const traceTradesFilterData = optionsCounterPartyList.length > 0 ? filterListWithCounterParty : processingTraceTradesList;
+        const traceTradesFilterData = optionsContraPartyList.length > 0 ? filterListWithContraParty : processingTraceTradesList;
         if (numericalFiltersList.length > 0) {
           numericalFiltersList.sort((tradeA: number, tradeB: number) => {
             if (tradeA < tradeB) {
