@@ -684,6 +684,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     selectedPortfolio: Array<string>;
     graphReceived: boolean;
     showAllTradeHistory: boolean;
+    isCDSVariant: boolean;
   };
   graph: {
     timeSeries: am4Charts.XYChart;
