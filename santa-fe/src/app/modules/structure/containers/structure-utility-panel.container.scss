@@ -34,6 +34,23 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &__breakdownSelect {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-label {
+      color: $font_color_minor;
+      font-size: $font_size_normal;
+      margin-bottom: $spacing_small;
+    }
+    &-ctas {
+
+    }
+  }
   &__updateNow {
     display: flex;
     flex-direction: column;
