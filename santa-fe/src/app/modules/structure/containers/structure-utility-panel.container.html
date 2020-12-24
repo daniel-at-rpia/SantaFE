@@ -17,13 +17,16 @@
       </button>
     </div>
   </section>
-  <hr class="sat-structureUtilityPanel__divider">
   <section class="sat-structureUtilityPanel__updateNow">
-    <span class="sat-structureUtilityPanel__updateNow-label">Showing Data At</span>
-    <span class="sat-structureUtilityPanel__updateNow-highlightText"> {{state.lastUpdateTime}}</span>
-    <span class="sat-structureUtilityPanel__updateNow-label">Update Now</span>
-    <button (click)="onClickUpdateNow()" class="sat-structureUtilityPanel__updateNow-btn">
-      <i class="fal fa-cloud-download"></i>
-    </button>
+    <div class="sat-structureUtilityPanel__updateNow-top">
+      <span class="sat-structureUtilityPanel__updateNow-top-label">Showing Data At</span>
+      <span class="sat-structureUtilityPanel__updateNow-top-highlightText"> {{state.lastUpdateTime}}</span>
+    </div>
+    <div class="sat-structureUtilityPanel__updateNow-bottom">
+      <button (click)="onClickUpdateNow()" class="sat-structureUtilityPanel__updateNow-btn santaBtn--labelled">
+        <i class="fal fa-cloud-download"></i>
+        <span>Update Now</span>
+      </button>
+    </div>
   </section>
 </article>
