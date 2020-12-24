@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { StructureActions } from 'Structure/actions/structure.actions';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, BreakdownViewFilter } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewData,
@@ -13,6 +13,7 @@ export interface StructureState {
   reloadFundDataPostEdit: BEPortfolioStructuringDTO;
   updateTick: number;
   viewData: StructureSetViewData;
+  activeBreakdownViewFilter: BreakdownViewFilter;
 }
 
 const initialState: StructureState = {
@@ -20,7 +21,8 @@ const initialState: StructureState = {
   setTargetTransfer: null,
   reloadFundDataPostEdit: null,
   updateTick: 0,
-  viewData: null
+  viewData: null,
+  activeBreakdownViewFilter: BreakdownViewFilter.overridesOnly
 }
 
 export function structureReducer(
@@ -54,6 +56,11 @@ export function structureReducer(
       return {
         ...state,
         updateTick: state.updateTick + 1
+      };
+    case StructureActions.ChangeBreakdownViewFilter:
+      return {
+        ...state,
+        activeBreakdownViewFilter: action.filterOption
       };
     default:
       return state;

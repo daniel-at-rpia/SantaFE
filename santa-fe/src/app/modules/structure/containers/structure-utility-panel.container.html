@@ -2,7 +2,11 @@
   [ngClass]="{
     'sat-structureUtilityPanel': true,
     'sat-structureUtilityPanel--cs01Selected': state.selectedMetricValue === constants.cs01,
-    'sat-structureUtilityPanel--creditLeverageSelected': state.selectedMetricValue === constants.leverage
+    'sat-structureUtilityPanel--creditLeverageSelected': state.selectedMetricValue === constants.leverage,
+    'sat-structureUtilityPanel--viewBreakdownOverridesOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.overridesOnly,
+    'sat-structureUtilityPanel--viewBreakdownBICSOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.BICSOnly,
+    'sat-structureUtilityPanel--viewBreakdownRegularsOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.regularsOnly,
+    'sat-structureUtilityPanel--viewBreakdownAll': state.activeBreakdownViewFilter === constants.breakdownViewFilter.all
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
     <div class="sat-structureUtilityPanel__metricSelect-label">Show Data In Metric</div>
@@ -20,26 +24,26 @@
   <section class="sat-structureUtilityPanel__breakdownSelect">
     <div class="sat-structureUtilityPanel__breakdownSelect-label">View Breakdowns Filter</div>
     <div class="sat-structureUtilityPanel__breakdownSelect-ctas santaBtnGroup">
-      <button class="sat-structureUtilityPanel__breakdownSelect-ctas-overrides santaBtn--labelled">
+      <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.overridesOnly)" class="sat-structureUtilityPanel__breakdownSelect-ctas-overrides santaBtn--labelled">
         <i class="fal fa-star"></i>
-        <span>Overrides</span>
+        <span>{{constants.breakdownViewFilter.overridesOnly}}</span>
       </button>
-      <button class="sat-structureUtilityPanel__breakdownSelect-ctas-BICS santaBtn--labelled">
+      <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.BICSOnly)" class="sat-structureUtilityPanel__breakdownSelect-ctas-BICS santaBtn--labelled">
         <i class="fal fa-industry-alt"></i>
-        <span>BICS</span>
+        <span>{{constants.breakdownViewFilter.BICSOnly}}</span>
       </button>
-      <button class="sat-structureUtilityPanel__breakdownSelect-ctas-BICS santaBtn--labelled">
+      <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.regularsOnly)" class="sat-structureUtilityPanel__breakdownSelect-ctas-regulars santaBtn--labelled">
         <i class="fal fa-award"></i>
-        <span>Regulars</span>
+        <span>{{constants.breakdownViewFilter.regularsOnly}}</span>
       </button>
-      <button class="sat-structureUtilityPanel__breakdownSelect-ctas-BICS">
-        <span>All</span>
+      <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.all)" class="sat-structureUtilityPanel__breakdownSelect-ctas-all">
+        <span>{{constants.breakdownViewFilter.all}}</span>
       </button>
     </div>
   </section>
   <section class="sat-structureUtilityPanel__updateNow">
     <div class="sat-structureUtilityPanel__updateNow-top">
-      <span class="sat-structureUtilityPanel__updateNow-top-label">Showing Data At</span>
+      <span class="sat-structureUtilityPanel__updateNow-top-label">Showing Data From</span>
       <span class="sat-structureUtilityPanel__updateNow-top-highlightText"> {{state.lastUpdateTime}}</span>
     </div>
     <div class="sat-structureUtilityPanel__updateNow-bottom">

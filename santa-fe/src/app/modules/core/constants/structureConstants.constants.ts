@@ -102,3 +102,10 @@ export enum BEPortfolioTargetMetricValues {
   CreditDuration = 'CreditDuration',
   Cs01 = 'Cs01'
 }
+
+export enum BreakdownViewFilter {
+  overridesOnly = 'Overrides',
+  BICSOnly = 'BICS',
+  regularsOnly = 'Regulars',
+  all = 'All'
+}

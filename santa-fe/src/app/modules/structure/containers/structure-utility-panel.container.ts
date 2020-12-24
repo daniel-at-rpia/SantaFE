@@ -1,13 +1,20 @@
-import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { first } from 'rxjs/operators';
-
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
-import { StructureMetricSelect } from 'Structure/actions/structure.actions';
-import { selectMetricLevel, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
-import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
-import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import * as moment from 'moment';
+
+import { PortfolioMetricValues, BreakdownViewFilter } from 'Core/constants/structureConstants.constants';
+import {
+  selectMetricLevel,
+  selectMainPanelUpdateTick,
+  selectActiveBreakdownViewOption
+} from 'Structure/selectors/structure.selectors';
+import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
+import {
+  StructureUpdateMainPanelEvent,
+  StructureMetricSelect,
+  StructureChangeBreakdownViewFilterEvent
+} from 'Structure/actions/structure.actions';
 
 @Component({
   selector: 'structure-utility-panel',
@@ -16,25 +23,32 @@ import * as moment from 'moment';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureUtilityPanel implements OnInit {
+export class StructureUtilityPanel implements OnInit, OnDestroy {
   state: StructureUtilityPanelState;
   subscriptions = {
     selectedMetricLevelSub: null,
-    lastUpdateSub: null
+    lastUpdateSub: null,
+    activeBreakdownViewFilterSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
     leverage: PortfolioMetricValues.creditLeverage,
-    creditDuration: PortfolioMetricValues.creditDuration
+    creditDuration: PortfolioMetricValues.creditDuration,
+    breakdownViewFilter: BreakdownViewFilter
   }
 
   constructor(private store$: Store<any>) {}
 
-  private initializePageState() {
-    this.state = {
+  private initializePageState(): StructureUtilityPanelState {
+    return {
       selectedMetricValue: null,
-      lastUpdateTime: 'n/a'
-    }
+      lastUpdateTime: 'n/a',
+      activeBreakdownViewFilter: null
+    };
+  }
+
+  public ngOnInit() {
+    this.state = this.initializePageState();
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel),
       first()  // Right now Utility Panel is the sole place to initiate a page-wide metric change, so there is no need to have Utility Panel react passively to the ngrx store, instead, it just need to subscribe to the initial value, and update its own state internally in setMetricLevel()
@@ -48,21 +62,40 @@ export class StructureUtilityPanel implements OnInit {
     ).subscribe((tick) => {
       this.state.lastUpdateTime = moment().format('hh:mm:ss a');
     });
+
+    this.subscriptions.activeBreakdownViewFilterSub = this.store$.pipe(
+      select(selectActiveBreakdownViewOption)
+    ).subscribe((activeFilter) => {
+      this.state.activeBreakdownViewFilter = activeFilter;
+    });
   }
 
-  public ngOnInit() {
-    this.initializePageState();
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
+      }
+    }
   }
 
   public setMetricLevel(metricLevel: PortfolioMetricValues) {
-    this.state.selectedMetricValue = metricLevel
-    const dispatchMetricChange = () => {
-      this.store$.dispatch(new StructureMetricSelect(metricLevel));
-    };
-    setTimeout(dispatchMetricChange.bind(this), 300);
+    if (metricLevel !== this.state.selectedMetricValue) {
+      this.state.selectedMetricValue = metricLevel;
+      const dispatchMetricChange = () => {
+        this.store$.dispatch(new StructureMetricSelect(metricLevel));
+      };
+      setTimeout(dispatchMetricChange.bind(this), 300);
+    }
   }
 
   public onClickUpdateNow() {
     this.store$.dispatch(new StructureUpdateMainPanelEvent());
+  }
+
+  public onClickBreakdownFilterChange(targetFilterOption: BreakdownViewFilter) {
+    if (this.state.activeBreakdownViewFilter !== targetFilterOption) {
+      this.store$.dispatch(new StructureChangeBreakdownViewFilterEvent(targetFilterOption));
+    }
   }
 }

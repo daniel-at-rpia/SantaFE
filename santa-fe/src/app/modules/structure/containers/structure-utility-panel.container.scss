@@ -104,4 +104,48 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &--viewBreakdownOverridesOnly {
+    #{$blockName} {
+      &__breakdownSelect {
+        &-ctas-overrides {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
+        }
+      }
+    }
+  }
+  &--viewBreakdownBICSOnly {
+    #{$blockName} {
+      &__breakdownSelect {
+        &-ctas-BICS {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
+        }
+      }
+    }
+  }
+  &--viewBreakdownRegularsOnly {
+    #{$blockName} {
+      &__breakdownSelect {
+        &-ctas-regulars {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
+        }
+      }
+    }
+  }
+  &--viewBreakdownAll {
+    #{$blockName} {
+      &__breakdownSelect {
+        &-ctas-all {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
+        }
+      }
+    }
+  }
 }

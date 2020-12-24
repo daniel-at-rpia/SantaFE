@@ -17,6 +17,17 @@ export const selectReloadFundDataPostEdit = createSelector(
   (state: StructureState) => state.reloadFundDataPostEdit
 );
 
-export const selectSetViewData = createSelector(getStructureState, (state: StructureState) => state.viewData);
+export const selectSetViewData = createSelector(
+  getStructureState,
+  (state: StructureState) => state.viewData
+);
 
-export const selectMainPanelUpdateTick = createSelector(getStructureState, (state: StructureState) => state.updateTick);
+export const selectMainPanelUpdateTick = createSelector(
+  getStructureState,
+  (state: StructureState) => state.updateTick
+);
+
+export const selectActiveBreakdownViewOption = createSelector(
+  getStructureState,
+  (state: StructureState) => state.activeBreakdownViewFilter
+);

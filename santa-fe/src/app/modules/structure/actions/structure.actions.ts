@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, BreakdownViewFilter } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewData
@@ -12,7 +12,8 @@ export enum StructureActions {
   SendSetTargetTransfer = '[Structure] Send Set Target Transfer',
   ReloadBreakdownDataPostEdit = '[Structure] Reload Breakdown Data',
   SetView = '[Structure] View Set For Breakdown Category',
-  UpdateMainPanel = '[Structure] Update Main Panel'
+  UpdateMainPanel = '[Structure] Update Main Panel',
+  ChangeBreakdownViewFilter = '[Structure] Change Breakdown View Filter'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -54,5 +55,13 @@ export class StructureSetView implements Action {
   readonly viewData: StructureSetViewData;
   constructor(viewData: StructureSetViewData) {
     this.viewData = viewData;
+  }
+}
+
+export class StructureChangeBreakdownViewFilterEvent implements Action {
+  readonly type = StructureActions.ChangeBreakdownViewFilter;
+  readonly filterOption: BreakdownViewFilter;
+  constructor(filterOption) {
+    this.filterOption = filterOption;
   }
 }
