@@ -8,6 +8,9 @@ $portfolioBreakdownRowBranchLevel2Base: .5rem;
 $portfolioBreakdownRowBranchLevel3Base: $portfolioBreakdownRowBranchLevel2Base + $portfolioBreakdownRowBranchLeftIncrement;
 $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base + $portfolioBreakdownRowBranchLeftIncrement;
 $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
+$portfolioBreakdownRowLevel2LeftOffset: $portfolioBreakdownRowBranchLevel2Base + $spacing_small;
+$portfolioBreakdownRowLevel3LeftOffset: $portfolioBreakdownRowBranchLevel3Base + $spacing_small;
+$portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base + $spacing_small;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   flex: 1 1 auto;
@@ -460,47 +463,51 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
           visibility: visible;
         }
       }
+    }
+  }
+  &--level1Row {
+    #{$blockName} {
       &__subLevelTargetGauge {
         display: flex;
       }
     }
   }
-  &--mainPanelLevel2 {
+  &--level2Row {
     display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel2Base;
       }
       &__cta {
-        margin-left: $portfolioBreakdownRowBranchLevel2Base + $spacing_small;
+        margin-left: $portfolioBreakdownRowLevel2LeftOffset;
         &-btn {
           margin-left: $spacing_x_small;
         }
       }
     }
   }
-  &--mainPanelLevel3 {
+  &--level3Row {
     display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel3Base;
       }
       &__cta {
-        margin-left: $portfolioBreakdownRowBranchLevel3Base + $spacing_small;
+        margin-left: $portfolioBreakdownRowLevel3LeftOffset;
         &-btn {
           margin-left: $spacing_x_small;
         }
       }
     }
   }
-  &--mainPanelLevel4 {
+  &--level4Row {
     display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel4Base;
       }
       &__cta {
-        margin-left: $portfolioBreakdownRowBranchLevel4Base + $spacing_small;
+        margin-left: $portfolioBreakdownRowLevel4LeftOffset;
         &-btn {
           margin-left: $spacing_x_small;
         }
@@ -523,9 +530,9 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
   }
   &--visibleSubLevel {
     &#{$blockName} {
-      &--mainPanelLevel2,
-      &--mainPanelLevel3,
-      &--mainPanelLevel4 {
+      &--level2Row,
+      &--level3Row,
+      &--level4Row {
         display: flex;
       }
     }
