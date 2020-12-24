@@ -11,15 +11,24 @@
   padding: $spacing_medium;
   overflow: hidden;
   &__left {
-    overflow: hidden;
-    display: flex;
     flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     margin-right: $page_gutter_width_for_alerts;
-    &-mainPanel,
-    structure-main-panel {
+    &-utilityPanel {
+      flex: 0 0 auto;
+      display: flex;
+    }
+    &-mainPanel {
+      flex: 1 1 auto;
       display: flex;
       overflow: hidden;
-      flex: 1 1 auto;
+      structure-main-panel {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
+      }
     }
   }
   &__iconLoad {
