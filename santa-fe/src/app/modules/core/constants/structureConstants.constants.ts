@@ -1,4 +1,4 @@
-import { PortfolioStructureDTO } from 'FEModels/frontend-models.interface';
+import { PortfolioFundDTO } from 'FEModels/frontend-models.interface';
 import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.interface';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 

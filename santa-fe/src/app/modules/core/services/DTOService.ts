@@ -1998,8 +1998,8 @@ export class DTOService {
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
     selectedMetricValue: PortfolioMetricValues
-  ): DTOs.PortfolioStructureDTO {
-    const object: DTOs.PortfolioStructureDTO = {
+  ): DTOs.PortfolioFundDTO {
+    const object: DTOs.PortfolioFundDTO = {
       data: null,
       api: {
         onSubmitMetricValues: null
@@ -2055,6 +2055,7 @@ export class DTOService {
           creditDuration: !isStencil ? rawData.indexTotals.CreditDuration: 0
         },
         children: [],
+        displayChildren: [],
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
         creditDurationTargetBar: null,
@@ -2521,7 +2522,7 @@ export class DTOService {
   }
 
   private processBreakdownDataForStructureFund(
-    object: DTOs.PortfolioStructureDTO,
+    object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
     selectedMetricValue: PortfolioMetricValues
@@ -2555,7 +2556,7 @@ export class DTOService {
   }
 
   private processOverrideDataForStructureFund(
-    object: DTOs.PortfolioStructureDTO,
+    object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEPortfolioStructuringDTO,
     selectedMetricValue: PortfolioMetricValues
   ){

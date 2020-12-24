@@ -123,7 +123,7 @@ export interface AmchartPieDataBlock {
 }
 
 export interface StructureSetTargetOverlayTransferPack {
-  targetFund: DTOs.PortfolioStructureDTO;
+  targetFund: DTOs.PortfolioFundDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   isCreateNewOverride: boolean;
 }

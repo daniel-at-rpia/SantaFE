@@ -27,7 +27,7 @@ export const selectMainPanelUpdateTick = createSelector(
   (state: StructureState) => state.updateTick
 );
 
-export const selectActiveBreakdownViewOption = createSelector(
+export const selectActiveBreakdownViewFilter = createSelector(
   getStructureState,
   (state: StructureState) => state.activeBreakdownViewFilter
 );

@@ -7,7 +7,7 @@ import { PortfolioMetricValues, BreakdownViewFilter } from 'Core/constants/struc
 import {
   selectMetricLevel,
   selectMainPanelUpdateTick,
-  selectActiveBreakdownViewOption
+  selectActiveBreakdownViewFilter
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
@@ -64,7 +64,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.activeBreakdownViewFilterSub = this.store$.pipe(
-      select(selectActiveBreakdownViewOption)
+      select(selectActiveBreakdownViewFilter)
     ).subscribe((activeFilter) => {
       this.state.activeBreakdownViewFilter = activeFilter;
     });

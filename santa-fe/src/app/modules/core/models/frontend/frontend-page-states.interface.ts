@@ -147,8 +147,9 @@ export interface StructureMainPanelState {
   ownerInitial: string;
   isUserPM: boolean;
   selectedMetricValue: PortfolioMetricValues;
+  activeBreakdownViewFilter: BreakdownViewFilter;
   fetchResult: {
-    fundList: DTOs.PortfolioStructureDTO[];
+    fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;
     fetchFundDataFailedError: string;
   }
@@ -296,7 +297,7 @@ export interface StructureUtilityPanelState {
 }
 
 export interface StructureSetTargetPanelState {
-  targetFund: DTOs.PortfolioStructureDTO;
+  targetFund: DTOs.PortfolioFundDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   targetBreakdownRawData: BEStructuringBreakdownBlock;
   targetBreakdownRawDataDisplayLabelMap: object;

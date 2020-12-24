@@ -756,7 +756,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
   }
 }
 
-export interface PortfolioStructureDTO extends BasicDTOStructure {
+export interface PortfolioFundDTO extends BasicDTOStructure {
   data: {
     date: string;
     portfolioId: number;
@@ -774,6 +774,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
+    displayChildren: Array<PortfolioBreakdownDTO>;
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
