@@ -1,111 +1,43 @@
 @import "global.scss";
 
-$structureUtilityPanel_width: 9rem;
-
-$structureUtilityPanel_side_width: 14rem;
-$structureUtilityPanel_width_expand: $structureUtilityPanel_width + $structureUtilityPanel_side_width*2 + $spacing_small*2;
-$structureUtilityPanel_tongue_topGutter: 4rem;
 $structureUtilityPanel_side_btn_size: 2.25rem;
 .sat-structureUtilityPanel {
   $blockName: &;
-  @include mix_fixed_div(relative, $z_index_utilityTongue);
-  @include material();
-  @include mix_border_radius(10px, 'bottom');
-  @include mix_alive('light');
-  @include mix_calculate(left, 50%, $structureUtilityPanel_width/2, '-');
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
   display: flex;
-  top: 0;
-  background-color: $color_white;
-  transform: translate(0, -$structureUtilityPanel_tongue_topGutter);
-  width: $structureUtilityPanel_width;
-  cursor: pointer;
+  padding: $spacing_medium;
   &__metricSelect {
-    @include mix_fixed_div(absolute, $z_index_base_item);
-    @include mix_alive('light');
-    @include mix_calculate(height, 100%, $spacing_small*2, '-');
-    @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
+    @include mix_border_generator(0 $typical_border_width 0 0);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    margin: $spacing_small 0;
-    padding-left: $spacing_small;
-    width: $structureUtilityPanel_side_width;
-    left: 0;
-    transform: scale(0.01);
-    &-metric {
-      flex: 1 1 50%;
+    margin: 0 $spacing_medium 0 $spacing_large;
+    padding: 0 $spacing_medium;
+    &-label {
+      color: $font_color_minor;
+      font-size: $font_size_normal;
+      margin-bottom: $spacing_small;
+    }
+    &-ctas {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      &-title {
-        height: 2.4rem;
-        color: $font_color_inverse;
-        text-align: center;
+      &-creditLeverage {
+        &-icon {
+          visibility: hidden;
+        }
       }
-      &-selectedLabel {
-        @include mix_border_radius(3px);
-        @include mix_theme_background;
-        margin: -$spacing_x_small 0 $spacing_x_small 0;
-        padding: $spacing_xx_small $spacing_small;
-        visibility: hidden;
-        color: $font_color_inverse;
-        font-size: $font_size_x_small;
-      }
-      &-btn {
-        @include mix_fixed_div(absolute, $z_index_base_item);
-        @include mix_border_radius(50%);
-        bottom: -$structureUtilityPanel_side_btn_size + $spacing_x_small;
-        padding: 0;
-        width: $structureUtilityPanel_side_btn_size;
-        height: $structureUtilityPanel_side_btn_size;
-        &:hover {
-          transform: scale(1.25);
+      &-creditDuration {
+        &-icon {
+          visibility: hidden;
         }
       }
     }
   }
-  &__tongue {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    &-bar {
-      flex: 0 0 auto;
-      display: flex;
-      justify-content: center;
-      margin-bottom: $spacing_x_small;
-      &>i{
-        font-size: $font_size_xx_large;
-      }
-    }
-    &-text {
-      flex: 0 0 auto;
-      text-align: center;
-      margin: $spacing_x_small 0;
-    }
-    &-highlightText {
-      @include mix_theme_background;
-      @include mix_border_radius(3px);
-      flex: 0 0 auto;
-      margin: $spacing_x_small $spacing_x_small $spacing_medium $spacing_x_small;
-      padding: $spacing_x_small;
-      color: $font_color_inverse;
-    }
-  }
   &__updateNow {
-    @include mix_fixed_div(absolute, $z_index_base_item);
-    @include mix_alive('light');
-    @include mix_calculate(height, 100%, $spacing_small*2, '-');
-    @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
     display: flex;
     align-items: center;
-    margin: $spacing_small 0;
-    width: $structureUtilityPanel_side_width;
-    right: 0;
-    transform: scale(0.01);
     &-btn {
-      @include mix_fixed_div(absolute, $z_index_base_item);
       @include mix_border_radius(50%);
-      right: -$structureUtilityPanel_side_btn_size/2;
       padding: 0;
       width: $structureUtilityPanel_side_btn_size;
       height: $structureUtilityPanel_side_btn_size;
@@ -117,27 +49,24 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       color: $font_color_inverse;
       margin: $spacing_large auto;
     }
-  }
-  &:hover, 
-  &:focus {
-    transform: translate(0,0);
+    &-highlightText {
+      @include mix_theme_background;
+      @include mix_border_radius(3px);
+      flex: 0 0 auto;
+      margin: $spacing_x_small $spacing_x_small $spacing_medium $spacing_x_small;
+      padding: $spacing_x_small;
+      color: $font_color_inverse;
+    }
   }
   &--cs01Selected {
     #{$blockName} {
       &__metricSelect {
-        &-metric {
-          &--cs01 {
-            #{$blockName}__metricSelect-metric {
-              &-selectedLabel {
-                visibility: visible;
-                font-size: $font_size_xx_small;
-              }
-              &-btn {
-                @include material('none');
-                background-color: $color_active;
-                color: $font_color_inverse;
-              }
-            }
+        &-ctas-creditDuration {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+          &-icon {
+            visibility: visible;
           }
         }
       }
@@ -146,39 +75,13 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--creditLeverageSelected {
     #{$blockName} {
       &__metricSelect {
-        &-metric {
-          &--creditLeverge {
-            #{$blockName}__metricSelect-metric {
-              &-selectedLabel {
-                visibility: visible;
-              }
-              &-btn {
-                @include material('none');
-                background-color: $color_active;
-                color: $font_color_inverse;
-              }
-            }
+        &-ctas-creditLeverage {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+          &-icon {
+            visibility: visible;
           }
-        }
-      }
-    }
-  }
-  &--tongueExpanded {
-    @include mix_calculate(left, 50%, $structureUtilityPanel_width_expand/2, '-');
-    @include material('none');
-    transform: translate(0, 0);
-    width: $structureUtilityPanel_width_expand;
-    background-color: $color_active;
-    #{$blockName} {
-      &__metricSelect, &__updateNow {
-        transform: scale(1);
-      }
-      &__tongue {
-        &-bar {
-          display: none;
-        }
-        &-text {
-          color: $font_color_inverse;
         }
       }
     }

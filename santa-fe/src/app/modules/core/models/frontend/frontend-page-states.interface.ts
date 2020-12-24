@@ -291,7 +291,6 @@ export interface StructureState {
 
 export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
-  isExpanded: boolean;
   lastUpdateTime: string;
 }
 

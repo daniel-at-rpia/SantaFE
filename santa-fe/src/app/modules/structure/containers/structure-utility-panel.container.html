@@ -1,34 +1,26 @@
 <article
   [ngClass]="{
     'sat-structureUtilityPanel': true,
-    'sat-structureUtilityPanel--tongueExpanded': state.isExpanded,
     'sat-structureUtilityPanel--cs01Selected': state.selectedMetricValue === constants.cs01,
     'sat-structureUtilityPanel--creditLeverageSelected': state.selectedMetricValue === constants.leverage
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
-    <div class="sat-structureUtilityPanel__metricSelect-metric sat-structureUtilityPanel__metricSelect-metric--creditLeverge">
-      <span class="sat-structureUtilityPanel__metricSelect-metric-selectedLabel">Selected</span>
-      <span class="sat-structureUtilityPanel__metricSelect-metric-title">{{constants.leverage}}</span>
-      <button class="sat-structureUtilityPanel__metricSelect-metric-btn" (click)="setMetricLevel(constants.leverage)">
-        <i class="fal fa-check"></i>
+    <div class="sat-structureUtilityPanel__metricSelect-label">Show Data In Metric</div>
+    <div class="sat-structureUtilityPanel__metricSelect-ctas santaBtnGroup">
+      <button (click)="setMetricLevel(constants.leverage)" class="sat-structureUtilityPanel__metricSelect-ctas-creditLeverage santaBtn--labelled">
+        <i class="sat-structureUtilityPanel__metricSelect-ctas-creditLeverage-icon fal fa-check"></i>
+        <span>{{constants.leverage}}</span>
       </button>
-    </div>
-    <div class="sat-structureUtilityPanel__metricSelect-metric sat-structureUtilityPanel__metricSelect-metric--cs01">
-      <span class="sat-structureUtilityPanel__metricSelect-metric-selectedLabel">Selected</span>
-      <span class="sat-structureUtilityPanel__metricSelect-metric-title">{{constants.cs01}} / {{constants.creditDuration}}</span>
-      <button class="sat-structureUtilityPanel__metricSelect-metric-btn" (click)="setMetricLevel(constants.cs01)">
-        <i class="fal fa-check"></i>
+      <button (click)="setMetricLevel(constants.cs01)" class="sat-structureUtilityPanel__metricSelect-ctas-creditDuration santaBtn--labelled">
+        <i class="sat-structureUtilityPanel__metricSelect-ctas-creditDuration-icon fal fa-check"></i>
+        <span>{{constants.cs01}} / {{constants.creditDuration}}</span>
       </button>
     </div>
   </section>
-  <section class="sat-structureUtilityPanel__tongue" (click)="onToggleTongueExpand()">
-    <span class="sat-structureUtilityPanel__tongue-text">Showing Data At</span>
-    <span class="sat-structureUtilityPanel__tongue-highlightText"> {{state.lastUpdateTime}}</span>
-    <div class="sat-structureUtilityPanel__tongue-bar">
-      <i class="fal fa-bars"></i>
-    </div>
-  </section>
+  <hr class="sat-structureUtilityPanel__divider">
   <section class="sat-structureUtilityPanel__updateNow">
+    <span class="sat-structureUtilityPanel__updateNow-label">Showing Data At</span>
+    <span class="sat-structureUtilityPanel__updateNow-highlightText"> {{state.lastUpdateTime}}</span>
     <span class="sat-structureUtilityPanel__updateNow-label">Update Now</span>
     <button (click)="onClickUpdateNow()" class="sat-structureUtilityPanel__updateNow-btn">
       <i class="fal fa-cloud-download"></i>

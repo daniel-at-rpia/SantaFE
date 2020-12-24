@@ -1,7 +1,9 @@
 import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { first } from 'rxjs/operators';
+
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { StructureMetricSelect } from 'Structure/actions/structure.actions';
-import { select, Store } from '@ngrx/store';
 import { selectMetricLevel, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
@@ -31,11 +33,11 @@ export class StructureUtilityPanel implements OnInit {
   private initializePageState() {
     this.state = {
       selectedMetricValue: null,
-      isExpanded: false,
       lastUpdateTime: 'n/a'
     }
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
-      select(selectMetricLevel)
+      select(selectMetricLevel),
+      first()  // Right now Utility Panel is the sole place to initiate a page-wide metric change, so there is no need to have Utility Panel react passively to the ngrx store, instead, it just need to subscribe to the initial value, and update its own state internally in setMetricLevel()
     ).subscribe((value) => {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage
       this.state.selectedMetricValue = metric;
@@ -53,17 +55,14 @@ export class StructureUtilityPanel implements OnInit {
   }
 
   public setMetricLevel(metricLevel: PortfolioMetricValues) {
-    const selectedMetric = metricLevel;
-    this.store$.dispatch(new StructureMetricSelect(selectedMetric));
-    this.state.isExpanded = false;
-  }
-
-  public onToggleTongueExpand() {
-    this.state.isExpanded = !this.state.isExpanded;
+    this.state.selectedMetricValue = metricLevel
+    const dispatchMetricChange = () => {
+      this.store$.dispatch(new StructureMetricSelect(metricLevel));
+    };
+    setTimeout(dispatchMetricChange.bind(this), 300);
   }
 
   public onClickUpdateNow() {
     this.store$.dispatch(new StructureUpdateMainPanelEvent());
-    this.state.isExpanded = false;
   }
 }
