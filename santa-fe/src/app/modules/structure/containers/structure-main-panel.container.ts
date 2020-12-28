@@ -441,6 +441,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
           return eachChild.data.backendGroupOptionIdentifier.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) < 0 && !eachChild.state.isOverrideVariant;
         });
         break;
+      case this.constants.breakdownViewFilter.all:
+        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+          return true;  // simply to retain the same behavior as other filters that generates a new reference
+        });
+        break;
       default:
         // code...
         break;
