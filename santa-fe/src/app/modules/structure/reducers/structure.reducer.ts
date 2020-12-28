@@ -1,6 +1,10 @@
 import { Action } from '@ngrx/store';
 import { StructureActions } from 'Structure/actions/structure.actions';
-import { PortfolioMetricValues, BreakdownViewFilter } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  BreakdownViewFilter,
+  PortfolioShortNames
+} from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewData,
@@ -14,6 +18,7 @@ export interface StructureState {
   updateTick: number;
   viewData: StructureSetViewData;
   activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
 }
 
 const initialState: StructureState = {
@@ -22,7 +27,16 @@ const initialState: StructureState = {
   reloadFundDataPostEdit: null,
   updateTick: 0,
   viewData: null,
-  activeBreakdownViewFilter: BreakdownViewFilter.overridesOnly
+  activeBreakdownViewFilter: BreakdownViewFilter.overridesOnly,
+  activePortfolioViewFilter: [
+    PortfolioShortNames.FIP,
+    PortfolioShortNames.BBB,
+    PortfolioShortNames.CIP,
+    PortfolioShortNames.STIP,
+    PortfolioShortNames.AGB,
+    PortfolioShortNames.DOF,
+    PortfolioShortNames.SOF
+  ]
 }
 
 export function structureReducer(
@@ -61,6 +75,11 @@ export function structureReducer(
       return {
         ...state,
         activeBreakdownViewFilter: action.filterOption
+      };
+    case StructureActions.ChangePortfolioViewFilter:
+      return {
+        ...state,
+        activePortfolioViewFilter: action.filterOption
       };
     default:
       return state;

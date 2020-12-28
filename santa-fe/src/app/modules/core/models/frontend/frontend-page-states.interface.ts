@@ -17,7 +17,11 @@ import {
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import { PortfolioMetricValues, BreakdownViewFilter } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  BreakdownViewFilter,
+  PortfolioShortNames
+} from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 
@@ -294,6 +298,7 @@ export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
   lastUpdateTime: string;
   activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
 }
 
 export interface StructureSetTargetPanelState {

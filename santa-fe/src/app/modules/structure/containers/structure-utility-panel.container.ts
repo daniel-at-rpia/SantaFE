@@ -12,13 +12,15 @@ import {
 import {
   selectMetricLevel,
   selectMainPanelUpdateTick,
-  selectActiveBreakdownViewFilter
+  selectActiveBreakdownViewFilter,
+  selectActivePortfolioViewFilter
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
   StructureUpdateMainPanelEvent,
   StructureMetricSelect,
-  StructureChangeBreakdownViewFilterEvent
+  StructureChangeBreakdownViewFilterEvent,
+  StructureChangePortfolioViewFilterEvent
 } from 'Structure/actions/structure.actions';
 
 @Component({
@@ -33,7 +35,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
   subscriptions = {
     selectedMetricLevelSub: null,
     lastUpdateSub: null,
-    activeBreakdownViewFilterSub: null
+    activeBreakdownViewFilterSub: null,
+    activePortfolioViewFilterSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -70,9 +73,17 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.activeBreakdownViewFilterSub = this.store$.pipe(
-      select(selectActiveBreakdownViewFilter)
+      select(selectActiveBreakdownViewFilter),
+      first()  // same reason as above
     ).subscribe((activeFilter) => {
       this.state.activeBreakdownViewFilter = activeFilter;
+    });
+
+    this.subscriptions.activePortfolioViewFilterSub = this.store$.pipe(
+      select(selectActivePortfolioViewFilter),
+      first()  // same reason as above
+    ).subscribe((activeFilter) => {
+      this.state.activePortfolioViewFilter = activeFilter;
     });
   }
 
@@ -101,6 +112,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
 
   public onClickBreakdownFilterChange(targetFilterOption: BreakdownViewFilter) {
     if (this.state.activeBreakdownViewFilter !== targetFilterOption) {
+      this.state.activeBreakdownViewFilter = targetFilterOption;
       this.store$.dispatch(new StructureChangeBreakdownViewFilterEvent(targetFilterOption));
     }
   }

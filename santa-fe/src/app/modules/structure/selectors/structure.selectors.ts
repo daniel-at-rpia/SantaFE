@@ -31,3 +31,8 @@ export const selectActiveBreakdownViewFilter = createSelector(
   getStructureState,
   (state: StructureState) => state.activeBreakdownViewFilter
 );
+
+export const selectActivePortfolioViewFilter = createSelector(
+  getStructureState,
+  (state: StructureState) => state.activePortfolioViewFilter
+);
