@@ -152,6 +152,7 @@ export interface StructureMainPanelState {
   isUserPM: boolean;
   selectedMetricValue: PortfolioMetricValues;
   activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
   fetchResult: {
     fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;

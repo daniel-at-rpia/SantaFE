@@ -9,7 +9,8 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import {
   selectReloadFundDataPostEdit,
   selectMainPanelUpdateTick,
-  selectActiveBreakdownViewFilter
+  selectActiveBreakdownViewFilter,
+  selectActivePortfolioViewFilter
 } from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
@@ -58,7 +59,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     selectedMetricLevelSub: null,
     reloadFundUponEditSub: null,
     viewData: null,
-    activeBreakdownViewFilterSub: null
+    activeBreakdownViewFilterSub: null,
+    activePortfolioViewFilterSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -84,6 +86,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       isUserPM: false,
       selectedMetricValue: this.constants.cs01,
       activeBreakdownViewFilter: null,
+      activePortfolioViewFilter: [],
       fetchResult: {
         fundList: [],
         fetchFundDataFailed: false,
@@ -153,6 +156,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       this.state.fetchResult.fundList.forEach((eachFund) => {
         this.updateTargetFundBreakdownDisplay(eachFund);
       });
+    });
+    this.subscriptions.activePortfolioViewFilterSub = this.store$.pipe(
+      select(selectActivePortfolioViewFilter)
+    ).subscribe((activeFilter) => {
+      this.state.activePortfolioViewFilter = activeFilter;
     });
   }
 
