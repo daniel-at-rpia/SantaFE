@@ -1,9 +1,14 @@
 import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import * as moment from 'moment';
 
-import { PortfolioMetricValues, BreakdownViewFilter } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  BreakdownViewFilter,
+  SUPPORTED_PORTFOLIO_LIST
+} from 'Core/constants/structureConstants.constants';
 import {
   selectMetricLevel,
   selectMainPanelUpdateTick,
@@ -34,7 +39,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     cs01: PortfolioMetricValues.cs01,
     leverage: PortfolioMetricValues.creditLeverage,
     creditDuration: PortfolioMetricValues.creditDuration,
-    breakdownViewFilter: BreakdownViewFilter
+    breakdownViewFilter: BreakdownViewFilter,
+    portfolios: SUPPORTED_PORTFOLIO_LIST
   }
 
   constructor(private store$: Store<any>) {}

@@ -15,22 +15,18 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     justify-content: space-between;
     margin: 0 $spacing_medium 0 $spacing_large;
     padding: 0 $spacing_medium;
-    &-label {
-      color: $font_color_minor;
-      font-size: $font_size_normal;
-      margin-bottom: $spacing_small;
-    }
-    &-ctas {
+    &-top {
       display: flex;
-      &-creditLeverage {
-        &-icon {
-          visibility: hidden;
-        }
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+        margin-bottom: $spacing_small;
       }
-      &-creditDuration {
-        &-icon {
-          visibility: hidden;
-        }
+    }
+    &-bottom {
+      display: flex;
+      &-ctas {
+        display: flex;
       }
     }
   }
@@ -42,13 +38,42 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     justify-content: space-between;
     margin-right: $spacing_medium;
     padding-right: $spacing_medium;
-    &-label {
-      color: $font_color_minor;
-      font-size: $font_size_normal;
-      margin-bottom: $spacing_small;
+    &-top {
+      display: flex;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+        margin-bottom: $spacing_small;
+      }
     }
-    &-ctas {
+    &-bottom {
+      display: flex;
+      &-ctas {
 
+      }
+    }
+  }
+  &__portfolioSelect {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-top {
+      display: flex;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+        margin-bottom: $spacing_small;
+      }
+    }
+    &-bottom {
+      display: flex;
+      &-btn {
+        margin: 0 $spacing_x_small;
+      }
     }
   }
   &__updateNow {
@@ -73,19 +98,18 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &-bottom {
       display: flex;
-      justify-content: flex-end;
+      &-btn {
+        flex: 1 1 auto;
+      }
     }
   }
   &--cs01Selected {
     #{$blockName} {
       &__metricSelect {
-        &-ctas-creditDuration {
+        &-bottom-ctas-creditDuration {
           @include material('none');
-          @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
-          &-icon {
-            visibility: visible;
-          }
+          color: $font_color_inverse;
         }
       }
     }
@@ -93,13 +117,10 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--creditLeverageSelected {
     #{$blockName} {
       &__metricSelect {
-        &-ctas-creditLeverage {
+        &-bottom-ctas-creditLeverage {
           @include material('none');
-          @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
-          &-icon {
-            visibility: visible;
-          }
+          color: $font_color_inverse;
         }
       }
     }
@@ -107,7 +128,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--viewBreakdownOverridesOnly {
     #{$blockName} {
       &__breakdownSelect {
-        &-ctas-overrides {
+        &-bottom-ctas-overrides {
           @extend .santaBtn--inverseLabelled;
           @include material('none');
           background-color: $color_active;
@@ -118,7 +139,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--viewBreakdownBICSOnly {
     #{$blockName} {
       &__breakdownSelect {
-        &-ctas-BICS {
+        &-bottom-ctas-BICS {
           @extend .santaBtn--inverseLabelled;
           @include material('none');
           background-color: $color_active;
@@ -129,7 +150,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--viewBreakdownRegularsOnly {
     #{$blockName} {
       &__breakdownSelect {
-        &-ctas-regulars {
+        &-bottom-ctas-regulars {
           @extend .santaBtn--inverseLabelled;
           @include material('none');
           background-color: $color_active;
@@ -140,7 +161,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--viewBreakdownAll {
     #{$blockName} {
       &__breakdownSelect {
-        &-ctas-all {
+        &-bottom-ctas-all {
           @extend .santaBtn--inverseLabelled;
           @include material('none');
           background-color: $color_active;
