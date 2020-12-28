@@ -48,7 +48,15 @@
       <span class="sat-structureUtilityPanel__portfolioSelect-top-label">Select Viewing Portfolios</span>
     </div>
     <div class="sat-structureUtilityPanel__portfolioSelect-bottom">
-      <button class="sat-structureUtilityPanel__portfolioSelect-bottom-btn" *ngFor="let eachFund of constants.portfolios">{{eachFund}}</button>
+      <button
+        (click)="onClickPortfolioFilterChange(eachFund)"
+        *ngFor="let eachFund of constants.portfolios"
+        [ngClass]="{
+          'sat-structureUtilityPanel__portfolioSelect-bottom-btn': true,
+          'sat-structureUtilityPanel__portfolioSelect-bottom-btn--selected': state.activePortfolioViewFilter.indexOf(eachFund) >= 0
+        }">
+        {{eachFund}}
+      </button>
     </div>
   </section>
   <section class="sat-structureUtilityPanel__updateNow">

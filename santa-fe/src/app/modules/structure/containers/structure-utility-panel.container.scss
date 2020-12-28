@@ -17,10 +17,10 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     padding: 0 $spacing_medium;
     &-top {
       display: flex;
+      margin-bottom: $spacing_small;
       &-label {
         color: $font_color_minor;
         font-size: $font_size_normal;
-        margin-bottom: $spacing_small;
       }
     }
     &-bottom {
@@ -40,10 +40,10 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     padding-right: $spacing_medium;
     &-top {
       display: flex;
+      margin-bottom: $spacing_small;
       &-label {
         color: $font_color_minor;
         font-size: $font_size_normal;
-        margin-bottom: $spacing_small;
       }
     }
     &-bottom {
@@ -63,16 +63,21 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     padding-right: $spacing_medium;
     &-top {
       display: flex;
+      margin-bottom: $spacing_small;
       &-label {
         color: $font_color_minor;
         font-size: $font_size_normal;
-        margin-bottom: $spacing_small;
       }
     }
     &-bottom {
       display: flex;
       &-btn {
         margin: 0 $spacing_x_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
       }
     }
   }
@@ -166,6 +171,36 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
           @include material('none');
           background-color: $color_active;
         }
+      }
+    }
+  }
+  @include mq-x-large-min {
+    &__metricSelect {
+      flex-direction: row;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+      }
+    }
+    &__breakdownSelect {
+      flex-direction: row;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+      }
+    }
+    &__portfolioSelect {
+      flex-direction: row;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+      }
+    }
+    &__updateNow {
+      flex-direction: row;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
       }
     }
   }

@@ -7,7 +7,8 @@ import * as moment from 'moment';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  SUPPORTED_PORTFOLIO_LIST
+  SUPPORTED_PORTFOLIO_LIST,
+  PortfolioShortNames
 } from 'Core/constants/structureConstants.constants';
 import {
   selectMetricLevel,
@@ -22,6 +23,7 @@ import {
   StructureChangeBreakdownViewFilterEvent,
   StructureChangePortfolioViewFilterEvent
 } from 'Structure/actions/structure.actions';
+import { UtilityService } from 'Core/services';
 
 @Component({
   selector: 'structure-utility-panel',
@@ -46,13 +48,17 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     portfolios: SUPPORTED_PORTFOLIO_LIST
   }
 
-  constructor(private store$: Store<any>) {}
+  constructor(
+    private store$: Store<any>,
+    private utilityService: UtilityService
+  ) {}
 
   private initializePageState(): StructureUtilityPanelState {
     return {
       selectedMetricValue: null,
       lastUpdateTime: 'n/a',
-      activeBreakdownViewFilter: null
+      activeBreakdownViewFilter: null,
+      activePortfolioViewFilter: []
     };
   }
 
@@ -115,5 +121,16 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       this.state.activeBreakdownViewFilter = targetFilterOption;
       this.store$.dispatch(new StructureChangeBreakdownViewFilterEvent(targetFilterOption));
     }
+  }
+
+  public onClickPortfolioFilterChange(targetFilterOption: PortfolioShortNames) {
+    if (this.state.activePortfolioViewFilter.indexOf(targetFilterOption) >= 0) {
+      this.state.activePortfolioViewFilter = this.state.activePortfolioViewFilter.filter((eachItem) => {
+        return eachItem !== targetFilterOption;
+      });
+    } else {
+      this.state.activePortfolioViewFilter.push(targetFilterOption);
+    }
+    this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
   }
 }
