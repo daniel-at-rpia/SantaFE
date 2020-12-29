@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
@@ -298,6 +300,8 @@ export interface StructureState {
 export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
   lastUpdateTime: string;
+  currentDatestamp: moment.Moment;
+  currentDatestampDisplayText: string;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
 }

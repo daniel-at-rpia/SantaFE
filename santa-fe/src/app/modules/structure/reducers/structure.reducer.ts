@@ -10,6 +10,7 @@ import {
   StructureSetViewData,
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
@@ -19,6 +20,7 @@ export interface StructureState {
   viewData: StructureSetViewData;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  dataDatestamp: number;
 }
 
 const initialState: StructureState = {
@@ -36,7 +38,8 @@ const initialState: StructureState = {
     PortfolioShortNames.AGB,
     PortfolioShortNames.DOF,
     PortfolioShortNames.SOF
-  ]
+  ],
+  dataDatestamp: moment().unix()
 }
 
 export function structureReducer(

@@ -14,7 +14,8 @@ import {
   selectMetricLevel,
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
-  selectActivePortfolioViewFilter
+  selectActivePortfolioViewFilter,
+  selectDataDatestamp
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
@@ -38,7 +39,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     selectedMetricLevelSub: null,
     lastUpdateSub: null,
     activeBreakdownViewFilterSub: null,
-    activePortfolioViewFilterSub: null
+    activePortfolioViewFilterSub: null,
+    dataDatestampSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -57,6 +59,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     return {
       selectedMetricValue: null,
       lastUpdateTime: 'n/a',
+      currentDatestamp: null,
+      currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: []
     };
@@ -90,6 +94,13 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       first()  // same reason as above
     ).subscribe((activeFilter) => {
       this.state.activePortfolioViewFilter = activeFilter;
+    });
+
+    this.subscriptions.dataDatestampSub = this.store$.pipe(
+      select(selectDataDatestamp),
+      first()  // same reason as above
+    ).subscribe((newDatestampInUnix) => {
+      this.updateDataDatestamp(moment.unix(newDatestampInUnix));
     });
   }
 
@@ -133,4 +144,10 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
     this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
   }
+
+  private updateDataDatestamp(targetDatestampInMoment: moment.Moment){
+    this.state.currentDatestamp = targetDatestampInMoment;
+    this.state.currentDatestampDisplayText = this.state.currentDatestamp.format('MMM Do');
+  }
+
 }
