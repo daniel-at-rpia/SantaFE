@@ -84,6 +84,38 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &__dateSwitch {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: $spacing_small;
+      &-label {
+        color: $font_color_minor;
+        margin-right: $spacing_small;
+      }
+      &-highlightText {
+        @include mix_theme_background;
+        @include mix_border_radius(3px);
+        flex: 0 0 auto;
+        padding: $spacing_x_small;
+        color: $font_color_inverse;
+      }
+    }
+    &-bottom {
+      display: flex;
+      &-btn {
+        margin: 0 $spacing_x_small;
+      }
+    }
+  }
   &__updateNow {
     display: flex;
     flex-direction: column;
@@ -204,6 +236,13 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-bottom {
         flex: 0 1 auto;
         align-self: unset;
+      }
+    }
+    &__dateSwitch {
+      flex-direction: row;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
       }
     }
     &__updateNow {
