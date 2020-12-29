@@ -9,6 +9,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   padding: $spacing_medium;
   &__metricSelect {
     @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,6 +33,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   }
   &__breakdownSelect {
     @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,6 +57,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   }
   &__portfolioSelect {
     @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -177,6 +180,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   @include mq-x-large-min {
     &__metricSelect {
       flex-direction: row;
+      justify-content: center;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
@@ -184,6 +188,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &__breakdownSelect {
       flex-direction: row;
+      justify-content: center;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
@@ -191,9 +196,14 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &__portfolioSelect {
       flex-direction: row;
+      justify-content: center;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+      }
+      &-bottom {
+        flex: 0 1 auto;
+        align-self: unset;
       }
     }
     &__updateNow {
