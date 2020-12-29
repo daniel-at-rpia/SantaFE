@@ -216,6 +216,9 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
       }
     }
     &__breakdownSelect {
@@ -224,6 +227,9 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
       }
     }
     &__portfolioSelect {
@@ -232,6 +238,9 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
       }
       &-bottom {
         flex: 0 1 auto;
