@@ -70,7 +70,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.state = this.initializePageState();
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel),
-      first()  // Right now Utility Panel is the sole place to initiate a page-wide metric change, so there is no need to have Utility Panel react passively to the ngrx store, instead, it just need to subscribe to the initial value, and update its own state internally in setMetricLevel()
+      first()  // Right now Utility Panel is the sole place to initiate a page-wide metric change, so there is no need to have Utility Panel react passively to the ngrx store, instead, it just need to subscribe to the initial value, and update its own state internally in setMetricLevel(). Updating it internally has the benefit of a faster UI response resulted in better UX, because going through the async ngrx flow takes more time
     ).subscribe((value) => {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.leverage
       this.state.selectedMetricValue = metric;
