@@ -22,7 +22,8 @@ import {
   StructureUpdateMainPanelEvent,
   StructureMetricSelect,
   StructureChangeBreakdownViewFilterEvent,
-  StructureChangePortfolioViewFilterEvent
+  StructureChangePortfolioViewFilterEvent,
+  StructureSwitchDataDatestampEvent
 } from 'Structure/actions/structure.actions';
 import { UtilityService } from 'Core/services';
 
@@ -100,7 +101,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       select(selectDataDatestamp),
       first()  // same reason as above
     ).subscribe((newDatestampInUnix) => {
-      this.updateDataDatestamp(moment.unix(newDatestampInUnix));
+      this.updateDataDatestamp(moment.unix(newDatestampInUnix), true);
     });
   }
 
@@ -145,9 +146,25 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
   }
 
-  private updateDataDatestamp(targetDatestampInMoment: moment.Moment){
+  public onClickSwitchDateBackOneDay() {
+    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+    newDatestamp.subtract(1, 'days');
+    this.updateDataDatestamp(newDatestamp);
+  }
+
+  public onClickSwitchDateBackOneWeek() {
+    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+    newDatestamp.subtract(1, 'weeks');
+    this.updateDataDatestamp(newDatestamp);
+  }
+
+  private updateDataDatestamp(
+    targetDatestampInMoment: moment.Moment,
+    skipNgRX: boolean = false
+  ){
     this.state.currentDatestamp = targetDatestampInMoment;
     this.state.currentDatestampDisplayText = this.state.currentDatestamp.format('MMM Do');
+    !skipNgRX && this.store$.dispatch(new StructureSwitchDataDatestampEvent(this.state.currentDatestamp));
   }
 
 }

@@ -109,7 +109,7 @@ export interface PayloadSetAlertsToInactive {
 }
 
 export interface PayloadGetPortfolioStructures {
-  yyyyMMDD?: string;
+  yyyyMMdd?: number;
 }
 
 export interface PayloadUpdatePortfolioStructuresTargets {

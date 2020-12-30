@@ -86,6 +86,6 @@ export class StructureSwitchDataDatestampEvent implements Action {
   readonly type = StructureActions.SwitchDataDatestamp;
   readonly dateStampInUnix: number;
   constructor(dateStampInMoment: moment.Moment) {
-    this.dateStampInUnix = parseInt(dateStampInMoment.format('x'));
+    this.dateStampInUnix = parseInt(dateStampInMoment.format('X'));
   }
 }

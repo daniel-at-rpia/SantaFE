@@ -152,6 +152,7 @@ export interface TradeCenterPanelState {
 export interface StructureMainPanelState {
   ownerInitial: string;
   isUserPM: boolean;
+  currentDataDatestamp: moment.Moment;
   selectedMetricValue: PortfolioMetricValues;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;

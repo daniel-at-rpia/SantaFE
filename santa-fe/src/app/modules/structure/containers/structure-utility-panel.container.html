@@ -65,11 +65,11 @@
       <span class="sat-structureUtilityPanel__dateSwitch-top-highlightText">{{state.currentDatestampDisplayText}}</span>
     </div>
     <div class="sat-structureUtilityPanel__dateSwitch-bottom">
-      <button class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
+      <button (click)="onClickSwitchDateBackOneWeek()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
         <i class="fal fa-arrow-left"></i>
         <span>1 W</span>
       </button>
-      <button class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
+      <button (click)="onClickSwitchDateBackOneDay()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
         <i class="fal fa-arrow-left"></i>
         <span>1 D</span>
       </button>

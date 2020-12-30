@@ -84,6 +84,11 @@ export function structureReducer(
         ...state,
         activePortfolioViewFilter: action.filterOption
       };
+    case StructureActions.SwitchDataDatestamp:
+      return {
+        ...state,
+        dataDatestamp: action.dateStampInUnix
+      };
     default:
       return state;
   }
