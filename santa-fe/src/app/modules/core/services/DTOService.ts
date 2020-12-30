@@ -127,9 +127,9 @@ export class DTOService {
         ticker: !isStencil ? rawData.ticker : null,
         obligorName: !isStencil ? rawData.obligorName : null,
         isGovt: !isStencil ? rawData.isGovt : false,
-        ratingLevel: !isStencil && rawData.metrics && rawData.metrics.Default ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
-        ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
-        ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
+        ratingLevel: 0,
+        ratingValue: null,
+        ratingBucket: null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
         tenor: !isStencil? this.utility.determineNumericalTenor(rawData) : 2,
         couponType: null,
@@ -314,6 +314,19 @@ export class DTOService {
           object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
           if (!!rawData.metrics.Default) {
             object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+            let targetSourceForRating = null;
+            if (!!rawData.metrics.Default.ratingNoNotch) {
+              targetSourceForRating = rawData.metrics.Default;
+            } else if (!!rawData.metrics.FTSE && !!rawData.metrics.FTSE.ratingNoNotch) {
+              targetSourceForRating = rawData.metrics.FTSE;
+            } else if (!!rawData.metrics.BB && !!rawData.metrics.BB.ratingNoNotch) {
+              targetSourceForRating = rawData.metrics.BB;
+            }
+            if (!!targetSourceForRating) {
+              object.data.ratingLevel = this.utility.mapRatings(targetSourceForRating.ratingNoNotch);
+              object.data.ratingValue = targetSourceForRating.ratingNoNotch;
+              object.data.ratingBucket = targetSourceForRating.ratingBucket;
+            }
           }
         }
       }
