@@ -305,6 +305,7 @@ export interface StructureUtilityPanelState {
   currentDatestampDisplayText: string;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  viewingHistoricalData: boolean;
 }
 
 export interface StructureSetTargetPanelState {

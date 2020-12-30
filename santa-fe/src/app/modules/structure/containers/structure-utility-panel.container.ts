@@ -63,7 +63,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       currentDatestamp: null,
       currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
-      activePortfolioViewFilter: []
+      activePortfolioViewFilter: [],
+      updateNowDisabled: false
     };
   }
 
@@ -125,7 +126,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
   }
 
   public onClickUpdateNow() {
-    this.store$.dispatch(new StructureUpdateMainPanelEvent());
+    if (!this.state.viewingHistoricalData) {
+      this.store$.dispatch(new StructureUpdateMainPanelEvent());
+    }
   }
 
   public onClickBreakdownFilterChange(targetFilterOption: BreakdownViewFilter) {
@@ -158,12 +161,46 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.updateDataDatestamp(newDatestamp);
   }
 
+  public onClickSwitchDateForwardOneDay() {
+    if (this.state.viewingHistoricalData) {
+      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+      newDatestamp.add(1, 'days');
+      if (newDatestamp.isAfter(moment())) {
+        this.onClickBackToToday();
+      } else {
+        this.updateDataDatestamp(newDatestamp);
+      }
+    }
+  }
+
+  public onClickSwitchDateForwardOneWeek() {
+    if (this.state.viewingHistoricalData) {
+      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+      newDatestamp.add(1, 'weeks');
+      if (newDatestamp.isAfter(moment())) {
+        this.onClickBackToToday();
+      } else {
+        this.updateDataDatestamp(newDatestamp);
+      }
+    }
+  }
+
+  public onClickBackToToday() {
+    const now = moment();
+    this.updateDataDatestamp(now);
+    this.state.lastUpdateTime = now.format('hh:mm:ss a');
+  }
+
   private updateDataDatestamp(
     targetDatestampInMoment: moment.Moment,
     skipNgRX: boolean = false
   ){
     this.state.currentDatestamp = targetDatestampInMoment;
     this.state.currentDatestampDisplayText = this.state.currentDatestamp.format('MMM Do');
+    this.state.viewingHistoricalData = !this.state.currentDatestamp.isSame(moment(), 'day');
+    if (this.state.viewingHistoricalData) {
+      this.state.lastUpdateTime = 'Beginning of Day';
+    }
     !skipNgRX && this.store$.dispatch(new StructureSwitchDataDatestampEvent(this.state.currentDatestamp));
   }
 

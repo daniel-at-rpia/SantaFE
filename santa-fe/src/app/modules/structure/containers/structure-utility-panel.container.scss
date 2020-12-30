@@ -113,6 +113,18 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       display: flex;
       &-btn {
         margin: 0 $spacing_x_small;
+        &--forward {
+          @include material('none');
+          @include mix_border_generator;
+          background-color: transparent;
+          cursor: not-allowed;
+          &>i {
+            color: $color_disabled;
+          }
+          &>span {
+            color: $color_disabled;
+          }
+        }
       }
     }
   }
@@ -138,8 +150,12 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &-bottom {
       display: flex;
-      &-btn {
+      &-updateNowBtn {
         flex: 1 1 auto;
+      }
+      &-backToTodayBtn {
+        flex: 1 1 auto;
+        display: none;
       }
     }
   }
@@ -205,6 +221,36 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
           @extend .santaBtn--inverseLabelled;
           @include material('none');
           background-color: $color_active;
+        }
+      }
+    }
+  }
+  &--viewingHistoricalData {
+    #{$blockName} {
+      &__dateSwitch {
+        &-bottom-btn {
+          &--forward {
+            @include material();
+            border-width: 0;
+            background-color: $color_white;
+            cursor: initial;
+            &>i {
+              color: $font_color_major;
+            }
+            &>span {
+              color: $font_color_major;
+            }
+          }
+        }
+      }
+      &__updateNow {
+        &-bottom {
+          &-updateNowBtn {
+            display: none;
+          }
+          &-backToTodayBtn {
+            display: flex;
+          }
         }
       }
     }

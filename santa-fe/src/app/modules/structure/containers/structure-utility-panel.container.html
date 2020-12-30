@@ -6,7 +6,8 @@
     'sat-structureUtilityPanel--viewBreakdownOverridesOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.overridesOnly,
     'sat-structureUtilityPanel--viewBreakdownBICSOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.BICSOnly,
     'sat-structureUtilityPanel--viewBreakdownRegularsOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.regularsOnly,
-    'sat-structureUtilityPanel--viewBreakdownAll': state.activeBreakdownViewFilter === constants.breakdownViewFilter.all
+    'sat-structureUtilityPanel--viewBreakdownAll': state.activeBreakdownViewFilter === constants.breakdownViewFilter.all,
+    'sat-structureUtilityPanel--viewingHistoricalData': state.viewingHistoricalData
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
     <div class="sat-structureUtilityPanel__metricSelect-top">
@@ -73,11 +74,11 @@
         <i class="fal fa-arrow-left"></i>
         <span>1 D</span>
       </button>
-      <button class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
+      <button (click)="onClickSwitchDateForwardOneDay()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn sat-structureUtilityPanel__dateSwitch-bottom-btn--forward santaBtn--small santaBtn--labelled">
         <i class="fal fa-arrow-right"></i>
         <span>1 D</span>
       </button>
-      <button class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
+      <button (click)="onClickSwitchDateForwardOneWeek()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn sat-structureUtilityPanel__dateSwitch-bottom-btn--forward santaBtn--small santaBtn--labelled">
         <i class="fal fa-arrow-right"></i>
         <span>1 W</span>
       </button>
@@ -89,9 +90,13 @@
       <span class="sat-structureUtilityPanel__updateNow-top-highlightText"> {{state.lastUpdateTime}}</span>
     </div>
     <div class="sat-structureUtilityPanel__updateNow-bottom">
-      <button (click)="onClickUpdateNow()" class="sat-structureUtilityPanel__updateNow-bottom-btn santaBtn--labelled">
+      <button (click)="onClickUpdateNow()" class="sat-structureUtilityPanel__updateNow-bottom-updateNowBtn santaBtn--labelled">
         <i class="fal fa-cloud-download"></i>
         <span>Update Now</span>
+      </button>
+      <button (click)="onClickBackToToday()" class="sat-structureUtilityPanel__updateNow-bottom-backToTodayBtn santaBtn--labelled">
+        <i class="fal fa-history"></i>
+        <span>Back to Today</span>
       </button>
     </div>
   </section>
