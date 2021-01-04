@@ -1,4 +1,5 @@
 // global rem setting for responsiveness
+
 @import 'global';
 
 html {
@@ -76,18 +77,18 @@ html {
   label{
     margin-bottom: 0;
   }
-  button{
+  button:not(.mat-button){
     @extend .santaBtn;
     font-weight: 400;
     font-family: "SantaOpenSans";
     line-height: $line_height_default;
   }
-  input{
+  input:not(.mat-input-element){
     @extend .santaInputElement;
     font-weight: 400;
     font-family: "SantaOpenSans";
   }
-  table{
+  table:not(.mat-calendar-table){
     @extend .santaTable;
   }
   p {
@@ -106,3 +107,5 @@ html {
     font-weight: 400;
     font-family: "SantaOpenSans";
   }
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
