@@ -298,6 +298,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   private setHistoricalTradeVisualizer(targetSecurity: DTOs.SecurityDTO) {
-    this.rowData.data.historicalTradeVisualizer = this.dtoService.formHistoricalTradeObject(targetSecurity)
+    const isCDSVariant = this.utilityService.isCDS(false, targetSecurity)
+    this.rowData.data.historicalTradeVisualizer = this.dtoService.formHistoricalTradeObject(targetSecurity, isCDSVariant)
   }
 }
