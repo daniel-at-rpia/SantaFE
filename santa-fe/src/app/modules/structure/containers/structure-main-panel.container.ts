@@ -233,6 +233,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
         this.processStructureData(serverReturn);
+        const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
+        this.state.fetchResult.fundList.forEach((eachFund) => {
+          eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
+        });
       }),
       catchError(err => {
         setTimeout(() => {

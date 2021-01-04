@@ -64,7 +64,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
-      updateNowDisabled: false
+      viewingHistoricalData: false
     };
   }
 
