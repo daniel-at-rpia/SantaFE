@@ -495,6 +495,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             }
           })
         }
+      } else {
+        targetRow.state.isDoveIn = false;
+        targetRow.state.isShowingSubLevels = false;
+        targetRow.data.displayedSubLevelRows.forEach(displayedSubLevel => {
+          const editRowListIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === displayedSubLevel.data.code);
+          if (editRowListIndex >= 0 ) {
+            this.state.editRowList.splice(editRowListIndex, 1);
+          }
+        })
+        targetRow.data.displayedSubLevelRows = [];
       }
     }
   }
