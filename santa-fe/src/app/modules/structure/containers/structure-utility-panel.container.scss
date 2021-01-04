@@ -99,11 +99,15 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       margin-bottom: $spacing_small;
       &-label {
         color: $font_color_minor;
-        margin-right: $spacing_small;
+        &--history {
+          display: none;
+          margin-right: $spacing_small;
+        }
       }
       &-highlightText {
         @include mix_theme_background;
         @include mix_border_radius(3px);
+        display: none;
         flex: 0 0 auto;
         padding: $spacing_x_small;
         color: $font_color_inverse;
@@ -139,6 +143,10 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-label {
         color: $font_color_minor;
         margin-right: $spacing_small;
+        &--historicalData {
+          display: none;
+          margin-right: 0;
+        }
       }
       &-highlightText {
         @include mix_theme_background;
@@ -156,6 +164,23 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-backToTodayBtn {
         flex: 1 1 auto;
         display: none;
+      }
+      &-icon {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: $spacing_medium;
+        &-today {
+          display: inline-block;
+          color: $font_color_major;
+          font-size: $font_size_xx_large;
+        }
+        &-history {
+          display: none;
+          color: $font_color_trivial;
+          font-size: $font_size_xx_large;
+        }
       }
     }
   }
@@ -228,6 +253,17 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--viewingHistoricalData {
     #{$blockName} {
       &__dateSwitch {
+        &-top {
+          &-label {
+            display: none;
+            &--history {
+              display: flex;
+            }
+          }
+          &-highlightText {
+            display: flex;
+          }
+        }
         &-bottom-btn {
           &--forward {
             @include material();
@@ -244,12 +280,32 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
         }
       }
       &__updateNow {
+        &-top {
+          &-label {
+            display: none;
+            &--historicalData {
+              display: flex;
+            }
+          }
+          &-highlightText {
+            display: none;
+          }
+        }
         &-bottom {
           &-updateNowBtn {
             display: none;
           }
           &-backToTodayBtn {
             display: flex;
+          }
+          &-icon {
+            background: none;
+            &-today {
+              display: none;
+            }
+            &-history {
+              display: inline-block;
+            }
           }
         }
       }

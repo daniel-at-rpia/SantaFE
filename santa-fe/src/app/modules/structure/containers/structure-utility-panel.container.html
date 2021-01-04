@@ -62,7 +62,8 @@
   </section>
   <section class="sat-structureUtilityPanel__dateSwitch">
     <div class="sat-structureUtilityPanel__dateSwitch-top">
-      <span class="sat-structureUtilityPanel__dateSwitch-top-label">Showing Data On</span>
+      <span class="sat-structureUtilityPanel__dateSwitch-top-label">Showing Today's Data</span>
+      <span class="sat-structureUtilityPanel__dateSwitch-top-label sat-structureUtilityPanel__dateSwitch-top-label--history">Showing Historical Data On</span>
       <span class="sat-structureUtilityPanel__dateSwitch-top-highlightText">{{state.currentDatestampDisplayText}}</span>
     </div>
     <div class="sat-structureUtilityPanel__dateSwitch-bottom">
@@ -86,7 +87,8 @@
   </section>
   <section class="sat-structureUtilityPanel__updateNow">
     <div class="sat-structureUtilityPanel__updateNow-top">
-      <span class="sat-structureUtilityPanel__updateNow-top-label">Showing Data At</span>
+      <span class="sat-structureUtilityPanel__updateNow-top-label">At</span>
+      <span class="sat-structureUtilityPanel__updateNow-top-label sat-structureUtilityPanel__updateNow-top-label--historicalData">At Beginning Of Day</span>
       <span class="sat-structureUtilityPanel__updateNow-top-highlightText"> {{state.lastUpdateTime}}</span>
     </div>
     <div class="sat-structureUtilityPanel__updateNow-bottom">
@@ -95,9 +97,13 @@
         <span>Update Now</span>
       </button>
       <button (click)="onClickBackToToday()" class="sat-structureUtilityPanel__updateNow-bottom-backToTodayBtn santaBtn--labelled">
-        <i class="fal fa-history"></i>
+        <i class="fal fa-clock"></i>
         <span>Back to Today</span>
       </button>
+      <div class="sat-structureUtilityPanel__updateNow-bottom-icon">
+        <i class="sat-structureUtilityPanel__updateNow-bottom-icon-today fal fa-clock"></i>
+        <i class="sat-structureUtilityPanel__updateNow-bottom-icon-history fal fa-monument"></i>
+      </div>
     </div>
   </section>
 </article>
