@@ -556,6 +556,32 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           }
         }
       }
+      &__subLevelTargetGauge {
+        display: flex;
+      }
+    }
+    &#{$blockName} {
+      &--level2Row {
+        #{$blockName} {
+          &__subLevelTargetGauge {
+            margin-left: $portfolioBreakdownRowLevel2LeftOffset;
+          }
+        }
+      }
+      &--level3Row {
+        #{$blockName} {
+          &__subLevelTargetGauge {
+            margin-left: $portfolioBreakdownRowLevel3LeftOffset;
+          }
+        }
+      }
+      &--level4Row {
+        #{$blockName} {
+          &__subLevelTargetGauge {
+            margin-left: $portfolioBreakdownRowLevel4LeftOffset;
+          }
+        }
+      }
     }
   }
   &--isWithinSetTargetPreview {

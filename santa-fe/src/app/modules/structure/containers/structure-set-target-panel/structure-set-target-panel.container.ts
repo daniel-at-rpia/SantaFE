@@ -11,7 +11,8 @@ import { ModalService } from 'Form/services/ModalService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
 import {
   StructureSetTargetOverlayTransferPack,
-  DefinitionConfiguratorEmitterParams
+  DefinitionConfiguratorEmitterParams,
+  AdhocExtensionBEMetricBreakdowns
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { PortfolioBreakdownDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import {
@@ -22,7 +23,8 @@ import {
 import {
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
-  PortfolioView
+  PortfolioView,
+  BICS_CODE_DELIMITER_AMOUNT
 } from 'Core/constants/structureConstants.constants';
 import {
   FilterOptionsCurrency,
@@ -52,8 +54,8 @@ import {
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
 } from 'Core/constants/structureConstants.constants';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import { BICSDictionaryLookupService} from 'Core/services/BICSDictionaryLookupService';
 import * as moment from 'moment';
-import { PortfolioBreakdown } from '../portfolio-breakdown/portfolio-breakdown.container';
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -80,7 +82,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private modalService: ModalService,
-    private bicsService: BICsDataProcessingService
+    private bicsService: BICsDataProcessingService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){
     this.state = this.initializePageState();
   }
@@ -495,6 +498,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             }
             this.updateDisplayedSubLevelsLists(rawCs01, this.state.targetBreakdown.data.rawCs01CategoryList, isCs01);
             this.updateDisplayedSubLevelsLists(creditLeverageRowEquivalent, this.state.targetBreakdown.data.rawLeverageCategoryList, isCs01);
+            this.updateDisplayedSubLevelsListWithTargets(rawCs01, true, isCs01);
+            this.updateDisplayedSubLevelsListWithTargets(creditLeverageRowEquivalent, false, isCs01);
           })
         }
       } else {
@@ -1322,6 +1327,41 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         }
       });
+    }
+  }
+
+  private updateDisplayedSubLevelsListWithTargets(row: StructurePortfolioBreakdownRowDTO, isCs01List: boolean, isDisplayCs01: boolean) {
+    const prefix = row.data.code;
+    const subCategoryCodes = Object.keys(this.bicsDictionaryLookupService.returnDictionary()).filter(key => key.indexOf(prefix) === 0 && key.length > row.data.code.length);
+    const customRawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, 1);
+    if (!!customRawBreakdown) {
+      const definitionList: Array<string> = [];
+      subCategoryCodes.forEach(code => {
+        const level = code.length / BICS_CODE_DELIMITER_AMOUNT;
+        const rawDataByCode = this.bicsService.getBICSCategoryRawData(this.state.targetFund.data.portfolioId, level, code);
+        if (!!rawDataByCode && (rawDataByCode.metricBreakdowns.CreditLeverage.targetLevel || rawDataByCode.metricBreakdowns.Cs01.targetLevel)) {
+          const displayCategory = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
+          if (!!displayCategory) {
+            customRawBreakdown.breakdown[displayCategory] = rawDataByCode;
+            definitionList.push(displayCategory);
+            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
+            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEMetricBreakdowns).code = code;
+          }
+        }
+      })
+      const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, definitionList, isDisplayCs01, false);
+      if (!!customBreakdown) {
+        const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
+        const listWithTargets = list.filter(newRow => !!newRow.data.targetLevel);
+        row.data.displayedSubLevelRowsWithTargets = listWithTargets;
+        const isCorrectListForEditRow = this.state.activeMetric === PortfolioMetricValues.cs01 ? isCs01List : !isCs01List;
+        if (!!isCorrectListForEditRow) {
+          const editRowEquivalent = this.state.editRowList.find(editRow => editRow.rowDTO.data.code === row.data.code);
+          if (!!editRowEquivalent) {
+            editRowEquivalent.rowDTO.data.displayedSubLevelRowsWithTargets = row.data.displayedSubLevelRowsWithTargets;
+          }
+        }
+      }
     }
   }
 }
