@@ -2256,19 +2256,9 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-        parsedRawData.currentLevel = Math.abs(rawCurrentLevel) >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
-      } else {
-        parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
-      }
+      parsedRawData.currentLevel = this.utility.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-          parsedRawData.targetLevel = Math.abs(parsedRawData.targetLevel) >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
-        } else {
-          parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
-        }
+        parsedRawData.targetLevel = this.utility.getRoundedValuesForVisualizer(rawTargetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
