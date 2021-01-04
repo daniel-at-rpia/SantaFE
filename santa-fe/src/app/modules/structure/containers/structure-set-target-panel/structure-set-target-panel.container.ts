@@ -493,6 +493,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             if (parentIndex >= 0) {
               this.state.editRowList.splice(editRowIndex, 0, newEditRow);
             }
+            this.updateDisplayedSubLevelsLists(rawCs01, this.state.targetBreakdown.data.rawCs01CategoryList, isCs01);
+            this.updateDisplayedSubLevelsLists(creditLeverageRowEquivalent, this.state.targetBreakdown.data.rawLeverageCategoryList, isCs01);
           })
         }
       } else {
@@ -1295,5 +1297,31 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
       }
     })
+  }
+
+  private updateDisplayedSubLevelsLists(row: StructurePortfolioBreakdownRowDTO, targetRawList: Array<StructurePortfolioBreakdownRowDTO>, isDisplayList: boolean) {
+    const hierarchyList: Array<BICsHierarchyBlock> = this.bicsService.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
+    if (hierarchyList.length > 0) {
+      hierarchyList.forEach((category: BICsHierarchyBlock) => {
+        if (targetRawList.length > 0) {
+          const targetListEquivalent = targetRawList.find(targetRow => targetRow.data.code === category.code);
+          if (!!targetListEquivalent) {
+            if (targetListEquivalent.data.displayedSubLevelRows.length > 0) {
+              const equivalentDisplayedSubLevelRow = targetListEquivalent.data.displayedSubLevelRows.find(displayedSubLevel => displayedSubLevel.data.code === row.data.code);
+              !equivalentDisplayedSubLevelRow && targetListEquivalent.data.displayedSubLevelRows.push(row);
+            } else {
+              targetListEquivalent.data.displayedSubLevelRows.push(row);
+            }
+            targetListEquivalent.state.isShowingSubLevels = true;
+            if (!!isDisplayList) {
+              const editRowEquivalent = this.state.editRowList.find(editRow => editRow.rowDTO.data.code === category.code);
+              if (!!editRowEquivalent) {
+                editRowEquivalent.rowDTO.data.displayedSubLevelRows = targetListEquivalent.data.displayedSubLevelRows;
+              }
+            }
+          }
+        }
+      });
+    }
   }
 }
