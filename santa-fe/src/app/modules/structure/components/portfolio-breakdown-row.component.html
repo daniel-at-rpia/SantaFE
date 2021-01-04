@@ -104,7 +104,7 @@
     <div class="sat-portfolioBreakdownRow__subLevelTargetGauge-content">
       <span class="sat-portfolioBreakdownRow__subLevelTargetGauge-content-label"></span>
       <ul class="sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList">
-        <li *ngFor="let eachScale of breakdownRow.data.displayedSubLevelRows; let level = index;" [ngClass]="'sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList-item sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList-item--level-' + level">
+        <li *ngFor="let eachScale of breakdownRow.data.displayedSubLevelRowsWithTargets; let level = index;" [ngClass]="'sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList-item sat-portfolioBreakdownRow__subLevelTargetGauge-content-scaleList-item--level-' + level">
         </li>
       </ul>
     </div>
