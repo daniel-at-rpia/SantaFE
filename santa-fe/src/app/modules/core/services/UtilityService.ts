@@ -1421,5 +1421,9 @@ export class UtilityService {
       });
     }
 
+    public getRowDiffToTarget(currentLevel: number, targetLevel: number, isCs01: boolean): number {
+      return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
+    }
+
   // structuring specific end
 }
