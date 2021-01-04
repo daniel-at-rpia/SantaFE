@@ -1,144 +1,123 @@
 @import "global.scss";
 
-$structureUtilityPanel_width: 9rem;
-
-$structureUtilityPanel_side_width: 14rem;
-$structureUtilityPanel_width_expand: $structureUtilityPanel_width + $structureUtilityPanel_side_width*2 + $spacing_small*2;
-$structureUtilityPanel_tongue_topGutter: 4rem;
 $structureUtilityPanel_side_btn_size: 2.25rem;
 .sat-structureUtilityPanel {
   $blockName: &;
-  @include mix_fixed_div(absolute, $z_index_utilityTongue);
-  @include material();
-  @include mix_border_radius(10px, 'bottom');
-  @include mix_alive('light');
-  @include mix_calculate(left, 50%, $structureUtilityPanel_width/2, '-');
+  @include mix_border_generator;
+  @include mix_border_radius(10px);
   display: flex;
-  top: 0;
-  background-color: $color_white;
-  transform: translate(0, -$structureUtilityPanel_tongue_topGutter);
-  width: $structureUtilityPanel_width;
-  cursor: pointer;
+  padding: $spacing_medium;
   &__metricSelect {
-    @include mix_fixed_div(absolute, $z_index_base_item);
-    @include mix_alive('light');
-    @include mix_calculate(height, 100%, $spacing_small*2, '-');
-    @include mix_border_generator(0 $typical_border_width 0 0, $color_white);
-    display: flex;
-    align-items: center;
-    margin: $spacing_small 0;
-    padding-left: $spacing_small;
-    width: $structureUtilityPanel_side_width;
-    left: 0;
-    transform: scale(0.01);
-    &-metric {
-      flex: 1 1 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      &-title {
-        height: 2.4rem;
-        color: $font_color_inverse;
-        text-align: center;
-      }
-      &-selectedLabel {
-        @include mix_border_radius(3px);
-        @include mix_theme_background;
-        margin: -$spacing_x_small 0 $spacing_x_small 0;
-        padding: $spacing_xx_small $spacing_small;
-        visibility: hidden;
-        color: $font_color_inverse;
-        font-size: $font_size_x_small;
-      }
-      &-btn {
-        @include mix_fixed_div(absolute, $z_index_base_item);
-        @include mix_border_radius(50%);
-        bottom: -$structureUtilityPanel_side_btn_size + $spacing_x_small;
-        padding: 0;
-        width: $structureUtilityPanel_side_btn_size;
-        height: $structureUtilityPanel_side_btn_size;
-        &:hover {
-          transform: scale(1.25);
-        }
-      }
-    }
-  }
-  &__tongue {
+    @include mix_border_generator(0 $typical_border_width 0 0);
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    &-bar {
-      flex: 0 0 auto;
+    justify-content: space-between;
+    margin: 0 $spacing_medium 0 $spacing_large;
+    padding: 0 $spacing_medium;
+    &-top {
       display: flex;
-      justify-content: center;
-      margin-bottom: $spacing_x_small;
-      &>i{
-        font-size: $font_size_xx_large;
+      margin-bottom: $spacing_small;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
       }
     }
-    &-text {
-      flex: 0 0 auto;
-      text-align: center;
-      margin: $spacing_x_small 0;
+    &-bottom {
+      display: flex;
+      &-ctas {
+        display: flex;
+      }
     }
-    &-highlightText {
-      @include mix_theme_background;
-      @include mix_border_radius(3px);
-      flex: 0 0 auto;
-      margin: $spacing_x_small $spacing_x_small $spacing_medium $spacing_x_small;
-      padding: $spacing_x_small;
-      color: $font_color_inverse;
+  }
+  &__breakdownSelect {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-top {
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+      }
+    }
+    &-bottom {
+      display: flex;
+      &-ctas {
+
+      }
+    }
+  }
+  &__portfolioSelect {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-top {
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+      }
+    }
+    &-bottom {
+      display: flex;
+      &-btn {
+        margin: 0 $spacing_x_small;
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
     }
   }
   &__updateNow {
-    @include mix_fixed_div(absolute, $z_index_base_item);
-    @include mix_alive('light');
-    @include mix_calculate(height, 100%, $spacing_small*2, '-');
-    @include mix_border_generator(0 0 0 $typical_border_width, $color_white);
     display: flex;
-    align-items: center;
-    margin: $spacing_small 0;
-    width: $structureUtilityPanel_side_width;
-    right: 0;
-    transform: scale(0.01);
-    &-btn {
-      @include mix_fixed_div(absolute, $z_index_base_item);
-      @include mix_border_radius(50%);
-      right: -$structureUtilityPanel_side_btn_size/2;
-      padding: 0;
-      width: $structureUtilityPanel_side_btn_size;
-      height: $structureUtilityPanel_side_btn_size;
-      &:hover {
-        transform: scale(1.25);
+    flex-direction: column;
+    justify-content: space-between;
+    &-top {
+      display: flex;
+      align-items: center;
+      margin-bottom: $spacing_x_small;
+      &-label {
+        color: $font_color_minor;
+        margin-right: $spacing_small;
+      }
+      &-highlightText {
+        @include mix_theme_background;
+        @include mix_border_radius(3px);
+        flex: 0 0 auto;
+        padding: $spacing_x_small;
+        color: $font_color_inverse;
       }
     }
-    &-label {
-      color: $font_color_inverse;
-      margin: $spacing_large auto;
+    &-bottom {
+      display: flex;
+      &-btn {
+        flex: 1 1 auto;
+      }
     }
-  }
-  &:hover, 
-  &:focus {
-    transform: translate(0,0);
   }
   &--cs01Selected {
     #{$blockName} {
       &__metricSelect {
-        &-metric {
-          &--cs01 {
-            #{$blockName}__metricSelect-metric {
-              &-selectedLabel {
-                visibility: visible;
-                font-size: $font_size_xx_small;
-              }
-              &-btn {
-                @include material('none');
-                background-color: $color_active;
-                color: $font_color_inverse;
-              }
-            }
-          }
+        &-bottom-ctas-creditDuration {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
         }
       }
     }
@@ -146,40 +125,92 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
   &--creditLeverageSelected {
     #{$blockName} {
       &__metricSelect {
-        &-metric {
-          &--creditLeverge {
-            #{$blockName}__metricSelect-metric {
-              &-selectedLabel {
-                visibility: visible;
-              }
-              &-btn {
-                @include material('none');
-                background-color: $color_active;
-                color: $font_color_inverse;
-              }
-            }
-          }
+        &-bottom-ctas-creditLeverage {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
         }
       }
     }
   }
-  &--tongueExpanded {
-    @include mix_calculate(left, 50%, $structureUtilityPanel_width_expand/2, '-');
-    @include material('none');
-    transform: translate(0, 0);
-    width: $structureUtilityPanel_width_expand;
-    background-color: $color_active;
+  &--viewBreakdownOverridesOnly {
     #{$blockName} {
-      &__metricSelect, &__updateNow {
-        transform: scale(1);
+      &__breakdownSelect {
+        &-bottom-ctas-overrides {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
+        }
       }
-      &__tongue {
-        &-bar {
-          display: none;
+    }
+  }
+  &--viewBreakdownBICSOnly {
+    #{$blockName} {
+      &__breakdownSelect {
+        &-bottom-ctas-BICS {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
         }
-        &-text {
-          color: $font_color_inverse;
+      }
+    }
+  }
+  &--viewBreakdownRegularsOnly {
+    #{$blockName} {
+      &__breakdownSelect {
+        &-bottom-ctas-regulars {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
         }
+      }
+    }
+  }
+  &--viewBreakdownAll {
+    #{$blockName} {
+      &__breakdownSelect {
+        &-bottom-ctas-all {
+          @extend .santaBtn--inverseLabelled;
+          @include material('none');
+          background-color: $color_active;
+        }
+      }
+    }
+  }
+  @include mq-x-large-min {
+    &__metricSelect {
+      flex-direction: row;
+      justify-content: center;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+      }
+    }
+    &__breakdownSelect {
+      flex-direction: row;
+      justify-content: center;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+      }
+    }
+    &__portfolioSelect {
+      flex-direction: row;
+      justify-content: center;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+      }
+      &-bottom {
+        flex: 0 1 auto;
+        align-self: unset;
+      }
+    }
+    &__updateNow {
+      flex-direction: row;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
       }
     }
   }

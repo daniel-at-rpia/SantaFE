@@ -6,7 +6,12 @@ import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { selectReloadFundDataPostEdit, selectMainPanelUpdateTick } from 'Structure/selectors/structure.selectors';
+import {
+  selectReloadFundDataPostEdit,
+  selectMainPanelUpdateTick,
+  selectActiveBreakdownViewFilter,
+  selectActivePortfolioViewFilter
+} from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
   UtilityService,
@@ -18,10 +23,15 @@ import {
   SUPPORTED_PORTFOLIO_LIST,
   BEPortfolioTargetMetricValues,
   BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+  BreakdownViewFilter
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
-import { PortfolioBreakdownDTO, PortfolioStructureDTO, TargetBarDTO } from 'Core/models/frontend/frontend-models.interface';
+import {
+  PortfolioBreakdownDTO,
+  PortfolioFundDTO,
+  TargetBarDTO
+} from 'Core/models/frontend/frontend-models.interface';
 import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -48,12 +58,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ownerInitialsSub: null,
     selectedMetricLevelSub: null,
     reloadFundUponEditSub: null,
-    viewData: null
+    viewData: null,
+    activeBreakdownViewFilterSub: null,
+    activePortfolioViewFilterSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
-    supportedFundList: SUPPORTED_PORTFOLIO_LIST
+    supportedFundList: SUPPORTED_PORTFOLIO_LIST,
+    breakdownViewFilter: BreakdownViewFilter
   };
   
   constructor(
@@ -69,14 +82,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   
   private initializePageState(): StructureMainPanelState { 
     const state: StructureMainPanelState = {
-        ownerInitial: null,
-        isUserPM: false,
-        selectedMetricValue: this.constants.cs01,
-        fetchResult: {
-          fundList: [],
-          fetchFundDataFailed: false,
-          fetchFundDataFailedError: ''
-        }
+      ownerInitial: null,
+      isUserPM: false,
+      selectedMetricValue: this.constants.cs01,
+      activeBreakdownViewFilter: null,
+      activePortfolioViewFilter: [],
+      fetchResult: {
+        fundList: [],
+        fetchFundDataFailed: false,
+        fetchFundDataFailedError: ''
+      }
     }
     return state; 
   }
@@ -134,6 +149,19 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.fullUpdate();
       }
     });
+    this.subscriptions.activeBreakdownViewFilterSub = this.store$.pipe(
+      select(selectActiveBreakdownViewFilter)
+    ).subscribe((activeFilter) => {
+      this.state.activeBreakdownViewFilter = activeFilter;
+      this.state.fetchResult.fundList.forEach((eachFund) => {
+        this.updateTargetFundBreakdownDisplay(eachFund);
+      });
+    });
+    this.subscriptions.activePortfolioViewFilterSub = this.store$.pipe(
+      select(selectActivePortfolioViewFilter)
+    ).subscribe((activeFilter) => {
+      this.state.activePortfolioViewFilter = activeFilter;
+    });
   }
 
   public ngOnDestroy() {
@@ -160,6 +188,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
       const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true, this.state.selectedMetricValue);
       eachFund.data.portfolioShortName = eachPortfolioName;
+      eachFund.data.displayChildren = eachFund.data.children;
       return eachFund;
     });
   }
@@ -169,7 +198,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailedError = '';
   }
 
-  private sortFunds(funds: Array<PortfolioStructureDTO>) {
+  private sortFunds(funds: Array<PortfolioFundDTO>) {
     funds.sort((fundA, fundB) => {
       const fundAShortName = fundA.data.portfolioShortName;
       const fundBShortName = fundB.data.portfolioShortName;
@@ -263,7 +292,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private formCustomBICsBreakdownWithSubLevels(
     rawData: BEPortfolioStructuringDTO,
-    fund: PortfolioStructureDTO
+    fund: PortfolioFundDTO
   ) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
     const {
@@ -386,11 +415,40 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       const alreadyExist = this.state.fetchResult.fundList.findIndex((eachFund) => {
         return eachFund.data.portfolioId === newFund.data.portfolioId;
       })
+      this.updateTargetFundBreakdownDisplay(newFund);
       if (alreadyExist >= 0) {
         this.state.fetchResult.fundList[alreadyExist] = newFund;
       } else {
         this.state.fetchResult.fundList.push(newFund);
       }
+    }
+  }
+
+  private updateTargetFundBreakdownDisplay(targetFund: PortfolioFundDTO) {
+    switch (this.state.activeBreakdownViewFilter) {
+      case this.constants.breakdownViewFilter.overridesOnly:
+        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+          return eachChild.state.isOverrideVariant;
+        });
+        break;
+      case this.constants.breakdownViewFilter.BICSOnly:
+        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+          return eachChild.data.backendGroupOptionIdentifier.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) === 0 && !eachChild.state.isOverrideVariant;
+        });
+        break;
+      case this.constants.breakdownViewFilter.regularsOnly:
+        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+          return eachChild.data.backendGroupOptionIdentifier.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) < 0 && !eachChild.state.isOverrideVariant;
+        });
+        break;
+      case this.constants.breakdownViewFilter.all:
+        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+          return true;  // simply to retain the same behavior as other filters that generates a new reference
+        });
+        break;
+      default:
+        // code...
+        break;
     }
   }
 

@@ -17,7 +17,11 @@ import {
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  BreakdownViewFilter,
+  PortfolioShortNames
+} from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 
@@ -147,8 +151,10 @@ export interface StructureMainPanelState {
   ownerInitial: string;
   isUserPM: boolean;
   selectedMetricValue: PortfolioMetricValues;
+  activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
   fetchResult: {
-    fundList: DTOs.PortfolioStructureDTO[];
+    fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;
     fetchFundDataFailedError: string;
   }
@@ -291,12 +297,13 @@ export interface StructureState {
 
 export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
-  isExpanded: boolean;
   lastUpdateTime: string;
+  activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
 }
 
 export interface StructureSetTargetPanelState {
-  targetFund: DTOs.PortfolioStructureDTO;
+  targetFund: DTOs.PortfolioFundDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   targetBreakdownRawData: BEStructuringBreakdownBlock;
   targetBreakdownRawDataDisplayLabelMap: object;

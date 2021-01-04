@@ -9,7 +9,12 @@
     <span class="sat-structureMainPanel__errorPrompt-text">{{state.fetchResult.fetchFundDataFailedError}}</span>
   </section>
   <section class="sat-structureMainPanel__fundGroup">
-    <div *ngFor="let fund of state.fetchResult.fundList" class="sat-structureMainPanel__fundGroup-fund">
+    <div
+      *ngFor="let fund of state.fetchResult.fundList"
+      [ngClass]="{
+        'sat-structureMainPanel__fundGroup-fund': true,
+        'sat-structureMainPanel__fundGroup-fund--hidden': state.activePortfolioViewFilter.indexOf(fund.data.portfolioShortName) < 0
+      }">
       <structure-fund [fund]="fund"></structure-fund>
     </div>
   </section>
