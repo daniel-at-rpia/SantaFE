@@ -126,6 +126,7 @@ export class BICsDataProcessingService {
         const newRowList: Array<StructurePortfolioBreakdownRowDTO> = this.formUIBranchForSubLevels(primaryRowList);
         newRowList.forEach(newRow => {
           this.getDisplayedSubLevelsForCategory(newRow, newRowList);
+          this.getDisplayedSubLevelsWithTargetsForCategory(newRow, newRowList)
         })
         return newRowList;
       } else {
@@ -372,6 +373,11 @@ export class BICsDataProcessingService {
         });
       }
     })
+  }
+
+  public getDisplayedSubLevelsWithTargetsForCategory(targetRow: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO> ) {
+    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && !!row.data.targetLevel);
+    targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
   private setBreakdownListProperties(
