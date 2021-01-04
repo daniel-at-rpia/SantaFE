@@ -1229,16 +1229,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private setModifiedRowListsForBICSVariant(rawCs01List: Array<StructurePortfolioBreakdownRowDTO>, rawCreditLeverageList: Array<StructurePortfolioBreakdownRowDTO>, targetBreakdown: PortfolioBreakdownDTO) {
     const cs01LevelOneList = rawCs01List.filter(row => row.data.bicsLevel === 1);
     const leverageLevelOneList = rawCreditLeverageList.filter(row => row.data.bicsLevel === 1);
-    // set displayedRows to be empty for now
     cs01LevelOneList.forEach(cs01Row => {
       cs01Row.state.isWithinEditRow = true;
-      cs01Row.data.displayedSubLevelRows = [];
       cs01Row.state.isStencil = false;
       cs01Row.data.moveVisualizer.state.isStencil = false;
     });
     leverageLevelOneList.forEach(creditLeverageRow => {
       creditLeverageRow.state.isWithinEditRow = true;
-      creditLeverageRow.data.displayedSubLevelRows = [];
       creditLeverageRow.state.isStencil = false;
       creditLeverageRow.data.moveVisualizer.state.isStencil = false;
     });
