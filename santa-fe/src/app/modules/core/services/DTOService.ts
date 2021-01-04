@@ -2323,6 +2323,7 @@ export class DTOService {
         simpleBucket: simpleBucket,
         parentRow: null,
         displayedSubLevelRows: [],
+        displayedSubLevelRowsWithTargets: [],
         code: code
       };
       if (eachCategoryBlock.diffToTarget < 0) {
