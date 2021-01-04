@@ -14,9 +14,10 @@
     'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
     'sat-portfolioBreakdownRow--hasSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.data.displayedSubLevelRows.length > 0,
     'sat-portfolioBreakdownRow--showSubLevels': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn && breakdownRow.state.isShowingSubLevels,
-    'sat-portfolioBreakdownRow--mainPanelLevel2': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2 && !!breakdownRow.state.isBtnDiveIn,
-    'sat-portfolioBreakdownRow--mainPanelLevel3': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3 && !!breakdownRow.state.isBtnDiveIn,
-    'sat-portfolioBreakdownRow--mainPanelLevel4': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4,
+    'sat-portfolioBreakdownRow--level1Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--level2Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--level3Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--level4Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4,
     'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover,
     'sat-portfolioBreakdownRow--isWithinEditRow': !!breakdownRow.state.isWithinEditRow,
     'sat-portfolioBreakdownRow--isWithinSetTargetPreview': !!breakdownRow.state.isWithinSetTargetPreview
