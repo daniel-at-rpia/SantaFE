@@ -1360,7 +1360,8 @@ export class DTOService {
     min: number,
     isStencil: boolean,
     isOverride: boolean,
-    diveInLevel: number
+    diveInLevel: number,
+    isCs01: boolean
   ): DTOs.MoveVisualizerDTO {
     const parsedMin = min < 0 ? 0 : min;
     const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
@@ -1425,6 +1426,7 @@ export class DTOService {
         structuringBreakdownExceededState: rawData.targetLevel !== null && rawData.currentLevel > rawData.targetLevel
       }
     };
+    object.data.endPinText = !!isCs01 ? `${object.data.end}k` : `${object.data.end}`;
     return object;
   }
 
@@ -2285,9 +2287,9 @@ export class DTOService {
         minValue,
         !!isStencil,
         isOverride,
-        diveInLevel
+        diveInLevel,
+        isCs01
       );
-      eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
       const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.targetLevel, parsedRawData.currentLevel, isCs01);
 
       const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
