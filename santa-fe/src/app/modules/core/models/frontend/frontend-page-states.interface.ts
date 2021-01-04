@@ -17,6 +17,7 @@ import {
   SecurityMapEntry,
   AlertDTOMap
 } from 'FEModels/frontend-adhoc-packages.interface';
+import { SantaDatePicker } from 'Form/models/form-models.interface';
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import {
@@ -306,6 +307,7 @@ export interface StructureUtilityPanelState {
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   viewingHistoricalData: boolean;
+  switchDateDatepicker: SantaDatePicker;
 }
 
 export interface StructureSetTargetPanelState {

@@ -67,6 +67,8 @@
       <span class="sat-structureUtilityPanel__dateSwitch-top-highlightText">{{state.currentDatestampDisplayText}}</span>
     </div>
     <div class="sat-structureUtilityPanel__dateSwitch-bottom">
+      <santa-datepicker [datepickerDTO]="state.switchDateDatepicker"></santa-datepicker>
+      <!--
       <button (click)="onClickSwitchDateBackOneWeek()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
         <i class="fal fa-arrow-left"></i>
         <span>1 W</span>
@@ -83,6 +85,7 @@
         <i class="fal fa-arrow-right"></i>
         <span>1 W</span>
       </button>
+      -->
     </div>
   </section>
   <section class="sat-structureUtilityPanel__updateNow">

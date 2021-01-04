@@ -6,6 +6,7 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
+    import { SantaDatePicker } from 'Form/models/form-models.interface';
     import {
       StructureOverrideToBreakdownConversionReturnPack,
       CustomBreakdownReturnPack,
@@ -2623,6 +2624,25 @@ export class DTOService {
       },
       state: {
         triggersRedirect: !!isRedirect
+      }
+    };
+    return object;
+  }
+
+  public formSantaDatepicker(
+    triggerLabel: string
+  ): SantaDatePicker {
+    const object: SantaDatePicker = {
+      data: {
+        triggerLabel: triggerLabel
+      },
+      api: {
+        formControl: null,
+        datepicker: null
+      },
+      state: {
+        noInputVariant: true,
+        opened: false
       }
     };
     return object;

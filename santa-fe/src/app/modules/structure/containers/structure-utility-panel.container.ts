@@ -25,7 +25,7 @@ import {
   StructureChangePortfolioViewFilterEvent,
   StructureSwitchDataDatestampEvent
 } from 'Structure/actions/structure.actions';
-import { UtilityService } from 'Core/services';
+import { UtilityService, DTOService } from 'Core/services';
 
 @Component({
   selector: 'structure-utility-panel',
@@ -53,7 +53,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store<any>,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private dtoService: DTOService
   ) {}
 
   private initializePageState(): StructureUtilityPanelState {
@@ -64,7 +65,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
-      viewingHistoricalData: false
+      viewingHistoricalData: false,
+      switchDateDatepicker: this.dtoService.formSantaDatepicker('Pick Date To View Historical Data')
     };
   }
 

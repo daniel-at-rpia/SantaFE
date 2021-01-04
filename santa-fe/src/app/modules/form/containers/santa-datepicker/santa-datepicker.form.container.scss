@@ -1,0 +1,29 @@
+@import "global.scss";
+@import "modules/form/form.scss";
+
+.sat-datepicker {
+  $blockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item);
+  &__trigger {
+    
+  }
+  &__popover {
+    @include mix_fixed_div(absolute, $z_index_dropdown);
+    @include mix_alive('light');
+    transform: scale(0.001);
+  }
+  &--openedState {
+    #{$blockName} {
+      &__trigger {
+        &-cta {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+      }
+      &__popover {
+        transform: scale(1);
+      }
+    }
+  }
+}

@@ -1,10 +1,31 @@
-<!-- 
-  <input matInput [matDatepicker]="dp" [formControl]="date">
-  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-  <mat-datepicker #dp></mat-datepicker> -->
-  <mat-form-field class="example-full-width" appearance="fill">
-  <mat-label>Choose a date</mat-label>
-  <input matInput [matDatepicker]="picker">
-  <mat-datepicker #picker></mat-datepicker>
-</mat-form-field>
-<button mat-raised-button (click)="picker.open()">Open</button>
+<article
+  [ngClass]="{
+    'sat-datepicker': true,
+    'sat-datepicker--openedState': datepickerDTO.state.opened
+  }">
+  <section class="sat-datepicker__trigger">
+    <button (click)="onClickOpen()" class="sat-datepicker__trigger-cta santaBtn--labelled">
+      <i class="far fa-calendar-day"></i>
+      <span>{{datepickerDTO.data.triggerLabel}}</span>
+    </button>
+  </section>
+  <section class="sat-datepicker__popover">
+    <div class="sat-datepicker__popover-content">
+      <mat-form-field class="sat-datepicker__popover-content-form" appearance="standard">
+        <mat-label>Choose a date</mat-label>
+        <input
+          class="sat-datepicker__popover-content-form-input"
+          matInput
+          [matDatepicker]="picker"
+          [formControl]="datepickerDTO.data.formControl || formControl"
+          (dateInput)="onDateValueChange('input', $event)"
+          (dateChange)="onDateValueChange('change', $event)">
+        <mat-datepicker
+          #picker
+          class="sat-datepicker__popover-content-form-datepicker"
+          (closed)="onCloseDatePicker()">
+        </mat-datepicker>
+      </mat-form-field>
+    </div>
+  </section>
+</article>
