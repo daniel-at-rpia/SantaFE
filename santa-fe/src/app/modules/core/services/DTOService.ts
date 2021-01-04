@@ -2280,7 +2280,7 @@ export class DTOService {
         diveInLevel,
         isCs01
       );
-      const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.targetLevel, parsedRawData.currentLevel, isCs01);
+      const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.currentLevel, parsedRawData.targetLevel, isCs01);
 
       const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
