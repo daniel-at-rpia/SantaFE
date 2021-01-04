@@ -227,6 +227,17 @@ button {
         }
     }
   }
+  &--isCDSVariantState {
+    #{$blockName} {
+      &__table {
+       &-content {
+          &-allTradeHistoryBtn {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
   &--displayGraphsState {
     #{$blockName} {
       &__graphs {

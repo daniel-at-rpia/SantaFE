@@ -1014,6 +1014,8 @@ export class DTOService {
     isSlimRowHeight: boolean,
     id?: string
   ): DTOs.SecurityTableRowDTO {
+    // set CDS state for historical trade visualizer for now as get all trade histories API does not work for CDS, and that button has to be disabled for those securities
+    const isCDSVariant = this.utility.isCDS(false, securityDTO);
     const object: DTOs.SecurityTableRowDTO = {
       data: {
         rowId: !!id ? id : this.utility.generateUUID(),
@@ -1051,7 +1053,7 @@ export class DTOService {
           }
         },
         alert: alert,
-        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO),
+        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO, isCDSVariant),
         traceTradeVisualizer: null
       },
       style: {
@@ -1061,7 +1063,7 @@ export class DTOService {
         expandViewSortByQuoteMetric: null,
         isExpanded: false,
         presentingAllQuotes: false,
-        isCDSVariant: this.utility.isCDS(false, securityDTO),
+        isCDSVariant: isCDSVariant,
         isCDSOffTheRun: false,
         viewHistoryState: false,
         viewTraceState: false,
@@ -1761,7 +1763,7 @@ export class DTOService {
     return object;
   }
 
-  public formHistoricalTradeObject(targetSecurity: DTOs.SecurityDTO): DTOs.HistoricalTradeVisualizerDTO {
+  public formHistoricalTradeObject(targetSecurity: DTOs.SecurityDTO, isCDS: boolean): DTOs.HistoricalTradeVisualizerDTO {
     const object: DTOs.HistoricalTradeVisualizerDTO = {
       data: {
         prinstineTradeList: targetSecurity.data.tradeHistory || [],
@@ -1776,7 +1778,8 @@ export class DTOService {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
         selectedPortfolio: [],
         graphReceived: false,
-        showAllTradeHistory: false
+        showAllTradeHistory: false,
+        isCDSVariant: isCDS
       },
       graph: {
         timeSeries: null,
