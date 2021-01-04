@@ -55,6 +55,8 @@ export const BICS_BRANCH_CHARACTER_LIMIT = 26;
 
 export const BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST: Array<string> = ['None', '*'];
 
+export const BICS_CODE_DELIMITER_AMOUNT = 2;
+
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
   creditLeverage = 'Credit Leverage',
