@@ -1359,7 +1359,6 @@ export class DTOService {
     max: number,
     min: number,
     isStencil: boolean,
-    groupOption: string,
     isOverride: boolean,
     diveInLevel: number
   ): DTOs.MoveVisualizerDTO {
@@ -2285,7 +2284,6 @@ export class DTOService {
         maxValue,
         minValue,
         !!isStencil,
-        groupOption,
         isOverride,
         diveInLevel
       );
