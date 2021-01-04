@@ -616,10 +616,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     }
     newRow.isEven = this.checkIfEvenRow(newRow);
-    if (newRow.isEven) {
-      const oppositeList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
-      const oppositeRow = oppositeList.find(oppositeRowItem => oppositeRowItem.data.code === newRow.rowDTO.data.code);
-    }
     return newRow;
   }
 
