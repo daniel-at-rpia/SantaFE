@@ -1274,19 +1274,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     })
   }
 
-  private updateEditRowDTOProperties(editRow: StructureSetTargetPanelEditRowBlock, rowDTO: StructurePortfolioBreakdownRowDTO) {
-    rowDTO.state.isStencil = false;
-    rowDTO.data.moveVisualizer.state.isStencil = false;
-    editRow.rowDTO.data = rowDTO.data;
-    //find equivalent row in opposite list, and also turn off those stencils
-    const oppositeList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
-    const equivalentRowInOppositeList = oppositeList.find(oppositeRow => oppositeRow.data.code === rowDTO.data.code);
-    if (!!equivalentRowInOppositeList) {
-      equivalentRowInOppositeList.state.isStencil = false;
-      equivalentRowInOppositeList.data.moveVisualizer.state.isStencil = false;
-    }
-  }
-
   private updateBICSpecificPropertiesForSubLevels(rawList:  Array<StructurePortfolioBreakdownRowDTO>, isCs01: boolean) {
     const targetList = !!isCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
     rawList.forEach(selectedListRow => {
