@@ -18,7 +18,8 @@
       SecurityGroupMetricBlock,
       SecurityGroupMetricPackBlock,
       SecurityCostPortfolioBlock,
-      TraceTradeBlock
+      TraceTradeBlock,
+      PortfolioBreakdownCategoryBlock
     } from 'FEModels/frontend-blocks.interface';
     import { DefinitionConfiguratorEmitterParams, StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -1423,6 +1424,17 @@ export class UtilityService {
 
     public getRowDiffToTarget(currentLevel: number, targetLevel: number, isCs01: boolean): number {
       return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
+    }
+
+    public getRowDiffToTargetText(amount: number, isCs01: boolean): string {
+      let displayText: string;
+      if (amount < 0) {
+        displayText = !!isCs01 ? `${amount}k` : `${amount}`;
+      }
+      if (amount > 0) {
+        displayText = !!isCs01 ? `+${amount}k` : `+${amount}`;
+      }
+      return displayText;
     }
 
     public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number {
