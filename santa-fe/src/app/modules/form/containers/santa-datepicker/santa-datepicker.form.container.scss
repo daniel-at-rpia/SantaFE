@@ -2,19 +2,21 @@
 @import "modules/form/form.scss";
 
 $datepicker_form_width: 10rem;
+$datepicker_form_gutterReset_bottom: convert_px_to_rem(-15px);
+$datepicker_form_gutterReset_top: convert_px_to_rem(-10px);
 .sat-datepicker {
   $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   display: flex;
-  align-items: center;
   &__form {
     width: $datepicker_form_width;
     padding-right: $spacing_small;
-    margin-bottom: -$spacing_medium;
-    margin-top: -$spacing_small;
+    margin-bottom: $datepicker_form_gutterReset_bottom;
+    margin-top: $datepicker_form_gutterReset_top;
   }
   &__trigger {
-
+    display: flex;
+    align-items: flex-end;
   }
   &--openedState {
     #{$blockName} {

@@ -138,8 +138,8 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     justify-content: space-between;
     &-top {
       display: flex;
+      justify-content: center;
       align-items: center;
-      margin-bottom: $spacing_x_small;
       &-label {
         color: $font_color_minor;
         margin-right: $spacing_small;
@@ -164,23 +164,6 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-backToTodayBtn {
         flex: 1 1 auto;
         display: none;
-      }
-      &-icon {
-        flex: 0 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: $spacing_medium;
-        &-today {
-          display: inline-block;
-          color: $font_color_major;
-          font-size: $font_size_xx_large;
-        }
-        &-history {
-          display: none;
-          color: $font_color_trivial;
-          font-size: $font_size_xx_large;
-        }
       }
     }
   }
@@ -297,15 +280,6 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
           }
           &-backToTodayBtn {
             display: flex;
-          }
-          &-icon {
-            background: none;
-            &-today {
-              display: none;
-            }
-            &-history {
-              display: inline-block;
-            }
           }
         }
       }
