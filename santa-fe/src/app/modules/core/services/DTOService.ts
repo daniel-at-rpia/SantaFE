@@ -2630,18 +2630,24 @@ export class DTOService {
   }
 
   public formSantaDatepicker(
-    triggerLabel: string
+    inputLabelEmpty: string,
+    inputLabelFilled: string,
+    minDate?: moment.Moment,
+    maxDate?: moment.Moment
   ): SantaDatePicker {
     const object: SantaDatePicker = {
       data: {
-        triggerLabel: triggerLabel
+        inputLabelDisplay: inputLabelEmpty,
+        inputLabelEmpty: inputLabelEmpty,
+        inputLabelFilled: inputLabelFilled,
+        minDate: minDate || moment('2020-01-01'),
+        maxDate: maxDate || moment()
       },
       api: {
-        formControl: null,
         datepicker: null
       },
       state: {
-        noInputVariant: true,
+        noInputVariant: false,
         opened: false
       }
     };

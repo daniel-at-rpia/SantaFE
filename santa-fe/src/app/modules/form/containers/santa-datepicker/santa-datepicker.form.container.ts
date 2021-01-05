@@ -9,12 +9,14 @@ import { SantaDatePicker } from '../../models/form-models.interface';
   selector: 'santa-datepicker',
   templateUrl: './santa-datepicker.form.container.html',
   styleUrls: ['./santa-datepicker.form.container.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.None
 })
 
 export class SantaDatepicker implements OnInit {
   @ViewChild('picker', {static: false}) datepicker: MatDatepicker<moment.Moment>;
   @Input() datepickerDTO: SantaDatePicker;
+  @Output() dateSelected = new EventEmitter<moment.Moment>();
+
   formControl = new FormControl(null);
 
   constructor(
@@ -23,7 +25,6 @@ export class SantaDatepicker implements OnInit {
 
   public ngOnInit() {
     // doing the creation of formControl in here instead of DTOService, to keep all form-specific code in the form module
-    this.datepickerDTO.api.formControl = new FormControl(null);
     this.datepickerDTO.api.datepicker = this.datepicker;
   }
 
@@ -38,14 +39,19 @@ export class SantaDatepicker implements OnInit {
 
   public onDateValueChange(
     source: string,
-    event: MatDatepickerInputEvent<Date>
+    event: MatDatepickerInputEvent<moment.Moment>
   ) {
     if (source === 'input') {
       // user is changing the input manually
     } else if (source === 'change') {
       // a change is submitted either via datepicker or manually chaning the input
-      if (!!event.value) {
-
+      this.datepickerDTO.state.opened = false;
+      if (!!event.value && moment.isMoment(event.value)) {
+        this.datepickerDTO.data.inputLabelDisplay = this.datepickerDTO.data.inputLabelFilled;
+        !!this.dateSelected && this.dateSelected.emit(event.value);
+      } else {
+        this.datepickerDTO.data.inputLabelDisplay = this.datepickerDTO.data.inputLabelEmpty;
+        !!this.dateSelected && this.dateSelected.emit(null);
       }
     }
   }

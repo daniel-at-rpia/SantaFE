@@ -63,29 +63,13 @@
   <section class="sat-structureUtilityPanel__dateSwitch">
     <div class="sat-structureUtilityPanel__dateSwitch-top">
       <span class="sat-structureUtilityPanel__dateSwitch-top-label">Showing Today's Data</span>
-      <span class="sat-structureUtilityPanel__dateSwitch-top-label sat-structureUtilityPanel__dateSwitch-top-label--history">Showing Historical Data On</span>
-      <span class="sat-structureUtilityPanel__dateSwitch-top-highlightText">{{state.currentDatestampDisplayText}}</span>
+      <span class="sat-structureUtilityPanel__dateSwitch-top-label sat-structureUtilityPanel__dateSwitch-top-label--history">Showing Data On</span>
     </div>
     <div class="sat-structureUtilityPanel__dateSwitch-bottom">
-      <santa-datepicker [datepickerDTO]="state.switchDateDatepicker"></santa-datepicker>
-      <!--
-      <button (click)="onClickSwitchDateBackOneWeek()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
-        <i class="fal fa-arrow-left"></i>
-        <span>1 W</span>
-      </button>
-      <button (click)="onClickSwitchDateBackOneDay()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
-        <i class="fal fa-arrow-left"></i>
-        <span>1 D</span>
-      </button>
-      <button (click)="onClickSwitchDateForwardOneDay()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn sat-structureUtilityPanel__dateSwitch-bottom-btn--forward santaBtn--small santaBtn--labelled">
-        <i class="fal fa-arrow-right"></i>
-        <span>1 D</span>
-      </button>
-      <button (click)="onClickSwitchDateForwardOneWeek()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn sat-structureUtilityPanel__dateSwitch-bottom-btn--forward santaBtn--small santaBtn--labelled">
-        <i class="fal fa-arrow-right"></i>
-        <span>1 W</span>
-      </button>
-      -->
+      <santa-datepicker
+        [datepickerDTO]="state.switchDateDatepicker"
+        (dateSelected)="onSelectedDateFromSwitchDateDatepicker($event)">
+      </santa-datepicker>
     </div>
   </section>
   <section class="sat-structureUtilityPanel__updateNow">

@@ -66,7 +66,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
       viewingHistoricalData: false,
-      switchDateDatepicker: this.dtoService.formSantaDatepicker('Choose Date')
+      switchDateDatepicker: this.dtoService.formSantaDatepicker('Choose Historical Date', 'Date')
     };
   }
 
@@ -151,39 +151,15 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
   }
 
-  public onClickSwitchDateBackOneDay() {
-    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-    newDatestamp.subtract(1, 'days');
-    this.updateDataDatestamp(newDatestamp);
-  }
-
-  public onClickSwitchDateBackOneWeek() {
-    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-    newDatestamp.subtract(1, 'weeks');
-    this.updateDataDatestamp(newDatestamp);
-  }
-
-  public onClickSwitchDateForwardOneDay() {
-    if (this.state.viewingHistoricalData) {
-      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-      newDatestamp.add(1, 'days');
-      if (newDatestamp.isAfter(moment())) {
+  public onSelectedDateFromSwitchDateDatepicker(targetDate: moment.Moment) {
+    if (!!targetDate && moment.isMoment(targetDate)) {
+      if (targetDate.isSame(moment(), 'day')) {
         this.onClickBackToToday();
       } else {
-        this.updateDataDatestamp(newDatestamp);
+        this.updateDataDatestamp(targetDate);
       }
-    }
-  }
-
-  public onClickSwitchDateForwardOneWeek() {
-    if (this.state.viewingHistoricalData) {
-      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-      newDatestamp.add(1, 'weeks');
-      if (newDatestamp.isAfter(moment())) {
-        this.onClickBackToToday();
-      } else {
-        this.updateDataDatestamp(newDatestamp);
-      }
+    } else {
+      this.onClickBackToToday();
     }
   }
 

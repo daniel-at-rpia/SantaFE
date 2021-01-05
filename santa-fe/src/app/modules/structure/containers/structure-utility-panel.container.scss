@@ -104,14 +104,6 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
           margin-right: $spacing_small;
         }
       }
-      &-highlightText {
-        @include mix_theme_background;
-        @include mix_border_radius(3px);
-        display: none;
-        flex: 0 0 auto;
-        padding: $spacing_x_small;
-        color: $font_color_inverse;
-      }
     }
     &-bottom {
       display: flex;
@@ -242,9 +234,6 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
             &--history {
               display: flex;
             }
-          }
-          &-highlightText {
-            display: flex;
           }
         }
         &-bottom-btn {

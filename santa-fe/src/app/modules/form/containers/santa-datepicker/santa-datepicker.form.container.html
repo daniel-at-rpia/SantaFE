@@ -4,13 +4,16 @@
     'sat-datepicker--openedState': datepickerDTO.state.opened
   }">
   <section class="sat-datepicker__form">
-    <mat-form-field class="sat-datepicker__form-content" appearance="standard">
-      <mat-label>{{datepickerDTO.data.triggerLabel}}</mat-label>
+    <mat-form-field class="sat-datepicker__form-content" appearance="outline">
+      <mat-label>{{datepickerDTO.data.inputLabelDisplay}}</mat-label>
       <input
         class="sat-datepicker__form-content-input"
         matInput
         [matDatepicker]="picker"
         [formControl]="datepickerDTO.data.formControl || formControl"
+        [min]="datepickerDTO.data.minDate"
+        [max]="datepickerDTO.data.maxDate"
+        placeholder="dd/mm/yyyy"
         (dateInput)="onDateValueChange('input', $event)"
         (dateChange)="onDateValueChange('change', $event)">
       <mat-datepicker

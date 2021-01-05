@@ -1,9 +1,8 @@
 @import "global.scss";
 @import "modules/form/form.scss";
 
-$datepicker_form_width: 10rem;
-$datepicker_form_gutterReset_bottom: convert_px_to_rem(-15px);
-$datepicker_form_gutterReset_top: convert_px_to_rem(-10px);
+$datepicker_form_width: 12rem;
+$datepicker_form_gutterReset_bottom: convert_px_to_rem(-5px);
 .sat-datepicker {
   $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
@@ -12,7 +11,12 @@ $datepicker_form_gutterReset_top: convert_px_to_rem(-10px);
     width: $datepicker_form_width;
     padding-right: $spacing_small;
     margin-bottom: $datepicker_form_gutterReset_bottom;
-    margin-top: $datepicker_form_gutterReset_top;
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+      .mat-form-field-infix {
+        padding: .5em 0;
+      }
+    }
   }
   &__trigger {
     display: flex;

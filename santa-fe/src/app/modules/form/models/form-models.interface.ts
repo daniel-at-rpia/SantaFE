@@ -11,10 +11,13 @@ interface BasicFormDTOStructure {
 
 export interface SantaDatePicker extends BasicFormDTOStructure {
   data: {
-    triggerLabel: string;
+    inputLabelDisplay: string;
+    inputLabelEmpty: string;
+    inputLabelFilled: string;
+    minDate: moment.Moment;
+    maxDate: moment.Moment;
   },
   api: {
-    formControl: FormControl;
     datepicker: MatDatepicker<moment.Moment>;
   }
   state: {
