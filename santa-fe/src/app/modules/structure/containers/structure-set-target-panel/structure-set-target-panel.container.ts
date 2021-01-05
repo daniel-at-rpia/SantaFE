@@ -831,6 +831,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!isBICS) {
           const rowCopy = this.utilityService.deepCopy(row);
           editRowListEquivalent.rowDTO = rowCopy;
+          // temporarily remove stencil states for BICS
+          editRowListEquivalent.rowDTO.state.isStencil = false;
+          editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
         }
         setTimeout(() => {
           row.state.isStencil = false;
