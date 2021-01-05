@@ -265,7 +265,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onClickDistributeEvenly() {
     const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked && (eachRow.rowDTO.data.bicsLevel < 2 || !eachRow.rowDTO.data.bicsLevel)
+      return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel)
     });
     if (unlockedList.length > 0) {
       const totalNumberOfRows = unlockedList.length;
@@ -293,7 +293,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onClickDistributeProportionally() {
     const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked && (eachRow.rowDTO.data.bicsLevel < 2|| !eachRow.rowDTO.data.bicsLevel);
+      return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel);
     });
     if (unlockedList.length > 0) {
       const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
@@ -614,12 +614,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       existInServer: true,
       rowDTO: null
     };
-    if (this.state.activeMetric === this.constants.metric.cs01) {
-      newRow.rowDTO = row;
-    } else {
-      const matchedRow = this.state.targetBreakdown.data.rawLeverageCategoryList.find(selectedRow => selectedRow.data.code === row.data.code);
-      if (!!matchedRow) {
-        newRow.rowDTO = matchedRow;
+    if (this.state.targetBreakdown.state.isBICs) {
+      if (this.state.activeMetric === this.constants.metric.cs01) {
+        newRow.rowDTO = row;
+      } else {
+        const matchedRow = this.state.targetBreakdown.data.rawLeverageCategoryList.find(selectedRow => selectedRow.data.code === row.data.code);
+        if (!!matchedRow) {
+          newRow.rowDTO = matchedRow;
+        }
       }
     }
     newRow.isEven = this.checkIfEvenRow(newRow);
