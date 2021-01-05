@@ -122,7 +122,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         overflow: hidden;
         padding-left: $spacing_large;
         &-border {
-          @include mix_fixed_div(absolute, $z_index_base_item_solid);
+          @include mix_fixed_div(absolute, $z_index_base_item);
           @include mix_border_generator(2px, $color_active);
           @include mix_border_radius(5px);
           @include mix_alive('light');
