@@ -15,7 +15,7 @@ import { SantaDatePicker } from '../../models/form-models.interface';
 export class SantaDatepicker implements OnInit {
   @ViewChild('picker', {static: false}) datepicker: MatDatepicker<moment.Moment>;
   @Input() datepickerDTO: SantaDatePicker;
-  formControl = new FormControl(moment());
+  formControl = new FormControl(null);
 
   constructor(
   ) {
@@ -23,7 +23,7 @@ export class SantaDatepicker implements OnInit {
 
   public ngOnInit() {
     // doing the creation of formControl in here instead of DTOService, to keep all form-specific code in the form module
-    this.datepickerDTO.api.formControl = new FormControl(moment());
+    this.datepickerDTO.api.formControl = new FormControl(null);
     this.datepickerDTO.api.datepicker = this.datepicker;
   }
 
@@ -40,7 +40,14 @@ export class SantaDatepicker implements OnInit {
     source: string,
     event: MatDatepickerInputEvent<Date>
   ) {
-    console.log('test, ', source, event.value);
+    if (source === 'input') {
+      // user is changing the input manually
+    } else if (source === 'change') {
+      // a change is submitted either via datepicker or manually chaning the input
+      if (!!event.value) {
+
+      }
+    }
   }
 
   public onCloseDatePicker() {

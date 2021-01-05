@@ -66,7 +66,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
       viewingHistoricalData: false,
-      switchDateDatepicker: this.dtoService.formSantaDatepicker('Pick Date To View Historical Data')
+      switchDateDatepicker: this.dtoService.formSantaDatepicker('Choose Date')
     };
   }
 

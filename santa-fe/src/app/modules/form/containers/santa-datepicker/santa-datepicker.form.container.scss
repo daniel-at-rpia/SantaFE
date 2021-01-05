@@ -1,16 +1,20 @@
 @import "global.scss";
 @import "modules/form/form.scss";
 
+$datepicker_form_width: 10rem;
 .sat-datepicker {
   $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
-  &__trigger {
-    
+  display: flex;
+  align-items: center;
+  &__form {
+    width: $datepicker_form_width;
+    padding-right: $spacing_small;
+    margin-bottom: -$spacing_medium;
+    margin-top: -$spacing_small;
   }
-  &__popover {
-    @include mix_fixed_div(absolute, $z_index_dropdown);
-    @include mix_alive('light');
-    transform: scale(0.001);
+  &__trigger {
+
   }
   &--openedState {
     #{$blockName} {
@@ -20,9 +24,6 @@
           @extend .santaBtn--inverseLabelled;
           background-color: $color_active;
         }
-      }
-      &__popover {
-        transform: scale(1);
       }
     }
   }

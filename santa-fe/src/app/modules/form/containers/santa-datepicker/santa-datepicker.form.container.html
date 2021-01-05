@@ -3,29 +3,27 @@
     'sat-datepicker': true,
     'sat-datepicker--openedState': datepickerDTO.state.opened
   }">
+  <section class="sat-datepicker__form">
+    <mat-form-field class="sat-datepicker__form-content" appearance="standard">
+      <mat-label>{{datepickerDTO.data.triggerLabel}}</mat-label>
+      <input
+        class="sat-datepicker__form-content-input"
+        matInput
+        [matDatepicker]="picker"
+        [formControl]="datepickerDTO.data.formControl || formControl"
+        (dateInput)="onDateValueChange('input', $event)"
+        (dateChange)="onDateValueChange('change', $event)">
+      <mat-datepicker
+        #picker
+        class="sat-datepicker__form-content-datepicker"
+        (closed)="onCloseDatePicker()">
+      </mat-datepicker>
+    </mat-form-field>
+  </section>
   <section class="sat-datepicker__trigger">
     <button (click)="onClickOpen()" class="sat-datepicker__trigger-cta santaBtn--labelled">
       <i class="far fa-calendar-day"></i>
-      <span>{{datepickerDTO.data.triggerLabel}}</span>
+      <span>Pick Date</span>
     </button>
-  </section>
-  <section class="sat-datepicker__popover">
-    <div class="sat-datepicker__popover-content">
-      <mat-form-field class="sat-datepicker__popover-content-form" appearance="standard">
-        <mat-label>Choose a date</mat-label>
-        <input
-          class="sat-datepicker__popover-content-form-input"
-          matInput
-          [matDatepicker]="picker"
-          [formControl]="datepickerDTO.data.formControl || formControl"
-          (dateInput)="onDateValueChange('input', $event)"
-          (dateChange)="onDateValueChange('change', $event)">
-        <mat-datepicker
-          #picker
-          class="sat-datepicker__popover-content-form-datepicker"
-          (closed)="onCloseDatePicker()">
-        </mat-datepicker>
-      </mat-form-field>
-    </div>
   </section>
 </article>
