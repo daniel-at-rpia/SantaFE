@@ -795,62 +795,51 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue === 0 ? null : counterPartyItem.modifiedUnderlineValue;
   }
 
+  // for preview rows and portfolio breakdown rows within edit row list (BICS)
+  // updates only the visualizers and diffToTargets only
+  // this is because the BE data isn't dynamic, and technically only these two properties change visually 
   private updateTargetBreakdownLists(list: Array<StructurePortfolioBreakdownRowDTO>, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean = false) {
     const [cs01Min, cs01Max, creditLeverageMin, creditLeverageMax] = this.utilityService.getCompareValuesForStructuringVisualizer(rawBreakdownData);
-    const minValue = !!isCs01 ? cs01Min : creditLeverageMin;
-    const maxValue = !!isCs01 ? cs01Max : creditLeverageMax;
+    const minValue = !!isCs01 ? cs01Min/1000 : creditLeverageMin;
+    const maxValue = !!isCs01 ? cs01Max/1000 : creditLeverageMax;
     list.forEach(row => {
       const editRowListEquivalent = !!isBICS ? this.state.editRowList.find(editRowList => editRowList.rowDTO.data.code === row.data.code) : this.state.editRowList.find(editRowList => editRowList.rowIdentifier === row.data.category);
       if (!!editRowListEquivalent) {
-        const { breakdown, portfolioId, groupOption } = rawBreakdownData;
-        const rowBreakdownData = !!isBICS ? breakdown[row.data.code] : breakdown[row.data.category];
-        const rowBreakdownMetricData = !!isCs01 ? rowBreakdownData.metricBreakdowns.Cs01 : rowBreakdownData.metricBreakdowns.CreditLeverage;
+        // stencil is manually toggled to mimic the appearance of the entire row being 'updated'
+        row.state.isStencil = true;
+        row.data.moveVisualizer.state.isStencil = true;
+        const { breakdown } = rawBreakdownData;
+        const rowRawBreakdownData = !!isBICS ? breakdown[row.data.code] : breakdown[row.data.category];
+        const rowRawBreakdownDataByMetric= !!isCs01 ? {...rowRawBreakdownData.metricBreakdowns.Cs01} : {...rowRawBreakdownData.metricBreakdowns.CreditLeverage};
         const { diveInLevel } = this.state.targetBreakdown.data;
-        const { isOverrideVariant } = this.state.targetBreakdown.state;
-        const level = !!isBICS ? row.data.bicsLevel : null;
-        const code = !!isBICS ? row.data.code : null;
-        const newCategoryBlock = this.dtoService.formPortfolioBreakdownCategoryBlock(
-          minValue,
-          maxValue,
-          false,
-          editRowListEquivalent.rowIdentifier,
-          rowBreakdownMetricData,
-          isCs01,
-          portfolioId,
-          groupOption,
-          isOverrideVariant,
-          diveInLevel,
-          rowBreakdownData.view as PortfolioView,
-          row.data.bucket,
-          row.data.simpleBucket,
-          level,
-          code
-        );
-        row.data = newCategoryBlock.data;
-        row.state = newCategoryBlock.state;
-        row.data.displayCategory = editRowListEquivalent.displayRowTitle;
-        row.state.isWithinSetTargetPreview = !isBICS;
-        if (!!isBICS) {
-          row.state.isWithinEditRow = true;
-          if (row.data.bicsLevel >= 2) {
-            row.state.isVisibleSubLevel = true;
-            row.state.isWithinPopover = false;
-            const hierarchyList: Array<BICsHierarchyBlock> = this.bicsService.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
-            const parentRow = hierarchyList.find(selectRow => selectRow.bicsLevel === row.data.bicsLevel - 1);
-            if (!!parentRow) {
-              const oppositeList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
-              const selectedParentRowInCurrentList = list.find(selectedListRow => selectedListRow.data.code === parentRow.code);
-              const selectedParentRowInOppositeList = oppositeList.find(oppositeListRow => oppositeListRow.data.code === parentRow.code)
-              if (!!selectedParentRowInCurrentList) {
-                selectedParentRowInCurrentList.state.isDoveIn = true;
-              }
-              if (!!selectedParentRowInOppositeList) {
-                selectedParentRowInOppositeList.state.isDoveIn = true;
-              }
-            }
-          }
-          this.updateEditRowDTOProperties(editRowListEquivalent, row);
+        const { isOverrideVariant} = this.state.targetBreakdown.state;
+        // use rounded current and target values for visualizer calculation
+        const rawCurrentLevel = rowRawBreakdownDataByMetric.currentLevel;
+        const rawTargetLevel = rowRawBreakdownDataByMetric.targetLevel;
+        rowRawBreakdownDataByMetric.currentLevel = !!rawCurrentLevel ? this.utilityService.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01) : rawCurrentLevel;
+        rowRawBreakdownDataByMetric.targetLevel = rawTargetLevel ? this.utilityService.getRoundedValuesForVisualizer(rawTargetLevel, isCs01) : rawTargetLevel;
+        const newVisualizer = this.dtoService.formMoveVisualizerObjectForStructuring(rowRawBreakdownDataByMetric, maxValue, minValue, false, isOverrideVariant,diveInLevel, isCs01);
+        // unlike visualizers which have to be relative and therefore need to be updated regardless, diffToTarget is dependent on which rows are being updated
+        const editRowEquivalentDataByMetric = !!isCs01 ? editRowListEquivalent.targetCs01 : editRowListEquivalent.targetCreditLeverage;
+        const isEditedRow = editRowEquivalentDataByMetric.level.isActive || editRowEquivalentDataByMetric.level.isImplied;
+        if (!!isEditedRow) {
+          const newDiffToTarget = this.utilityService.getRowDiffToTarget(rowRawBreakdownDataByMetric.currentLevel, rowRawBreakdownDataByMetric.targetLevel, isCs01);
+          const newDiffToTargetDisplay = this.utilityService.getRowDiffToTargetText(newDiffToTarget, isCs01);
+          this.setNewDiffToTargetsForRows(row, newDiffToTarget, newDiffToTargetDisplay);
         }
+        row.data.moveVisualizer = newVisualizer;
+        if (!!isBICS) {
+          const rowCopy = this.utilityService.deepCopy(row);
+          editRowListEquivalent.rowDTO = rowCopy;
+        }
+        setTimeout(() => {
+          row.state.isStencil = false;
+          row.data.moveVisualizer.state.isStencil = false;
+          if (!!isBICS) {
+            editRowListEquivalent.rowDTO.state.isStencil = false;
+            editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
+          }
+        }, 300)
       }
     })
   }
@@ -1353,4 +1342,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     }
   }
+
+  private setNewDiffToTargetsForRows(row: StructurePortfolioBreakdownRowDTO, amount: number, displayText: string) {
+    row.data.diffToTarget = amount;
+    row.data.diffToTargetDisplay = displayText;
+  }
+
 }
