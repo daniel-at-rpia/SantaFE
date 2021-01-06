@@ -1437,6 +1437,13 @@ export class UtilityService {
       return displayText;
     }
 
+    public getMetricSpecificMinAndMaxForVisualizer(rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean): Array<number> {
+      const [cs01Min, cs01Max, creditLeverageMin, creditLeverageMax] = this.getCompareValuesForStructuringVisualizer(rawBreakdownData);
+      const minValue = !!isCs01 ? cs01Min/1000 : creditLeverageMin;
+      const maxValue = !!isCs01 ? cs01Max/1000 : creditLeverageMax;
+      return [minValue, maxValue];
+    }
+
     public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number {
       // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
       const roundedValue = !!isCs01 ? Math.abs(value) >= 1000 ? this.round(value/1000, 0) : 0 : this.round(value, 2);
