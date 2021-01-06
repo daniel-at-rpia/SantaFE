@@ -546,6 +546,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         border-color: $color_white;
       }
       &__cta {
+        flex: 0 0 12rem;
         &-actionMenu {
           top: 0;
           &-top {
@@ -553,6 +554,43 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           }
           &-bottom {
             margin-top: 0;
+          }
+        }
+        &-btn {
+          &-editedTargetAmount {
+            @include mix_border_radius(3px);
+            display: flex;
+            position: relative;
+            background-color: $color_active;
+            color: $font_color_inverse;
+            padding: $spacing_xx_small;
+            font-size: $font_size_small;
+            &-tooltip {
+              display: none;
+              position: absolute;
+              top: -$iconButton_size_x_small;
+              background-color: $color_active;
+              color: $font_color_inverse;
+              padding: $spacing_xx_small;
+              font-size: $font_size_small;
+              white-space: nowrap;
+            }
+            &:hover {
+              #{$blockName} {
+                &__cta {
+                  &-btn {
+                    &-editedTargetAmount {
+                      &-tooltip {
+                        display: flex;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          &-text {
+            margin-right: $spacing_small;
           }
         }
       }

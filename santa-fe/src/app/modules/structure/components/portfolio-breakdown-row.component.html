@@ -36,6 +36,13 @@
         }"></i>
       </div>
       <span class="sat-portfolioBreakdownRow__cta-btn-text" title="{{breakdownRow.data.category}}">{{ breakdownRow.data.displayCategory }}</span>
+      <span
+        *ngIf="breakdownRow.data.editedSubLevelRowsWithTargets.length > 0 && breakdownRow.state.isWithinEditRow"
+        class="sat-portfolioBreakdownRow__cta-btn-editedTargetAmount">
+        <span class="sat-portfolioBreakdownRow__cta-btn-editedTargetAmount-tooltip">Number of edited sub levels</span>
+        {{ breakdownRow.data.editedSubLevelRowsWithTargets.length}}
+        <i class="fal fa-pencil"></i>
+      </span>
     </button>
     <div class="sat-portfolioBreakdownRow__cta-actionMenu" (click)="onCollapseActionMenu()">
       <div class="sat-portfolioBreakdownRow__cta-actionMenu-top">
