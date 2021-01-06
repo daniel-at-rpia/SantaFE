@@ -1,11 +1,16 @@
 import { Action } from '@ngrx/store';
 import { StructureActions } from 'Structure/actions/structure.actions';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  BreakdownViewFilter,
+  PortfolioShortNames
+} from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewData,
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
@@ -13,6 +18,9 @@ export interface StructureState {
   reloadFundDataPostEdit: BEPortfolioStructuringDTO;
   updateTick: number;
   viewData: StructureSetViewData;
+  activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
+  dataDatestamp: number;
 }
 
 const initialState: StructureState = {
@@ -20,7 +28,18 @@ const initialState: StructureState = {
   setTargetTransfer: null,
   reloadFundDataPostEdit: null,
   updateTick: 0,
-  viewData: null
+  viewData: null,
+  activeBreakdownViewFilter: BreakdownViewFilter.overridesOnly,
+  activePortfolioViewFilter: [
+    PortfolioShortNames.FIP,
+    PortfolioShortNames.BBB,
+    PortfolioShortNames.CIP,
+    PortfolioShortNames.STIP,
+    PortfolioShortNames.AGB,
+    PortfolioShortNames.DOF,
+    PortfolioShortNames.SOF
+  ],
+  dataDatestamp: moment().unix()
 }
 
 export function structureReducer(
@@ -54,6 +73,21 @@ export function structureReducer(
       return {
         ...state,
         updateTick: state.updateTick + 1
+      };
+    case StructureActions.ChangeBreakdownViewFilter:
+      return {
+        ...state,
+        activeBreakdownViewFilter: action.filterOption
+      };
+    case StructureActions.ChangePortfolioViewFilter:
+      return {
+        ...state,
+        activePortfolioViewFilter: action.filterOption
+      };
+    case StructureActions.SwitchDataDatestamp:
+      return {
+        ...state,
+        dataDatestamp: action.dateStampInUnix
       };
     default:
       return state;

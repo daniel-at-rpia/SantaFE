@@ -631,6 +631,16 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
+  &--isViewingHistoricalData {
+    #{$blockName} {
+      &__cta {
+        &-actionMenu-top-viewBtn {
+          visibility: hidden;
+          pointer-events: none;
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__cta {

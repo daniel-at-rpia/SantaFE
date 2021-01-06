@@ -1,6 +1,6 @@
 <article [ngClass]="{
   'sat-fundStructuring': true,
-  'sat-fundStructuring--editAvailableState': fund.state.isEditAvailable,
+  'sat-fundStructuring--editAvailableState': fund.state.isEditAvailable && !fund.state.isViewingHistoricalData,
   'sat-fundStructuring--editingState': fund.state.isEditingFund,
   'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCreditDuration || fund.state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable,
@@ -83,7 +83,7 @@
   </section>
   <section *ngIf="fund.data" class="sat-fundStructuring__content">
     <ul class="sat-fundStructuring__content-breakdownList">
-      <li class="sat-fundStructuring__content-breakdownList-item" *ngFor="let eachBreakdown of fund.data.children">
+      <li class="sat-fundStructuring__content-breakdownList-item" *ngFor="let eachBreakdown of fund.data.displayChildren">
         <portfolio-breakdown
           [breakdownData]="eachBreakdown"
           [dataIsReady]="!fund.state.isStencil"

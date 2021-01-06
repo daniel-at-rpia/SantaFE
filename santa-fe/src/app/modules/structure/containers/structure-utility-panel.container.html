@@ -1,37 +1,109 @@
 <article
   [ngClass]="{
     'sat-structureUtilityPanel': true,
-    'sat-structureUtilityPanel--tongueExpanded': state.isExpanded,
     'sat-structureUtilityPanel--cs01Selected': state.selectedMetricValue === constants.cs01,
-    'sat-structureUtilityPanel--creditLeverageSelected': state.selectedMetricValue === constants.leverage
+    'sat-structureUtilityPanel--creditLeverageSelected': state.selectedMetricValue === constants.leverage,
+    'sat-structureUtilityPanel--viewBreakdownOverridesOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.overridesOnly,
+    'sat-structureUtilityPanel--viewBreakdownBICSOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.BICSOnly,
+    'sat-structureUtilityPanel--viewBreakdownRegularsOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.regularsOnly,
+    'sat-structureUtilityPanel--viewBreakdownAll': state.activeBreakdownViewFilter === constants.breakdownViewFilter.all,
+    'sat-structureUtilityPanel--viewingHistoricalData': state.viewingHistoricalData
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
-    <div class="sat-structureUtilityPanel__metricSelect-metric sat-structureUtilityPanel__metricSelect-metric--creditLeverge">
-      <span class="sat-structureUtilityPanel__metricSelect-metric-selectedLabel">Selected</span>
-      <span class="sat-structureUtilityPanel__metricSelect-metric-title">{{constants.leverage}}</span>
-      <button class="sat-structureUtilityPanel__metricSelect-metric-btn" (click)="setMetricLevel(constants.leverage)">
-        <i class="fal fa-check"></i>
-      </button>
+    <div class="sat-structureUtilityPanel__metricSelect-top">
+      <span class="sat-structureUtilityPanel__metricSelect-top-label">Show Data In Metric</span>
     </div>
-    <div class="sat-structureUtilityPanel__metricSelect-metric sat-structureUtilityPanel__metricSelect-metric--cs01">
-      <span class="sat-structureUtilityPanel__metricSelect-metric-selectedLabel">Selected</span>
-      <span class="sat-structureUtilityPanel__metricSelect-metric-title">{{constants.cs01}} / {{constants.creditDuration}}</span>
-      <button class="sat-structureUtilityPanel__metricSelect-metric-btn" (click)="setMetricLevel(constants.cs01)">
-        <i class="fal fa-check"></i>
+    <div class="sat-structureUtilityPanel__metricSelect-bottom">
+      <div class="sat-structureUtilityPanel__metricSelect-bottom-ctas santaBtnGroup">
+        <button (click)="setMetricLevel(constants.leverage)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditLeverage">{{constants.leverage}}</button>
+        <button (click)="setMetricLevel(constants.cs01)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditDuration">{{constants.cs01}} / {{constants.creditDuration}}</button>
+      </div>
+    </div>
+  </section>
+  <section class="sat-structureUtilityPanel__breakdownSelect">
+    <div class="sat-structureUtilityPanel__breakdownSelect-top">
+      <span class="sat-structureUtilityPanel__breakdownSelect-top-label">Viewing Breakdowns</span>
+    </div>
+    <div class="sat-structureUtilityPanel__breakdownSelect-bottom">
+      <div class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas santaBtnGroup">
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.overridesOnly)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-overrides santaBtn--labelled">
+          <i class="fal fa-star"></i>
+          <span>{{constants.breakdownViewFilter.overridesOnly}}</span>
+        </button>
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.BICSOnly)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-BICS santaBtn--labelled">
+          <i class="fal fa-industry-alt"></i>
+          <span>{{constants.breakdownViewFilter.BICSOnly}}</span>
+        </button>
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.regularsOnly)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-regulars santaBtn--labelled">
+          <i class="fal fa-award"></i>
+          <span>{{constants.breakdownViewFilter.regularsOnly}}</span>
+        </button>
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.all)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-all">
+          <span>{{constants.breakdownViewFilter.all}}</span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <section class="sat-structureUtilityPanel__portfolioSelect">
+    <div class="sat-structureUtilityPanel__portfolioSelect-top">
+      <span class="sat-structureUtilityPanel__portfolioSelect-top-label">Viewing Portfolios</span>
+    </div>
+    <div class="sat-structureUtilityPanel__portfolioSelect-bottom">
+      <button
+        (click)="onClickPortfolioFilterChange(eachFund)"
+        *ngFor="let eachFund of constants.portfolios"
+        [ngClass]="{
+          'sat-structureUtilityPanel__portfolioSelect-bottom-btn': true,
+          'sat-structureUtilityPanel__portfolioSelect-bottom-btn--selected': state.activePortfolioViewFilter.indexOf(eachFund) >= 0
+        }">
+        {{eachFund}}
       </button>
     </div>
   </section>
-  <section class="sat-structureUtilityPanel__tongue" (click)="onToggleTongueExpand()">
-    <span class="sat-structureUtilityPanel__tongue-text">Showing Data At</span>
-    <span class="sat-structureUtilityPanel__tongue-highlightText"> {{state.lastUpdateTime}}</span>
-    <div class="sat-structureUtilityPanel__tongue-bar">
-      <i class="fal fa-bars"></i>
+  <section class="sat-structureUtilityPanel__dateSwitch">
+    <div class="sat-structureUtilityPanel__dateSwitch-top">
+      <span class="sat-structureUtilityPanel__dateSwitch-top-label">Showing Today's Data</span>
+      <span class="sat-structureUtilityPanel__dateSwitch-top-label sat-structureUtilityPanel__dateSwitch-top-label--history">Showing Historical Data On</span>
+      <span class="sat-structureUtilityPanel__dateSwitch-top-highlightText">{{state.currentDatestampDisplayText}}</span>
+    </div>
+    <div class="sat-structureUtilityPanel__dateSwitch-bottom">
+      <button (click)="onClickSwitchDateBackOneWeek()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
+        <i class="fal fa-arrow-left"></i>
+        <span>1 W</span>
+      </button>
+      <button (click)="onClickSwitchDateBackOneDay()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn santaBtn--small santaBtn--labelled">
+        <i class="fal fa-arrow-left"></i>
+        <span>1 D</span>
+      </button>
+      <button (click)="onClickSwitchDateForwardOneDay()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn sat-structureUtilityPanel__dateSwitch-bottom-btn--forward santaBtn--small santaBtn--labelled">
+        <i class="fal fa-arrow-right"></i>
+        <span>1 D</span>
+      </button>
+      <button (click)="onClickSwitchDateForwardOneWeek()" class="sat-structureUtilityPanel__dateSwitch-bottom-btn sat-structureUtilityPanel__dateSwitch-bottom-btn--forward santaBtn--small santaBtn--labelled">
+        <i class="fal fa-arrow-right"></i>
+        <span>1 W</span>
+      </button>
     </div>
   </section>
   <section class="sat-structureUtilityPanel__updateNow">
-    <span class="sat-structureUtilityPanel__updateNow-label">Update Now</span>
-    <button (click)="onClickUpdateNow()" class="sat-structureUtilityPanel__updateNow-btn">
-      <i class="fal fa-cloud-download"></i>
-    </button>
+    <div class="sat-structureUtilityPanel__updateNow-top">
+      <span class="sat-structureUtilityPanel__updateNow-top-label">At</span>
+      <span class="sat-structureUtilityPanel__updateNow-top-label sat-structureUtilityPanel__updateNow-top-label--historicalData">At Beginning Of Day</span>
+      <span class="sat-structureUtilityPanel__updateNow-top-highlightText"> {{state.lastUpdateTime}}</span>
+    </div>
+    <div class="sat-structureUtilityPanel__updateNow-bottom">
+      <button (click)="onClickUpdateNow()" class="sat-structureUtilityPanel__updateNow-bottom-updateNowBtn santaBtn--labelled">
+        <i class="fal fa-cloud-download"></i>
+        <span>Update Now</span>
+      </button>
+      <button (click)="onClickBackToToday()" class="sat-structureUtilityPanel__updateNow-bottom-backToTodayBtn santaBtn--labelled">
+        <i class="fal fa-clock"></i>
+        <span>Back to Today</span>
+      </button>
+      <div class="sat-structureUtilityPanel__updateNow-bottom-icon">
+        <i class="sat-structureUtilityPanel__updateNow-bottom-icon-today fal fa-clock"></i>
+        <i class="sat-structureUtilityPanel__updateNow-bottom-icon-history fal fa-monument"></i>
+      </div>
+    </div>
   </section>
 </article>

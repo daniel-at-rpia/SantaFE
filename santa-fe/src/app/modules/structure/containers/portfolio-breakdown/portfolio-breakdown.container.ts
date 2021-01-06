@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+import * as moment from 'moment';
 
 import {
   UtilityService,
@@ -30,6 +31,7 @@ import {
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -43,7 +45,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   @Input() dataIsReady: boolean;
   @Output() clickedEdit = new EventEmitter<PortfolioBreakdownDTO>();
   subscriptions = {
-    ownerInitialsSub: null
+    ownerInitialsSub: null,
+    dataDatestampSub: null
   };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
@@ -69,6 +72,17 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     ).subscribe((initials) => {
       this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
       this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
+    });
+    this.subscriptions.dataDatestampSub = this.store$.pipe(
+      select(selectDataDatestamp)
+    ).subscribe((datestampInUnix) => {
+      this.breakdownData.state.isViewingHistoricalData = !moment.unix(datestampInUnix).isSame(moment(), 'day');
+      this.breakdownData.data.rawCs01CategoryList.forEach((eachRow) => {
+        eachRow.state.isViewingHistoricalData = this.breakdownData.state.isViewingHistoricalData;
+      });
+      this.breakdownData.data.rawLeverageCategoryList.forEach((eachRow) => {
+        eachRow.state.isViewingHistoricalData = this.breakdownData.state.isViewingHistoricalData;
+      });
     });
   }
 
