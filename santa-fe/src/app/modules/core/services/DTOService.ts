@@ -2640,8 +2640,9 @@ export class DTOService {
         inputLabelDisplay: inputLabelEmpty,
         inputLabelEmpty: inputLabelEmpty,
         inputLabelFilled: inputLabelFilled,
-        minDate: minDate || moment('2020-01-01'),
-        maxDate: maxDate || moment()
+        minDate: minDate || moment('2020-11-13'),
+        maxDate: maxDate || moment(),
+        receivedExternalChangeDate: null
       },
       api: {
         datepicker: null

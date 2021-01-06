@@ -66,7 +66,10 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
       viewingHistoricalData: false,
-      switchDateDatepicker: this.dtoService.formSantaDatepicker('Choose Historical Date', 'Date')
+      switchDate: {
+        datepicker: this.dtoService.formSantaDatepicker('Choose Historical Date', 'Date'),
+        changeDate: null
+      }
     };
   }
 
@@ -163,8 +166,11 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onClickBackToToday() {
+  public onClickBackToToday(updateDatepicker: boolean = false) {
     const now = moment();
+    if (!!updateDatepicker) {
+      this.state.switchDate.changeDate = now;
+    }
     this.updateDataDatestamp(now);
     this.state.lastUpdateTime = now.format('hh:mm:ss a');
   }

@@ -69,34 +69,36 @@ html {
 /***********
   Basic resets
 ***********/
+  body {
+    margin: 0;
+  }
+  // have to wrap all the resets in it because otherwise it messes up the styling for Angular Material.
+  // TODO: #366 
   app-root, santa-modal {
-    *{
+    * {
       box-sizing: border-box;
       font-size: $font_size_small;
     }
-    body{
-      margin: 0;
-    }
-    ul{
+    ul {
       list-style: none;
       margin: 0;
       padding: 0;
     }
-    label{
+    label {
       margin-bottom: 0;
     }
-    button{
+    button {
       @extend .santaBtn;
       font-weight: 400;
       font-family: "SantaOpenSans";
       line-height: $line_height_default;
     }
-    input{
+    input {
       @extend .santaInputElement;
       font-weight: 400;
       font-family: "SantaOpenSans";
     }
-    table{
+    table {
       @extend .santaTable;
     }
     p {

@@ -10,10 +10,10 @@
         class="sat-datepicker__form-content-input"
         matInput
         [matDatepicker]="picker"
-        [formControl]="datepickerDTO.data.formControl || formControl"
+        [formControl]="formControl"
         [min]="datepickerDTO.data.minDate"
         [max]="datepickerDTO.data.maxDate"
-        placeholder="dd/mm/yyyy"
+        placeholder="mm/dd/yyyy"
         (dateInput)="onDateValueChange('input', $event)"
         (dateChange)="onDateValueChange('change', $event)">
       <mat-datepicker

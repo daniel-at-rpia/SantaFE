@@ -16,6 +16,7 @@ export interface SantaDatePicker extends BasicFormDTOStructure {
     inputLabelFilled: string;
     minDate: moment.Moment;
     maxDate: moment.Moment;
+    receivedExternalChangeDate: moment.Moment;
   },
   api: {
     datepicker: MatDatepicker<moment.Moment>;

@@ -307,7 +307,10 @@ export interface StructureUtilityPanelState {
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   viewingHistoricalData: boolean;
-  switchDateDatepicker: SantaDatePicker;
+  switchDate: {
+    datepicker: SantaDatePicker;
+    changeDate: moment.Moment;
+  }
 }
 
 export interface StructureSetTargetPanelState {
