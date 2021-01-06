@@ -310,6 +310,7 @@ export interface PortfolioBreakdownCategoryBlock {
   children?: DTOs.PortfolioBreakdownDTO; // used in popover dive-in
   displayedSubLevelRows?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used for BICS hierarchy display in main BICS panel and set target modal
   displayedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used to indicate which sub levels have targets
+  editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
 }
 export interface GlobalNavLegendBlock {

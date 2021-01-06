@@ -234,6 +234,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!notOneOffEdit) {
       targetCategory.isLocked = true;
       this.calculateAllocation();
+      if (this.state.targetBreakdown.state.isBICs && targetCategory.rowDTO) {
+        this.setNumberOfSubLevelRowEdits(targetCategory);
+      }
       this.refresh();
     }
   }
@@ -1424,5 +1427,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     rowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
       this.updateRowVisualizer(row, rawBreakdownCopy, minValue, maxValue,isCs01, isBICS);
     })
+  }
+
+  private setNumberOfSubLevelRowEdits(targetCategory: StructureSetTargetPanelEditRowBlock) {
+    const hierarchyList = this.bicsService.getTargetSpecificHierarchyList(targetCategory.rowDTO.data.code, targetCategory.rowDTO.data.bicsLevel);
+    if (hierarchyList.length > 0) {
+      const selectedBreakdownList: Array<StructurePortfolioBreakdownRowDTO> = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+      hierarchyList.forEach((listItem: BICsHierarchyBlock) => {
+        const rawListEquivalent = selectedBreakdownList.find(selectedRow => selectedRow.data.code === listItem.code);
+        if (!!rawListEquivalent) {
+          const ifExists = rawListEquivalent.data.editedSubLevelRowsWithTargets.find(displayedRow => displayedRow.data.code === targetCategory.rowDTO.data.code);
+          !ifExists && rawListEquivalent.data.editedSubLevelRowsWithTargets.push(targetCategory.rowDTO);
+        }
+      })
+    }
   }
 }

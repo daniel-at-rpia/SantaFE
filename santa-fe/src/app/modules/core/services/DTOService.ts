@@ -2314,6 +2314,7 @@ export class DTOService {
         parentRow: null,
         displayedSubLevelRows: [],
         displayedSubLevelRowsWithTargets: [],
+        editedSubLevelRowsWithTargets: [],
         code: code
       };
       eachCategoryBlock.diffToTargetDisplay = this.utility.getRowDiffToTargetText(eachCategoryBlock.diffToTarget, isCs01);
