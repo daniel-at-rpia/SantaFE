@@ -31,7 +31,7 @@
       TradeStoreResetEvent,
       TradeCenterPanelLoadTableWithFilterEvent
     } from 'Trade/actions/trade.actions';
-    import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { GlobalWorkflowTypes, GLOBAL_WORKFLOW_STATE_ID_KEY } from 'Core/constants/coreConstants.constant';
     import { SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
   //
 
@@ -50,7 +50,8 @@ export class TradePage implements OnInit, OnDestroy {
     ownerInitialsSub: null
   };
   constants = {
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    stateId: GLOBAL_WORKFLOW_STATE_ID_KEY
   }
 
   private initializePageState() {
@@ -79,7 +80,7 @@ export class TradePage implements OnInit, OnDestroy {
     this.store$.dispatch(new TradeStoreResetEvent());
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       tap(params => {
-        const state = this.globalWorkflowIOService.fetchState(params.get('stateId'));
+        const state = this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
         if (!!state) {
           if (state.data.workflowType === this.constants.globalWorkflowTypes.launchTradeToSeeBonds) {
             if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {

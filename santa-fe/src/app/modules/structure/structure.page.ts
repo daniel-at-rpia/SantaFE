@@ -16,15 +16,19 @@
     } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import {
+      DTOService,
+      UtilityService,
+      RestfulCommService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { StructureState } from 'FEModels/frontend-page-states.interface';
-    import { StructureStoreResetEvent } from 'Structure/actions/structure.actions';
+    import { StructureStoreResetEvent, StructureUtilityPanelLoadStateEvent } from 'Structure/actions/structure.actions';
     import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
     import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from 'FEModels/frontend-blocks.interface';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+    import { GLOBAL_WORKFLOW_STATE_ID_KEY, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 
   //
 
@@ -40,7 +44,9 @@ export class StructurePage implements OnInit, OnDestroy {
     routeChange: null
   };
   constants = {
-    editModalId: STRUCTURE_EDIT_MODAL_ID
+    editModalId: STRUCTURE_EDIT_MODAL_ID,
+    stateId: GLOBAL_WORKFLOW_STATE_ID_KEY,
+    workflowType: GlobalWorkflowTypes
   };
 
   private initializePageState(): StructureState {
@@ -64,7 +70,8 @@ export class StructurePage implements OnInit, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private bicsDataProcessingService: BICsDataProcessingService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private globalWorkflowIOService: GlobalWorkflowIOService
   ) {
     this.state = this.initializePageState();
   }
@@ -75,6 +82,18 @@ export class StructurePage implements OnInit, OnDestroy {
     this.fetchBICsHierarchy();
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       tap(params => {
+        const state = this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
+        if (!!state) {
+          switch(state.data.workflowType) {
+            case this.constants.workflowType.changedStructureUtilityConfig: 
+              if (!!state.data.stateInfo && !!state.data.stateInfo.structureUtilityPanelSnapshot) {
+                this.store$.dispatch(new StructureUtilityPanelLoadStateEvent(state.data.stateInfo.structureUtilityPanelSnapshot));
+              }
+              break;
+            default:
+              break;
+          }
+        }
       })
     ).subscribe();
   }

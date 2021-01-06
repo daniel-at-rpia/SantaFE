@@ -290,5 +290,8 @@ export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;
 export enum GlobalWorkflowTypes {
   genericType = 'Generic',
   launchTradeToSeeBonds = 'Launch Trade To See Bonds',
-  routeHandlerPlaceholder = 'Placeholder for Route Handler'
+  routeHandlerPlaceholder = 'Placeholder for Route Handler',
+  changedStructureUtilityConfig = 'Changed Structure Utility Config'
 }
+
+export const GLOBAL_WORKFLOW_STATE_ID_KEY = 'stateId';

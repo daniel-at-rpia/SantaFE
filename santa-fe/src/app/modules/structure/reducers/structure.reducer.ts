@@ -9,6 +9,7 @@ import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewData,
 } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
 import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 import * as moment from 'moment';
 
@@ -21,6 +22,7 @@ export interface StructureState {
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   dataDatestamp: number;
+  utilityPanelLoadState: StructureUtilityPanelState;
 }
 
 const initialState: StructureState = {
@@ -39,7 +41,8 @@ const initialState: StructureState = {
     PortfolioShortNames.DOF,
     PortfolioShortNames.SOF
   ],
-  dataDatestamp: moment().unix()
+  dataDatestamp: moment().unix(),
+  utilityPanelLoadState: null
 }
 
 export function structureReducer(
@@ -88,6 +91,11 @@ export function structureReducer(
       return {
         ...state,
         dataDatestamp: action.dateStampInUnix
+      };
+    case StructureActions.UtilityPanelLoadState:
+      return {
+        ...state,
+        utilityPanelLoadState: action.panelState
       };
     default:
       return state;

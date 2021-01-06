@@ -10,6 +10,7 @@ import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewData
 } from 'FEModels/frontend-adhoc-packages.interface';
+import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
 import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 
 export enum StructureActions {
@@ -21,7 +22,8 @@ export enum StructureActions {
   UpdateMainPanel = '[Structure] Update Main Panel',
   ChangeBreakdownViewFilter = '[Structure] Change Breakdown View Filter',
   ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter',
-  SwitchDataDatestamp = '[Structure] Switch Data Datestamp'
+  SwitchDataDatestamp = '[Structure] Switch Data Datestamp',
+  UtilityPanelLoadState = '[Structure] Utility Panel Load State'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -87,5 +89,13 @@ export class StructureSwitchDataDatestampEvent implements Action {
   readonly dateStampInUnix: number;
   constructor(dateStampInMoment: moment.Moment) {
     this.dateStampInUnix = parseInt(dateStampInMoment.format('X'));
+  }
+}
+
+export class StructureUtilityPanelLoadStateEvent implements Action {
+  readonly type = StructureActions.UtilityPanelLoadState;
+  readonly panelState: StructureUtilityPanelState;
+  constructor(panelState: StructureUtilityPanelState) {
+    this.panelState = panelState;
   }
 }

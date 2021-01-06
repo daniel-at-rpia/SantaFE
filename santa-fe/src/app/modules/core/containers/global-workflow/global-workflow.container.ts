@@ -48,7 +48,7 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
           if (!newState.state.triggersRedirect) {
             // don't block current thread
             setTimeout(function(){
-              history.pushState(newState, newState.data.workflowType, `/${newState.data.module}/${newState.data.uuid}`);
+              history.pushState(null, newState.data.workflowType, `/${newState.data.module}/${newState.data.uuid}`);
             }, 1);
           }
           if (!this.state.currentState || this.state.currentState.data.uuid !== newState.data.uuid) {

@@ -16,7 +16,8 @@ import {
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
   selectActivePortfolioViewFilter,
-  selectDataDatestamp
+  selectDataDatestamp,
+  selectUtilityPanelLoadState
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
@@ -27,6 +28,8 @@ import {
   StructureSwitchDataDatestampEvent
 } from 'Structure/actions/structure.actions';
 import { UtilityService, DTOService } from 'Core/services';
+import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'structure-utility-panel',
@@ -42,7 +45,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     lastUpdateSub: null,
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
-    dataDatestampSub: null
+    dataDatestampSub: null,
+    utilityPanelLoadStateSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -50,7 +54,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     creditDuration: PortfolioMetricValues.creditDuration,
     breakdownViewFilter: BreakdownViewFilter,
     portfolios: SUPPORTED_PORTFOLIO_LIST,
-    beginningOfDay: UTILITY_PANEL_HISTORICAL_TIME_LABEL
+    beginningOfDay: UTILITY_PANEL_HISTORICAL_TIME_LABEL,
+    modules: NavigationModule,
+    globalWorkflowTypes: GlobalWorkflowTypes
   }
 
   constructor(
@@ -111,6 +117,14 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     ).subscribe((newDatestampInUnix) => {
       this.updateDataDatestamp(moment.unix(newDatestampInUnix), true);
     });
+
+    this.subscriptions.utilityPanelLoadStateSub = this.store$.pipe(
+      select(selectUtilityPanelLoadState)
+    ).subscribe((newState) => {
+      if (!!newState) {
+        this.setMetricLevel(newState.selectedMetricValue);
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -122,13 +136,17 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
   }
 
-  public setMetricLevel(metricLevel: PortfolioMetricValues) {
+  public setMetricLevel(
+    metricLevel: PortfolioMetricValues,
+    pushToGlobalState: boolean = false
+  ) {
     if (metricLevel !== this.state.selectedMetricValue) {
       this.state.selectedMetricValue = metricLevel;
       const dispatchMetricChange = () => {
         this.store$.dispatch(new StructureMetricSelect(metricLevel));
       };
       setTimeout(dispatchMetricChange.bind(this), 300);
+      !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
     }
   }
 
@@ -188,6 +206,12 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       this.state.lastUpdateTime = 'Beginning of Day';
     }
     !skipNgRX && this.store$.dispatch(new StructureSwitchDataDatestampEvent(this.state.currentDatestamp));
+  }
+
+  private pushStateSnapshotToGlobalState() {
+    const newState = this.dtoService.formGlobalWorkflow(this.constants.modules.structuring, false, this.constants.globalWorkflowTypes.changedStructureUtilityConfig);
+    newState.data.stateInfo.structureUtilityPanelSnapshot = this.utilityService.deepCopy(this.state);
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
   }
 
 }

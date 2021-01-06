@@ -41,3 +41,8 @@ export const selectDataDatestamp = createSelector(
   getStructureState,
   (state: StructureState) => state.dataDatestamp
 );
+
+export const selectUtilityPanelLoadState = createSelector(
+  getStructureState,
+  (state: StructureState) => state.utilityPanelLoadState
+);

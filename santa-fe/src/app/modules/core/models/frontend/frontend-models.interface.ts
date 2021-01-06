@@ -33,6 +33,7 @@ import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.const
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
+import { StructureUtilityPanelState } from './frontend-page-states.interface';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -910,6 +911,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
       filterList?: Array<SecurityDefinitionDTO>;
+      structureUtilityPanelSnapshot?: StructureUtilityPanelState;
     }
   },
   api: {
