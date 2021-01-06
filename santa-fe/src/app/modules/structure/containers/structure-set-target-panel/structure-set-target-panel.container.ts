@@ -469,49 +469,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public getSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
     if (!!targetRow) {
-      if (!targetRow.state.isDoveIn) {
-        targetRow.state.isDoveIn = true;
-        const oppositeRowList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
-        const oppositeRow = oppositeRowList.find(row => row.data.code === targetRow.data.code);
-        if (!!oppositeRow) {
-          oppositeRow.state.isDoveIn = true;
-        }
-        const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
-        const subBreakdown = this.bicsService.formSubLevelBreakdown(targetRow, isCs01, this.state.targetBreakdown.data.displayCategoryList);
-        targetRow.data.children = subBreakdown;
-        if (!!targetRow.data.children && targetRow.data.children.data.rawCs01CategoryList.length > 0 && targetRow.data.children.data.rawLeverageCategoryList.length > 0) {
-          this.updateBICSpecificPropertiesForSubLevels(targetRow.data.children.data.rawCs01CategoryList, true);
-          this.updateBICSpecificPropertiesForSubLevels(targetRow.data.children.data.rawLeverageCategoryList, false);
-          targetRow.data.children.data.rawCs01CategoryList.forEach(rawCs01 => {
-            const newEditRow = this.loadEditRowsReturnNewRow(rawCs01);
-            const creditLeverageRowEquivalent = targetRow.data.children.data.rawLeverageCategoryList.find(rawLeverageRow => rawLeverageRow.data.code === rawCs01.data.code);
-            if (!!creditLeverageRowEquivalent) {
-              newEditRow.targetCreditLeverage.level.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetLevel ? `${creditLeverageRowEquivalent.data.targetLevel}` : null;
-              newEditRow.targetCreditLeverage.level.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetLevel ? creditLeverageRowEquivalent.data.raw.targetLevel : null;
-              newEditRow.targetCreditLeverage.percent.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetPct ? `${creditLeverageRowEquivalent.data.targetPct}` : null;
-              newEditRow.targetCreditLeverage.percent.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetPct ? creditLeverageRowEquivalent.data.raw.targetPct : null;
-            }
-            const parentIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === targetRow.data.code);
-            const editRowIndex = parentIndex + 1;
-            if (parentIndex >= 0) {
-              this.state.editRowList.splice(editRowIndex, 0, newEditRow);
-            }
-            this.updateDisplayedSubLevelsLists(rawCs01, this.state.targetBreakdown.data.rawCs01CategoryList, isCs01);
-            this.updateDisplayedSubLevelsLists(creditLeverageRowEquivalent, this.state.targetBreakdown.data.rawLeverageCategoryList, isCs01);
-            this.updateDisplayedSubLevelsListWithTargets(rawCs01, true, isCs01);
-            this.updateDisplayedSubLevelsListWithTargets(creditLeverageRowEquivalent, false, isCs01);
-          })
-        }
+      if (targetRow.data.displayedSubLevelRows.length <= 0) {
+        this.createSubLevelEditRows(targetRow);
       } else {
-        targetRow.state.isDoveIn = false;
-        targetRow.state.isShowingSubLevels = false;
-        targetRow.data.displayedSubLevelRows.forEach(displayedSubLevel => {
-          const editRowListIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === displayedSubLevel.data.code);
-          if (editRowListIndex >= 0 ) {
-            this.state.editRowList.splice(editRowListIndex, 1);
-          }
-        })
-        targetRow.data.displayedSubLevelRows = [];
+        if (!!targetRow.state.isDoveIn) {
+          this.toggleEditRowDTODiveInState(targetRow, false)
+        } else {
+         this.toggleEditRowDTODiveInState(targetRow, true, targetRow.data.bicsLevel + 1);
+        }
       }
     }
   }
@@ -612,7 +577,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       isLocked: false,
       isEven: false,
       existInServer: true,
-      rowDTO: null
+      rowDTO: null,
+      isVisible: true
     };
     if (this.state.targetBreakdown.state.isBICs) {
       if (this.state.activeMetric === this.constants.metric.cs01) {
@@ -1240,11 +1206,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       cs01Row.state.isWithinEditRow = true;
       cs01Row.state.isStencil = false;
       cs01Row.data.moveVisualizer.state.isStencil = false;
+      cs01Row.data.displayedSubLevelRows = [];
     });
     leverageLevelOneList.forEach(creditLeverageRow => {
       creditLeverageRow.state.isWithinEditRow = true;
       creditLeverageRow.state.isStencil = false;
       creditLeverageRow.data.moveVisualizer.state.isStencil = false;
+      creditLeverageRow.data.displayedSubLevelRows = [];
     });
     targetBreakdown.data.rawCs01CategoryList = cs01LevelOneList;
     targetBreakdown.data.rawLeverageCategoryList = leverageLevelOneList;
@@ -1292,17 +1260,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (targetRawList.length > 0) {
           const targetListEquivalent = targetRawList.find(targetRow => targetRow.data.code === category.code);
           if (!!targetListEquivalent) {
+            const copy = this.utilityService.deepCopy(row);
             if (targetListEquivalent.data.displayedSubLevelRows.length > 0) {
               const equivalentDisplayedSubLevelRow = targetListEquivalent.data.displayedSubLevelRows.find(displayedSubLevel => displayedSubLevel.data.code === row.data.code);
-              !equivalentDisplayedSubLevelRow && targetListEquivalent.data.displayedSubLevelRows.push(row);
+              !equivalentDisplayedSubLevelRow && targetListEquivalent.data.displayedSubLevelRows.push(copy);
             } else {
-              targetListEquivalent.data.displayedSubLevelRows.push(row);
+              targetListEquivalent.data.displayedSubLevelRows.push(copy);
             }
             targetListEquivalent.state.isShowingSubLevels = true;
             if (!!isDisplayList) {
               const editRowEquivalent = this.state.editRowList.find(editRow => editRow.rowDTO.data.code === category.code);
               if (!!editRowEquivalent) {
                 editRowEquivalent.rowDTO.data.displayedSubLevelRows = targetListEquivalent.data.displayedSubLevelRows;
+                editRowEquivalent.rowDTO.state.isShowingSubLevels = true;
               }
             }
           }
@@ -1351,4 +1321,68 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     row.data.diffToTargetDisplay = displayText;
   }
 
+  private toggleEditRowDTODiveInState(row: StructurePortfolioBreakdownRowDTO, diveInState: boolean, level: number = null) {
+    row.state.isDoveIn = diveInState;
+    row.state.isShowingSubLevels = diveInState;
+    const parsedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = !!level ? row.data.displayedSubLevelRows.filter(displayListRow => displayListRow.data.bicsLevel === level) : row.data.displayedSubLevelRows;
+    parsedDisplayList.forEach(parsedDisplayRow => {
+      parsedDisplayRow.state.isDoveIn = false;
+      const editRowListIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === parsedDisplayRow.data.code);
+      if (editRowListIndex >= 0 ) {
+        this.state.editRowList[editRowListIndex].isVisible = diveInState;
+        this.resetSubLevelStatesToShowFurtherLevels(this.state.editRowList[editRowListIndex].rowDTO, false);
+      }
+      const rawCs01Equivalent = this.state.targetBreakdown.data.rawCs01CategoryList.find(rawCs01Row => rawCs01Row.data.code === parsedDisplayRow.data.code);
+      if (!!rawCs01Equivalent) {
+        this.resetSubLevelStatesToShowFurtherLevels(rawCs01Equivalent, false);
+      }
+      const rawLeverageEquivalent = this.state.targetBreakdown.data.rawLeverageCategoryList.find(rawLeverageRow => rawLeverageRow.data.code === parsedDisplayRow.data.code);
+      if (!!rawLeverageEquivalent) {
+        this.resetSubLevelStatesToShowFurtherLevels(rawLeverageEquivalent, false);
+      }
+    })
+  }
+
+  private createSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
+    targetRow.state.isDoveIn = true;
+    const rawCs01Row = this.state.targetBreakdown.data.rawCs01CategoryList.find(rawCs01 => rawCs01.data.code === targetRow.data.code);
+    if (!!rawCs01Row) {
+      rawCs01Row.state.isDoveIn = true;
+    }
+    const rawCreditLeverageRow = this.state.targetBreakdown.data.rawLeverageCategoryList.find(rawCreditLeverage => rawCreditLeverage.data.code === targetRow.data.code);
+    if (!!rawCreditLeverageRow) {
+      rawCreditLeverageRow.state.isDoveIn = true;
+    }
+    const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+    const subBreakdown = this.bicsService.formSubLevelBreakdown(targetRow, isCs01, this.state.targetBreakdown.data.displayCategoryList);
+    targetRow.data.children = subBreakdown;
+    if (!!targetRow.data.children && targetRow.data.children.data.rawCs01CategoryList.length > 0 && targetRow.data.children.data.rawLeverageCategoryList.length > 0) {
+      this.updateBICSpecificPropertiesForSubLevels(targetRow.data.children.data.rawCs01CategoryList, true);
+      this.updateBICSpecificPropertiesForSubLevels(targetRow.data.children.data.rawLeverageCategoryList, false);
+      targetRow.data.children.data.rawCs01CategoryList.forEach(rawCs01 => {
+        const newEditRow = this.loadEditRowsReturnNewRow(rawCs01);
+        const creditLeverageRowEquivalent = targetRow.data.children.data.rawLeverageCategoryList.find(rawLeverageRow => rawLeverageRow.data.code === rawCs01.data.code);
+        if (!!creditLeverageRowEquivalent) {
+          newEditRow.targetCreditLeverage.level.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetLevel ? `${creditLeverageRowEquivalent.data.targetLevel}` : null;
+          newEditRow.targetCreditLeverage.level.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetLevel ? creditLeverageRowEquivalent.data.raw.targetLevel : null;
+          newEditRow.targetCreditLeverage.percent.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetPct ? `${creditLeverageRowEquivalent.data.targetPct}` : null;
+          newEditRow.targetCreditLeverage.percent.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetPct ? creditLeverageRowEquivalent.data.raw.targetPct : null;
+        }
+        const parentIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === targetRow.data.code);
+        const editRowIndex = parentIndex + 1;
+        if (parentIndex >= 0) {
+          this.state.editRowList.splice(editRowIndex, 0, newEditRow);
+        }
+        this.updateDisplayedSubLevelsLists(rawCs01, this.state.targetBreakdown.data.rawCs01CategoryList, isCs01);
+        this.updateDisplayedSubLevelsLists(creditLeverageRowEquivalent, this.state.targetBreakdown.data.rawLeverageCategoryList, isCs01);
+        this.updateDisplayedSubLevelsListWithTargets(rawCs01, true, isCs01);
+        this.updateDisplayedSubLevelsListWithTargets(creditLeverageRowEquivalent, false, isCs01);
+      })
+    }
+  }
+
+  private resetSubLevelStatesToShowFurtherLevels(row: StructurePortfolioBreakdownRowDTO, state: boolean) {
+    row.state.isDoveIn = state;
+    row.state.isShowingSubLevels = state;
+  }
 }

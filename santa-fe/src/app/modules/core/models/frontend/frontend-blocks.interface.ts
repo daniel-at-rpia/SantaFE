@@ -333,6 +333,7 @@ export interface StructureSetTargetPanelEditRowBlock {
   isLocked: boolean;
   isEven: boolean;
   existInServer: boolean;
+  isVisible: boolean;
   rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
 }
 

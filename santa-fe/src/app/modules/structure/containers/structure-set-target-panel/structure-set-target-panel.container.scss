@@ -415,7 +415,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
 .sat-structureSetTargetEditRow {
   $blockName: &;
   @include mix_alive('custom', $animation_duration_light background-color);
-  display: flex;
+  display: none;
   background-color: $color_gray_2;
   &__details {
     flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
@@ -568,6 +568,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         }
       }
     }
+  }
+  &--visibleState {
+    display: flex;
   }
   &--evenState {
     background-color: $color_blue_gray_1;
