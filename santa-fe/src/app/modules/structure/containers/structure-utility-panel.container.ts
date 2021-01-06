@@ -8,7 +8,8 @@ import {
   PortfolioMetricValues,
   BreakdownViewFilter,
   SUPPORTED_PORTFOLIO_LIST,
-  PortfolioShortNames
+  PortfolioShortNames,
+  UTILITY_PANEL_HISTORICAL_TIME_LABEL
 } from 'Core/constants/structureConstants.constants';
 import {
   selectMetricLevel,
@@ -48,7 +49,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     leverage: PortfolioMetricValues.creditLeverage,
     creditDuration: PortfolioMetricValues.creditDuration,
     breakdownViewFilter: BreakdownViewFilter,
-    portfolios: SUPPORTED_PORTFOLIO_LIST
+    portfolios: SUPPORTED_PORTFOLIO_LIST,
+    beginningOfDay: UTILITY_PANEL_HISTORICAL_TIME_LABEL
   }
 
   constructor(
