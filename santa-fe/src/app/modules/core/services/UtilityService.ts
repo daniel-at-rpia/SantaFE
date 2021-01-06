@@ -1423,7 +1423,7 @@ export class UtilityService {
     }
 
     public getRowDiffToTarget(currentLevel: number, targetLevel: number, isCs01: boolean): number {
-      return !!isCs01 ? this.round((targetLevel - currentLevel)/1000,0) : this.round(targetLevel - currentLevel, 2);
+      return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
     }
 
     public getRowDiffToTargetText(amount: number, isCs01: boolean): string {
