@@ -14,14 +14,16 @@ import {
   selectMetricLevel,
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
-  selectActivePortfolioViewFilter
+  selectActivePortfolioViewFilter,
+  selectDataDatestamp
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
   StructureUpdateMainPanelEvent,
   StructureMetricSelect,
   StructureChangeBreakdownViewFilterEvent,
-  StructureChangePortfolioViewFilterEvent
+  StructureChangePortfolioViewFilterEvent,
+  StructureSwitchDataDatestampEvent
 } from 'Structure/actions/structure.actions';
 import { UtilityService } from 'Core/services';
 
@@ -38,7 +40,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     selectedMetricLevelSub: null,
     lastUpdateSub: null,
     activeBreakdownViewFilterSub: null,
-    activePortfolioViewFilterSub: null
+    activePortfolioViewFilterSub: null,
+    dataDatestampSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -57,8 +60,11 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     return {
       selectedMetricValue: null,
       lastUpdateTime: 'n/a',
+      currentDatestamp: null,
+      currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
-      activePortfolioViewFilter: []
+      activePortfolioViewFilter: [],
+      viewingHistoricalData: false
     };
   }
 
@@ -91,6 +97,13 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     ).subscribe((activeFilter) => {
       this.state.activePortfolioViewFilter = activeFilter;
     });
+
+    this.subscriptions.dataDatestampSub = this.store$.pipe(
+      select(selectDataDatestamp),
+      first()  // same reason as above
+    ).subscribe((newDatestampInUnix) => {
+      this.updateDataDatestamp(moment.unix(newDatestampInUnix), true);
+    });
   }
 
   public ngOnDestroy() {
@@ -113,7 +126,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
   }
 
   public onClickUpdateNow() {
-    this.store$.dispatch(new StructureUpdateMainPanelEvent());
+    if (!this.state.viewingHistoricalData) {
+      this.store$.dispatch(new StructureUpdateMainPanelEvent());
+    }
   }
 
   public onClickBreakdownFilterChange(targetFilterOption: BreakdownViewFilter) {
@@ -133,4 +148,60 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
     this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
   }
+
+  public onClickSwitchDateBackOneDay() {
+    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+    newDatestamp.subtract(1, 'days');
+    this.updateDataDatestamp(newDatestamp);
+  }
+
+  public onClickSwitchDateBackOneWeek() {
+    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+    newDatestamp.subtract(1, 'weeks');
+    this.updateDataDatestamp(newDatestamp);
+  }
+
+  public onClickSwitchDateForwardOneDay() {
+    if (this.state.viewingHistoricalData) {
+      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+      newDatestamp.add(1, 'days');
+      if (newDatestamp.isAfter(moment())) {
+        this.onClickBackToToday();
+      } else {
+        this.updateDataDatestamp(newDatestamp);
+      }
+    }
+  }
+
+  public onClickSwitchDateForwardOneWeek() {
+    if (this.state.viewingHistoricalData) {
+      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
+      newDatestamp.add(1, 'weeks');
+      if (newDatestamp.isAfter(moment())) {
+        this.onClickBackToToday();
+      } else {
+        this.updateDataDatestamp(newDatestamp);
+      }
+    }
+  }
+
+  public onClickBackToToday() {
+    const now = moment();
+    this.updateDataDatestamp(now);
+    this.state.lastUpdateTime = now.format('hh:mm:ss a');
+  }
+
+  private updateDataDatestamp(
+    targetDatestampInMoment: moment.Moment,
+    skipNgRX: boolean = false
+  ){
+    this.state.currentDatestamp = targetDatestampInMoment;
+    this.state.currentDatestampDisplayText = this.state.currentDatestamp.format('MMM Do');
+    this.state.viewingHistoricalData = !this.state.currentDatestamp.isSame(moment(), 'day');
+    if (this.state.viewingHistoricalData) {
+      this.state.lastUpdateTime = 'Beginning of Day';
+    }
+    !skipNgRX && this.store$.dispatch(new StructureSwitchDataDatestampEvent(this.state.currentDatestamp));
+  }
+
 }

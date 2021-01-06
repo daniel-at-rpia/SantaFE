@@ -1,4 +1,6 @@
 import { Action } from '@ngrx/store';
+import * as moment from 'moment';
+
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
@@ -18,7 +20,8 @@ export enum StructureActions {
   SetView = '[Structure] View Set For Breakdown Category',
   UpdateMainPanel = '[Structure] Update Main Panel',
   ChangeBreakdownViewFilter = '[Structure] Change Breakdown View Filter',
-  ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter'
+  ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter',
+  SwitchDataDatestamp = '[Structure] Switch Data Datestamp'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -76,5 +79,13 @@ export class StructureChangePortfolioViewFilterEvent implements Action {
   readonly filterOption: Array<PortfolioShortNames>;
   constructor(filterOption: Array<PortfolioShortNames>) {
     this.filterOption = filterOption;
+  }
+}
+
+export class StructureSwitchDataDatestampEvent implements Action {
+  readonly type = StructureActions.SwitchDataDatestamp;
+  readonly dateStampInUnix: number;
+  constructor(dateStampInMoment: moment.Moment) {
+    this.dateStampInUnix = parseInt(dateStampInMoment.format('X'));
   }
 }

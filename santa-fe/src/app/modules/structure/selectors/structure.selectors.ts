@@ -36,3 +36,8 @@ export const selectActivePortfolioViewFilter = createSelector(
   getStructureState,
   (state: StructureState) => state.activePortfolioViewFilter
 );
+
+export const selectDataDatestamp = createSelector(
+  getStructureState,
+  (state: StructureState) => state.dataDatestamp
+);

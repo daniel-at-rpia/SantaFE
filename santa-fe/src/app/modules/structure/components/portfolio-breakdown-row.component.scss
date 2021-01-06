@@ -560,6 +560,16 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
       }
     }
   }
+  &--isViewingHistoricalData {
+    #{$blockName} {
+      &__cta {
+        &-actionMenu-top-viewBtn {
+          visibility: hidden;
+          pointer-events: none;
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__cta {

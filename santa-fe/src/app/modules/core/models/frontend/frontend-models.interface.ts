@@ -754,6 +754,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isEditingViewAvail: boolean;
     isDisplaySubLevels: boolean;
     isDisplayPopover: boolean;
+    isViewingHistoricalData: boolean;
   }
 }
 
@@ -801,6 +802,7 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     }
     autoScalingAvailable: boolean;
     autoScalingActive: boolean;
+    isViewingHistoricalData: boolean;
   }
 }
 
@@ -872,6 +874,7 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isDoveIn: boolean;
     isWithinEditRow: boolean;
     isWithinSetTargetPreview: boolean;
+    isViewingHistoricalData: boolean;
   }
 }
 

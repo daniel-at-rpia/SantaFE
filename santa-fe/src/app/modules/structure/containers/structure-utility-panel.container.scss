@@ -84,6 +84,54 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &__dateSwitch {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: $spacing_small;
+      &-label {
+        color: $font_color_minor;
+        &--history {
+          display: none;
+          margin-right: $spacing_small;
+        }
+      }
+      &-highlightText {
+        @include mix_theme_background;
+        @include mix_border_radius(3px);
+        display: none;
+        flex: 0 0 auto;
+        padding: $spacing_x_small;
+        color: $font_color_inverse;
+      }
+    }
+    &-bottom {
+      display: flex;
+      &-btn {
+        margin: 0 $spacing_x_small;
+        &--forward {
+          @include material('none');
+          @include mix_border_generator;
+          background-color: transparent;
+          cursor: not-allowed;
+          &>i {
+            color: $color_disabled;
+          }
+          &>span {
+            color: $color_disabled;
+          }
+        }
+      }
+    }
+  }
   &__updateNow {
     display: flex;
     flex-direction: column;
@@ -95,6 +143,10 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-label {
         color: $font_color_minor;
         margin-right: $spacing_small;
+        &--historicalData {
+          display: none;
+          margin-right: 0;
+        }
       }
       &-highlightText {
         @include mix_theme_background;
@@ -106,8 +158,29 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &-bottom {
       display: flex;
-      &-btn {
+      &-updateNowBtn {
         flex: 1 1 auto;
+      }
+      &-backToTodayBtn {
+        flex: 1 1 auto;
+        display: none;
+      }
+      &-icon {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: $spacing_medium;
+        &-today {
+          display: inline-block;
+          color: $font_color_major;
+          font-size: $font_size_xx_large;
+        }
+        &-history {
+          display: none;
+          color: $font_color_trivial;
+          font-size: $font_size_xx_large;
+        }
       }
     }
   }
@@ -177,6 +250,67 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &--viewingHistoricalData {
+    #{$blockName} {
+      &__dateSwitch {
+        &-top {
+          &-label {
+            display: none;
+            &--history {
+              display: flex;
+            }
+          }
+          &-highlightText {
+            display: flex;
+          }
+        }
+        &-bottom-btn {
+          &--forward {
+            @include material();
+            border-width: 0;
+            background-color: $color_white;
+            cursor: initial;
+            &>i {
+              color: $font_color_major;
+            }
+            &>span {
+              color: $font_color_major;
+            }
+          }
+        }
+      }
+      &__updateNow {
+        &-top {
+          &-label {
+            display: none;
+            &--historicalData {
+              display: flex;
+            }
+          }
+          &-highlightText {
+            display: none;
+          }
+        }
+        &-bottom {
+          &-updateNowBtn {
+            display: none;
+          }
+          &-backToTodayBtn {
+            display: flex;
+          }
+          &-icon {
+            background: none;
+            &-today {
+              display: none;
+            }
+            &-history {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
   @include mq-x-large-min {
     &__metricSelect {
       flex-direction: row;
@@ -184,6 +318,9 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
       }
     }
     &__breakdownSelect {
@@ -192,6 +329,9 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
       }
     }
     &__portfolioSelect {
@@ -200,10 +340,20 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
       }
       &-bottom {
         flex: 0 1 auto;
         align-self: unset;
+      }
+    }
+    &__dateSwitch {
+      flex-direction: row;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
       }
     }
     &__updateNow {

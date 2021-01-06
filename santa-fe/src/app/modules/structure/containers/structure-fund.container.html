@@ -1,6 +1,6 @@
 <article [ngClass]="{
   'sat-fundStructuring': true,
-  'sat-fundStructuring--editAvailableState': fund.state.isEditAvailable,
+  'sat-fundStructuring--editAvailableState': fund.state.isEditAvailable && !fund.state.isViewingHistoricalData,
   'sat-fundStructuring--editingState': fund.state.isEditingFund,
   'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCreditDuration || fund.state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable,

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
+import * as moment from 'moment';
+
 import { DTOService } from 'Core/services/DTOService';
 import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
 import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
@@ -10,7 +12,8 @@ import {
   selectReloadFundDataPostEdit,
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
-  selectActivePortfolioViewFilter
+  selectActivePortfolioViewFilter,
+  selectDataDatestamp
 } from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
@@ -54,6 +57,7 @@ import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interfa
 export class StructureMainPanel implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
   subscriptions = {
+    receiveNewDateSub: null,
     updateSub: null,
     ownerInitialsSub: null,
     selectedMetricLevelSub: null,
@@ -84,6 +88,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const state: StructureMainPanelState = {
       ownerInitial: null,
       isUserPM: false,
+      currentDataDatestamp: null,
       selectedMetricValue: this.constants.cs01,
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
@@ -98,6 +103,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   
   public ngOnInit() {
     this.state = this.initializePageState();
+    this.subscriptions.receiveNewDateSub = this.store$.pipe(
+      select(selectDataDatestamp)
+    ).subscribe((datestampInUnix) => {
+      this.state.currentDataDatestamp = moment.unix(datestampInUnix);
+      this.fullUpdate();
+    });
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((value) => {
@@ -145,7 +156,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.subscriptions.updateSub = this.store$.pipe(
       select(selectMainPanelUpdateTick)
     ).subscribe((tick) => {
-      if (tick >= 0) {
+      if (tick > 0) {  // ignore the initial page load
         this.fullUpdate();
       }
     });
@@ -177,7 +188,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     const initialWaitForIcons = this.loadStencilFunds.bind(this);
     setTimeout(() => {
       initialWaitForIcons();
-    }, 200);
+    }, 1);
     const loadData = this.fetchFunds.bind(this);
     setTimeout(() => {
       loadData();
@@ -213,14 +224,19 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private fetchFunds() {
-    //If nothing is passed in, BE assumes current date
-    let payload: PayloadGetPortfolioStructures;
+    let payload: PayloadGetPortfolioStructures = {
+      yyyyMMdd: parseInt(this.state.currentDataDatestamp.format('YYYYMMDD'))
+    };
     const endpoint = this.restfulCommService.apiMap.getPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
         this.processStructureData(serverReturn);
+        const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
+        this.state.fetchResult.fundList.forEach((eachFund) => {
+          eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
+        });
       }),
       catchError(err => {
         setTimeout(() => {

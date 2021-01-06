@@ -2038,7 +2038,8 @@ export class DTOService {
         autoScalingAvailable: !isStencil 
           ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
           : false,
-        autoScalingActive: true
+        autoScalingActive: true,
+        isViewingHistoricalData: false
       }
     };
     try {
@@ -2142,7 +2143,8 @@ export class DTOService {
         isOverrideVariant: false,
         isEditingViewAvail: false,
         isDisplaySubLevels: false,
-        isDisplayPopover: false
+        isDisplayPopover: false,
+        isViewingHistoricalData: false
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
@@ -2391,7 +2393,8 @@ export class DTOService {
         isEditingViewAvail: false,
         isDoveIn: false,
         isWithinEditRow: false,
-        isWithinSetTargetPreview: false
+        isWithinSetTargetPreview: false,
+        isViewingHistoricalData: false
       }
     }
     return object;
