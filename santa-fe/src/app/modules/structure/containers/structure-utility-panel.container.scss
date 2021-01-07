@@ -161,8 +161,9 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     }
     &-bottom {
       display: flex;
+      align-self: flex-end;
       &-updateNowBtn {
-        flex: 1 1 auto;
+        // flex: 1 1 auto;
       }
       &-backToTodayBtn {
         flex: 1 1 auto;
