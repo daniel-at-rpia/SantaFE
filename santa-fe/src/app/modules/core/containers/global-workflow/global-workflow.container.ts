@@ -1,6 +1,7 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { Router, ActivatedRoute } from '@angular/router';
+    import { Location } from '@angular/common';
     import { Observable, Subscription, interval, of } from 'rxjs';
     import { tap, first, withLatestFrom, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
@@ -31,7 +32,8 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private utilityService: GlobalServices.UtilityService,
-    private GlobalWorkflowIOService: GlobalServices.GlobalWorkflowIOService
+    private GlobalWorkflowIOService: GlobalServices.GlobalWorkflowIOService,
+    private angularLocation: Location
   ) {
     this.state = {
       currentState: null
@@ -48,8 +50,9 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
           if (!newState.state.triggersRedirect) {
             // don't block current thread
             setTimeout(function(){
-              history.pushState(null, newState.data.workflowType, `/${newState.data.module}/${newState.data.uuid}`);
-            }, 1);
+              // angular's Location API is a wrapper on History API that go through more logic within the angular application before calling History API
+              this.angularLocation.go(`/${newState.data.module}/${newState.data.uuid}`);
+            }.bind(this), 1);
           }
           if (!this.state.currentState || this.state.currentState.data.uuid !== newState.data.uuid) {
             this.storeState(newState);

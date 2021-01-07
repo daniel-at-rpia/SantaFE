@@ -137,7 +137,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       const navigateToStructuring = () => {
         const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring, true);
         this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
-        this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+        // no need to record this state, since it's meant as going to a diff module with a fresh state, recording it causs problem in history
       };
       setTimeout(navigateToStructuring.bind(this), 500);
     }
@@ -149,7 +149,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       const navigateToTrade = () => {
         const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.trade, true);
         this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
-        this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+        // no need to record this state, since it's meant as going to a diff module with a fresh state, recording it causs problem in history
       }
       setTimeout(navigateToTrade.bind(this), 500);
     };
