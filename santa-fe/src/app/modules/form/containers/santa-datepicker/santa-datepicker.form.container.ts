@@ -5,6 +5,7 @@ import * as moment from 'moment';
 
 import { SantaDatePicker } from '../../models/form-models.interface';
 import { UtilityService } from 'Core/services';
+import { datepickerInputEvents } from '../../constants/formConstants.constants';
 
 @Component({
   selector: 'santa-datepicker',
@@ -21,6 +22,10 @@ export class SantaDatepicker implements OnInit, OnChanges {
 
   protected formControl = new FormControl(null);
 
+  constants = {
+    inputEvents: datepickerInputEvents
+  }
+
   constructor(
     private utilityService: UtilityService
   ) {
@@ -33,7 +38,6 @@ export class SantaDatepicker implements OnInit, OnChanges {
 
   public ngOnChanges() {
     if (!!this.changeDate && !this.changeDate.isSame(this.datepickerDTO.data.receivedExternalChangeDate, 'day')) {
-      console.log('test, got here');
       this.datepickerDTO.data.receivedExternalChangeDate = this.utilityService.deepCopy(this.changeDate);
       this.formControl.setValue(this.datepickerDTO.data.receivedExternalChangeDate);
     }
@@ -52,9 +56,9 @@ export class SantaDatepicker implements OnInit, OnChanges {
     source: string,
     event: MatDatepickerInputEvent<moment.Moment>
   ) {
-    if (source === 'input') {
+    if (source === this.constants.inputEvents.typingInInput) {
       // user is changing the input manually
-    } else if (source === 'change') {
+    } else if (source === this.constants.inputEvents.dateSelectionInBothInputAndDatepicker) {
       // a change is submitted either via datepicker or manually chaning the input
       this.datepickerDTO.state.opened = false;
       if (!!event.value && moment.isMoment(event.value)) {

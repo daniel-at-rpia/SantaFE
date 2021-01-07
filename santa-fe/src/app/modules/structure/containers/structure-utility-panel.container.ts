@@ -185,7 +185,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.state.currentDatestampDisplayText = this.state.currentDatestamp.format('MMM Do');
     this.state.viewingHistoricalData = !this.state.currentDatestamp.isSame(moment(), 'day');
     if (this.state.viewingHistoricalData) {
-      this.state.lastUpdateTime = 'Beginning of Day';
+      this.state.lastUpdateTime = this.constants.beginningOfDay;
     }
     !skipNgRX && this.store$.dispatch(new StructureSwitchDataDatestampEvent(this.state.currentDatestamp));
   }

@@ -14,8 +14,8 @@
         [min]="datepickerDTO.data.minDate"
         [max]="datepickerDTO.data.maxDate"
         placeholder="mm/dd/yyyy"
-        (dateInput)="onDateValueChange('input', $event)"
-        (dateChange)="onDateValueChange('change', $event)">
+        (dateInput)="onDateValueChange(constants.inputEvents.typingInInput, $event)"
+        (dateChange)="onDateValueChange(constants.inputEvents.dateSelectionInBothInputAndDatepicker, $event)">
       <mat-datepicker
         #picker
         class="sat-datepicker__form-content-datepicker"
