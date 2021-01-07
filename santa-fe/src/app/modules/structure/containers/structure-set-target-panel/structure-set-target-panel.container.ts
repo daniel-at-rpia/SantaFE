@@ -231,6 +231,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetLevel = targetCategory.targetCreditLeverage.level.savedUnderlineValue;
       this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
     }
+    const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+    this.updateRowTargetValues(targetCategory, isCs01, this.state.targetBreakdown.state.isBICs);
     if (!notOneOffEdit) {
       targetCategory.isLocked = true;
       this.calculateAllocation();
@@ -1440,6 +1442,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           !ifExists && rawListEquivalent.data.editedSubLevelRowsWithTargets.push(targetCategory.rowDTO);
         }
       })
+    }
+  }
+
+  private updateRowTargetValues(targetCategory: StructureSetTargetPanelEditRowBlock, isCs01: boolean, isBICS: boolean) {
+    const selectedRowList = !!isCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+    const rowListEquivalent = selectedRowList.find(row => !!isBICS ? row.data.code === targetCategory.targetBlockFromBreakdown.code : row.data.displayCategory === targetCategory.rowIdentifier);
+    if (!!rowListEquivalent) {
+      const selectedMetricValue = !!isCs01 ? targetCategory.targetCs01 : targetCategory.targetCreditLeverage;
+      rowListEquivalent.data.targetLevel = selectedMetricValue.level.savedUnderlineValue;
+      rowListEquivalent.data.targetPct = selectedMetricValue.percent.savedUnderlineValue;
     }
   }
 }
