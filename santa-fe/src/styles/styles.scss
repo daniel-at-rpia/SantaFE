@@ -1,5 +1,13 @@
 // global rem setting for responsiveness
+
 @import 'global';
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+// angular material styling resets
+.mat-form-field-infix {
+  width: unset!important;
+}
 
 html {
   font-size: 14px;
@@ -61,48 +69,53 @@ html {
 /***********
   Basic resets
 ***********/
-  *{
-    box-sizing: border-box;
-    font-size: $font_size_small;
-  }
-  body{
+  body {
     margin: 0;
   }
-  ul{
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  // have to wrap all the resets in it because otherwise it messes up the styling for Angular Material.
+  // TODO: #366 
+  app-root, santa-modal {
+    * {
+      box-sizing: border-box;
+      font-size: $font_size_small;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    label {
+      margin-bottom: 0;
+    }
+    button {
+      @extend .santaBtn;
+      font-weight: 400;
+      font-family: "SantaOpenSans";
+      line-height: $line_height_default;
+    }
+    input {
+      @extend .santaInputElement;
+      font-weight: 400;
+      font-family: "SantaOpenSans";
+    }
+    table {
+      @extend .santaTable;
+    }
+    p {
+      @extend .santa-paragraph;
+    }
+    hr {
+      border-style: none;
+      margin: 0;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+    textarea {
+      @include mix_border_radius(3px);
+      font-weight: 400;
+      font-family: "SantaOpenSans";
+    }
   }
-  label{
-    margin-bottom: 0;
-  }
-  button{
-    @extend .santaBtn;
-    font-weight: 400;
-    font-family: "SantaOpenSans";
-    line-height: $line_height_default;
-  }
-  input{
-    @extend .santaInputElement;
-    font-weight: 400;
-    font-family: "SantaOpenSans";
-  }
-  table{
-    @extend .santaTable;
-  }
-  p {
-    @extend .santa-paragraph;
-  }
-  hr {
-    border-style: none;
-    margin: 0;
-  }
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  textarea {
-    @include mix_border_radius(3px);
-    font-weight: 400;
-    font-family: "SantaOpenSans";
-  }
+  

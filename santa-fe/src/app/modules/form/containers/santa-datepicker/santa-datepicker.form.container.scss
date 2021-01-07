@@ -1,0 +1,36 @@
+@import "global.scss";
+@import "modules/form/form.scss";
+
+$datepicker_form_width: 12rem;
+$datepicker_form_gutterReset_bottom: convert_px_to_rem(-5px);
+.sat-datepicker {
+  $blockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item);
+  display: flex;
+  &__form {
+    width: $datepicker_form_width;
+    padding-right: $spacing_small;
+    margin-bottom: $datepicker_form_gutterReset_bottom;
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+      .mat-form-field-infix {
+        padding: .5em 0;
+      }
+    }
+  }
+  &__trigger {
+    display: flex;
+    align-items: flex-end;
+  }
+  &--openedState {
+    #{$blockName} {
+      &__trigger {
+        &-cta {
+          @include material('none');
+          @extend .santaBtn--inverseLabelled;
+          background-color: $color_active;
+        }
+      }
+    }
+  }
+}
