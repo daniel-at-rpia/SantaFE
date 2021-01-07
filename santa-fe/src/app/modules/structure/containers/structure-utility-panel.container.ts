@@ -123,6 +123,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     ).subscribe((newState) => {
       if (!!newState) {
         this.setMetricLevel(newState.selectedMetricValue);
+        this.onClickBreakdownFilterChange(newState.activeBreakdownViewFilter);
       }
     });
   }
@@ -156,10 +157,14 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onClickBreakdownFilterChange(targetFilterOption: BreakdownViewFilter) {
+  public onClickBreakdownFilterChange(
+    targetFilterOption: BreakdownViewFilter,
+    pushToGlobalState: boolean = false
+  ) {
     if (this.state.activeBreakdownViewFilter !== targetFilterOption) {
       this.state.activeBreakdownViewFilter = targetFilterOption;
       this.store$.dispatch(new StructureChangeBreakdownViewFilterEvent(targetFilterOption));
+      !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
     }
   }
 
