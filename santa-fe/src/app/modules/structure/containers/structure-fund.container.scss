@@ -131,11 +131,13 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     width: 8rem;
   }
   &__content {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     &-breakdownList {
       @include mix_enable_scrollbar('vertical');
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       padding: $spacing_small $spacing_large $spacing_large $spacing_large;
