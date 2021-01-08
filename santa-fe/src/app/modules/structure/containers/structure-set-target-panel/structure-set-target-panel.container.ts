@@ -766,9 +766,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     list.forEach(row => {
       const editRowListEquivalent = !!isBICS ? this.state.editRowList.find(editRowList => editRowList.rowDTO.data.code === row.data.code) : this.state.editRowList.find(editRowList => editRowList.rowIdentifier === row.data.category);
       if (!!editRowListEquivalent) {
-        // stencil is manually toggled to mimic the appearance of the entire row being 'updated'
-        row.state.isStencil = true;
-        row.data.moveVisualizer.state.isStencil = true;
         const rowRawBreakdownDataByMetric = this.getRowRawDataByMetric(row, rawBreakdownData, isCs01, isBICS);
         // unlike visualizers which have to be relative and therefore need to be updated regardless, diffToTarget is dependent on which rows are being updated
         const editRowEquivalentDataByMetric = !!isCs01 ? editRowListEquivalent.targetCs01 : editRowListEquivalent.targetCreditLeverage;
@@ -782,20 +779,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         this.updateRowVisualizer(row, rawBreakdownData, minValue, maxValue, isCs01, isBICS);
         if (!!isBICS) {
-          const rowCopy = this.utilityService.deepCopy(row);
-          editRowListEquivalent.rowDTO = rowCopy;
-          // temporarily remove stencil states for BICS
-          editRowListEquivalent.rowDTO.state.isStencil = false;
-          editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
-        }
-        setTimeout(() => {
           row.state.isStencil = false;
           row.data.moveVisualizer.state.isStencil = false;
-          if (!!isBICS) {
-            editRowListEquivalent.rowDTO.state.isStencil = false;
-            editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
-          }
-        }, 300)
+          editRowListEquivalent.rowDTO = row;
+        }
       }
     })
   }
