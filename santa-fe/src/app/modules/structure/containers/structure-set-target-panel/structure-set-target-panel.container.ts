@@ -286,7 +286,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
       });
       this.calculateAllocation();
-      this.refresh();
     }
   }
 
@@ -317,7 +316,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
       });
       this.calculateAllocation();
-      this.refresh();
     }
   }
 
