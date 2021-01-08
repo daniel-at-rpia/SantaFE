@@ -111,3 +111,5 @@ export enum BreakdownViewFilter {
   regularsOnly = 'Regulars',
   all = 'All'
 }
+
+export const UTILITY_PANEL_HISTORICAL_TIME_LABEL = 'Beginning Of Day';

@@ -8,7 +8,8 @@ import {
   PortfolioMetricValues,
   BreakdownViewFilter,
   SUPPORTED_PORTFOLIO_LIST,
-  PortfolioShortNames
+  PortfolioShortNames,
+  UTILITY_PANEL_HISTORICAL_TIME_LABEL
 } from 'Core/constants/structureConstants.constants';
 import {
   selectMetricLevel,
@@ -25,7 +26,7 @@ import {
   StructureChangePortfolioViewFilterEvent,
   StructureSwitchDataDatestampEvent
 } from 'Structure/actions/structure.actions';
-import { UtilityService } from 'Core/services';
+import { UtilityService, DTOService } from 'Core/services';
 
 @Component({
   selector: 'structure-utility-panel',
@@ -48,12 +49,14 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     leverage: PortfolioMetricValues.creditLeverage,
     creditDuration: PortfolioMetricValues.creditDuration,
     breakdownViewFilter: BreakdownViewFilter,
-    portfolios: SUPPORTED_PORTFOLIO_LIST
+    portfolios: SUPPORTED_PORTFOLIO_LIST,
+    beginningOfDay: UTILITY_PANEL_HISTORICAL_TIME_LABEL
   }
 
   constructor(
     private store$: Store<any>,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    private dtoService: DTOService
   ) {}
 
   private initializePageState(): StructureUtilityPanelState {
@@ -64,7 +67,11 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
-      viewingHistoricalData: false
+      viewingHistoricalData: false,
+      switchDate: {
+        datepicker: this.dtoService.formSantaDatepicker('Choose Historical Date', 'Date'),
+        changeDate: null
+      }
     };
   }
 
@@ -149,44 +156,23 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
   }
 
-  public onClickSwitchDateBackOneDay() {
-    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-    newDatestamp.subtract(1, 'days');
-    this.updateDataDatestamp(newDatestamp);
-  }
-
-  public onClickSwitchDateBackOneWeek() {
-    const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-    newDatestamp.subtract(1, 'weeks');
-    this.updateDataDatestamp(newDatestamp);
-  }
-
-  public onClickSwitchDateForwardOneDay() {
-    if (this.state.viewingHistoricalData) {
-      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-      newDatestamp.add(1, 'days');
-      if (newDatestamp.isAfter(moment())) {
+  public onSelectedDateFromSwitchDateDatepicker(targetDate: moment.Moment) {
+    if (!!targetDate && moment.isMoment(targetDate)) {
+      if (targetDate.isSame(moment(), 'day')) {
         this.onClickBackToToday();
       } else {
-        this.updateDataDatestamp(newDatestamp);
+        this.updateDataDatestamp(targetDate);
       }
+    } else {
+      this.onClickBackToToday();
     }
   }
 
-  public onClickSwitchDateForwardOneWeek() {
-    if (this.state.viewingHistoricalData) {
-      const newDatestamp: moment.Moment = this.utilityService.deepCopy(this.state.currentDatestamp);
-      newDatestamp.add(1, 'weeks');
-      if (newDatestamp.isAfter(moment())) {
-        this.onClickBackToToday();
-      } else {
-        this.updateDataDatestamp(newDatestamp);
-      }
-    }
-  }
-
-  public onClickBackToToday() {
+  public onClickBackToToday(updateDatepicker: boolean = false) {
     const now = moment();
+    if (!!updateDatepicker) {
+      this.state.switchDate.changeDate = now;
+    }
     this.updateDataDatestamp(now);
     this.state.lastUpdateTime = now.format('hh:mm:ss a');
   }
@@ -199,7 +185,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.state.currentDatestampDisplayText = this.state.currentDatestamp.format('MMM Do');
     this.state.viewingHistoricalData = !this.state.currentDatestamp.isSame(moment(), 'day');
     if (this.state.viewingHistoricalData) {
-      this.state.lastUpdateTime = 'Beginning of Day';
+      this.state.lastUpdateTime = this.constants.beginningOfDay;
     }
     !skipNgRX && this.store$.dispatch(new StructureSwitchDataDatestampEvent(this.state.currentDatestamp));
   }

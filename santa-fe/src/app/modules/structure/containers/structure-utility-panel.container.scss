@@ -97,20 +97,23 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       justify-content: center;
       align-items: center;
       margin-bottom: $spacing_small;
-      &-label {
-        color: $font_color_minor;
-        &--history {
-          display: none;
-          margin-right: $spacing_small;
-        }
-      }
-      &-highlightText {
+      &-title {
         @include mix_theme_background;
         @include mix_border_radius(3px);
-        display: none;
-        flex: 0 0 auto;
-        padding: $spacing_x_small;
-        color: $font_color_inverse;
+        display: flex;
+        align-items: center;
+        padding: $spacing_xx_small $spacing_x_small;
+        &>i {
+          color: $font_color_inverse;
+          margin-right: $spacing_small;
+        }
+        &-label {
+          color: $font_color_inverse;
+        }
+        &--history {
+          display: none;
+          background: $color_disabled;
+        }
       }
     }
     &-bottom {
@@ -138,8 +141,8 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     justify-content: space-between;
     &-top {
       display: flex;
+      justify-content: center;
       align-items: center;
-      margin-bottom: $spacing_x_small;
       &-label {
         color: $font_color_minor;
         margin-right: $spacing_small;
@@ -152,35 +155,19 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
         @include mix_theme_background;
         @include mix_border_radius(3px);
         flex: 0 0 auto;
-        padding: $spacing_x_small;
+        padding: $spacing_xx_small $spacing_x_small;
         color: $font_color_inverse;
       }
     }
     &-bottom {
       display: flex;
+      align-self: flex-end;
       &-updateNowBtn {
-        flex: 1 1 auto;
+        // flex: 1 1 auto;
       }
       &-backToTodayBtn {
         flex: 1 1 auto;
         display: none;
-      }
-      &-icon {
-        flex: 0 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: $spacing_medium;
-        &-today {
-          display: inline-block;
-          color: $font_color_major;
-          font-size: $font_size_xx_large;
-        }
-        &-history {
-          display: none;
-          color: $font_color_trivial;
-          font-size: $font_size_xx_large;
-        }
       }
     }
   }
@@ -254,14 +241,11 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     #{$blockName} {
       &__dateSwitch {
         &-top {
-          &-label {
+          &-title {
             display: none;
             &--history {
               display: flex;
             }
-          }
-          &-highlightText {
-            display: flex;
           }
         }
         &-bottom-btn {
@@ -297,15 +281,6 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
           }
           &-backToTodayBtn {
             display: flex;
-          }
-          &-icon {
-            background: none;
-            &-today {
-              display: none;
-            }
-            &-history {
-              display: inline-block;
-            }
           }
         }
       }
@@ -354,6 +329,12 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-top {
         margin-bottom: 0;
         margin-right: $spacing_medium;
+        &-title {
+          padding: $spacing_x_small;
+          &>i {
+            font-size: $font_size_x_large;
+          }
+        }
       }
     }
     &__updateNow {
