@@ -228,8 +228,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if (this.state.targetBreakdown.state.isBICs && targetCategory.rowDTO) {
         this.setNumberOfSubLevelRowEdits(targetCategory);
       }
-      this.refresh();
     }
+    this.refresh();
   }
 
   public onClickChangeActiveMetric(newMetric: PortfolioMetricValues) {
