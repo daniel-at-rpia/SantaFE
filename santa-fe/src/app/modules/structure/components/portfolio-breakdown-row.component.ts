@@ -26,7 +26,9 @@ export class PortfolioBreakdownRow {
     improving: PortfolioView.improving,
     neutral: PortfolioView.neutral,
     deteriorating: PortfolioView.deteriorating,
-    negative: PortfolioView.negative
+    negative: PortfolioView.negative,
+    diveInText: 'Dive In',
+    diveOutText: 'Dive Out'
   }
   constructor(
     private store$: Store<any>,
