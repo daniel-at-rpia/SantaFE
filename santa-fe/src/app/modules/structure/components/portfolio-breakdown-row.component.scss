@@ -37,6 +37,38 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       padding: $spacing_xx_small;
       text-align: right;
       flex-direction: row;
+      &-editedTargetAmount {
+        @include mix_border_radius(3px);
+        display: none;
+        position: relative;
+        background-color: $color_active;
+        color: $font_color_inverse;
+        padding: $spacing_xx_small;
+        font-size: $font_size_small;
+        &-tooltip {
+          @include mix_fixed_div(absolute, $z_index_tooltip_lift);
+          display: none;
+          top: -$iconButton_size_x_small;
+          background-color: $color_active;
+          color: $font_color_inverse;
+          padding: $spacing_xx_small;
+          font-size: $font_size_small;
+          white-space: nowrap;
+        }
+        &:hover {
+          #{$blockName} {
+            &__cta {
+              &-btn {
+                &-editedTargetAmount {
+                  &-tooltip {
+                    display: flex;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       &-text {
         flex: 1 1 auto;
         text-align: left;
@@ -465,14 +497,14 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
-  &--level1Row {
+  &--parallelLevel1Row {
     #{$blockName} {
       &__subLevelTargetGauge {
         display: flex;
       }
     }
   }
-  &--level2Row {
+  &--parallelLevel2Row {
     display: none;
     #{$blockName} {
       &__branch {
@@ -486,7 +518,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
-  &--level3Row {
+  &--parallelLevel3Row {
     display: none;
     #{$blockName} {
       &__branch {
@@ -500,7 +532,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
-  &--level4Row {
+  &--parallelLevel4Row {
     display: none;
     #{$blockName} {
       &__branch {
@@ -530,9 +562,9 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
   }
   &--visibleSubLevel {
     &#{$blockName} {
-      &--level2Row,
-      &--level3Row,
-      &--level4Row {
+      &--parallelLevel2Row,
+      &--parallelLevel3Row,
+      &--parallelLevel4Row {
         display: flex;
       }
     }
@@ -556,67 +588,44 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
             margin-top: 0;
           }
         }
-        &-btn {
-          &-editedTargetAmount {
-            @include mix_border_radius(3px);
-            display: flex;
-            position: relative;
-            background-color: $color_active;
-            color: $font_color_inverse;
-            padding: $spacing_xx_small;
-            font-size: $font_size_small;
-            &-tooltip {
-              display: none;
-              position: absolute;
-              top: -$iconButton_size_x_small;
-              background-color: $color_active;
-              color: $font_color_inverse;
-              padding: $spacing_xx_small;
-              font-size: $font_size_small;
-              white-space: nowrap;
-            }
-            &:hover {
-              #{$blockName} {
-                &__cta {
-                  &-btn {
-                    &-editedTargetAmount {
-                      &-tooltip {
-                        display: flex;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-          &-text {
-            margin-right: $spacing_small;
-          }
-        }
       }
       &__subLevelTargetGauge {
         display: flex;
       }
     }
     &#{$blockName} {
-      &--level2Row {
+      &--parallelLevel2Row {
         #{$blockName} {
           &__subLevelTargetGauge {
             margin-left: $portfolioBreakdownRowLevel2LeftOffset;
           }
         }
       }
-      &--level3Row {
+      &--parallelLevel3Row {
         #{$blockName} {
           &__subLevelTargetGauge {
             margin-left: $portfolioBreakdownRowLevel3LeftOffset;
           }
         }
       }
-      &--level4Row {
+      &--parallelLevel4Row {
         #{$blockName} {
           &__subLevelTargetGauge {
             margin-left: $portfolioBreakdownRowLevel4LeftOffset;
+          }
+        }
+      }
+    }
+  }
+  &--hasEditedSubLevels {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-editedTargetAmount {
+            display: flex;
+          }
+          &-text {
+            margin-right: $spacing_small;
           }
         }
       }

@@ -132,12 +132,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
-          if (this.state.targetBreakdown.state.isBICs) {
-            this.setModifiedRowListsForBICSVariant(rawCs01CategoryList, rawLeverageCategoryList, this.state.targetBreakdown);
-          } else {
-            rawCs01CategoryList.forEach(rawCs01 => rawCs01.state.isWithinSetTargetPreview = true);
-            rawLeverageCategoryList.forEach(rawLeverage => rawLeverage.state.isWithinSetTargetPreview = true);
-          }
           this.state.targetBreakdown.state.isPreviewVariant = true;
           if (!!this.state.targetBreakdown.data.popoverMainRow) {
             this.state.targetBreakdown.data.popoverMainRow = null;
@@ -155,11 +149,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
-        this.loadEditRows();
         if (this.state.targetBreakdown.state.isBICs) {
-          this.resetMultipleVisualizers(this.state.targetBreakdown.data.rawCs01CategoryList, true, this.state.targetBreakdown.state.isBICs, true);
-          this.resetMultipleVisualizers(this.state.targetBreakdown.data.rawLeverageCategoryList, false, this.state.targetBreakdown.state.isBICs, true);
+          this.setModifiedRowListsForBICSVariant(rawCs01CategoryList, rawLeverageCategoryList, this.state.targetBreakdown);
+        } else {
+          rawCs01CategoryList.forEach(rawCs01 => rawCs01.state.isWithinSetTargetPreview = true);
+          rawLeverageCategoryList.forEach(rawLeverage => rawLeverage.state.isWithinSetTargetPreview = true);
         }
+        this.loadEditRows();
         this.calculateAllocation();
         this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
         this.loadBICSOptionsIntoConfigurator();
@@ -1209,6 +1205,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     });
     targetBreakdown.data.rawCs01CategoryList = cs01LevelOneList;
     targetBreakdown.data.rawLeverageCategoryList = leverageLevelOneList;
+    this.resetMultipleVisualizers(this.state.targetBreakdown.data.rawCs01CategoryList, true, this.state.targetBreakdown.state.isBICs, true);
+    this.resetMultipleVisualizers(this.state.targetBreakdown.data.rawLeverageCategoryList, false, this.state.targetBreakdown.state.isBICs, true);
   }
 
   private refresh() {
@@ -1246,7 +1244,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     })
   }
 
-  private updateDisplayedSubLevelsLists(row: StructurePortfolioBreakdownRowDTO, targetRawList: Array<StructurePortfolioBreakdownRowDTO>, isDisplayList: boolean) {
+  private updateDisplayedSubLevelsLists(
+    row: StructurePortfolioBreakdownRowDTO,
+    targetRawList: Array<StructurePortfolioBreakdownRowDTO>,
+    isDisplayList: boolean) {
     const hierarchyList: Array<BICsHierarchyBlock> = this.bicsService.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
     if (hierarchyList.length > 0) {
       hierarchyList.forEach((category: BICsHierarchyBlock) => {
@@ -1275,8 +1276,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private updateDisplayedSubLevelsListWithTargets(row: StructurePortfolioBreakdownRowDTO, isCs01List: boolean, isDisplayCs01: boolean) {
-    const prefix = row.data.code;
-    const subCategoryCodes = Object.keys(this.bicsDictionaryLookupService.returnDictionary()).filter(key => key.indexOf(prefix) === 0 && key.length > row.data.code.length);
+    const subCategoryCodes = this.bicsDictionaryLookupService.getBICSSubLevelByCodeGrouping(row.data.code);
     const customRawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, 1);
     if (!!customRawBreakdown) {
       const definitionList: Array<string> = [];
