@@ -469,10 +469,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if (targetRow.data.displayedSubLevelRows.length <= 0) {
         this.createSubLevelEditRows(targetRow);
       } else {
+        const isDisplayCs01 = this.state.activeMetric === this.constants.metric.cs01;
         if (!!targetRow.state.isDoveIn) {
-          this.toggleEditRowDTODiveInState(targetRow, false)
+          this.toggleEditRowDTODiveInState(targetRow, false, isDisplayCs01)
         } else {
-         this.toggleEditRowDTODiveInState(targetRow, true, targetRow.data.bicsLevel + 1);
+         this.toggleEditRowDTODiveInState(targetRow, true, isDisplayCs01, targetRow.data.bicsLevel + 1);
         }
       }
     }
@@ -1299,9 +1300,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     row.data.diffToTargetDisplay = displayText;
   }
 
-  private toggleEditRowDTODiveInState(row: StructurePortfolioBreakdownRowDTO, diveInState: boolean, level: number = null) {
-    row.state.isDoveIn = diveInState;
-    row.state.isShowingSubLevels = diveInState;
+  private toggleEditRowDTODiveInState(row: StructurePortfolioBreakdownRowDTO, diveInState: boolean, isDisplayCs01: boolean, level: number = null) {
+    this.resetSubLevelStatesToShowFurtherLevels(row, diveInState);
+    const oppositeList = !!isDisplayCs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
+    const oppositeListEquivalent = oppositeList.find(oppositeRow => oppositeRow.data.code === row.data.code);
+    if (!!oppositeListEquivalent) {
+      this.resetSubLevelStatesToShowFurtherLevels(oppositeListEquivalent, diveInState);
+    }
     const parsedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = !!level ? row.data.displayedSubLevelRows.filter(displayListRow => displayListRow.data.bicsLevel === level) : row.data.displayedSubLevelRows;
     parsedDisplayList.forEach(parsedDisplayRow => {
       parsedDisplayRow.state.isDoveIn = false;
