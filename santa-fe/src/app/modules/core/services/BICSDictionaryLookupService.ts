@@ -23,8 +23,10 @@ export class BICSDictionaryLookupService {
   public loadBICSData(data: BEBICsHierarchyBlock) {
     this.bicsDictionary = data;
     this.buildReversedBICSHierarchyDictionary(data);
-    this.buildBICSGroupingByCode(data);
-  }
+    if (Object.keys(this.bicsGroupingByCode).length === 0) {
+        this.buildBICSGroupingByCode(data);
+      }
+    }
 
   public returnDictionary(): BEBICsHierarchyBlock {
     return this.bicsDictionary;
@@ -104,7 +106,8 @@ export class BICSDictionaryLookupService {
         const prefix = code.substring(0,2);
         const isPrimaryCodeGroupingExists = Object.keys(this.bicsGroupingByCode).find(key => key === prefix);
         if (!!isPrimaryCodeGroupingExists) {
-          this.bicsGroupingByCode[prefix].push(code);
+          const isExists = this.bicsGroupingByCode[prefix].find(value => value === code);
+          !isExists && this.bicsGroupingByCode[prefix].push(code);
         }
       }
     }
