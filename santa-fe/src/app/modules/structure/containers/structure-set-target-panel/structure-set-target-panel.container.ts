@@ -1367,7 +1367,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           this.state.editRowList.splice(editRowIndex, 0, newEditRow);
         }
         this.updateDisplayedSubLevelsLists(rawCs01, this.state.targetBreakdown.data.rawCs01CategoryList, isCs01);
-        this.updateDisplayedSubLevelsLists(creditLeverageRowEquivalent, this.state.targetBreakdown.data.rawLeverageCategoryList, isCs01);
+        this.updateDisplayedSubLevelsLists(creditLeverageRowEquivalent, this.state.targetBreakdown.data.rawLeverageCategoryList, !isCs01);
         this.updateDisplayedSubLevelsListWithTargets(rawCs01, true, isCs01);
         this.updateDisplayedSubLevelsListWithTargets(creditLeverageRowEquivalent, false, isCs01);
       })
