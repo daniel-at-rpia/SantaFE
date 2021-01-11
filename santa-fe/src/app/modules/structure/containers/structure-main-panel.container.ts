@@ -35,7 +35,11 @@ import {
   PortfolioFundDTO,
   TargetBarDTO
 } from 'Core/models/frontend/frontend-models.interface';
-import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'App/modules/core/models/backend/backend-models.interface';
+import {
+  BEPortfolioStructuringDTO,
+  BEStructuringBreakdownBlock,
+  BEGetPortfolioStructureServerReturn
+} from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
@@ -231,7 +235,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+      tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
         this.processStructureData(serverReturn);
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
@@ -277,7 +281,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+      tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
         this.processStructureData(serverReturn);
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -386,10 +390,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return parsedCustomBICSDefinitionListNoNull;
   }
 
-  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
+  private processStructureData(serverReturn: BEGetPortfolioStructureServerReturn) {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
-      serverReturn.forEach(eachFund => {
+      const nowData = serverReturn.Now;
+      nowData.forEach(eachFund => {
         this.loadFund(eachFund);
       })
       try {
