@@ -142,7 +142,8 @@
               'sat-structureSetTargetEditRow--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs,
               'sat-structureSetTargetEditRow--bicsLevel2Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 2,
               'sat-structureSetTargetEditRow--bicsLevel3Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 3,
-              'sat-structureSetTargetEditRow--bicsLevel4Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 4
+              'sat-structureSetTargetEditRow--bicsLevel4Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 4,
+              'sat-structureSetTargetEditRow--visibleState': eachCategory.isVisible
             }">
             <section class="sat-structureSetTargetEditRow__details">
               <portfolio-breakdown-row

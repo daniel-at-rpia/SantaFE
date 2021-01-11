@@ -126,6 +126,7 @@ export class BICsDataProcessingService {
         const newRowList: Array<StructurePortfolioBreakdownRowDTO> = this.formUIBranchForSubLevels(primaryRowList);
         newRowList.forEach(newRow => {
           this.getDisplayedSubLevelsForCategory(newRow, newRowList);
+          this.getDisplayedSubLevelsWithTargetsForCategory(newRow, newRowList)
         })
         return newRowList;
       } else {
@@ -339,24 +340,14 @@ export class BICsDataProcessingService {
     );
   }
 
-  public getDisplayedSubLevelsForCategory(row: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO>){
-    if (row.data.displayedSubLevelRows.length > 0) {
-      row.data.displayedSubLevelRows.forEach(subLevel => {
-        subLevel.state.isVisibleSubLevel = !!row.state.isShowingSubLevels;
+  public getDisplayedSubLevelsForCategory(targetRow: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO>){
+    if (targetRow.data.displayedSubLevelRows.length > 0) {
+      targetRow.data.displayedSubLevelRows.forEach(subLevel => {
+        subLevel.state.isVisibleSubLevel = !!targetRow.state.isShowingSubLevels;
       })
     } else {
-      const rowIndex = rowList.findIndex(displayRow => displayRow.data.code === row.data.code);
-      const modifiedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = rowList.slice(rowIndex + 1);
-      if (rowIndex >= 0) {
-        for (let i = 0; i < modifiedDisplayList.length; i++) {
-          const isSubLevel = modifiedDisplayList[i].data.code.indexOf(row.data.code) === 0;
-          if (!!isSubLevel) {
-            row.data.displayedSubLevelRows.push(modifiedDisplayList[i])
-          } else {
-            break;
-          }
-        }
-      }
+      const displayedSubLevelList = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel);
+      targetRow.data.displayedSubLevelRows = displayedSubLevelList;
     }
   }
 
@@ -382,6 +373,11 @@ export class BICsDataProcessingService {
         });
       }
     })
+  }
+
+  public getDisplayedSubLevelsWithTargetsForCategory(targetRow: StructurePortfolioBreakdownRowDTO, rowList: Array<StructurePortfolioBreakdownRowDTO> ) {
+    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && !!row.data.targetLevel);
+    targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
   private setBreakdownListProperties(

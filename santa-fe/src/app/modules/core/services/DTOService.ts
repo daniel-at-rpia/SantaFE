@@ -1360,9 +1360,9 @@ export class DTOService {
     max: number,
     min: number,
     isStencil: boolean,
-    groupOption: string,
     isOverride: boolean,
-    diveInLevel: number
+    diveInLevel: number,
+    isCs01: boolean
   ): DTOs.MoveVisualizerDTO {
     const parsedMin = min < 0 ? 0 : min;
     const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
@@ -1427,6 +1427,7 @@ export class DTOService {
         structuringBreakdownExceededState: rawData.targetLevel !== null && rawData.currentLevel > rawData.targetLevel
       }
     };
+    object.data.endPinText = !!isCs01 ? `${object.data.end}k` : `${object.data.end}`;
     return object;
   }
 
@@ -2259,19 +2260,9 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-        parsedRawData.currentLevel = Math.abs(rawCurrentLevel) >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
-      } else {
-        parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
-      }
+      parsedRawData.currentLevel = this.utility.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-          parsedRawData.targetLevel = Math.abs(parsedRawData.targetLevel) >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
-        } else {
-          parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
-        }
+        parsedRawData.targetLevel = this.utility.getRoundedValuesForVisualizer(rawTargetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
@@ -2289,12 +2280,11 @@ export class DTOService {
         maxValue,
         minValue,
         !!isStencil,
-        groupOption,
         isOverride,
-        diveInLevel
+        diveInLevel,
+        isCs01
       );
-      eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
-      const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
+      const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.currentLevel, parsedRawData.targetLevel, isCs01);
 
       const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
@@ -2327,14 +2317,11 @@ export class DTOService {
         simpleBucket: simpleBucket,
         parentRow: null,
         displayedSubLevelRows: [],
+        displayedSubLevelRowsWithTargets: [],
+        editedSubLevelRowsWithTargets: [],
         code: code
       };
-      if (eachCategoryBlock.diffToTarget < 0) {
-        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
-      }
-      if (eachCategoryBlock.diffToTarget > 0) {
-        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
-      }
+      eachCategoryBlock.diffToTargetDisplay = this.utility.getRowDiffToTargetText(eachCategoryBlock.diffToTarget, isCs01);
       const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isBicsBreakdown);
       return eachCategoryBlockDTO;
     } else {

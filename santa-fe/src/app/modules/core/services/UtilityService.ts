@@ -18,7 +18,8 @@
       SecurityGroupMetricBlock,
       SecurityGroupMetricPackBlock,
       SecurityCostPortfolioBlock,
-      TraceTradeBlock
+      TraceTradeBlock,
+      PortfolioBreakdownCategoryBlock
     } from 'FEModels/frontend-blocks.interface';
     import { DefinitionConfiguratorEmitterParams, StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
     import {
@@ -1419,6 +1420,34 @@ export class UtilityService {
           return 0;
         }
       });
+    }
+
+    public getRowDiffToTarget(currentLevel: number, targetLevel: number, isCs01: boolean): number {
+      return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
+    }
+
+    public getRowDiffToTargetText(amount: number, isCs01: boolean): string {
+      let displayText: string;
+      if (amount < 0) {
+        displayText = !!isCs01 ? `${amount}k` : `${amount}`;
+      }
+      if (amount > 0) {
+        displayText = !!isCs01 ? `+${amount}k` : `+${amount}`;
+      }
+      return displayText;
+    }
+
+    public getMetricSpecificMinAndMaxForVisualizer(rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean): Array<number> {
+      const [cs01Min, cs01Max, creditLeverageMin, creditLeverageMax] = this.getCompareValuesForStructuringVisualizer(rawBreakdownData);
+      const minValue = !!isCs01 ? cs01Min/1000 : creditLeverageMin;
+      const maxValue = !!isCs01 ? cs01Max/1000 : creditLeverageMax;
+      return [minValue, maxValue];
+    }
+
+    public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number {
+      // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
+      const roundedValue = !!isCs01 ? Math.abs(value) >= 1000 ? this.round(value/1000, 0) : 0 : this.round(value, 2);
+      return roundedValue;
     }
 
   // structuring specific end

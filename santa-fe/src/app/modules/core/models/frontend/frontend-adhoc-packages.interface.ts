@@ -188,6 +188,10 @@ export interface SecurityDefinitionFilterOptionTenorRange {
   [property:string]: SecurityDefinitionFilterOptionTenorRangeItem
 }
 
+export interface BICSGroupingByCodeBlock {
+  [code: number]: Array<string>;
+}
+
 interface SecurityDefinitionFilterOptionTenorRangeItem {
   displayLabel: string;
   min: number;
