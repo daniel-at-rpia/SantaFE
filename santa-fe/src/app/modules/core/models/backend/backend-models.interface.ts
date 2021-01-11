@@ -621,6 +621,10 @@ export interface BEStructuringMetricTotalBlock {
   CreditDuration: number;
 }
 
+export interface BEGetPortfolioStructureBlock {
+  Now: Array<BEPortfolioStructuringDTO>;
+}
+
 export interface BEPortfolioStructuringDTO {
   date: string;
   portfolioId: number;
