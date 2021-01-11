@@ -649,7 +649,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.totalUnallocatedCreditLeverage = !!this.state.targetFund.data.target.target.creditLeverage ? this.state.targetFund.data.target.target.creditLeverage : this.state.targetFund.data.currentTotals.creditLeverage;
     this.state.remainingUnallocatedCreditLeverage = !!this.state.targetFund.data.target.target.creditLeverage ? this.state.targetFund.data.target.target.creditLeverage : this.state.targetFund.data.currentTotals.creditLeverage;
 
-    if (this.state.targetBreakdown.state.isBICs) {
+    if (!!this.state.targetBreakdown && this.state.targetBreakdown.state.isBICs) {
       const filteredList = this.state.editRowList.filter(editRow => editRow.rowDTO.data.bicsLevel < 2);
       if (filteredList.length > 0) {
         filteredList.forEach((eachRow) => {
