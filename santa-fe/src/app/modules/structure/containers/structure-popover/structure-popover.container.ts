@@ -123,6 +123,7 @@ export class StructurePopover implements OnInit, OnChanges {
     categoryRow.state.isWithinPopover = true;
     this.popover = this.dtoService.formStructurePopoverObject(categoryRow, isCs01);
     this.popover.state.isActive = true;
+    categoryRow.state.isDoveIn = !categoryRow.state.isDoveIn;
   }
 
   public switchPopoverSubLevels(block: PortfolioBreakdownCategoryBlock, activeMetric: PortfolioMetricValues) {

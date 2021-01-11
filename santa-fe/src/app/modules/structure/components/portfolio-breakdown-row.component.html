@@ -64,8 +64,13 @@
       </div>
       <div class="sat-portfolioBreakdownRow__cta-actionMenu-bottom">
         <button (click)="onClickDiveIn(breakdownRow)" class="sat-portfolioBreakdownRow__cta-actionMenu-bottom-diveInBtn santaBtn--circleLabelled">
-          <i class="fal fa-arrow-from-top"></i>
-          <span>Dive In</span>
+          <i [ngClass]="{
+              'fal': true,
+              'fa-arrow-from-bottom': breakdownRow.state.isDoveIn,
+              'fa-arrow-from-top': !breakdownRow.state.isDoveIn
+            }">
+          </i>
+          <span>{{ breakdownRow.state.isDoveIn ? constants.diveOutText : constants.diveInText }}</span>
         </button>
       </div>
     </div>

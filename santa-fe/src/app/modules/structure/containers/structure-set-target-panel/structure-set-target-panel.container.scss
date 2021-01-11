@@ -128,6 +128,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
           @include mix_alive('light');
           width: $structureSetTargetPanel_edit_column_size + $spacing_small;
           height: 100%;
+          pointer-events: none;
         }
         &-header {
           flex: 0 0 auto;
