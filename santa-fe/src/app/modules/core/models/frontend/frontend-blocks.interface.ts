@@ -6,7 +6,7 @@ The main difference between blocks and components is blocks does not carry any c
 Because of this, while component models need to follow "BasicDTOStructure", blocks don't.
 */
 
-import * as DTOs from 'FEModels/frontend-models.interface';
+import * as DTOs from './frontend-models.interface';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
