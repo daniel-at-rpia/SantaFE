@@ -1300,7 +1300,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     row.data.diffToTargetDisplay = displayText;
   }
 
-  private toggleEditRowDTODiveInState(row: StructurePortfolioBreakdownRowDTO, diveInState: boolean, isDisplayCs01: boolean, level: number = null) {
+  private toggleEditRowDTODiveInState(
+    row: StructurePortfolioBreakdownRowDTO,
+    diveInState: boolean,
+    isDisplayCs01: boolean,
+    level: number = null) {
     this.resetSubLevelStatesToShowFurtherLevels(row, diveInState);
     const oppositeList = !!isDisplayCs01 ? this.state.targetBreakdown.data.rawLeverageCategoryList : this.state.targetBreakdown.data.rawCs01CategoryList;
     const oppositeListEquivalent = oppositeList.find(oppositeRow => oppositeRow.data.code === row.data.code);
