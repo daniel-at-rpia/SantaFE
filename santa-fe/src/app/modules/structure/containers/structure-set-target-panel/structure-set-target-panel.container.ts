@@ -238,14 +238,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.activeMetric = newMetric;
       this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric = !this.state.targetFund.data.cs01TargetBar.state.isInactiveMetric;
       this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric = !this.state.targetFund.data.creditLeverageTargetBar.state.isInactiveMetric;
-      this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === this.constants.metric.cs01;
       this.setBtnText();
-      this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
-      if (this.state.targetBreakdown.state.isBICs) {
-        const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
-        this.updateEditRowDTOReferenceBasedOnMetric(selectedList);
-      } else {
-        this.refreshPreview();
+      if (!!this.state.targetBreakdown) {
+        this.state.targetBreakdown.state.isDisplayingCs01 = this.state.activeMetric === this.constants.metric.cs01;
+        this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+        if (this.state.targetBreakdown.state.isBICs) {
+          const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+          this.updateEditRowDTOReferenceBasedOnMetric(selectedList);
+        } else {
+          this.refreshPreview();
+        }
       }
     }
   }
