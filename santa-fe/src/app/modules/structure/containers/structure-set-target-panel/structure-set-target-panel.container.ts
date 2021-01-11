@@ -128,7 +128,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state = this.initializePageState();
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
-        const { rawLeverageCategoryList, rawCs01CategoryList } = this.state.targetBreakdown.data;
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
           this.state.targetBreakdown.data.displayCategoryList = this.state.targetBreakdown.state.isDisplayingCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
@@ -149,11 +148,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
         this.state.activeMetric = pack.targetFund.data.cs01TargetBar.state.isInactiveMetric ? this.constants.metric.creditLeverage : this.constants.metric.cs01;
-        if (this.state.targetBreakdown.state.isBICs) {
-          this.setModifiedRowListsForBICSVariant(rawCs01CategoryList, rawLeverageCategoryList, this.state.targetBreakdown);
-        } else {
-          rawCs01CategoryList.forEach(rawCs01 => rawCs01.state.isWithinSetTargetPreview = true);
-          rawLeverageCategoryList.forEach(rawLeverage => rawLeverage.state.isWithinSetTargetPreview = true);
+        if (!!this.state.targetBreakdown) {
+          if (this.state.targetBreakdown.state.isBICs) {
+            this.setModifiedRowListsForBICSVariant(this.state.targetBreakdown.data.rawCs01CategoryList, this.state.targetBreakdown.data.rawLeverageCategoryList, this.state.targetBreakdown);
+          } else {
+            this.state.targetBreakdown.data.rawCs01CategoryList.forEach(rawCs01 => rawCs01.state.isWithinSetTargetPreview = true);
+            this.state.targetBreakdown.data.rawLeverageCategoryList.forEach(rawLeverage => rawLeverage.state.isWithinSetTargetPreview = true);
+          }
         }
         this.loadEditRows();
         this.calculateAllocation();
