@@ -9,23 +9,13 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
-    import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
     import {
-      SecurityDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableRowDTO,
-      BestQuoteComparerDTO,
-      SearchShortcutDTO,
-      AlertDTO,
-      SecurityTableDTO,
-      AlertCountSummaryDTO,
-      SecurityDefinitionDTO
-    } from 'FEModels/frontend-models.interface';
-    import {
-      TableFetchResultBlock,
-      BICsHierarchyAllDataBlock,
-      BICsHierarchyBlock
-    } from 'FEModels/frontend-blocks.interface';
+      DTOs,
+      Blocks,
+      PageStates,
+      AdhocPacks,
+      Stubs
+    } from 'Core/models/frontend';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
@@ -34,11 +24,6 @@
       BEFetchAllTradeDataReturn,
       BEBICsHierarchyBlock
     } from 'BEModels/backend-models.interface';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      SecurityMapEntry,
-      DefinitionConfiguratorEmitterParamsItem
-    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
@@ -85,7 +70,6 @@
       TradeAlertTableReceiveNewAlertsEvent,
       TradeBICSDataLoadedEvent
     } from 'Trade/actions/trade.actions';
-    import { SecurityTableHeaderConfigStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
   //
 
 @Component({
@@ -96,7 +80,7 @@
 })
 
 export class TradeCenterPanel implements OnInit, OnDestroy {
-  state: TradeCenterPanelState;
+  state: PageStates.TradeCenterPanelState;
   subscriptions = {
     userInitialsSub: null,
     startNewUpdateSub: null,
@@ -122,12 +106,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     filterOptionTenorRange: FilterOptionsTenorRange
   }
 
-  private initializePageState(): TradeCenterPanelState {
+  private initializePageState(): PageStates.TradeCenterPanelState {
     const mainTableMetrics = SecurityTableHeaderConfigs.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
-    const state: TradeCenterPanelState = {
+    const state: PageStates.TradeCenterPanelState = {
       bestQuoteValidWindow: null,
       presets: {
         presetsReady: false,
@@ -276,7 +260,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectPresetCategory(targetCategory: Array<SearchShortcutDTO>) {
+  public onSelectPresetCategory(targetCategory: Array<DTOs.SearchShortcutDTO>) {
     if (this.state.presets.selectedList === targetCategory) {
       this.state.presets.selectedList = null;
     } else {
@@ -284,7 +268,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectPreset(targetPreset: SearchShortcutDTO) {
+  public onSelectPreset(targetPreset: DTOs.SearchShortcutDTO) {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
@@ -337,7 +321,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       );
       this.state.filters.quickFilters.driverType = targetDriver;
       // driver update needs to be to both tables
-      const newMetrics: Array<SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
+      const newMetrics: Array<Stubs.SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
         if (eachMetricStub.content.isDriverDependent && eachMetricStub.content.isAttrChangable) {
           if (targetDriver === this.constants.defaultMetricIdentifier) {
@@ -353,7 +337,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onApplyFilter(params: DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
+  public onApplyFilter(params: AdhocPacks.DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters.portfolios = [];
     this.state.filters.quickFilters.owner = [];
@@ -386,7 +370,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+  public onSelectSecurityForAnalysis(targetSecurity: DTOs.SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
     this.restfulCommService.logEngagement(
       EngagementActionList.selectSecurityForAnalysis,
@@ -396,7 +380,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     );
   }
 
-  public onSelectSecurityForAlertConfig(targetSecurity: SecurityDTO) {
+  public onSelectSecurityForAlertConfig(targetSecurity: DTOs.SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
   }
 
@@ -445,9 +429,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private populateSingleShortcutList(
-    stubList: Array<SearchShortcutStub>
-  ): Array<SearchShortcutDTO> {
-    const list: Array<SearchShortcutDTO> = [];
+    stubList: Array<Stubs.SearchShortcutStub>
+  ): Array<DTOs.SearchShortcutDTO> {
+    const list: Array<DTOs.SearchShortcutDTO> = [];
     stubList.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
@@ -481,7 +465,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private loadInitialStencilTable() {
-    const stencilMainTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
+    const stencilMainTableHeaderBuffer: Array<DTOs.SecurityTableHeaderDTO> = [];
     this.state.table.metrics.forEach((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
@@ -565,8 +549,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   private updateStage(
     stageNumber: number,
-    targetTableBlock: TableFetchResultBlock,
-    targetTableDTO: SecurityTableDTO
+    targetTableBlock: Blocks.TableFetchResultBlock,
+    targetTableDTO: DTOs.SecurityTableDTO
   ) {
     targetTableBlock.currentContentStage = stageNumber;
     if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
@@ -593,9 +577,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private filterPrinstineRowList(
-    targetPrinstineList: Array<SecurityTableRowDTO>
-  ): Array<SecurityTableRowDTO> {
-    const filteredList: Array<SecurityTableRowDTO> = [];
+    targetPrinstineList: Array<DTOs.SecurityTableRowDTO>
+  ): Array<DTOs.SecurityTableRowDTO> {
+    const filteredList: Array<DTOs.SecurityTableRowDTO> = [];
     targetPrinstineList.forEach((eachRow) => {
       try {
         if (!!eachRow && !!eachRow.data && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
@@ -628,8 +612,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private filterBySecurityAttribute(
-    targetRow: SecurityTableRowDTO,
-    targetFilter: DefinitionConfiguratorEmitterParamsItem
+    targetRow: DTOs.SecurityTableRowDTO,
+    targetFilter: AdhocPacks.DefinitionConfiguratorEmitterParamsItem
   ): boolean {
     const targetAttribute = targetFilter.targetAttribute;
     const filterBy = targetFilter.filterBy;
@@ -651,7 +635,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
+  private filterByPortfolio(targetRow: DTOs.SecurityTableRowDTO): boolean {
     const targetSecurity = targetRow.data.security;
     let includeFlag = false;
     if (this.state.filters.quickFilters.portfolios.length > 0) {
@@ -681,7 +665,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     return includeFlag;
   }
 
-  private filterByOwner(targetRow: SecurityTableRowDTO): boolean {
+  private filterByOwner(targetRow: DTOs.SecurityTableRowDTO): boolean {
     let includeFlag = false;
     if (this.state.filters.quickFilters.owner.length > 0) {
       this.state.filters.quickFilters.owner.forEach((eachOwner) => {
@@ -696,7 +680,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     return includeFlag;
   }
 
-  private filterBySeniority(row: SecurityTableRowDTO): boolean {
+  private filterBySeniority(row: DTOs.SecurityTableRowDTO): boolean {
     let includeFlag = false;
     const filterObj = this.state.filters.securityFilters.filter(f => f.targetAttribute === 'seniority')[0];
     if (filterObj) {
@@ -708,7 +692,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     return includeFlag;
   }
 
-  private filterByStrategy(targetRow: SecurityTableRowDTO): boolean {
+  private filterByStrategy(targetRow: DTOs.SecurityTableRowDTO): boolean {
     let includeFlag = false;
     if (this.state.filters.quickFilters.strategy.length > 0) {
       this.state.filters.quickFilters.strategy.forEach((eachStrategy) => {
@@ -724,8 +708,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private filterByBICS(
-    targetRow: SecurityTableRowDTO,
-    targetFilter: DefinitionConfiguratorEmitterParamsItem
+    targetRow: DTOs.SecurityTableRowDTO,
+    targetFilter: AdhocPacks.DefinitionConfiguratorEmitterParamsItem
   ): boolean {
     let includeFlag = false;
     if (targetFilter.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
@@ -744,7 +728,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     return includeFlag;
   }
 
-  private filterByTenor(targetRow: SecurityTableRowDTO): boolean {
+  private filterByTenor(targetRow: DTOs.SecurityTableRowDTO): boolean {
     let includeFlag = false;
     if (this.state.filters.quickFilters.tenor.length > 0) {
       this.state.filters.quickFilters.tenor.forEach((eachTenor) => {
@@ -787,7 +771,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     const targetTable = this.state.fetchResult.mainTable;
     if (securityIDList) {
       if (securityIDList.length > 0) {
-        let securityTableRowDTOList: SecurityTableRowDTO[] = [];
+        let securityTableRowDTOList: Array<DTOs.SecurityTableRowDTO> = [];
         for (let securityTableRowDTO in targetTable.prinstineRowList) {
           for (let securityID of securityIDList) {
             if (targetTable.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
@@ -844,7 +828,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: Object) => {
         if (!!serverReturn) {
-          const map:Array<SecurityMapEntry> = [];
+          const map:Array<AdhocPacks.SecurityMapEntry> = [];
           for (const eachSecurityId in serverReturn) {
             map.push({
               keywords: serverReturn[eachSecurityId],
@@ -859,7 +843,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private autoLoadTable(filterList: Array<SecurityDefinitionDTO>) {
+  private autoLoadTable(filterList: Array<DTOs.SecurityDefinitionDTO>) {
     this.onSelectPreset(this.state.presets.portfolioShortcutList[0]);
     filterList.forEach((eachFilterDefinition) => {
       this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
