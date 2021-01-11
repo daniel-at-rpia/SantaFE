@@ -621,7 +621,7 @@ export interface BEStructuringMetricTotalBlock {
   CreditDuration: number;
 }
 
-export interface BEGetPortfolioStructureBlock {
+export interface BEGetPortfolioStructureServerReturn {
   Now: Array<BEPortfolioStructuringDTO>;
 }
 

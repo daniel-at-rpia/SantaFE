@@ -38,7 +38,7 @@ import {
 import {
   BEPortfolioStructuringDTO,
   BEStructuringBreakdownBlock,
-  BEGetPortfolioStructureBlock
+  BEGetPortfolioStructureServerReturn
 } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -235,7 +235,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: BEGetPortfolioStructureBlock) => {
+      tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
         this.processStructureData(serverReturn);
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
@@ -281,7 +281,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: BEGetPortfolioStructureBlock) => {
+      tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
         this.processStructureData(serverReturn);
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -390,7 +390,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return parsedCustomBICSDefinitionListNoNull;
   }
 
-  private processStructureData(serverReturn: BEGetPortfolioStructureBlock) {
+  private processStructureData(serverReturn: BEGetPortfolioStructureServerReturn) {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
       const nowData = serverReturn.Now;
