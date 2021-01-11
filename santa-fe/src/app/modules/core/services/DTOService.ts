@@ -182,6 +182,10 @@ export class DTOService {
         portfolios: [],
         strategyFirm: '',
         strategyList: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.partitionOptionValues ? rawData.unitPosition.partitionOptionValues.StrategyName : [],
+        weight: {
+          fundCS01Pct: 0,
+          groupCS01Pct: 0
+        },
         position: {
           positionCurrent: 0,
           positionCurrentInMM: 'n/a',
@@ -989,7 +993,7 @@ export class DTOService {
         isAttrChangable: !!stub.content.isAttrChangable,
         readyStage: stub.content.readyStage,
         metricPackDeltaScope: stub.content.metricPackDeltaScope || null,
-        frontendMetric: !!stub.content.isFrontEndMetric,
+        isFrontendAggregation: !!stub.content.isFrontendAggregation,
         isDataTypeText: !!stub.content.isDataTypeText,
         isDriverDependent: !!stub.content.isDriverDependent,
         groupBelongs: stub.content.groupBelongs,

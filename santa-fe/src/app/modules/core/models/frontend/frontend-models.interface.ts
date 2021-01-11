@@ -74,6 +74,10 @@ export interface SecurityDTO extends BasicDTOStructure {
     portfolios: Array<SecurityPortfolioBlock>;
     strategyFirm: string;
     strategyList: Array<string>;
+    weight: {
+      fundCS01Pct: number;
+      groupCS01Pct: number;
+    }
     position: {
       positionCurrent: number;
       positionCurrentInMM: string;
@@ -389,7 +393,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isAttrChangable: boolean;
     readyStage: number;
     metricPackDeltaScope: string;
-    frontendMetric: boolean;
+    isFrontendAggregation: boolean;
     isDataTypeText: boolean;
     isDriverDependent: boolean;
     pinned: boolean;

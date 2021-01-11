@@ -48,6 +48,7 @@ export const SecurityTableHeaderConfigGroups = {
   alert: 'Alert-related',
   mark: 'Mark',
   markDiscrepancies: 'Mark Discrepancies',
+  weight: 'Weight %',
   cost: 'Position Cost',
   position: 'Position (MM)',
   cs01: 'CS01 (k)',
@@ -492,7 +493,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'bestQuote',
       underlineAttrName: 'bid',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontEndMetric: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       tableSpecifics: {
@@ -512,7 +512,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'bestQuote',
       underlineAttrName: 'ask',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontEndMetric: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.bestQuote,
       tableSpecifics: {
@@ -634,7 +633,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'markDisIndexRaw',
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontEndMetric: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
@@ -955,7 +953,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'markDisBidRaw',
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontEndMetric: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
@@ -975,7 +972,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'markDisAskRaw',
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontEndMetric: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
@@ -995,7 +991,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'markDisMidRaw',
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontEndMetric: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
@@ -1015,7 +1010,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'markDisLiquidationRaw',
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontEndMetric: true,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
@@ -1024,6 +1018,48 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'weightFundCS01',
+    content: {
+      label: 'Within <Fund>',
+      attrName: 'fundCS01Pct',
+      underlineAttrName: 'fundCS01Pct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontendAggregation: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          disabled: true,
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'weightTableCS01',
+    content: {
+      label: 'Within Table',
+      attrName: 'groupCS01Pct',
+      underlineAttrName: 'groupCS01Pct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontendAggregation: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          disabled: true,
           active: false
         }
       }

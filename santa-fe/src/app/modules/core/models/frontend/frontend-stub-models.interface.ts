@@ -89,7 +89,7 @@ export interface SecurityTableHeaderConfigStub {
       tradeAlert?: SecurityTableHeaderConfigStubTableSpecificsBlock;
     };
     blockAttrName?: string;
-    isFrontEndMetric?: boolean;
+    isFrontendAggregation?: boolean;  // just because the column is calculated on FE, doesn't mean it need to hanlded differently. The ones that do need to be handled differently are the ones aggregated on FE, so we only care about those
     isForBestQuoteComparer?: boolean;
     isForSecurityCard?: boolean;
     isDataTypeText?: boolean;

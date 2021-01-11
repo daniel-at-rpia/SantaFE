@@ -12,7 +12,11 @@
       SearchShortcutDTO,
       AlertDTO
     } from 'FEModels/frontend-models.interface';
-    import { AlertDTOMap, LiveDataDiffingResult } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      AlertDTOMap,
+      LiveDataDiffingResult,
+      LiveDataAggregateTransferPack
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -346,5 +350,17 @@ export class LiveDataProcessingService {
     // when an old row is overwritten with a new row, some states of the row and the security card needs to be carried over because they are changed by user interaction, if they are not carried over, it would appear like as the interaction got terminated and the row was refreshed
     // this causes bad UX, especially in case of the user is entering stuff in the alert shortcut config UI
     newRow.data.security.state = oldRow.data.security.state;
+  }
+
+  private calculateAggregateMetrics(serverReturn: BEFetchAllTradeDataReturn) {
+    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const transferPack: LiveDataAggregateTransferPack = {
+      fundCS01: 0,
+      tableCS01: 0
+    };
+    for (const eachKey in rawSecurityDTOMap){
+      const eachBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
+      
+    }
   }
 }
