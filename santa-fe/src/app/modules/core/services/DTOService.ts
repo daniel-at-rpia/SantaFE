@@ -2322,7 +2322,8 @@ export class DTOService {
         code: code
       };
       eachCategoryBlock.diffToTargetDisplay = this.utility.getRowDiffToTargetText(eachCategoryBlock.diffToTarget, isCs01);
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isBicsBreakdown);
+      const isDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(eachCategoryBlock.code) : false;
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isDiveIn);
       return eachCategoryBlockDTO;
     } else {
       return null;

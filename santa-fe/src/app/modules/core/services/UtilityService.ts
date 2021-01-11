@@ -21,7 +21,10 @@
       TraceTradeBlock,
       PortfolioBreakdownCategoryBlock
     } from 'FEModels/frontend-blocks.interface';
-    import { DefinitionConfiguratorEmitterParams, StructureOverrideToBreakdownConversionReturnPack } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      DefinitionConfiguratorEmitterParams,
+      StructureOverrideToBreakdownConversionReturnPack
+    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -36,6 +39,7 @@
       AlertSubTypes,
       TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
+    import { BICS_DIVE_IN_UNAVAILABLE_CATEGORIES } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
@@ -1448,6 +1452,11 @@ export class UtilityService {
       // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
       const roundedValue = !!isCs01 ? Math.abs(value) >= 1000 ? this.round(value/1000, 0) : 0 : this.round(value, 2);
       return roundedValue;
+    }
+
+    public checkIfDiveInIsAvailable(code: string): boolean {
+      const isDiveInAvailable = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === code);
+      return !isDiveInAvailable;
     }
 
   // structuring specific end

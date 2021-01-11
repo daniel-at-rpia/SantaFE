@@ -228,8 +228,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       if (this.state.targetBreakdown.state.isBICs && targetCategory.rowDTO) {
         this.setNumberOfSubLevelRowEdits(targetCategory);
       }
-      this.refresh();
     }
+    this.refresh();
   }
 
   public onClickChangeActiveMetric(newMetric: PortfolioMetricValues) {
@@ -286,7 +286,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
       });
       this.calculateAllocation();
-      this.refresh();
     }
   }
 
@@ -317,7 +316,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         );
       });
       this.calculateAllocation();
-      this.refresh();
     }
   }
 
@@ -671,12 +669,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
       });
     }
-    if (this.state.remainingUnallocatedCS01) {
+    if (this.state.remainingUnallocatedCS01 !== null) {
       this.state.displayPercentageUnallocatedCS01 = this.utilityService.round(this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 * 100, 0);
       this.state.displayRemainingUnallocatedCS01 = `${this.utilityService.round(this.state.remainingUnallocatedCS01/1000, 1)} k`;
     }
 
-    if (this.state.remainingUnallocatedCreditLeverage) {
+    if (this.state.remainingUnallocatedCreditLeverage !== null) {
       this.state.displayPercentageUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage * 100, 0);
       this.state.displayRemainingUnallocatedCreditLeverage = this.utilityService.round(this.state.remainingUnallocatedCreditLeverage, 2);
     }
@@ -768,9 +766,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     list.forEach(row => {
       const editRowListEquivalent = !!isBICS ? this.state.editRowList.find(editRowList => editRowList.rowDTO.data.code === row.data.code) : this.state.editRowList.find(editRowList => editRowList.rowIdentifier === row.data.category);
       if (!!editRowListEquivalent) {
-        // stencil is manually toggled to mimic the appearance of the entire row being 'updated'
-        row.state.isStencil = true;
-        row.data.moveVisualizer.state.isStencil = true;
         const rowRawBreakdownDataByMetric = this.getRowRawDataByMetric(row, rawBreakdownData, isCs01, isBICS);
         // unlike visualizers which have to be relative and therefore need to be updated regardless, diffToTarget is dependent on which rows are being updated
         const editRowEquivalentDataByMetric = !!isCs01 ? editRowListEquivalent.targetCs01 : editRowListEquivalent.targetCreditLeverage;
@@ -784,20 +779,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         this.updateRowVisualizer(row, rawBreakdownData, minValue, maxValue, isCs01, isBICS);
         if (!!isBICS) {
-          const rowCopy = this.utilityService.deepCopy(row);
-          editRowListEquivalent.rowDTO = rowCopy;
-          // temporarily remove stencil states for BICS
-          editRowListEquivalent.rowDTO.state.isStencil = false;
-          editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
-        }
-        setTimeout(() => {
           row.state.isStencil = false;
           row.data.moveVisualizer.state.isStencil = false;
-          if (!!isBICS) {
-            editRowListEquivalent.rowDTO.state.isStencil = false;
-            editRowListEquivalent.rowDTO.data.moveVisualizer.state.isStencil = false;
-          }
-        }, 300)
+          editRowListEquivalent.rowDTO = row;
+        }
       }
     })
   }

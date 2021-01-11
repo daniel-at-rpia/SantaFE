@@ -57,6 +57,8 @@ export const BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST: Array<string> = ['None
 
 export const BICS_CODE_DELIMITER_AMOUNT = 2;
 
+export const BICS_DIVE_IN_UNAVAILABLE_CATEGORIES = ['99'];
+
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
   creditLeverage = 'Credit Leverage',
