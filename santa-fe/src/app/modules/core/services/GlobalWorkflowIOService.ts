@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DetachedRouteHandle } from '@angular/router';
 
-import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
+import { DTOs } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
@@ -9,14 +9,14 @@ import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 @Injectable()
 
 export class GlobalWorkflowIOService {
-  private temporaryStore: Map<string, GlobalWorkflowStateDTO> = new Map();
+  private temporaryStore: Map<string, DTOs.GlobalWorkflowStateDTO> = new Map();
 
   constructor(
     private utilityService: UtilityService,
     private dtoService: DTOService
   ){}
 
-  public storeState(targetState: GlobalWorkflowStateDTO) {
+  public storeState(targetState: DTOs.GlobalWorkflowStateDTO) {
     const writableCopy = this.utilityService.deepCopy(targetState);
     const exist = this.temporaryStore.get(writableCopy.data.uuid);
     if (!!exist && exist.data.workflowType === GlobalWorkflowTypes.routeHandlerPlaceholder) {
@@ -25,7 +25,7 @@ export class GlobalWorkflowIOService {
     this.temporaryStore.set(targetState.data.uuid, writableCopy);
   }
 
-  public fetchState(targetUUID: string): GlobalWorkflowStateDTO {
+  public fetchState(targetUUID: string): DTOs.GlobalWorkflowStateDTO {
     if (!!targetUUID) {
       return this.temporaryStore.get(targetUUID) || null;
     } else {

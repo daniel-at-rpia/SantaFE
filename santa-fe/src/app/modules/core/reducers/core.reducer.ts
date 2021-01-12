@@ -4,29 +4,24 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import {
-  AlertDTO,
-  AlertCountSummaryDTO,
-  GlobalWorkflowStateDTO
-} from 'FEModels/frontend-models.interface';
+import { DTOs, AdhocPacks } from 'Core/models/frontend';
 import { CoreActions } from 'Core/actions/core.actions';
-import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
 
 export interface CoreState {
   user: {
     initials: string;
   };
   alert: {
-    newAlerts: Array<AlertDTO>;
-    countByTypeArr: Array<AlertCountSummaryDTO>;
+    newAlerts: Array<DTOs.AlertDTO>;
+    countByTypeArr: Array<DTOs.AlertCountSummaryDTO>;
     displayThumbnail: boolean;
   };
   securityMap: {
     valid: boolean;
-    mapContent: Array<SecurityMapEntry>;
+    mapContent: Array<AdhocPacks.SecurityMapEntry>;
   };
   globalWorkflow: {
-    newState: GlobalWorkflowStateDTO;
+    newState: DTOs.GlobalWorkflowStateDTO;
     currentStateUUID: string;
   }
 }
