@@ -4,20 +4,8 @@
     import * as moment from 'moment';
 
     import * as BEModels from 'BEModels/backend-models.interface';
-    import * as DTOs from 'FEModels/frontend-models.interface';
-    import * as Blocks from 'FEModels/frontend-blocks.interface';
+    import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
     import { SantaDatePicker } from 'Form/models/form-models.interface';
-    import {
-      StructureOverrideToBreakdownConversionReturnPack,
-      CustomBreakdownReturnPack,
-      AdhocExtensionBEMetricBreakdowns
-    } from 'FEModels/frontend-adhoc-packages.interface';
-    import {
-      SecurityDefinitionStub,
-      SecurityDefinitionBundleStub,
-      SecurityTableHeaderConfigStub,
-      SecurityMetricOptionStub
-    } from 'FEModels/frontend-stub-models.interface';
     import { UtilityService } from './UtilityService';
     import {
       SecurityGroupRatingColorScheme,
@@ -576,7 +564,7 @@ export class DTOService {
   }
 
   public formSecurityDefinitionObject(
-    rawData: SecurityDefinitionStub
+    rawData: Stubs.SecurityDefinitionStub
   ): DTOs.SecurityDefinitionDTO {
     const object: DTOs.SecurityDefinitionDTO = {
       data: {
@@ -631,7 +619,7 @@ export class DTOService {
   }
 
   public formSecurityDefinitionBundleObject(
-    stubData: SecurityDefinitionBundleStub
+    stubData: Stubs.SecurityDefinitionBundleStub
   ): DTOs.SecurityDefinitionBundleDTO {
     const object: DTOs.SecurityDefinitionBundleDTO = {
       data: {
@@ -651,7 +639,7 @@ export class DTOService {
     groupByDisabled: boolean,
     noMainCTA: boolean,
     securityAttrOnly: boolean,
-    definitionLayoutMap: Array<SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
+    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = {
       data: {
@@ -975,7 +963,7 @@ export class DTOService {
   }
 
   public formSecurityTableHeaderObject(
-    stub: SecurityTableHeaderConfigStub,
+    stub: Stubs.SecurityTableHeaderConfigStub,
     useSpecificsFrom: string,
     activePortfolios: Array<string>
   ): DTOs.SecurityTableHeaderDTO {
@@ -2163,14 +2151,14 @@ export class DTOService {
       let code: string;
       if (!!rawData.breakdown[eachCategoryText]) {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
-        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel : null;
-        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).code : null;
+        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel : null;
+        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code : null;
       }
       if (!!isOverride) {
         bucket = rawData.breakdown[eachCategoryText].bucket || {};
         simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
+        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel}`;
         bucket[formattedBEKey] = [code];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
@@ -2494,13 +2482,13 @@ export class DTOService {
     rawData: BEModels.BEPortfolioStructuringDTO,
     targetBreakdown: BEModels.BEStructuringBreakdownBlock,
     identifiers: string[]
-  ): CustomBreakdownReturnPack {
+  ): AdhocPacks.CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
     for (let code in customBreakdown.breakdown) {
       const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
       if (!!customBreakdown.breakdown[code] && !!isCodeValid) {
-        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
-        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
+        (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel = 1;
+        (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code = code;
       }
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
@@ -2511,8 +2499,8 @@ export class DTOService {
           if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel <= -1000 || !!selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel) {
             const level = i + 2;
             customBreakdown.breakdown[code] = selectedBreakdown.breakdown[code];
-            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
-            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
+            (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel = level;
+            (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code = code;
           }
         }
       }
@@ -2569,7 +2557,7 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues
   ){
     if(rawData.overrides) {
-      const returnPack: StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
+      const returnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = returnPack.list;
       overrideList.sort((overrideA, overrideB) =>{
         if (overrideA.groupOption > overrideB.groupOption) {

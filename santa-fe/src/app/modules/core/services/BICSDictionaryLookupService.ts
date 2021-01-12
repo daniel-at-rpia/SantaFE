@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
+
+import { AdhocPacks } from '../models/frontend';
 import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
-import {
-  BICSHierarchyDictionaryByLevel,
-  BICSGroupingByCodeBlock
-} from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX } from 'Core/constants/structureConstants.constants';
 
 @Injectable()
 
 export class BICSDictionaryLookupService {
-  private reversedBICSHierarchyDictionary: BICSHierarchyDictionaryByLevel = {
+  private reversedBICSHierarchyDictionary: AdhocPacks.BICSHierarchyDictionaryByLevel = {
     level1: {},
     level2: {},
     level3: {},
     level4: {}
   };
   private bicsDictionary: BEBICsHierarchyBlock;
-  private bicsGroupingByCode: BICSGroupingByCodeBlock = {};
+  private bicsGroupingByCode: AdhocPacks.BICSGroupingByCodeBlock = {};
 
   constructor() {}
 
