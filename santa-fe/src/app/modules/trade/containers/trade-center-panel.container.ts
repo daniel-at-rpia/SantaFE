@@ -9,13 +9,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
-    import {
-      DTOs,
-      Blocks,
-      PageStates,
-      AdhocPacks,
-      Stubs
-    } from 'Core/models/frontend';
+    import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
