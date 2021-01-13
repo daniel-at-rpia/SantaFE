@@ -35,8 +35,7 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       SecurityDefinitionMap,
-      FullOwnerList,
-      FilterOptionsTenorRange
+      FullOwnerList
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioShortcuts,
@@ -96,8 +95,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     alertTypes: AlertTypes,
     keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
     userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
-    devWhitelist: DevWhitelist,
-    filterOptionTenorRange: FilterOptionsTenorRange
+    devWhitelist: DevWhitelist
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -573,168 +571,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   private filterPrinstineRowList(
     targetPrinstineList: Array<DTOs.SecurityTableRowDTO>
   ): Array<DTOs.SecurityTableRowDTO> {
-    const filteredList: Array<DTOs.SecurityTableRowDTO> = [];
-    targetPrinstineList.forEach((eachRow) => {
-      try {
-        if (!!eachRow && !!eachRow.data && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
-          if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
-          || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
-            let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-            let ownerFlag = this.filterByOwner(eachRow);
-            let strategyFlag = this.filterByStrategy(eachRow);
-            let tenorFlag = this.filterByTenor(eachRow);
-            let securityLevelFilterResultCombined = true;
-            if (this.state.filters.securityFilters.length > 0) {
-              const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
-                return this.filterBySecurityAttribute(eachRow, eachFilter);
-              });
-              // as long as one of the filters failed, this security will not show
-              securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
-                return eachResult;
-              }).length === securityLevelFilterResult.length;
-            }
-            strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && tenorFlag && filteredList.push(eachRow);
-          }
-        } else {
-          filteredList.push(eachRow);
-        }
-      } catch(err) {
-        console.error('filter issue', err ? err.message : '', eachRow);
-      }
-    });
-    return filteredList;
-  }
-
-  private filterBySecurityAttribute(
-    targetRow: DTOs.SecurityTableRowDTO,
-    targetFilter: AdhocPacks.DefinitionConfiguratorEmitterParamsItem
-  ): boolean {
-    const targetAttribute = targetFilter.targetAttribute;
-    const filterBy = targetFilter.filterBy;
-    let includeFlag = false;
-    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList' || targetAttribute === 'tenor') {
-      // bypass those filters since they are handled via individual functions
-      return true;
-    } else if (targetAttribute === 'seniority') {
-      return this.filterBySeniority(targetRow);
-    } else if (targetFilter.targetAttributeBlock === 'bics') {
-      return this.filterByBICS(targetRow, targetFilter);
-    } else {
-      filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data[targetAttribute] === eachValue) {
-          includeFlag = true;
-        }
-      });
-      return includeFlag;
-    }
-  }
-
-  private filterByPortfolio(targetRow: DTOs.SecurityTableRowDTO): boolean {
-    const targetSecurity = targetRow.data.security;
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.portfolios.length > 0) {
-      targetRow.data.security.data.position.positionCurrent = 0;
-      targetRow.data.security.data.cs01CadCurrent = 0;
-      targetRow.data.security.data.cs01LocalCurrent = 0;
-      this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-        const portfolioExist = targetRow.data.security.data.portfolios.find((eachPortfolioBlock) => {
-          return eachPortfolioBlock.portfolioName === eachPortfolio;
-        });
-        if (!!portfolioExist) {
-          targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionCurrent + portfolioExist.quantity;
-          targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadCurrent + portfolioExist.cs01Cad;
-          targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalCurrent + portfolioExist.cs01Local;
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-      targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionFirm;
-      targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadFirm;
-      targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalFirm;
-    }
-    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false, true);
-    targetRow.data.security.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01CadCurrent, false);
-    targetRow.data.security.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01LocalCurrent, false);
-    return includeFlag;
-  }
-
-  private filterByOwner(targetRow: DTOs.SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.owner.length > 0) {
-      this.state.filters.quickFilters.owner.forEach((eachOwner) => {
-        const ownerExist = targetRow.data.security.data.owner.indexOf(eachOwner) > -1;
-        if (!!ownerExist) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-    }
-    return includeFlag;
-  }
-
-  private filterBySeniority(row: DTOs.SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    const filterObj = this.state.filters.securityFilters.filter(f => f.targetAttribute === 'seniority')[0];
-    if (filterObj) {
-      const includes = filterObj.filterBy.map(v => v.toLowerCase());
-      const {seniority} = row.data.security.data;
-      const seniorityName = seniority.split(' - ')[1];
-      includeFlag = includes.indexOf(seniorityName.toLowerCase()) !== -1;
-    }
-    return includeFlag;
-  }
-
-  private filterByStrategy(targetRow: DTOs.SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.strategy.length > 0) {
-      this.state.filters.quickFilters.strategy.forEach((eachStrategy) => {
-        const strategyExist = targetRow.data.security.data.strategyList.indexOf(eachStrategy) > -1;
-        if (!!strategyExist) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-    }
-    return includeFlag;
-  }
-
-  private filterByBICS(
-    targetRow: DTOs.SecurityTableRowDTO,
-    targetFilter: AdhocPacks.DefinitionConfiguratorEmitterParamsItem
-  ): boolean {
-    let includeFlag = false;
-    if (targetFilter.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
-      targetFilter.filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      targetFilter.filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] === eachValue) {
-          includeFlag = true;
-        }
-      });
-    }
-    return includeFlag;
-  }
-
-  private filterByTenor(targetRow: DTOs.SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.tenor.length > 0) {
-      this.state.filters.quickFilters.tenor.forEach((eachTenor) => {
-        const targetRange = this.constants.filterOptionTenorRange[eachTenor];
-        if (!!targetRow && !!targetRow.data.security && targetRow.data.security.data.tenor >= targetRange.min && targetRow.data.security.data.tenor <= targetRange.max) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-    }
-    return includeFlag;
+    return this.processingService.filterPrinstineRowList(targetPrinstineList, this.state.filters);
   }
 
   private calculateBestQuoteComparerWidthAndHeight() {

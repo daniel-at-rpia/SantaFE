@@ -5,14 +5,15 @@ The main difference between blocks and components is blocks does not carry any c
 
 Because of this, while component models need to follow "BasicDTOStructure", blocks don't.
 */
-
-import * as DTOs from './frontend-models.interface';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
   ColumnApi,
   ValueFormatterParams
 } from 'ag-grid-community';
+
+import * as DTOs from './frontend-models.interface';
+import * as AdhocPacks from './frontend-adhoc-packages.interface';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
@@ -405,4 +406,19 @@ export interface BICSMainRowDataBlock {
   portfolioID: number;
   level: number;
   isCs01?: boolean;
+}
+
+export interface TradeCenterPanelStateFilterBlock {
+  keyword: {
+    defaultValueForUI: string;
+  }
+  quickFilters: {
+    driverType: string;
+    portfolios: Array<string>;
+    keyword: string;
+    owner: Array<string>;
+    strategy: Array<string>;
+    tenor: Array<string>;
+  }
+  securityFilters: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>;
 }
