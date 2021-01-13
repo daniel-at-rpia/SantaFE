@@ -4,20 +4,8 @@
     import * as moment from 'moment';
 
     import * as BEModels from 'BEModels/backend-models.interface';
-    import * as DTOs from 'FEModels/frontend-models.interface';
-    import * as Blocks from 'FEModels/frontend-blocks.interface';
+    import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
     import { SantaDatePicker } from 'Form/models/form-models.interface';
-    import {
-      StructureOverrideToBreakdownConversionReturnPack,
-      CustomBreakdownReturnPack,
-      AdhocExtensionBEMetricBreakdowns
-    } from 'FEModels/frontend-adhoc-packages.interface';
-    import {
-      SecurityDefinitionStub,
-      SecurityDefinitionBundleStub,
-      SecurityTableHeaderConfigStub,
-      SecurityMetricOptionStub
-    } from 'FEModels/frontend-stub-models.interface';
     import { UtilityService } from './UtilityService';
     import {
       SecurityGroupRatingColorScheme,
@@ -580,7 +568,7 @@ export class DTOService {
   }
 
   public formSecurityDefinitionObject(
-    rawData: SecurityDefinitionStub
+    rawData: Stubs.SecurityDefinitionStub
   ): DTOs.SecurityDefinitionDTO {
     const object: DTOs.SecurityDefinitionDTO = {
       data: {
@@ -635,7 +623,7 @@ export class DTOService {
   }
 
   public formSecurityDefinitionBundleObject(
-    stubData: SecurityDefinitionBundleStub
+    stubData: Stubs.SecurityDefinitionBundleStub
   ): DTOs.SecurityDefinitionBundleDTO {
     const object: DTOs.SecurityDefinitionBundleDTO = {
       data: {
@@ -655,7 +643,7 @@ export class DTOService {
     groupByDisabled: boolean,
     noMainCTA: boolean,
     securityAttrOnly: boolean,
-    definitionLayoutMap: Array<SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
+    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = {
       data: {
@@ -979,7 +967,7 @@ export class DTOService {
   }
 
   public formSecurityTableHeaderObject(
-    stub: SecurityTableHeaderConfigStub,
+    stub: Stubs.SecurityTableHeaderConfigStub,
     useSpecificsFrom: string,
     activePortfolios: Array<string>
   ): DTOs.SecurityTableHeaderDTO {
@@ -1364,9 +1352,9 @@ export class DTOService {
     max: number,
     min: number,
     isStencil: boolean,
-    groupOption: string,
     isOverride: boolean,
-    diveInLevel: number
+    diveInLevel: number,
+    isCs01: boolean
   ): DTOs.MoveVisualizerDTO {
     const parsedMin = min < 0 ? 0 : min;
     const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
@@ -1431,6 +1419,7 @@ export class DTOService {
         structuringBreakdownExceededState: rawData.targetLevel !== null && rawData.currentLevel > rawData.targetLevel
       }
     };
+    object.data.endPinText = !!isCs01 ? `${object.data.end}k` : `${object.data.end}`;
     return object;
   }
 
@@ -2166,14 +2155,14 @@ export class DTOService {
       let code: string;
       if (!!rawData.breakdown[eachCategoryText]) {
         isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
-        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel : null;
-        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).code : null;
+        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel : null;
+        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code : null;
       }
       if (!!isOverride) {
         bucket = rawData.breakdown[eachCategoryText].bucket || {};
         simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
       } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocExtensionBEMetricBreakdowns).customLevel}`;
+        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel}`;
         bucket[formattedBEKey] = [code];
       } else {
         bucket[rawData.groupOption] = [eachCategoryText];
@@ -2263,19 +2252,9 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-        parsedRawData.currentLevel = Math.abs(rawCurrentLevel) >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
-      } else {
-        parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
-      }
+      parsedRawData.currentLevel = this.utility.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-          parsedRawData.targetLevel = Math.abs(parsedRawData.targetLevel) >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
-        } else {
-          parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
-        }
+        parsedRawData.targetLevel = this.utility.getRoundedValuesForVisualizer(rawTargetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
@@ -2293,12 +2272,11 @@ export class DTOService {
         maxValue,
         minValue,
         !!isStencil,
-        groupOption,
         isOverride,
-        diveInLevel
+        diveInLevel,
+        isCs01
       );
-      eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
-      const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
+      const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.currentLevel, parsedRawData.targetLevel, isCs01);
 
       const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
@@ -2331,15 +2309,13 @@ export class DTOService {
         simpleBucket: simpleBucket,
         parentRow: null,
         displayedSubLevelRows: [],
+        displayedSubLevelRowsWithTargets: [],
+        editedSubLevelRowsWithTargets: [],
         code: code
       };
-      if (eachCategoryBlock.diffToTarget < 0) {
-        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
-      }
-      if (eachCategoryBlock.diffToTarget > 0) {
-        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
-      }
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isBicsBreakdown);
+      eachCategoryBlock.diffToTargetDisplay = this.utility.getRowDiffToTargetText(eachCategoryBlock.diffToTarget, isCs01);
+      const isDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(eachCategoryBlock.code) : false;
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isDiveIn);
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2510,13 +2486,13 @@ export class DTOService {
     rawData: BEModels.BEPortfolioStructuringDTO,
     targetBreakdown: BEModels.BEStructuringBreakdownBlock,
     identifiers: string[]
-  ): CustomBreakdownReturnPack {
+  ): AdhocPacks.CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
     for (let code in customBreakdown.breakdown) {
       const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
       if (!!customBreakdown.breakdown[code] && !!isCodeValid) {
-        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = 1;
-        (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
+        (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel = 1;
+        (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code = code;
       }
     }
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
@@ -2527,8 +2503,8 @@ export class DTOService {
           if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel <= -1000 || !!selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel) {
             const level = i + 2;
             customBreakdown.breakdown[code] = selectedBreakdown.breakdown[code];
-            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
-            (customBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).code = code;
+            (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel = level;
+            (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code = code;
           }
         }
       }
@@ -2585,7 +2561,7 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues
   ){
     if(rawData.overrides) {
-      const returnPack: StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
+      const returnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = returnPack.list;
       overrideList.sort((overrideA, overrideB) =>{
         if (overrideA.groupOption > overrideB.groupOption) {

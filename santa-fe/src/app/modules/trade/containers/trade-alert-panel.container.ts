@@ -9,25 +9,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
-    import { TradeAlertPanelState } from 'FEModels/frontend-page-states.interface';
-    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
-    import {
-      SecurityTableHeaderDTO,
-      AlertCountSummaryDTO,
-      SecurityTableDTO,
-      SecurityDTO,
-      AlertDTO,
-      SecurityTableRowDTO,
-      NumericFilterDTO,
-      TradeAlertConfigurationAxeGroupBlockDTO
-    } from 'FEModels/frontend-models.interface';
-    import { 
-      TableFetchResultBlock,
-      SelectAxeWatchlistSide,
-      SelectAxeWatchlistType,
-      SelectAxeWatchlistRangeValue,
-      SelectAxeWatchlistRangeDriver
-    } from 'FEModels/frontend-blocks.interface';
+    import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
     import {
       BESecurityDTO,
       BEAlertConfigurationReturn,
@@ -84,7 +66,6 @@
       KEYWORDSEARCH_DEBOUNCE_TIME,
       TriCoreDriverConfig
     } from 'Core/constants/coreConstants.constant';
-    import { SecurityTableHeaderConfigStub } from 'Core/models/frontend/frontend-stub-models.interface';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
 
@@ -102,7 +83,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   @Output() saveConfig = new EventEmitter();
   @Output() showAlertTable = new EventEmitter();
   @Output() collapseAlertTable = new EventEmitter();
-  state: TradeAlertPanelState;
+  state: PageStates.TradeAlertPanelState;
   subscriptions = {
     userInitialsSub: null,
     securityMapSub: null,
@@ -141,12 +122,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   // general
-    private initializePageState(): TradeAlertPanelState {
+    private initializePageState(): PageStates.TradeAlertPanelState {
       const alertTableMetrics = SecurityTableHeaderConfigs.filter((eachStub) => {
         const targetSpecifics = eachStub.content.tableSpecifics.tradeAlert || eachStub.content.tableSpecifics.default;
         return !targetSpecifics.disabled;
       });
-      const state: TradeAlertPanelState = {
+      const state: PageStates.TradeAlertPanelState = {
         isUserPM: false,
         configureAlert: false,
         isAlertPaused: true,
@@ -339,9 +320,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             // no filtering logic for now
             return true;
           }) : [];
-          const updateList: Array<AlertDTO> = [];
-          const alertTableList: Array<AlertDTO> = [];
-          const alertTableRemovalList: Array<AlertDTO> = [];  // currently the only alerts that needs to be removed are the cancelled trade alerts
+          const updateList: Array<DTOs.AlertDTO> = [];
+          const alertTableList: Array<DTOs.AlertDTO> = [];
+          const alertTableRemovalList: Array<DTOs.AlertDTO> = [];  // currently the only alerts that needs to be removed are the cancelled trade alerts
           filteredServerReturn.forEach((eachRawAlert) => {
             // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
             if (!!eachRawAlert.marketListAlert) {
@@ -497,7 +478,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             metric.content.tableSpecifics.tradeAlert.active = false;
           }
         })
-        const nonDisabledAlertHeaders: Array<SecurityTableHeaderConfigStub> = securityTableHeaderConfigsCopy.filter((header: SecurityTableHeaderConfigStub) => (!!header.content.tableSpecifics.default && !header.content.tableSpecifics.tradeAlert) || (!header.content.tableSpecifics.tradeAlert.disabled));
+        const nonDisabledAlertHeaders: Array<Stubs.SecurityTableHeaderConfigStub> = securityTableHeaderConfigsCopy.filter((header: Stubs.SecurityTableHeaderConfigStub) => (!!header.content.tableSpecifics.default && !header.content.tableSpecifics.tradeAlert) || (!header.content.tableSpecifics.tradeAlert.disabled));
         this.state.table.alertMetrics = nonDisabledAlertHeaders;
     }
 
@@ -585,7 +566,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
   
-    public onSelectAxeWatchlistSide({targetScope, targetBlock}: SelectAxeWatchlistSide) {
+    public onSelectAxeWatchlistSide({targetScope, targetBlock}: Blocks.SelectAxeWatchlistSide) {
       if (!!targetScope && !!targetBlock && !targetBlock.state.isDisabled) {
         this.addScopeToAxeWatchlistEntry(targetBlock, targetScope);
         this.restfulCommService.logEngagement(
@@ -597,7 +578,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
       const currTypes: AxeAlertType[] = targetBlock.data.axeAlertTypes.slice();
       if (!!targetType && !!targetBlock && !targetBlock.state.isDisabled) {
         if (targetBlock.data.axeAlertTypes.indexOf(targetType) === -1) {
@@ -614,7 +595,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    public onSelectAxeAlertWatchType({targetType, targetBlock}: SelectAxeWatchlistType) {
+    public onSelectAxeAlertWatchType({targetType, targetBlock}: Blocks.SelectAxeWatchlistType) {
       if (!!targetType && !!targetBlock && !targetBlock.state.isDisabled) {
         if (targetBlock.data.axeAlertTypes.indexOf(targetType) === -1) {
           targetBlock.data.axeAlertTypes = [targetType, ...targetBlock.data.axeAlertTypes];
@@ -639,7 +620,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.configureAlert = false;
     }
 
-    public onTogglePriority(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onTogglePriority(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
       targetBlock.state.isUrgent = !targetBlock.state.isUrgent;
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
@@ -649,7 +630,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onToggleDisableTargetGroupFromAxeWatchList(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
       targetBlock.state.isDisabled = !targetBlock.state.isDisabled;
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertConfigure,
@@ -659,7 +640,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onClickRemoveSecurityFromAxeWatchList(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onClickRemoveSecurityFromAxeWatchList(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
       targetBlock.state.isDeleted = true;
       this.state.configuration.axe.searchList.forEach((eachCard) => {
         if (eachCard.data.securityID === targetBlock.data.card.data.securityID) {
@@ -674,28 +655,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    private checkRangeActive(targetEntry: TradeAlertConfigurationAxeGroupBlockDTO ) {
+    private checkRangeActive(targetEntry: DTOs.TradeAlertConfigurationAxeGroupBlockDTO ) {
       targetEntry.state.isRangeActive = (targetEntry.data.targetRange.state.isFilled && targetEntry.data.targetDriver ) ?  true : false;
     }
 
-    public onSelectAxeRangeDriver({targetBlock, targetDriver}: SelectAxeWatchlistRangeDriver) {
+    public onSelectAxeRangeDriver({targetBlock, targetDriver}: Blocks.SelectAxeWatchlistRangeDriver) {
       targetBlock.data.targetDriver = targetDriver;
       this.checkRangeActive(targetBlock);
     }
 
-    public onChangeAxeRangeMin({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
+    public onChangeAxeRangeMin({newValue, targetBlock}: Blocks.SelectAxeWatchlistRangeValue) {
       targetBlock.data.targetRange.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
       this.checkRangeActive(targetBlock);
     }
 
-    public onChangeAxeRangeMax({newValue, targetBlock}: SelectAxeWatchlistRangeValue) {
+    public onChangeAxeRangeMax({newValue, targetBlock}: Blocks.SelectAxeWatchlistRangeValue) {
       targetBlock.data.targetRange.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
       this.checkIsFilled(targetBlock);
       this.checkRangeActive(targetBlock);
     }
 
-    public onClickedClearRange(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onClickedClearRange(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
       targetBlock.data.targetRange.data = {
         minNumber: "",
         maxNumber: ""
@@ -704,11 +685,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.checkRangeActive(targetBlock);
     }
 
-    public onToggleSendEmail(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    public onToggleSendEmail(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
       targetBlock.data.sendEmail = !targetBlock.data.sendEmail;
     }
 
-    private fetchSecurities(matchList: Array<SecurityMapEntry>) {
+    private fetchSecurities(matchList: Array<AdhocPacks.SecurityMapEntry>) {
       const list = matchList.map((eachEntry) => {
         return eachEntry.secruityId;
       });
@@ -736,25 +717,25 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
     }
 
-    private onClickSearchResult(targetSecurity: SecurityDTO) {
+    private onClickSearchResult(targetSecurity: DTOs.SecurityDTO) {
       this.addSecurityToWatchList(targetSecurity);
       this.updateTargetSecurityExist(targetSecurity);
     }
 
-    private updateTargetSecurityExist(targetSecurity: SecurityDTO) {
+    private updateTargetSecurityExist(targetSecurity: DTOs.SecurityDTO) {
       const existList = this.state.configuration.axe.securityList.filter((eachEntry) => {
         return eachEntry.data.card.data.securityID === targetSecurity.data.securityID && !eachEntry.state.isDeleted;
       });
       targetSecurity.state.isSelected = existList.length > 0;
     }
 
-    private addSecurityToWatchList(targetSecurity: SecurityDTO) {
-      const copy:SecurityDTO = this.utilityService.deepCopy(targetSecurity);
+    private addSecurityToWatchList(targetSecurity: DTOs.SecurityDTO) {
+      const copy:DTOs.SecurityDTO = this.utilityService.deepCopy(targetSecurity);
       copy.state.isSelected = false;
       copy.state.isInteractionDisabled = true;
       copy.state.isMultiLineVariant = false;
       copy.state.isWidthFlexible = true;
-      const newEntry: TradeAlertConfigurationAxeGroupBlockDTO = this.dtoService.formWatchListObject(copy);
+      const newEntry: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = this.dtoService.formWatchListObject(copy);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertAddSingleSecurity,
@@ -832,7 +813,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       ).subscribe();
     }
 
-    private addScopeToAxeWatchlistEntry(targetEntry: TradeAlertConfigurationAxeGroupBlockDTO, targetScope: AxeAlertScope) {
+    private addScopeToAxeWatchlistEntry(targetEntry: DTOs.TradeAlertConfigurationAxeGroupBlockDTO, targetScope: AxeAlertScope) {
       if (targetScope === this.constants.axeAlertScope.liquidation) {
         if (targetEntry.data.scopes.indexOf(targetScope) >= 0) {
           targetEntry.data.scopes = [];
@@ -925,7 +906,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private checkIsFilled(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+    private checkIsFilled(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
       if (!!targetBlock.data.targetRange.data.minNumber || !!targetBlock.data.targetRange.data.maxNumber) {
         targetBlock.data.targetRange.state.isFilled = true;
       } else {
@@ -943,7 +924,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private populateRangeNumberFilterFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO, formNumericFilterObjectFn): NumericFilterDTO {
+    private populateRangeNumberFilterFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO, formNumericFilterObjectFn): DTOs.NumericFilterDTO {
       const dto = formNumericFilterObjectFn();
       if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
         dto.data.minNumber = rawGroupConfig.parameters.LowerSpreadThreshold;
@@ -957,7 +938,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private appendRangeToAxeConfigPayloads(
       payload: PayloadUpdateSingleAlertConfig,
-      targetBlock: TradeAlertConfigurationAxeGroupBlockDTO
+      targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO
     ) {
       if (targetBlock && targetBlock.data.targetDriver && targetBlock.data.targetRange && targetBlock.data.targetRange.data) {
         if (targetBlock.data.targetDriver === this.constants.driver.Spread.label) {
@@ -984,7 +965,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.keywordChanged$.next(newKeyword);
     }
 
-    public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+    public onSelectSecurityForAnalysis(targetSecurity: DTOs.SecurityDTO) {
       this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
       this.restfulCommService.logEngagement(
         EngagementActionList.selectSecurityForAnalysis,
@@ -994,16 +975,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    public onClickedSecurityCardSearch(targetSecurity: SecurityDTO) {
+    public onClickedSecurityCardSearch(targetSecurity: DTOs.SecurityDTO) {
       if (targetSecurity && targetSecurity.data) {
         this.store$.dispatch(new TradeKeywordSearchThisSecurityEvent(targetSecurity.data.name));
       }
     }
 
     private filterPrinstineRowList(
-      targetPrinstineList: Array<SecurityTableRowDTO>
-    ): Array<SecurityTableRowDTO> {
-      const filteredList: Array<SecurityTableRowDTO> = [];
+      targetPrinstineList: Array<DTOs.SecurityTableRowDTO>
+    ): Array<DTOs.SecurityTableRowDTO> {
+      const filteredList: Array<DTOs.SecurityTableRowDTO> = [];
       targetPrinstineList.forEach((eachRow) => {
         try {
           if (!!eachRow && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
@@ -1056,7 +1037,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.utilityService.calculateBestQuoteComparerWidthAndHeightPerSet(bestPriceList);
     }
 
-    private loadFreshData(newAlertList: Array<AlertDTO>) {
+    private loadFreshData(newAlertList: Array<DTOs.AlertDTO>) {
       this.state.alert.nonMarketListAxeAlertCount = 0;
       this.state.alert.marketListAxeAlertCount = 0;
       this.state.alert.markAlertCount = 0;
@@ -1072,7 +1053,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     private loadInitialStencilTable() {
-      const stencilAlertTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
+      const stencilAlertTableHeaderBuffer: Array<DTOs.SecurityTableHeaderDTO> = [];
       this.state.table.alertMetrics.forEach((eachStub) => {
         const targetSpecifics = eachStub.content.tableSpecifics.tradeAlert || eachStub.content.tableSpecifics.default;
         if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
@@ -1098,7 +1079,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.fetchResult.alertTable.rowList = this.utilityService.deepCopy(this.state.fetchResult.alertTable.prinstineRowList);
     }
 
-    private fetchUpdate(newAlertList: Array<AlertDTO>) {
+    private fetchUpdate(newAlertList: Array<DTOs.AlertDTO>) {
       if (this.state.alert.initialAlertListReceived) {
         if (newAlertList.length > 0) {
           this.alertCountIncrement(newAlertList);
@@ -1175,8 +1156,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     private updateStage(
       stageNumber: number,
-      targetTableBlock: TableFetchResultBlock,
-      targetTableDTO: SecurityTableDTO
+      targetTableBlock: Blocks.TableFetchResultBlock,
+      targetTableDTO: DTOs.SecurityTableDTO
     ) {
       targetTableBlock.currentContentStage = stageNumber;
       if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
@@ -1201,7 +1182,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private alertCountIncrement(alertList: Array<AlertDTO>) {
+    private alertCountIncrement(alertList: Array<DTOs.AlertDTO>) {
       alertList.forEach((eachAlert) => {
         if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
           switch (eachAlert.data.type) {
@@ -1228,7 +1209,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
     }
 
-    private alertCountDecrement(removalList: Array<AlertDTO>) {
+    private alertCountDecrement(removalList: Array<DTOs.AlertDTO>) {
       removalList.forEach((eachAlert) => {
         if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
           switch (eachAlert.data.type) {
@@ -1256,11 +1237,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     private identifyTableUpdate(
-      targetTableBlock: TableFetchResultBlock,
+      targetTableBlock: Blocks.TableFetchResultBlock,
       countdownUpdateOnly: boolean
-    ): Array<SecurityTableRowDTO> {
+    ): Array<DTOs.SecurityTableRowDTO> {
       if (countdownUpdateOnly) {
-        const updateList:Array<SecurityTableRowDTO> = [];
+        const updateList:Array<DTOs.SecurityTableRowDTO> = [];
         targetTableBlock.rowList.forEach((eachRow) => {
           if (this.state.alert.recentUpdatedAlertList.indexOf(eachRow.data.rowId) >= 0) {
             updateList.push(eachRow);
@@ -1277,7 +1258,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    private populateTableRowRemovalList(alertList: Array<AlertDTO>) {
+    private populateTableRowRemovalList(alertList: Array<DTOs.AlertDTO>) {
       // find the corresponding row basd on the alert, since the rowIds are the alertIds in alert table
       this.state.fetchResult.alertTable.removalRowList = [];
       alertList.forEach((eachAlert) => {

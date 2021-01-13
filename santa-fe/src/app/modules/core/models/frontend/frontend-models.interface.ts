@@ -4,30 +4,14 @@ import * as moment from 'moment';
 import * as am4Charts from '@amcharts/amcharts4/charts';
 import { DetachedRouteHandle } from '@angular/router';
 
-import {
-  AgGridColumnDefinition,
-  AgGridRow,
-  QuoteMetricBlock,
-  SecurityDefinitionFilterBlock,
-  SecurityGroupMetricBlock,
-  SecurityGroupMetricPackBlock,
-  SecurityGroupPieChartBlock,
-  SecurityMarkBlock,
-  SecurityPortfolioBlock,
-  SecurityTableRowQuoteBlock,
-  SecurityCostPortfolioBlock, 
-  PortfolioMetricTotals,
-  PortfolioBreakdownCategoryBlock,
-  TraceTradeBlock,
-  BICSMainRowDataBlock
-} from 'FEModels/frontend-blocks.interface';
+import * as Blocks from './frontend-blocks.interface';
+import * as AdhocPacks from './frontend-adhoc-packages.interface';
 import {
   AlertSubTypes,
   AlertTypes,
   NavigationModule,
   GlobalWorkflowTypes
 } from 'Core/constants/coreConstants.constant';
-import { SantaTableNumericFloatingFilterParams } from 'FEModels/frontend-adhoc-packages.interface';
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
@@ -70,8 +54,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     backupPmName: string;
     researchName: string;
     owner: Array<string>;
-    mark: SecurityMarkBlock;
-    portfolios: Array<SecurityPortfolioBlock>;
+    mark: Blocks.SecurityMarkBlock;
+    portfolios: Array<Blocks.SecurityPortfolioBlock>;
     strategyFirm: string;
     strategyList: Array<string>;
     weight: {
@@ -103,17 +87,17 @@ export interface SecurityDTO extends BasicDTOStructure {
       positionBBBInMM: string;
     };
     cost: {
-      current: SecurityCostPortfolioBlock;
-      firm: SecurityCostPortfolioBlock;
-      DOF: SecurityCostPortfolioBlock;
-      SOF: SecurityCostPortfolioBlock;
-      STIP: SecurityCostPortfolioBlock;
-      FIP: SecurityCostPortfolioBlock;
-      CIP: SecurityCostPortfolioBlock;
-      AGB: SecurityCostPortfolioBlock;
-      BBB: SecurityCostPortfolioBlock;
+      current: Blocks.SecurityCostPortfolioBlock;
+      firm: Blocks.SecurityCostPortfolioBlock;
+      DOF: Blocks.SecurityCostPortfolioBlock;
+      SOF: Blocks.SecurityCostPortfolioBlock;
+      STIP: Blocks.SecurityCostPortfolioBlock;
+      FIP: Blocks.SecurityCostPortfolioBlock;
+      CIP: Blocks.SecurityCostPortfolioBlock;
+      AGB: Blocks.SecurityCostPortfolioBlock;
+      BBB: Blocks.SecurityCostPortfolioBlock;
     }
-    metricPack: SecurityGroupMetricPackBlock;
+    metricPack: Blocks.SecurityGroupMetricPackBlock;
     bestQuote: {
       bid: number;
       displayBid: string;
@@ -162,7 +146,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertTraceSpread?: number;
     }
     tradeHistory: Array<TradeDTO>;
-    traceTrades: Array<TraceTradeBlock>;
+    traceTrades: Array<Blocks.TraceTradeBlock>;
     lastTrace: {
       lastTraceSpread: number;
       lastTracePrice: number;
@@ -205,8 +189,8 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     ratingLevel: number;
     ratingValue: string;
     numOfSecurities: number;
-    stats: Array<SecurityGroupMetricBlock>;
-    metricPack: SecurityGroupMetricPackBlock;
+    stats: Array<Blocks.SecurityGroupMetricBlock>;
+    metricPack: Blocks.SecurityGroupMetricPackBlock;
     primaryMetric: string;
     sort: {
       primarySortMetricValue: number;
@@ -223,8 +207,8 @@ export interface SecurityGroupDTO extends BasicDTOStructure {
     isLandscapeView: boolean;
   }
   graph: {
-    leftPie: SecurityGroupPieChartBlock;
-    rightPie: SecurityGroupPieChartBlock;
+    leftPie: Blocks.SecurityGroupPieChartBlock;
+    rightPie: Blocks.SecurityGroupPieChartBlock;
   }
 }
 
@@ -234,9 +218,9 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     displayName: string;
     key: string;
     urlForGetLongOptionListFromServer: string;
-    prinstineFilterOptionList: Array<SecurityDefinitionFilterBlock>;
-    filterOptionList: Array<SecurityDefinitionFilterBlock>;
-    highlightSelectedOptionList: Array<SecurityDefinitionFilterBlock>;
+    prinstineFilterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
+    filterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
+    highlightSelectedOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
     securityDTOAttrBlock: string;
     backendDtoAttrName: string;
@@ -280,13 +264,13 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
 
 export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
   data: {
-    stats: Array<SecurityGroupMetricBlock>;
+    stats: Array<Blocks.SecurityGroupMetricBlock>;
   },
   state: {
     isEmpty: boolean;
     isStencil: boolean;
     isExpanded: boolean;
-    editingStat: SecurityGroupMetricBlock;
+    editingStat: Blocks.SecurityGroupMetricBlock;
     editingStatSelectedMetric: any;
     editingStatSelectedMetricValueType: string;
     editingStatSelectedMetricDeltaType: string;
@@ -359,11 +343,11 @@ export interface SecurityTableDTO extends BasicDTOStructure {
     headers: Array<SecurityTableHeaderDTO>;
     allHeaders: Array<SecurityTableHeaderDTO>;
     rows: Array<SecurityTableRowDTO>;
-    agGridColumnDefs: Array<AgGridColumnDefinition>;
-    agGridRowData: Array<AgGridRow>;
+    agGridColumnDefs: Array<Blocks.AgGridColumnDefinition>;
+    agGridRowData: Array<Blocks.AgGridRow>;
     agGridFrameworkComponents: object;
     agGridAggregationMap: object;
-    agGridPinnedTopRowData: Array<AgGridRow>;
+    agGridPinnedTopRowData: Array<Blocks.AgGridRow>;
   },
   state: {
     loadedContentStage: number;
@@ -416,8 +400,8 @@ export interface SecurityTableRowDTO extends BasicDTOStructure {
     rowId: string;
     security: SecurityDTO;
     cells: Array<SecurityTableCellDTO>;
-    quotes: SecurityTableRowQuoteBlock;
-    quoteHeaders: Array<QuoteMetricBlock>;
+    quotes: Blocks.SecurityTableRowQuoteBlock;
+    quoteHeaders: Array<Blocks.QuoteMetricBlock>;
     bestQuotes: {
       combined: {
         bestSpreadQuote: BestQuoteComparerDTO;
@@ -525,7 +509,7 @@ export interface NumericFilterDTO extends BasicDTOStructure {
   api: {
     params: agGrid.IFilterParams;
     valueGetter: (rowNode: agGrid.RowNode) => any;
-    floatingParams: SantaTableNumericFloatingFilterParams;
+    floatingParams: AdhocPacks.SantaTableNumericFloatingFilterParams;
   }
   state: {
     isFilled: boolean;
@@ -677,7 +661,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
   data: {
     prinstineTradeList: Array<TradeDTO>;
     displayTradeList: Array<TradeDTO>;
-    positionList: Array<SecurityPortfolioBlock>;
+    positionList: Array<Blocks.SecurityPortfolioBlock>;
     timeSeriesId: string;
     positionPieId: string;
     volumeLeftPieId: string;
@@ -738,7 +722,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     rawCs01CategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     rawLeverageCategoryList: Array<StructurePortfolioBreakdownRowDTO>;
     backendGroupOptionIdentifier: string;
-    popoverMainRow: BICSMainRowDataBlock;
+    popoverMainRow: Blocks.BICSMainRowDataBlock;
     portfolioId: number;
     portfolioName: string;
     diveInLevel: number;
@@ -772,13 +756,13 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
       portfolioTargetId: string;
       date: string;
       portfolioId: number;
-      target: PortfolioMetricTotals;
+      target: Blocks.PortfolioMetricTotals;
     };
-    currentTotals: PortfolioMetricTotals;
+    currentTotals: Blocks.PortfolioMetricTotals;
     indexId: number;
     indexShortName: string;
     indexNav: number;
-    indexTotals: PortfolioMetricTotals;
+    indexTotals: Blocks.PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
     displayChildren: Array<PortfolioBreakdownDTO>;
     cs01TargetBar: TargetBarDTO;
@@ -861,7 +845,7 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
 }
 
 export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
-  data: PortfolioBreakdownCategoryBlock;
+  data: Blocks.PortfolioBreakdownCategoryBlock;
   style: {
     branchHeight: string;
     top: string;
@@ -884,8 +868,8 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
 
 export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
   data: {
-    pristineRowList: Array<TraceTradeBlock>;
-    displayList: Array<TraceTradeBlock>;
+    pristineRowList: Array<Blocks.TraceTradeBlock>;
+    displayList: Array<Blocks.TraceTradeBlock>;
     scatterGraphId: string;
     pieGraphLeftId: string;
     pieGraphRightId: string;

@@ -106,15 +106,14 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public loadData() {
     if (this.breakdownData.data.title === 'BICS') {
-      // Resets BICS sublevel states
+      // Resets BICS sublevel states when switching between metrics
+      // addSortedREgularBICSWithSubLevels has to execute for both lists
+      // this is to ensure that when toggling the set target modal and switching between metrics in the modal would append the correct sub levels for each category
       this.breakdownData.state.isDisplaySubLevels = false;
-      if (this.breakdownData.state.isDisplayingCs01) {
-        this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawCs01CategoryList);
-        this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawCs01CategoryList);
-      } else {
-        this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawLeverageCategoryList);
-        this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
-      }
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawCs01CategoryList);
+      this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawCs01CategoryList);
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawLeverageCategoryList);
+      this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
     }
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     if (this.dataIsReady) {

@@ -20,7 +20,7 @@ export class SantaDatepicker implements OnInit, OnChanges {
   @Input() changeDate: moment.Moment;
   @Output() dateSelected = new EventEmitter<moment.Moment>();
 
-  protected formControl = new FormControl(null);
+  public formControl = new FormControl(null);
 
   constants = {
     inputEvents: datepickerInputEvents

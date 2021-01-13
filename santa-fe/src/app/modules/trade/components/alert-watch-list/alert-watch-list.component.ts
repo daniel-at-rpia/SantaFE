@@ -1,6 +1,5 @@
     import {Component, Input, OnInit, EventEmitter, Output, ViewEncapsulation} from '@angular/core';
-    import { TradeAlertConfigurationAxeGroupBlockDTO } from 'FEModels/frontend-models.interface';
-    import { SelectAxeWatchlistSide, SelectAxeWatchlistType, SelectAxeWatchlistRangeValue, SelectAxeWatchlistRangeDriver } from 'Core/models/frontend/frontend-blocks.interface';
+    import { DTOs, Blocks } from 'Core/models/frontend';
     import { AxeAlertScope, AxeAlertType } from 'App/modules/core/constants/tradeConstants.constant';
     import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
 
@@ -13,17 +12,17 @@
 })
 
 export class AlertWatchList implements OnInit {
-  @Input() eachSecurityBlock: TradeAlertConfigurationAxeGroupBlockDTO;
-  @Output() selectAxeWatchlistSide = new EventEmitter<SelectAxeWatchlistSide>();
-  @Output() selectAxeWatchlistType = new EventEmitter<SelectAxeWatchlistType>();
-  @Output() changeAxeWatchlistRangeMin = new EventEmitter<SelectAxeWatchlistRangeValue>();
-  @Output() changeAxeWatchlistRangeMax = new EventEmitter<SelectAxeWatchlistRangeValue>();
-  @Output() clickAxeWatchlistClearRange = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
-  @Output() selectAxeWatchlistRangeDriver = new EventEmitter<SelectAxeWatchlistRangeDriver>();
-  @Output() toggleAxeWatchlistPriority = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
-  @Output() toggleAxeWatchlistSendEmail = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
-  @Output() toggleDisableTargetGroupFromAxeWatchlist = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
-  @Output() clickRemoveSecurityFromAxeWatchlist = new EventEmitter<TradeAlertConfigurationAxeGroupBlockDTO>();
+  @Input() eachSecurityBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO;
+  @Output() selectAxeWatchlistSide = new EventEmitter<Blocks.SelectAxeWatchlistSide>();
+  @Output() selectAxeWatchlistType = new EventEmitter<Blocks.SelectAxeWatchlistType>();
+  @Output() changeAxeWatchlistRangeMin = new EventEmitter<Blocks.SelectAxeWatchlistRangeValue>();
+  @Output() changeAxeWatchlistRangeMax = new EventEmitter<Blocks.SelectAxeWatchlistRangeValue>();
+  @Output() clickAxeWatchlistClearRange = new EventEmitter<DTOs.TradeAlertConfigurationAxeGroupBlockDTO>();
+  @Output() selectAxeWatchlistRangeDriver = new EventEmitter<Blocks.SelectAxeWatchlistRangeDriver>();
+  @Output() toggleAxeWatchlistPriority = new EventEmitter<DTOs.TradeAlertConfigurationAxeGroupBlockDTO>();
+  @Output() toggleAxeWatchlistSendEmail = new EventEmitter<DTOs.TradeAlertConfigurationAxeGroupBlockDTO>();
+  @Output() toggleDisableTargetGroupFromAxeWatchlist = new EventEmitter<DTOs.TradeAlertConfigurationAxeGroupBlockDTO>();
+  @Output() clickRemoveSecurityFromAxeWatchlist = new EventEmitter<DTOs.TradeAlertConfigurationAxeGroupBlockDTO>();
 
   constants = {
     axeAlertScope: AxeAlertScope,
@@ -35,46 +34,46 @@ export class AlertWatchList implements OnInit {
 
   ngOnInit() {}
 
-  public onSelectAxeAlertWatchlistSide(targetScope: AxeAlertScope, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onSelectAxeAlertWatchlistSide(targetScope: AxeAlertScope, targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     const emitObject = {targetScope, targetBlock};
     this.selectAxeWatchlistSide.emit(emitObject)
   }
 
-  public onSelectAxeAlertWatchlistType(targetType: AxeAlertType, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onSelectAxeAlertWatchlistType(targetType: AxeAlertType, targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     const emitObject = {targetType, targetBlock};
     this.selectAxeWatchlistType.emit(emitObject)
   }
 
-  public onChangeAxeWatchlistRangeMin(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onChangeAxeWatchlistRangeMin(newValue, targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     this.changeAxeWatchlistRangeMin.emit({newValue, targetBlock})
   }
 
-  public onChangeAxeWatchlistRangeMax(newValue, targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onChangeAxeWatchlistRangeMax(newValue, targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     this.changeAxeWatchlistRangeMax.emit({newValue, targetBlock})
   }
 
-  public onClickAxeWatchlistClearRange(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onClickAxeWatchlistClearRange(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     this.clickAxeWatchlistClearRange.emit(targetBlock);
   }
 
-  public onSelectAxeWatchlistRangeDriver(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO, targetDriver: string) {
+  public onSelectAxeWatchlistRangeDriver(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO, targetDriver: string) {
     const emitObject = {targetBlock, targetDriver};
     this.selectAxeWatchlistRangeDriver.emit(emitObject);
   }
 
-  public onToggleAxeWatchlistPriority(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onToggleAxeWatchlistPriority(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     this.toggleAxeWatchlistPriority.emit(targetBlock)
   }
 
-  public onToggleAxeWatchlistSendEmail(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onToggleAxeWatchlistSendEmail(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     this.toggleAxeWatchlistSendEmail.emit(targetBlock);
   }
 
-  public onToggleDisableTargetGroupFromAxeWatchlist(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onToggleDisableTargetGroupFromAxeWatchlist(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     this.toggleDisableTargetGroupFromAxeWatchlist.emit(targetBlock);
   }
 
-  public onClickRemoveSecurityFromAxeWatchlist(targetBlock: TradeAlertConfigurationAxeGroupBlockDTO) {
+  public onClickRemoveSecurityFromAxeWatchlist(targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
     this.clickRemoveSecurityFromAxeWatchlist.emit(targetBlock);
   }
  }

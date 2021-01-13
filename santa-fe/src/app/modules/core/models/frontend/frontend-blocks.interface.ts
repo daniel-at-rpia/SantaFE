@@ -6,7 +6,7 @@ The main difference between blocks and components is blocks does not carry any c
 Because of this, while component models need to follow "BasicDTOStructure", blocks don't.
 */
 
-import * as DTOs from 'FEModels/frontend-models.interface';
+import * as DTOs from './frontend-models.interface';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
@@ -308,7 +308,9 @@ export interface PortfolioBreakdownCategoryBlock {
   view: PortfolioView;
   parentRow: DTOs.StructurePortfolioBreakdownRowDTO;
   children?: DTOs.PortfolioBreakdownDTO; // used in popover dive-in
-  displayedSubLevelRows?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used in regular BICS breakdown to display sublevels per category
+  displayedSubLevelRows?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used for BICS hierarchy display in main BICS panel and set target modal
+  displayedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used to indicate which sub levels have targets
+  editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
 }
 export interface GlobalNavLegendBlock {
@@ -332,6 +334,7 @@ export interface StructureSetTargetPanelEditRowBlock {
   isLocked: boolean;
   isEven: boolean;
   existInServer: boolean;
+  isVisible: boolean;
   rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
 }
 
