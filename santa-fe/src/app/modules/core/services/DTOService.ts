@@ -6,6 +6,7 @@
     import * as BEModels from 'BEModels/backend-models.interface';
     import * as DTOs from 'FEModels/frontend-models.interface';
     import * as Blocks from 'FEModels/frontend-blocks.interface';
+    import { SantaDatePicker } from 'Form/models/form-models.interface';
     import {
       StructureOverrideToBreakdownConversionReturnPack,
       CustomBreakdownReturnPack,
@@ -127,9 +128,9 @@ export class DTOService {
         ticker: !isStencil ? rawData.ticker : null,
         obligorName: !isStencil ? rawData.obligorName : null,
         isGovt: !isStencil ? rawData.isGovt : false,
-        ratingLevel: !isStencil && rawData.metrics && rawData.metrics.Default ? this.utility.mapRatings(rawData.metrics.Default.ratingNoNotch) : 0,
-        ratingValue: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingNoNotch : null,
-        ratingBucket: !isStencil && rawData.metrics && rawData.metrics.Default ? rawData.metrics.Default.ratingBucket : null,
+        ratingLevel: 0,
+        ratingValue: null,
+        ratingBucket: null,
         seniorityLevel: !isStencil ? this.utility.mapSeniorities(rawData.genericSeniority) : 5,
         tenor: !isStencil? this.utility.determineNumericalTenor(rawData) : 2,
         couponType: null,
@@ -314,6 +315,19 @@ export class DTOService {
           object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
           if (!!rawData.metrics.Default) {
             object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+            let targetSourceForRating = null;
+            if (!!rawData.metrics.Default.ratingNoNotch) {
+              targetSourceForRating = rawData.metrics.Default;
+            } else if (!!rawData.metrics.FTSE && !!rawData.metrics.FTSE.ratingNoNotch) {
+              targetSourceForRating = rawData.metrics.FTSE;
+            } else if (!!rawData.metrics.BB && !!rawData.metrics.BB.ratingNoNotch) {
+              targetSourceForRating = rawData.metrics.BB;
+            }
+            if (!!targetSourceForRating) {
+              object.data.ratingLevel = this.utility.mapRatings(targetSourceForRating.ratingNoNotch);
+              object.data.ratingValue = targetSourceForRating.ratingNoNotch;
+              object.data.ratingBucket = targetSourceForRating.ratingBucket;
+            }
           }
         }
       }
@@ -1001,6 +1015,8 @@ export class DTOService {
     isSlimRowHeight: boolean,
     id?: string
   ): DTOs.SecurityTableRowDTO {
+    // set CDS state for historical trade visualizer for now as get all trade histories API does not work for CDS, and that button has to be disabled for those securities
+    const isCDSVariant = this.utility.isCDS(false, securityDTO);
     const object: DTOs.SecurityTableRowDTO = {
       data: {
         rowId: !!id ? id : this.utility.generateUUID(),
@@ -1038,7 +1054,7 @@ export class DTOService {
           }
         },
         alert: alert,
-        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO),
+        historicalTradeVisualizer: this.formHistoricalTradeObject(securityDTO, isCDSVariant),
         traceTradeVisualizer: null
       },
       style: {
@@ -1048,7 +1064,7 @@ export class DTOService {
         expandViewSortByQuoteMetric: null,
         isExpanded: false,
         presentingAllQuotes: false,
-        isCDSVariant: this.utility.isCDS(false, securityDTO),
+        isCDSVariant: isCDSVariant,
         isCDSOffTheRun: false,
         viewHistoryState: false,
         viewTraceState: false,
@@ -1344,9 +1360,9 @@ export class DTOService {
     max: number,
     min: number,
     isStencil: boolean,
-    groupOption: string,
     isOverride: boolean,
-    diveInLevel: number
+    diveInLevel: number,
+    isCs01: boolean
   ): DTOs.MoveVisualizerDTO {
     const parsedMin = min < 0 ? 0 : min;
     const parsedCurrentLevel = rawData.currentLevel < 0 ? 0 : rawData.currentLevel;
@@ -1411,6 +1427,7 @@ export class DTOService {
         structuringBreakdownExceededState: rawData.targetLevel !== null && rawData.currentLevel > rawData.targetLevel
       }
     };
+    object.data.endPinText = !!isCs01 ? `${object.data.end}k` : `${object.data.end}`;
     return object;
   }
 
@@ -1748,7 +1765,7 @@ export class DTOService {
     return object;
   }
 
-  public formHistoricalTradeObject(targetSecurity: DTOs.SecurityDTO): DTOs.HistoricalTradeVisualizerDTO {
+  public formHistoricalTradeObject(targetSecurity: DTOs.SecurityDTO, isCDS: boolean): DTOs.HistoricalTradeVisualizerDTO {
     const object: DTOs.HistoricalTradeVisualizerDTO = {
       data: {
         prinstineTradeList: targetSecurity.data.tradeHistory || [],
@@ -1763,7 +1780,8 @@ export class DTOService {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
         selectedPortfolio: [],
         graphReceived: false,
-        showAllTradeHistory: false
+        showAllTradeHistory: false,
+        isCDSVariant: isCDS
       },
       graph: {
         timeSeries: null,
@@ -1998,8 +2016,8 @@ export class DTOService {
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
     selectedMetricValue: PortfolioMetricValues
-  ): DTOs.PortfolioStructureDTO {
-    const object: DTOs.PortfolioStructureDTO = {
+  ): DTOs.PortfolioFundDTO {
+    const object: DTOs.PortfolioFundDTO = {
       data: null,
       api: {
         onSubmitMetricValues: null
@@ -2022,7 +2040,8 @@ export class DTOService {
         autoScalingAvailable: !isStencil 
           ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
           : false,
-        autoScalingActive: true
+        autoScalingActive: true,
+        isViewingHistoricalData: false
       }
     };
     try {
@@ -2055,6 +2074,7 @@ export class DTOService {
           creditDuration: !isStencil ? rawData.indexTotals.CreditDuration: 0
         },
         children: [],
+        displayChildren: [],
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
         creditDurationTargetBar: null,
@@ -2125,7 +2145,8 @@ export class DTOService {
         isOverrideVariant: false,
         isEditingViewAvail: false,
         isDisplaySubLevels: false,
-        isDisplayPopover: false
+        isDisplayPopover: false,
+        isViewingHistoricalData: false
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
@@ -2239,19 +2260,9 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-        parsedRawData.currentLevel = Math.abs(rawCurrentLevel) >= 1000 ? this.utility.round(parsedRawData.currentLevel/1000, 0) : 0;
-      } else {
-        parsedRawData.currentLevel = this.utility.round(parsedRawData.currentLevel, 2);
-      }
+      parsedRawData.currentLevel = this.utility.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        if (!!isCs01) {
-        // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-          parsedRawData.targetLevel = Math.abs(parsedRawData.targetLevel) >= 1000 ? this.utility.round(parsedRawData.targetLevel/1000, 0) : 0;
-        } else {
-          parsedRawData.targetLevel = this.utility.round(parsedRawData.targetLevel, 2);
-        }
+        parsedRawData.targetLevel = this.utility.getRoundedValuesForVisualizer(rawTargetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
@@ -2269,12 +2280,11 @@ export class DTOService {
         maxValue,
         minValue,
         !!isStencil,
-        groupOption,
         isOverride,
-        diveInLevel
+        diveInLevel,
+        isCs01
       );
-      eachMoveVisualizer.data.endPinText = !!isCs01 ? `${eachMoveVisualizer.data.end}k` : `${eachMoveVisualizer.data.end}`;
-      const diffToTarget = !!isCs01 ? Math.round(parsedRawData.targetLevel - parsedRawData.currentLevel) : this.utility.round(parsedRawData.targetLevel - parsedRawData.currentLevel, 2);
+      const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.currentLevel, parsedRawData.targetLevel, isCs01);
 
       const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
@@ -2307,15 +2317,13 @@ export class DTOService {
         simpleBucket: simpleBucket,
         parentRow: null,
         displayedSubLevelRows: [],
+        displayedSubLevelRowsWithTargets: [],
+        editedSubLevelRowsWithTargets: [],
         code: code
       };
-      if (eachCategoryBlock.diffToTarget < 0) {
-        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `${eachCategoryBlock.diffToTarget}k` : `${eachCategoryBlock.diffToTarget}`;
-      }
-      if (eachCategoryBlock.diffToTarget > 0) {
-        eachCategoryBlock.diffToTargetDisplay = !!isCs01 ? `+${eachCategoryBlock.diffToTarget}k` : `+${eachCategoryBlock.diffToTarget}`;
-      }
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isBicsBreakdown);
+      eachCategoryBlock.diffToTargetDisplay = this.utility.getRowDiffToTargetText(eachCategoryBlock.diffToTarget, isCs01);
+      const isDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(eachCategoryBlock.code) : false;
+      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isDiveIn);
       return eachCategoryBlockDTO;
     } else {
       return null;
@@ -2374,7 +2382,8 @@ export class DTOService {
         isEditingViewAvail: false,
         isDoveIn: false,
         isWithinEditRow: false,
-        isWithinSetTargetPreview: false
+        isWithinSetTargetPreview: false,
+        isViewingHistoricalData: false
       }
     }
     return object;
@@ -2521,7 +2530,7 @@ export class DTOService {
   }
 
   private processBreakdownDataForStructureFund(
-    object: DTOs.PortfolioStructureDTO,
+    object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEPortfolioStructuringDTO,
     isStencil: boolean,
     selectedMetricValue: PortfolioMetricValues
@@ -2555,7 +2564,7 @@ export class DTOService {
   }
 
   private processOverrideDataForStructureFund(
-    object: DTOs.PortfolioStructureDTO,
+    object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEPortfolioStructuringDTO,
     selectedMetricValue: PortfolioMetricValues
   ){
@@ -2603,6 +2612,32 @@ export class DTOService {
       },
       state: {
         triggersRedirect: !!isRedirect
+      }
+    };
+    return object;
+  }
+
+  public formSantaDatepicker(
+    inputLabelEmpty: string,
+    inputLabelFilled: string,
+    minDate?: moment.Moment,
+    maxDate?: moment.Moment
+  ): SantaDatePicker {
+    const object: SantaDatePicker = {
+      data: {
+        inputLabelDisplay: inputLabelEmpty,
+        inputLabelEmpty: inputLabelEmpty,
+        inputLabelFilled: inputLabelFilled,
+        minDate: minDate || moment('2020-11-13'),
+        maxDate: maxDate || moment(),
+        receivedExternalChangeDate: null
+      },
+      api: {
+        datepicker: null
+      },
+      state: {
+        noInputVariant: false,
+        opened: false
       }
     };
     return object;

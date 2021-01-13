@@ -123,7 +123,7 @@ export interface AmchartPieDataBlock {
 }
 
 export interface StructureSetTargetOverlayTransferPack {
-  targetFund: DTOs.PortfolioStructureDTO;
+  targetFund: DTOs.PortfolioFundDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   isCreateNewOverride: boolean;
 }
@@ -186,6 +186,10 @@ export interface BICSHierarchyDictionaryByLevel {
 
 export interface SecurityDefinitionFilterOptionTenorRange {
   [property:string]: SecurityDefinitionFilterOptionTenorRangeItem
+}
+
+export interface BICSGroupingByCodeBlock {
+  [code: number]: Array<string>;
 }
 
 interface SecurityDefinitionFilterOptionTenorRangeItem {

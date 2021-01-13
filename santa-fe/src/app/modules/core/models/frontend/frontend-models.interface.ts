@@ -684,6 +684,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     selectedPortfolio: Array<string>;
     graphReceived: boolean;
     showAllTradeHistory: boolean;
+    isCDSVariant: boolean;
   };
   graph: {
     timeSeries: am4Charts.XYChart;
@@ -753,10 +754,11 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isEditingViewAvail: boolean;
     isDisplaySubLevels: boolean;
     isDisplayPopover: boolean;
+    isViewingHistoricalData: boolean;
   }
 }
 
-export interface PortfolioStructureDTO extends BasicDTOStructure {
+export interface PortfolioFundDTO extends BasicDTOStructure {
   data: {
     date: string;
     portfolioId: number;
@@ -774,6 +776,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     indexNav: number;
     indexTotals: PortfolioMetricTotals;
     children: Array<PortfolioBreakdownDTO>;
+    displayChildren: Array<PortfolioBreakdownDTO>;
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
@@ -799,6 +802,7 @@ export interface PortfolioStructureDTO extends BasicDTOStructure {
     }
     autoScalingAvailable: boolean;
     autoScalingActive: boolean;
+    isViewingHistoricalData: boolean;
   }
 }
 
@@ -870,6 +874,7 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isDoveIn: boolean;
     isWithinEditRow: boolean;
     isWithinSetTargetPreview: boolean;
+    isViewingHistoricalData: boolean;
   }
 }
 

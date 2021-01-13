@@ -8,6 +8,9 @@ $portfolioBreakdownRowBranchLevel2Base: .5rem;
 $portfolioBreakdownRowBranchLevel3Base: $portfolioBreakdownRowBranchLevel2Base + $portfolioBreakdownRowBranchLeftIncrement;
 $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base + $portfolioBreakdownRowBranchLeftIncrement;
 $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
+$portfolioBreakdownRowLevel2LeftOffset: $portfolioBreakdownRowBranchLevel2Base + $spacing_small;
+$portfolioBreakdownRowLevel3LeftOffset: $portfolioBreakdownRowBranchLevel3Base + $spacing_small;
+$portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base + $spacing_small;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   flex: 1 1 auto;
@@ -34,6 +37,38 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
       padding: $spacing_xx_small;
       text-align: right;
       flex-direction: row;
+      &-editedTargetAmount {
+        @include mix_border_radius(3px);
+        display: none;
+        position: relative;
+        background-color: $color_active;
+        color: $font_color_inverse;
+        padding: $spacing_xx_small;
+        font-size: $font_size_small;
+        &-tooltip {
+          @include mix_fixed_div(absolute, $z_index_tooltip_lift);
+          display: none;
+          top: -$iconButton_size_x_small;
+          background-color: $color_active;
+          color: $font_color_inverse;
+          padding: $spacing_xx_small;
+          font-size: $font_size_small;
+          white-space: nowrap;
+        }
+        &:hover {
+          #{$blockName} {
+            &__cta {
+              &-btn {
+                &-editedTargetAmount {
+                  &-tooltip {
+                    display: flex;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       &-text {
         flex: 1 1 auto;
         text-align: left;
@@ -460,47 +495,51 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
           visibility: visible;
         }
       }
+    }
+  }
+  &--parallelLevel1Row {
+    #{$blockName} {
       &__subLevelTargetGauge {
         display: flex;
       }
     }
   }
-  &--mainPanelLevel2 {
+  &--parallelLevel2Row {
     display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel2Base;
       }
       &__cta {
-        margin-left: $portfolioBreakdownRowBranchLevel2Base + $spacing_small;
+        margin-left: $portfolioBreakdownRowLevel2LeftOffset;
         &-btn {
           margin-left: $spacing_x_small;
         }
       }
     }
   }
-  &--mainPanelLevel3 {
+  &--parallelLevel3Row {
     display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel3Base;
       }
       &__cta {
-        margin-left: $portfolioBreakdownRowBranchLevel3Base + $spacing_small;
+        margin-left: $portfolioBreakdownRowLevel3LeftOffset;
         &-btn {
           margin-left: $spacing_x_small;
         }
       }
     }
   }
-  &--mainPanelLevel4 {
+  &--parallelLevel4Row {
     display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel4Base;
       }
       &__cta {
-        margin-left: $portfolioBreakdownRowBranchLevel4Base + $spacing_small;
+        margin-left: $portfolioBreakdownRowLevel4LeftOffset;
         &-btn {
           margin-left: $spacing_x_small;
         }
@@ -523,9 +562,9 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
   }
   &--visibleSubLevel {
     &#{$blockName} {
-      &--mainPanelLevel2,
-      &--mainPanelLevel3,
-      &--mainPanelLevel4 {
+      &--parallelLevel2Row,
+      &--parallelLevel3Row,
+      &--parallelLevel4Row {
         display: flex;
       }
     }
@@ -539,6 +578,7 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
         border-color: $color_white;
       }
       &__cta {
+        flex: 0 0 12rem;
         &-actionMenu {
           top: 0;
           &-top {
@@ -549,6 +589,46 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
           }
         }
       }
+      &__subLevelTargetGauge {
+        display: flex;
+      }
+    }
+    &#{$blockName} {
+      &--parallelLevel2Row {
+        #{$blockName} {
+          &__subLevelTargetGauge {
+            margin-left: $portfolioBreakdownRowLevel2LeftOffset;
+          }
+        }
+      }
+      &--parallelLevel3Row {
+        #{$blockName} {
+          &__subLevelTargetGauge {
+            margin-left: $portfolioBreakdownRowLevel3LeftOffset;
+          }
+        }
+      }
+      &--parallelLevel4Row {
+        #{$blockName} {
+          &__subLevelTargetGauge {
+            margin-left: $portfolioBreakdownRowLevel4LeftOffset;
+          }
+        }
+      }
+    }
+  }
+  &--hasEditedSubLevels {
+    #{$blockName} {
+      &__cta {
+        &-btn {
+          &-editedTargetAmount {
+            display: flex;
+          }
+          &-text {
+            margin-right: $spacing_small;
+          }
+        }
+      }
     }
   }
   &--isWithinSetTargetPreview {
@@ -556,6 +636,16 @@ $portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
       &__cta {
         &-actionMenu {
           display: none;
+        }
+      }
+    }
+  }
+  &--isViewingHistoricalData {
+    #{$blockName} {
+      &__cta {
+        &-actionMenu-top-viewBtn {
+          visibility: hidden;
+          pointer-events: none;
         }
       }
     }

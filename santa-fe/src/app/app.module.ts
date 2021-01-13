@@ -4,6 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 import { environment } from '../environments/environment';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { StoreModule } from '@ngrx/store';
 import { appReducers, metaReducers } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
@@ -42,6 +44,7 @@ import { AppRoot } from './app.root';
       maxAge: 25,
       logOnly: environment.production
     }),
+    BrowserAnimationsModule,
 
     // 3rd party dependencies
     AgGridModule,

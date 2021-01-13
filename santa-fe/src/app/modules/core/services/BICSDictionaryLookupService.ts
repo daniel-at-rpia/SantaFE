@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
-import { BICSHierarchyDictionaryByLevel } from 'Core/models/frontend/frontend-adhoc-packages.interface';
+import {
+  BICSHierarchyDictionaryByLevel,
+  BICSGroupingByCodeBlock
+} from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX } from 'Core/constants/structureConstants.constants';
 
 @Injectable()
@@ -13,13 +16,17 @@ export class BICSDictionaryLookupService {
     level4: {}
   };
   private bicsDictionary: BEBICsHierarchyBlock;
+  private bicsGroupingByCode: BICSGroupingByCodeBlock = {};
 
   constructor() {}
 
   public loadBICSData(data: BEBICsHierarchyBlock) {
     this.bicsDictionary = data;
     this.buildReversedBICSHierarchyDictionary(data);
-  }
+    if (Object.keys(this.bicsGroupingByCode).length === 0) {
+        this.buildBICSGroupingByCode(data);
+      }
+    }
 
   public returnDictionary(): BEBICsHierarchyBlock {
     return this.bicsDictionary;
@@ -59,6 +66,12 @@ export class BICSDictionaryLookupService {
     }
   }
 
+  public getBICSSubLevelByCodeGrouping(code: string): Array<string> {
+    const mainCategoryCode = code.substring(0,2);
+    const subCodes = this.bicsGroupingByCode[mainCategoryCode].filter(subCode => subCode.length > code.length && subCode.indexOf(code) === 0);
+    return subCodes;
+  }
+
   private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
     for (let eachCode in data) {
       const block = data[eachCode];
@@ -82,4 +95,21 @@ export class BICSDictionaryLookupService {
     }
   }
 
+  private buildBICSGroupingByCode(data: BEBICsHierarchyBlock) {
+    for (let code in data) {
+      if (code.length === 2) {
+        const isExist = Object.keys(this.bicsGroupingByCode).find(key => key === code);
+        if (!isExist) {
+          this.bicsGroupingByCode[code] = [];
+        }
+      } else {
+        const prefix = code.substring(0,2);
+        const isPrimaryCodeGroupingExists = Object.keys(this.bicsGroupingByCode).find(key => key === prefix);
+        if (!!isPrimaryCodeGroupingExists) {
+          const isExists = this.bicsGroupingByCode[prefix].find(value => value === code);
+          !isExists && this.bicsGroupingByCode[prefix].push(code);
+        }
+      }
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+import * as moment from 'moment';
 
 import {
   UtilityService,
@@ -30,6 +31,7 @@ import {
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -43,7 +45,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   @Input() dataIsReady: boolean;
   @Output() clickedEdit = new EventEmitter<PortfolioBreakdownDTO>();
   subscriptions = {
-    ownerInitialsSub: null
+    ownerInitialsSub: null,
+    dataDatestampSub: null
   };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
@@ -70,6 +73,17 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
       this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
+    this.subscriptions.dataDatestampSub = this.store$.pipe(
+      select(selectDataDatestamp)
+    ).subscribe((datestampInUnix) => {
+      this.breakdownData.state.isViewingHistoricalData = !moment.unix(datestampInUnix).isSame(moment(), 'day');
+      this.breakdownData.data.rawCs01CategoryList.forEach((eachRow) => {
+        eachRow.state.isViewingHistoricalData = this.breakdownData.state.isViewingHistoricalData;
+      });
+      this.breakdownData.data.rawLeverageCategoryList.forEach((eachRow) => {
+        eachRow.state.isViewingHistoricalData = this.breakdownData.state.isViewingHistoricalData;
+      });
+    });
   }
 
   public ngOnChanges() {
@@ -92,15 +106,14 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public loadData() {
     if (this.breakdownData.data.title === 'BICS') {
-      // Resets BICS sublevel states
+      // Resets BICS sublevel states when switching between metrics
+      // addSortedREgularBICSWithSubLevels has to execute for both lists
+      // this is to ensure that when toggling the set target modal and switching between metrics in the modal would append the correct sub levels for each category
       this.breakdownData.state.isDisplaySubLevels = false;
-      if (this.breakdownData.state.isDisplayingCs01) {
-        this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawCs01CategoryList);
-        this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawCs01CategoryList);
-      } else {
-        this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawLeverageCategoryList);
-        this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
-      }
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawCs01CategoryList);
+      this.breakdownData.data.rawCs01CategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawCs01CategoryList);
+      this.bicsDataProcessingService.resetBICsSubLevelsState(this.breakdownData.data.rawLeverageCategoryList);
+      this.breakdownData.data.rawLeverageCategoryList = this.bicsDataProcessingService.addSortedRegularBICsWithSublevels(this.breakdownData.data.rawLeverageCategoryList);
     }
     this.breakdownData.data.displayCategoryList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawCs01CategoryList : this.breakdownData.data.rawLeverageCategoryList;
     if (this.dataIsReady) {

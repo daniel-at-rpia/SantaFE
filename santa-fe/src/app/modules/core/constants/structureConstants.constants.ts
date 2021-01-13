@@ -1,4 +1,4 @@
-import { PortfolioStructureDTO } from 'FEModels/frontend-models.interface';
+import { PortfolioFundDTO } from 'FEModels/frontend-models.interface';
 import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.interface';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
@@ -55,6 +55,10 @@ export const BICS_BRANCH_CHARACTER_LIMIT = 26;
 
 export const BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST: Array<string> = ['None', '*'];
 
+export const BICS_CODE_DELIMITER_AMOUNT = 2;
+
+export const BICS_DIVE_IN_UNAVAILABLE_CATEGORIES = ['99'];
+
 export enum PortfolioMetricValues {
   cs01 = 'CS01',
   creditLeverage = 'Credit Leverage',
@@ -102,3 +106,12 @@ export enum BEPortfolioTargetMetricValues {
   CreditDuration = 'CreditDuration',
   Cs01 = 'Cs01'
 }
+
+export enum BreakdownViewFilter {
+  overridesOnly = 'Overrides',
+  BICSOnly = 'BICS',
+  regularsOnly = 'Regulars',
+  all = 'All'
+}
+
+export const UTILITY_PANEL_HISTORICAL_TIME_LABEL = 'Beginning Of Day';

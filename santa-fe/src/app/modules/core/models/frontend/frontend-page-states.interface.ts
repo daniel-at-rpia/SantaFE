@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 import * as DTOs from 'FEModels/frontend-models.interface';
 import {
   ObligorChartCategoryBlock,
@@ -15,9 +17,14 @@ import {
   SecurityMapEntry,
   AlertDTOMap
 } from 'FEModels/frontend-adhoc-packages.interface';
+import { SantaDatePicker } from 'Form/models/form-models.interface';
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  BreakdownViewFilter,
+  PortfolioShortNames
+} from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 
@@ -146,9 +153,12 @@ export interface TradeCenterPanelState {
 export interface StructureMainPanelState {
   ownerInitial: string;
   isUserPM: boolean;
+  currentDataDatestamp: moment.Moment;
   selectedMetricValue: PortfolioMetricValues;
+  activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
   fetchResult: {
-    fundList: DTOs.PortfolioStructureDTO[];
+    fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;
     fetchFundDataFailedError: string;
   }
@@ -291,12 +301,20 @@ export interface StructureState {
 
 export interface StructureUtilityPanelState {
   selectedMetricValue: PortfolioMetricValues;
-  isExpanded: boolean;
   lastUpdateTime: string;
+  currentDatestamp: moment.Moment;
+  currentDatestampDisplayText: string;
+  activeBreakdownViewFilter: BreakdownViewFilter;
+  activePortfolioViewFilter: Array<PortfolioShortNames>;
+  viewingHistoricalData: boolean;
+  switchDate: {
+    datepicker: SantaDatePicker;
+    changeDate: moment.Moment;
+  }
 }
 
 export interface StructureSetTargetPanelState {
-  targetFund: DTOs.PortfolioStructureDTO;
+  targetFund: DTOs.PortfolioFundDTO;
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   targetBreakdownRawData: BEStructuringBreakdownBlock;
   targetBreakdownRawDataDisplayLabelMap: object;

@@ -4,7 +4,7 @@ import { catchError, first, tap} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import * as moment from 'moment';
 
-import { PortfolioStructureDTO } from 'Core/models/frontend/frontend-models.interface';
+import { PortfolioFundDTO } from 'Core/models/frontend/frontend-models.interface';
 import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { UtilityService } from 'Core/services/UtilityService';
@@ -37,8 +37,8 @@ import { NavigationModule } from 'Core/constants/coreConstants.constant';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureFund implements OnInit {
-  @Input() fund: PortfolioStructureDTO;
+export class StructureFund implements OnInit, OnDestroy {
+  @Input() fund: PortfolioFundDTO;
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
@@ -69,6 +69,15 @@ export class StructureFund implements OnInit {
       this.fund.state.isEditAvailable = this.constants.structuringTeamPMList.indexOf(value) >= 0;
     });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
+      }
+    }
   }
 
   public onClickedEditInBreakdown(targetBreakdown: PortfolioBreakdownDTO) {
