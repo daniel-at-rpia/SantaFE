@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AlertTypes} from 'Core/constants/coreConstants.constant';
-import {AlertCountSummaryDTO} from 'FEModels/frontend-models.interface';
+import { DTOs } from 'Core/models/frontend';
 
 @Component({
   selector: 'alert-count-summary',
@@ -8,7 +8,7 @@ import {AlertCountSummaryDTO} from 'FEModels/frontend-models.interface';
   styleUrls: ['./alert-count-summary.scss']
 })
 export class AlertCountSummary implements OnInit {
-  @Input() summary: AlertCountSummaryDTO;
+  @Input() summary: DTOs.AlertCountSummaryDTO;
   constructor() {
   }
 

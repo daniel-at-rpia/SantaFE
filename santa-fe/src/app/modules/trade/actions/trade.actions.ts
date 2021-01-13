@@ -1,10 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import {
-  SecurityTableRowDTO,
-  SecurityDTO,
-  SecurityDefinitionDTO
-} from 'FEModels/frontend-models.interface';
+import { DTOs } from 'Core/models/frontend';
 
 export enum TradeActions {
   TradeStoreReset = '[Trade] Reset Store Upon Entering',
@@ -76,9 +72,9 @@ export class TradeTogglePresetEvent implements Action {
 
 export class TradeSelectedSecurityForAnalysisEvent implements Action {
   readonly type = TradeActions.SelectSecurityForAnalysisEvent;
-  readonly targetSecurity: SecurityDTO;
+  readonly targetSecurity: DTOs.SecurityDTO;
   constructor(
-    targetSecurity: SecurityDTO
+    targetSecurity: DTOs.SecurityDTO
   ){
     this.targetSecurity = targetSecurity;
   }
@@ -96,9 +92,9 @@ export class TradeSecurityIDsFromAnalysisEvent implements Action {
 
 export class TradeSecurityTableRowDTOListForAnalysisEvent implements Action {
   readonly type = TradeActions.SecurityTableRowDTOListForAnalysisEvent;
-  readonly securityTableRowDTOList: Array<SecurityTableRowDTO>;
+  readonly securityTableRowDTOList: Array<DTOs.SecurityTableRowDTO>;
   constructor(
-    securityTableRowDTOList: Array<SecurityTableRowDTO>
+    securityTableRowDTOList: Array<DTOs.SecurityTableRowDTO>
   ){
     this.securityTableRowDTOList = securityTableRowDTOList;
   }
@@ -116,9 +112,9 @@ export class TradeChangeBestQuoteValidWindowEvent implements Action {
 
 export class TradeSelectedSecurityForAlertConfigEvent implements Action {
   readonly type = TradeActions.SelectSecurityForAlertConfigEvent;
-  readonly targetSecurity: SecurityDTO;
+  readonly targetSecurity: DTOs.SecurityDTO;
   constructor(
-    targetSecurity: SecurityDTO
+    targetSecurity: DTOs.SecurityDTO
   ){
     this.targetSecurity = targetSecurity;
   }
@@ -149,8 +145,8 @@ export class TradeKeywordSearchThisSecurityEvent implements Action {
 
 export class TradeCenterPanelLoadTableWithFilterEvent implements Action {
   readonly type = TradeActions.CenterPanelLoadTableWithFilter;
-  readonly filterList: Array<SecurityDefinitionDTO>;
-  constructor(filterList: Array<SecurityDefinitionDTO>){
+  readonly filterList: Array<DTOs.SecurityDefinitionDTO>;
+  constructor(filterList: Array<DTOs.SecurityDefinitionDTO>){
     this.filterList = filterList;
   }
 }

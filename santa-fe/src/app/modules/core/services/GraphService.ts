@@ -10,26 +10,8 @@ import am4themes_spiritedaway from "@amcharts/amcharts4/themes/spiritedaway";
 import * as moment from 'moment';
 
 import { UtilityService } from './UtilityService';
-import {
-  SecurityGroupPieChartBlock,
-  SecurityGroupPieChartDataBlock,
-  ObligorChartCategoryBlock,
-  VisualizerGraphsBlock,
-  TraceTradeBlock
-} from 'FEModels/frontend-blocks.interface';
-import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
-import {
-  ObligorGraphCategoryData,
-  ObligorGraphAxesZoomState,
-  LilMarketGraphSeriesDataPack,
-  AmchartPieDataBlock,
-  TraceScatterGraphData
-} from 'src/app/modules/core/models/frontend/frontend-adhoc-packages.interface';
+import { DTOs, Blocks, PageStates, AdhocPacks } from '../models/frontend';
 import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
-import {
-  HistoricalTradeVisualizerDTO,
-  TraceTradesVisualizerDTO
-} from 'FEModels/frontend-models.interface';
 import {
   TradeSideValueEquivalent,
   traceTradePieGraphKeys
@@ -53,7 +35,7 @@ export class GraphService {
       return chart;
     }
 
-    public destroyMultipleGraphs(charts: VisualizerGraphsBlock) {
+    public destroyMultipleGraphs(charts: Blocks.VisualizerGraphsBlock) {
       for (let key in charts) {
         if (!!charts[key]) {
           this.destroyGraph(charts[key]);
@@ -64,7 +46,7 @@ export class GraphService {
 
   // Security Pie Chart 
     public generateSecurityGroupPieChart(
-      pieChartDTO: SecurityGroupPieChartBlock,
+      pieChartDTO: Blocks.SecurityGroupPieChartBlock,
     ): am4charts.PieChart {
       const chart = am4core.create(pieChartDTO.name, am4charts.PieChart);
       const pieSeries = chart.series.push(new am4charts.PieSeries());
@@ -112,7 +94,7 @@ export class GraphService {
     }
 
     public changeSecurityGroupPieChartOnSelect(
-      pieChartDTO: SecurityGroupPieChartBlock,
+      pieChartDTO: Blocks.SecurityGroupPieChartBlock,
       isSelected: boolean
     ) {
       const chart = pieChartDTO.chart;
@@ -133,14 +115,14 @@ export class GraphService {
     }
 
     private generateGroupPieChartData(
-      pieChartDTO: SecurityGroupPieChartBlock
-    ): Array<SecurityGroupPieChartDataBlock> {
+      pieChartDTO: Blocks.SecurityGroupPieChartBlock
+    ): Array<Blocks.SecurityGroupPieChartDataBlock> {
       const colorScheme = pieChartDTO.colorScheme.scheme;
-      const dataList: Array<SecurityGroupPieChartDataBlock> = [];
+      const dataList: Array<Blocks.SecurityGroupPieChartDataBlock> = [];
       //if (pieChartDTO.colorScheme.type === 'Rating') {
       for (const attrName in pieChartDTO.rawSupportingData) {
         const colorMappingIndex = this.findColorMapping(pieChartDTO.colorScheme.type, attrName);
-        const newEntry: SecurityGroupPieChartDataBlock = {
+        const newEntry: Blocks.SecurityGroupPieChartDataBlock = {
           label: pieChartDTO.colorScheme.type === 'Seniority' ? this.utility.convertSenioritiesToAcronyms(attrName) : attrName,
           value: this.utility.retrieveValueForGroupPieChartFromSupportingData(pieChartDTO.rawSupportingData[attrName]),
           index: colorMappingIndex,
@@ -179,7 +161,7 @@ export class GraphService {
       return chart;
     }
 
-    public buildObligorChart(state: TradeObligorGraphPanelState) {
+    public buildObligorChart(state: PageStates.TradeObligorGraphPanelState) {
       // Initialize the chart as XY.
       state.obligorChart = am4core.create("chartdiv", am4charts.XYChart);
 
@@ -232,7 +214,7 @@ export class GraphService {
       state.obligorChart.zoomOutButton.disabled = true;
     }
 
-    public addCategoryToObligorGraph(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState) {
+    public addCategoryToObligorGraph(category: Blocks.ObligorChartCategoryBlock, state: PageStates.TradeObligorGraphPanelState) {
       // Create data array that can be handled by amCharts from out category DataItems.
       let amChartsData: any[] = this.buildObligorChartData(category, state);
 
@@ -247,10 +229,10 @@ export class GraphService {
       }
     }
 
-    public captureXYChartCurrentZoomState(chart: any, state: TradeObligorGraphPanelState): ObligorGraphAxesZoomState {
+    public captureXYChartCurrentZoomState(chart: any, state: PageStates.TradeObligorGraphPanelState): AdhocPacks.ObligorGraphAxesZoomState {
       // Capture the current axes zoom state in out Zoom State object.
       // This is not used, but here when we need it.
-      let currentState: ObligorGraphAxesZoomState;
+      let currentState: AdhocPacks.ObligorGraphAxesZoomState;
       currentState = {
         xAxis: {
           start: chart.xAxes.values[0].minZoomed,
@@ -268,8 +250,8 @@ export class GraphService {
       return currentState;
     }
 
-    public buildObligorChartData(category: ObligorChartCategoryBlock, state: TradeObligorGraphPanelState): any[] {
-      let amChartsData: ObligorGraphCategoryData[] = [];
+    public buildObligorChartData(category: Blocks.ObligorChartCategoryBlock, state: PageStates.TradeObligorGraphPanelState): any[] {
+      let amChartsData: AdhocPacks.ObligorGraphCategoryData[] = [];
 
       for (let dataItem in category.data.obligorCategoryDataItemDTO) {
 
@@ -290,7 +272,7 @@ export class GraphService {
           else if (state.markValue.quantity) markQuantity = category.data.obligorCategoryDataItemDTO[dataItem].data.currentPosition
 
           //TODO: After being more familiar with amcharts, I don't think we need a seperate object for this.
-          // We can probably find a way to send in ObligorChartCategoryBlock to create the series. I'm not entirely sure if it will work. But worth looking into.
+          // We can probably find a way to send in Blocks.ObligorChartCategoryBlock to create the series. I'm not entirely sure if it will work. But worth looking into.
           // This whole method would be removed, and it would get rid of some duplication.
           if (mid !== null)
             amChartsData.push({
@@ -305,7 +287,7 @@ export class GraphService {
       return amChartsData;
     }
 
-    private buildObligorChartDumbells(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
+    private buildObligorChartDumbells(state: PageStates.TradeObligorGraphPanelState, category: Blocks.ObligorChartCategoryBlock, amChartsData: any[]): am4charts.ColumnSeries {
 
       if (amChartsData.length > 0) {
         // Create the column representing the mark discrepency.
@@ -416,7 +398,7 @@ export class GraphService {
 
     }
 
-    private buildObligorChartTrendCurve(state: TradeObligorGraphPanelState, category: ObligorChartCategoryBlock, amChartsData: any[], dumbBellSeries: am4charts.ColumnSeries): am4charts.LineSeries {
+    private buildObligorChartTrendCurve(state: PageStates.TradeObligorGraphPanelState, category: Blocks.ObligorChartCategoryBlock, amChartsData: any[], dumbBellSeries: am4charts.ColumnSeries): am4charts.LineSeries {
 
       var sortedArray: any[] = amChartsData.sort((obj1, obj2) => {
         if (obj1.workoutTerm > obj2.workoutTerm) {
@@ -509,7 +491,7 @@ export class GraphService {
       return isValid;
     }
 
-    private initializeObligorChartXAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
+    private initializeObligorChartXAxis(state: PageStates.TradeObligorGraphPanelState): am4charts.ValueAxis {
       let xAxis = state.obligorChart.xAxes.push(new am4charts.ValueAxis());
       xAxis.renderer.grid.template.strokeDasharray = "1,3";
       xAxis.title.text = "Tenor";
@@ -520,7 +502,7 @@ export class GraphService {
       return xAxis;
     }
 
-    private initializeObligorChartYAxis(state: TradeObligorGraphPanelState): am4charts.ValueAxis {
+    private initializeObligorChartYAxis(state: PageStates.TradeObligorGraphPanelState): am4charts.ValueAxis {
       let yAxis = state.obligorChart.yAxes.push(new am4charts.ValueAxis());
       if (state.metric.spread) yAxis.title.text = "Spread";
       if (state.metric.yield) yAxis.title.text = "Yield";
@@ -531,7 +513,7 @@ export class GraphService {
       return yAxis;
     }
 
-    private initializeObligorChartTriggerEvents(state: TradeObligorGraphPanelState, xAxis: am4charts.ValueAxis, yAxis: am4charts.ValueAxis) {
+    private initializeObligorChartTriggerEvents(state: PageStates.TradeObligorGraphPanelState, xAxis: am4charts.ValueAxis, yAxis: am4charts.ValueAxis) {
       // When the legend is clicked, reset the axis zoom scope.
       state.obligorChart.legend.events.on("hit", function (ev) {
         state.axesZoomState.xAxis.start = null;
@@ -575,15 +557,15 @@ export class GraphService {
       });
     }
 
-    private resetAxesZoomScope(state: TradeObligorGraphPanelState){
+    private resetAxesZoomScope(state: PageStates.TradeObligorGraphPanelState){
     }
 
     /* 
       refactor exemption area
     */ 
     public buildLilMarketTimeSeriesGraph(
-      baseDataPack: LilMarketGraphSeriesDataPack,
-      targetDataPack: LilMarketGraphSeriesDataPack
+      baseDataPack: AdhocPacks.LilMarketGraphSeriesDataPack,
+      targetDataPack: AdhocPacks.LilMarketGraphSeriesDataPack
     ): am4charts.XYChart {
       
       const chart = am4core.create('LilMarketGraph', am4charts.XYChart);
@@ -608,7 +590,7 @@ export class GraphService {
       return chart;
     }
 
-    private buildLilMarketSeries(chart: am4charts.XYChart, dataPack: LilMarketGraphSeriesDataPack){
+    private buildLilMarketSeries(chart: am4charts.XYChart, dataPack: AdhocPacks.LilMarketGraphSeriesDataPack){
       // Create series
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = "value";
@@ -651,7 +633,7 @@ export class GraphService {
 
   // TradeHistoryVisualizer Charts
 
-    public generateTradeHistoryTimeSeries(dto: HistoricalTradeVisualizerDTO): am4charts.XYChart {
+    public generateTradeHistoryTimeSeries(dto: DTOs.HistoricalTradeVisualizerDTO): am4charts.XYChart {
       // Create chart
       let chart = am4core.create(dto.data.timeSeriesId, am4charts.XYChart);
 
@@ -776,10 +758,10 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeHistoryVolumeLeftPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+    public generateTradeHistoryVolumeLeftPie(dto: DTOs.HistoricalTradeVisualizerDTO): am4charts.PieChart {
       am4core.useTheme(am4themes_dataviz);
       const chart = am4core.create(dto.data.volumeLeftPieId, am4charts.PieChart);
-      const pieDataList: Array<AmchartPieDataBlock> = [];
+      const pieDataList: Array<AdhocPacks.AmchartPieDataBlock> = [];
       dto.data.prinstineTradeList.forEach((eachTrade) => {
         const exist = pieDataList.find((eachItem) => { return eachItem.subject === eachTrade.data.counterPartyName});
         if (exist) {
@@ -801,10 +783,10 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeHistoryVolumeRightPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+    public generateTradeHistoryVolumeRightPie(dto: DTOs.HistoricalTradeVisualizerDTO): am4charts.PieChart {
       am4core.useTheme(am4themes_frozen);
       const chart = am4core.create(dto.data.volumeRightPieId, am4charts.PieChart);
-      const pieDataList: Array<AmchartPieDataBlock> = [];
+      const pieDataList: Array<AdhocPacks.AmchartPieDataBlock> = [];
       dto.data.prinstineTradeList.forEach((eachTrade) => {
         const exist = pieDataList.find((eachItem) => { return eachItem.subject === eachTrade.data.trader});
         if (exist) {
@@ -826,9 +808,9 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeHistoryPositionPie(dto: HistoricalTradeVisualizerDTO): am4charts.PieChart {
+    public generateTradeHistoryPositionPie(dto: DTOs.HistoricalTradeVisualizerDTO): am4charts.PieChart {
       const chart = am4core.create(dto.data.positionPieId, am4charts.PieChart);
-      const fundList: Array<AmchartPieDataBlock> = dto.data.positionList.map((eachPosition) => {
+      const fundList: Array<AdhocPacks.AmchartPieDataBlock> = dto.data.positionList.map((eachPosition) => {
         return {
           subject: eachPosition.portfolioName,
           quantity: eachPosition.quantity
@@ -844,12 +826,12 @@ export class GraphService {
       return chart;
     }
 
-    public generateTradeTraceScatterGraph(dto: TraceTradesVisualizerDTO): am4charts.XYChart {
+    public generateTradeTraceScatterGraph(dto: DTOs.TraceTradesVisualizerDTO): am4charts.XYChart {
       const chart = am4core.create(dto.data.scatterGraphId, am4charts.XYChart);
       chart.height = am4core.percent(100);
       const reverseList = dto.data.displayList.length > 0 ? [...dto.data.displayList].reverse() : null;
       if (!!dto.state.isDisplayAllTraceTrades) {
-        const tradeDataList: Array<TraceScatterGraphData> = [];
+        const tradeDataList: Array<AdhocPacks.TraceScatterGraphData> = [];
         if (reverseList.length > 0) {
           reverseList.forEach(trade => {
             const isTradeSell = trade.side === TradeSideValueEquivalent.Ask;
@@ -859,7 +841,7 @@ export class GraphService {
             const hoursInMinutes = +(timeOnly.substring(0,2)) * 60;
             const minutes = +(timeOnly.substring(3,5));
             const totalTime = hoursInMinutes + minutes;
-            const object: TraceScatterGraphData = {
+            const object: AdhocPacks.TraceScatterGraphData = {
               rawDate: trade.tradeTime,
               totalTime: totalTime,
               date: date,
@@ -890,7 +872,7 @@ export class GraphService {
             //maintain the same x-axis even with filtering
             const allTraceDataList = dto.data.pristineRowList.length > 0 ? [...dto.data.pristineRowList].reverse() : null;
             if (allTraceDataList.length > 0) {
-              allTraceDataList.forEach((item: TraceTradeBlock) => {
+              allTraceDataList.forEach((item: Blocks.TraceTradeBlock) => {
                 const formattedDate = moment(item.tradeTime).format('YYYY-MM-DD');
                 if (customDateAxisList.length > 0) {
                   const ifExists = customDateAxisList.find(customDate => customDate === formattedDate);
@@ -946,10 +928,10 @@ export class GraphService {
         }
       } else {
         if (reverseList.length > 0) {
-          const tradeDataList: Array<TraceScatterGraphData> = [];
+          const tradeDataList: Array<AdhocPacks.TraceScatterGraphData> = [];
           reverseList.forEach(trade => {
             const time = new Date(trade.tradeTime);
-            const object: TraceScatterGraphData = {
+            const object: AdhocPacks.TraceScatterGraphData = {
               date: time.getTime(),
               contraParty: trade.contraParty,
               ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
@@ -1077,7 +1059,7 @@ export class GraphService {
       }
     }
 
-    public generateTraceTradePieGraph(dto: TraceTradesVisualizerDTO, graphID: string, categories: Array<string>, targetKey: traceTradePieGraphKeys): am4charts.PieChart {
+    public generateTraceTradePieGraph(dto: DTOs.TraceTradesVisualizerDTO, graphID: string, categories: Array<string>, targetKey: traceTradePieGraphKeys): am4charts.PieChart {
       const chart = am4core.create(graphID, am4charts.PieChart);
       const chartData = [];
       categories.forEach(category => {

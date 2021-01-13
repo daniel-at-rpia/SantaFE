@@ -22,11 +22,10 @@
       RestfulCommService,
       GlobalWorkflowIOService
     } from 'Core/services';
-    import { TradeState } from 'FEModels/frontend-page-states.interface';
+    import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { CoreUserLoggedIn, CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail, selectUserInitials } from 'Core/selectors/core.selectors';
-    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       TradeStoreResetEvent,
       TradeCenterPanelLoadTableWithFilterEvent
@@ -42,7 +41,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TradePage implements OnInit, OnDestroy {
-  state: TradeState;
+  state: PageStates.TradeState;
   subscriptions = {
     routeChange: null,
     receiveSelectedSecuritySub: null,

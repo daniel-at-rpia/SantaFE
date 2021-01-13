@@ -3,16 +3,7 @@
 
     import { UtilityService } from 'Core/services/UtilityService';
     import { DTOService } from 'Core/services/DTOService';
-    import {
-      SecurityDTO,
-      SecurityTableDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableRowDTO,
-      BestQuoteComparerDTO,
-      SearchShortcutDTO,
-      AlertDTO
-    } from 'FEModels/frontend-models.interface';
-    import { AlertDTOMap, LiveDataDiffingResult } from 'FEModels/frontend-adhoc-packages.interface';
+    import { DTOs, AdhocPacks } from 'Core/models/frontend';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -36,14 +27,14 @@ export class LiveDataProcessingService {
   }
 
   public loadFinalStageData(
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    tableHeaderList: Array<DTOs.SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
-    sendToGraphCallback: (card: SecurityDTO) => void,
-    sendToAlertConfigCallback: (card: SecurityDTO) => void
-  ): Array<SecurityTableRowDTO> {
+    sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
+    sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void
+  ): Array<DTOs.SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
-    const prinstineRowList: Array<SecurityTableRowDTO> = [];
+    const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachKey in rawSecurityDTOMap){
       let isValidFlag = true;
@@ -79,16 +70,16 @@ export class LiveDataProcessingService {
   }
 
   public loadFinalStageDataForAlertTable(
-    alertDTOMap: AlertDTOMap,
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    alertDTOMap: AdhocPacks.AlertDTOMap,
+    tableHeaderList: Array<DTOs.SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
-    sendToGraphCallback: (card: SecurityDTO) => void,
-    sendToAlertConfigCallback: (card: SecurityDTO) => void,
-    searchCallback: (card: SecurityDTO) => void
-  ): Array<SecurityTableRowDTO> {
+    sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
+    sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
+    searchCallback: (card: DTOs.SecurityDTO) => void
+  ): Array<DTOs.SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
-    const prinstineRowList: Array<SecurityTableRowDTO> = [];
+    const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachAlertId in alertDTOMap) {
       const eachAlertDTO = alertDTOMap[eachAlertId];
@@ -127,12 +118,12 @@ export class LiveDataProcessingService {
   }
 
   private populateEachRowWithData(
-    headerList: Array<SecurityTableHeaderDTO>,
-    prinstineRowList: Array<SecurityTableRowDTO>,
-    newSecurity: SecurityDTO,
+    headerList: Array<DTOs.SecurityTableHeaderDTO>,
+    prinstineRowList: Array<DTOs.SecurityTableRowDTO>,
+    newSecurity: DTOs.SecurityDTO,
     driverType: string,
     bestQuoteServerReturn: BEBestQuoteDTO,
-    targetAlert: AlertDTO
+    targetAlert: DTOs.AlertDTO
   ) {
     const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert, true, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, null, false, newSecurity.data.securityID);
     this.populateEachRowWithBestQuoteData(
@@ -156,8 +147,8 @@ export class LiveDataProcessingService {
   }
 
   private populateEachRowWithBestQuoteData(
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
-    targetRow: SecurityTableRowDTO,
+    tableHeaderList: Array<DTOs.SecurityTableHeaderDTO>,
+    targetRow: DTOs.SecurityTableRowDTO,
     driverType: string,
     quote: BEBestQuoteDTO
   ){
@@ -230,24 +221,24 @@ export class LiveDataProcessingService {
   }
 
   public returnDiff(
-    table: SecurityTableDTO,
-    newList: Array<SecurityTableRowDTO>,
+    table: DTOs.SecurityTableDTO,
+    newList: Array<DTOs.SecurityTableRowDTO>,
     diffOverwriteRowList?: Array<string>
-  ): LiveDataDiffingResult {
-    const updateList: Array<SecurityTableRowDTO> = [];
-    const oldRowList: Array<SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
+  ): AdhocPacks.LiveDataDiffingResult {
+    const updateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const oldRowList: Array<DTOs.SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
     let markDiffCount = 0;
     let quantDiffCount = 0;
 
     // those lists are only used for logging purposes
-    const newRowList: Array<SecurityTableRowDTO> = [];
-    const positionUpdateList: Array<SecurityTableRowDTO> = [];
-    const markUpdateList: Array<SecurityTableRowDTO> = [];
-    const newBestQuoteUpdateList: Array<SecurityTableRowDTO> = [];
-    const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
-    const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
-    const validityUpdateList: Array<SecurityTableRowDTO> = [];
-    const overwriteUpdateList: Array<SecurityTableRowDTO> = [];
+    const newRowList: Array<DTOs.SecurityTableRowDTO> = [];
+    const positionUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const markUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const newBestQuoteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const betterBidUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const betterAskUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const validityUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const overwriteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
 
     newList.forEach((eachNewRow) => {
       // if this row is specified in the overwrite list, then there is no need to do diffing, just add it to the list of rows to be updated
@@ -298,8 +289,8 @@ export class LiveDataProcessingService {
   }
 
   private isThereDiffInSecurity(
-    oldSecurity: SecurityDTO,
-    newSecurity: SecurityDTO
+    oldSecurity: DTOs.SecurityDTO,
+    newSecurity: DTOs.SecurityDTO
   ): number {
     if (oldSecurity.data.position.positionFirm !== newSecurity.data.position.positionFirm) {
       return 1;
@@ -311,8 +302,8 @@ export class LiveDataProcessingService {
   }
 
   private isThereDiffInBestQuoteComparer(
-    oldBestQuote: BestQuoteComparerDTO,
-    newBestQuote: BestQuoteComparerDTO
+    oldBestQuote: DTOs.BestQuoteComparerDTO,
+    newBestQuote: DTOs.BestQuoteComparerDTO
   ): number {
     if (oldBestQuote && !newBestQuote) {
       return 1;
@@ -340,8 +331,8 @@ export class LiveDataProcessingService {
   }
 
   private carryOverOldRowStates(
-    newRow: SecurityTableRowDTO,
-    oldRow: SecurityTableRowDTO
+    newRow: DTOs.SecurityTableRowDTO,
+    oldRow: DTOs.SecurityTableRowDTO
   ) {
     // when an old row is overwritten with a new row, some states of the row and the security card needs to be carried over because they are changed by user interaction, if they are not carried over, it would appear like as the interaction got terminated and the row was refreshed
     // this causes bad UX, especially in case of the user is entering stuff in the alert shortcut config UI

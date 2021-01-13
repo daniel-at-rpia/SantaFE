@@ -9,11 +9,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import {
-      SecurityDTO,
-      MoveVisualizerDTO,
-      HistoricalSummaryDTO
-    } from 'FEModels/frontend-models.interface';
+    import { DTOs } from 'Core/models/frontend';
     import {
       HISTORICAL_SUMMARY_ROUNDING
     } from 'Core/constants/tradeConstants.constant';
@@ -27,7 +23,7 @@
 })
 
 export class HistoricalSummary implements OnChanges {
-  @Input() summaryData: HistoricalSummaryDTO;
+  @Input() summaryData: DTOs.HistoricalSummaryDTO;
   subscriptions = {
   }
   constants = {

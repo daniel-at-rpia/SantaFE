@@ -31,7 +31,7 @@ const initialState: StructureState = {
   reloadFundDataPostEdit: null,
   updateTick: 0,
   viewData: null,
-  activeBreakdownViewFilter: BreakdownViewFilter.overridesOnly,
+  activeBreakdownViewFilter: BreakdownViewFilter.all,
   activePortfolioViewFilter: [
     PortfolioShortNames.FIP,
     PortfolioShortNames.BBB,
