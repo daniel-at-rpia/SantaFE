@@ -47,6 +47,9 @@ export interface BEPortfolioDTO {
   quantity: number;
   cs01Local: number;
   cs01Cad: number;
+  cs01CadWeightFund: number;
+  bondEquivalentValueCad: number;
+  bondEquivalentValueCadWeightFund: number;
   trades: Array<BETradeBlock>;
 }
 

@@ -1025,7 +1025,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightFundCS01',
     content: {
-      label: 'Within <Fund>',
+      label: 'In <Fund>',
       attrName: 'fundCS01Pct',
       underlineAttrName: 'fundCS01Pct',
       blockAttrName: 'weight',
@@ -1047,7 +1047,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightTableCS01',
     content: {
-      label: 'Within Table',
+      label: 'In Table',
       attrName: 'groupCS01Pct',
       underlineAttrName: 'groupCS01Pct',
       blockAttrName: 'weight',

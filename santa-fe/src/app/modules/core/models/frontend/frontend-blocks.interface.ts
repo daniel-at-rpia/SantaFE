@@ -26,6 +26,8 @@ export interface SecurityPortfolioBlock {
   strategy: string;
   cs01Cad: number;
   cs01Local: number;
+  cs01WeightPct: number;
+  // bondEquivalentValue
   costFifoSpread: number;
   costWeightedAvgSpread: number;
   costFifoPrice: number;

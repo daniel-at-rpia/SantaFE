@@ -421,6 +421,7 @@ export class LiveDataProcessingService {
           targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionCurrent + portfolioExist.quantity;
           targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadCurrent + portfolioExist.cs01Cad;
           targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalCurrent + portfolioExist.cs01Local;
+          targetRow.data.security.data.weight.fundCS01Pct = panelStateFilterBlock.quickFilters.portfolios.length === 1 ? this.utilityService.round(portfolioExist.cs01WeightPct*100, 2) : null;  // only show fund pct if the user is looking at a specific fund, would always be the case when the user launches Trade through Structuring.
           includeFlag = true;
         }
       });
@@ -533,16 +534,18 @@ export class LiveDataProcessingService {
   ) {
     // right now it's just for the two columns that displays table weight cs01 and credit leverage, but this process works for others
     const matchedRows = this.filterPrinstineRowList(targetPrinstineList, panelStateFilterBlock);
-    const transferPack: AdhocPacks.LiveDataAggregateTransferPack = {
-      fundCS01: 0,
-      tableCS01: 0
-    };
     let tableCS01Aggregate = 0;
     matchedRows.forEach((eachRow) => {
       if (!!eachRow && !!eachRow.data.security) {
-        tableCS01Aggregate = tableCS01Aggregate + eachRow.data.security.data.position.positionCurrent;
+        const eachRowCs01 = eachRow.data.security.data.position.positionCurrent;
+        tableCS01Aggregate = tableCS01Aggregate + eachRowCs01;
       }
     });
-    console.log('test, total aggregate is ', tableCS01Aggregate);
+    matchedRows.forEach((eachRow) => {
+      if (!!eachRow && !!eachRow.data.security) {
+        const eachRowCs01 = eachRow.data.security.data.position.positionCurrent;
+        eachRow.data.security.data.weight.groupCS01Pct = this.utilityService.round(eachRowCs01/tableCS01Aggregate*100, 2);
+      }
+    })
   }
 }

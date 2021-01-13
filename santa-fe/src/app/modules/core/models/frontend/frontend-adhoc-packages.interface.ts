@@ -192,8 +192,3 @@ interface SecurityDefinitionFilterOptionTenorRangeItem {
   min: number;
   max: number;
 }
-
-export interface LiveDataAggregateTransferPack {
-  fundCS01: number;
-  tableCS01: number;
-}

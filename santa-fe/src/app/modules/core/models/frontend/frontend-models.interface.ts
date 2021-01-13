@@ -112,6 +112,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadFirmInK: string;
     cs01CadCurrent: number;
     cs01CadCurrentInK: string;
+    bondEquivalentValueCurrent: number;
     hasIndex: boolean;
     hedgeFactor: number;
     alert: {
