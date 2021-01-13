@@ -409,6 +409,8 @@ export class LiveDataProcessingService {
   ): boolean {
     const targetSecurity = targetRow.data.security;
     let includeFlag = false;
+    targetRow.data.security.data.weight.fundCS01Pct = null;
+    targetRow.data.security.data.weight.fundBEVPct = null;
     if (panelStateFilterBlock.quickFilters.portfolios.length > 0) {
       targetRow.data.security.data.position.positionCurrent = 0;
       targetRow.data.security.data.cs01CadCurrent = 0;
@@ -421,7 +423,11 @@ export class LiveDataProcessingService {
           targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionCurrent + portfolioExist.quantity;
           targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadCurrent + portfolioExist.cs01Cad;
           targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalCurrent + portfolioExist.cs01Local;
-          targetRow.data.security.data.weight.fundCS01Pct = panelStateFilterBlock.quickFilters.portfolios.length === 1 ? this.utilityService.round(portfolioExist.cs01WeightPct*100, 2) : null;  // only show fund pct if the user is looking at a specific fund, would always be the case when the user launches Trade through Structuring.
+          if (panelStateFilterBlock.quickFilters.portfolios.length === 1) {
+            // only show fund pct if the user is looking at a specific fund, would always be the case when the user launches Trade through Structuring.
+            targetRow.data.security.data.weight.fundCS01Pct = this.utilityService.round(portfolioExist.cs01WeightPct*100, 2);
+            targetRow.data.security.data.weight.fundBEVPct = this.utilityService.round(portfolioExist.bondEquivalentValueWeightPct*100, 2);
+          }
           includeFlag = true;
         }
       });

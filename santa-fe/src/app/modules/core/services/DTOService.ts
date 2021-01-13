@@ -172,8 +172,10 @@ export class DTOService {
         strategyFirm: '',
         strategyList: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.partitionOptionValues ? rawData.unitPosition.partitionOptionValues.StrategyName : [],
         weight: {
-          fundCS01Pct: 0,
-          groupCS01Pct: 0
+          fundCS01Pct: null,
+          groupCS01Pct: null,
+          fundBEVPct: null,
+          groupBEVPct: null
         },
         position: {
           positionCurrent: 0,
@@ -342,6 +344,8 @@ export class DTOService {
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local,
       cs01WeightPct: targetPortfolio.cs01CadWeightFund,
+      bondEquivalentValueCad: targetPortfolio.bondEquivalentValueCad,
+      bondEquivalentValueWeightPct: targetPortfolio.bondEquivalentValueCadWeightFund,
       costFifoSpread: null,
       costFifoPrice: null,
       costWeightedAvgSpread: !!lastTrade ? lastTrade.wgtAvgSpread : null,

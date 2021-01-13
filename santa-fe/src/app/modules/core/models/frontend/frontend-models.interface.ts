@@ -61,6 +61,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     weight: {
       fundCS01Pct: number;
       groupCS01Pct: number;
+      fundBEVPct: number;
+      groupBEVPct: number;
     }
     position: {
       positionCurrent: number;

@@ -1025,13 +1025,11 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightFundCS01',
     content: {
-      label: 'In <Fund>',
+      label: '% In <Fund> - CS01',
       attrName: 'fundCS01Pct',
       underlineAttrName: 'fundCS01Pct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontendAggregation: true,
-      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1047,18 +1045,57 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightTableCS01',
     content: {
-      label: 'In Table',
+      label: '% In Table - CS01',
       attrName: 'groupCS01Pct',
       underlineAttrName: 'groupCS01Pct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontendAggregation: true,
-      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
           active: true,
           groupShow: true
+        },
+        tradeAlert: {
+          disabled: true,
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'weightFundBEV',
+    content: {
+      label: '% In <Fund> - BEV',
+      attrName: 'fundBEVPct',
+      underlineAttrName: 'fundBEVPct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          disabled: true,
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'weightTableBEV',
+    content: {
+      label: '% In Table - BEV',
+      attrName: 'groupBEVPct',
+      underlineAttrName: 'groupBEVPct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default:{
+          active: true,
+          groupShow: false
         },
         tradeAlert: {
           disabled: true,
