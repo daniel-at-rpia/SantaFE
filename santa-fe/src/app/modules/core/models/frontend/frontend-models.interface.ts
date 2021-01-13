@@ -59,6 +59,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     strategyFirm: string;
     strategyList: Array<string>;
     weight: {
+      currentGroupCS01Value: number;
+      currentGroupBEVValue: number;
       fundCS01Pct: number;
       groupCS01Pct: number;
       fundBEVPct: number;

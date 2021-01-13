@@ -172,6 +172,8 @@ export class DTOService {
         strategyFirm: '',
         strategyList: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.partitionOptionValues ? rawData.unitPosition.partitionOptionValues.StrategyName : [],
         weight: {
+          currentGroupCS01Value: 0,
+          currentGroupBEVValue: 0,
           fundCS01Pct: null,
           groupCS01Pct: null,
           fundBEVPct: null,

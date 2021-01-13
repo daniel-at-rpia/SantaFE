@@ -409,37 +409,29 @@ export class LiveDataProcessingService {
   ): boolean {
     const targetSecurity = targetRow.data.security;
     let includeFlag = false;
-    targetRow.data.security.data.weight.fundCS01Pct = null;
-    targetRow.data.security.data.weight.fundBEVPct = null;
-    if (panelStateFilterBlock.quickFilters.portfolios.length > 0) {
-      targetRow.data.security.data.position.positionCurrent = 0;
-      targetRow.data.security.data.cs01CadCurrent = 0;
-      targetRow.data.security.data.cs01LocalCurrent = 0;
-      panelStateFilterBlock.quickFilters.portfolios.forEach((eachPortfolio) => {
-        const portfolioExist = targetRow.data.security.data.portfolios.find((eachPortfolioBlock) => {
-          return eachPortfolioBlock.portfolioName === eachPortfolio;
-        });
-        if (!!portfolioExist) {
-          targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionCurrent + portfolioExist.quantity;
-          targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadCurrent + portfolioExist.cs01Cad;
-          targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalCurrent + portfolioExist.cs01Local;
-          if (panelStateFilterBlock.quickFilters.portfolios.length === 1) {
-            // only show fund pct if the user is looking at a specific fund, would always be the case when the user launches Trade through Structuring.
-            targetRow.data.security.data.weight.fundCS01Pct = this.utilityService.round(portfolioExist.cs01WeightPct*100, 2);
-            targetRow.data.security.data.weight.fundBEVPct = this.utilityService.round(portfolioExist.bondEquivalentValueWeightPct*100, 2);
-          }
-          includeFlag = true;
-        }
+    targetSecurity.data.weight.fundCS01Pct = null;
+    targetSecurity.data.weight.fundBEVPct = null;
+    targetSecurity.data.portfolios.forEach((eachPortfolio) => {
+      const portfolioMatchFilterScope = panelStateFilterBlock.quickFilters.portfolios.length === 0 ? true : panelStateFilterBlock.quickFilters.portfolios.find((eachPortfolioFilter) => {
+        return eachPortfolio.portfolioName === eachPortfolioFilter;
       });
-    } else {
-      includeFlag = true;
-      targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionFirm;
-      targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadFirm;
-      targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalFirm;
-    }
-    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false, true);
-    targetRow.data.security.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01CadCurrent, false);
-    targetRow.data.security.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01LocalCurrent, false);
+      if (!!portfolioMatchFilterScope) {
+        includeFlag = true;
+        targetSecurity.data.position.positionCurrent = targetSecurity.data.position.positionCurrent + eachPortfolio.quantity;
+        targetSecurity.data.cs01CadCurrent = targetSecurity.data.cs01CadCurrent + eachPortfolio.cs01Cad;
+        targetSecurity.data.cs01LocalCurrent = targetSecurity.data.cs01LocalCurrent + eachPortfolio.cs01Local;
+        targetSecurity.data.weight.currentGroupCS01Value = targetSecurity.data.weight.currentGroupCS01Value + eachPortfolio.cs01Cad;
+        targetSecurity.data.weight.currentGroupBEVValue = targetSecurity.data.weight.currentGroupBEVValue + eachPortfolio.bondEquivalentValueCad;
+        if (panelStateFilterBlock.quickFilters.portfolios.length === 1) {
+          // only show fund pct if the user is looking at a specific fund, would always be the case when the user launches Trade through Structuring.
+          targetSecurity.data.weight.fundCS01Pct = this.utilityService.round(eachPortfolio.cs01WeightPct*100, 2);
+          targetSecurity.data.weight.fundBEVPct = this.utilityService.round(eachPortfolio.bondEquivalentValueWeightPct*100, 2);
+        }
+      }
+    });
+    targetSecurity.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetSecurity.data.position.positionCurrent, false, true);
+    targetSecurity.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetSecurity.data.cs01CadCurrent, false);
+    targetSecurity.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetSecurity.data.cs01LocalCurrent, false);
     return includeFlag;
   }
 
@@ -541,16 +533,21 @@ export class LiveDataProcessingService {
     // right now it's just for the two columns that displays table weight cs01 and credit leverage, but this process works for others
     const matchedRows = this.filterPrinstineRowList(targetPrinstineList, panelStateFilterBlock);
     let tableCS01Aggregate = 0;
+    let tableBEVAggregate = 0;
     matchedRows.forEach((eachRow) => {
       if (!!eachRow && !!eachRow.data.security) {
-        const eachRowCs01 = eachRow.data.security.data.position.positionCurrent;
+        const eachRowCs01 = eachRow.data.security.data.weight.currentGroupCS01Value;
         tableCS01Aggregate = tableCS01Aggregate + eachRowCs01;
+        const eachRowBEV = eachRow.data.security.data.weight.currentGroupBEVValue;
+        tableBEVAggregate = tableBEVAggregate + eachRowBEV;
       }
     });
     matchedRows.forEach((eachRow) => {
       if (!!eachRow && !!eachRow.data.security) {
-        const eachRowCs01 = eachRow.data.security.data.position.positionCurrent;
-        eachRow.data.security.data.weight.groupCS01Pct = this.utilityService.round(eachRowCs01/tableCS01Aggregate*100, 2);
+        const eachRowCs01 = eachRow.data.security.data.weight.currentGroupCS01Value;
+        eachRow.data.security.data.weight.groupCS01Pct = !!eachRowCs01 ? this.utilityService.round(eachRowCs01/tableCS01Aggregate*100, 2) : null;
+        const eachRowBEV = eachRow.data.security.data.weight.currentGroupBEVValue;
+        eachRow.data.security.data.weight.groupBEVPct = !!eachRowBEV ? this.utilityService.round(eachRowBEV/tableBEVAggregate*100, 2) : null;
       }
     })
   }

@@ -1034,7 +1034,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       tableSpecifics: {
         default: {
           active: true,
-          groupShow: true
+          groupShow: false
         },
         tradeAlert: {
           disabled: true,
