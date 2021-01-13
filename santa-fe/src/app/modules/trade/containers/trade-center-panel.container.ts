@@ -532,7 +532,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
-      this.onSelectSecurityForAlertConfig.bind(this)
+      this.onSelectSecurityForAlertConfig.bind(this),
+      this.state.filters
     );
     this.calculateBestQuoteComparerWidthAndHeight();
     this.state.fetchResult.mainTable.fetchComplete = true;

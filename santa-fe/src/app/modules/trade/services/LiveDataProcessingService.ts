@@ -32,7 +32,8 @@ export class LiveDataProcessingService {
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
-    sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void
+    sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): Array<DTOs.SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
@@ -67,6 +68,7 @@ export class LiveDataProcessingService {
         );
       }
     }
+    this.calculateAggregateMetrics(prinstineRowList, panelStateFilterBlock);
     return prinstineRowList;
   }
 
@@ -376,18 +378,6 @@ export class LiveDataProcessingService {
     newRow.data.security.state = oldRow.data.security.state;
   }
 
-  private calculateAggregateMetrics(serverReturn: BEFetchAllTradeDataReturn) {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
-    const transferPack: AdhocPacks.LiveDataAggregateTransferPack = {
-      fundCS01: 0,
-      tableCS01: 0
-    };
-    for (const eachKey in rawSecurityDTOMap){
-      const eachBESecurity:BESecurityDTO = rawSecurityDTOMap[eachKey].security;
-
-    }
-  }
-
   private filterBySecurityAttribute(
     targetRow: DTOs.SecurityTableRowDTO,
     targetFilter: AdhocPacks.DefinitionConfiguratorEmitterParamsItem,
@@ -535,5 +525,24 @@ export class LiveDataProcessingService {
       includeFlag = true;
     }
     return includeFlag;
+  }
+
+  private calculateAggregateMetrics(
+    targetPrinstineList: Array<DTOs.SecurityTableRowDTO>,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ) {
+    // right now it's just for the two columns that displays table weight cs01 and credit leverage, but this process works for others
+    const matchedRows = this.filterPrinstineRowList(targetPrinstineList, panelStateFilterBlock);
+    const transferPack: AdhocPacks.LiveDataAggregateTransferPack = {
+      fundCS01: 0,
+      tableCS01: 0
+    };
+    let tableCS01Aggregate = 0;
+    matchedRows.forEach((eachRow) => {
+      if (!!eachRow && !!eachRow.data.security) {
+        tableCS01Aggregate = tableCS01Aggregate + eachRow.data.security.data.position.positionCurrent;
+      }
+    });
+    console.log('test, total aggregate is ', tableCS01Aggregate);
   }
 }

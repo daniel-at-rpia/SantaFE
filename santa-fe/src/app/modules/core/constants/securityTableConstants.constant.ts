@@ -1031,6 +1031,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontendAggregation: true,
+      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1052,6 +1053,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontendAggregation: true,
+      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
