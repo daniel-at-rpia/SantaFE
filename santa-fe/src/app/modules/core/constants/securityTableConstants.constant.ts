@@ -27,7 +27,6 @@ export const AGGRID_ALERT_STATUS_COLUMN_WIDTH = 155;  // can not use simple text
 export const AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH = 155;
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 140;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
-export const AGGRID_NARROW_COLUMN_WIDTH = 95;
 export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 240;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_ROW_HEIGHT_SLIM = 34;
@@ -101,7 +100,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: false,
@@ -125,7 +124,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: false,
@@ -169,7 +168,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'alert',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       isCustomComponent: true,
       tableSpecifics: {
         default: {
@@ -215,7 +214,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: false,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: false,
@@ -238,7 +237,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: false,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: false,
@@ -261,7 +260,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: false,
@@ -284,7 +283,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: false,
@@ -540,6 +539,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
@@ -560,6 +560,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
@@ -580,6 +581,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
@@ -622,6 +624,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -642,6 +645,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.mark,
       tableSpecifics: {
         default: {
@@ -849,6 +853,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'obligorName',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
+      columnWidth: 180,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
@@ -868,7 +873,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'securityType',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
@@ -923,7 +928,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'tenor',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: false,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
@@ -962,6 +967,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
@@ -981,6 +987,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
@@ -1000,6 +1007,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
@@ -1019,6 +1027,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'mark',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.markDiscrepancies,
       tableSpecifics: {
         default: {
@@ -1038,7 +1047,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'fundCS01Pct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isColumnWidthNarrow: true,
+      columnWidth: 110,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1060,7 +1069,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontendAggregation: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 110,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1081,7 +1090,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'fundBEVPct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isColumnWidthNarrow: true,
+      columnWidth: 110,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1102,7 +1111,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'groupBEVPct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isColumnWidthNarrow: true,
+      columnWidth: 110,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default:{
@@ -1126,7 +1135,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1148,7 +1157,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1170,7 +1179,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1192,7 +1201,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1214,7 +1223,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1236,7 +1245,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1258,7 +1267,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.cost,
       isDriverDependent: true,
       isAttrChangable: true,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1278,7 +1287,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1298,7 +1307,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1318,7 +1327,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1337,7 +1346,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1356,7 +1365,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1375,7 +1384,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1394,7 +1403,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1413,7 +1422,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1432,7 +1441,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1451,7 +1460,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1470,7 +1479,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       blockAttrName: 'position',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.position,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1490,7 +1499,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1513,7 +1522,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1536,7 +1545,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1559,7 +1568,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDriverDependent: false,
       groupBelongs: SecurityTableHeaderConfigGroups.lastTrace,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1580,7 +1589,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01CadCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1598,7 +1607,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01LocalCurrent',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1616,7 +1625,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01CadFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true,
@@ -1635,7 +1644,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'cs01LocalFirm',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.cs01,
-      isColumnWidthNarrow: true,
+      columnWidth: 95,
       tableSpecifics: {
         default: {
           active: true
@@ -1656,6 +1665,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Dod',
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
@@ -1678,6 +1688,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Wow',
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
@@ -1700,6 +1711,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Mom',
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
@@ -1721,6 +1733,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Yoy',
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
@@ -1742,6 +1755,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       metricPackDeltaScope: 'Ytd',
       isDriverDependent: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.delta,
       tableSpecifics: {
         default: {
@@ -1776,7 +1790,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
-      isColumnWidthNarrow: true,
+      columnWidth: 70,
       tableSpecifics: {
         default: {
           active: true,
@@ -1796,7 +1810,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
-      isColumnWidthNarrow: true,
+      columnWidth: 70,
       tableSpecifics: {
         default: {
           active: true
@@ -1815,7 +1829,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.ownership,
-      isColumnWidthNarrow: true,
+      columnWidth: 70,
       tableSpecifics: {
         default: {
           active: true,
@@ -1851,6 +1865,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       attrName: 'hedgeFactor',
       underlineAttrName: 'hedgeFactor',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
+      columnWidth: 95,
       groupBelongs: SECURITY_TABLE_HEADER_NO_GROUP,
       tableSpecifics: {
         default: {

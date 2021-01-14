@@ -1002,13 +1002,15 @@ export class DTOService {
         groupShow: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].groupShow : !!stub.content.tableSpecifics.default.groupShow,
         activePortfolios: activePortfolios || []
       },
+      style: {
+        columnWidthOverride: stub.content.columnWidth > 0 ? stub.content.columnWidth : null
+      },
       state: {
         isBestQuoteVariant: !!stub.content.isForBestQuoteComparer,
         isSecurityCardVariant: !!stub.content.isForSecurityCard,
         isCustomComponent: !!stub.content.isCustomComponent,
         isAxeSkewEnabled: false,
-        istotalSkewEnabled: false,
-        isNarrowColumnVariant: !!stub.content.isColumnWidthNarrow
+        istotalSkewEnabled: false
       }
     };
     return object;

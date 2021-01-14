@@ -395,13 +395,15 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     groupShow: boolean;
     activePortfolios: Array<string>;
   },
+  style: {
+    columnWidthOverride: number;
+  },
   state: {
     isSecurityCardVariant: boolean;
     isBestQuoteVariant: boolean;
     isCustomComponent: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
-    isNarrowColumnVariant: boolean;
   }
 }
 

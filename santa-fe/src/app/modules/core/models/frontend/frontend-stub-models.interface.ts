@@ -98,7 +98,7 @@ export interface SecurityTableHeaderConfigStub {
     isAttrChangable?: boolean;  // isAttrChangable means the 'attrName' & 'underlineAttrName' will be overwritten with driver-specific attributes, commonly used for columns that are switching between spread/price/yield
     metricPackDeltaScope?: string;
     groupBelongs: string;
-    isColumnWidthNarrow?: boolean;
+    columnWidth?: number;
     isCustomComponent?: boolean;
   }
 }
@@ -107,6 +107,7 @@ export interface SecurityTableSpecificAlertHeaderStub {
   include: string[];
   exclude: string[];
 }
+
 export interface SecurityTableSpecificAlertHeaderConfigsStub {
   axe: SecurityTableSpecificAlertHeaderStub;
   mark: SecurityTableSpecificAlertHeaderStub;
