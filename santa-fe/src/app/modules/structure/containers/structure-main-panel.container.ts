@@ -266,7 +266,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   private updateViewData(data: StructureSetViewTransferPack) {
     const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.loadStencilFunds();
-    const { bucket, view, displayCategory} = data;
+    const { bucket, view, displayCategory, isBulkEditViewOnly, isBulkEditViewWithTargets} = data;
     const payload: PayloadSetView = {
       buckets: bucket,
       views: view
@@ -279,8 +279,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         totalBucketValues = totalBucketValues === '' ? `${bucket[values]}` : `${totalBucketValues} ${bucket[values]}`
       }
     }
-
-    const messageDetails = `${displayCategory}, with view value ${displayViewValue}`;
+    let messageDetails: string;
+    if (!!isBulkEditViewOnly) {
+      messageDetails = 'views';
+    } else if (!!isBulkEditViewWithTargets) {
+      messageDetails = `views and targets`;
+    } else {
+      messageDetails = `${displayCategory}, with view value ${displayViewValue}`;
+    }
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),

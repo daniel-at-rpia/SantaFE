@@ -271,7 +271,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       const viewData: StructureSetViewTransferPack = {
         bucket: [row.data.bucket],
         view: view !== row.data.view ? [view] : null,
-        displayCategory: formattedDisplayCategory
+        displayCategory: formattedDisplayCategory,
+        isBulkEditViewOnly: false,
+        isBulkEditViewWithTargets: false
       }
       this.store$.dispatch(new StructureSetView(viewData));
     }
