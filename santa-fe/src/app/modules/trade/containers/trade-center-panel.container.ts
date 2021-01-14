@@ -31,7 +31,9 @@
     import { CoreLoadSecurityMap, CoreUserLoggedIn } from 'Core/actions/core.actions';
     import {
       SecurityTableHeaderConfigs,
-      SECURITY_TABLE_FINAL_STAGE
+      SECURITY_TABLE_FINAL_STAGE,
+      SecurityTableHeaderConfigGroups,
+      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_NAME_PLACEHOLDER
     } from 'Core/constants/securityTableConstants.constant';
     import {
       SecurityDefinitionMap,
@@ -63,6 +65,7 @@
       TradeAlertTableReceiveNewAlertsEvent,
       TradeBICSDataLoadedEvent
     } from 'Trade/actions/trade.actions';
+    import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
   //
 
 @Component({
@@ -95,7 +98,10 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     alertTypes: AlertTypes,
     keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
     userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
-    devWhitelist: DevWhitelist
+    devWhitelist: DevWhitelist,
+    portolioMetricValues: PortfolioMetricValues,
+    securityTableHeaderConfigGroups: SecurityTableHeaderConfigGroups,
+    weigthHeaderNamePlaceholder: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_NAME_PLACEHOLDER
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -238,9 +244,13 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       combineLatest(
         this.store$.pipe(select(selectBICSDataLoaded))
       )
-    ).subscribe(([filterList, bicsLoaded]) => {
-      if (!!filterList && filterList.length > 0 && bicsLoaded) {
-        this.autoLoadTable(filterList);
+    ).subscribe(([pack, bicsLoaded]) => {
+      if (!!pack) {
+        const filterList = pack.filterList;
+        const metric = pack.metric;
+        if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric) {
+          this.autoLoadTable(filterList, metric);
+        }
       }
     });
   }
@@ -349,7 +359,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
     this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
     if (this.state.filters.quickFilters.portfolios.length === 1) {
-      this.modifyWeightColumnHeaders();
+      this.modifyWeightColumnHeadersUpdateFundName();
     }
     if (!!logEngagement) {
       let filterValue = '';
@@ -678,7 +688,10 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private autoLoadTable(filterList: Array<DTOs.SecurityDefinitionDTO>) {
+  private autoLoadTable(
+    filterList: Array<DTOs.SecurityDefinitionDTO>,
+    portfolioMetric: PortfolioMetricValues
+  ) {
     this.onSelectPreset(this.state.presets.portfolioShortcutList[0]);
     filterList.forEach((eachFilterDefinition) => {
       this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
@@ -703,17 +716,81 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
     this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
+    this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
     this.onApplyFilter(params, false);
   }
 
-  private modifyWeightColumnHeaders() {
+  private modifyWeightColumnHeadersUpdateFundName() {
     const targetFund = this.state.filters.quickFilters.portfolios[0];
     this.state.table.metrics.forEach((eachHeader) => {
       if (eachHeader.key === 'weightFundCS01') {
-        eachHeader.content.label = eachHeader.content.label.replace('<Fund>', targetFund);
+        eachHeader.content.label = eachHeader.content.label.replace(this.constants.weigthHeaderNamePlaceholder, targetFund);
+      }
+      if (eachHeader.key === 'weightFundBEV') {
+        eachHeader.content.label = eachHeader.content.label.replace(this.constants.weigthHeaderNamePlaceholder, targetFund);
       }
     });
     // trigger the ngOnChanges in santa table
+    this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
+  }
+
+  private modifyWeightColumnHeadersUpdateActiveAndPinState(targetMetric: PortfolioMetricValues) {
+    const fundCS01Header = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightFundCS01';
+    });
+    const tableCS01Header = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightTableCS01';
+    });
+    const fundBEVHeader = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightFundBEV';
+    });
+    const tableBEVHeader = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightTableBEV';
+    });
+    if (targetMetric === this.constants.portolioMetricValues.cs01) {
+      fundCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true
+      };
+      tableCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true
+      };
+      fundBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false
+      };
+      tableBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false
+      };
+    } else if (targetMetric === this.constants.portolioMetricValues.creditLeverage) {
+      fundCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false
+      };
+      tableCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false
+      };
+      fundBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true
+      };
+      tableBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true
+      };
+    }
+    // trigger the ngOnChanges in santa table, normally would be already triggered by modifyWeightColumnHeadersUpdateFundName(), so this is just defensive programming
     this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
   }
 }

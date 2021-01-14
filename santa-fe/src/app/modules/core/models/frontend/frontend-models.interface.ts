@@ -903,6 +903,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
       filterList?: Array<SecurityDefinitionDTO>;
+      activeMetric?: PortfolioMetricValues;
     }
   },
   api: {
