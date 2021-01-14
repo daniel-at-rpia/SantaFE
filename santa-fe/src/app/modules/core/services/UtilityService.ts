@@ -13,18 +13,7 @@
       BEStructuringOverrideBlock,
       BEStructuringBreakdownBlock
     } from 'BEModels/backend-models.interface';
-    import * as DTOs from 'FEModels/frontend-models.interface';
-    import {
-      SecurityGroupMetricBlock,
-      SecurityGroupMetricPackBlock,
-      SecurityCostPortfolioBlock,
-      TraceTradeBlock,
-      PortfolioBreakdownCategoryBlock
-    } from 'FEModels/frontend-blocks.interface';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      StructureOverrideToBreakdownConversionReturnPack
-    } from 'FEModels/frontend-adhoc-packages.interface';
+    import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -342,8 +331,8 @@ export class UtilityService {
       }
     }
 
-    public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): SecurityGroupMetricPackBlock {
-      const object: SecurityGroupMetricPackBlock = {
+    public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): Blocks.SecurityGroupMetricPackBlock {
+      const object: Blocks.SecurityGroupMetricPackBlock = {
         raw: {},
         delta: {
           Dod: {},
@@ -445,8 +434,8 @@ export class UtilityService {
 
     public packDefinitionConfiguratorEmitterParams(
       configuratorData: DTOs.SecurityDefinitionConfiguratorDTO
-    ): DefinitionConfiguratorEmitterParams {
-      const params: DefinitionConfiguratorEmitterParams = {
+    ): AdhocPacks.DefinitionConfiguratorEmitterParams {
+      const params: AdhocPacks.DefinitionConfiguratorEmitterParams = {
         filterList: []
       };
       configuratorData.data.definitionList.forEach((eachBundle) => {
@@ -594,7 +583,7 @@ export class UtilityService {
       return `${name}/${normalizedOption}`;
     }
 
-    public retrieveGroupMetricValue(metricDTO: SecurityGroupMetricBlock, groupDTO: DTOs.SecurityGroupDTO): number {
+    public retrieveGroupMetricValue(metricDTO: Blocks.SecurityGroupMetricBlock, groupDTO: DTOs.SecurityGroupDTO): number {
       if (!!groupDTO && !!metricDTO) {
         const driverLabel = metricDTO.label;
         let value, deltaSubPack;
@@ -894,7 +883,7 @@ export class UtilityService {
     private determineCostPortfolioForRetrieveSecurityMetricFromCostPack(
       dto: DTOs.SecurityDTO,
       header: DTOs.SecurityTableHeaderDTO
-    ): SecurityCostPortfolioBlock {
+    ): Blocks.SecurityCostPortfolioBlock {
       if (header.data.key.indexOf('DOF') >= 0) {
         return dto.data.cost.DOF;
       } else if (header.data.key.indexOf('SOF') >= 0) {
@@ -1090,7 +1079,7 @@ export class UtilityService {
       return amount;
     }
 
-    public getTraceTradesListBasedOnAmount(list: Array<TraceTradeBlock>, amount: number): Array<TraceTradeBlock> {
+    public getTraceTradesListBasedOnAmount(list: Array<Blocks.TraceTradeBlock>, amount: number): Array<Blocks.TraceTradeBlock> {
       const newList = list.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
       return newList;
     }
@@ -1106,7 +1095,7 @@ export class UtilityService {
       }
     }
 
-    public getDailyTraceTrades(traceTrades: Array<TraceTradeBlock>): Array<TraceTradeBlock> {
+    public getDailyTraceTrades(traceTrades: Array<Blocks.TraceTradeBlock>): Array<Blocks.TraceTradeBlock> {
       if (traceTrades.length > 0) {
         const currentDate = moment();
         const currentMonthDay = currentDate.format('MMM DD');
@@ -1124,8 +1113,8 @@ export class UtilityService {
       }
     }
     
-    public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<TraceTradeBlock> {
-      let displayedList: Array<TraceTradeBlock> = [];
+    public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<Blocks.TraceTradeBlock> {
+      let displayedList: Array<Blocks.TraceTradeBlock> = [];
       let numericalFiltersList: Array<number> = [];
       const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
       if (options.length > 0) {
@@ -1135,8 +1124,8 @@ export class UtilityService {
             numericalFiltersList = [...numericalFiltersList, numericalAmount];
           }
         })
-        const processingTraceTradesList: Array<TraceTradeBlock> = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
-        let filterListWithContraParty: Array<TraceTradeBlock> = [];
+        const processingTraceTradesList: Array<Blocks.TraceTradeBlock> = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
+        let filterListWithContraParty: Array<Blocks.TraceTradeBlock> = [];
         const checkNumericalFilter = /\d/;
         const optionsContraPartyList = options.filter(option => !checkNumericalFilter.test(option));
         if (optionsContraPartyList.length > 0) {
@@ -1284,7 +1273,7 @@ export class UtilityService {
 
     public convertRawOverrideToRawBreakdown(
       overrideRawDataList: Array<BEStructuringOverrideBlock>
-    ): StructureOverrideToBreakdownConversionReturnPack {
+    ): AdhocPacks.StructureOverrideToBreakdownConversionReturnPack {
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
       overrideRawDataList.forEach((eachRawOverride) => {

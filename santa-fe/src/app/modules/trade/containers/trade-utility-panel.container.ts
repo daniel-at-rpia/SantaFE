@@ -5,7 +5,7 @@
     import { Store, select } from '@ngrx/store';
 
     import { TradeState } from 'Trade/reducers/trade.reducer';
-    import { TradeUtilityPanelState } from 'FEModels/frontend-page-states.interface';
+    import { PageStates } from 'Core/models/frontend';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import {
@@ -38,7 +38,7 @@
 
 export class TradeUtilityPanel implements OnInit, OnDestroy {
   @Input() sidePanelsDisplayed: boolean;
-  state: TradeUtilityPanelState;
+  state: PageStates.TradeUtilityPanelState;
   constants = {
     liveUpdateCountdown: LIVE_UPDATE_COUNTDOWN,
     liveUpdateInprogPrompt: LIVE_UPDATE_INPROG_PROMPT,

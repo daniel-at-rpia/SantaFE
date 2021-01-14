@@ -24,10 +24,9 @@
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { EngagementActionList } from 'Core/constants/coreConstants.constant';
-    import { SecurityMapEntry } from 'FEModels/frontend-adhoc-packages.interface';
+    import { PageStates, AdhocPacks } from 'Core/models/frontend';
     import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { FAILED_USER_INITIALS_FALLBACK, DevWhitelist } from 'Core/constants/coreConstants.constant';
-    import { RootState } from 'FEModels/frontend-page-states.interface'
   //
 
 declare const VERSION: string;
@@ -37,7 +36,7 @@ declare const VERSION: string;
   templateUrl: './app.root.html'
 })
 export class AppRoot implements OnInit, OnDestroy {
-  state: RootState;
+  state: PageStates.RootState;
   title = `Santa - RPIA Trading & Portfolio Management - Ver.${VERSION}`;
   globalCount$: Observable<any>;
   subscriptions = {
@@ -84,7 +83,7 @@ export class AppRoot implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: Object) => {
         if (!!serverReturn) {
-          const map:Array<SecurityMapEntry> = [];
+          const map: Array<AdhocPacks.SecurityMapEntry> = [];
           for (const eachSecurityId in serverReturn) {
             map.push({
               keywords: serverReturn[eachSecurityId],
