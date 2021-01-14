@@ -12,7 +12,8 @@ import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selec
 import {
   StructureSetTargetOverlayTransferPack,
   DefinitionConfiguratorEmitterParams,
-  AdhocExtensionBEMetricBreakdowns
+  AdhocExtensionBEMetricBreakdowns,
+  StructureSetViewTransferPack
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { PortfolioBreakdownDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import {

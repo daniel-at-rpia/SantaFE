@@ -45,7 +45,10 @@ import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetViewData, AdhocExtensionBEMetricBreakdowns } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  StructureSetViewTransferPack,
+  AdhocExtensionBEMetricBreakdowns
+} from 'FEModels/frontend-adhoc-packages.interface';
 import {
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
@@ -144,7 +147,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500)
       })
     });
-    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewData) => {
+    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewTransferPack) => {
       if (!!value) {
         this.updateViewData(value);
       }
@@ -236,7 +239,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
-        this.processStructureData(serverReturn);
+        this.processStructureData(serverReturn.Now);
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -260,13 +263,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  private updateViewData(data: StructureSetViewData) {
+  private updateViewData(data: StructureSetViewTransferPack) {
     const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.loadStencilFunds();
     const { bucket, view, displayCategory} = data;
     const payload: PayloadSetView = {
-      bucket: bucket,
-      view: view
+      buckets: bucket,
+      views: view
     }
     const endpoint = this.restfulCommService.apiMap.setView;
     let totalBucketValues = '';
@@ -281,7 +284,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
+      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
         this.processStructureData(serverReturn);
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -390,11 +393,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return parsedCustomBICSDefinitionListNoNull;
   }
 
-  private processStructureData(serverReturn: BEGetPortfolioStructureServerReturn) {
+  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
-      const nowData = serverReturn.Now;
-      nowData.forEach(eachFund => {
+      serverReturn.forEach(eachFund => {
         this.loadFund(eachFund);
       })
       try {

@@ -19,11 +19,16 @@ import {
 import {
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+  PortfolioView
 } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { PortfolioBreakdownCategoryBlock, BICSMainRowDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import { BICSMainRowDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import {
+  StructureRowSetViewData,
+  StructureSetViewTransferPack
+} from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import {
   editingViewAvailableUsers,
   StructuringTeamPMList,
@@ -32,6 +37,7 @@ import {
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
+import { StructureSetView } from 'Structure/actions/structure.actions';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -249,6 +255,26 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isEditingView = !targetRow.state.isEditingView;
+  }
+
+  public updateRowView(data: StructureRowSetViewData) {
+    if (!!data) {
+      const { view, row } = data;
+      const isRegularBICSRow = row.data.bicsLevel >= 1 && !!row.data.code;
+      let formattedDisplayCategory: string;
+      if (!!isRegularBICSRow) {
+        const level = row.data.bicsLevel;
+        formattedDisplayCategory = `${row.data.displayCategory} (Lv.${level})`;
+      } else {
+        formattedDisplayCategory = row.data.displayCategory;
+      }
+      const viewData: StructureSetViewTransferPack = {
+        bucket: [row.data.bucket],
+        view: view !== row.data.view ? [view] : null,
+        displayCategory: formattedDisplayCategory
+      }
+      this.store$.dispatch(new StructureSetView(viewData));
+    }
   }
 
   private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
