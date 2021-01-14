@@ -9,6 +9,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
 import {
   StructureSetTargetOverlayTransferPack,
   DefinitionConfiguratorEmitterParams,
@@ -73,7 +74,8 @@ import * as moment from 'moment';
 export class StructureSetTargetPanel implements OnInit, OnDestroy {
   state: StructureSetTargetPanelState;
   subscriptions = {
-    setTargetTransferPackSub: null
+    setTargetTransferPackSub: null,
+    ownerInitialsSub: null
   };
   constants = {
     metric: PortfolioMetricValues,
@@ -121,13 +123,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       },
       removalList: [],
       clearAllTargetSelected: false,
-      editViewMode: false
+      editViewMode: false,
+      ownerInitial: null
     };
     return state;
   }
 
   public ngOnInit() {
     this.state = this.initializePageState();
+    this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      select(selectUserInitials)
+    ).subscribe((value) => {
+        this.state.ownerInitial = value;
+    });
     this.subscriptions.setTargetTransferPackSub = this.store$.pipe(
       select(selectSetTargetTransferPack)
     ).subscribe((pack: StructureSetTargetOverlayTransferPack) => {
