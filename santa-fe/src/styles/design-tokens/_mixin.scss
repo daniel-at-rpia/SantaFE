@@ -304,3 +304,9 @@
     align-items: center;
     flex-direction: column;
   }
+
+  @mixin mix_active_view_style {
+    @include material('none');
+    background-color: $color_active;
+    color: $font_color_inverse;
+  }

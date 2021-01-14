@@ -667,9 +667,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--positive {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
+            @include mix_active_view_style;
           }
         }
       }
@@ -680,9 +678,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--improving {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
+            @include mix_active_view_style;
           }
         }
       }
@@ -693,9 +689,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--deteriorating {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
+            @include mix_active_view_style;
           }
         }
       }
@@ -706,9 +700,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--negative {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
+            @include mix_active_view_style;
           }
         }
       }
@@ -719,9 +711,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--neutral {
-            @include material('none');
-            background-color: $color_active;
-            color: $font_color_inverse;
+            @include mix_active_view_style;
           }
         }
       }

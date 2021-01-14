@@ -329,9 +329,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--positive {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_active_view_style;
             }
           }
         }
@@ -354,9 +352,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--improving {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_active_view_style;
             }
           }
         }
@@ -379,9 +375,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--deteriorating {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_active_view_style;
             }
           }
         }
@@ -401,9 +395,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--negative {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_active_view_style;
             }
           }
         }
@@ -423,9 +415,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--neutral {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_active_view_style;
               #{$blockName} {
                 &__utility {
                   &-ctas {
