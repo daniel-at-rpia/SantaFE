@@ -77,6 +77,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     &-setView {
       display: none;
       justify-content: space-between;
+      padding-left: $spacing_large;
       &-btn {
         display: flex;
         flex-direction: row;
@@ -90,6 +91,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
           &--down {
             font-size: $font_size_small;
             margin-top: $spacing_x_small;
+            margin-left: -1px;
           }
         }
       }
