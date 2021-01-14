@@ -607,10 +607,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (this.state.targetBreakdown.state.isBICs) {
       if (this.state.activeMetric === this.constants.metric.cs01) {
         newRow.rowDTO = row;
+        newRow.view = row.data.view;
       } else {
         const matchedRow = this.state.targetBreakdown.data.rawLeverageCategoryList.find(selectedRow => selectedRow.data.code === row.data.code);
         if (!!matchedRow) {
           newRow.rowDTO = matchedRow;
+          newRow.view = matchedRow.data.view;
         }
       }
     }
