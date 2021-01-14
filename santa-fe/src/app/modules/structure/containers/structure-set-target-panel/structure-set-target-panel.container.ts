@@ -49,7 +49,11 @@ import {
   PayloadGetPortfolioOverride,
   PayloadClearPortfolioBreakdown
 } from 'BEModels/backend-payloads.interface';
-import { StructureReloadFundDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
+import {
+  StructureReloadFundDataPostEditEvent,
+  StructureUpdateMainPanelEvent,
+  StructureSetView
+} from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   CustomeBreakdownConfiguratorDefinitionLayout,
@@ -75,7 +79,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     metric: PortfolioMetricValues,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
-    definitionMap: SecurityDefinitionMap
+    definitionMap: SecurityDefinitionMap,
+    view: PortfolioView
   };
 
   constructor(
@@ -482,6 +487,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  public onClickSetView(editRow: StructureSetTargetPanelEditRowBlock, view: PortfolioView) {
+    if (!!editRow.view) {
+      // user intends to remove view option
+      editRow.view = editRow.view === view ? null : view;
+    } else {
+      editRow.view = view;
+    }
+    editRow.isViewEdited = true;
+  }
+
+  public onToggleSetViewMode() {
+    this.state.editViewMode = !this.state.editViewMode;
   }
 
   private checkIfEvenRow(editRow: StructureSetTargetPanelEditRowBlock): boolean {
