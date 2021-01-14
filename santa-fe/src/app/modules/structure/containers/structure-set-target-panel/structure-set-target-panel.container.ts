@@ -1498,9 +1498,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     const viewPayload: StructureSetViewTransferPack = {
       bucket: [],
       view: [],
-      displayCategory: '',
-      isBulkEditViewOnly: false,
-      isBulkEditViewWithTargets: false
+      displayCategory: ''
     };
     this.state.editRowList.forEach(editRow => {
       if (editRow.isViewEdited) {

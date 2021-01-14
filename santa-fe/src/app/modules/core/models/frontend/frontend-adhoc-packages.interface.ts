@@ -127,8 +127,6 @@ export interface StructureSetViewTransferPack {
   bucket: Array<StructureBucketDataBlock>;
   view: Array<PortfolioView>;
   displayCategory: string;
-  isBulkEditViewOnly: boolean;
-  isBulkEditViewWithTargets: boolean;
 }
 
 export interface StructureOverrideToBreakdownConversionReturnPack {
