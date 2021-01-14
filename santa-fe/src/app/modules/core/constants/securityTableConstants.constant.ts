@@ -66,7 +66,8 @@ export const SECURITY_TABLE_ICONS = {
   sortDescending: '<i class="fas fa-sort-amount-down"></i>'
 };
 
-export const SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_NAME_PLACEHOLDER = '<Fund>';
+export const SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START = '<';
+export const SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END = '>';
 
 export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = [
   {
@@ -1027,7 +1028,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightFundCS01',
     content: {
-      label: `% In ${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_NAME_PLACEHOLDER} - CS01`,
+      label: `% In ${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - CS01`,
       attrName: 'fundCS01Pct',
       underlineAttrName: 'fundCS01Pct',
       blockAttrName: 'weight',
@@ -1068,7 +1069,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightFundBEV',
     content: {
-      label: `% In ${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_NAME_PLACEHOLDER} - BEV`,
+      label: `% In ${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - BEV`,
       attrName: 'fundBEVPct',
       underlineAttrName: 'fundBEVPct',
       blockAttrName: 'weight',

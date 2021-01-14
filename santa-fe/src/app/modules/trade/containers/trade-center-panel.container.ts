@@ -33,7 +33,8 @@
       SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE,
       SecurityTableHeaderConfigGroups,
-      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_NAME_PLACEHOLDER
+      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
+      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END
     } from 'Core/constants/securityTableConstants.constant';
     import {
       SecurityDefinitionMap,
@@ -101,7 +102,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     devWhitelist: DevWhitelist,
     portolioMetricValues: PortfolioMetricValues,
     securityTableHeaderConfigGroups: SecurityTableHeaderConfigGroups,
-    weigthHeaderNamePlaceholder: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_NAME_PLACEHOLDER
+    weigthHeaderNameDelimiterStart: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
+    weigthHeaderNameDelimiterEnd: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -724,10 +726,22 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     const targetFund = this.state.filters.quickFilters.portfolios[0];
     this.state.table.metrics.forEach((eachHeader) => {
       if (eachHeader.key === 'weightFundCS01') {
-        eachHeader.content.label = eachHeader.content.label.replace(this.constants.weigthHeaderNamePlaceholder, targetFund);
+        let newLabel = eachHeader.content.label;
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterStart, '|');
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterEnd, '|');
+        const array = newLabel.split('|');
+        if (array.length === 3) {
+          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd}`).concat(array[2]);
+        }
       }
       if (eachHeader.key === 'weightFundBEV') {
-        eachHeader.content.label = eachHeader.content.label.replace(this.constants.weigthHeaderNamePlaceholder, targetFund);
+        let newLabel = eachHeader.content.label;
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterStart, '|');
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterEnd, '|');
+        const array = newLabel.split('|');
+        if (array.length === 3) {
+          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd}`).concat(array[2]);
+        }
       }
     });
     // trigger the ngOnChanges in santa table
