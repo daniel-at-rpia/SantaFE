@@ -348,6 +348,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       }
     });
     this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+    if (this.state.filters.quickFilters.portfolios.length === 1) {
+      this.modifyWeightColumnHeaders();
+    }
     if (!!logEngagement) {
       let filterValue = '';
       params.filterList.forEach((eachFilter) => {
@@ -701,5 +704,16 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
     this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
     this.onApplyFilter(params, false);
+  }
+
+  private modifyWeightColumnHeaders() {
+    const targetFund = this.state.filters.quickFilters.portfolios[0];
+    this.state.table.metrics.forEach((eachHeader) => {
+      if (eachHeader.key === 'weightFundCS01') {
+        eachHeader.content.label = eachHeader.content.label.replace('<Fund>', targetFund);
+      }
+    });
+    // trigger the ngOnChanges in santa table
+    this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
   }
 }

@@ -549,6 +549,6 @@ export class LiveDataProcessingService {
         const eachRowBEV = eachRow.data.security.data.weight.currentGroupBEVValue;
         eachRow.data.security.data.weight.groupBEVPct = !!eachRowBEV ? this.utilityService.round(eachRowBEV/tableBEVAggregate*100, 2) : null;
       }
-    })
+    });
   }
 }
