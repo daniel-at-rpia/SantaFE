@@ -74,6 +74,26 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     &-clearTargets {
       display: flex;
     }
+    &-setView {
+      display: none;
+      justify-content: space-between;
+      &-btn {
+        display: flex;
+        flex-direction: row;
+        &-icon {
+          display: flex;
+          margin-right: $spacing_x_small;
+          &--up {
+            font-size: $font_size_small;
+            margin-bottom: $spacing_x_small;
+          }
+          &--down {
+            font-size: $font_size_small;
+            margin-top: $spacing_x_small;
+          }
+        }
+      }
+    }
   }
   &__main {
     @include mix_fixed_div(relative, $z_index_base_item);
@@ -408,6 +428,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         &-clearTargets {
           display: none;
         }
+        &-setView {
+          display: flex;
+        }
       }
     }
   }
@@ -418,8 +441,63 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   @include mix_alive('custom', $animation_duration_light background-color);
   display: none;
   background-color: $color_gray_2;
+  &__setView {
+    @include mix_fixed_div(relative, $z_index_dropdown);
+    @include mix_alive('light');
+    display: none;
+    flex: 0 1 auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0);
+    padding-left: $spacing_small;
+    &-btn {
+      margin-right: $spacing_small;
+      &-icon {
+        color: $font_color_inverse;
+      }
+      &-text {
+        word-break: break-all;
+        color: $font_color_inverse;
+      }
+      &--positive {
+        background-color: $color_green_6;
+      }
+      &--improving {
+        background-color: $color_lime_10;
+        #{$blockName} {
+          &__setView {
+            &-btn {
+              &-icon {
+                transform: rotate(45deg);
+              }
+            }
+          }
+        }
+      }
+      &--neutral {
+        background-color: $color_yellow_6;
+      }
+      &--deteriorating {
+        background-color: $color_orange_6;
+        #{$blockName} {
+          &__setView {
+            &-btn {
+              &-icon {
+                transform: rotate(-45deg);
+              }
+            }
+          }
+        }
+      }
+      &--negative {
+        background-color: $color_red_6;
+      }
+    }
+
+  }
   &__details {
-    flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
+    flex: 1 1 auto;
     display: none;
     align-items: center;
     padding: $spacing_x_small 0 $spacing_small $spacing_medium;
@@ -502,9 +580,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         }
       }
       &__label {
-        &-text {
-          display: none;
-        }
+        display: none;
       }
     }
   }
@@ -572,6 +648,84 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--visibleState {
     display: flex;
+  }
+  &--editingViewState {
+    #{$blockName} {
+      &__setView {
+        display: flex;
+        transform: scale(1);
+        + #{$blockName} {
+         &__details {
+          flex: 1 1 auto;
+         }
+        }
+      }
+    }
+  }
+  &--selectedPositiveView {
+    #{$blockName} {
+      &__setView {
+        &-btn {
+          &--positive {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+  }
+  &--selectedImprovingView {
+    #{$blockName} {
+      &__setView {
+        &-btn {
+          &--improving {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+  }
+  &--selectedDeterioratingView {
+    #{$blockName} {
+      &__setView {
+        &-btn {
+          &--deteriorating {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+  }
+  &--selectedNegativeView {
+    #{$blockName} {
+      &__setView {
+        &-btn {
+          &--negative {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
+  }
+  &--selectedNeutralView {
+    #{$blockName} {
+      &__setView {
+        &-btn {
+          &--neutral {
+            @include material('none');
+            background-color: $color_active;
+            color: $font_color_inverse;
+          }
+        }
+      }
+    }
   }
   &--evenState {
     background-color: $color_blue_gray_1;
