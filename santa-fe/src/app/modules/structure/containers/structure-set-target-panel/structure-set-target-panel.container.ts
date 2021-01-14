@@ -1489,7 +1489,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       isBulkEditViewOnly: false,
       isBulkEditViewWithTargets: false
     };
-    let isViewPayloadValid: boolean;
     this.state.editRowList.forEach(editRow => {
       if (editRow.isViewEdited) {
         const groupOption = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${editRow.rowDTO.data.bicsLevel}`;
@@ -1500,7 +1499,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         viewPayload.view.push(editRow.view)
       }
     })
-    isViewPayloadValid = viewPayload.bucket.length > 0;
+    const isViewPayloadValid = viewPayload.bucket.length > 0;
     return !!isViewPayloadValid ? viewPayload : null;
   }
 }
