@@ -115,7 +115,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         newOverrideNameCache: null
       },
       removalList: [],
-      clearAllTargetSelected: false
+      clearAllTargetSelected: false,
+      editViewMode: false
     };
     return state;
   }
@@ -578,9 +579,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       },
       isLocked: false,
       isEven: false,
+      isViewEdited: false,
       existInServer: true,
       rowDTO: null,
-      isVisible: true
+      isVisible: true,
+      view: null
     };
     if (this.state.targetBreakdown.state.isBICs) {
       if (this.state.activeMetric === this.constants.metric.cs01) {
