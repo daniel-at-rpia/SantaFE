@@ -154,6 +154,7 @@
               'sat-structureSetTargetEditRow--bicsLevel4Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 4,
               'sat-structureSetTargetEditRow--visibleState': eachCategory.isVisible,
               'sat-structureSetTargetEditRow--editingViewState': state.editViewMode,
+              'sat-structureSetTargetEditRow--hasUpdatedViewState': eachCategory.isViewEdited,
               'sat-structureSetTargetEditRow--selectedPositiveView': eachCategory.view === constants.view.positive,
               'sat-structureSetTargetEditRow--selectedImprovingView': eachCategory.view === constants.view.improving,
               'sat-structureSetTargetEditRow--selectedDeterioratingView': eachCategory.view === constants.view.deteriorating,
@@ -161,11 +162,11 @@
               'sat-structureSetTargetEditRow--selectedNeutralView': eachCategory.view === constants.view.neutral
             }">
             <section class="sat-structureSetTargetEditRow__setView">
-              <button (click)="onClickSetView(eachCategory, constants.view.positive)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--positive">
+              <button (click)="onClickSetView(eachCategory, constants.view.positive)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--positive">
                 <i class="fal fa-arrow-up sat-structureSetTargetEditRow__setView-btn-icon"></i>
                 <span class="sat-structureSetTargetEditRow__setView-btn-text">{{ constants.view.positive }}</span>
               </button>
-              <button (click)="onClickSetView(eachCategory, constants.view.improving)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small santaBtn--inverseLabelled sat-structureSetTargetEditRow__setView-btn--improving">
+              <button (click)="onClickSetView(eachCategory, constants.view.improving)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--improving">
                 <i class="fal fa-arrow-up sat-structureSetTargetEditRow__setView-btn-icon"></i>
                 <span class="sat-structureSetTargetEditRow__setView-btn-text">{{ constants.view.improving }}</span>
               </button>
