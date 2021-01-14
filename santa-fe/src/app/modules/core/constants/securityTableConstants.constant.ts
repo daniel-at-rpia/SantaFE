@@ -52,7 +52,7 @@ export const SecurityTableHeaderConfigGroups = {
   alert: 'Alert-related',
   mark: 'Mark',
   markDiscrepancies: 'Mark Discrepancies',
-  weight: 'Weight %',
+  weight: 'Weight % within fund/table',
   cost: 'Position Cost',
   position: 'Position (MM)',
   cs01: 'CS01 (k)',
@@ -1033,11 +1033,12 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightFundCS01',
     content: {
-      label: `% In ${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - CS01`,
-      attrName: 'fundCS01Pct',
+      label: `${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - CS01`,
+      attrName: 'fundCS01PctDisplay',
       underlineAttrName: 'fundCS01Pct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1053,12 +1054,13 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightTableCS01',
     content: {
-      label: '% In Table - CS01',
-      attrName: 'groupCS01Pct',
+      label: 'Table - CS01',
+      attrName: 'groupCS01PctDisplay',
       underlineAttrName: 'groupCS01Pct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isFrontendAggregation: true,
+      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1074,11 +1076,12 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightFundBEV',
     content: {
-      label: `% In ${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - BEV`,
-      attrName: 'fundBEVPct',
+      label: `${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - BEV`,
+      attrName: 'fundBEVPctDisplay',
       underlineAttrName: 'fundBEVPct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
@@ -1094,11 +1097,12 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'weightTableBEV',
     content: {
-      label: '% In Table - BEV',
-      attrName: 'groupBEVPct',
+      label: 'Table - BEV',
+      attrName: 'groupBEVPctDisplay',
       underlineAttrName: 'groupBEVPct',
       blockAttrName: 'weight',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isColumnWidthNarrow: true,
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default:{

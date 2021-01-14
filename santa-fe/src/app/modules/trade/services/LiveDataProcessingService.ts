@@ -410,7 +410,9 @@ export class LiveDataProcessingService {
     const targetSecurity = targetRow.data.security;
     let includeFlag = false;
     targetSecurity.data.weight.fundCS01Pct = null;
+    targetSecurity.data.weight.fundCS01PctDisplay = null;
     targetSecurity.data.weight.fundBEVPct = null;
+    targetSecurity.data.weight.fundBEVPctDisplay = null;
     targetSecurity.data.portfolios.forEach((eachPortfolio) => {
       const portfolioMatchFilterScope = panelStateFilterBlock.quickFilters.portfolios.length === 0 ? true : panelStateFilterBlock.quickFilters.portfolios.find((eachPortfolioFilter) => {
         return eachPortfolio.portfolioName === eachPortfolioFilter;
@@ -425,7 +427,9 @@ export class LiveDataProcessingService {
         if (panelStateFilterBlock.quickFilters.portfolios.length === 1) {
           // only show fund pct if the user is looking at a specific fund, would always be the case when the user launches Trade through Structuring.
           targetSecurity.data.weight.fundCS01Pct = this.utilityService.round(eachPortfolio.cs01WeightPct*100, 2);
+          targetSecurity.data.weight.fundCS01PctDisplay = targetSecurity.data.weight.fundCS01Pct ? `${targetSecurity.data.weight.fundCS01Pct} %` : null;
           targetSecurity.data.weight.fundBEVPct = this.utilityService.round(eachPortfolio.bondEquivalentValueWeightPct*100, 2);
+          targetSecurity.data.weight.fundBEVPctDisplay = !!targetSecurity.data.weight.fundBEVPct ? `${targetSecurity.data.weight.fundBEVPct} %` : null;
         }
       }
     });
@@ -546,8 +550,10 @@ export class LiveDataProcessingService {
       if (!!eachRow && !!eachRow.data.security) {
         const eachRowCs01 = eachRow.data.security.data.weight.currentGroupCS01Value;
         eachRow.data.security.data.weight.groupCS01Pct = !!eachRowCs01 ? this.utilityService.round(eachRowCs01/tableCS01Aggregate*100, 2) : null;
+        eachRow.data.security.data.weight.groupCS01PctDisplay = eachRow.data.security.data.weight.groupCS01Pct ? `${eachRow.data.security.data.weight.groupCS01Pct} %` : null;
         const eachRowBEV = eachRow.data.security.data.weight.currentGroupBEVValue;
         eachRow.data.security.data.weight.groupBEVPct = !!eachRowBEV ? this.utilityService.round(eachRowBEV/tableBEVAggregate*100, 2) : null;
+        eachRow.data.security.data.weight.groupBEVPctDisplay = !!eachRow.data.security.data.weight.groupBEVPct ? `${eachRow.data.security.data.weight.groupBEVPct} %` : null;
       }
     });
   }

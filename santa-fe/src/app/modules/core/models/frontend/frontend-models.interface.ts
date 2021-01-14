@@ -62,9 +62,13 @@ export interface SecurityDTO extends BasicDTOStructure {
       currentGroupCS01Value: number;
       currentGroupBEVValue: number;
       fundCS01Pct: number;
+      fundCS01PctDisplay: string;
       groupCS01Pct: number;
+      groupCS01PctDisplay: string;
       fundBEVPct: number;
+      fundBEVPctDisplay: string;
       groupBEVPct: number;
+      groupBEVPctDisplay: string;
     }
     position: {
       positionCurrent: number;

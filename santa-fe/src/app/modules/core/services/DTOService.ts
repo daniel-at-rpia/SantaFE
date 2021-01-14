@@ -175,9 +175,13 @@ export class DTOService {
           currentGroupCS01Value: 0,
           currentGroupBEVValue: 0,
           fundCS01Pct: null,
+          fundCS01PctDisplay: null,
           groupCS01Pct: null,
+          groupCS01PctDisplay: null,
           fundBEVPct: null,
-          groupBEVPct: null
+          fundBEVPctDisplay: null,
+          groupBEVPct: null,
+          groupBEVPctDisplay: null
         },
         position: {
           positionCurrent: 0,
