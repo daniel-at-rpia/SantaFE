@@ -34,7 +34,8 @@
       SECURITY_TABLE_FINAL_STAGE,
       SecurityTableHeaderConfigGroups,
       SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
-      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END
+      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
+      AggridSortOptions
     } from 'Core/constants/securityTableConstants.constant';
     import {
       SecurityDefinitionMap,
@@ -103,7 +104,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     portolioMetricValues: PortfolioMetricValues,
     securityTableHeaderConfigGroups: SecurityTableHeaderConfigGroups,
     weigthHeaderNameDelimiterStart: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
-    weigthHeaderNameDelimiterEnd: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END
+    weigthHeaderNameDelimiterEnd: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
+    sortOption: AggridSortOptions
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -740,7 +742,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterEnd, '|');
         const array = newLabel.split('|');
         if (array.length === 3) {
-          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd}`).concat(array[2]);
+          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd} `).concat(array[2]);
         }
       }
     });
@@ -765,43 +767,51 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       fundCS01Header.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: true
+        groupShow: true,
+        sortActivated: this.constants.sortOption.desc
       };
       tableCS01Header.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: true
+        groupShow: true,
+        sortActivated: null
       };
       fundBEVHeader.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: false
+        groupShow: false,
+        sortActivated: null
       };
       tableBEVHeader.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: false
+        groupShow: false,
+        sortActivated: null
       };
     } else if (targetMetric === this.constants.portolioMetricValues.creditLeverage) {
       fundCS01Header.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: false
+        groupShow: false,
+        sortActivated: null
       };
       tableCS01Header.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: false
+        groupShow: false,
+        sortActivated: null
       };
       fundBEVHeader.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: true
+        groupShow: true,
+        sortActivated: this.constants.sortOption.desc
       };
       tableBEVHeader.content.tableSpecifics.default = {
         pinned: true,
         active: true,
-        groupShow: true
+        groupShow: true,
+        sortActivated: null
       };
     }
     // trigger the ngOnChanges in santa table, normally would be already triggered by modifyWeightColumnHeadersUpdateFundName(), so this is just defensive programming

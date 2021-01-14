@@ -16,7 +16,7 @@ import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -386,6 +386,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isDataTypeText: boolean;
     isDriverDependent: boolean;
     pinned: boolean;
+    sortActivated: AggridSortOptions;
     groupBelongs: string;
     groupShow: boolean;
     activePortfolios: Array<string>;

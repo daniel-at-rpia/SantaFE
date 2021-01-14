@@ -994,6 +994,7 @@ export class DTOService {
         isDriverDependent: !!stub.content.isDriverDependent,
         groupBelongs: stub.content.groupBelongs,
         pinned: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].pinned : !!stub.content.tableSpecifics.default.pinned,
+        sortActivated: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? stub.content.tableSpecifics[useSpecificsFrom].sortActivated : stub.content.tableSpecifics.default.sortActivated,
         groupShow: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].groupShow : !!stub.content.tableSpecifics.default.groupShow,
         activePortfolios: activePortfolios || []
       },

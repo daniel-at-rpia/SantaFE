@@ -1,4 +1,5 @@
 import { Label } from '@amcharts/amcharts4/core';
+import { AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 export interface SearchShortcutStub {
   displayTitle: string;
@@ -119,6 +120,7 @@ interface SecurityTableHeaderConfigStubTableSpecificsBlock {
   pinned?: boolean;
   disabled?: boolean;
   groupShow?: boolean;
+  sortActivated?: AggridSortOptions;
 }
 
 export interface TriCoreDriverConfigStub {

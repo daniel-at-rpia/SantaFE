@@ -41,6 +41,10 @@ export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
 export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
 export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
 export const AGGRID_DETAIL_COLUMN_KEY = 'Quotes';
+export enum AggridSortOptions {
+  asc = "asc",
+  desc = "desc"
+}
 
 export const SECURITY_TABLE_HEADER_NO_GROUP = 'noGroup';
 export const SecurityTableHeaderConfigGroups = {
@@ -106,7 +110,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         tradeAlert: {
           active: true,
           disabled: false,
-          groupShow: true
+          groupShow: true,
+          sortActivated: AggridSortOptions.asc
         }
       }
     }

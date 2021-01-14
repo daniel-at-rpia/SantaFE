@@ -105,13 +105,14 @@ export class AgGridMiddleLayerService {
         sortable: true,
         filter: null,
         pinned: eachHeader.data.pinned || false,
+        sort: eachHeader.data.sortActivated || null,
         enablePivot: false,
         enableRowGroup: false,
         hide: !isActiveByDefault
       };
-      if (eachHeader.data.key === 'alertTime') {
-        newAgColumn['sort'] = 'asc';
-      }
+      // if (eachHeader.data.key === 'alertTime') {
+        // newAgColumn.sort = 'asc';
+      // }
       if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
         if (eachHeader.data.key === 'alertTraceVolumeEstimated') {
           newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToCommas(params.value) : null);

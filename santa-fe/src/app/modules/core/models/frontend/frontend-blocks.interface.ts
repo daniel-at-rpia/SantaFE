@@ -18,7 +18,7 @@ import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.const
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock, BEMetricBreakdowns } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -158,6 +158,7 @@ export interface AgGridColumnDefinition {
   cellRenderer?: string;
   resizable?: boolean;
   sortable?: boolean;
+  sort?: AggridSortOptions;
   filter?: string;
   pinned?: boolean;
   hide: boolean;
