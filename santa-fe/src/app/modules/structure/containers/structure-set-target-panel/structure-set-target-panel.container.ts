@@ -1480,4 +1480,27 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
     }
   }
+
+  private traverseEditRowListForUpdatedView(): StructureSetViewTransferPack {
+    const viewPayload: StructureSetViewTransferPack = {
+      bucket: [],
+      view: [],
+      displayCategory: '',
+      isBulkEditViewOnly: false,
+      isBulkEditViewWithTargets: false
+    };
+    let isViewPayloadValid: boolean;
+    this.state.editRowList.forEach(editRow => {
+      if (editRow.isViewEdited) {
+        const groupOption = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${editRow.rowDTO.data.bicsLevel}`;
+        const rowBucket = {
+          [groupOption]: [editRow.rowDTO.data.code]
+        }
+        viewPayload.bucket.push(rowBucket);
+        viewPayload.view.push(editRow.view)
+      }
+    })
+    isViewPayloadValid = viewPayload.bucket.length > 0;
+    return !!isViewPayloadValid ? viewPayload : null;
+  }
 }
