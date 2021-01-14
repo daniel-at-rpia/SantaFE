@@ -37,7 +37,8 @@ import {
 import {
   PayloadUpdateBreakdown,
   PayloadUpdateOverride,
-  PayloadDeleteOverride
+  PayloadDeleteOverride,
+  PayloadSetView
 } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
@@ -859,7 +860,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private submitTargetChanges(): boolean {
     if (!this.state.targetBreakdownIsOverride) {
-      return this.submitRegularBreakdownChanges();
+      if (this.state.targetBreakdown.state.isBICs) {
+        return this.submitRegularBICSBreakdownChanges();
+      } else {
+        return this.submitRegularBreakdownChanges()
+      }
     } else {
       return this.submitOverrideChanges();
     }
@@ -1509,5 +1514,117 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     })
     const isViewPayloadValid = viewPayload.bucket.length > 0;
     return !!isViewPayloadValid ? viewPayload : null;
+  }
+
+  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, isBulkEditViewOnly: boolean, fundWithUpdatedTargets: BEPortfolioStructuringDTO = null): boolean {
+    const message = !!isBulkEditViewOnly ? 'views' : `view and BICS targets in ${this.state.targetFund.data.portfolioShortName}`;
+    const endpoint = this.restfulCommService.apiMap.setView;
+    const { bucket, view } = data;
+    const payload: PayloadSetView = {
+      buckets: bucket,
+      views: view
+    }
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+        if (!!serverReturn) {
+          const completeAlertMessage = `Successfully updated ${message}`;
+          this.store$.dispatch(new StructureUpdateMainPanelEvent());
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+          this.restfulCommService.logEngagement(
+            this.restfulCommService.engagementMap.portfolioStructureSetView,
+            null,
+            `Updated ${message}. Set by ${this.state.ownerInitial}.`,
+            'Portfolio Structure Breakdown'
+          )
+        } else {
+          if (!!fundWithUpdatedTargets) {
+            // since the update breakdown has succeeded, the UI needs to change to reflect that
+            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(fundWithUpdatedTargets));
+            const updateBreakdownAlert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`, null);
+            this.store$.dispatch(new CoreSendNewAlerts([updateBreakdownAlert]));
+          }
+          const viewAlert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update funds with new view values`, null);
+          viewAlert.state.isError = true;
+          this.store$.dispatch(new CoreSendNewAlerts([viewAlert]));
+          this.restfulCommService.logError(`Failed to receive fund data with updated views`);
+        }
+      }),
+      catchError(err => {
+        setTimeout(() => {
+          if (!!fundWithUpdatedTargets) {
+            // since the update breakdown call has succeeded, the UI needs to change to reflect that
+            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(fundWithUpdatedTargets));
+            const updateBreakdownAlert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`, null);
+            this.store$.dispatch(new CoreSendNewAlerts([updateBreakdownAlert]));
+          }
+          const viewAlert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', 'Unable to update views', null);
+          viewAlert.state.isError = true;
+          this.store$.dispatch(new CoreSendNewAlerts([viewAlert]));
+        }, 500)
+        this.restfulCommService.logError('Set Analyst View API call failed')
+        console.error(`${endpoint} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
+    return true;
+  }
+
+  private submitRegularBICSBreakdownChanges(): boolean {
+    const payloads: Array<PayloadUpdateBreakdown> = this.traverseEditRowsToFormUpdateBreakdownPayload();
+    const viewPayload: StructureSetViewTransferPack = this.traverseEditRowListForUpdatedView();
+    if (!!payloads && payloads.length > 0) {
+      const necessaryUpdateNumOfCalls = payloads.length;
+      let callCount = 0;
+      payloads.forEach((payload) => {
+        const level = payload.portfolioBreakdown.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1];
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEPortfolioStructuringDTO) => {
+            if (!!serverReturn) {
+              callCount++;
+              if (callCount === necessaryUpdateNumOfCalls) {
+                if (!viewPayload) {
+                  this.store$.dispatch(
+                    new CoreSendNewAlerts([
+                      this.dtoService.formSystemAlertObject(
+                        'Structuring',
+                        'Updated',
+                        `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`,
+                        null
+                      )]
+                    )
+                  );
+                  this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+                } else {
+                  this.submitBulkEditViewChanges(viewPayload, false, serverReturn);
+                }
+              }
+            } else {
+              this.restfulCommService.logError(`Failed to receive fund based on updated BICS Lv.${level} targets in ${this.state.targetFund.data.portfolioShortName}`);
+              const alert = this.dtoService.formSystemAlertObject('Error', 'Set Target', `Unable to update BICS Lv.${level} targets in ${this.state.targetFund.data.portfolioShortName}`, null);
+              alert.state.isError = true;
+              this.store$.dispatch(new CoreSendNewAlerts([alert]));
+              return false;
+            }
+          }),
+          catchError(err => {
+            console.error('update breakdown failed');
+            const message = !!viewPayload ? `failed to update views and targets for BICS Lv.${level} in ${this.state.targetFund.data.portfolioShortName}` : `update breakdown failed in ${this.state.targetFund.data.portfolioShortName}`;
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', message, null)]));
+            return of('error');
+          })
+        ).subscribe();
+      })
+      return true;
+    } else {
+      if (!!viewPayload) {
+        return this.submitBulkEditViewChanges(viewPayload, true);
+      } else {
+        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target or view because no change is detected', null)]));
+        return false;
+      }
+    }
   }
 }
