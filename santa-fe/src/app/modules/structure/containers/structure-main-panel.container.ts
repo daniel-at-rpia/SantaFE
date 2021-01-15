@@ -273,7 +273,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
     const endpoint = this.restfulCommService.apiMap.setView;
     let totalBucketValues = '';
-    const displayViewValue = !!view ? view : 'removed';
+    const [ updatedView ] = view;
+    const displayViewValue = !!updatedView ? updatedView : 'removed';
     for (let values in bucket) {
       if (!!bucket[values]) {
         totalBucketValues = totalBucketValues === '' ? `${bucket[values]}` : `${totalBucketValues} ${bucket[values]}`
