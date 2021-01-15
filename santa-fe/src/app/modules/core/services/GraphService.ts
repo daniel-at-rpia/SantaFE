@@ -988,8 +988,8 @@ export class GraphService {
           }
         })
         // the +/- of 10 extends the y-axis a bit more so that points dont touch the axis
-        const min = ((Math.floor(sortedSpreadData[0] / 10) * 10) - 10) >= 0 ? (Math.floor(sortedSpreadData[0] / 10) * 10) - 10 : 0;
-        const max = (Math.ceil(sortedSpreadData[sortedSpreadData.length - 1] / 10) * 10) + 10;
+        const min = ((Math.floor(sortedSpreadData[0] / 10) * 10) - 10) >= 0 ? (Math.floor(sortedSpreadData[0] / 10) * 10) - 15 : 0;
+        const max = (Math.ceil(sortedSpreadData[sortedSpreadData.length - 1] / 10) * 10) + 15;
         const parsedMin = min;
         const parsedMax = max;
         const initialIncrement = (parsedMax-parsedMin) / 4;
