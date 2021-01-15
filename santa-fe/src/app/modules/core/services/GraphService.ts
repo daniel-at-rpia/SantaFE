@@ -1034,21 +1034,21 @@ export class GraphService {
         let bullet1 = series1.bullets.push(new am4charts.CircleBullet());
         bullet1.fill = am4core.color('#BC2B5D');
         bullet1.stroke = am4core.color('#eee');
+        bullet1.circle.radius = 4.5;
         let series2 = chart.series.push(new am4charts.LineSeries());
         series2.dataFields.valueY = "buyY";
         series2.dataFields.dateX = "date";
         series2.strokeOpacity = 0;
         series2.cursorTooltipEnabled = false;
         let bullet2 = series2.bullets.push(new am4charts.CircleBullet());
-        bullet2.fill = am4core.color('#26A77B')
-        bullet2.stroke = am4core.color('#eee')
+        bullet2.fill = am4core.color('#26A77B');
+        bullet2.stroke = am4core.color('#eee');
+        bullet2.circle.radius = 4.5;
         if (!!dto.state.isDisplayAllTraceTrades) {
           series1.dataFields.valueX = "totalTime";
           series2.dataFields.valueX = "totalTime";
           bullet1.tooltipText = "{contraParty} sell {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
           bullet2.tooltipText = "{contraParty} buy {valueY} on {date.formatDate('MMM dd')} at {dateX.formatDate('HH:mm:ss')}";
-          bullet1.circle.radius = 4.5;
-          bullet2.circle.radius = 4.5;
         } else {
           bullet1.tooltipText = "{contraParty} sell {valueY} at {dateX.formatDate('HH:mm:ss')}";
           bullet2.tooltipText = "{contraParty} buy {valueY} at {dateX.formatDate('HH:mm:ss')}";
