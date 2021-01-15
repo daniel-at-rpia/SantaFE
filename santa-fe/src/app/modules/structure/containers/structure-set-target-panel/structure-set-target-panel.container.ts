@@ -734,9 +734,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = '';
         }
-      } else {
-        counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '';
       }
     } else if (metric === this.constants.metric.creditLeverage) {
       if (this.state.totalUnallocatedCreditLeverage > 0) {
@@ -755,9 +752,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = '';
         }
-      } else {
-        counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '';
       }
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
