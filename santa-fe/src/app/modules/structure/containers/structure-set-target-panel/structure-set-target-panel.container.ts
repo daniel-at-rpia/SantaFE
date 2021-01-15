@@ -525,8 +525,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       modifiedDisplayRowTitle: row.data.displayCategory,
       targetCs01: {
         level: {
-          savedDisplayValue: !!row.data.targetLevel ? `${row.data.targetLevel}` : null,
-          savedUnderlineValue: !!row.data.raw.targetLevel ? row.data.raw.targetLevel : null,
+          savedDisplayValue: row.data.targetLevel !== null ? `${row.data.targetLevel}` : null,
+          savedUnderlineValue: row.data.raw.targetLevel !== null ? row.data.raw.targetLevel : null,
           modifiedDisplayValue: null,
           modifiedUnderlineValue: null,
           isActive: false,
@@ -537,8 +537,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           isSaved: false
         },
         percent: {
-          savedDisplayValue: !!row.data.targetPct ? `${row.data.targetPct}` : null,
-          savedUnderlineValue: !!row.data.raw.targetPct ? row.data.raw.targetPct : null,
+          savedDisplayValue: row.data.targetPct !== null  ? `${row.data.targetPct}` : null,
+          savedUnderlineValue: row.data.raw.targetPct !== null ? row.data.raw.targetPct : null,
           modifiedDisplayValue: null,
           modifiedUnderlineValue: null,
           isActive: false,
@@ -622,10 +622,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             return eachRow.rowIdentifier === eachCategory.data.category;
           });
           if (!!targetRow) {
-            targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
-            targetRow.targetCreditLeverage.level.savedUnderlineValue = !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null;
-            targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
-            targetRow.targetCreditLeverage.percent.savedUnderlineValue = !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null;
+            targetRow.targetCreditLeverage.level.savedDisplayValue = eachCategory.data.targetLevel !== null ? `${eachCategory.data.targetLevel}` : null;
+            targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.data.raw.targetLevel !== null ? eachCategory.data.raw.targetLevel : null;
+            targetRow.targetCreditLeverage.percent.savedDisplayValue = eachCategory.data.targetPct !== null ? `${eachCategory.data.targetPct}` : null;
+            targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.data.raw.targetPct !== null ? eachCategory.data.raw.targetPct : null;
           };
         }
       });
