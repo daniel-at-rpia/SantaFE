@@ -1448,5 +1448,23 @@ export class UtilityService {
       return !isDiveInAvailable;
     }
 
+    public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {
+      const { view, row } = data;
+      const isRegularBICSRow = row.data.bicsLevel >= 1 && !!row.data.code;
+      let formattedDisplayCategory: string;
+      if (!!isRegularBICSRow) {
+        const level = row.data.bicsLevel;
+        formattedDisplayCategory = `${row.data.displayCategory} (Lv.${level})`;
+      } else {
+        formattedDisplayCategory = row.data.displayCategory;
+      }
+      const viewData: AdhocPacks.StructureSetViewTransferPack = {
+        bucket: [row.data.bucket],
+        view: view !== row.data.view ? [view] : [null],
+        displayCategory: formattedDisplayCategory
+      }
+      return viewData;
+    }
+
   // structuring specific end
 }

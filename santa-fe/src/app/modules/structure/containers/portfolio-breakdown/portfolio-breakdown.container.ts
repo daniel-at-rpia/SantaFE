@@ -259,21 +259,10 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public updateRowView(data: StructureRowSetViewData) {
     if (!!data) {
-      const { view, row } = data;
-      const isRegularBICSRow = row.data.bicsLevel >= 1 && !!row.data.code;
-      let formattedDisplayCategory: string;
-      if (!!isRegularBICSRow) {
-        const level = row.data.bicsLevel;
-        formattedDisplayCategory = `${row.data.displayCategory} (Lv.${level})`;
-      } else {
-        formattedDisplayCategory = row.data.displayCategory;
+      const viewData = this.utilityService.formViewPayloadTransferPackForSingleEdit(data);
+      if (!!viewData) {
+        this.store$.dispatch(new StructureSetView(viewData));
       }
-      const viewData: StructureSetViewTransferPack = {
-        bucket: [row.data.bucket],
-        view: view !== row.data.view ? [view] : [null],
-        displayCategory: formattedDisplayCategory
-      }
-      this.store$.dispatch(new StructureSetView(viewData));
     }
   }
 
