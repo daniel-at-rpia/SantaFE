@@ -2496,7 +2496,7 @@ export class DTOService {
       for (let code in selectedBreakdown.breakdown) {
         const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
         if (!!selectedBreakdown.breakdown[code] && !!isCodeValid) {
-          if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel <= -1000 || !!selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel) {
+          if (selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel >= 1000 || selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel <= -1000 || selectedBreakdown.breakdown[code].metricBreakdowns.Cs01.targetLevel === 0 || selectedBreakdown.breakdown[code].metricBreakdowns.CreditLeverage.targetLevel !== null) {
             const level = i + 2;
             customBreakdown.breakdown[code] = selectedBreakdown.breakdown[code];
             (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel = level;
