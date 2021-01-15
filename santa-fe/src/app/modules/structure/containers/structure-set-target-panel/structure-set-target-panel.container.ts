@@ -1022,7 +1022,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
-          if (!eachRow.targetCs01.level.savedUnderlineValue) {
+          if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
@@ -1076,7 +1076,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
-          if (!eachRow.targetCs01.level.savedUnderlineValue) {
+          if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
