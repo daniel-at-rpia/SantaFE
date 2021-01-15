@@ -1268,7 +1268,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       subCategoryCodes.forEach(code => {
         const level = code.length / BICS_CODE_DELIMITER_AMOUNT;
         const rawDataByCode = this.bicsService.getBICSCategoryRawData(this.state.targetFund.data.portfolioId, level, code);
-        if (!!rawDataByCode && (rawDataByCode.metricBreakdowns.CreditLeverage.targetLevel || rawDataByCode.metricBreakdowns.Cs01.targetLevel)) {
+        if (!!rawDataByCode && (rawDataByCode.metricBreakdowns.CreditLeverage.targetLevel !== null || rawDataByCode.metricBreakdowns.Cs01.targetLevel != null)) {
           const displayCategory = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
           if (!!displayCategory) {
             customRawBreakdown.breakdown[displayCategory] = rawDataByCode;
@@ -1281,7 +1281,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, definitionList, isDisplayCs01, false);
       if (!!customBreakdown) {
         const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
-        const listWithTargets = list.filter(newRow => !!newRow.data.targetLevel);
+        const listWithTargets = list.filter(newRow => newRow.data.targetLevel !== null);
         row.data.displayedSubLevelRowsWithTargets = listWithTargets;
         const isCorrectListForEditRow = this.state.activeMetric === PortfolioMetricValues.cs01 ? isCs01List : !isCs01List;
         if (!!isCorrectListForEditRow) {
