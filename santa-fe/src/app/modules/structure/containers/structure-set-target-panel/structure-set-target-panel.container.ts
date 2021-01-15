@@ -201,7 +201,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem.isSaved = true;
     targetItem.isFocused = false;
     targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
-    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue === 0 ? null : targetItem.modifiedUnderlineValue;
+    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue;
     let counterPartyItem = null;
     if (targetItem.metric === this.constants.metric.cs01) {
       if (!!targetItem.isPercent) {
@@ -598,7 +598,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
     const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
     row[rowTargetMetric].level.modifiedDisplayValue = '';
-    row[rowTargetMetric].level.modifiedUnderlineValue = 0;
+    row[rowTargetMetric].level.modifiedUnderlineValue = null;
     row[rowTargetMetric].level.isActive = true;
     this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
   }
@@ -689,17 +689,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     displayValue: string,
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
-    if (displayValue == '') {
+    if (displayValue === '') {
+      displayValue = '';
+    } else if (displayValue === '0') {
       displayValue = '0';
-    };
+    }
     targetItem.modifiedDisplayValue = displayValue;
     targetItem.isActive = true;
     if (targetItem.metric === this.constants.metric.cs01 && !targetItem.isPercent) {
-      targetItem.modifiedUnderlineValue = parseFloat(displayValue)*1000;
+      targetItem.modifiedUnderlineValue = displayValue === '' ? null : parseFloat(displayValue)*1000;
     } else if (targetItem.isPercent) {
-      targetItem.modifiedUnderlineValue = parseFloat(displayValue)/100;
+      targetItem.modifiedUnderlineValue = displayValue === '' ? null : parseFloat(displayValue)/100;
     } else {
-      targetItem.modifiedUnderlineValue = parseFloat(displayValue);
+      targetItem.modifiedUnderlineValue = displayValue === '' ? null : parseFloat(displayValue);
     }
   }
 
@@ -717,7 +719,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (metric === this.constants.metric.cs01) {
       if (this.state.totalUnallocatedCS01 > 0) {
         // checks if there is an actual target saved, and if not, it would have been set to null
-        if (!!targetUnderlineValue) {
+        if (!!targetUnderlineValue || targetUnderlineValue === 0) {
           if (!!targetIsPercent) {
             impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
             counterPartyItem.modifiedUnderlineValue = impliedValue;
@@ -729,7 +731,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         } else {
           impliedValue = null;
-          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = '';
         }
       } else {
@@ -738,7 +740,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     } else if (metric === this.constants.metric.creditLeverage) {
       if (this.state.totalUnallocatedCreditLeverage > 0) {
-        if (!!targetUnderlineValue) {
+        if (!!targetUnderlineValue || targetUnderlineValue === 0) {
           if (!!targetIsPercent) {
             impliedValue = targetUnderlineValue * this.state.totalUnallocatedCreditLeverage;
             counterPartyItem.modifiedUnderlineValue = impliedValue;
@@ -750,7 +752,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         } else {
           impliedValue = null;
-          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = '';
         }
       } else {
@@ -759,7 +761,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
-    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue === 0 ? null : counterPartyItem.modifiedUnderlineValue;
+    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
   }
 
   // for preview rows and portfolio breakdown rows within edit row list (BICS)
@@ -776,7 +778,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const isEditedRow = editRowEquivalentDataByMetric.level.isActive || editRowEquivalentDataByMetric.level.isImplied;
         if (!!isEditedRow) {
           const parsedCurrentLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.currentLevel, isCs01);
-          const parsedTargetLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.targetLevel, isCs01)
+          const parsedTargetLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.targetLevel, isCs01);
           const newDiffToTarget = this.utilityService.getRowDiffToTarget(parsedCurrentLevel, parsedTargetLevel, isCs01);
           const newDiffToTargetDisplay = this.utilityService.getRowDiffToTargetText(newDiffToTarget, isCs01);
           this.setNewDiffToTargetsForRows(row, newDiffToTarget, newDiffToTargetDisplay);
