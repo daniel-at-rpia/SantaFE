@@ -1349,10 +1349,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const newEditRow = this.loadEditRowsReturnNewRow(rawCs01);
         const creditLeverageRowEquivalent = targetRow.data.children.data.rawLeverageCategoryList.find(rawLeverageRow => rawLeverageRow.data.code === rawCs01.data.code);
         if (!!creditLeverageRowEquivalent) {
-          newEditRow.targetCreditLeverage.level.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetLevel ? `${creditLeverageRowEquivalent.data.targetLevel}` : null;
-          newEditRow.targetCreditLeverage.level.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetLevel ? creditLeverageRowEquivalent.data.raw.targetLevel : null;
-          newEditRow.targetCreditLeverage.percent.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetPct ? `${creditLeverageRowEquivalent.data.targetPct}` : null;
-          newEditRow.targetCreditLeverage.percent.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetPct ? creditLeverageRowEquivalent.data.raw.targetPct : null;
+          newEditRow.targetCreditLeverage.level.savedDisplayValue = creditLeverageRowEquivalent.data.targetLevel !== null ? `${creditLeverageRowEquivalent.data.targetLevel}` : null;
+          newEditRow.targetCreditLeverage.level.savedUnderlineValue = creditLeverageRowEquivalent.data.raw.targetLevel !== null ? creditLeverageRowEquivalent.data.raw.targetLevel : null;
+          newEditRow.targetCreditLeverage.percent.savedDisplayValue = creditLeverageRowEquivalent.data.targetPct !== null ? `${creditLeverageRowEquivalent.data.targetPct}` : null;
+          newEditRow.targetCreditLeverage.percent.savedUnderlineValue = creditLeverageRowEquivalent.data.raw.targetPct !== null ? creditLeverageRowEquivalent.data.raw.targetPct : null;
         }
         const parentIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === targetRow.data.code);
         const editRowIndex = parentIndex + 1;
