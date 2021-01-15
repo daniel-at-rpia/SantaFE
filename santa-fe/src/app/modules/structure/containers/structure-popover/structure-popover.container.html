@@ -29,7 +29,8 @@
           (categoryClicked)="onClickBreakdownCategory($event)"
           (rowDiveInClicked)="getNextBicsLevel($event)"
           (seeBondClicked)="onClickSeeBond()"
-          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+          (setViewForRowClicked)="updatePopoverRowView($event)">
         </portfolio-breakdown-row>
       </li>
     </ul>
@@ -49,7 +50,8 @@
             (categoryClicked)="onClickBreakdownCategory($event)"
             (rowDiveInClicked)="getNextBicsLevel($event)"
             (seeBondClicked)="onClickSeeBond()"
-            (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+            (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+            (setViewForRowClicked)="updatePopoverRowView($event)">
           </portfolio-breakdown-row>
           <div [ngClass]="{
             'sat-popover__levels-secondDiveIn': true,
@@ -67,7 +69,8 @@
                   (categoryClicked)="onClickBreakdownCategory($event)"
                   (rowDiveInClicked)="getNextBicsLevel($event)"
                   (seeBondClicked)="onClickSeeBond()"
-                  (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+                  (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+                  (setViewForRowClicked)="updatePopoverRowView($event)">
                 </portfolio-breakdown-row>
                 <div [ngClass]="{
                   'sat-popover__levels-thirdDiveIn': true,
@@ -80,7 +83,8 @@
                         [breakdownRow]="fourthLevel"
                         (categoryClicked)="onClickBreakdownCategory($event)"
                         (seeBondClicked)="onClickSeeBond()"
-                        (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+                        (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+                        (setViewForRowClicked)="updatePopoverRowView($event)">
                       </portfolio-breakdown-row>
                     </li>
                   </ul>
