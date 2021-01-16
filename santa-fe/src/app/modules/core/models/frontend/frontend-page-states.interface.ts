@@ -121,20 +121,7 @@ export interface TradeCenterPanelState {
     fetchTableDataFailedError: string;
     mainTable: Blocks.TableFetchResultBlock;
   }
-  filters: {
-    keyword: {
-      defaultValueForUI: string;
-    }
-    quickFilters: {
-      driverType: string;
-      portfolios: Array<string>;
-      keyword: string;
-      owner: Array<string>;
-      strategy: Array<string>;
-      tenor: Array<string>;
-    }
-    securityFilters: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>
-  }
+  filters: Blocks.TradeCenterPanelStateFilterBlock;
 }
 
 export interface StructureMainPanelState {

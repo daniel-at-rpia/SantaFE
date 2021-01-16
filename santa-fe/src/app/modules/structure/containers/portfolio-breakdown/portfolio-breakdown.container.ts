@@ -60,7 +60,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     navigationModule: NavigationModule,
     securityDefinitionMap: SecurityDefinitionMap,
     bicsBreakdownId: BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    metrics: PortfolioMetricValues
   }
 
   constructor(
@@ -216,6 +217,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickSeeBond(targetRow: StructurePortfolioBreakdownRowDTO) {
     const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    newWorkflowState.data.stateInfo.activeMetric = !!this.breakdownData.state.isDisplayingCs01 ? this.constants.metrics.cs01 : this.constants.metrics.creditLeverage;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<SecurityDefinitionDTO> = [];
     if (this.breakdownData.state.isOverrideVariant) {
