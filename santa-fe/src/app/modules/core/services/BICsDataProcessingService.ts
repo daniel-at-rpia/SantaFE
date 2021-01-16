@@ -69,7 +69,7 @@ export class BICsDataProcessingService {
     const parsedRowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = [];
     if (subRowList.length > 0) {
       subRowList.forEach((eachRow: DTOs.StructurePortfolioBreakdownRowDTO) => {
-        if (!!eachRow.data.targetLevel) {
+        if (eachRow.data.targetLevel !== null) {
           const ifExistsInParsedList = parsedRowList.find(parsedRow => parsedRow.data.code === eachRow.data.code)
           !ifExistsInParsedList && parsedRowList.push(eachRow);
           const hierarchyList: Array<Blocks.BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.code, eachRow.data.bicsLevel);
