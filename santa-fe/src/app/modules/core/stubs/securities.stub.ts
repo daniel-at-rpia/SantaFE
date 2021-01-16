@@ -16,103 +16,125 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
             }
         },
         "securityDtos": {
-            "17163": {
-                "securityIdentifier": "17163",
+            "17163":  {
+                "securityIdentifier": "17861",
                 "security": {
-                    "securityIdentifier": "17163",
+                    "securityIdentifier": "17861",
                     "metrics": {
-                        "BB": {
+                        "FO": {
                             "isFixedForLife": true,
                             "isFixedToFloatInFixed": false,
                             "isFloat": false,
                             "isNewIssue": false,
-                            "benchmarkSecurityIdentifier": null,
-                            "benchmarkName": null,
+                            "benchmarkSecurityIdentifier": "1843",
+                            "benchmarkName": "OBL 0 04/09/2021 EUR 173",
                             "underlyingSecurityId": -1,
-                            "yieldWorst": 3.22264,
+                            "yieldWorst": 0.053075,
                             "tenor": "2Y",
-                            "amtOutstanding": 500000000.0,
-                            "marketValue": 518591110.0,
-                            "workoutTerm": 1.161644,
-                            "ratingDouble": 11.0,
+                            "amtOutstanding": 579012000.0,
+                            "marketValue": 614289690.0,
+                            "workoutTerm": 0.263014,
+                            "ratingDouble": 13.0,
                             "isRated": true,
-                            "rating": "BB-",
+                            "rating": "BB+",
                             "ratingNoNotch": "BB",
-                            "ratingBucket": "HY",
-                            "price": 101.996,
-                            "spread": 306.191
+                            "ratingBucket": "Xover",
+                            "price": 101.595479,
+                            "spread": 56.3
                         },
                         "Default": {
                             "isFixedForLife": true,
                             "isFixedToFloatInFixed": false,
                             "isFloat": false,
                             "isNewIssue": false,
-                            "benchmarkSecurityIdentifier": "96926",
-                            "benchmarkName": "T 0.125 11/30/2022 USD",
+                            "benchmarkSecurityIdentifier": "1843",
+                            "benchmarkName": "OBL 0 04/09/2021 EUR 173",
                             "underlyingSecurityId": -1,
-                            "yieldWorst": 2.900518,
+                            "yieldWorst": 0.053075,
                             "tenor": "2Y",
-                            "amtOutstanding": 500000000.0,
-                            "marketValue": 518591110.0,
-                            "workoutTerm": 1.161644,
-                            "ratingDouble": 11.0,
+                            "amtOutstanding": 579012000.0,
+                            "marketValue": 614389824.0,
+                            "workoutTerm": 0.263014,
+                            "ratingDouble": 13.0,
                             "isRated": true,
-                            "rating": "BB-",
+                            "rating": "BB+",
                             "ratingNoNotch": "BB",
-                            "ratingBucket": "HY",
-                            "price": 102.34375,
-                            "spread": 278.3065
+                            "ratingBucket": "Xover",
+                            "price": 101.612773,
+                            "spread": 56.3
                         }
                     },
                     "deltaMetrics": {
                         "Dod": {
-                            "yieldWorst": 0.034538,
+                            "yieldWorst": 0.0,
                             "ratingDouble": 0.0,
-                            "price": -0.046875,
-                            "spread": 3.7745
+                            "price": 0.0,
+                            "spread": 0.0
                         },
                         "Wow": {
-                            "yieldWorst": -0.349447,
+                            "yieldWorst": -0.108697,
                             "ratingDouble": 0.0,
-                            "price": 0.385417,
-                            "spread": -36.732
+                            "price": -0.067227,
+                            "spread": 0.0
                         },
-                        "Mtd": {
-                            "yieldWorst": -0.484525,
-                            "ratingDouble": -0.5,
-                            "price": 0.458036,
-                            "spread": -45.3955
-                        },
-                        "Mom": {
-                            "yieldWorst": -1.043516,
-                            "ratingDouble": -0.5,
-                            "price": 1.09375,
-                            "spread": -99.7985
-                        },
+                        "Mtd": null,
+                        "Mom": null,
                         "Ytd": null,
                         "Yoy": null
                     },
-                    "ccy": "USD",
-                    "obligorId": 6149,
-                    "obligorName": "SERVICE PROPERTIES TRUST",
-                    "country": "United States America",
-                    "sector": "Real Estate",
-                    "industry": "REITS",
-                    "subIndustry": "REITS-Hotels",
-                    "bicsCode": "15101112",
-                    "bicsLevel1": "Real Estate",
-                    "bicsLevel2": "Real Estate",
-                    "bicsLevel3": "REIT",
-                    "bicsLevel4": "Hotel REIT",
-                    "name": "SVC 5 08/15/2022 USD SENIOR_UNSECURED",
-                    "genericSeniority": "SR",
-                    "globalIdentifier": "US44106MAQ50",
-                    "paymentRank": "SR UNSECURED",
+                    "ccy": "EUR",
+                    "obligorId": 828,
+                    "obligorName": "UNICREDIT SPA",
+                    "country": "Italy",
+                    "sector": "Financials",
+                    "industry": "Banks",
+                    "subIndustry": "Diversified Banking Inst",
+                    "bicsCode": "14101011",
+                    "bicsLevel1": "Financials",
+                    "bicsLevel2": "Banking",
+                    "bicsLevel3": "Banking",
+                    "bicsLevel4": "Banks",
+                    "name": "UCGIM 6.125 04/19/2021 EUR EMTN SUBORDINATE",
+                    "genericSeniority": "SUB",
+                    "globalIdentifier": "XS0618847775",
+                    "paymentRank": "SUBORDINATED",
                     "securitySubType": "Bond",
-                    "ticker": "SVC",
-                    "unitPosition": null,
+                    "ticker": "UCGIM",
+                    "unitPosition": {
+                        "securityIdentifier": "17861",
+                        "partitionOptionValues": {
+                            "PortfolioShortName": [
+                                "DOF"
+                            ],
+                            "StrategyName": [
+                                "Short Carry"
+                            ]
+                        },
+                        "strategyAsOfDate": "2021-01-12T00:00:00",
+                        "mark": {
+                            "driver": "Spread",
+                            "enteredTime": "2021-01-13T00:00:00-05:00",
+                            "user": null,
+                            "value": 56.3,
+                            "spread": 56.3,
+                            "price": 101.595479,
+                            "yield": 0.053075
+                        },
+                        "hedgeFactor": 1.0,
+                        "strategies": [
+                            "Short Carry"
+                        ],
+                        "owners": [
+                            "TW",
+                            "DJ",
+                            "LP"
+                        ],
+                        "primaryPmName": "TW",
+                        "backupPmName": "DJ",
+                        "researchName": "LP"
+                    },
                     "securityType": "Bond",
-                    "maturityType": "Callable"
+                    "maturityType": "Bullet"
                 },
                 "bestQuotes": {
                     "bestPriceQuote": {
@@ -120,96 +142,131 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "quoteMetric": "Price",
                         "totalActiveAxeBidQuantity": 0.0,
                         "totalActiveAxeAskQuantity": 0.0,
-                        "totalActiveBidQuantity": 2000000.0,
+                        "totalActiveBidQuantity": 0.0,
                         "totalActiveAskQuantity": 0.0,
                         "axeSkew": null,
-                        "totalSkew": 0.0,
+                        "totalSkew": null,
                         "bestBidQuoteCondition": null,
                         "bidQuoteType": "Run",
-                        "bidDealer": "SEAP",
-                        "bidQuoteValue": 102.0,
-                        "bidTime": "2020-12-21T14:30:03",
-                        "bidIsOld": false,
+                        "bidDealer": "BAML",
+                        "bidQuoteValue": 101.8219985961914,
+                        "bidTime": "2021-01-13T09:16:56-05:00",
+                        "bidIsOld": true,
                         "bestAskQuoteCondition": null,
                         "askQuoteType": "Run",
-                        "askDealer": "BARC",
-                        "askQuoteValue": 102.5,
-                        "askTime": "2020-12-21T13:24:32",
-                        "askIsOld": false,
-                        "bidAxeDealer": "RWPC",
-                        "bidAxeQuoteValue": 101.625,
-                        "bidAxeTime": "2020-12-21T07:39:52",
+                        "askDealer": "BAML",
+                        "askQuoteValue": 100.93800354003906,
+                        "askTime": "2021-01-13T09:16:56-05:00",
+                        "askIsOld": true,
+                        "bidAxeDealer": "DB",
+                        "bidAxeQuoteValue": 101.52400207519531,
+                        "bidAxeTime": "2021-01-13T07:30:05-05:00",
                         "bidAxeIsOld": true,
-                        "askAxeDealer": "RWPC",
-                        "askAxeQuoteValue": 102.375,
-                        "askAxeTime": "2020-12-21T07:39:52",
+                        "askAxeDealer": "HSBC",
+                        "askAxeQuoteValue": 101.5999984741211,
+                        "askAxeTime": "2021-01-13T03:50:02-05:00",
                         "askAxeIsOld": true,
-                        "globalIdentifier": "US44106MAQ50"
+                        "globalIdentifier": "XS0618847775"
                     },
                     "bestSpreadQuote": {
                         "isOffTheRunCds": false,
                         "quoteMetric": "Spread",
                         "totalActiveAxeBidQuantity": 0.0,
                         "totalActiveAxeAskQuantity": 0.0,
-                        "totalActiveBidQuantity": 2000000.0,
+                        "totalActiveBidQuantity": 0.0,
                         "totalActiveAskQuantity": 0.0,
                         "axeSkew": null,
-                        "totalSkew": 0.0,
+                        "totalSkew": null,
                         "bestBidQuoteCondition": null,
                         "bidQuoteType": "Run",
-                        "bidDealer": "SEAP",
-                        "bidQuoteValue": 308.7669982910156,
-                        "bidTime": "2020-12-21T14:30:03",
-                        "bidIsOld": false,
+                        "bidDealer": "SUMI",
+                        "bidQuoteValue": 80.86060333251953,
+                        "bidTime": "2021-01-13T02:26:00-05:00",
+                        "bidIsOld": true,
                         "bestAskQuoteCondition": null,
                         "askQuoteType": "Run",
-                        "askDealer": "BARC",
-                        "askQuoteValue": 264.1650085449219,
-                        "askTime": "2020-12-21T13:24:32",
-                        "askIsOld": false,
-                        "bidAxeDealer": "RWPC",
-                        "bidAxeQuoteValue": 341.7690124511719,
-                        "bidAxeTime": "2020-12-21T07:39:52",
+                        "askDealer": "MS",
+                        "askQuoteValue": 114.58000183105469,
+                        "askTime": "2021-01-13T08:39:32-05:00",
+                        "askIsOld": true,
+                        "bidAxeDealer": "DB",
+                        "bidAxeQuoteValue": 82.0,
+                        "bidAxeTime": "2021-01-13T07:30:05-05:00",
                         "bidAxeIsOld": true,
-                        "askAxeDealer": "RWPC",
-                        "askAxeQuoteValue": 275.739990234375,
-                        "askAxeTime": "2020-12-21T07:39:52",
+                        "askAxeDealer": "HSBC",
+                        "askAxeQuoteValue": -17.0,
+                        "askAxeTime": "2021-01-13T03:50:02-05:00",
                         "askAxeIsOld": true,
-                        "globalIdentifier": "US44106MAQ50"
+                        "globalIdentifier": "XS0618847775"
                     },
                     "bestYieldQuote": {
                         "isOffTheRunCds": false,
                         "quoteMetric": "Yield",
                         "totalActiveAxeBidQuantity": 0.0,
                         "totalActiveAxeAskQuantity": 0.0,
-                        "totalActiveBidQuantity": 2000000.0,
+                        "totalActiveBidQuantity": 0.0,
                         "totalActiveAskQuantity": 0.0,
                         "axeSkew": null,
-                        "totalSkew": 0.0,
+                        "totalSkew": null,
                         "bestBidQuoteCondition": null,
                         "bidQuoteType": "Run",
-                        "bidDealer": "SEAP",
-                        "bidQuoteValue": 3.203000068664551,
-                        "bidTime": "2020-12-21T14:30:03",
-                        "bidIsOld": false,
+                        "bidDealer": "BAML",
+                        "bidQuoteValue": -0.8999999761581421,
+                        "bidTime": "2021-01-13T09:16:56-05:00",
+                        "bidIsOld": true,
                         "bestAskQuoteCondition": null,
                         "askQuoteType": "Run",
-                        "askDealer": "BARC",
-                        "askQuoteValue": 2.759999990463257,
-                        "askTime": "2020-12-21T13:24:32",
-                        "askIsOld": false,
-                        "bidAxeDealer": "RWPC",
-                        "bidAxeQuoteValue": 3.534630060195923,
-                        "bidAxeTime": "2020-12-21T07:39:52",
+                        "askDealer": "BAML",
+                        "askQuoteValue": 2.4000000953674316,
+                        "askTime": "2021-01-13T09:16:56-05:00",
+                        "askIsOld": true,
+                        "bidAxeDealer": "DB",
+                        "bidAxeQuoteValue": 0.20000000298023224,
+                        "bidAxeTime": "2021-01-13T07:30:05-05:00",
                         "bidAxeIsOld": true,
-                        "askAxeDealer": "RWPC",
-                        "askAxeQuoteValue": 2.8723199367523193,
-                        "askAxeTime": "2020-12-21T07:39:52",
+                        "askAxeDealer": "HSBC",
+                        "askAxeQuoteValue": -0.021076299250125885,
+                        "askAxeTime": "2021-01-13T03:50:02-05:00",
                         "askAxeIsOld": true,
-                        "globalIdentifier": "US44106MAQ50"
+                        "globalIdentifier": "XS0618847775"
                     }
                 },
-                "positions": null,
+                "positions": [
+                    {
+                        "source": "FO",
+                        "partitionOptionValues": {
+                            "PortfolioShortName": "DOF",
+                            "StrategyName": "Short Carry"
+                        },
+                        "trades": [
+                            {
+                                "partitionOptionValue": {
+                                    "PortfolioShortName": "DOF",
+                                    "StrategyName": "Short Carry"
+                                },
+                                "tradeId": "5861644",
+                                "parentTradeId": "5861639",
+                                "trader": "DA",
+                                "quantity": 6413000.0,
+                                "tradeDateTime": "2021-01-06T11:39:01-05:00",
+                                "price": 101.68,
+                                "counterpartyName": "DB LDN",
+                                "spread": 73.0,
+                                "isCancelled": false,
+                                "quantityAfterTrade": 6413000.0,
+                                "wgtAvgSpread": 73.0,
+                                "wgtAvgPrice": 101.68,
+                                "isValid": true
+                            }
+                        ],
+                        "quantity": 6413000.0,
+                        "bondEquivalentValueCad": 10535163.581041835,
+                        "bondEquivalentValueCadWeightFund": 0.005678873974177238,
+                        "cs01Cad": 279.709645281,
+                        "cs01CadWeightFund": 0.00024731627179343517,
+                        "cs01Local": 180.63964072292111
+                    }
+                ],
                 "lastTracePrice": null,
                 "lastTraceSpread": null,
                 "lastTraceVolumeEstimated": null,
@@ -222,17 +279,17 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                     "securityIdentifier": "338|5Y",
                     "metrics": {
                         "FO": {
-                            "workoutTerm": 5.0,
+                            "workoutTerm": 4.936986,
                             "ratingDouble": 13.0,
                             "isRated": true,
                             "rating": "BB+",
                             "ratingNoNotch": "BB",
                             "ratingBucket": "HY",
-                            "price": 101.961,
+                            "price": 101.934,
                             "spread": 60.06
                         },
                         "BB": {
-                            "workoutTerm": 5.0082,
+                            "workoutTerm": 4.9397,
                             "ratingDouble": 13.0,
                             "isRated": true,
                             "rating": "BB+",
@@ -242,7 +299,7 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                             "spread": null
                         },
                         "Default": {
-                            "workoutTerm": 5.0,
+                            "workoutTerm": 4.936986,
                             "ratingDouble": 13.0,
                             "isRated": true,
                             "rating": "BB+",
@@ -273,7 +330,11 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                             "price": null,
                             "spread": null
                         },
-                        "Ytd": null,
+                        "Ytd": {
+                            "ratingDouble": 0.0,
+                            "price": null,
+                            "spread": null
+                        },
                         "Yoy": null
                     },
                     "ccy": "USD",
@@ -299,28 +360,25 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "partitionOptionValues": {
                             "PortfolioShortName": [
                                 "DOF",
-                                "SOF",
-                                ""
+                                "SOF"
                             ],
                             "StrategyName": [
-                                "Portfolio Shorts",
-                                ""
+                                "Portfolio Shorts"
                             ]
                         },
-                        "strategyAsOfDate": "2020-12-18T00:00:00",
+                        "strategyAsOfDate": "2021-01-12T00:00:00",
                         "mark": {
                             "driver": "Spread",
-                            "enteredTime": "2020-12-21T00:00:00-05:00",
+                            "enteredTime": "2021-01-13T00:00:00-05:00",
                             "user": null,
                             "value": 60.06,
                             "spread": 60.06,
-                            "price": 101.961,
+                            "price": 101.934,
                             "yield": 0.6006
                         },
                         "hedgeFactor": 1.0,
                         "strategies": [
-                            "Portfolio Shorts",
-                            ""
+                            "Portfolio Shorts"
                         ],
                         "owners": [
                             "DJ",
@@ -360,12 +418,15 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                                 "quantityAfterTrade": -5500000.0,
                                 "wgtAvgSpread": 85.5,
                                 "wgtAvgPrice": 0.0,
-                                "isValid": false
+                                "isValid": true
                             }
                         ],
                         "quantity": -5500000.0,
-                        "cs01Cad": -3535.5400025,
-                        "cs01Local": -2751.8212970890413
+                        "bondEquivalentValueCad": -7141352.560001,
+                        "bondEquivalentValueCadWeightFund": -0.0038494742755008225,
+                        "cs01Cad": -3438.719999,
+                        "cs01CadWeightFund": -0.0030404793836831417,
+                        "cs01Local": -2701.2725836606446
                     },
                     {
                         "source": "FO",
@@ -391,12 +452,15 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                                 "quantityAfterTrade": -3000000.0,
                                 "wgtAvgSpread": 85.5,
                                 "wgtAvgPrice": 0.0,
-                                "isValid": false
+                                "isValid": true
                             }
                         ],
                         "quantity": -3000000.0,
-                        "cs01Cad": -1928.476365,
-                        "cs01Local": -1500.9934347758408
+                        "bondEquivalentValueCad": -3895283.214546,
+                        "bondEquivalentValueCadWeightFund": -0.005443416631491312,
+                        "cs01Cad": -1875.665454,
+                        "cs01CadWeightFund": -0.007239218923143322,
+                        "cs01Local": -1473.4214092694424
                     }
                 ],
                 "lastTracePrice": null,
