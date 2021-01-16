@@ -6,6 +6,7 @@ import {
 
 import { DTOs } from 'Core/models/frontend';
 import { TradeActions } from 'Trade/actions/trade.actions';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 // TODO: technical debt, re-org this by putting specific things for particular panels
 export interface TradeState {
@@ -33,7 +34,10 @@ export interface TradeState {
   keywordSearchInMainTable: string;
   bicsDataLoaded: boolean;
   centerPanel: {
-    filterListForTableLoad: Array<DTOs.SecurityDefinitionDTO>
+    autoLoadTable: {
+      filterList: Array<DTOs.SecurityDefinitionDTO>;
+      metric: PortfolioMetricValues;
+    }
   }
 }
 
@@ -62,7 +66,10 @@ const initialState: TradeState = {
   keywordSearchInMainTable: '',
   bicsDataLoaded: false,
   centerPanel: {
-    filterListForTableLoad: []
+    autoLoadTable: {
+      filterList: [],
+      metric: null
+    }
   }
 };
 
@@ -214,7 +221,10 @@ export function tradeReducer(
         ...state,
         centerPanel: {
           ...state.centerPanel,
-          filterListForTableLoad: action.filterList
+          autoLoadTable: {
+            filterList: action.filterList,
+            metric: action.metric
+          }
         }
       }
     case TradeActions.BICSDataLoaded:

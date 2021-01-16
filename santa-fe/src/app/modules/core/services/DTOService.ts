@@ -142,6 +142,7 @@ export class DTOService {
         cs01CadFirmInK: null,
         cs01CadCurrent: null,
         cs01CadCurrentInK: null,
+        bondEquivalentValueCurrent: null,
         owner: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.owners && rawData.unitPosition.owners.length > 0 ? rawData.unitPosition.owners : [],
         mark: {
           combinedDefaultMark: null,
@@ -170,6 +171,18 @@ export class DTOService {
         portfolios: [],
         strategyFirm: '',
         strategyList: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.partitionOptionValues ? rawData.unitPosition.partitionOptionValues.StrategyName : [],
+        weight: {
+          currentGroupCS01Value: 0,
+          currentGroupBEVValue: 0,
+          fundCS01Pct: null,
+          fundCS01PctDisplay: null,
+          groupCS01Pct: null,
+          groupCS01PctDisplay: null,
+          fundBEVPct: null,
+          fundBEVPctDisplay: null,
+          groupBEVPct: null,
+          groupBEVPctDisplay: null
+        },
         position: {
           positionCurrent: 0,
           positionCurrentInMM: 'n/a',
@@ -336,6 +349,9 @@ export class DTOService {
       strategy: targetPortfolio.partitionOptionValues.StrategyName,
       cs01Cad: targetPortfolio.cs01Cad,
       cs01Local: targetPortfolio.cs01Local,
+      cs01WeightPct: targetPortfolio.cs01CadWeightFund,
+      bondEquivalentValueCad: targetPortfolio.bondEquivalentValueCad,
+      bondEquivalentValueWeightPct: targetPortfolio.bondEquivalentValueCadWeightFund,
       costFifoSpread: null,
       costFifoPrice: null,
       costWeightedAvgSpread: !!lastTrade ? lastTrade.wgtAvgSpread : null,
@@ -977,21 +993,24 @@ export class DTOService {
         isAttrChangable: !!stub.content.isAttrChangable,
         readyStage: stub.content.readyStage,
         metricPackDeltaScope: stub.content.metricPackDeltaScope || null,
-        frontendMetric: !!stub.content.isFrontEndMetric,
+        isFrontendAggregation: !!stub.content.isFrontendAggregation,
         isDataTypeText: !!stub.content.isDataTypeText,
         isDriverDependent: !!stub.content.isDriverDependent,
         groupBelongs: stub.content.groupBelongs,
         pinned: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].pinned : !!stub.content.tableSpecifics.default.pinned,
+        sortActivated: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? stub.content.tableSpecifics[useSpecificsFrom].sortActivated : stub.content.tableSpecifics.default.sortActivated,
         groupShow: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].groupShow : !!stub.content.tableSpecifics.default.groupShow,
         activePortfolios: activePortfolios || []
+      },
+      style: {
+        columnWidthOverride: stub.content.columnWidth > 0 ? stub.content.columnWidth : null
       },
       state: {
         isBestQuoteVariant: !!stub.content.isForBestQuoteComparer,
         isSecurityCardVariant: !!stub.content.isForSecurityCard,
         isCustomComponent: !!stub.content.isCustomComponent,
         isAxeSkewEnabled: false,
-        istotalSkewEnabled: false,
-        isNarrowColumnVariant: !!stub.content.isColumnWidthNarrow
+        istotalSkewEnabled: false
       }
     };
     return object;
