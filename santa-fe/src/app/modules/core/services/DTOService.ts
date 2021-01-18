@@ -2163,44 +2163,16 @@ export class DTOService {
       definitionList.sort();
     }
     definitionList.forEach((eachCategoryText) => {
-      let bucket: Blocks.StructureBucketDataBlock = {};
-      let simpleBucket: Blocks.StructureBucketDataBlock = {};
-      let customLevel: number;
-      let isCustomLevelAvailable: string;
-      let code: string;
-      if (!!rawData.breakdown[eachCategoryText]) {
-        isCustomLevelAvailable = Object.keys(rawData.breakdown[eachCategoryText]).find(key => key === 'customLevel');
-        customLevel = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel : null;
-        code = !!isCustomLevelAvailable ? (rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code : null;
-      }
-      if (!!isOverride) {
-        bucket = rawData.breakdown[eachCategoryText].bucket || {};
-        simpleBucket = rawData.breakdown[eachCategoryText].simpleBucket || {};
-      } else if (!!isCustomLevelAvailable) {
-        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(rawData.breakdown[eachCategoryText] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel}`;
-        bucket[formattedBEKey] = [code];
-      } else {
-        bucket[rawData.groupOption] = [eachCategoryText];
-      }
-      const parsedBEView = !!rawData.breakdown[eachCategoryText]  && !!rawData.breakdown[eachCategoryText].view ? rawData.breakdown[eachCategoryText].view.toLowerCase() : null;
-      const view = PortfolioView[parsedBEView];
       const eachCS01Row = rawData.breakdown[eachCategoryText] 
         ? this.formStructureBreakdownRowObject(
           findCs01Min,
           findCs01Max,
           isStencil,
           eachCategoryText,
-          rawData.breakdown[eachCategoryText].metricBreakdowns.Cs01,
+          rawData,
           true,
-          rawData.portfolioId,
-          rawData.groupOption,
           isOverride,
-          object.data.diveInLevel,
-          view,
-          bucket,
-          simpleBucket,
-          customLevel,
-          code
+          object.data.diveInLevel
         )
         : null;
       !!eachCS01Row && object.data.rawCs01CategoryList.push(eachCS01Row);
@@ -2210,17 +2182,10 @@ export class DTOService {
           findLeverageMax,
           isStencil,
           eachCategoryText,
-          rawData.breakdown[eachCategoryText].metricBreakdowns.CreditLeverage,
+          rawData,
           false,
-          rawData.portfolioId,
-          rawData.groupOption,
           isOverride,
-          object.data.diveInLevel,
-          view,
-          bucket,
-          simpleBucket,
-          customLevel,
-          code
+          object.data.diveInLevel
         )
         : null;
       !!eachLeverageRow && object.data.rawLeverageCategoryList.push(eachLeverageRow);
@@ -2249,58 +2214,77 @@ export class DTOService {
     maxValue: number,
     isStencil: boolean,
     categoryName: string,
-    rawCategoryData: BEModels.BEStructuringBreakdownMetricSingleEntryBlock,
+    rawData: BEModels.BEStructuringBreakdownBlock,
     isCs01: boolean,
-    portfolioID: number,
-    groupOption: string,
     isOverride: boolean,
-    diveInLevel: number,
-    view: PortfolioView,
-    bucket: Blocks.StructureBucketDataBlock,
-    simpleBucket: Blocks.StructureBucketDataBlock,
-    customLevel: number = null,
-    code: string = null
+    diveInLevel: number
   ): DTOs.StructurePortfolioBreakdownRowDTO {
-    const object = {
-      data: this.populatePortfolioBreakdownRowData(
-          minValue,
-          maxValue,
-          isStencil,
-          categoryName,
-          rawCategoryData,
-          isCs01,
-          portfolioID,
-          groupOption,
-          isOverride,
-          diveInLevel,
-          view,
-          bucket,
-          simpleBucket,
-          customLevel,
-          code
-        ),
-      style: {
-        branchHeight: '0',
-        top: '0'
-      },
-      state: {
-        isSelected: false,
-        isBtnDiveIn: false,
-        isStencil: true,
-        isWithinPopover: false,
-        isVisibleSubLevel: false,
-        isShowingSubLevels: false,
-        isEditingView: false,
-        isEditingViewAvail: false,
-        isDoveIn: false,
-        isWithinEditRow: false,
-        isWithinSetTargetPreview: false,
-        isViewingHistoricalData: false
+    const categoryData = rawData.breakdown[categoryName];
+    if (!!categoryData) {
+      const portfolioID = rawData.portfolioId;
+      const groupOption = rawData.groupOption;
+      const parsedBEView = !!categoryData && !!categoryData.view ? categoryData.view.toLowerCase() : null;
+      const view = PortfolioView[parsedBEView];
+      let bucket: Blocks.StructureBucketDataBlock = {};
+      let isCustomLevelAvailable: string;
+      let simpleBucket: Blocks.StructureBucketDataBlock = {};
+      let customLevel: number;
+      let code: string;
+      isCustomLevelAvailable = Object.keys(categoryData).find(key => key === 'customLevel');
+      customLevel = !!isCustomLevelAvailable ? (categoryData as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel : null;
+      code = !!isCustomLevelAvailable ? (categoryData as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code : null;
+      if (!!isOverride) {
+        bucket = categoryData.bucket || {};
+        simpleBucket = categoryData.simpleBucket || {};
+      } else if (!!isCustomLevelAvailable) {
+        const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(categoryData as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel}`;
+        bucket[formattedBEKey] = [code];
+      } else {
+        bucket[rawData.groupOption] = [categoryName];
       }
+      const object = {
+        data: this.populatePortfolioBreakdownRowData(
+            minValue,
+            maxValue,
+            isStencil,
+            categoryName,
+            isCs01 ? categoryData.metricBreakdowns.Cs01 : categoryData.metricBreakdowns.CreditLeverage,
+            isCs01,
+            portfolioID,
+            groupOption,
+            isOverride,
+            diveInLevel,
+            view,
+            bucket,
+            simpleBucket,
+            customLevel,
+            code
+          ),
+        style: {
+          branchHeight: '0',
+          top: '0'
+        },
+        state: {
+          isSelected: false,
+          isBtnDiveIn: false,
+          isStencil: true,
+          isWithinPopover: false,
+          isVisibleSubLevel: false,
+          isShowingSubLevels: false,
+          isEditingView: false,
+          isEditingViewAvail: false,
+          isDoveIn: false,
+          isWithinEditRow: false,
+          isWithinSetTargetPreview: false,
+          isViewingHistoricalData: false
+        }
+      }
+      const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
+      object.state.isBtnDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(object.data.code) : false;
+      return object;
+    } else {
+      return null;
     }
-    const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
-    object.state.isBtnDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(object.data.code) : false;
-    return object;
   }
 
   private populatePortfolioBreakdownRowData(
@@ -2580,14 +2564,14 @@ export class DTOService {
     currencyBreakdown.data.portfolioName = rawData.portfolioShortName;
     object.data.children.push(currencyBreakdown);
     currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
-    ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
-    ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
-    ratingBreakdown.data.indexName = rawData.indexShortName;
-    ratingBreakdown.data.portfolioName = rawData.portfolioShortName;
-    object.data.children.push(ratingBreakdown);
-    ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     if (!isStencil) {
+      const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
+      ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
+      ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
+      ratingBreakdown.data.indexName = rawData.indexShortName;
+      ratingBreakdown.data.portfolioName = rawData.portfolioShortName;
+      object.data.children.push(ratingBreakdown);
+      ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
       const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
       tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
       tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
