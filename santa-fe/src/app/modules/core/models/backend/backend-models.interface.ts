@@ -706,7 +706,7 @@ export interface BETraceTradesBlock {
   side: string;
   spread: number;
   traceTradeID: string;
-  tradeTradeRefID: string;
+  traceTradeRefID: string;
   type: string;
   volumeReported: number;
   volumeEstimated: number;
