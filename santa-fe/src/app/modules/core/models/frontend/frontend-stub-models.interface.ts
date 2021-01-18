@@ -1,4 +1,5 @@
 import { Label } from '@amcharts/amcharts4/core';
+import { AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 export interface SearchShortcutStub {
   displayTitle: string;
@@ -89,7 +90,7 @@ export interface SecurityTableHeaderConfigStub {
       tradeAlert?: SecurityTableHeaderConfigStubTableSpecificsBlock;
     };
     blockAttrName?: string;
-    isFrontEndMetric?: boolean;
+    isFrontendAggregation?: boolean;  // just because the column is calculated on FE, doesn't mean it need to hanlded differently. The ones that do need to be handled differently are the ones aggregated on FE, so we only care about those
     isForBestQuoteComparer?: boolean;
     isForSecurityCard?: boolean;
     isDataTypeText?: boolean;
@@ -97,7 +98,7 @@ export interface SecurityTableHeaderConfigStub {
     isAttrChangable?: boolean;  // isAttrChangable means the 'attrName' & 'underlineAttrName' will be overwritten with driver-specific attributes, commonly used for columns that are switching between spread/price/yield
     metricPackDeltaScope?: string;
     groupBelongs: string;
-    isColumnWidthNarrow?: boolean;
+    columnWidth?: number;
     isCustomComponent?: boolean;
   }
 }
@@ -106,6 +107,7 @@ export interface SecurityTableSpecificAlertHeaderStub {
   include: string[];
   exclude: string[];
 }
+
 export interface SecurityTableSpecificAlertHeaderConfigsStub {
   axe: SecurityTableSpecificAlertHeaderStub;
   mark: SecurityTableSpecificAlertHeaderStub;
@@ -119,6 +121,7 @@ interface SecurityTableHeaderConfigStubTableSpecificsBlock {
   pinned?: boolean;
   disabled?: boolean;
   groupShow?: boolean;
+  sortActivated?: AggridSortOptions;
 }
 
 export interface TriCoreDriverConfigStub {

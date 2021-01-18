@@ -12,7 +12,6 @@
     import { RestfulCommService } from './RestfulCommService';
     import { DTOs, Blocks } from '../models/frontend';
     import {
-      AGGRID_NARROW_COLUMN_WIDTH,
       SecurityTableHeaderConfigs,
       AGGRID_SECURITY_CARD_COLUMN_WIDTH,
       AGGRID_QUOTE_COLUMN_WIDTH,
@@ -105,13 +104,11 @@ export class AgGridMiddleLayerService {
         sortable: true,
         filter: null,
         pinned: eachHeader.data.pinned || false,
+        sort: eachHeader.data.sortActivated || null,
         enablePivot: false,
         enableRowGroup: false,
         hide: !isActiveByDefault
       };
-      if (eachHeader.data.key === 'alertTime') {
-        newAgColumn['sort'] = 'asc';
-      }
       if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
         if (eachHeader.data.key === 'alertTraceVolumeEstimated') {
           newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToCommas(params.value) : null);
@@ -316,8 +313,8 @@ export class AgGridMiddleLayerService {
       newAgColumn.enableRowGroup = true;
       newAgColumn.enablePivot = true;
     }
-    if (targetHeader.state.isNarrowColumnVariant) {
-      newAgColumn.width = AGGRID_NARROW_COLUMN_WIDTH;
+    if (!!targetHeader.style.columnWidthOverride) {
+      newAgColumn.width = targetHeader.style.columnWidthOverride;
     }
     if (targetHeader.data.key === 'alertMessage') {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--alertMessage`;

@@ -16,7 +16,7 @@ import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
+import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 interface BasicDTOStructure {
   [property: string]: object;
@@ -58,6 +58,18 @@ export interface SecurityDTO extends BasicDTOStructure {
     portfolios: Array<Blocks.SecurityPortfolioBlock>;
     strategyFirm: string;
     strategyList: Array<string>;
+    weight: {
+      currentGroupCS01Value: number;
+      currentGroupBEVValue: number;
+      fundCS01Pct: number;
+      fundCS01PctDisplay: string;
+      groupCS01Pct: number;
+      groupCS01PctDisplay: string;
+      fundBEVPct: number;
+      fundBEVPctDisplay: string;
+      groupBEVPct: number;
+      groupBEVPctDisplay: string;
+    }
     position: {
       positionCurrent: number;
       positionCurrentInMM: string;
@@ -108,6 +120,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadFirmInK: string;
     cs01CadCurrent: number;
     cs01CadCurrentInK: string;
+    bondEquivalentValueCurrent: number;
     hasIndex: boolean;
     hedgeFactor: number;
     alert: {
@@ -373,13 +386,17 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isAttrChangable: boolean;
     readyStage: number;
     metricPackDeltaScope: string;
-    frontendMetric: boolean;
+    isFrontendAggregation: boolean;
     isDataTypeText: boolean;
     isDriverDependent: boolean;
     pinned: boolean;
+    sortActivated: AggridSortOptions;
     groupBelongs: string;
     groupShow: boolean;
     activePortfolios: Array<string>;
+  },
+  style: {
+    columnWidthOverride: number;
   },
   state: {
     isSecurityCardVariant: boolean;
@@ -387,7 +404,6 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isCustomComponent: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
-    isNarrowColumnVariant: boolean;
   }
 }
 
@@ -894,6 +910,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
       filterList?: Array<SecurityDefinitionDTO>;
+      activeMetric?: PortfolioMetricValues;
     }
   },
   api: {

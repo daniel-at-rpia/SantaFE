@@ -416,13 +416,16 @@ export class UtilityService {
       targetShortcut: DTOs.SearchShortcutDTO,
       targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
     ): DTOs.SecurityDefinitionConfiguratorDTO {
-      const newConfig = this.deepCopy(targetConfigurator);
-      const shortcutCopy = this.deepCopy(targetShortcut);
+      const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
+      const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
       shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
               eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
+              eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.filterOptionList.filter((eachFilter) => {
+                return !!eachFilter.isSelected;
+              });
               eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
               eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
             }
