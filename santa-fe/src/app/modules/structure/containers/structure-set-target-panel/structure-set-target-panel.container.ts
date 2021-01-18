@@ -1471,7 +1471,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private updateRowTargetValues(targetCategory: StructureSetTargetPanelEditRowBlock, isCs01: boolean, isBICS: boolean) {
     const selectedRowList = !!isCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
-    const rowListEquivalent = selectedRowList.find(row => !!isBICS ? row.data.code === targetCategory.targetBlockFromBreakdown.code : row.data.displayCategory === targetCategory.rowIdentifier);
+    const rowListEquivalent = selectedRowList.find(row => !!isBICS ? row.data.code === targetCategory.targetBlockFromBreakdown.code : row.data.displayCategory === targetCategory.targetBlockFromBreakdown.displayCategory);
     if (!!rowListEquivalent) {
       const selectedMetricValue = !!isCs01 ? targetCategory.targetCs01 : targetCategory.targetCreditLeverage;
       rowListEquivalent.data.targetLevel = selectedMetricValue.level.savedUnderlineValue;
