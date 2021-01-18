@@ -1525,29 +1525,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
-        if (!!serverReturn) {
-          const completeAlertMessage = `Successfully updated ${message}`;
-          this.store$.dispatch(new StructureUpdateMainPanelEvent());
-          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
-          this.store$.dispatch(new CoreSendNewAlerts([alert]));
-          this.restfulCommService.logEngagement(
-            this.restfulCommService.engagementMap.portfolioStructureSetView,
-            null,
-            `Updated ${message}. Set by ${this.state.ownerInitial}.`,
-            'Portfolio Structure Breakdown'
-          )
-        } else {
-          if (!!fundWithUpdatedTargets) {
-            // since the update breakdown has succeeded, the UI needs to change to reflect that
-            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(fundWithUpdatedTargets));
-            const updateBreakdownAlert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`, null);
-            this.store$.dispatch(new CoreSendNewAlerts([updateBreakdownAlert]));
-          }
-          const viewAlert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', `Unable to update funds with new view values`, null);
-          viewAlert.state.isError = true;
-          this.store$.dispatch(new CoreSendNewAlerts([viewAlert]));
-          this.restfulCommService.logError(`Failed to receive fund data with updated views`);
-        }
+        const completeAlertMessage = `Successfully updated ${message}`;
+        this.store$.dispatch(new StructureUpdateMainPanelEvent());
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        this.restfulCommService.logEngagement(
+          this.restfulCommService.engagementMap.portfolioStructureSetView,
+          null,
+          `Updated ${message}. Set by ${this.state.ownerInitial}.`,
+          'Portfolio Structure Breakdown'
+        )
       }),
       catchError(err => {
         setTimeout(() => {
@@ -1583,28 +1570,22 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             if (!!serverReturn) {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
+                this.store$.dispatch(
+                  new CoreSendNewAlerts([
+                    this.dtoService.formSystemAlertObject(
+                      'Structuring',
+                      'Updated',
+                      `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`,
+                      null
+                    )]
+                  )
+                );
                 if (!viewPayload) {
-                  this.store$.dispatch(
-                    new CoreSendNewAlerts([
-                      this.dtoService.formSystemAlertObject(
-                        'Structuring',
-                        'Updated',
-                        `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`,
-                        null
-                      )]
-                    )
-                  );
                   this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
                 } else {
                   this.submitBulkEditViewChanges(viewPayload, false, serverReturn);
                 }
               }
-            } else {
-              this.restfulCommService.logError(`Failed to receive fund based on updated BICS Lv.${level} targets in ${this.state.targetFund.data.portfolioShortName}`);
-              const alert = this.dtoService.formSystemAlertObject('Error', 'Set Target', `Unable to update BICS Lv.${level} targets in ${this.state.targetFund.data.portfolioShortName}`, null);
-              alert.state.isError = true;
-              this.store$.dispatch(new CoreSendNewAlerts([alert]));
-              return false;
             }
           }),
           catchError(err => {
