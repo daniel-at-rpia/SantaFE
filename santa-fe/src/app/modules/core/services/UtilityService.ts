@@ -1378,7 +1378,7 @@ export class UtilityService {
             totalLevel = totalLevel + eachCategory.data.currentLevel;
           });
           const filteredListWithTargets = filteredList.filter((eachCategory) => {
-            return !!eachCategory.data.targetLevel;
+            return eachCategory.data.targetLevel !== null;
           });
           if (filteredListWithTargets.length > 0) {
             let misalignmentAggregate = 0;
