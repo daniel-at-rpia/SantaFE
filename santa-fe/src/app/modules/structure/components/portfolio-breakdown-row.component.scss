@@ -210,10 +210,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           color: $font_color_inverse;
         }
         &--positive {
-          background-color: $color_green_6;
+          background-color: $viewPositiveColor;
         }
         &--improving {
-          background-color: $color_lime_10;
+          background-color: $viewImprovingColor;
           #{$blockName} {
             &__utility {
               &-ctas {
@@ -227,10 +227,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           }
         }
         &--neutral {
-          background-color: $color_yellow_6;
+          background-color: $viewNeutralColor;
         }
         &--deteriorating {
-          background-color: $color_orange_6;
+          background-color: $viewDeterioratingColor;
           #{$blockName} {
             &__utility {
               &-ctas {
@@ -244,7 +244,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           }
         }
         &--negative {
-          background-color: $color_red_6;
+          background-color: $viewNegativeColor;
         }
       }
     }
@@ -321,7 +321,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_green_6;
+            background-color: $viewPositiveColor;
           }
         }
       }
@@ -341,7 +341,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_lime_10;
+            background-color: $viewImprovingColor;
             &-icon {
               transform: rotate(45deg);
             }
@@ -364,7 +364,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_orange_6;
+            background-color: $viewDeterioratingColor;
             &-icon {
               transform: rotate(-45deg);
             }
@@ -387,7 +387,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_red_6;
+            background-color: $viewNegativeColor;
           }
         }
       }
@@ -407,7 +407,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_yellow_6;
+            background-color: $viewNeutralColor;
           }
         }
       }

@@ -660,19 +660,19 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
             color: $font_color_inverse;
           }
           &--positive {
-            background-color: $color_green_6;
+            background-color: $viewPositiveColor;
           }
           &--improving {
-            background-color: $color_lime_10;
+            background-color: $viewImprovingColor;
           }
           &--neutral {
-            background-color: $color_yellow_6;
+            background-color: $viewNeutralColor;
           }
           &--deteriorating {
-            background-color: $color_orange_6;
+            background-color: $viewDeterioratingColor;
           }
           &--negative {
-            background-color: $color_red_6;
+            background-color: $viewNegativeColor;
           }
         }
       }
