@@ -380,6 +380,7 @@ export interface StructureBucketDataBlock {
 }
 
 export interface TraceTradeBlock {
+  benchmarkName: string;
   traceTradeId: string;
   tradeTime: string;
   displayTradeTime: string;
