@@ -2044,6 +2044,11 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     attrName: 'displayVolumeReported',
     size: 7
   },{
+    headerKey: 'displayBenchMarkName',
+    headerDisplayLabel: 'Benchmark Name',
+    attrName: 'displayBenchMarkName',
+    size: 8
+  },{
     headerKey: 'price',
     headerDisplayLabel: 'Px',
     attrName: 'price',
