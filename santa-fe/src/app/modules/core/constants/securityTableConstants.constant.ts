@@ -425,6 +425,27 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'alertTraceBenchmarkName',
+    content: {
+      label: 'Benchmark Name',
+      attrName: 'alertTraceBenchmarkName',
+      underlineAttrName: 'alertTraceBenchmarkName',
+      blockAttrName: 'alert',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
     key: 'alertMessage',
     content: {
       label: 'Alert Message',
