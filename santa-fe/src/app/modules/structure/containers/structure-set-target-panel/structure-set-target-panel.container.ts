@@ -217,7 +217,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetItem.isSaved = true;
     targetItem.isFocused = false;
     targetItem.savedDisplayValue = targetItem.modifiedDisplayValue;
-    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue === 0 ? null : targetItem.modifiedUnderlineValue;
+    targetItem.savedUnderlineValue = targetItem.modifiedUnderlineValue;
     let counterPartyItem = null;
     if (targetItem.metric === this.constants.metric.cs01) {
       if (!!targetItem.isPercent) {
@@ -555,8 +555,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       modifiedDisplayRowTitle: row.data.displayCategory,
       targetCs01: {
         level: {
-          savedDisplayValue: !!row.data.targetLevel ? `${row.data.targetLevel}` : null,
-          savedUnderlineValue: !!row.data.raw.targetLevel ? row.data.raw.targetLevel : null,
+          savedDisplayValue: row.data.targetLevel !== null ? `${row.data.targetLevel}` : null,
+          savedUnderlineValue: row.data.raw.targetLevel !== null ? row.data.raw.targetLevel : null,
           modifiedDisplayValue: null,
           modifiedUnderlineValue: null,
           isActive: false,
@@ -567,8 +567,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           isSaved: false
         },
         percent: {
-          savedDisplayValue: !!row.data.targetPct ? `${row.data.targetPct}` : null,
-          savedUnderlineValue: !!row.data.raw.targetPct ? row.data.raw.targetPct : null,
+          savedDisplayValue: row.data.targetPct !== null  ? `${row.data.targetPct}` : null,
+          savedUnderlineValue: row.data.raw.targetPct !== null ? row.data.raw.targetPct : null,
           modifiedDisplayValue: null,
           modifiedUnderlineValue: null,
           isActive: false,
@@ -632,7 +632,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
     const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
     row[rowTargetMetric].level.modifiedDisplayValue = '';
-    row[rowTargetMetric].level.modifiedUnderlineValue = 0;
+    row[rowTargetMetric].level.modifiedUnderlineValue = null;
     row[rowTargetMetric].level.isActive = true;
     this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
   }
@@ -656,10 +656,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             return eachRow.rowIdentifier === eachCategory.data.category;
           });
           if (!!targetRow) {
-            targetRow.targetCreditLeverage.level.savedDisplayValue = !!eachCategory.data.targetLevel ? `${eachCategory.data.targetLevel}` : null;
-            targetRow.targetCreditLeverage.level.savedUnderlineValue = !!eachCategory.data.raw.targetLevel ? eachCategory.data.raw.targetLevel : null;
-            targetRow.targetCreditLeverage.percent.savedDisplayValue = !!eachCategory.data.targetPct ? `${eachCategory.data.targetPct}` : null;
-            targetRow.targetCreditLeverage.percent.savedUnderlineValue = !!eachCategory.data.raw.targetPct ? eachCategory.data.raw.targetPct : null;
+            targetRow.targetCreditLeverage.level.savedDisplayValue = eachCategory.data.targetLevel !== null ? `${eachCategory.data.targetLevel}` : null;
+            targetRow.targetCreditLeverage.level.savedUnderlineValue = eachCategory.data.raw.targetLevel !== null ? eachCategory.data.raw.targetLevel : null;
+            targetRow.targetCreditLeverage.percent.savedDisplayValue = eachCategory.data.targetPct !== null ? `${eachCategory.data.targetPct}` : null;
+            targetRow.targetCreditLeverage.percent.savedUnderlineValue = eachCategory.data.raw.targetPct !== null ? eachCategory.data.raw.targetPct : null;
           };
         }
       });
@@ -723,17 +723,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     displayValue: string,
     targetItem: StructureSetTargetPanelEditRowItemBlock
   ) {
-    if (displayValue == '') {
+    if (displayValue === '') {
+      displayValue = '';
+    } else if (displayValue === '0') {
       displayValue = '0';
-    };
+    }
     targetItem.modifiedDisplayValue = displayValue;
     targetItem.isActive = true;
     if (targetItem.metric === this.constants.metric.cs01 && !targetItem.isPercent) {
-      targetItem.modifiedUnderlineValue = parseFloat(displayValue)*1000;
+      targetItem.modifiedUnderlineValue = displayValue === '' ? null : parseFloat(displayValue)*1000;
     } else if (targetItem.isPercent) {
-      targetItem.modifiedUnderlineValue = parseFloat(displayValue)/100;
+      targetItem.modifiedUnderlineValue = displayValue === '' ? null : parseFloat(displayValue)/100;
     } else {
-      targetItem.modifiedUnderlineValue = parseFloat(displayValue);
+      targetItem.modifiedUnderlineValue = displayValue === '' ? null : parseFloat(displayValue);
     }
   }
 
@@ -751,7 +753,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (metric === this.constants.metric.cs01) {
       if (this.state.totalUnallocatedCS01 > 0) {
         // checks if there is an actual target saved, and if not, it would have been set to null
-        if (!!targetUnderlineValue) {
+        if (!!targetUnderlineValue || targetUnderlineValue === 0) {
           if (!!targetIsPercent) {
             impliedValue = targetUnderlineValue * this.state.totalUnallocatedCS01;
             counterPartyItem.modifiedUnderlineValue = impliedValue;
@@ -763,16 +765,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         } else {
           impliedValue = null;
-          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = '';
         }
-      } else {
-        counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '';
       }
     } else if (metric === this.constants.metric.creditLeverage) {
       if (this.state.totalUnallocatedCreditLeverage > 0) {
-        if (!!targetUnderlineValue) {
+        if (!!targetUnderlineValue || targetUnderlineValue === 0) {
           if (!!targetIsPercent) {
             impliedValue = targetUnderlineValue * this.state.totalUnallocatedCreditLeverage;
             counterPartyItem.modifiedUnderlineValue = impliedValue;
@@ -784,16 +783,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         } else {
           impliedValue = null;
-          counterPartyItem.modifiedUnderlineValue = 0;
+          counterPartyItem.modifiedUnderlineValue = impliedValue;
           counterPartyItem.modifiedDisplayValue = '';
         }
-      } else {
-        counterPartyItem.modifiedUnderlineValue = 0;
-        counterPartyItem.modifiedDisplayValue = '';
       }
     }
     counterPartyItem.savedDisplayValue = counterPartyItem.modifiedDisplayValue;
-    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue === 0 ? null : counterPartyItem.modifiedUnderlineValue;
+    counterPartyItem.savedUnderlineValue = counterPartyItem.modifiedUnderlineValue;
   }
 
   // for preview rows and portfolio breakdown rows within edit row list (BICS)
@@ -810,7 +806,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const isEditedRow = editRowEquivalentDataByMetric.level.isActive || editRowEquivalentDataByMetric.level.isImplied;
         if (!!isEditedRow) {
           const parsedCurrentLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.currentLevel, isCs01);
-          const parsedTargetLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.targetLevel, isCs01)
+          const parsedTargetLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.targetLevel, isCs01);
           const newDiffToTarget = this.utilityService.getRowDiffToTarget(parsedCurrentLevel, parsedTargetLevel, isCs01);
           const newDiffToTargetDisplay = this.utilityService.getRowDiffToTargetText(newDiffToTarget, isCs01);
           this.setNewDiffToTargetsForRows(row, newDiffToTarget, newDiffToTargetDisplay);
@@ -1064,7 +1060,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
-          if (!eachRow.targetCs01.level.savedUnderlineValue) {
+          if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
@@ -1118,7 +1114,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
-          if (!eachRow.targetCs01.level.savedUnderlineValue) {
+          if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
             modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
@@ -1310,7 +1306,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       subCategoryCodes.forEach(code => {
         const level = code.length / BICS_CODE_DELIMITER_AMOUNT;
         const rawDataByCode = this.bicsService.getBICSCategoryRawData(this.state.targetFund.data.portfolioId, level, code);
-        if (!!rawDataByCode && (rawDataByCode.metricBreakdowns.CreditLeverage.targetLevel || rawDataByCode.metricBreakdowns.Cs01.targetLevel)) {
+        if (!!rawDataByCode && (rawDataByCode.metricBreakdowns.CreditLeverage.targetLevel !== null || rawDataByCode.metricBreakdowns.Cs01.targetLevel != null)) {
           const displayCategory = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
           if (!!displayCategory) {
             customRawBreakdown.breakdown[displayCategory] = rawDataByCode;
@@ -1323,7 +1319,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, definitionList, isDisplayCs01, false);
       if (!!customBreakdown) {
         const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
-        const listWithTargets = list.filter(newRow => !!newRow.data.targetLevel);
+        const listWithTargets = list.filter(newRow => newRow.data.targetLevel !== null);
         row.data.displayedSubLevelRowsWithTargets = listWithTargets;
         const isCorrectListForEditRow = this.state.activeMetric === PortfolioMetricValues.cs01 ? isCs01List : !isCs01List;
         if (!!isCorrectListForEditRow) {
@@ -1391,10 +1387,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const newEditRow = this.loadEditRowsReturnNewRow(rawCs01);
         const creditLeverageRowEquivalent = targetRow.data.children.data.rawLeverageCategoryList.find(rawLeverageRow => rawLeverageRow.data.code === rawCs01.data.code);
         if (!!creditLeverageRowEquivalent) {
-          newEditRow.targetCreditLeverage.level.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetLevel ? `${creditLeverageRowEquivalent.data.targetLevel}` : null;
-          newEditRow.targetCreditLeverage.level.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetLevel ? creditLeverageRowEquivalent.data.raw.targetLevel : null;
-          newEditRow.targetCreditLeverage.percent.savedDisplayValue = !!creditLeverageRowEquivalent.data.targetPct ? `${creditLeverageRowEquivalent.data.targetPct}` : null;
-          newEditRow.targetCreditLeverage.percent.savedUnderlineValue = !!creditLeverageRowEquivalent.data.raw.targetPct ? creditLeverageRowEquivalent.data.raw.targetPct : null;
+          newEditRow.targetCreditLeverage.level.savedDisplayValue = creditLeverageRowEquivalent.data.targetLevel !== null ? `${creditLeverageRowEquivalent.data.targetLevel}` : null;
+          newEditRow.targetCreditLeverage.level.savedUnderlineValue = creditLeverageRowEquivalent.data.raw.targetLevel !== null ? creditLeverageRowEquivalent.data.raw.targetLevel : null;
+          newEditRow.targetCreditLeverage.percent.savedDisplayValue = creditLeverageRowEquivalent.data.targetPct !== null ? `${creditLeverageRowEquivalent.data.targetPct}` : null;
+          newEditRow.targetCreditLeverage.percent.savedUnderlineValue = creditLeverageRowEquivalent.data.raw.targetPct !== null ? creditLeverageRowEquivalent.data.raw.targetPct : null;
         }
         const parentIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === targetRow.data.code);
         const editRowIndex = parentIndex + 1;
