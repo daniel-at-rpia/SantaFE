@@ -568,28 +568,50 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
   isBenchmarkHedged?: boolean
 }
 
-export interface BEStructuringBreakdownSingleEntry {
-  targetLevel?: number;
-  targetPct: number;
-  currentLevel?: number;
-  currentPct?: number;
-  indexLevel?: number;
-  indexPct?: number;
+export interface BEGetPortfolioStructureServerReturn {
+  Now: Array<BEStructuringFundBlock>;
+  DoD?: Array<BEStructuringFundBlock>;
+  Wow?: Array<BEStructuringFundBlock>;
+  Mom?: Array<BEStructuringFundBlock>;
+  Ytd?: Array<BEStructuringFundBlock>;
 }
 
-export interface BEMetricBreakdowns {
-  metricBreakdowns: {
-    CreditLeverage?: BEStructuringBreakdownSingleEntry;
-    Cs01?: BEStructuringBreakdownSingleEntry;
-    CreditDuration?: BEStructuringBreakdownSingleEntry;
-  },
-  view?: string;
-  simpleBucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
-    [property: string]: Array<string>;
+export interface BEStructuringFundBlock {
+  date: string;
+  portfolioId: number;
+  portfolioShortName: PortfolioShortNames;
+  portfolioNav: number;
+  target: {
+    portfolioTargetId: string;
+    date: string;
+    portfolioId: number;
+    target: BEStructuringFundMetricTotalBlock;
   }
-  bucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
-    [property: string]: Array<string>;
+  currentTotals: BEStructuringFundMetricTotalBlock
+  indexId: number;
+  indexShortName: string;
+  indexNav: number;
+  indexTotals: BEStructuringFundMetricTotalBlock;
+  breakdowns: {
+    BicsCodeLevel1?: BEStructuringBreakdownBlock;
+    BicsCodeLevel2?: BEStructuringBreakdownBlock;
+    BicsCodeLevel3?: BEStructuringBreakdownBlock;
+    BicsCodeLevel4?: BEStructuringBreakdownBlock;
+    BicsCodeLevel5?: BEStructuringBreakdownBlock;
+    BicsCodeLevel6?: BEStructuringBreakdownBlock;
+    BicsCodeLevel7?: BEStructuringBreakdownBlock;
+    Ccy?: BEStructuringBreakdownBlock;
+    RatingNoNotch?: BEStructuringBreakdownBlock;
+    Tenor?: BEStructuringBreakdownBlock;
   }
+  overrides?: Array<BEStructuringOverrideBlock>;
+  isIndexValid: boolean;
+}
+
+interface BEStructuringFundMetricTotalBlock {
+  CreditLeverage: number;
+  Cs01: number;
+  CreditDuration: number;
 }
 
 export interface BEStructuringBreakdownBlock {
@@ -599,7 +621,7 @@ export interface BEStructuringBreakdownBlock {
   portfolioBreakdownId?: string;
   portfolioId: number;
   breakdown: {
-    [property: string]: BEMetricBreakdowns;
+    [property: string]: BEStructuringBreakdownMetricBlock;
   }
 }
 
@@ -614,50 +636,32 @@ export interface BEStructuringOverrideBlock {
   simpleBucket: {
     [property: string]: Array<string>;
   }
-  breakdown?: BEMetricBreakdowns;
+  breakdown?: BEStructuringBreakdownMetricBlock;
   title?: string;
 }
 
-export interface BEStructuringMetricTotalBlock {
-  CreditLeverage: number;
-  Cs01: number;
-  CreditDuration: number;
+export interface BEStructuringBreakdownMetricBlock {
+  metricBreakdowns: {
+    CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
+    Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
+    CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
+  },
+  view?: string;
+  simpleBucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
+    [property: string]: Array<string>;
+  }
+  bucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
+    [property: string]: Array<string>;
+  }
 }
 
-export interface BEGetPortfolioStructureServerReturn {
-  Now: Array<BEPortfolioStructuringDTO>;
-}
-
-export interface BEPortfolioStructuringDTO {
-  date: string;
-  portfolioId: number;
-  portfolioShortName: PortfolioShortNames;
-  portfolioNav: number;
-  target: {
-    portfolioTargetId: string;
-    date: string;
-    portfolioId: number;
-    target: BEStructuringMetricTotalBlock;
-  }
-  currentTotals: BEStructuringMetricTotalBlock
-  indexId: number;
-  indexShortName: string;
-  indexNav: number;
-  indexTotals: BEStructuringMetricTotalBlock;
-  breakdowns: {
-    BicsCodeLevel1: BEStructuringBreakdownBlock;
-    BicsCodeLevel2?: BEStructuringBreakdownBlock;
-    BicsCodeLevel3?: BEStructuringBreakdownBlock;
-    BicsCodeLevel4?: BEStructuringBreakdownBlock;
-    BicsCodeLevel5?: BEStructuringBreakdownBlock;
-    BicsCodeLevel6?: BEStructuringBreakdownBlock;
-    BicsCodeLevel7?: BEStructuringBreakdownBlock;
-    Ccy: BEStructuringBreakdownBlock;
-    RatingNoNotch: BEStructuringBreakdownBlock;
-    Tenor: BEStructuringBreakdownBlock;
-  }
-  overrides?: Array<BEStructuringOverrideBlock>;
-  isIndexValid: boolean;
+export interface BEStructuringBreakdownMetricSingleEntryBlock {
+  targetLevel?: number;
+  targetPct: number;
+  currentLevel?: number;
+  currentPct?: number;
+  indexLevel?: number;
+  indexPct?: number;
 }
 
 export interface BEBICsCodeBlock {

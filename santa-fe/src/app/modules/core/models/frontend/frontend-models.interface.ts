@@ -15,7 +15,7 @@ import {
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
-import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
+import { BEStructuringFundBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 interface BasicDTOStructure {
@@ -780,7 +780,7 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
-    originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
+    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;

@@ -10,7 +10,7 @@ import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewData
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import { BEStructuringFundBlock } from 'BEModels/backend-models.interface';
 
 export enum StructureActions {
   StructureStoreReset = '[Structure] Reset Store Upon Entering',
@@ -47,8 +47,8 @@ export class StructureSendSetTargetTransferEvent implements Action {
 
 export class StructureReloadFundDataPostEditEvent implements Action {
   readonly type = StructureActions.ReloadBreakdownDataPostEdit;
-  readonly targetRawFund: BEPortfolioStructuringDTO;
-  constructor(targetRawFund: BEPortfolioStructuringDTO) {
+  readonly targetRawFund: BEStructuringFundBlock;
+  constructor(targetRawFund: BEStructuringFundBlock) {
     this.targetRawFund = targetRawFund;
   }
 }

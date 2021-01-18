@@ -22,7 +22,7 @@ import {
   PayloadUpdateBreakdown,
   PayloadUpdateOverride
 } from 'BEModels/backend-payloads.interface';
-import { BEPortfolioStructuringDTO, BEMetricBreakdowns } from 'BEModels/backend-models.interface';
+import { BEStructuringFundBlock, BEStructuringBreakdownMetricBlock } from 'BEModels/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent } from 'Structure/actions/structure.actions';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
@@ -207,7 +207,7 @@ export class StructureFund implements OnInit, OnDestroy {
     })
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioTargets, {req: 'POST'}, payload).pipe(
       first(),
-      tap((serverReturn: BEPortfolioStructuringDTO) => {
+      tap((serverReturn: BEStructuringFundBlock) => {
         if (!!serverReturn) {
           this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
           const systemAlertMessage = `Successfully updated ${serverReturn.portfolioShortName} target levels.`;
