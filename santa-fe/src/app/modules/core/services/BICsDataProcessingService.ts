@@ -69,7 +69,7 @@ export class BICsDataProcessingService {
     const parsedRowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = [];
     if (subRowList.length > 0) {
       subRowList.forEach((eachRow: DTOs.StructurePortfolioBreakdownRowDTO) => {
-        if (!!eachRow.data.targetLevel) {
+        if (eachRow.data.targetLevel !== null) {
           const ifExistsInParsedList = parsedRowList.find(parsedRow => parsedRow.data.code === eachRow.data.code)
           !ifExistsInParsedList && parsedRowList.push(eachRow);
           const hierarchyList: Array<Blocks.BICsHierarchyBlock> = this.getTargetSpecificHierarchyList(eachRow.data.code, eachRow.data.bicsLevel);
@@ -361,7 +361,7 @@ export class BICsDataProcessingService {
   }
 
   public getDisplayedSubLevelsWithTargetsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> ) {
-    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && !!row.data.targetLevel);
+    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && row.data.targetLevel !== null);
     targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
