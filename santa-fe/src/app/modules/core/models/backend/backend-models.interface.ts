@@ -680,6 +680,10 @@ export interface BEGetAllTraceTradesBlock {
 
 export interface BETraceTradesBlock {
   actionFlag: string;
+  benchmarkGlobalIdentifier: string;
+  benchmarkGlobalIdentifierType: string;
+  benchmarkName: string;
+  benchmarkSecurityID: number;
   contraParty: TraceTradeParty;
   reportingParty: TraceTradeParty;
   creationTime: string;
@@ -702,7 +706,7 @@ export interface BETraceTradesBlock {
   side: string;
   spread: number;
   traceTradeID: string;
-  tradeTradeRefID: string;
+  traceTradeRefID: string;
   type: string;
   volumeReported: number;
   volumeEstimated: number;
