@@ -1514,8 +1514,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return !!isViewPayloadValid ? viewPayload : null;
   }
 
-  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, isBulkEditViewOnly: boolean, fundWithUpdatedTargets: BEPortfolioStructuringDTO = null): boolean {
-    const message = !!isBulkEditViewOnly ? 'views' : `view and BICS targets in ${this.state.targetFund.data.portfolioShortName}`;
+  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEPortfolioStructuringDTO = null): boolean {
     const endpoint = this.restfulCommService.apiMap.setView;
     const { bucket, view } = data;
     const payload: PayloadSetView = {
@@ -1525,14 +1524,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
-        const completeAlertMessage = `Successfully updated ${message}`;
+        const completeAlertMessage = `Successfully updated views`;
         this.store$.dispatch(new StructureUpdateMainPanelEvent());
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
         this.restfulCommService.logEngagement(
           this.restfulCommService.engagementMap.portfolioStructureSetView,
           null,
-          `Updated ${message}. Set by ${this.state.ownerInitial}.`,
+          `Updated views. Set by ${this.state.ownerInitial}.`,
           'Portfolio Structure Breakdown'
         )
       }),
@@ -1583,7 +1582,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
                 if (!viewPayload) {
                   this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
                 } else {
-                  this.submitBulkEditViewChanges(viewPayload, false, serverReturn);
+                  this.submitBulkEditViewChanges(viewPayload, serverReturn);
                 }
               }
             }
@@ -1599,7 +1598,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       return true;
     } else {
       if (!!viewPayload) {
-        return this.submitBulkEditViewChanges(viewPayload, true);
+        return this.submitBulkEditViewChanges(viewPayload);
       } else {
         this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target or view because no change is detected', null)]));
         return false;
