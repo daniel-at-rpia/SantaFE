@@ -425,6 +425,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'alertTraceBenchmarkName',
+    content: {
+      label: 'Benchmark Name',
+      attrName: 'alertTraceBenchmarkName',
+      underlineAttrName: 'alertTraceBenchmarkName',
+      blockAttrName: 'alert',
+      isDataTypeText: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
     key: 'alertMessage',
     content: {
       label: 'Alert Message',
@@ -1881,7 +1903,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
 
 const POSITION_ALERT_HEADERS = ['hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition'];
 
-const TRACE_ALERT_HEADERS = ['alertTraceReportingParty', 'alertTraceContraParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTracePrice', 'alertTraceSpread'];
+const TRACE_ALERT_HEADERS = ['alertTraceReportingParty', 'alertTraceContraParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTraceBenchmarkName', 'alertTracePrice', 'alertTraceSpread'];
 
 const TRACE_ALERT_EXCLUDED_HEADERS = SecurityTableHeaderConfigs.filter(header => header.key.indexOf('Trace') === -1 && !!header.content.tableSpecifics.tradeAlert && !!header.content.tableSpecifics.tradeAlert.active).map(newHeader => newHeader.key);
 
@@ -2043,6 +2065,11 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     headerDisplayLabel: 'Vol (Reported)',
     attrName: 'displayVolumeReported',
     size: 7
+  },{
+    headerKey: 'displayBenchMarkName',
+    headerDisplayLabel: 'Benchmark Name',
+    attrName: 'displayBenchMarkName',
+    size: 8
   },{
     headerKey: 'price',
     headerDisplayLabel: 'Px',
