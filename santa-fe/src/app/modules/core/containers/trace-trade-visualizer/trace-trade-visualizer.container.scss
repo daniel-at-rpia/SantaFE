@@ -20,10 +20,10 @@ button {
   overflow: hidden;
   margin-left: $spacing_medium;
   &__table {
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: scroll;
     &-utility {
       flex: 0 0 auto;
       display: flex;
@@ -73,7 +73,6 @@ button {
       }
     }
     &-content {
-      @include mix_enable_scrollbar('vertical');
       flex: 1 1 auto;
       display: flex;
       flex-wrap: wrap;
@@ -118,11 +117,10 @@ button {
     }
   }
   &__graphs {
-    flex: 1 1 auto;
+    flex: 0 1 28rem;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    max-width: 50rem;
     margin: 0 $spacing_small;
     &-scatterGraph {
       flex: 0 1 60%;

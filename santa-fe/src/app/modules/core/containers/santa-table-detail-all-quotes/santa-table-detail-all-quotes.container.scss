@@ -56,6 +56,7 @@ $santaTableDetailAllQuotes_width_CDS: $securityQuote_main_size_1 * 2 + $security
   }
   &__trace {
     @include mix_fixed_div(relative, $z_index_base_item_lift);
+    @include mix_enable_scrollbar('horizontal');
     flex: 1 1 auto;
     display: none;
     overflow: hidden;
