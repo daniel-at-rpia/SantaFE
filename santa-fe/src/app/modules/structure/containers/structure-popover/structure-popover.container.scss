@@ -90,9 +90,9 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       background-color: $color_gray_1;
       padding: $spacing_small 0;
       &-category {
-        @include bicsLevelCategory;
+        @include mix_bics_level_category;
         &-text {
-          @include bicsLevelCategoryText;
+          @include mix_bics_level_category_text;
         }
       }
       &-list {
@@ -117,9 +117,9 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       background-color: $color_gray_2;
       padding: $spacing_small 0;
       &-category {
-        @include bicsLevelCategory;
+        @include mix_bics_level_category;
         &-text {
-         @include bicsLevelCategoryText;
+         @include mix_bics_level_category_text;
         }
       }
       &-list {

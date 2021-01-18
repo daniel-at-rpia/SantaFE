@@ -7,8 +7,10 @@ import {
   StructurePopoverDTO,
   StructurePortfolioBreakdownRowDTO
 } from 'Core/models/frontend/frontend-models.interface';
+import { StructureRowSetViewData } from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import { DTOService, BICsDataProcessingService } from 'Core/services';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+import { StructureSetView } from 'Structure/actions/structure.actions';
 import {
   PortfolioBreakdownCategoryBlock,
   BICSMainRowDataBlock
@@ -152,6 +154,15 @@ export class StructurePopover implements OnInit, OnChanges {
     this.popover.state.isActive = false;
     this.popover.data.mainRow.state.isSelected = false;
     !!this.resetPopover && this.resetPopover.emit();
+  }
+
+  public updatePopoverRowView(data: StructureRowSetViewData) {
+    if (!!data) {
+      const viewData = this.utilityService.formViewPayloadTransferPackForSingleEdit(data);
+      if (!!viewData) {
+        this.store$.dispatch(new StructureSetView(viewData));
+      }
+    }
   }
 
   private removeStencils() {
