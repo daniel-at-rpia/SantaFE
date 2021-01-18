@@ -9,10 +9,12 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
 import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
+import { selectUserInitials } from 'Core/selectors/core.selectors';
 import {
   StructureSetTargetOverlayTransferPack,
   DefinitionConfiguratorEmitterParams,
-  AdhocExtensionBEMetricBreakdowns
+  AdhocExtensionBEMetricBreakdowns,
+  StructureSetViewTransferPack
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { PortfolioBreakdownDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import {
@@ -35,7 +37,8 @@ import {
 import {
   PayloadUpdateBreakdown,
   PayloadUpdateOverride,
-  PayloadDeleteOverride
+  PayloadDeleteOverride,
+  PayloadSetView
 } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
@@ -48,7 +51,11 @@ import {
   PayloadGetPortfolioOverride,
   PayloadClearPortfolioBreakdown
 } from 'BEModels/backend-payloads.interface';
-import { StructureReloadFundDataPostEditEvent, StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
+import {
+  StructureReloadFundDataPostEditEvent,
+  StructureUpdateMainPanelEvent,
+  StructureSetView
+} from 'Structure/actions/structure.actions';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   CustomeBreakdownConfiguratorDefinitionLayout,
@@ -68,13 +75,15 @@ import * as moment from 'moment';
 export class StructureSetTargetPanel implements OnInit, OnDestroy {
   state: StructureSetTargetPanelState;
   subscriptions = {
-    setTargetTransferPackSub: null
+    setTargetTransferPackSub: null,
+    ownerInitialsSub: null
   };
   constants = {
     metric: PortfolioMetricValues,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
-    definitionMap: SecurityDefinitionMap
+    definitionMap: SecurityDefinitionMap,
+    view: PortfolioView
   };
 
   constructor(
@@ -114,13 +123,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         newOverrideNameCache: null
       },
       removalList: [],
-      clearAllTargetSelected: false
+      clearAllTargetSelected: false,
+      editViewMode: false,
+      ownerInitial: null
     };
     return state;
   }
 
   public ngOnInit() {
     this.state = this.initializePageState();
+    this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      select(selectUserInitials)
+    ).subscribe((value) => {
+        this.state.ownerInitial = value;
+    });
     this.subscriptions.setTargetTransferPackSub = this.store$.pipe(
       select(selectSetTargetTransferPack)
     ).subscribe((pack: StructureSetTargetOverlayTransferPack) => {
@@ -482,6 +498,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
+  public onClickSetView(editRow: StructureSetTargetPanelEditRowBlock, view: PortfolioView) {
+    if (!!editRow.view) {
+      // user intends to remove view option
+      editRow.view = editRow.view === view ? null : view;
+    } else {
+      editRow.view = view;
+    }
+    editRow.isViewEdited = true;
+  }
+
+  public onToggleSetViewMode() {
+    this.state.editViewMode = !this.state.editViewMode;
+  }
+
   private checkIfEvenRow(editRow: StructureSetTargetPanelEditRowBlock): boolean {
     const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
     if (!!this.state.targetBreakdown.state.isBICs) {
@@ -577,17 +607,21 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       },
       isLocked: false,
       isEven: false,
+      isViewEdited: false,
       existInServer: true,
       rowDTO: null,
-      isVisible: true
+      isVisible: true,
+      view: null
     };
     if (this.state.targetBreakdown.state.isBICs) {
       if (this.state.activeMetric === this.constants.metric.cs01) {
         newRow.rowDTO = row;
+        newRow.view = row.data.view;
       } else {
         const matchedRow = this.state.targetBreakdown.data.rawLeverageCategoryList.find(selectedRow => selectedRow.data.code === row.data.code);
         if (!!matchedRow) {
           newRow.rowDTO = matchedRow;
+          newRow.view = matchedRow.data.view;
         }
       }
     }
@@ -822,7 +856,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private submitTargetChanges(): boolean {
     if (!this.state.targetBreakdownIsOverride) {
-      return this.submitRegularBreakdownChanges();
+      if (this.state.targetBreakdown.state.isBICs) {
+        return this.submitRegularBICSBreakdownChanges();
+      } else {
+        return this.submitRegularBreakdownChanges()
+      }
     } else {
       return this.submitOverrideChanges();
     }
@@ -1449,6 +1487,118 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetLevel = targetCategory.targetCreditLeverage.level.savedUnderlineValue;
       this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
+    }
+  }
+
+  private traverseEditRowListForUpdatedView(): StructureSetViewTransferPack {
+    const viewPayload: StructureSetViewTransferPack = {
+      bucket: [],
+      view: [],
+      displayCategory: ''
+    };
+    this.state.editRowList.forEach(editRow => {
+      if (editRow.isViewEdited) {
+        const groupOption = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${editRow.rowDTO.data.bicsLevel}`;
+        const rowBucket = {
+          [groupOption]: [editRow.rowDTO.data.code]
+        }
+        viewPayload.bucket.push(rowBucket);
+        viewPayload.view.push(editRow.view)
+      }
+    })
+    const isViewPayloadValid = viewPayload.bucket.length > 0;
+    return !!isViewPayloadValid ? viewPayload : null;
+  }
+
+  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEPortfolioStructuringDTO = null): boolean {
+    const endpoint = this.restfulCommService.apiMap.setView;
+    const { bucket, view } = data;
+    const payload: PayloadSetView = {
+      buckets: bucket,
+      views: view
+    }
+    this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
+      first(),
+      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+        const completeAlertMessage = `Successfully updated views`;
+        this.store$.dispatch(new StructureUpdateMainPanelEvent());
+        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
+        this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        this.restfulCommService.logEngagement(
+          this.restfulCommService.engagementMap.portfolioStructureSetView,
+          null,
+          `Updated views. Set by ${this.state.ownerInitial}.`,
+          'Portfolio Structure Breakdown'
+        )
+      }),
+      catchError(err => {
+        setTimeout(() => {
+          if (!!fundWithUpdatedTargets) {
+            // since the update breakdown call has succeeded, the UI needs to change to reflect that
+            this.store$.dispatch(new StructureReloadFundDataPostEditEvent(fundWithUpdatedTargets));
+            const updateBreakdownAlert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`, null);
+            this.store$.dispatch(new CoreSendNewAlerts([updateBreakdownAlert]));
+          }
+          const viewAlert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', 'Unable to update views', null);
+          viewAlert.state.isError = true;
+          this.store$.dispatch(new CoreSendNewAlerts([viewAlert]));
+        }, 500)
+        this.restfulCommService.logError('Set Analyst View API call failed')
+        console.error(`${endpoint} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
+    return true;
+  }
+
+  private submitRegularBICSBreakdownChanges(): boolean {
+    const payloads: Array<PayloadUpdateBreakdown> = this.traverseEditRowsToFormUpdateBreakdownPayload();
+    const viewPayload: StructureSetViewTransferPack = this.traverseEditRowListForUpdatedView();
+    if (!!payloads && payloads.length > 0) {
+      const necessaryUpdateNumOfCalls = payloads.length;
+      let callCount = 0;
+      payloads.forEach((payload) => {
+        const level = payload.portfolioBreakdown.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1];
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEPortfolioStructuringDTO) => {
+            if (!!serverReturn) {
+              callCount++;
+              if (callCount === necessaryUpdateNumOfCalls) {
+                this.store$.dispatch(
+                  new CoreSendNewAlerts([
+                    this.dtoService.formSystemAlertObject(
+                      'Structuring',
+                      'Updated',
+                      `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`,
+                      null
+                    )]
+                  )
+                );
+                if (!viewPayload) {
+                  this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+                } else {
+                  this.submitBulkEditViewChanges(viewPayload, serverReturn);
+                }
+              }
+            }
+          }),
+          catchError(err => {
+            console.error('update breakdown failed');
+            const message = !!viewPayload ? `failed to update views and targets for BICS Lv.${level} in ${this.state.targetFund.data.portfolioShortName}` : `update breakdown failed in ${this.state.targetFund.data.portfolioShortName}`;
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', message, null)]));
+            return of('error');
+          })
+        ).subscribe();
+      })
+      return true;
+    } else {
+      if (!!viewPayload) {
+        return this.submitBulkEditViewChanges(viewPayload);
+      } else {
+        this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target or view because no change is detected', null)]));
+        return false;
+      }
     }
   }
 }
