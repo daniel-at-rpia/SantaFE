@@ -431,6 +431,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       attrName: 'alertTraceBenchmarkName',
       underlineAttrName: 'alertTraceBenchmarkName',
       blockAttrName: 'alert',
+      isDataTypeText: true,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
       tableSpecifics: {
@@ -1902,7 +1903,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
 
 const POSITION_ALERT_HEADERS = ['hfPosition', 'nlfPosition', 'dofPosition', 'sofPosition', 'stipPosition', 'fipPosition', 'cipPosition', 'agbPosition', 'bbbPosition'];
 
-const TRACE_ALERT_HEADERS = ['alertTraceReportingParty', 'alertTraceContraParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', ' alertTraceBenchmarkName', 'alertTracePrice', 'alertTraceSpread'];
+const TRACE_ALERT_HEADERS = ['alertTraceReportingParty', 'alertTraceContraParty', 'alertTraceVolumeEstimated', 'alertTraceVolumeReported', 'alertTraceBenchmarkName', 'alertTracePrice', 'alertTraceSpread'];
 
 const TRACE_ALERT_EXCLUDED_HEADERS = SecurityTableHeaderConfigs.filter(header => header.key.indexOf('Trace') === -1 && !!header.content.tableSpecifics.tradeAlert && !!header.content.tableSpecifics.tradeAlert.active).map(newHeader => newHeader.key);
 
