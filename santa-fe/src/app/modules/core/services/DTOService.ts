@@ -2184,8 +2184,8 @@ export class DTOService {
       }
       const parsedBEView = !!rawData.breakdown[eachCategoryText]  && !!rawData.breakdown[eachCategoryText].view ? rawData.breakdown[eachCategoryText].view.toLowerCase() : null;
       const view = PortfolioView[parsedBEView];
-      const eachCs01CategoryBlock = rawData.breakdown[eachCategoryText] 
-        ? this.formPortfolioBreakdownCategoryBlock(
+      const eachCS01Row = rawData.breakdown[eachCategoryText] 
+        ? this.formStructureBreakdownRowObject(
           findCs01Min,
           findCs01Max,
           isStencil,
@@ -2203,9 +2203,9 @@ export class DTOService {
           code
         )
         : null;
-      !!eachCs01CategoryBlock && object.data.rawCs01CategoryList.push(eachCs01CategoryBlock);
-      const eachLeverageCategoryBlock = rawData.breakdown[eachCategoryText] 
-        ? this.formPortfolioBreakdownCategoryBlock(
+      !!eachCS01Row && object.data.rawCs01CategoryList.push(eachCS01Row);
+      const eachLeverageRow = rawData.breakdown[eachCategoryText] 
+        ? this.formStructureBreakdownRowObject(
           findLeverageMin,
           findLeverageMax,
           isStencil,
@@ -2223,7 +2223,7 @@ export class DTOService {
           code
         )
         : null;
-      !!eachLeverageCategoryBlock && object.data.rawLeverageCategoryList.push(eachLeverageCategoryBlock);
+      !!eachLeverageRow && object.data.rawLeverageCategoryList.push(eachLeverageRow);
     });
     return object;
   }
@@ -2244,7 +2244,7 @@ export class DTOService {
     return newBreakdown;
   }
 
-  public formPortfolioBreakdownCategoryBlock(
+  private formStructureBreakdownRowObject(
     minValue: number,
     maxValue: number,
     isStencil: boolean,
@@ -2261,6 +2261,65 @@ export class DTOService {
     customLevel: number = null,
     code: string = null
   ): DTOs.StructurePortfolioBreakdownRowDTO {
+    const object = {
+      data: this.populatePortfolioBreakdownRowData(
+          minValue,
+          maxValue,
+          isStencil,
+          categoryName,
+          rawCategoryData,
+          isCs01,
+          portfolioID,
+          groupOption,
+          isOverride,
+          diveInLevel,
+          view,
+          bucket,
+          simpleBucket,
+          customLevel,
+          code
+        ),
+      style: {
+        branchHeight: '0',
+        top: '0'
+      },
+      state: {
+        isSelected: false,
+        isBtnDiveIn: false,
+        isStencil: true,
+        isWithinPopover: false,
+        isVisibleSubLevel: false,
+        isShowingSubLevels: false,
+        isEditingView: false,
+        isEditingViewAvail: false,
+        isDoveIn: false,
+        isWithinEditRow: false,
+        isWithinSetTargetPreview: false,
+        isViewingHistoricalData: false
+      }
+    }
+    const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
+    object.state.isBtnDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(object.data.code) : false;
+    return object;
+  }
+
+  private populatePortfolioBreakdownRowData(
+    minValue: number,
+    maxValue: number,
+    isStencil: boolean,
+    categoryName: string,
+    rawCategoryData: BEModels.BEStructuringBreakdownMetricSingleEntryBlock,
+    isCs01: boolean,
+    portfolioID: number,
+    groupOption: string,
+    isOverride: boolean,
+    diveInLevel: number,
+    view: PortfolioView,
+    bucket: Blocks.StructureBucketDataBlock,
+    simpleBucket: Blocks.StructureBucketDataBlock,
+    customLevel: number = null,
+    code: string = null
+  ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
       const parsedRawData = this.utility.deepCopy(rawCategoryData);
       const rawCurrentLevel = parsedRawData.currentLevel;
@@ -2292,8 +2351,6 @@ export class DTOService {
         isCs01
       );
       const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.currentLevel, parsedRawData.targetLevel, isCs01);
-
-      const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
@@ -2329,9 +2386,7 @@ export class DTOService {
         code: code
       };
       eachCategoryBlock.diffToTargetDisplay = this.utility.getRowDiffToTargetText(eachCategoryBlock.diffToTarget, isCs01);
-      const isDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(eachCategoryBlock.code) : false;
-      const eachCategoryBlockDTO = this.formStructureBreakdownRowObject(eachCategoryBlock, isDiveIn);
-      return eachCategoryBlockDTO;
+      return eachCategoryBlock;
     } else {
       return null;
     }
@@ -2366,31 +2421,6 @@ export class DTOService {
       state: {
         isActive: false,
         isDisplayCs01: isDisplayCs01
-      }
-    }
-    return object;
-  }
-
-  public formStructureBreakdownRowObject(categoryRow: Blocks.PortfolioBreakdownCategoryBlock, isDiveIn: boolean): DTOs.StructurePortfolioBreakdownRowDTO {
-    const object = {
-      data: categoryRow,
-      style: {
-        branchHeight: '0',
-        top: '0'
-      },
-      state: {
-        isSelected: false,
-        isBtnDiveIn: isDiveIn,
-        isStencil: true,
-        isWithinPopover: false,
-        isVisibleSubLevel: false,
-        isShowingSubLevels: false,
-        isEditingView: false,
-        isEditingViewAvail: false,
-        isDoveIn: false,
-        isWithinEditRow: false,
-        isWithinSetTargetPreview: false,
-        isViewingHistoricalData: false
       }
     }
     return object;
