@@ -100,6 +100,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.clearSearchFilter();
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
+        if (this.configuratorData.state.showFiltersFromDefinition.data.name === this.constants.map.TICKER.displayName) {
+         this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
+        }
         const definitionShown = this.configuratorData.state.showFiltersFromDefinition;
         this.boostConfigurator.emit();
       } else {
