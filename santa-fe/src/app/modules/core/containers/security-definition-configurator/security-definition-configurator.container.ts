@@ -33,7 +33,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   @Output() buryConfigurator = new EventEmitter();
   @Output() boostConfigurator = new EventEmitter();
   constants = {
-    map: SecurityDefinitionMap
+    map: SecurityDefinitionMap,
+    cappedAmount: 100
   }
 
   constructor(
