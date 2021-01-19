@@ -138,13 +138,17 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     if (this.configuratorData.state.showFiltersFromDefinition) {
       this.configuratorData.data.filterSearchInputValue = newKeyword;
       if (!!newKeyword && newKeyword.length >= 1) {
-        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
-          if (this.applySearchFilter(eachOption, newKeyword)) {
-            eachOption.isFilteredOut = false;
-          } else {
-            eachOption.isFilteredOut = true;
-          }
-        })
+        if (this.configuratorData.state.showFiltersFromDefinition.data.name === this.constants.map.TICKER.displayName) {
+          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = this.getCustomFilterOptionList(newKeyword, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionList);
+        } else {
+          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+            if (this.applySearchFilter(eachOption, newKeyword)) {
+              eachOption.isFilteredOut = false;
+            } else {
+              eachOption.isFilteredOut = true;
+            }
+          })
+        }
       } else {
         this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
           eachOption.isFilteredOut = false;
