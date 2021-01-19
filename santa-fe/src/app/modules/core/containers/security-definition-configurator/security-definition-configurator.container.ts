@@ -291,4 +291,48 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     ).subscribe();
   }
 
+  private getCustomFilterOptionList(newKeyword: string, prinstineList: Array<SecurityDefinitionFilterBlock>): Array<SecurityDefinitionFilterBlock> {
+    const filterSpecificOptionList: Array<SecurityDefinitionFilterBlock> = [];
+    prinstineList.forEach((eachOption) => {
+      const optionCopy = {...eachOption};
+      if (this.applySearchFilter(eachOption, newKeyword)) {
+        optionCopy.isFilteredOut = false;
+      } else {
+        optionCopy.isFilteredOut = true;
+      }
+      !optionCopy.isFilteredOut && filterSpecificOptionList.push(optionCopy);
+    });
+    if (filterSpecificOptionList.length > 0) {
+      const exactMatchOptionList: Array<SecurityDefinitionFilterBlock> = [];
+      const parsedKeyword = newKeyword.toLowerCase();
+      filterSpecificOptionList.forEach((option: SecurityDefinitionFilterBlock) => {
+        const parsedLabel = option.displayLabel.toLowerCase();
+        if (parsedLabel.indexOf(parsedKeyword) === 0) {
+          const optionIndex = filterSpecificOptionList.findIndex((specificOption: SecurityDefinitionFilterBlock) => specificOption.displayLabel.toLowerCase() === parsedLabel);
+          if (optionIndex >= 0) {
+            exactMatchOptionList.push(option);
+            filterSpecificOptionList.splice(optionIndex, 1);
+          }
+        }
+      })
+      if (exactMatchOptionList.length > 0) {
+        exactMatchOptionList.sort((optionA: SecurityDefinitionFilterBlock, optionB: SecurityDefinitionFilterBlock) => {
+          if (optionA.displayLabel < optionB.displayLabel) {
+            return - 1
+          } else if (optionA.displayLabel > optionB.displayLabel) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+      }
+      const limit = exactMatchOptionList.length > 0 ? this.constants.cappedAmount - exactMatchOptionList.length : this.constants.cappedAmount;
+      const cappedFilterSpecificOptionList = filterSpecificOptionList.length > limit ? filterSpecificOptionList.filter((option: SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : filterSpecificOptionList;
+      const formattedFilteredList: Array<SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedFilterSpecificOptionList] : cappedFilterSpecificOptionList;
+      return formattedFilteredList;
+    } else {
+      return [];
+    }
+  }
+
 }
