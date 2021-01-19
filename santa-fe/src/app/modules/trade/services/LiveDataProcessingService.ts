@@ -413,6 +413,7 @@ export class LiveDataProcessingService {
     targetSecurity.data.weight.fundCS01PctDisplay = null;
     targetSecurity.data.weight.fundBEVPct = null;
     targetSecurity.data.weight.fundBEVPctDisplay = null;
+    targetSecurity.data.position.positionCurrent = 0;
     targetSecurity.data.portfolios.forEach((eachPortfolio) => {
       const portfolioMatchFilterScope = panelStateFilterBlock.quickFilters.portfolios.length === 0 ? true : panelStateFilterBlock.quickFilters.portfolios.find((eachPortfolioFilter) => {
         return eachPortfolio.portfolioName === eachPortfolioFilter;

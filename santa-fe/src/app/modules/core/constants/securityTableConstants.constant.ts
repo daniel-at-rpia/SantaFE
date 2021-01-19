@@ -1073,7 +1073,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
-          active: true,
+          active: false,
           groupShow: false
         },
         tradeAlert: {
@@ -1095,7 +1095,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
-          active: true,
+          active: false,
           groupShow: true
         },
         tradeAlert: {
@@ -1116,7 +1116,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default: {
-          active: true,
+          active: false,
           groupShow: false
         },
         tradeAlert: {
@@ -1137,7 +1137,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       groupBelongs: SecurityTableHeaderConfigGroups.weight,
       tableSpecifics: {
         default:{
-          active: true,
+          active: false,
           groupShow: false
         },
         tradeAlert: {
