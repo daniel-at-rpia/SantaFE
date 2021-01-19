@@ -440,8 +440,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: true,
-          disabled: false,
+          active: false,
+          disabled: true,
           groupShow: true
         }
       }
