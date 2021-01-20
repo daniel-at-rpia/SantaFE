@@ -137,9 +137,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onSearchKeywordChange(newKeyword: string) {
     if (this.configuratorData.state.showFiltersFromDefinition) {
       this.configuratorData.data.filterSearchInputValue = newKeyword;
-      if (!!newKeyword && newKeyword.length >= 1) {
+      // Checking for empty string when ticker is selected
+      if (newKeyword.length >= 0) {
         if (this.configuratorData.state.showFiltersFromDefinition.data.name === this.constants.map.TICKER.displayName) {
-          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = this.getCustomFilterOptionList(newKeyword, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionList);
+          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = newKeyword !== '' ? this.getCustomFilterOptionList(newKeyword, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionList) : [];
         } else {
           this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
             if (this.applySearchFilter(eachOption, newKeyword)) {
