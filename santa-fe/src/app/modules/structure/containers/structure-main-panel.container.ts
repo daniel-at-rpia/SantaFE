@@ -36,7 +36,7 @@ import {
   TargetBarDTO
 } from 'Core/models/frontend/frontend-models.interface';
 import {
-  BEPortfolioStructuringDTO,
+  BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
   BEGetPortfolioStructureServerReturn
 } from 'App/modules/core/models/backend/backend-models.interface';
@@ -47,7 +47,7 @@ import {
 } from 'App/modules/core/models/backend/backend-payloads.interface';
 import {
   StructureSetViewTransferPack,
-  AdhocExtensionBEMetricBreakdowns
+  AdhocExtensionBEStructuringBreakdownMetricBlock
 } from 'FEModels/frontend-adhoc-packages.interface';
 import {
   SecurityDefinitionMap
@@ -154,7 +154,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
       select(selectReloadFundDataPostEdit)
-    ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
+    ).subscribe((targetFund: BEStructuringFundBlock) => {
       if (!!targetFund) {
         const targetFundCopy = this.utilityService.deepCopy(targetFund);
         this.loadFund(targetFundCopy);
@@ -284,7 +284,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+      tap((serverReturn: Array<BEStructuringFundBlock>) => {
         this.processStructureData(serverReturn);
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -314,7 +314,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private formCustomBICsBreakdownWithSubLevels(
-    rawData: BEPortfolioStructuringDTO,
+    rawData: BEStructuringFundBlock,
     fund: PortfolioFundDTO
   ) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
@@ -345,13 +345,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
-    rawData: BEPortfolioStructuringDTO,
+    rawData: BEStructuringFundBlock,
     customBICSBreakdown: BEStructuringBreakdownBlock,
     customBICSDefinitionList: Array<string>
   ) {
     // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
     for (let code in customBICSBreakdown.breakdown) {
-      const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel;
+      const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel;
       // level 3+ since level 2 parent categories would already be in the breakdown
       if (!!customBICSBreakdown.breakdown[code] && targetLevel >= 3) {
         const targetHierarchyList: Array<BICsHierarchyBlock> = this.bicsDataProcessingService.getTargetSpecificHierarchyList(
@@ -366,8 +366,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
               const categoryBEData = rawData.breakdowns[formattedBEBICSKey].breakdown[category.code];
               if (!!categoryBEData) {
                 customBICSBreakdown.breakdown[category.code] = categoryBEData;
-                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
-                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).code = category.code;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = category.bicsLevel;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEStructuringBreakdownMetricBlock).code = category.code;
                 customBICSDefinitionList.push(category.code);
               }
             }
@@ -393,7 +393,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return parsedCustomBICSDefinitionListNoNull;
   }
 
-  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
+  private processStructureData(serverReturn: Array<BEStructuringFundBlock>) {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
       serverReturn.forEach(eachFund => {
@@ -425,7 +425,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return breakdowns;
   }
 
-  private loadFund(rawData: BEPortfolioStructuringDTO) {
+  private loadFund(rawData: BEStructuringFundBlock) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.bicsDataProcessingService.setRawBICsData(rawData);
       const newFund = this.dtoService.formStructureFundObject(rawData, false, this.state.selectedMetricValue);

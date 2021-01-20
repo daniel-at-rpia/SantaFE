@@ -13,8 +13,8 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import {
   StructureSetTargetOverlayTransferPack,
   DefinitionConfiguratorEmitterParams,
-  AdhocExtensionBEMetricBreakdowns,
-  StructureSetViewTransferPack
+  StructureSetViewTransferPack,
+  AdhocExtensionBEStructuringBreakdownMetricBlock
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { PortfolioBreakdownDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import {
@@ -42,10 +42,10 @@ import {
 } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
-  BEPortfolioStructuringDTO,
-  BEMetricBreakdowns,
+  BEStructuringFundBlock,
+  BEStructuringBreakdownMetricBlock,
   BEStructuringOverrideBlock,
-  BEStructuringBreakdownSingleEntry
+  BEStructuringBreakdownMetricSingleEntryBlock
 } from 'BEModels/backend-models.interface';
 import {
   PayloadGetPortfolioOverride,
@@ -874,7 +874,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       payloads.forEach((payload) => {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEPortfolioStructuringDTO) => {
+          tap((serverReturn: BEStructuringFundBlock) => {
             callCount++;
             if (callCount === necessaryUpdateNumOfCalls) {
               this.store$.dispatch(
@@ -918,7 +918,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!payload) {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
             first(),
-            tap((serverReturn: BEPortfolioStructuringDTO) => {
+            tap((serverReturn: BEStructuringFundBlock) => {
               this.store$.dispatch(
                 new CoreSendNewAlerts([
                   this.dtoService.formSystemAlertObject(
@@ -958,7 +958,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         updatePayload.forEach((eachPayload) => {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
             first(),
-            tap((serverReturn: BEPortfolioStructuringDTO) => {
+            tap((serverReturn: BEStructuringFundBlock) => {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
                 if (necessaryDeleteNumOfCalls > 0) {
@@ -1003,7 +1003,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     deletePayload.forEach((eachPayload, index) => {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
         first(),
-        tap((serverReturn: BEPortfolioStructuringDTO) => {
+        tap((serverReturn: BEStructuringFundBlock) => {
           callCount++;
           if (callCount === necessaryDeleteNumOfCalls) {
             this.store$.dispatch(new StructureUpdateMainPanelEvent());
@@ -1053,7 +1053,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.editRowList.forEach((eachRow) => {
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         hasModification = true;
-        const modifiedMetricBreakdowns: BEMetricBreakdowns = {
+        const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlock = {
           metricBreakdowns: {}
         };
         if (this.cs01ModifiedInEditRow(eachRow)) {
@@ -1106,7 +1106,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
-        const modifiedMetricBreakdowns: BEMetricBreakdowns = {
+        const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlock = {
           view: null,
           metricBreakdowns: {}
         };
@@ -1311,8 +1311,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           if (!!displayCategory) {
             customRawBreakdown.breakdown[displayCategory] = rawDataByCode;
             definitionList.push(displayCategory);
-            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEMetricBreakdowns).customLevel = level;
-            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEMetricBreakdowns).code = code;
+            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
+            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
           }
         }
       })
@@ -1420,7 +1420,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     row.state.isShowingSubLevels = state;
   }
 
-  private getRowRawDataByMetric(row: StructurePortfolioBreakdownRowDTO, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean): BEStructuringBreakdownSingleEntry {
+  private getRowRawDataByMetric(row: StructurePortfolioBreakdownRowDTO, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean): BEStructuringBreakdownMetricSingleEntryBlock {
     const { breakdown } = rawBreakdownData;
     const rowRawBreakdownData = !!isBICS ? breakdown[row.data.code] : breakdown[row.data.category];
     const rowRawBreakdownDataByMetric= !!isCs01 ? {...rowRawBreakdownData.metricBreakdowns.Cs01} : {...rowRawBreakdownData.metricBreakdowns.CreditLeverage};
@@ -1510,7 +1510,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return !!isViewPayloadValid ? viewPayload : null;
   }
 
-  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEPortfolioStructuringDTO = null): boolean {
+  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEStructuringFundBlock = null): boolean {
     const endpoint = this.restfulCommService.apiMap.setView;
     const { bucket, view } = data;
     const payload: PayloadSetView = {
@@ -1519,7 +1519,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+      tap((serverReturn: Array<BEStructuringFundBlock>) => {
         const completeAlertMessage = `Successfully updated views`;
         this.store$.dispatch(new StructureUpdateMainPanelEvent());
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -1561,7 +1561,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const level = payload.portfolioBreakdown.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1];
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEPortfolioStructuringDTO) => {
+          tap((serverReturn: BEStructuringFundBlock) => {
             if (!!serverReturn) {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {

@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
 import {
   BEBICsHierarchyBlock,
-  BEPortfolioStructuringDTO,
+  BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
-  BEMetricBreakdowns
+  BEStructuringBreakdownMetricBlock
 } from 'Core/models/backend/backend-models.interface';
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
@@ -166,7 +166,7 @@ export class BICsDataProcessingService {
     return allBICSList;
   }
 
-  public setRawBICsData(rawData: BEPortfolioStructuringDTO) {
+  public setRawBICsData(rawData: BEStructuringFundBlock) {
     const { BicsCodeLevel1, BicsCodeLevel2, BicsCodeLevel3, BicsCodeLevel4 } = rawData.breakdowns;
     const block: Blocks.BICsCategorizationBlock = {
       portfolioID: rawData.portfolioId,
@@ -183,7 +183,7 @@ export class BICsDataProcessingService {
     }
   }
 
-  public getBICSCategoryRawData(portfolioId: number, level: number, code: string): BEMetricBreakdowns {
+  public getBICSCategoryRawData(portfolioId: number, level: number, code: string): BEStructuringBreakdownMetricBlock {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
     if (!!rawData) {
       const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
@@ -262,8 +262,8 @@ export class BICsDataProcessingService {
           if (!!code && selectedSubRawBreakdown.breakdown[code]) {
             if (categoryCode === code) {
               object.breakdown[subTier] = selectedSubRawBreakdown.breakdown[code];
-              (object.breakdown[subTier] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel = breakdownRow.data.bicsLevel + 1;
-              (object.breakdown[subTier] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code = code;
+              (object.breakdown[subTier] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = breakdownRow.data.bicsLevel + 1;
+              (object.breakdown[subTier] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
             }
           }
         }
@@ -298,8 +298,8 @@ export class BICsDataProcessingService {
         const categoryName = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
         if (!!breakdownData) {
           customRawBreakdown.breakdown[categoryName] = breakdownData;
-          (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).customLevel = level;
-          (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEMetricBreakdowns).code = code;
+          (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
+          (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
         }
         const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [categoryName], isCs01, false);
         const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
