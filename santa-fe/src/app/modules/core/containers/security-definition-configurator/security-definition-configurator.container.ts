@@ -307,18 +307,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       !optionCopy.isFilteredOut && filterSpecificOptionList.push(optionCopy);
     });
     if (filterSpecificOptionList.length > 0) {
-      const exactMatchOptionList: Array<SecurityDefinitionFilterBlock> = [];
       const parsedKeyword = newKeyword.toLowerCase();
-      filterSpecificOptionList.forEach((option: SecurityDefinitionFilterBlock) => {
-        const parsedLabel = option.displayLabel.toLowerCase();
-        if (parsedLabel.indexOf(parsedKeyword) === 0) {
-          const optionIndex = filterSpecificOptionList.findIndex((specificOption: SecurityDefinitionFilterBlock) => specificOption.displayLabel.toLowerCase() === parsedLabel);
-          if (optionIndex >= 0) {
-            exactMatchOptionList.push(option);
-            filterSpecificOptionList.splice(optionIndex, 1);
-          }
-        }
-      })
+      const exactMatchOptionList: Array<SecurityDefinitionFilterBlock> = filterSpecificOptionList.filter((option: SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) === 0);
+      const generalMatchOptionList = exactMatchOptionList.length > 0 ? filterSpecificOptionList.filter((option: SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) > 0) : filterSpecificOptionList;
       if (exactMatchOptionList.length > 0) {
         exactMatchOptionList.sort((optionA: SecurityDefinitionFilterBlock, optionB: SecurityDefinitionFilterBlock) => {
           if (optionA.displayLabel < optionB.displayLabel) {
@@ -331,8 +322,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         });
       }
       const limit = exactMatchOptionList.length > 0 ? this.constants.cappedAmount - exactMatchOptionList.length : this.constants.cappedAmount;
-      const cappedFilterSpecificOptionList = filterSpecificOptionList.length > limit ? filterSpecificOptionList.filter((option: SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : filterSpecificOptionList;
-      const formattedFilteredList: Array<SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedFilterSpecificOptionList] : cappedFilterSpecificOptionList;
+      const cappedGeneralMatchList = generalMatchOptionList.length > limit ? generalMatchOptionList.filter((option: SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : generalMatchOptionList;
+      const formattedFilteredList: Array<SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedGeneralMatchList] : cappedGeneralMatchList;
       return formattedFilteredList;
     } else {
       return [];
