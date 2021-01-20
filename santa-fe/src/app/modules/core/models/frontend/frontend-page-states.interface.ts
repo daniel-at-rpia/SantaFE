@@ -10,7 +10,8 @@ import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.const
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  PortfolioView
 } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 
@@ -311,4 +312,6 @@ export interface StructureSetTargetPanelState {
   }
   removalList: Array<Blocks.StructureSetTargetPanelEditRowBlock>;
   clearAllTargetSelected: boolean;
+  editViewMode: boolean;
+  ownerInitial: string;
 }

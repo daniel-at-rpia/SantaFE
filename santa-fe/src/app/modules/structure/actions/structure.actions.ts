@@ -8,7 +8,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
-  StructureSetViewData
+  StructureSetViewTransferPack
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { BEStructuringFundBlock } from 'BEModels/backend-models.interface';
 
@@ -60,8 +60,8 @@ export class StructureUpdateMainPanelEvent implements Action {
 
 export class StructureSetView implements Action {
   readonly type = StructureActions.SetView;
-  readonly viewData: StructureSetViewData;
-  constructor(viewData: StructureSetViewData) {
+  readonly viewData: StructureSetViewTransferPack;
+  constructor(viewData: StructureSetViewTransferPack) {
     this.viewData = viewData;
   }
 }

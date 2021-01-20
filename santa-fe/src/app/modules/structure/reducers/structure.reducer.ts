@@ -7,7 +7,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
-  StructureSetViewData,
+  StructureSetViewTransferPack,
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { BEStructuringFundBlock } from 'BEModels/backend-models.interface';
 import * as moment from 'moment';
@@ -17,7 +17,7 @@ export interface StructureState {
   setTargetTransfer: StructureSetTargetOverlayTransferPack;
   reloadFundDataPostEdit: BEStructuringFundBlock;
   updateTick: number;
-  viewData: StructureSetViewData;
+  viewData: StructureSetViewTransferPack;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   dataDatestamp: number;

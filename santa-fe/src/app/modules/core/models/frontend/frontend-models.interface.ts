@@ -151,6 +151,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertTraceReportingParty?: TraceTradeParty;
       alertTraceVolumeEstimated?: number;
       alertTraceVolumeReported?: number;
+      alertTraceBenchmarkName?: string;
       alertTracePrice?: number;
       alertTraceSpread?: number;
     }
@@ -605,6 +606,7 @@ export interface AlertDTO extends BasicDTOStructure {
     traceSide?: string;
     traceVolumeEstimated?: number;
     traceVolumeReported?: number;
+    traceBenchmarkName?: string;
     tracePrice?: number;
     traceSpread?: number;
   },

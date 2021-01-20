@@ -1378,7 +1378,7 @@ export class UtilityService {
             totalLevel = totalLevel + eachCategory.data.currentLevel;
           });
           const filteredListWithTargets = filteredList.filter((eachCategory) => {
-            return !!eachCategory.data.targetLevel;
+            return eachCategory.data.targetLevel !== null;
           });
           if (filteredListWithTargets.length > 0) {
             let misalignmentAggregate = 0;
@@ -1458,6 +1458,24 @@ export class UtilityService {
     public checkIfDiveInIsAvailable(code: string): boolean {
       const isDiveInAvailable = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === code);
       return !isDiveInAvailable;
+    }
+
+    public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {
+      const { view, row } = data;
+      const isRegularBICSRow = row.data.bicsLevel >= 1 && !!row.data.code;
+      let formattedDisplayCategory: string;
+      if (!!isRegularBICSRow) {
+        const level = row.data.bicsLevel;
+        formattedDisplayCategory = `${row.data.displayCategory} (Lv.${level})`;
+      } else {
+        formattedDisplayCategory = row.data.displayCategory;
+      }
+      const viewData: AdhocPacks.StructureSetViewTransferPack = {
+        bucket: [row.data.bucket],
+        view: view !== row.data.view ? [view] : [null],
+        displayCategory: formattedDisplayCategory
+      }
+      return viewData;
     }
 
   // structuring specific end

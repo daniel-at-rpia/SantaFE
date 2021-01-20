@@ -63,7 +63,9 @@
           (categoryClicked)="onClickBreakdownCategory($event)"
           (rowDiveInClicked)="getPopoverMainRow($event)"
           (seeBondClicked)="onClickSeeBond($event)"
-          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+          (setViewForRowClicked)="updateRowView($event)"
+          >
         </portfolio-breakdown-row>
       </li>
     </ul>
