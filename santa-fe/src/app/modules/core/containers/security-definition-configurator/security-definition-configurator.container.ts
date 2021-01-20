@@ -134,7 +134,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onSearchKeywordChange(newKeyword) {
+  public onSearchKeywordChange(newKeyword: string) {
     if (this.configuratorData.state.showFiltersFromDefinition) {
       this.configuratorData.data.filterSearchInputValue = newKeyword;
       if (!!newKeyword && newKeyword.length >= 1) {
