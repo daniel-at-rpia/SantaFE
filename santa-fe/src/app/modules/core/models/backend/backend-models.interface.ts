@@ -528,6 +528,7 @@ interface BEAlertRegularQuoteBlock extends BEQuoteBaseBlock {
   isGreyMarket: boolean,
   isBenchmarkHedged?: boolean
 }
+
 interface BEAlertCDSQuoteBlock extends BEQuoteBaseBlock {
   class: string,
   msG1MessageID: string,

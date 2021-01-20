@@ -232,7 +232,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private fetchFunds() {
     let payload: PayloadGetPortfolioStructures = {
-      yyyyMMdd: parseInt(this.state.currentDataDatestamp.format('YYYYMMDD'))
+      yyyyMMdd: parseInt(this.state.currentDataDatestamp.format('YYYYMMDD')),
+      deltaTypes: ["Dod","Wow","Mom","Ytd"]
     };
     const endpoint = this.restfulCommService.apiMap.getPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();

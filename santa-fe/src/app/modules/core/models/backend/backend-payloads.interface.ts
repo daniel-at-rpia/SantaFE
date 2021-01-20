@@ -114,6 +114,7 @@ export interface PayloadSetAlertsToInactive {
 
 export interface PayloadGetPortfolioStructures {
   yyyyMMdd?: number;
+  deltaTypes?: Array<string>;
 }
 
 export interface PayloadUpdatePortfolioStructuresTargets {
