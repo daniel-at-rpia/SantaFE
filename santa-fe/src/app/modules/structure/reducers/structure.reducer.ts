@@ -9,13 +9,13 @@ import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewTransferPack,
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import { BEStructuringFundBlock } from 'BEModels/backend-models.interface';
 import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
   setTargetTransfer: StructureSetTargetOverlayTransferPack;
-  reloadFundDataPostEdit: BEPortfolioStructuringDTO;
+  reloadFundDataPostEdit: BEStructuringFundBlock;
   updateTick: number;
   viewData: StructureSetViewTransferPack;
   activeBreakdownViewFilter: BreakdownViewFilter;

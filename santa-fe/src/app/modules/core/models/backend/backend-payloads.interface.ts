@@ -6,10 +6,10 @@ import {
 } from 'Core/constants/structureConstants.constants'
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
-  BEPortfolioStructuringDTO,
+  BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
   BEStructuringOverrideBlock,
-  BEMetricBreakdowns
+  BEStructuringBreakdownMetricBlock
 } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
@@ -133,7 +133,7 @@ export interface PayloadUpdateBreakdown {
     groupOption: string;
     portfolioId: number;
     breakdown: {
-      [property: string]: BEMetricBreakdowns;
+      [property: string]: BEStructuringBreakdownMetricBlock;
     }
   };
 }
