@@ -47,6 +47,9 @@ export interface BEPortfolioDTO {
   quantity: number;
   cs01Local: number;
   cs01Cad: number;
+  cs01CadWeightFund: number;
+  bondEquivalentValueCad: number;
+  bondEquivalentValueCadWeightFund: number;
   trades: Array<BETradeBlock>;
 }
 
@@ -621,6 +624,10 @@ export interface BEStructuringMetricTotalBlock {
   CreditDuration: number;
 }
 
+export interface BEGetPortfolioStructureServerReturn {
+  Now: Array<BEPortfolioStructuringDTO>;
+}
+
 export interface BEPortfolioStructuringDTO {
   date: string;
   portfolioId: number;
@@ -673,6 +680,10 @@ export interface BEGetAllTraceTradesBlock {
 
 export interface BETraceTradesBlock {
   actionFlag: string;
+  benchmarkGlobalIdentifier: string;
+  benchmarkGlobalIdentifierType: string;
+  benchmarkName: string;
+  benchmarkSecurityID: number;
   contraParty: TraceTradeParty;
   reportingParty: TraceTradeParty;
   creationTime: string;
@@ -695,7 +706,7 @@ export interface BETraceTradesBlock {
   side: string;
   spread: number;
   traceTradeID: string;
-  tradeTradeRefID: string;
+  traceTradeRefID: string;
   type: string;
   volumeReported: number;
   volumeEstimated: number;

@@ -10,23 +10,8 @@
     import { UtilityService } from './UtilityService';
     import { DTOService } from './DTOService';
     import { RestfulCommService } from './RestfulCommService';
+    import { DTOs, Blocks } from '../models/frontend';
     import {
-      SecurityDTO,
-      SecurityTableDTO,
-      SecurityTableRowDTO,
-      SecurityTableHeaderDTO,
-      BestQuoteComparerDTO,
-      SantaTableAlertSideCellDTO,
-      SantaTableAlertStatusCellDTO
-    } from 'FEModels/frontend-models.interface';
-    import {
-      AgGridRowNode,
-      AgGridRow,
-      AgGridColumnDefinition,
-      AgGridColumn
-    } from 'FEModels/frontend-blocks.interface';
-    import {
-      AGGRID_NARROW_COLUMN_WIDTH,
       SecurityTableHeaderConfigs,
       AGGRID_SECURITY_CARD_COLUMN_WIDTH,
       AGGRID_QUOTE_COLUMN_WIDTH,
@@ -61,15 +46,15 @@ export class AgGridMiddleLayerService {
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService
   ){}
-  public onGridReady(table: SecurityTableDTO) {
+  public onGridReady(table: DTOs.SecurityTableDTO) {
     // nothing atm
   }
 
-  public loadAgGridHeaders(table: SecurityTableDTO): Array<AgGridColumnDefinition> {
+  public loadAgGridHeaders(table: DTOs.SecurityTableDTO): Array<Blocks.AgGridColumnDefinition> {
     const list = [];
     const groupList = [];
     // the detail column is for triggering the All Quotes table
-    const detailColumn: AgGridColumnDefinition = {
+    const detailColumn: Blocks.AgGridColumnDefinition = {
       headerName: AGGRID_DETAIL_COLUMN_KEY,
       field: AGGRID_DETAIL_COLUMN_KEY,
       headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--detail ag-numeric-header`,
@@ -87,7 +72,7 @@ export class AgGridMiddleLayerService {
     list.push(detailColumn);
     for (const eachGroupKey in SecurityTableHeaderConfigGroups) {
       // we are treating the groups as definitions as well for the sake of simplicity, since agGrid allows that
-      const eachGroup: AgGridColumnDefinition = {
+      const eachGroup: Blocks.AgGridColumnDefinition = {
         headerName: SecurityTableHeaderConfigGroups[eachGroupKey],
         field: eachGroupKey,
         headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${eachGroupKey}`,
@@ -110,7 +95,7 @@ export class AgGridMiddleLayerService {
           groupName = eachGroupKey;
         }
       }
-      const newAgColumn: AgGridColumnDefinition = {
+      const newAgColumn: Blocks.AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
         headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${groupName}`,
@@ -119,13 +104,11 @@ export class AgGridMiddleLayerService {
         sortable: true,
         filter: null,
         pinned: eachHeader.data.pinned || false,
+        sort: eachHeader.data.sortActivated || null,
         enablePivot: false,
         enableRowGroup: false,
         hide: !isActiveByDefault
       };
-      if (eachHeader.data.key === 'alertTime') {
-        newAgColumn['sort'] = 'asc';
-      }
       if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
         if (eachHeader.data.key === 'alertTraceVolumeEstimated') {
           newAgColumn.valueFormatter = (params: ValueFormatterParams) => (!!params.value ? this.utilityService.parseNumberToCommas(params.value) : null);
@@ -184,8 +167,8 @@ export class AgGridMiddleLayerService {
   }
 
   public loadAgGridRows(
-    table: SecurityTableDTO
-  ): Array<AgGridRow> {
+    table: DTOs.SecurityTableDTO
+  ): Array<Blocks.AgGridRow> {
     const targetRows = table.data.rows;
     const targetHeaders = table.data.allHeaders;
     // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
@@ -224,8 +207,8 @@ export class AgGridMiddleLayerService {
   }
 
   public updateAgGridRows(
-    table: SecurityTableDTO,
-    targetRows: Array<SecurityTableRowDTO>,
+    table: DTOs.SecurityTableDTO,
+    targetRows: Array<DTOs.SecurityTableRowDTO>,
     location: number  // this is needed only for logging purpose
   ) {
     // minus one because securityCard is not one of the cells ( TODO: this is a bad design, what if a table has more than one security card column? should not treat it different from other columns )
@@ -265,7 +248,7 @@ export class AgGridMiddleLayerService {
   }
 
   public removeAgGridRow(
-    table: SecurityTableDTO,
+    table: DTOs.SecurityTableDTO,
     removeRowIdList: Array<string>
   ) {
     const agGridRemovalList = [];
@@ -279,8 +262,8 @@ export class AgGridMiddleLayerService {
   }
 
   private loadAgGridHeadersComparator(
-    targetHeader: SecurityTableHeaderDTO,
-    newAgColumn: AgGridColumnDefinition
+    targetHeader: DTOs.SecurityTableHeaderDTO,
+    newAgColumn: Blocks.AgGridColumnDefinition
   ) {
     if (targetHeader.data.key === 'securityCard') {
       newAgColumn.comparator = this.agCompareSecurities.bind(this);
@@ -296,8 +279,8 @@ export class AgGridMiddleLayerService {
   }
 
   private loadAgGridHeadersUILogics(
-    targetHeader: SecurityTableHeaderDTO,
-    newAgColumn: AgGridColumnDefinition
+    targetHeader: DTOs.SecurityTableHeaderDTO,
+    newAgColumn: Blocks.AgGridColumnDefinition
   ) {
     if (targetHeader.state.isCustomComponent) {
       newAgColumn.cellRenderer = targetHeader.data.key;
@@ -330,8 +313,8 @@ export class AgGridMiddleLayerService {
       newAgColumn.enableRowGroup = true;
       newAgColumn.enablePivot = true;
     }
-    if (targetHeader.state.isNarrowColumnVariant) {
-      newAgColumn.width = AGGRID_NARROW_COLUMN_WIDTH;
+    if (!!targetHeader.style.columnWidthOverride) {
+      newAgColumn.width = targetHeader.style.columnWidthOverride;
     }
     if (targetHeader.data.key === 'alertMessage') {
       newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--alertMessage`;
@@ -346,15 +329,15 @@ export class AgGridMiddleLayerService {
   }
 
   private formAgGridRow(
-    targetRow: SecurityTableRowDTO,
-    targetHeaders: Array<SecurityTableHeaderDTO>,
+    targetRow: DTOs.SecurityTableRowDTO,
+    targetHeaders: Array<DTOs.SecurityTableHeaderDTO>,
     bestQuoteCellIndex: number,
     bestAxeQuoteCellIndex: number,
     alertSideCellIndex: number,
     alertStatusCellIndex: number
-  ): AgGridRow {
+  ): Blocks.AgGridRow {
     const eachSecurity = targetRow.data.security;
-    const newAgRow: AgGridRow = {
+    const newAgRow: Blocks.AgGridRow = {
       id: targetRow.data.rowId,
       securityCard: eachSecurity,
       bestQuote:
@@ -392,8 +375,8 @@ export class AgGridMiddleLayerService {
   private agCompareUnderlineValue(
     valueA: string | number,
     valueB: string | number,
-    nodeA: AgGridRowNode,
-    nodeB: AgGridRowNode,
+    nodeA: Blocks.AgGridRowNode,
+    nodeB: Blocks.AgGridRowNode,
     inverted: boolean
   ) {
     // TODO: currently this logic causes a bit of delay on switching to alert table, this needs to be optimized
@@ -435,10 +418,10 @@ export class AgGridMiddleLayerService {
   }
 
   private agCompareBestQuoteComparer(
-    qA: BestQuoteComparerDTO,
-    qB: BestQuoteComparerDTO,
-    nodeA: AgGridRowNode,
-    nodeB: AgGridRowNode,
+    qA: DTOs.BestQuoteComparerDTO,
+    qB: DTOs.BestQuoteComparerDTO,
+    nodeA: Blocks.AgGridRowNode,
+    nodeB: Blocks.AgGridRowNode,
     inverted: boolean
   ) {
     // as long as we only have one bestQuoteComparer in the table there is no need to find out the column
@@ -480,10 +463,10 @@ export class AgGridMiddleLayerService {
   }
 
   private agCompareSecurities(
-    securityA: SecurityDTO,
-    securityB: SecurityDTO,
-    nodeA: AgGridRowNode,
-    nodeB: AgGridRowNode,
+    securityA: DTOs.SecurityDTO,
+    securityB: DTOs.SecurityDTO,
+    nodeA: Blocks.AgGridRowNode,
+    nodeB: Blocks.AgGridRowNode,
     inverted: boolean
   ) {
     if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
@@ -498,10 +481,10 @@ export class AgGridMiddleLayerService {
   }
 
   private agCompareAlertSide(
-    sideA: SantaTableAlertSideCellDTO,
-    sideB: SantaTableAlertSideCellDTO,
-    nodeA: AgGridRowNode,
-    nodeB: AgGridRowNode,
+    sideA: DTOs.SantaTableAlertSideCellDTO,
+    sideB: DTOs.SantaTableAlertSideCellDTO,
+    nodeA: Blocks.AgGridRowNode,
+    nodeB: Blocks.AgGridRowNode,
     inverted: boolean
   ) {
     if (!!sideA && !!sideB && !sideA.state.isStencil && !sideB.state.isStencil) {
@@ -516,10 +499,10 @@ export class AgGridMiddleLayerService {
   }
 
   private agCompareAlertStatus(
-    statusA: SantaTableAlertStatusCellDTO,
-    statusB: SantaTableAlertStatusCellDTO,
-    nodeA: AgGridRowNode,
-    nodeB: AgGridRowNode,
+    statusA: DTOs.SantaTableAlertStatusCellDTO,
+    statusB: DTOs.SantaTableAlertStatusCellDTO,
+    nodeA: Blocks.AgGridRowNode,
+    nodeB: Blocks.AgGridRowNode,
     inverted: boolean
   ) {
     if (!!statusA && !!statusB) {
@@ -534,11 +517,11 @@ export class AgGridMiddleLayerService {
   }
 
   private returnSortValue(
-    targetHeader: SecurityTableHeaderDTO,
+    targetHeader: DTOs.SecurityTableHeaderDTO,
     valueA: string | number,
     valueB: string | number,
-    securityA: SecurityDTO,
-    securityB: SecurityDTO
+    securityA: DTOs.SecurityDTO,
+    securityB: DTOs.SecurityDTO
   ): number {
     if (securityA == null && securityB != null) {
       return -16;
@@ -553,7 +536,7 @@ export class AgGridMiddleLayerService {
     }
   }
 
-  private resizeAllAutoSizeColumns(table: SecurityTableDTO) {
+  private resizeAllAutoSizeColumns(table: DTOs.SecurityTableDTO) {
     const allColumnIds = [];
     table.api.columnApi.getAllColumns().forEach((column) => {
       const colId = column.getColId();

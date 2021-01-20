@@ -1,11 +1,7 @@
 import {Component, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
 import { PortfolioView } from 'Core/constants/structureConstants.constants';
-import { Store } from '@ngrx/store';
-import { StructureSetView } from 'Structure/actions/structure.actions';
-import * as moment from 'moment';
-import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import { StructureRowSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
 
 @Component({
   selector: 'portfolio-breakdown-row',
@@ -21,6 +17,7 @@ export class PortfolioBreakdownRow {
   @Output() categoryClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() seeBondClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() enterSetViewModeClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() setViewForRowClicked = new EventEmitter<StructureRowSetViewData>();
   constants = {
     positive: PortfolioView.positive,
     improving: PortfolioView.improving,
@@ -30,10 +27,7 @@ export class PortfolioBreakdownRow {
     diveInText: 'Dive In',
     diveOutText: 'Dive Out'
   }
-  constructor(
-    private store$: Store<any>,
-    private bicsDataProcessingService: BICsDataProcessingService
-  ) {}
+  constructor() {}
 
   public onClickCategory() {
     !!this.categoryClicked && this.categoryClicked.emit(this.breakdownRow);
@@ -59,20 +53,11 @@ export class PortfolioBreakdownRow {
   }
 
   public onClickSetView(view: PortfolioView) {
-    const isRegularBICSRow = this.breakdownRow.data.bicsLevel >= 1 && !!this.breakdownRow.data.code;
-    let formattedDisplayCategory: string;
-    if (!!isRegularBICSRow) {
-      const level = this.breakdownRow.data.bicsLevel;
-      formattedDisplayCategory = `${this.breakdownRow.data.displayCategory} (Lv.${level})`;
-    } else {
-      formattedDisplayCategory = this.breakdownRow.data.displayCategory;
+    const data: StructureRowSetViewData = {
+      row: this.breakdownRow,
+      view: view
     }
-    const viewData: StructureSetViewData = {
-      bucket: this.breakdownRow.data.bucket,
-      view: view !== this.breakdownRow.data.view ? view : null,
-      displayCategory: formattedDisplayCategory
-    }
-    this.store$.dispatch(new StructureSetView(viewData));
+    !!this.setViewForRowClicked && this.setViewForRowClicked.emit(data);
   }
 
   public showSubLevels(breakdownRow: StructurePortfolioBreakdownRowDTO) {

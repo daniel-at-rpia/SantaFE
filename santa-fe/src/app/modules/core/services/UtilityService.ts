@@ -13,18 +13,7 @@
       BEStructuringOverrideBlock,
       BEStructuringBreakdownBlock
     } from 'BEModels/backend-models.interface';
-    import * as DTOs from 'FEModels/frontend-models.interface';
-    import {
-      SecurityGroupMetricBlock,
-      SecurityGroupMetricPackBlock,
-      SecurityCostPortfolioBlock,
-      TraceTradeBlock,
-      PortfolioBreakdownCategoryBlock
-    } from 'FEModels/frontend-blocks.interface';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      StructureOverrideToBreakdownConversionReturnPack
-    } from 'FEModels/frontend-adhoc-packages.interface';
+    import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -342,8 +331,8 @@ export class UtilityService {
       }
     }
 
-    public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): SecurityGroupMetricPackBlock {
-      const object: SecurityGroupMetricPackBlock = {
+    public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): Blocks.SecurityGroupMetricPackBlock {
+      const object: Blocks.SecurityGroupMetricPackBlock = {
         raw: {},
         delta: {
           Dod: {},
@@ -427,13 +416,16 @@ export class UtilityService {
       targetShortcut: DTOs.SearchShortcutDTO,
       targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
     ): DTOs.SecurityDefinitionConfiguratorDTO {
-      const newConfig = this.deepCopy(targetConfigurator);
-      const shortcutCopy = this.deepCopy(targetShortcut);
+      const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
+      const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
       shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
               eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
+              eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.filterOptionList.filter((eachFilter) => {
+                return !!eachFilter.isSelected;
+              });
               eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
               eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
             }
@@ -445,8 +437,8 @@ export class UtilityService {
 
     public packDefinitionConfiguratorEmitterParams(
       configuratorData: DTOs.SecurityDefinitionConfiguratorDTO
-    ): DefinitionConfiguratorEmitterParams {
-      const params: DefinitionConfiguratorEmitterParams = {
+    ): AdhocPacks.DefinitionConfiguratorEmitterParams {
+      const params: AdhocPacks.DefinitionConfiguratorEmitterParams = {
         filterList: []
       };
       configuratorData.data.definitionList.forEach((eachBundle) => {
@@ -594,7 +586,7 @@ export class UtilityService {
       return `${name}/${normalizedOption}`;
     }
 
-    public retrieveGroupMetricValue(metricDTO: SecurityGroupMetricBlock, groupDTO: DTOs.SecurityGroupDTO): number {
+    public retrieveGroupMetricValue(metricDTO: Blocks.SecurityGroupMetricBlock, groupDTO: DTOs.SecurityGroupDTO): number {
       if (!!groupDTO && !!metricDTO) {
         const driverLabel = metricDTO.label;
         let value, deltaSubPack;
@@ -894,7 +886,7 @@ export class UtilityService {
     private determineCostPortfolioForRetrieveSecurityMetricFromCostPack(
       dto: DTOs.SecurityDTO,
       header: DTOs.SecurityTableHeaderDTO
-    ): SecurityCostPortfolioBlock {
+    ): Blocks.SecurityCostPortfolioBlock {
       if (header.data.key.indexOf('DOF') >= 0) {
         return dto.data.cost.DOF;
       } else if (header.data.key.indexOf('SOF') >= 0) {
@@ -1090,7 +1082,7 @@ export class UtilityService {
       return amount;
     }
 
-    public getTraceTradesListBasedOnAmount(list: Array<TraceTradeBlock>, amount: number): Array<TraceTradeBlock> {
+    public getTraceTradesListBasedOnAmount(list: Array<Blocks.TraceTradeBlock>, amount: number): Array<Blocks.TraceTradeBlock> {
       const newList = list.filter(trade => !!trade.volumeEstimated ? trade.volumeEstimated >= amount : trade.volumeReported >= amount);
       return newList;
     }
@@ -1106,7 +1098,7 @@ export class UtilityService {
       }
     }
 
-    public getDailyTraceTrades(traceTrades: Array<TraceTradeBlock>): Array<TraceTradeBlock> {
+    public getDailyTraceTrades(traceTrades: Array<Blocks.TraceTradeBlock>): Array<Blocks.TraceTradeBlock> {
       if (traceTrades.length > 0) {
         const currentDate = moment();
         const currentMonthDay = currentDate.format('MMM DD');
@@ -1124,8 +1116,8 @@ export class UtilityService {
       }
     }
     
-    public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<TraceTradeBlock> {
-      let displayedList: Array<TraceTradeBlock> = [];
+    public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<Blocks.TraceTradeBlock> {
+      let displayedList: Array<Blocks.TraceTradeBlock> = [];
       let numericalFiltersList: Array<number> = [];
       const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
       if (options.length > 0) {
@@ -1135,8 +1127,8 @@ export class UtilityService {
             numericalFiltersList = [...numericalFiltersList, numericalAmount];
           }
         })
-        const processingTraceTradesList: Array<TraceTradeBlock> = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
-        let filterListWithContraParty: Array<TraceTradeBlock> = [];
+        const processingTraceTradesList: Array<Blocks.TraceTradeBlock> = !rowData.data.traceTradeVisualizer.state.isDisplayAllTraceTrades ? this.getDailyTraceTrades(rowData.data.security.data.traceTrades) : rowData.data.security.data.traceTrades;
+        let filterListWithContraParty: Array<Blocks.TraceTradeBlock> = [];
         const checkNumericalFilter = /\d/;
         const optionsContraPartyList = options.filter(option => !checkNumericalFilter.test(option));
         if (optionsContraPartyList.length > 0) {
@@ -1284,7 +1276,7 @@ export class UtilityService {
 
     public convertRawOverrideToRawBreakdown(
       overrideRawDataList: Array<BEStructuringOverrideBlock>
-    ): StructureOverrideToBreakdownConversionReturnPack {
+    ): AdhocPacks.StructureOverrideToBreakdownConversionReturnPack {
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
       overrideRawDataList.forEach((eachRawOverride) => {
@@ -1386,7 +1378,7 @@ export class UtilityService {
             totalLevel = totalLevel + eachCategory.data.currentLevel;
           });
           const filteredListWithTargets = filteredList.filter((eachCategory) => {
-            return !!eachCategory.data.targetLevel;
+            return eachCategory.data.targetLevel !== null;
           });
           if (filteredListWithTargets.length > 0) {
             let misalignmentAggregate = 0;
@@ -1427,7 +1419,11 @@ export class UtilityService {
     }
 
     public getRowDiffToTarget(currentLevel: number, targetLevel: number, isCs01: boolean): number {
-      return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
+      if (!!targetLevel || targetLevel === 0) {
+        return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
+      } else {
+        return 0;
+      }
     }
 
     public getRowDiffToTargetText(amount: number, isCs01: boolean): string {
@@ -1448,15 +1444,38 @@ export class UtilityService {
       return [minValue, maxValue];
     }
 
-    public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number {
+    public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number | null {
+      let parsedValue: number | null;
       // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-      const roundedValue = !!isCs01 ? Math.abs(value) >= 1000 ? this.round(value/1000, 0) : 0 : this.round(value, 2);
-      return roundedValue;
+      if (!!value || value === 0) {
+        parsedValue = !!isCs01 ? Math.abs(value) >= 1000 ? this.round(value/1000, 0) : 0 : this.round(value, 2);
+      } else {
+        parsedValue = null;
+      }
+      return parsedValue;
     }
 
     public checkIfDiveInIsAvailable(code: string): boolean {
       const isDiveInAvailable = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === code);
       return !isDiveInAvailable;
+    }
+
+    public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {
+      const { view, row } = data;
+      const isRegularBICSRow = row.data.bicsLevel >= 1 && !!row.data.code;
+      let formattedDisplayCategory: string;
+      if (!!isRegularBICSRow) {
+        const level = row.data.bicsLevel;
+        formattedDisplayCategory = `${row.data.displayCategory} (Lv.${level})`;
+      } else {
+        formattedDisplayCategory = row.data.displayCategory;
+      }
+      const viewData: AdhocPacks.StructureSetViewTransferPack = {
+        bucket: [row.data.bucket],
+        view: view !== row.data.view ? [view] : [null],
+        displayCategory: formattedDisplayCategory
+      }
+      return viewData;
     }
 
   // structuring specific end

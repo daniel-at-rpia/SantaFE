@@ -8,13 +8,7 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { GraphService } from 'Core/services/GraphService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import {
-      SecurityDTO,
-      MoveVisualizerDTO,
-      SecurityDefinitionDTO
-    } from 'FEModels/frontend-models.interface';
-    import { TradeMarketAnalysisPanelState } from 'FEModels/frontend-page-states.interface';
-    import { LilMarketGraphSeriesDataPack } from 'FEModels/frontend-adhoc-packages.interface';
+    import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
     import {
       BEHistoricalSummaryDTO,
       BEHistoricalSummaryOverviewDTO,
@@ -44,7 +38,7 @@
 export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
   @Output() populateGraph = new EventEmitter();
   @Input() collapseGraph: boolean;
-  state: TradeMarketAnalysisPanelState;
+  state: PageStates.TradeMarketAnalysisPanelState;
   subscriptions = {
     receiveSelectedSecuritySub: null
   }
@@ -56,14 +50,14 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
   };
 
-  private initializePageState(): TradeMarketAnalysisPanelState {
+  private initializePageState(): PageStates.TradeMarketAnalysisPanelState {
     if (!!this.state) {
       // there is an old state exists
       if (!!this.state.chart) {
         this.state.chart.dispose();
       }
     }
-    const state: TradeMarketAnalysisPanelState = {
+    const state: PageStates.TradeMarketAnalysisPanelState = {
       receivedSecurity: false,
       receivedSecurityIsCDS: false,
       targetSecurity: null,
@@ -126,7 +120,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public onClickGroupByOption(targetOption: SecurityDefinitionDTO){
+  public onClickGroupByOption(targetOption: DTOs.SecurityDefinitionDTO){
     if (!!this.state.apiReturnedState) {
       if (!targetOption.state.isLocked) {
         this.restfulCommService.logEngagement(
@@ -174,7 +168,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public onSelectSecurityCardInPresentList(targetSecurity: SecurityDTO) {
+  public onSelectSecurityCardInPresentList(targetSecurity: DTOs.SecurityDTO) {
     this.state.table.presentList.forEach((eachCard) => {
       if (eachCard.data.securityID !== targetSecurity.data.securityID) {
         eachCard.state.isSelected = false;
@@ -182,7 +176,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     })
   }
 
-  public onClickSecurityCardThumbDown(targetSecurity: SecurityDTO) {
+  public onClickSecurityCardThumbDown(targetSecurity: DTOs.SecurityDTO) {
     this.restfulCommService.logEngagement(
       EngagementActionList.thumbdownSecurity,
       targetSecurity.data.securityID,
@@ -191,7 +185,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  public onClickSecurityCardSendToGraph(targetSecurity: SecurityDTO) {
+  public onClickSecurityCardSendToGraph(targetSecurity: DTOs.SecurityDTO) {
     if (!this.state.displayGraph) {
       this.populateGraph.emit();
     }
@@ -211,11 +205,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
       const buildGraph = () => {
         this.state.displayGraph = true;
         const baseSecurity = this.state.table.levelSummary.data.list[0];
-        const basePack: LilMarketGraphSeriesDataPack = {
+        const basePack: AdhocPacks.LilMarketGraphSeriesDataPack = {
           name: baseSecurity.data.identifier,
           data: baseSecurity.data.timeSeries
         };
-        const targetPack: LilMarketGraphSeriesDataPack = {
+        const targetPack: AdhocPacks.LilMarketGraphSeriesDataPack = {
           name: this.state.table.levelSummary.data.list[targetIndex].data.identifier,
           data: targetData
         }
@@ -227,11 +221,11 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public onClickSecurityCardSentToAlertConfig(targetSecurity: SecurityDTO) {
+  public onClickSecurityCardSentToAlertConfig(targetSecurity: DTOs.SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
   }
 
-  private onSecuritySelected(targetSecurity: SecurityDTO) {
+  private onSecuritySelected(targetSecurity: DTOs.SecurityDTO) {
     this.state = this.initializePageState();
     this.state.receivedSecurity = true;
     this.state.receivedSecurityIsCDS = this.utilityService.isCDS(false, this.state.targetSecurity);
@@ -242,7 +236,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     this.fetchGroupData();
   }
 
-  private populateDefinitionOptions(newState: TradeMarketAnalysisPanelState) {
+  private populateDefinitionOptions(newState: PageStates.TradeMarketAnalysisPanelState) {
     const options = [];
     const activeOptions = [];
     this.constants.marketAnalysisGroupByOptions.forEach((eachDefinitionStub) => {
@@ -456,7 +450,7 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  private applyStatesToSecurityCards(targetSecurity: SecurityDTO) {
+  private applyStatesToSecurityCards(targetSecurity: DTOs.SecurityDTO) {
     targetSecurity.state.isMultiLineVariant = false;
     targetSecurity.state.isWidthFlexible = true;
     targetSecurity.api.onClickCard = this.onSelectSecurityCardInPresentList.bind(this);

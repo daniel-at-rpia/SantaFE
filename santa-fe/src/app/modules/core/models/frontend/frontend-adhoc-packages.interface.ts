@@ -6,20 +6,15 @@ import {
   IFloatingFilterParams,
   SerializedNumberFilter
 } from 'ag-grid-community';
-import { PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
+import { PortfolioView } from 'Core/constants/structureConstants.constants';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import * as DTOs from 'FEModels/frontend-models.interface';
+import * as DTOs from './frontend-models.interface';
+import * as Blocks from './frontend-blocks.interface';
 import {
   BEPortfolioStructuringDTO,
   BEStructuringBreakdownBlock,
   BEMetricBreakdowns
 } from 'BEModels/backend-models.interface';
-import {
-  QuoteMetricBlock,
-  AgGridRow,
-  AgGridRowNode,
-  SecurityDefinitionFilterBlock
-} from 'FEModels/frontend-blocks.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 
@@ -30,7 +25,7 @@ export interface SecurityMapEntry {
 
 export interface ClickedSortQuotesByMetricEmitterParams {
   targetRow: DTOs.SecurityTableRowDTO;
-  targetBlock: QuoteMetricBlock;
+  targetBlock: Blocks.QuoteMetricBlock;
   targetMetricLabel: string; 
 }
 
@@ -43,7 +38,7 @@ export interface DefinitionConfiguratorEmitterParamsItem {
   targetAttribute: string;
   targetAttributeBlock: string;
   filterBy: Array<string>;
-  filterByBlocks: Array<SecurityDefinitionFilterBlock>;
+  filterByBlocks: Array<Blocks.SecurityDefinitionFilterBlock>;
 }
 
 export interface LiveDataDiffingResult {
@@ -53,8 +48,8 @@ export interface LiveDataDiffingResult {
 }
 
 export interface AgGridRowParams {
-  data: AgGridRow;
-  node: AgGridRowNode;
+  data: Blocks.AgGridRow;
+  node: Blocks.AgGridRowNode;
   api: GridApi;
   columnApi: ColumnApi;
   context: {
@@ -128,9 +123,9 @@ export interface StructureSetTargetOverlayTransferPack {
   isCreateNewOverride: boolean;
 }
 
-export interface StructureSetViewData {
-  bucket: StructureBucketDataBlock;
-  view: PortfolioView;
+export interface StructureSetViewTransferPack {
+  bucket: Array<StructureBucketDataBlock>;
+  view: Array<PortfolioView>;
   displayCategory: string;
 }
 
@@ -190,6 +185,11 @@ export interface SecurityDefinitionFilterOptionTenorRange {
 
 export interface BICSGroupingByCodeBlock {
   [code: number]: Array<string>;
+}
+
+export interface StructureRowSetViewData  {
+  row: DTOs.StructurePortfolioBreakdownRowDTO;
+  view: PortfolioView;
 }
 
 interface SecurityDefinitionFilterOptionTenorRangeItem {

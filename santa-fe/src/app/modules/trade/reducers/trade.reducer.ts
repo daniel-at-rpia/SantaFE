@@ -4,27 +4,23 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import {
-  SecurityTableRowDTO,
-  SecurityDTO,
-  AlertDTO,
-  SecurityDefinitionDTO
-} from 'FEModels/frontend-models.interface';
+import { DTOs } from 'Core/models/frontend';
 import { TradeActions } from 'Trade/actions/trade.actions';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 // TODO: technical debt, re-org this by putting specific things for particular panels
 export interface TradeState {
   presetSelected: boolean;
   liveUpdateSecondCount: number;
   liveUpdateTick: number;
-  tableRowUpdateList: Array<SecurityTableRowDTO>;
-  selectedSecurityForAnalysis: SecurityDTO;
+  tableRowUpdateList: Array<DTOs.SecurityTableRowDTO>;
+  selectedSecurityForAnalysis: DTOs.SecurityDTO;
   securityIDListFromAnalysis: Array<string>;
-  securityTableRowDTOListForAnalysis: Array<SecurityTableRowDTO>;
+  securityTableRowDTOListForAnalysis: Array<DTOs.SecurityTableRowDTO>;
   bestQuoteValidWindow: number;
-  selectedSecurityForAlertConfig: SecurityDTO;
+  selectedSecurityForAlertConfig: DTOs.SecurityDTO;
   darkMode: boolean;
-  newAlertsForAlertTable: Array<AlertDTO>;
+  newAlertsForAlertTable: Array<DTOs.AlertDTO>;
   tradeAlertTable: {
     initialDataLoaded: boolean;
     liveUpdateInProgress: boolean;
@@ -38,7 +34,10 @@ export interface TradeState {
   keywordSearchInMainTable: string;
   bicsDataLoaded: boolean;
   centerPanel: {
-    filterListForTableLoad: Array<SecurityDefinitionDTO>
+    autoLoadTable: {
+      filterList: Array<DTOs.SecurityDefinitionDTO>;
+      metric: PortfolioMetricValues;
+    }
   }
 }
 
@@ -67,7 +66,10 @@ const initialState: TradeState = {
   keywordSearchInMainTable: '',
   bicsDataLoaded: false,
   centerPanel: {
-    filterListForTableLoad: []
+    autoLoadTable: {
+      filterList: [],
+      metric: null
+    }
   }
 };
 
@@ -219,7 +221,10 @@ export function tradeReducer(
         ...state,
         centerPanel: {
           ...state.centerPanel,
-          filterListForTableLoad: action.filterList
+          autoLoadTable: {
+            filterList: action.filterList,
+            metric: action.metric
+          }
         }
       }
     case TradeActions.BICSDataLoaded:

@@ -3,16 +3,7 @@
 
     import { UtilityService } from 'Core/services/UtilityService';
     import { DTOService } from 'Core/services/DTOService';
-    import {
-      SecurityDTO,
-      SecurityTableDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableRowDTO,
-      BestQuoteComparerDTO,
-      SearchShortcutDTO,
-      AlertDTO
-    } from 'FEModels/frontend-models.interface';
-    import { AlertDTOMap, LiveDataDiffingResult } from 'FEModels/frontend-adhoc-packages.interface';
+    import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
     import {
       BEPortfolioDTO,
       BESecurityDTO,
@@ -20,6 +11,7 @@
       BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
     import { TriCoreDriverConfig, DEFAULT_DRIVER_IDENTIFIER } from 'Core/constants/coreConstants.constant';
+    import { SecurityDefinitionMap, FilterOptionsTenorRange } from 'Core/constants/securityDefinitionConstants.constant';
   // dependencies
 
 @Injectable()
@@ -36,14 +28,15 @@ export class LiveDataProcessingService {
   }
 
   public loadFinalStageData(
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    tableHeaderList: Array<DTOs.SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
-    sendToGraphCallback: (card: SecurityDTO) => void,
-    sendToAlertConfigCallback: (card: SecurityDTO) => void
-  ): Array<SecurityTableRowDTO> {
+    sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
+    sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): Array<DTOs.SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
-    const prinstineRowList: Array<SecurityTableRowDTO> = [];
+    const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachKey in rawSecurityDTOMap){
       let isValidFlag = true;
@@ -75,20 +68,21 @@ export class LiveDataProcessingService {
         );
       }
     }
+    this.filterPrinstineRowList(prinstineRowList, panelStateFilterBlock);
     return prinstineRowList;
   }
 
   public loadFinalStageDataForAlertTable(
-    alertDTOMap: AlertDTOMap,
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
+    alertDTOMap: AdhocPacks.AlertDTOMap,
+    tableHeaderList: Array<DTOs.SecurityTableHeaderDTO>,
     selectedDriver: string,
     serverReturn: BEFetchAllTradeDataReturn,
-    sendToGraphCallback: (card: SecurityDTO) => void,
-    sendToAlertConfigCallback: (card: SecurityDTO) => void,
-    searchCallback: (card: SecurityDTO) => void
-  ): Array<SecurityTableRowDTO> {
+    sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
+    sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
+    searchCallback: (card: DTOs.SecurityDTO) => void
+  ): Array<DTOs.SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
-    const prinstineRowList: Array<SecurityTableRowDTO> = [];
+    const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachAlertId in alertDTOMap) {
       const eachAlertDTO = alertDTOMap[eachAlertId];
@@ -126,13 +120,118 @@ export class LiveDataProcessingService {
     return prinstineRowList;
   }
 
+  public returnDiff(
+    table: DTOs.SecurityTableDTO,
+    newList: Array<DTOs.SecurityTableRowDTO>,
+    diffOverwriteRowList?: Array<string>
+  ): AdhocPacks.LiveDataDiffingResult {
+    const updateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const oldRowList: Array<DTOs.SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
+    let markDiffCount = 0;
+    let quantDiffCount = 0;
+
+    // those lists are only used for logging purposes
+    const newRowList: Array<DTOs.SecurityTableRowDTO> = [];
+    const positionUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const markUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const newBestQuoteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const betterBidUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const betterAskUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const validityUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    const overwriteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+
+    newList.forEach((eachNewRow) => {
+      // if this row is specified in the overwrite list, then there is no need to do diffing, just add it to the list of rows to be updated
+      if (!!diffOverwriteRowList && diffOverwriteRowList.length > 0 && diffOverwriteRowList.includes(eachNewRow.data.rowId)) {
+        overwriteUpdateList.push(eachNewRow);
+        updateList.push(eachNewRow);
+      } else {
+        const oldRow = oldRowList.find((eachOldRow) => {
+          return eachOldRow.data.rowId === eachNewRow.data.rowId;
+        });
+        if (!!oldRow) {
+          const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
+          const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
+          if ( isSecurityDiff > 0 || isBestQuoteDiff > 0) {
+            this.carryOverOldRowStates(eachNewRow, oldRow);
+            updateList.push(eachNewRow);
+          }
+          isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
+          isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
+          if (isBestQuoteDiff === 1 || isBestQuoteDiff === 2) {
+            newBestQuoteUpdateList.push(eachNewRow);
+          }
+          isBestQuoteDiff === 3 && betterBidUpdateList.push(eachNewRow);
+          isBestQuoteDiff === 4 && betterAskUpdateList.push(eachNewRow);
+          isBestQuoteDiff === 5 && validityUpdateList.push(eachNewRow);
+        } else {
+          updateList.push(eachNewRow);
+          newRowList.push(eachNewRow);
+        }
+      }
+    });
+    if (updateList.length > 0) {
+      console.log('=== new update ===');
+      newRowList.length > 0 && console.log('new rows', newRowList);
+      positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
+      markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
+      newBestQuoteUpdateList.length > 0 && console.log('Best Quote overwrite: ', newBestQuoteUpdateList);
+      betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
+      betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
+      validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
+      overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
+    }
+    return {
+      newRowList: updateList,
+      markDiffCount: markDiffCount,
+      quantDiffCount: quantDiffCount
+    };
+  }
+
+  public filterPrinstineRowList(
+    targetPrinstineList: Array<DTOs.SecurityTableRowDTO>,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): Array<DTOs.SecurityTableRowDTO> {
+    const filteredList: Array<DTOs.SecurityTableRowDTO> = [];
+    targetPrinstineList.forEach((eachRow) => {
+      try {
+        if (!!eachRow && !!eachRow.data && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
+          if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, panelStateFilterBlock.quickFilters.keyword)
+          || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, panelStateFilterBlock.quickFilters.keyword)) {
+            let portfolioIncludeFlag = this.filterByPortfolio(eachRow, panelStateFilterBlock);
+            let ownerFlag = this.filterByOwner(eachRow, panelStateFilterBlock);
+            let strategyFlag = this.filterByStrategy(eachRow, panelStateFilterBlock);
+            let tenorFlag = this.filterByTenor(eachRow, panelStateFilterBlock);
+            let securityLevelFilterResultCombined = true;
+            if (panelStateFilterBlock.securityFilters.length > 0) {
+              const securityLevelFilterResult = panelStateFilterBlock.securityFilters.map((eachFilter) => {
+                return this.filterBySecurityAttribute(eachRow, eachFilter, panelStateFilterBlock);
+              });
+              // as long as one of the filters failed, this security will not show
+              securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
+                return eachResult;
+              }).length === securityLevelFilterResult.length;
+            }
+            strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && tenorFlag && filteredList.push(eachRow);
+          }
+        } else {
+          filteredList.push(eachRow);
+        }
+      } catch(err) {
+        console.error('filter issue', err ? err.message : '', eachRow);
+      }
+    });
+    this.calculateAggregateMetrics(filteredList);
+    return filteredList;
+  }
+
   private populateEachRowWithData(
-    headerList: Array<SecurityTableHeaderDTO>,
-    prinstineRowList: Array<SecurityTableRowDTO>,
-    newSecurity: SecurityDTO,
+    headerList: Array<DTOs.SecurityTableHeaderDTO>,
+    prinstineRowList: Array<DTOs.SecurityTableRowDTO>,
+    newSecurity: DTOs.SecurityDTO,
     driverType: string,
     bestQuoteServerReturn: BEBestQuoteDTO,
-    targetAlert: AlertDTO
+    targetAlert: DTOs.AlertDTO
   ) {
     const newRow = !!targetAlert ? this.dtoService.formSecurityTableRowObject(newSecurity, targetAlert, true, targetAlert.data.id) : this.dtoService.formSecurityTableRowObject(newSecurity, null, false, newSecurity.data.securityID);
     this.populateEachRowWithBestQuoteData(
@@ -156,8 +255,8 @@ export class LiveDataProcessingService {
   }
 
   private populateEachRowWithBestQuoteData(
-    tableHeaderList: Array<SecurityTableHeaderDTO>,
-    targetRow: SecurityTableRowDTO,
+    tableHeaderList: Array<DTOs.SecurityTableHeaderDTO>,
+    targetRow: DTOs.SecurityTableRowDTO,
     driverType: string,
     quote: BEBestQuoteDTO
   ){
@@ -229,77 +328,9 @@ export class LiveDataProcessingService {
     }
   }
 
-  public returnDiff(
-    table: SecurityTableDTO,
-    newList: Array<SecurityTableRowDTO>,
-    diffOverwriteRowList?: Array<string>
-  ): LiveDataDiffingResult {
-    const updateList: Array<SecurityTableRowDTO> = [];
-    const oldRowList: Array<SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
-    let markDiffCount = 0;
-    let quantDiffCount = 0;
-
-    // those lists are only used for logging purposes
-    const newRowList: Array<SecurityTableRowDTO> = [];
-    const positionUpdateList: Array<SecurityTableRowDTO> = [];
-    const markUpdateList: Array<SecurityTableRowDTO> = [];
-    const newBestQuoteUpdateList: Array<SecurityTableRowDTO> = [];
-    const betterBidUpdateList: Array<SecurityTableRowDTO> = [];
-    const betterAskUpdateList: Array<SecurityTableRowDTO> = [];
-    const validityUpdateList: Array<SecurityTableRowDTO> = [];
-    const overwriteUpdateList: Array<SecurityTableRowDTO> = [];
-
-    newList.forEach((eachNewRow) => {
-      // if this row is specified in the overwrite list, then there is no need to do diffing, just add it to the list of rows to be updated
-      if (!!diffOverwriteRowList && diffOverwriteRowList.length > 0 && diffOverwriteRowList.includes(eachNewRow.data.rowId)) {
-        overwriteUpdateList.push(eachNewRow);
-        updateList.push(eachNewRow);
-      } else {
-        const oldRow = oldRowList.find((eachOldRow) => {
-          return eachOldRow.data.rowId === eachNewRow.data.rowId;
-        });
-        if (!!oldRow) {
-          const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
-          const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
-          if ( isSecurityDiff > 0 || isBestQuoteDiff > 0) {
-            this.carryOverOldRowStates(eachNewRow, oldRow);
-            updateList.push(eachNewRow);
-          }
-          isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
-          isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
-          if (isBestQuoteDiff === 1 || isBestQuoteDiff === 2) {
-            newBestQuoteUpdateList.push(eachNewRow);
-          }
-          isBestQuoteDiff === 3 && betterBidUpdateList.push(eachNewRow);
-          isBestQuoteDiff === 4 && betterAskUpdateList.push(eachNewRow);
-          isBestQuoteDiff === 5 && validityUpdateList.push(eachNewRow);
-        } else {
-          updateList.push(eachNewRow);
-          newRowList.push(eachNewRow);
-        }
-      }
-    });
-    if (updateList.length > 0) {
-      console.log('=== new update ===');
-      newRowList.length > 0 && console.log('new rows', newRowList);
-      positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
-      markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
-      newBestQuoteUpdateList.length > 0 && console.log('Best Quote overwrite: ', newBestQuoteUpdateList);
-      betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
-      betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
-      validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
-      overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
-    }
-    return {
-      newRowList: updateList,
-      markDiffCount: markDiffCount,
-      quantDiffCount: quantDiffCount
-    };
-  }
-
   private isThereDiffInSecurity(
-    oldSecurity: SecurityDTO,
-    newSecurity: SecurityDTO
+    oldSecurity: DTOs.SecurityDTO,
+    newSecurity: DTOs.SecurityDTO
   ): number {
     if (oldSecurity.data.position.positionFirm !== newSecurity.data.position.positionFirm) {
       return 1;
@@ -307,12 +338,17 @@ export class LiveDataProcessingService {
     if (oldSecurity.data.mark.markBackend !== newSecurity.data.mark.markBackend) {
       return 2;
     }
+    const oldWeight = oldSecurity.data.weight;
+    const newWeight = newSecurity.data.weight;
+    if (oldWeight.fundCS01Pct !== newWeight.fundCS01Pct || oldWeight.fundBEVPct !== newWeight.fundBEVPct || oldWeight.groupCS01Pct !== newWeight.groupCS01Pct || oldWeight.groupBEVPct !== newWeight.groupBEVPct) {
+      return 3;
+    }
     return 0;
   }
 
   private isThereDiffInBestQuoteComparer(
-    oldBestQuote: BestQuoteComparerDTO,
-    newBestQuote: BestQuoteComparerDTO
+    oldBestQuote: DTOs.BestQuoteComparerDTO,
+    newBestQuote: DTOs.BestQuoteComparerDTO
   ): number {
     if (oldBestQuote && !newBestQuote) {
       return 1;
@@ -340,11 +376,190 @@ export class LiveDataProcessingService {
   }
 
   private carryOverOldRowStates(
-    newRow: SecurityTableRowDTO,
-    oldRow: SecurityTableRowDTO
+    newRow: DTOs.SecurityTableRowDTO,
+    oldRow: DTOs.SecurityTableRowDTO
   ) {
     // when an old row is overwritten with a new row, some states of the row and the security card needs to be carried over because they are changed by user interaction, if they are not carried over, it would appear like as the interaction got terminated and the row was refreshed
     // this causes bad UX, especially in case of the user is entering stuff in the alert shortcut config UI
     newRow.data.security.state = oldRow.data.security.state;
+  }
+
+  private filterBySecurityAttribute(
+    targetRow: DTOs.SecurityTableRowDTO,
+    targetFilter: AdhocPacks.DefinitionConfiguratorEmitterParamsItem,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): boolean {
+    const targetAttribute = targetFilter.targetAttribute;
+    const filterBy = targetFilter.filterBy;
+    let includeFlag = false;
+    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList' || targetAttribute === 'tenor') {
+      // bypass those filters since they are handled via individual functions
+      return true;
+    } else if (targetAttribute === 'seniority') {
+      return this.filterBySeniority(targetRow, panelStateFilterBlock);
+    } else if (targetFilter.targetAttributeBlock === 'bics') {
+      return this.filterByBICS(targetRow, targetFilter, panelStateFilterBlock);
+    } else {
+      filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data[targetAttribute] === eachValue) {
+          includeFlag = true;
+        }
+      });
+      return includeFlag;
+    }
+  }
+
+  private filterByPortfolio(
+    targetRow: DTOs.SecurityTableRowDTO,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): boolean {
+    const targetSecurity = targetRow.data.security;
+    let includeFlag = false;
+    targetSecurity.data.weight.fundCS01Pct = null;
+    targetSecurity.data.weight.fundCS01PctDisplay = null;
+    targetSecurity.data.weight.fundBEVPct = null;
+    targetSecurity.data.weight.fundBEVPctDisplay = null;
+    targetSecurity.data.position.positionCurrent = 0;
+    targetSecurity.data.portfolios.forEach((eachPortfolio) => {
+      const portfolioMatchFilterScope = panelStateFilterBlock.quickFilters.portfolios.length === 0 ? true : panelStateFilterBlock.quickFilters.portfolios.find((eachPortfolioFilter) => {
+        return eachPortfolio.portfolioName === eachPortfolioFilter;
+      });
+      if (!!portfolioMatchFilterScope) {
+        includeFlag = true;
+        targetSecurity.data.position.positionCurrent = targetSecurity.data.position.positionCurrent + eachPortfolio.quantity;
+        targetSecurity.data.cs01CadCurrent = targetSecurity.data.cs01CadCurrent + eachPortfolio.cs01Cad;
+        targetSecurity.data.cs01LocalCurrent = targetSecurity.data.cs01LocalCurrent + eachPortfolio.cs01Local;
+        targetSecurity.data.weight.currentGroupCS01Value = targetSecurity.data.weight.currentGroupCS01Value + eachPortfolio.cs01Cad;
+        targetSecurity.data.weight.currentGroupBEVValue = targetSecurity.data.weight.currentGroupBEVValue + eachPortfolio.bondEquivalentValueCad;
+        if (panelStateFilterBlock.quickFilters.portfolios.length === 1) {
+          // only show fund pct if the user is looking at a specific fund, would always be the case when the user launches Trade through Structuring.
+          targetSecurity.data.weight.fundCS01Pct = this.utilityService.round(eachPortfolio.cs01WeightPct*100, 2);
+          targetSecurity.data.weight.fundCS01PctDisplay = targetSecurity.data.weight.fundCS01Pct ? `${targetSecurity.data.weight.fundCS01Pct} %` : null;
+          targetSecurity.data.weight.fundBEVPct = this.utilityService.round(eachPortfolio.bondEquivalentValueWeightPct*100, 2);
+          targetSecurity.data.weight.fundBEVPctDisplay = !!targetSecurity.data.weight.fundBEVPct ? `${targetSecurity.data.weight.fundBEVPct} %` : null;
+        }
+      }
+    });
+    targetSecurity.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetSecurity.data.position.positionCurrent, false, true);
+    targetSecurity.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetSecurity.data.cs01CadCurrent, false);
+    targetSecurity.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetSecurity.data.cs01LocalCurrent, false);
+    return includeFlag;
+  }
+
+  private filterByOwner(
+    targetRow: DTOs.SecurityTableRowDTO,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): boolean {
+    let includeFlag = false;
+    if (panelStateFilterBlock.quickFilters.owner.length > 0) {
+      panelStateFilterBlock.quickFilters.owner.forEach((eachOwner) => {
+        const ownerExist = targetRow.data.security.data.owner.indexOf(eachOwner) > -1;
+        if (!!ownerExist) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterBySeniority(
+    row: DTOs.SecurityTableRowDTO,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): boolean {
+    let includeFlag = false;
+    const filterObj = panelStateFilterBlock.securityFilters.filter(f => f.targetAttribute === 'seniority')[0];
+    if (filterObj) {
+      const includes = filterObj.filterBy.map(v => v.toLowerCase());
+      const {seniority} = row.data.security.data;
+      const seniorityName = seniority.split(' - ')[1];
+      includeFlag = includes.indexOf(seniorityName.toLowerCase()) !== -1;
+    }
+    return includeFlag;
+  }
+
+  private filterByStrategy(
+    targetRow: DTOs.SecurityTableRowDTO,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): boolean {
+    let includeFlag = false;
+    if (panelStateFilterBlock.quickFilters.strategy.length > 0) {
+      panelStateFilterBlock.quickFilters.strategy.forEach((eachStrategy) => {
+        const strategyExist = targetRow.data.security.data.strategyList.indexOf(eachStrategy) > -1;
+        if (!!strategyExist) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private filterByBICS(
+    targetRow: DTOs.SecurityTableRowDTO,
+    targetFilter: AdhocPacks.DefinitionConfiguratorEmitterParamsItem,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): boolean {
+    let includeFlag = false;
+    if (targetFilter.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+      targetFilter.filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      targetFilter.filterBy.forEach((eachValue) => {
+        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] === eachValue) {
+          includeFlag = true;
+        }
+      });
+    }
+    return includeFlag;
+  }
+
+  private filterByTenor(
+    targetRow: DTOs.SecurityTableRowDTO,
+    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+  ): boolean {
+    let includeFlag = false;
+    if (panelStateFilterBlock.quickFilters.tenor.length > 0) {
+      panelStateFilterBlock.quickFilters.tenor.forEach((eachTenor) => {
+        const targetRange = FilterOptionsTenorRange[eachTenor];
+        if (!!targetRow && !!targetRow.data.security && targetRow.data.security.data.tenor >= targetRange.min && targetRow.data.security.data.tenor <= targetRange.max) {
+          includeFlag = true;
+        }
+      });
+    } else {
+      includeFlag = true;
+    }
+    return includeFlag;
+  }
+
+  private calculateAggregateMetrics(
+    matchedRows: Array<DTOs.SecurityTableRowDTO>
+  ) {
+    // right now it's just for the two columns that displays table weight cs01 and credit leverage, but this process works for others
+    let tableCS01Aggregate = 0;
+    let tableBEVAggregate = 0;
+    matchedRows.forEach((eachRow) => {
+      if (!!eachRow && !!eachRow.data.security) {
+        const eachRowCs01 = eachRow.data.security.data.weight.currentGroupCS01Value;
+        tableCS01Aggregate = tableCS01Aggregate + eachRowCs01;
+        const eachRowBEV = eachRow.data.security.data.weight.currentGroupBEVValue;
+        tableBEVAggregate = tableBEVAggregate + eachRowBEV;
+      }
+    });
+    matchedRows.forEach((eachRow) => {
+      if (!!eachRow && !!eachRow.data.security) {
+        const eachRowCs01 = eachRow.data.security.data.weight.currentGroupCS01Value;
+        eachRow.data.security.data.weight.groupCS01Pct = !!eachRowCs01 ? this.utilityService.round(eachRowCs01/tableCS01Aggregate*100, 2) : null;
+        eachRow.data.security.data.weight.groupCS01PctDisplay = eachRow.data.security.data.weight.groupCS01Pct ? `${eachRow.data.security.data.weight.groupCS01Pct} %` : null;
+        const eachRowBEV = eachRow.data.security.data.weight.currentGroupBEVValue;
+        eachRow.data.security.data.weight.groupBEVPct = !!eachRowBEV ? this.utilityService.round(eachRowBEV/tableBEVAggregate*100, 2) : null;
+        eachRow.data.security.data.weight.groupBEVPctDisplay = !!eachRow.data.security.data.weight.groupBEVPct ? `${eachRow.data.security.data.weight.groupBEVPct} %` : null;
+      }
+    });
   }
 }

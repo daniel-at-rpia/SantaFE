@@ -35,13 +35,20 @@ import {
   PortfolioFundDTO,
   TargetBarDTO
 } from 'Core/models/frontend/frontend-models.interface';
-import { BEPortfolioStructuringDTO, BEStructuringBreakdownBlock } from 'App/modules/core/models/backend/backend-models.interface';
+import {
+  BEPortfolioStructuringDTO,
+  BEStructuringBreakdownBlock,
+  BEGetPortfolioStructureServerReturn
+} from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetViewData, AdhocExtensionBEMetricBreakdowns } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  StructureSetViewTransferPack,
+  AdhocExtensionBEMetricBreakdowns
+} from 'FEModels/frontend-adhoc-packages.interface';
 import {
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
@@ -140,7 +147,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500)
       })
     });
-    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewData) => {
+    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewTransferPack) => {
       if (!!value) {
         this.updateViewData(value);
       }
@@ -231,8 +238,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
-        this.processStructureData(serverReturn);
+      tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
+        this.processStructureData(serverReturn.Now);
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -256,23 +263,23 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  private updateViewData(data: StructureSetViewData) {
+  private updateViewData(data: StructureSetViewTransferPack) {
     const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.loadStencilFunds();
     const { bucket, view, displayCategory} = data;
     const payload: PayloadSetView = {
-      bucket: bucket,
-      view: view
+      buckets: bucket,
+      views: view
     }
     const endpoint = this.restfulCommService.apiMap.setView;
     let totalBucketValues = '';
-    const displayViewValue = !!view ? view : 'removed';
+    const [ updatedView ] = view;
+    const displayViewValue = !!updatedView ? updatedView : 'removed';
     for (let values in bucket) {
       if (!!bucket[values]) {
         totalBucketValues = totalBucketValues === '' ? `${bucket[values]}` : `${totalBucketValues} ${bucket[values]}`
       }
     }
-
     const messageDetails = `${displayCategory}, with view value ${displayViewValue}`;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(

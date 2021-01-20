@@ -9,23 +9,7 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
-    import { TradeCenterPanelState } from 'FEModels/frontend-page-states.interface';
-    import {
-      SecurityDTO,
-      SecurityTableHeaderDTO,
-      SecurityTableRowDTO,
-      BestQuoteComparerDTO,
-      SearchShortcutDTO,
-      AlertDTO,
-      SecurityTableDTO,
-      AlertCountSummaryDTO,
-      SecurityDefinitionDTO
-    } from 'FEModels/frontend-models.interface';
-    import {
-      TableFetchResultBlock,
-      BICsHierarchyAllDataBlock,
-      BICsHierarchyBlock
-    } from 'FEModels/frontend-blocks.interface';
+    import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
@@ -34,11 +18,6 @@
       BEFetchAllTradeDataReturn,
       BEBICsHierarchyBlock
     } from 'BEModels/backend-models.interface';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      SecurityMapEntry,
-      DefinitionConfiguratorEmitterParamsItem
-    } from 'FEModels/frontend-adhoc-packages.interface';
     import {
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
@@ -52,12 +31,15 @@
     import { CoreLoadSecurityMap, CoreUserLoggedIn } from 'Core/actions/core.actions';
     import {
       SecurityTableHeaderConfigs,
-      SECURITY_TABLE_FINAL_STAGE
+      SECURITY_TABLE_FINAL_STAGE,
+      SecurityTableHeaderConfigGroups,
+      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
+      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
+      AggridSortOptions
     } from 'Core/constants/securityTableConstants.constant';
     import {
       SecurityDefinitionMap,
-      FullOwnerList,
-      FilterOptionsTenorRange
+      FullOwnerList
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PortfolioShortcuts,
@@ -85,7 +67,7 @@
       TradeAlertTableReceiveNewAlertsEvent,
       TradeBICSDataLoadedEvent
     } from 'Trade/actions/trade.actions';
-    import { SecurityTableHeaderConfigStub, SearchShortcutStub } from 'FEModels/frontend-stub-models.interface';
+    import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
   //
 
 @Component({
@@ -96,7 +78,7 @@
 })
 
 export class TradeCenterPanel implements OnInit, OnDestroy {
-  state: TradeCenterPanelState;
+  state: PageStates.TradeCenterPanelState;
   subscriptions = {
     userInitialsSub: null,
     startNewUpdateSub: null,
@@ -119,15 +101,19 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
     userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
     devWhitelist: DevWhitelist,
-    filterOptionTenorRange: FilterOptionsTenorRange
+    portolioMetricValues: PortfolioMetricValues,
+    securityTableHeaderConfigGroups: SecurityTableHeaderConfigGroups,
+    weigthHeaderNameDelimiterStart: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
+    weigthHeaderNameDelimiterEnd: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
+    sortOption: AggridSortOptions
   }
 
-  private initializePageState(): TradeCenterPanelState {
+  private initializePageState(): PageStates.TradeCenterPanelState {
     const mainTableMetrics = SecurityTableHeaderConfigs.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
-    const state: TradeCenterPanelState = {
+    const state: PageStates.TradeCenterPanelState = {
       bestQuoteValidWindow: null,
       presets: {
         presetsReady: false,
@@ -262,9 +248,13 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       combineLatest(
         this.store$.pipe(select(selectBICSDataLoaded))
       )
-    ).subscribe(([filterList, bicsLoaded]) => {
-      if (!!filterList && filterList.length > 0 && bicsLoaded) {
-        this.autoLoadTable(filterList);
+    ).subscribe(([pack, bicsLoaded]) => {
+      if (!!pack) {
+        const filterList = pack.filterList;
+        const metric = pack.metric;
+        if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric) {
+          this.autoLoadTable(filterList, metric);
+        }
       }
     });
   }
@@ -276,7 +266,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectPresetCategory(targetCategory: Array<SearchShortcutDTO>) {
+  public onSelectPresetCategory(targetCategory: Array<DTOs.SearchShortcutDTO>) {
     if (this.state.presets.selectedList === targetCategory) {
       this.state.presets.selectedList = null;
     } else {
@@ -284,7 +274,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectPreset(targetPreset: SearchShortcutDTO) {
+  public onSelectPreset(targetPreset: DTOs.SearchShortcutDTO) {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
@@ -337,7 +327,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       );
       this.state.filters.quickFilters.driverType = targetDriver;
       // driver update needs to be to both tables
-      const newMetrics: Array<SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
+      const newMetrics: Array<Stubs.SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
         if (eachMetricStub.content.isDriverDependent && eachMetricStub.content.isAttrChangable) {
           if (targetDriver === this.constants.defaultMetricIdentifier) {
@@ -353,7 +343,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onApplyFilter(params: DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
+  public onApplyFilter(params: AdhocPacks.DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters.portfolios = [];
     this.state.filters.quickFilters.owner = [];
@@ -372,6 +362,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       }
     });
     this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+    if (this.state.filters.quickFilters.portfolios.length === 1) {
+      this.modifyWeightColumnHeadersUpdateFundName();
+    }
     if (!!logEngagement) {
       let filterValue = '';
       params.filterList.forEach((eachFilter) => {
@@ -386,7 +379,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectSecurityForAnalysis(targetSecurity: SecurityDTO) {
+  public onSelectSecurityForAnalysis(targetSecurity: DTOs.SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
     this.restfulCommService.logEngagement(
       EngagementActionList.selectSecurityForAnalysis,
@@ -396,7 +389,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     );
   }
 
-  public onSelectSecurityForAlertConfig(targetSecurity: SecurityDTO) {
+  public onSelectSecurityForAlertConfig(targetSecurity: DTOs.SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
   }
 
@@ -445,9 +438,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private populateSingleShortcutList(
-    stubList: Array<SearchShortcutStub>
-  ): Array<SearchShortcutDTO> {
-    const list: Array<SearchShortcutDTO> = [];
+    stubList: Array<Stubs.SearchShortcutStub>
+  ): Array<DTOs.SearchShortcutDTO> {
+    const list: Array<DTOs.SearchShortcutDTO> = [];
     stubList.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
@@ -481,7 +474,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private loadInitialStencilTable() {
-    const stencilMainTableHeaderBuffer: Array<SecurityTableHeaderDTO> = [];
+    const stencilMainTableHeaderBuffer: Array<DTOs.SecurityTableHeaderDTO> = [];
     this.state.table.metrics.forEach((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       if (eachStub.content.isForSecurityCard || targetSpecifics.active) {
@@ -556,7 +549,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       this.state.filters.quickFilters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
-      this.onSelectSecurityForAlertConfig.bind(this)
+      this.onSelectSecurityForAlertConfig.bind(this),
+      this.state.filters
     );
     this.calculateBestQuoteComparerWidthAndHeight();
     this.state.fetchResult.mainTable.fetchComplete = true;
@@ -565,8 +559,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   private updateStage(
     stageNumber: number,
-    targetTableBlock: TableFetchResultBlock,
-    targetTableDTO: SecurityTableDTO
+    targetTableBlock: Blocks.TableFetchResultBlock,
+    targetTableDTO: DTOs.SecurityTableDTO
   ) {
     targetTableBlock.currentContentStage = stageNumber;
     if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
@@ -593,170 +587,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   private filterPrinstineRowList(
-    targetPrinstineList: Array<SecurityTableRowDTO>
-  ): Array<SecurityTableRowDTO> {
-    const filteredList: Array<SecurityTableRowDTO> = [];
-    targetPrinstineList.forEach((eachRow) => {
-      try {
-        if (!!eachRow && !!eachRow.data && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
-          if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
-          || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)) {
-            let portfolioIncludeFlag = this.filterByPortfolio(eachRow);
-            let ownerFlag = this.filterByOwner(eachRow);
-            let strategyFlag = this.filterByStrategy(eachRow);
-            let tenorFlag = this.filterByTenor(eachRow);
-            let securityLevelFilterResultCombined = true;
-            if (this.state.filters.securityFilters.length > 0) {
-              const securityLevelFilterResult = this.state.filters.securityFilters.map((eachFilter) => {
-                return this.filterBySecurityAttribute(eachRow, eachFilter);
-              });
-              // as long as one of the filters failed, this security will not show
-              securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
-                return eachResult;
-              }).length === securityLevelFilterResult.length;
-            }
-            strategyFlag && ownerFlag && securityLevelFilterResultCombined && portfolioIncludeFlag && tenorFlag && filteredList.push(eachRow);
-          }
-        } else {
-          filteredList.push(eachRow);
-        }
-      } catch(err) {
-        console.error('filter issue', err ? err.message : '', eachRow);
-      }
-    });
-    return filteredList;
-  }
-
-  private filterBySecurityAttribute(
-    targetRow: SecurityTableRowDTO,
-    targetFilter: DefinitionConfiguratorEmitterParamsItem
-  ): boolean {
-    const targetAttribute = targetFilter.targetAttribute;
-    const filterBy = targetFilter.filterBy;
-    let includeFlag = false;
-    if (targetAttribute === 'portfolios' || targetAttribute === 'owner' || targetAttribute === 'strategyList' || targetAttribute === 'tenor') {
-      // bypass those filters since they are handled via individual functions
-      return true;
-    } else if (targetAttribute === 'seniority') {
-      return this.filterBySeniority(targetRow);
-    } else if (targetFilter.targetAttributeBlock === 'bics') {
-      return this.filterByBICS(targetRow, targetFilter);
-    } else {
-      filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data[targetAttribute] === eachValue) {
-          includeFlag = true;
-        }
-      });
-      return includeFlag;
-    }
-  }
-
-  private filterByPortfolio(targetRow: SecurityTableRowDTO): boolean {
-    const targetSecurity = targetRow.data.security;
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.portfolios.length > 0) {
-      targetRow.data.security.data.position.positionCurrent = 0;
-      targetRow.data.security.data.cs01CadCurrent = 0;
-      targetRow.data.security.data.cs01LocalCurrent = 0;
-      this.state.filters.quickFilters.portfolios.forEach((eachPortfolio) => {
-        const portfolioExist = targetRow.data.security.data.portfolios.find((eachPortfolioBlock) => {
-          return eachPortfolioBlock.portfolioName === eachPortfolio;
-        });
-        if (!!portfolioExist) {
-          targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionCurrent + portfolioExist.quantity;
-          targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadCurrent + portfolioExist.cs01Cad;
-          targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalCurrent + portfolioExist.cs01Local;
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-      targetRow.data.security.data.position.positionCurrent = targetRow.data.security.data.position.positionFirm;
-      targetRow.data.security.data.cs01CadCurrent = targetRow.data.security.data.cs01CadFirm;
-      targetRow.data.security.data.cs01LocalCurrent = targetRow.data.security.data.cs01LocalFirm;
-    }
-    targetRow.data.security.data.position.positionCurrentInMM = this.utilityService.parsePositionToMM(targetRow.data.security.data.position.positionCurrent, false, true);
-    targetRow.data.security.data.cs01CadCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01CadCurrent, false);
-    targetRow.data.security.data.cs01LocalCurrentInK = this.utilityService.parseNumberToThousands(targetRow.data.security.data.cs01LocalCurrent, false);
-    return includeFlag;
-  }
-
-  private filterByOwner(targetRow: SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.owner.length > 0) {
-      this.state.filters.quickFilters.owner.forEach((eachOwner) => {
-        const ownerExist = targetRow.data.security.data.owner.indexOf(eachOwner) > -1;
-        if (!!ownerExist) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-    }
-    return includeFlag;
-  }
-
-  private filterBySeniority(row: SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    const filterObj = this.state.filters.securityFilters.filter(f => f.targetAttribute === 'seniority')[0];
-    if (filterObj) {
-      const includes = filterObj.filterBy.map(v => v.toLowerCase());
-      const {seniority} = row.data.security.data;
-      const seniorityName = seniority.split(' - ')[1];
-      includeFlag = includes.indexOf(seniorityName.toLowerCase()) !== -1;
-    }
-    return includeFlag;
-  }
-
-  private filterByStrategy(targetRow: SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.strategy.length > 0) {
-      this.state.filters.quickFilters.strategy.forEach((eachStrategy) => {
-        const strategyExist = targetRow.data.security.data.strategyList.indexOf(eachStrategy) > -1;
-        if (!!strategyExist) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-    }
-    return includeFlag;
-  }
-
-  private filterByBICS(
-    targetRow: SecurityTableRowDTO,
-    targetFilter: DefinitionConfiguratorEmitterParamsItem
-  ): boolean {
-    let includeFlag = false;
-    if (targetFilter.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
-      targetFilter.filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      targetFilter.filterBy.forEach((eachValue) => {
-        if (targetRow.data.security.data.bics[targetFilter.targetAttribute] === eachValue) {
-          includeFlag = true;
-        }
-      });
-    }
-    return includeFlag;
-  }
-
-  private filterByTenor(targetRow: SecurityTableRowDTO): boolean {
-    let includeFlag = false;
-    if (this.state.filters.quickFilters.tenor.length > 0) {
-      this.state.filters.quickFilters.tenor.forEach((eachTenor) => {
-        const targetRange = this.constants.filterOptionTenorRange[eachTenor];
-        if (!!targetRow && !!targetRow.data.security && targetRow.data.security.data.tenor >= targetRange.min && targetRow.data.security.data.tenor <= targetRange.max) {
-          includeFlag = true;
-        }
-      });
-    } else {
-      includeFlag = true;
-    }
-    return includeFlag;
+    targetPrinstineList: Array<DTOs.SecurityTableRowDTO>
+  ): Array<DTOs.SecurityTableRowDTO> {
+    return this.processingService.filterPrinstineRowList(targetPrinstineList, this.state.filters);
   }
 
   private calculateBestQuoteComparerWidthAndHeight() {
@@ -787,7 +620,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     const targetTable = this.state.fetchResult.mainTable;
     if (securityIDList) {
       if (securityIDList.length > 0) {
-        let securityTableRowDTOList: SecurityTableRowDTO[] = [];
+        let securityTableRowDTOList: Array<DTOs.SecurityTableRowDTO> = [];
         for (let securityTableRowDTO in targetTable.prinstineRowList) {
           for (let securityID of securityIDList) {
             if (targetTable.prinstineRowList[securityTableRowDTO].data.security.data.securityID === securityID) {
@@ -844,7 +677,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: Object) => {
         if (!!serverReturn) {
-          const map:Array<SecurityMapEntry> = [];
+          const map:Array<AdhocPacks.SecurityMapEntry> = [];
           for (const eachSecurityId in serverReturn) {
             map.push({
               keywords: serverReturn[eachSecurityId],
@@ -859,7 +692,10 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private autoLoadTable(filterList: Array<SecurityDefinitionDTO>) {
+  private autoLoadTable(
+    filterList: Array<DTOs.SecurityDefinitionDTO>,
+    portfolioMetric: PortfolioMetricValues
+  ) {
     this.onSelectPreset(this.state.presets.portfolioShortcutList[0]);
     filterList.forEach((eachFilterDefinition) => {
       this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
@@ -884,6 +720,101 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
     this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
+    this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
     this.onApplyFilter(params, false);
+  }
+
+  private modifyWeightColumnHeadersUpdateFundName() {
+    const targetFund = this.state.filters.quickFilters.portfolios[0];
+    this.state.table.metrics.forEach((eachHeader) => {
+      if (eachHeader.key === 'weightFundCS01') {
+        let newLabel = eachHeader.content.label;
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterStart, '|');
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterEnd, '|');
+        const array = newLabel.split('|');
+        if (array.length === 3) {
+          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd}`).concat(array[2]);
+        }
+      }
+      if (eachHeader.key === 'weightFundBEV') {
+        let newLabel = eachHeader.content.label;
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterStart, '|');
+        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterEnd, '|');
+        const array = newLabel.split('|');
+        if (array.length === 3) {
+          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd} `).concat(array[2]);
+        }
+      }
+    });
+    // trigger the ngOnChanges in santa table
+    this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
+  }
+
+  private modifyWeightColumnHeadersUpdateActiveAndPinState(targetMetric: PortfolioMetricValues) {
+    const fundCS01Header = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightFundCS01';
+    });
+    const tableCS01Header = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightTableCS01';
+    });
+    const fundBEVHeader = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightFundBEV';
+    });
+    const tableBEVHeader = this.state.table.metrics.find((eachHeaderMetric) => {
+      return eachHeaderMetric.key === 'weightTableBEV';
+    });
+    if (targetMetric === this.constants.portolioMetricValues.cs01) {
+      fundCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true,
+        sortActivated: this.constants.sortOption.desc
+      };
+      tableCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true,
+        sortActivated: null
+      };
+      fundBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false,
+        sortActivated: null
+      };
+      tableBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false,
+        sortActivated: null
+      };
+    } else if (targetMetric === this.constants.portolioMetricValues.creditLeverage) {
+      fundCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false,
+        sortActivated: null
+      };
+      tableCS01Header.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: false,
+        sortActivated: null
+      };
+      fundBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true,
+        sortActivated: this.constants.sortOption.desc
+      };
+      tableBEVHeader.content.tableSpecifics.default = {
+        pinned: true,
+        active: true,
+        groupShow: true,
+        sortActivated: null
+      };
+    }
+    // trigger the ngOnChanges in santa table, normally would be already triggered by modifyWeightColumnHeadersUpdateFundName(), so this is just defensive programming
+    this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
   }
 }

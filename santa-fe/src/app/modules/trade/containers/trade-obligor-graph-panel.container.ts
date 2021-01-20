@@ -9,13 +9,11 @@ import {
 import { Store, select } from '@ngrx/store';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { PayloadObligorSecurityIDs } from 'BEModels/backend-payloads.interface';
-import { SecurityDTO } from 'App/modules/core/models/frontend/frontend-models.interface';
+import { DTOs, Blocks, PageStates } from 'Core/models/frontend';
 import { DTOService } from 'Core/services/DTOService';
 import { tap, first, delay } from 'rxjs/operators';
 import { TradeSecurityIDsFromAnalysisEvent } from 'Trade/actions/trade.actions';
 import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
-import { TradeObligorGraphPanelState } from 'FEModels/frontend-page-states.interface';
-import { ObligorCategoryDataItemBlock } from 'FEModels/frontend-blocks.interface';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 import {
   BESingleBestQuoteDTO,
@@ -32,7 +30,7 @@ import {
 })
 
 export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
-  state: TradeObligorGraphPanelState;
+  state: PageStates.TradeObligorGraphPanelState;
   subscriptions = {
     selectSecurityUpdateForAnalysis: null,
     selectSecurityTableRowDTOListForAnalysis: null,
@@ -73,7 +71,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
   }
 
-  private setObligorSecurityID(data: SecurityDTO) {
+  private setObligorSecurityID(data: DTOs.SecurityDTO) {
     if (data) this.state.obligorSecurityID = data.data.securityID;
     if (this.state.obligorSecurityID) this.fetchSecurityIDs();
   }
@@ -135,7 +133,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
                 spreadMid = this.addBestMidToChartCategory(rawCurveData[eachSecurityId].bestQuotes.bestSpreadQuote);
                 yieldMid = this.addBestMidToChartCategory(rawCurveData[eachSecurityId].bestQuotes.bestYieldQuote);
               }
-              let categoryDataItem: ObligorCategoryDataItemBlock = {
+              let categoryDataItem: Blocks.ObligorCategoryDataItemBlock = {
                 data: {
                   name: securityDTO.data.name,
                   securityID: eachSecurityId,

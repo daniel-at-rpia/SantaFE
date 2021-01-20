@@ -19,11 +19,16 @@ import {
 import {
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+  PortfolioView
 } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { PortfolioBreakdownCategoryBlock, BICSMainRowDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import { BICSMainRowDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import {
+  StructureRowSetViewData,
+  StructureSetViewTransferPack
+} from 'Core/models/frontend/frontend-adhoc-packages.interface';
 import {
   editingViewAvailableUsers,
   StructuringTeamPMList,
@@ -32,6 +37,7 @@ import {
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
+import { StructureSetView } from 'Structure/actions/structure.actions';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -54,7 +60,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     navigationModule: NavigationModule,
     securityDefinitionMap: SecurityDefinitionMap,
     bicsBreakdownId: BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    metrics: PortfolioMetricValues
   }
 
   constructor(
@@ -210,6 +217,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickSeeBond(targetRow: StructurePortfolioBreakdownRowDTO) {
     const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    newWorkflowState.data.stateInfo.activeMetric = !!this.breakdownData.state.isDisplayingCs01 ? this.constants.metrics.cs01 : this.constants.metrics.creditLeverage;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<SecurityDefinitionDTO> = [];
     if (this.breakdownData.state.isOverrideVariant) {
@@ -249,6 +257,15 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
 
   public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isEditingView = !targetRow.state.isEditingView;
+  }
+
+  public updateRowView(data: StructureRowSetViewData) {
+    if (!!data) {
+      const viewData = this.utilityService.formViewPayloadTransferPackForSingleEdit(data);
+      if (!!viewData) {
+        this.store$.dispatch(new StructureSetView(viewData));
+      }
+    }
   }
 
   private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {

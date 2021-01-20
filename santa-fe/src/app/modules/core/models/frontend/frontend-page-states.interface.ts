@@ -1,32 +1,19 @@
 import * as moment from 'moment';
+import * as am4charts from '@amcharts/amcharts4/charts';
 
-import * as DTOs from 'FEModels/frontend-models.interface';
-import {
-  ObligorChartCategoryBlock,
-  TableFetchResultBlock,
-  GlobalNavLegendBlock,
-  StructureSetTargetPanelEditRowBlock
-} from 'FEModels/frontend-blocks.interface';
-import {
-  SecurityDefinitionStub,
-  SecurityTableHeaderConfigStub
-} from 'FEModels/frontend-stub-models.interface';
-import {
-  DefinitionConfiguratorEmitterParamsItem,
-  ObligorGraphAxesZoomState,
-  SecurityMapEntry,
-  AlertDTOMap
-} from 'FEModels/frontend-adhoc-packages.interface';
+import * as DTOs from './frontend-models.interface';
+import * as Blocks from './frontend-blocks.interface';
+import * as Stubs from './frontend-stub-models.interface';
+import * as AdhocPacks from './frontend-adhoc-packages.interface';
 import { SantaDatePicker } from 'Form/models/form-models.interface';
 import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
-import * as am4charts from '@amcharts/amcharts4/charts';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  PortfolioView
 } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
-import { BICsHierarchyAllDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 
 export interface RootState {
   ownerInitial: string;
@@ -38,8 +25,8 @@ export interface GlobalNavState {
   user: string;
   currentModule: NavigationModule,
   legend: {
-    seniority: Array<GlobalNavLegendBlock>;
-    rating: Array<GlobalNavLegendBlock>;
+    seniority: Array<Blocks.GlobalNavLegendBlock>;
+    rating: Array<Blocks.GlobalNavLegendBlock>;
   }
 }
 
@@ -87,15 +74,15 @@ export interface MarketGroupPanelState {
     pieConfigurator: {
       left: {
         selected: boolean;
-        options: Array<SecurityDefinitionStub>;
+        options: Array<Stubs.SecurityDefinitionStub>;
         displayText: string;
-        activeMetric: SecurityDefinitionStub;
+        activeMetric: Stubs.SecurityDefinitionStub;
       }
       right: {
         selected: boolean;
-        options: Array<SecurityDefinitionStub>;
+        options: Array<Stubs.SecurityDefinitionStub>;
         displayText: string;
-        activeMetric: SecurityDefinitionStub;
+        activeMetric: Stubs.SecurityDefinitionStub;
       }
     }
   }
@@ -126,28 +113,15 @@ export interface TradeCenterPanelState {
     boosted: boolean;
   }
   table: {
-    metrics: Array<SecurityTableHeaderConfigStub>;
+    metrics: Array<Stubs.SecurityTableHeaderConfigStub>;
     dto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    mainTable: TableFetchResultBlock;
+    mainTable: Blocks.TableFetchResultBlock;
   }
-  filters: {
-    keyword: {
-      defaultValueForUI: string;
-    }
-    quickFilters: {
-      driverType: string;
-      portfolios: Array<string>;
-      keyword: string;
-      owner: Array<string>;
-      strategy: Array<string>;
-      tenor: Array<string>;
-    }
-    securityFilters: Array<DefinitionConfiguratorEmitterParamsItem>
-  }
+  filters: Blocks.TradeCenterPanelStateFilterBlock;
 }
 
 export interface StructureMainPanelState {
@@ -215,7 +189,7 @@ export interface TradeObligorGraphPanelState {
   obligorCurrency: string;
   securityTableRowDTOList: DTOs.SecurityTableRowDTO[];
   lookBackHours: number;
-  axesZoomState: ObligorGraphAxesZoomState;
+  axesZoomState: AdhocPacks.ObligorGraphAxesZoomState;
   metric: {
     spread: boolean;
     yield: boolean;
@@ -230,7 +204,7 @@ export interface TradeObligorGraphPanelState {
     srCDS: boolean;
     subCDS: boolean;
   }
-  chartCategories: ObligorChartCategoryBlock[];
+  chartCategories: Blocks.ObligorChartCategoryBlock[];
 }
 
 export interface TradeAlertPanelState {
@@ -238,7 +212,7 @@ export interface TradeAlertPanelState {
   configureAlert: boolean;
   // focusMode: boolean;
   isAlertPaused: boolean;
-  securityMap: Array<SecurityMapEntry>;
+  securityMap: Array<AdhocPacks.SecurityMapEntry>;
   alertUpdateTimestamp: string;
   configuration: {
     axe: {
@@ -255,13 +229,13 @@ export interface TradeAlertPanelState {
   receivedActiveAlertsMap: object;  // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
   displayAlertTable: boolean;
   table: {
-    alertMetrics: Array<SecurityTableHeaderConfigStub>;
+    alertMetrics: Array<Stubs.SecurityTableHeaderConfigStub>;
     alertDto: DTOs.SecurityTableDTO;
   }
   fetchResult: {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
-    alertTable: TableFetchResultBlock;
+    alertTable: Blocks.TableFetchResultBlock;
   }
   filters: {
     keyword: {
@@ -274,7 +248,7 @@ export interface TradeAlertPanelState {
     }
   }
   alert: {
-    alertTableAlertList: AlertDTOMap;
+    alertTableAlertList: AdhocPacks.AlertDTOMap;
     initialAlertListReceived: boolean;
     nonMarketListAxeAlertCount: number;
     marketListAxeAlertCount: number;
@@ -291,7 +265,7 @@ export interface TradeAlertPanelState {
 
 export interface StructureState {
   BICsData: {
-    formattedBICsHierarchy: BICsHierarchyAllDataBlock;
+    formattedBICsHierarchy: Blocks.BICsHierarchyAllDataBlock;
   }
   fetchResult: {
     fetchBICsHierarchyFailed: boolean;
@@ -318,7 +292,7 @@ export interface StructureSetTargetPanelState {
   targetBreakdown: DTOs.PortfolioBreakdownDTO;
   targetBreakdownRawData: BEStructuringBreakdownBlock;
   targetBreakdownRawDataDisplayLabelMap: object;
-  editRowList: Array<StructureSetTargetPanelEditRowBlock>;
+  editRowList: Array<Blocks.StructureSetTargetPanelEditRowBlock>;
   totalUnallocatedCS01: number;
   totalUnallocatedCreditLeverage: number;
   remainingUnallocatedCS01: number;
@@ -336,6 +310,8 @@ export interface StructureSetTargetPanelState {
     display: boolean;
     newOverrideNameCache: string;
   }
-  removalList: Array<StructureSetTargetPanelEditRowBlock>;
+  removalList: Array<Blocks.StructureSetTargetPanelEditRowBlock>;
   clearAllTargetSelected: boolean;
+  editViewMode: boolean;
+  ownerInitial: string;
 }
