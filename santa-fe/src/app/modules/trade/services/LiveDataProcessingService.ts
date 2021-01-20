@@ -221,7 +221,7 @@ export class LiveDataProcessingService {
         console.error('filter issue', err ? err.message : '', eachRow);
       }
     });
-    this.calculateAggregateMetrics(targetPrinstineList);
+    this.calculateAggregateMetrics(filteredList);
     return filteredList;
   }
 
