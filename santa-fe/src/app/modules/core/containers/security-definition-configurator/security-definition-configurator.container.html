@@ -71,7 +71,7 @@
           [placeholder]="'search'"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
-        <span class="sat-securityDefinitionConfigurator__filters-content-search-text">Result will be shown if there are less than 100 matches. Type more to keep filtering.</span>
+        <span class="sat-securityDefinitionConfigurator__filters-content-search-text">{{ constants.keywordSearchHelperText }}</span>
       </div>
       <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn">
         <div *ngFor="let eachLevel of configuratorData.state.showFiltersFromDefinition?.state.currentFilterPathInConsolidatedBICS; let eachIndex = index;" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry">

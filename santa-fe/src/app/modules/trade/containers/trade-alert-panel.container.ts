@@ -64,7 +64,8 @@
       AlertSubTypes,
       AlertTypes,
       KEYWORDSEARCH_DEBOUNCE_TIME,
-      TriCoreDriverConfig
+      TriCoreDriverConfig,
+      KEYWORD_SEARCH_HELPER_TEXT
     } from 'Core/constants/coreConstants.constant';
     import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
   //
@@ -107,7 +108,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
-    driver: TriCoreDriverConfig
+    driver: TriCoreDriverConfig,
+    keywordSearchHelperText: KEYWORD_SEARCH_HELPER_TEXT
   }
 
   constructor(

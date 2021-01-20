@@ -292,3 +292,5 @@ export enum GlobalWorkflowTypes {
   launchTradeToSeeBonds = 'Launch Trade To See Bonds',
   routeHandlerPlaceholder = 'Placeholder for Route Handler'
 }
+
+export const KEYWORD_SEARCH_HELPER_TEXT = 'Result will be shown if there are less than 100 matches. Type more to keep filtering.';
