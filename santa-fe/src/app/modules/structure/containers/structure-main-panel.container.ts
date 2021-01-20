@@ -38,7 +38,9 @@ import {
 import {
   BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
-  BEGetPortfolioStructureServerReturn
+  BEGetPortfolioStructureServerReturn,
+  BEStructuringBreakdownBlockWithSubPortfolios,
+  BEStructuringBreakdownMetricBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -239,7 +241,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
-        this.processStructureData(serverReturn.Now);
+        this.processStructureData(this.extractSubPortfolioFromServerReturn(serverReturn));
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -473,6 +475,53 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         // code...
         break;
     }
+  }
+
+  private extractSubPortfolioFromServerReturn(serverReturn: BEGetPortfolioStructureServerReturn): Array<BEStructuringFundBlock> {
+    const targetListWithSubPortfolios = serverReturn.Now;  // hardcoding it to Now until implemntation of delta
+    const targetListWithoutSubPortfolios: Array<BEStructuringFundBlock> = targetListWithSubPortfolios.map((eachFundWithSub) => {
+      const {
+        target: targetWithSub,
+        currentTotals: currentTotalsWithSub,
+        breakdowns: breakdownsWithSub,
+        overrides: overridesWithSub,
+        ...inheritFundValues
+      } = eachFundWithSub;
+      const eachFundWithoutSub: BEStructuringFundBlock = {
+        target: {
+          target: targetWithSub.target.All,
+          portfolioTargetId: targetWithSub.portfolioTargetId,
+          portfolioId: targetWithSub.portfolioId,
+          date: targetWithSub.date
+        },
+        currentTotals: currentTotalsWithSub.All,
+        breakdowns: {},
+        overrides: [],
+        ...inheritFundValues
+      };
+      for (const eachBreakdownKey in breakdownsWithSub) {
+        const eachBreakdownWithSub:BEStructuringBreakdownBlockWithSubPortfolios = breakdownsWithSub[eachBreakdownKey];
+        const {
+          breakdown: breakdownCategoriesWithSub,
+          ...inheritBreakdownValues
+        } = eachBreakdownWithSub;
+        const eachBreakdownWithoutSub: BEStructuringBreakdownBlock = {
+          breakdown: {},
+          ...inheritBreakdownValues
+        };
+        for (const eachCategoryKey in breakdownCategoriesWithSub) {
+          const eachCategoryWithSub = breakdownCategoriesWithSub[eachCategoryKey];
+          const eachBreakdownCategoryWithoutSub: BEStructuringBreakdownMetricBlock = {
+            metricBreakdowns: eachCategoryWithSub.metricBreakdowns.All,
+            view: eachCategoryWithSub.view
+          };
+          eachBreakdownWithoutSub.breakdown[eachCategoryKey] = eachBreakdownCategoryWithoutSub;
+        }
+        eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
+      }
+      return eachFundWithoutSub;
+    });
+    return targetListWithoutSubPortfolios;
   }
 
 }
