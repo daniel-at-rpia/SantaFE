@@ -68,7 +68,7 @@ export class LiveDataProcessingService {
         );
       }
     }
-    this.calculateAggregateMetrics(prinstineRowList, panelStateFilterBlock);
+    this.filterPrinstineRowList(prinstineRowList, panelStateFilterBlock);
     return prinstineRowList;
   }
 
@@ -221,6 +221,7 @@ export class LiveDataProcessingService {
         console.error('filter issue', err ? err.message : '', eachRow);
       }
     });
+    this.calculateAggregateMetrics(targetPrinstineList);
     return filteredList;
   }
 
@@ -336,6 +337,11 @@ export class LiveDataProcessingService {
     }
     if (oldSecurity.data.mark.markBackend !== newSecurity.data.mark.markBackend) {
       return 2;
+    }
+    const oldWeight = oldSecurity.data.weight;
+    const newWeight = newSecurity.data.weight;
+    if (oldWeight.fundCS01Pct !== newWeight.fundCS01Pct || oldWeight.fundBEVPct !== newWeight.fundBEVPct || oldWeight.groupCS01Pct !== newWeight.groupCS01Pct || oldWeight.groupBEVPct !== newWeight.groupBEVPct) {
+      return 3;
     }
     return 0;
   }
@@ -532,11 +538,9 @@ export class LiveDataProcessingService {
   }
 
   private calculateAggregateMetrics(
-    targetPrinstineList: Array<DTOs.SecurityTableRowDTO>,
-    panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
+    matchedRows: Array<DTOs.SecurityTableRowDTO>
   ) {
     // right now it's just for the two columns that displays table weight cs01 and credit leverage, but this process works for others
-    const matchedRows = this.filterPrinstineRowList(targetPrinstineList, panelStateFilterBlock);
     let tableCS01Aggregate = 0;
     let tableBEVAggregate = 0;
     matchedRows.forEach((eachRow) => {

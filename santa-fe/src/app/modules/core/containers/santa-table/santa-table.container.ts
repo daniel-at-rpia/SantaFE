@@ -171,17 +171,17 @@ export class SantaTable implements OnInit, OnChanges {
         this.loadTableHeaders();
         this.loadTableRows(this.newRows);
         this.tableData.state.loadedContentStage = this.receivedContentStage;
-      } else if (this.securityTableHeaderConfigsCache !== this.receivedSecurityTableHeaderConfigsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
-        console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableHeaderConfigsUpdate);
-        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.loadTableHeaders();
-        this.loadTableRows(this.newRows);
       } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
         console.log(`[${this.tableName}] - rows updated for inter-stage change`, this.receivedContentStage);
         this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate; // saving initial cache
         this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
         this.tableData.state.loadedContentStage = this.receivedContentStage;
+        this.loadTableRows(this.newRows);
+      } else if (this.securityTableHeaderConfigsCache !== this.receivedSecurityTableHeaderConfigsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+        console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableHeaderConfigsUpdate);
+        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
+        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
+        this.loadTableHeaders();
         this.loadTableRows(this.newRows);
       } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage && JSON.stringify(this.removeRows) == JSON.stringify(this.removeRowsCache)) {  // the reason for checking removeRowsCache diffing is if they are different, then the newRows diffing is caused by a removal update, in that case bypass this condition since the removal is handled in the bit code below
         console.log(`[${this.tableName}] - rows updated for change within same stage, triggered when filters are applied`, this.tableData.state.loadedContentStage);
