@@ -8,7 +8,7 @@
     'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
     'sat-securityDefinitionConfigurator--filterLongState': configuratorData.state.showFiltersFromDefinition?.state.isFilterLong,
     'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.BICS_CONSOLIDATED.key,
-    'sat-securityDefinitionConfigurator--searchHelperTextAvailState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.TICKER.key
+    'sat-securityDefinitionConfigurator--cappedFilterListState': configuratorData.state.showFiltersFromDefinition?.state.isFilterCapped
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">

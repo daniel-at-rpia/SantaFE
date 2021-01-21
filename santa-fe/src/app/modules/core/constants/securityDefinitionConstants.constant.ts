@@ -622,3 +622,5 @@ export const FilterTraceTradesOptions = [
 ]
 
 export const DEFINITION_LONG_THRESHOLD = 5;
+
+export const DEFINITION_CAPPED_THRESHOLD = 300;

@@ -9,7 +9,11 @@
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
     import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
     import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
-    import { ConfiguratorDefinitionLayout, SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      ConfiguratorDefinitionLayout,
+      DEFINITION_CAPPED_THRESHOLD,
+      SecurityDefinitionMap
+    } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       DefinitionConfiguratorEmitterParams,
       DefinitionConfiguratorEmitterParamsItem
@@ -67,6 +71,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
       this.configuratorData.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {
+          eachDefinition.state.isFilterCapped = this.checkIfDefinitionFilterOptionListIsCapped(eachDefinition);
           if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
             this.fetchCountryCode(eachDefinition);
           }
@@ -103,7 +108,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.clearSearchFilter();
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
-        if (this.configuratorData.state.showFiltersFromDefinition.data.name === this.constants.map.TICKER.displayName) {
+        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
          if (this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
           this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((selectedOption: SecurityDefinitionFilterBlock) => {
@@ -146,7 +151,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.configuratorData.data.filterSearchInputValue = newKeyword;
       // Checking for empty string when ticker is selected
       if (newKeyword.length >= 0) {
-        if (this.configuratorData.state.showFiltersFromDefinition.data.name === this.constants.map.TICKER.displayName) {
+        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
           this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = newKeyword !== '' ? this.getCustomFilterOptionList(newKeyword, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionList) : [];
         } else {
           this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
@@ -342,6 +347,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     } else {
       return [];
     }
+  }
+
+  private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: SecurityDefinitionDTO): boolean {
+    return !!targetDefinition.data.prinstineFilterOptionList ? targetDefinition.data.prinstineFilterOptionList.length > DEFINITION_CAPPED_THRESHOLD : false;
   }
 
 }

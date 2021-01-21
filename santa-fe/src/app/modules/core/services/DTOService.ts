@@ -608,7 +608,8 @@ export class DTOService {
         filterActive: false,
         isMiniPillVariant: false,
         isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
-        currentFilterPathInConsolidatedBICS: []
+        currentFilterPathInConsolidatedBICS: [],
+        isFilterCapped: false
       }
     }
     return object;
