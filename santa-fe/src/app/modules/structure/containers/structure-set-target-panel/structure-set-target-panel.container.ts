@@ -45,7 +45,7 @@ import {
 } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
-  BEStructuringFundBlock,
+  BEStructuringFundBlockWithSubPortfolios,
   BEStructuringBreakdownMetricBlock,
   BEStructuringOverrideBlock,
   BEStructuringBreakdownMetricSingleEntryBlock,
@@ -884,7 +884,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       payloads.forEach((payload) => {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringFundBlock) => {
+          tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
             callCount++;
             if (callCount === necessaryUpdateNumOfCalls) {
               this.store$.dispatch(
@@ -928,7 +928,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!payload) {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
             first(),
-            tap((serverReturn: BEStructuringFundBlock) => {
+            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
               this.store$.dispatch(
                 new CoreSendNewAlerts([
                   this.dtoService.formSystemAlertObject(
@@ -968,7 +968,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         updatePayload.forEach((eachPayload) => {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
             first(),
-            tap((serverReturn: BEStructuringFundBlock) => {
+            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
                 if (necessaryDeleteNumOfCalls > 0) {
@@ -1013,7 +1013,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     deletePayload.forEach((eachPayload, index) => {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
         first(),
-        tap((serverReturn: BEStructuringFundBlock) => {
+        tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
           callCount++;
           if (callCount === necessaryDeleteNumOfCalls) {
             this.store$.dispatch(new StructureUpdateMainPanelEvent());
@@ -1521,7 +1521,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return !!isViewPayloadValid ? viewPayload : null;
   }
 
-  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEStructuringFundBlock = null): boolean {
+  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEStructuringFundBlockWithSubPortfolios = null): boolean {
     const endpoint = this.restfulCommService.apiMap.setView;
     const { bucket, view } = data;
     const payload: PayloadSetView = {
@@ -1530,7 +1530,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEStructuringFundBlock>) => {
+      tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
         const completeAlertMessage = `Successfully updated views`;
         this.store$.dispatch(new StructureUpdateMainPanelEvent());
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -1572,7 +1572,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const level = payload.portfolioBreakdown.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1];
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringFundBlock) => {
+          tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
             if (!!serverReturn) {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
