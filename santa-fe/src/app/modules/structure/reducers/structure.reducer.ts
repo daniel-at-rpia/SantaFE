@@ -3,7 +3,8 @@ import { StructureActions } from 'Structure/actions/structure.actions';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
@@ -20,6 +21,7 @@ export interface StructureState {
   viewData: StructureSetViewTransferPack;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  activeSubPortfolioFilter: SubPortfolioFilter;
   dataDatestamp: number;
 }
 
@@ -39,6 +41,7 @@ const initialState: StructureState = {
     PortfolioShortNames.DOF,
     PortfolioShortNames.SOF
   ],
+  activeSubPortfolioFilter: SubPortfolioFilter.all,
   dataDatestamp: moment().unix()
 }
 

@@ -40,7 +40,8 @@ import {
   BEStructuringBreakdownBlock,
   BEGetPortfolioStructureServerReturn,
   BEStructuringBreakdownBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlock
+  BEStructuringBreakdownMetricBlock,
+  BEStructuringFundBlockWithSubPortfolios
 } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -286,8 +287,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEStructuringFundBlock>) => {
-        this.processStructureData(serverReturn);
+      tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
+        const packagedServerReturn: BEGetPortfolioStructureServerReturn = {
+          Now: serverReturn
+        };
+        this.processStructureData(this.extractSubPortfolioFromServerReturn(packagedServerReturn));
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
