@@ -105,6 +105,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       if (this.configuratorData.state.showFiltersFromDefinition) {
         if (this.configuratorData.state.showFiltersFromDefinition.data.name === this.constants.map.TICKER.displayName) {
          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
+         if (this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
+          this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((selectedOption: SecurityDefinitionFilterBlock) => {
+            this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.push(selectedOption);
+          })
+         }
         }
         const definitionShown = this.configuratorData.state.showFiltersFromDefinition;
         this.boostConfigurator.emit();
