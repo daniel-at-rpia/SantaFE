@@ -11,9 +11,9 @@ import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.i
 import * as DTOs from './frontend-models.interface';
 import * as Blocks from './frontend-blocks.interface';
 import {
-  BEPortfolioStructuringDTO,
+  BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
-  BEMetricBreakdowns
+  BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
@@ -154,7 +154,7 @@ export interface TraceScatterGraphData {
   nonActiveTrade?: number;
 }
 
-export interface AdhocExtensionBEMetricBreakdowns extends BEMetricBreakdowns {
+export interface AdhocExtensionBEStructuringBreakdownMetricBlock extends BEStructuringBreakdownMetricBlock {
   customLevel: number;
   code: string;
 }

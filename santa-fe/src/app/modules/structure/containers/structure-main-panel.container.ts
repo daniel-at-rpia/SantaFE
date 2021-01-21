@@ -36,9 +36,11 @@ import {
   TargetBarDTO
 } from 'Core/models/frontend/frontend-models.interface';
 import {
-  BEPortfolioStructuringDTO,
+  BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
-  BEGetPortfolioStructureServerReturn
+  BEGetPortfolioStructureServerReturn,
+  BEStructuringBreakdownBlockWithSubPortfolios,
+  BEStructuringBreakdownMetricBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -47,7 +49,7 @@ import {
 } from 'App/modules/core/models/backend/backend-payloads.interface';
 import {
   StructureSetViewTransferPack,
-  AdhocExtensionBEMetricBreakdowns
+  AdhocExtensionBEStructuringBreakdownMetricBlock
 } from 'FEModels/frontend-adhoc-packages.interface';
 import {
   SecurityDefinitionMap
@@ -154,7 +156,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
       select(selectReloadFundDataPostEdit)
-    ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
+    ).subscribe((targetFund: BEStructuringFundBlock) => {
       if (!!targetFund) {
         const targetFundCopy = this.utilityService.deepCopy(targetFund);
         this.loadFund(targetFundCopy);
@@ -204,7 +206,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true, this.state.selectedMetricValue);
+      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromServerReturn(PortfolioStructuringSample)[0], true, this.state.selectedMetricValue);
       eachFund.data.portfolioShortName = eachPortfolioName;
       eachFund.data.displayChildren = eachFund.data.children;
       return eachFund;
@@ -239,7 +241,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
-        this.processStructureData(serverReturn.Now);
+        this.processStructureData(this.extractSubPortfolioFromServerReturn(serverReturn));
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -284,7 +286,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEPortfolioStructuringDTO>) => {
+      tap((serverReturn: Array<BEStructuringFundBlock>) => {
         this.processStructureData(serverReturn);
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -314,7 +316,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private formCustomBICsBreakdownWithSubLevels(
-    rawData: BEPortfolioStructuringDTO,
+    rawData: BEStructuringFundBlock,
     fund: PortfolioFundDTO
   ) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
@@ -345,13 +347,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
-    rawData: BEPortfolioStructuringDTO,
+    rawData: BEStructuringFundBlock,
     customBICSBreakdown: BEStructuringBreakdownBlock,
     customBICSDefinitionList: Array<string>
   ) {
     // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
     for (let code in customBICSBreakdown.breakdown) {
-      const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel;
+      const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel;
       // level 3+ since level 2 parent categories would already be in the breakdown
       if (!!customBICSBreakdown.breakdown[code] && targetLevel >= 3) {
         const targetHierarchyList: Array<BICsHierarchyBlock> = this.bicsDataProcessingService.getTargetSpecificHierarchyList(
@@ -366,8 +368,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
               const categoryBEData = rawData.breakdowns[formattedBEBICSKey].breakdown[category.code];
               if (!!categoryBEData) {
                 customBICSBreakdown.breakdown[category.code] = categoryBEData;
-                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
-                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).code = category.code;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = category.bicsLevel;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEStructuringBreakdownMetricBlock).code = category.code;
                 customBICSDefinitionList.push(category.code);
               }
             }
@@ -393,7 +395,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return parsedCustomBICSDefinitionListNoNull;
   }
 
-  private processStructureData(serverReturn: Array<BEPortfolioStructuringDTO>) {
+  private processStructureData(serverReturn: Array<BEStructuringFundBlock>) {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
       serverReturn.forEach(eachFund => {
@@ -425,7 +427,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return breakdowns;
   }
 
-  private loadFund(rawData: BEPortfolioStructuringDTO) {
+  private loadFund(rawData: BEStructuringFundBlock) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.bicsDataProcessingService.setRawBICsData(rawData);
       const newFund = this.dtoService.formStructureFundObject(rawData, false, this.state.selectedMetricValue);
@@ -473,6 +475,53 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         // code...
         break;
     }
+  }
+
+  private extractSubPortfolioFromServerReturn(serverReturn: BEGetPortfolioStructureServerReturn): Array<BEStructuringFundBlock> {
+    const targetListWithSubPortfolios = serverReturn.Now;  // hardcoding it to Now until implemntation of delta
+    const targetListWithoutSubPortfolios: Array<BEStructuringFundBlock> = targetListWithSubPortfolios.map((eachFundWithSub) => {
+      const {
+        target: targetWithSub,
+        currentTotals: currentTotalsWithSub,
+        breakdowns: breakdownsWithSub,
+        overrides: overridesWithSub,
+        ...inheritFundValues
+      } = eachFundWithSub;
+      const eachFundWithoutSub: BEStructuringFundBlock = {
+        target: {
+          target: targetWithSub.target.All,
+          portfolioTargetId: targetWithSub.portfolioTargetId,
+          portfolioId: targetWithSub.portfolioId,
+          date: targetWithSub.date
+        },
+        currentTotals: currentTotalsWithSub.All,
+        breakdowns: {},
+        overrides: [],
+        ...inheritFundValues
+      };
+      for (const eachBreakdownKey in breakdownsWithSub) {
+        const eachBreakdownWithSub:BEStructuringBreakdownBlockWithSubPortfolios = breakdownsWithSub[eachBreakdownKey];
+        const {
+          breakdown: breakdownCategoriesWithSub,
+          ...inheritBreakdownValues
+        } = eachBreakdownWithSub;
+        const eachBreakdownWithoutSub: BEStructuringBreakdownBlock = {
+          breakdown: {},
+          ...inheritBreakdownValues
+        };
+        for (const eachCategoryKey in breakdownCategoriesWithSub) {
+          const eachCategoryWithSub = breakdownCategoriesWithSub[eachCategoryKey];
+          const eachBreakdownCategoryWithoutSub: BEStructuringBreakdownMetricBlock = {
+            metricBreakdowns: eachCategoryWithSub.metricBreakdowns.All,
+            view: eachCategoryWithSub.view
+          };
+          eachBreakdownWithoutSub.breakdown[eachCategoryKey] = eachBreakdownCategoryWithoutSub;
+        }
+        eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
+      }
+      return eachFundWithoutSub;
+    });
+    return targetListWithoutSubPortfolios;
   }
 
 }
