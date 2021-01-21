@@ -171,11 +171,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public triggerApplyFilter() {
+    this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.groupByDisabled && this.onClickDefinition(this.configuratorData.state.showFiltersFromDefinition);
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.configuratorData);
     this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
     this.clickedApplyFilter.emit(params);
-    this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.canApplyFilter = false;
   }
 
