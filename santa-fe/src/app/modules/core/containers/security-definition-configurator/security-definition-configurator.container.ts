@@ -160,6 +160,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
             }
           })
         }
+        this.configuratorData.state.showFiltersFromDefinition.data.totalMatchingResults = this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length;
       } else {
         this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
           eachOption.isFilteredOut = false;

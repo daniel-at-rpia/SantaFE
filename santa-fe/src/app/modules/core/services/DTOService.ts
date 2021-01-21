@@ -594,7 +594,8 @@ export class DTOService {
         securityDTOAttr: rawData.securityDTOAttr,
         securityDTOAttrBlock: rawData.securityDTOAttrBlock,
         highlightSelectedOptionList: [],
-        backendDtoAttrName: rawData.backendDtoAttrName
+        backendDtoAttrName: rawData.backendDtoAttrName,
+        totalMatchingResults: 0
       },
       style: {
         icon: rawData.icon,
