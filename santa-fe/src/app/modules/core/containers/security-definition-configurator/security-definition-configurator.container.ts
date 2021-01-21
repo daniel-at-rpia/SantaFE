@@ -69,14 +69,13 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
       this.configuratorData.data.definitionList.forEach((eachBundle) => {
         eachBundle.data.list.forEach((eachDefinition) => {
-          eachDefinition.state.isFilterCapped = this.checkIfDefinitionFilterOptionListIsCapped(eachDefinition);
           if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
             this.fetchCountryCode(eachDefinition);
           }
           if (eachDefinition.data.key === this.constants.map.TICKER.key) {
             this.fetchTicker(eachDefinition);
           }
-        })
+        });
       });
     }
   }
@@ -301,6 +300,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       first(),
       tap((serverReturn: Array<string>) => {
         this.dtoService.loadSecurityDefinitionOptions(targetDefinition, serverReturn);
+        targetDefinition.state.isFilterCapped = this.checkIfDefinitionFilterOptionListIsCapped(targetDefinition);
       }),
       catchError(err => {
         this.restfulCommService.logError('Cannot retrieve country data');
