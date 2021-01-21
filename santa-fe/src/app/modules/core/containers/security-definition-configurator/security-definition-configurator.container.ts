@@ -18,7 +18,6 @@
       DefinitionConfiguratorEmitterParams,
       DefinitionConfiguratorEmitterParamsItem
     } from 'FEModels/frontend-adhoc-packages.interface';
-    import { KEYWORD_SEARCH_HELPER_TEXT } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -40,7 +39,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   constants = {
     map: SecurityDefinitionMap,
     cappedAmount: 100,
-    keywordSearchHelperText: KEYWORD_SEARCH_HELPER_TEXT
   }
 
   constructor(
