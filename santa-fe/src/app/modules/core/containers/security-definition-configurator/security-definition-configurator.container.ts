@@ -339,9 +339,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       const cappedGeneralMatchList = generalMatchOptionList.length > limit ? generalMatchOptionList.filter((option: SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : generalMatchOptionList;
       const formattedFilteredList: Array<SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedGeneralMatchList] : cappedGeneralMatchList;
       if (this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
-        formattedFilteredList.forEach((option: SecurityDefinitionFilterBlock) => {
-          const isSelected = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.find((highlightedOption: SecurityDefinitionFilterBlock) => highlightedOption.displayLabel === option.displayLabel);
-          option.isSelected = !!isSelected;
+        this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((highlightOption: SecurityDefinitionFilterBlock) => {
+          const filterOptionIndex = formattedFilteredList.findIndex((filterOption: SecurityDefinitionFilterBlock) => filterOption.displayLabel === highlightOption.displayLabel);
+          if (filterOptionIndex >= 0) {
+            formattedFilteredList[filterOptionIndex] = highlightOption;
+          }
         })
       }
       return formattedFilteredList;
