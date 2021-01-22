@@ -115,3 +115,10 @@ export enum BreakdownViewFilter {
 }
 
 export const UTILITY_PANEL_HISTORICAL_TIME_LABEL = 'Beginning Of Day';
+
+export enum SubPortfolioFilter {
+  all = 'All',
+  nonHedging = 'Non-Hedging',
+  nonShortCarry = 'Non-Short Carry',
+  shortCarry = 'Short Carry'
+}

@@ -41,3 +41,8 @@ export const selectDataDatestamp = createSelector(
   getStructureState,
   (state: StructureState) => state.dataDatestamp
 );
+
+export const selectActiveSubPortfolioFilter = createSelector(
+  getStructureState,
+  (state: StructureState) => state.activeSubPortfolioFilter
+);
