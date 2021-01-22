@@ -6,10 +6,8 @@ import {
 } from 'Core/constants/structureConstants.constants'
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
-  BEStructuringFundBlock,
-  BEStructuringBreakdownBlock,
-  BEStructuringOverrideBlock,
-  BEStructuringBreakdownMetricBlock
+  BEStructuringOverrideBlockWithSubPortfolios,
+  BEStructuringBreakdownMetricBlockWithSubPortfolios
 } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
@@ -133,21 +131,21 @@ export interface PayloadUpdateBreakdown {
     groupOption: string;
     portfolioId: number;
     breakdown: {
-      [property: string]: BEStructuringBreakdownMetricBlock;
+      [property: string]: BEStructuringBreakdownMetricBlockWithSubPortfolios;
     }
   };
 }
 
 export interface PayloadUpdateOverride {
-  portfolioOverride: BEStructuringOverrideBlock;
+  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
 }
 
 export interface PayloadDeleteOverride {
-  portfolioOverride: BEStructuringOverrideBlock;
+  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
 }
 
 export interface PayloadGetPortfolioOverride {
-  portfolioOverride: BEStructuringOverrideBlock;
+  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
 }
 
 export interface PayloadSetView {

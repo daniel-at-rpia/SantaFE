@@ -11,7 +11,8 @@ import {
   PortfolioMetricValues,
   BreakdownViewFilter,
   PortfolioShortNames,
-  PortfolioView
+  PortfolioView,
+  SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
 
@@ -314,4 +315,5 @@ export interface StructureSetTargetPanelState {
   clearAllTargetSelected: boolean;
   editViewMode: boolean;
   ownerInitial: string;
+  activeSubPortfolioFilter: SubPortfolioFilter;
 }

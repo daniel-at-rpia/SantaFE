@@ -11,7 +11,6 @@ import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.i
 import * as DTOs from './frontend-models.interface';
 import * as Blocks from './frontend-blocks.interface';
 import {
-  BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
   BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';

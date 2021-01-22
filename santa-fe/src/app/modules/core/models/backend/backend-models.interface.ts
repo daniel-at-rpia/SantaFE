@@ -683,22 +683,22 @@ export interface BEStructuringOverrideBlock {
 
 export interface BEStructuringBreakdownMetricBlockWithSubPortfolios extends Omit<BEStructuringBreakdownMetricBlock, 'metricBreakdowns'>{
   metricBreakdowns: {
-    All: {
+    All?: {
       CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
       Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
       CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
     };
-    NonHedging: {
+    NonHedging?: {
       CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
       Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
       CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
     };
-    NonShortCarry: {
+    NonShortCarry?: {
       CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
       Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
       CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
     };
-    ShortCarry: {
+    ShortCarry?: {
       CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
       Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
       CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
