@@ -41,7 +41,9 @@ import {
   BEGetPortfolioStructureServerReturn,
   BEStructuringBreakdownBlockWithSubPortfolios,
   BEStructuringBreakdownMetricBlock,
-  BEStructuringFundBlockWithSubPortfolios
+  BEStructuringFundBlockWithSubPortfolios,
+  BEStructuringOverrideBlockWithSubPortfolios,
+  BEStructuringOverrideBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -529,6 +531,20 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
       eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
     }
+    overridesWithSub.forEach((eachOverrideWithSub:BEStructuringOverrideBlockWithSubPortfolios) => {
+      const {
+        breakdown: overrideCategoriesWithSub,
+        ...inheritOverrideValues
+      } = eachOverrideWithSub;
+      const eachOverrideWithoutSub: BEStructuringOverrideBlock = {
+        breakdown: {
+          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns.All,
+          view: overrideCategoriesWithSub.view
+        },
+        ...inheritOverrideValues
+      };
+      eachFundWithoutSub.overrides.push(eachOverrideWithoutSub);
+    });
     return eachFundWithoutSub;
   }
 
