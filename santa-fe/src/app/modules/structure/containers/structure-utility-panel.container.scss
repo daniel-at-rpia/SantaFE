@@ -321,6 +321,39 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &--viewStrategNonHedging {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-nonHedging {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--viewStrategyNonShortCarry {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-nonShortCarry {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--viewStrategyShortCarry {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-shortCarry {
+          @include material('none');
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
   @include mq-x-large-min {
     &__metricSelect {
       flex-direction: row;

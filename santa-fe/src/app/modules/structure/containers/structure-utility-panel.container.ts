@@ -26,7 +26,8 @@ import {
   StructureMetricSelect,
   StructureChangeBreakdownViewFilterEvent,
   StructureChangePortfolioViewFilterEvent,
-  StructureSwitchDataDatestampEvent
+  StructureSwitchDataDatestampEvent,
+  StructureChangeSubPortfolioViewFilterEvent
 } from 'Structure/actions/structure.actions';
 import { UtilityService, DTOService } from 'Core/services';
 
@@ -190,8 +191,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
   }
 
   public onClickSubPortfolioChange(targetFilterOption: SubPortfolioFilter) {
-    if (this.state) {
-      // code...
+    if (this.state.activeSubPortfolioFilter !== targetFilterOption) {
+      this.state.activeSubPortfolioFilter = targetFilterOption;
+      this.store$.dispatch(new StructureChangeSubPortfolioViewFilterEvent(targetFilterOption));
     }
   }
 

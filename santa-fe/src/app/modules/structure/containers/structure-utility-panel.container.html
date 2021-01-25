@@ -8,7 +8,10 @@
     'sat-structureUtilityPanel--viewBreakdownRegularsOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.regularsOnly,
     'sat-structureUtilityPanel--viewBreakdownAll': state.activeBreakdownViewFilter === constants.breakdownViewFilter.all,
     'sat-structureUtilityPanel--viewingHistoricalData': state.viewingHistoricalData,
-    'sat-structureUtilityPanel--viewStrategyAll': state.activeSubPortfolioFilter === constants.subPortfolioFilter.all
+    'sat-structureUtilityPanel--viewStrategyAll': state.activeSubPortfolioFilter === constants.subPortfolioFilter.all,
+    'sat-structureUtilityPanel--viewStrategNonHedging': state.activeSubPortfolioFilter === constants.subPortfolioFilter.nonHedging,
+    'sat-structureUtilityPanel--viewStrategyNonShortCarry': state.activeSubPortfolioFilter === constants.subPortfolioFilter.nonShortCarry,
+    'sat-structureUtilityPanel--viewStrategyShortCarry': state.activeSubPortfolioFilter === constants.subPortfolioFilter.shortCarry
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
     <div class="sat-structureUtilityPanel__metricSelect-top">
@@ -27,10 +30,10 @@
     </div>
     <div class="sat-structureUtilityPanel__strategySelect-bottom">
       <div class="sat-structureUtilityPanel__strategySelect-bottom-ctas santaBtnGroup">
-        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonHedging">{{constants.subPortfolioFilter.nonHedging}}</button>
-        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonShortCarry">{{constants.subPortfolioFilter.nonShortCarry}}</button>
-        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-shortCarry">{{constants.subPortfolioFilter.shortCarry}}</button>
-        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-all">{{constants.subPortfolioFilter.all}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.nonHedging)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonHedging">{{constants.subPortfolioFilter.nonHedging}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.nonShortCarry)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonShortCarry">{{constants.subPortfolioFilter.nonShortCarry}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.shortCarry)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-shortCarry">{{constants.subPortfolioFilter.shortCarry}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.all)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-all">{{constants.subPortfolioFilter.all}}</button>
       </div>
     </div>
   </section>
