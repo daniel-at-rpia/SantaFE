@@ -48,6 +48,7 @@ import {
   BEStructuringFundBlockWithSubPortfolios,
   BEStructuringBreakdownMetricBlock,
   BEStructuringOverrideBlock,
+  BEStructuringOverrideBlockWithSubPortfolios,
   BEStructuringBreakdownMetricSingleEntryBlock,
   BEStructuringBreakdownMetricBlockWithSubPortfolios
 } from 'BEModels/backend-models.interface';
@@ -384,12 +385,23 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringOverrideBlock) => {
-            const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+          tap((serverReturn: BEStructuringOverrideBlockWithSubPortfolios) => {
+            const {
+              breakdown: breakdownWithSubPortfolio,
+              ...inheritValues
+            } = serverReturn;
+            const overrideData: BEStructuringOverrideBlock = {
+              breakdown: {
+                view: breakdownWithSubPortfolio.view,
+                metricBreakdowns: breakdownWithSubPortfolio.metricBreakdowns[this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter)]
+              },
+              ...inheritValues
+            }
+            const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([overrideData]);
             const rawBreakdownList = returnPack.list;
             this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
-            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
-            const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
+            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(overrideData);
+            const newCategoryKey = this.utilityService.formCategoryKeyForOverride(overrideData);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
               const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
               this.state.targetBreakdownRawData.breakdown[newCategoryKey] = newDataBlock;
