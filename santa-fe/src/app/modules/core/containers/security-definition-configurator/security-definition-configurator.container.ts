@@ -106,10 +106,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
       if (this.configuratorData.state.showFiltersFromDefinition) {
         if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
-         this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = [];
+         this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = [];
          if (this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
           this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((selectedOption: SecurityDefinitionFilterBlock) => {
-            this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.push(selectedOption);
+            this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.push(selectedOption);
           })
          }
         }
@@ -132,7 +132,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         return eachFilter.key !== targetOption.key;
       });
     }
-    targetDefinition.data.filterOptionList.forEach((eachOption) => {
+    targetDefinition.data.displayOptionList.forEach((eachOption) => {
       if (eachOption.isSelected || this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
         filterActive = true;
       }
@@ -150,10 +150,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       if (newKeyword.length >= 0) {
         if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
           if (!hasAppliedFilter) {
-            this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList = newKeyword !== '' ? this.getCustomFilterOptionList(newKeyword, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionList) : [];
+            this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = newKeyword !== '' ? this.getCustomFilterOptionList(newKeyword, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionList) : [];
           }
         } else {
-          this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+          this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.forEach((eachOption) => {
             if (this.applySearchFilter(eachOption, newKeyword)) {
               eachOption.isFilteredOut = false;
             } else {
@@ -161,9 +161,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
             }
           })
         }
-        this.configuratorData.state.showFiltersFromDefinition.data.totalMatchingResults = newKeyword !== '' ? this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.length : 0;
+        this.configuratorData.state.showFiltersFromDefinition.data.totalMatchingResults = newKeyword !== '' ? this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.length : 0;
       } else {
-        this.configuratorData.state.showFiltersFromDefinition.data.filterOptionList.forEach((eachOption) => {
+        this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.forEach((eachOption) => {
           eachOption.isFilteredOut = false;
         })
       }
@@ -190,8 +190,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
       const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
       const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level-1);
-      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, level);
-      consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
+      consolidatedBICSDefinition.data.displayOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, level);
+      consolidatedBICSDefinition.data.displayOptionList.forEach((eachOption) => {
         const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
           return eachOption.key === eachSelectedOption.key;
         });
@@ -216,8 +216,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
           newLevel
         );
       }
-      consolidatedBICSDefinition.data.filterOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, newLevel);
-      consolidatedBICSDefinition.data.filterOptionList.forEach((eachOption) => {
+      consolidatedBICSDefinition.data.displayOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, newLevel);
+      consolidatedBICSDefinition.data.displayOptionList.forEach((eachOption) => {
         const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
           return eachOption.key === eachSelectedOption.key;
         });
@@ -238,7 +238,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   private clearDefinitionFilterOptions(targetDefinition: SecurityDefinitionDTO) {
-    targetDefinition.data.filterOptionList.forEach((eachOption) => {
+    targetDefinition.data.displayOptionList.forEach((eachOption) => {
       eachOption.isSelected = false;
     });
     targetDefinition.state.filterActive = false;
@@ -248,14 +248,14 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     let canApply = false;
     this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
       eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
-        const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
+        const activeFilters = eachDefinition.data.displayOptionList.filter((eachOption) => {
           return eachOption.isSelected;
         })
         let previousListForCompare: Array<SecurityDefinitionFilterBlock>;
         if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
           previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
         } else {
-          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.filterOptionList;
+          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
         const prevActiveFilters = previousListForCompare.filter((eachOption) => {
           return eachOption.isSelected;

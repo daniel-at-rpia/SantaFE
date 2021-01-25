@@ -447,7 +447,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
-          definitionDTO.data.filterOptionList.forEach((eachFilterOption) => {
+          definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
             if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
               eachFilterOption.isSelected = true;
             }
@@ -704,7 +704,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
             // deepCopy is necessary because the array was already set to readonly because it's from the store
             eachDefinition.data.highlightSelectedOptionList = this.utilityService.deepCopy(eachFilterDefinition.data.highlightSelectedOptionList);
             eachDefinition.data.highlightSelectedOptionList.forEach((eachHighlightedFilterOption) => {
-              const findMatchInFilterOptionList = eachDefinition.data.filterOptionList.find((eachFilterOption) => {
+              const findMatchInFilterOptionList = eachDefinition.data.displayOptionList.find((eachFilterOption) => {
                 return eachFilterOption.shortKey === eachHighlightedFilterOption.shortKey;
               });
               if (!!findMatchInFilterOptionList) {

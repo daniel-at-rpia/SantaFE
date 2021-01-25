@@ -590,7 +590,7 @@ export class DTOService {
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
-        filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
+        displayOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr,
         securityDTOAttrBlock: rawData.securityDTOAttrBlock,
         highlightSelectedOptionList: [],
@@ -622,10 +622,10 @@ export class DTOService {
     bicsLevel?: number
   ): DTOs.SecurityDefinitionDTO {
     targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
-    targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
+    targetDefinition.data.displayOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
     if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
-      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+      targetDefinition.data.displayOptionList.forEach((eachOption) => {
         const exist = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
           return eachSelectedOption.shortKey === eachOption.shortKey;
         });

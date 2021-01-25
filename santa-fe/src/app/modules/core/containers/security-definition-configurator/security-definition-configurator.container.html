@@ -90,7 +90,7 @@
       </div>
       <ul class="sat-securityDefinitionConfigurator__filters-content-optionList sat-securityDefinitionConfigurator__filters-content-optionList--regular">
         <button
-          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.displayOptionList"
           (click)="onClickFilterOption(eachOption)"
           [ngClass]="{
             'sat-securityDefinitionConfigurator__filters-content-optionList-item': true,
@@ -102,7 +102,7 @@
       </ul>
       <ul class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList">
         <div
-          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.displayOptionList"
           [ngClass]="{
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item': true,
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected,

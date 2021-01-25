@@ -234,8 +234,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       );
     } else {
       // other regular breakdowns will come here (ccy, rating, tenor);
-      const targetDefinition = this.utilityService.deepCopy(this.breakdownData.data.definition);
-      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+      const targetDefinition: SecurityDefinitionDTO = this.utilityService.deepCopy(this.breakdownData.data.definition);
+      targetDefinition.data.displayOptionList.forEach((eachOption) => {
         if (eachOption.shortKey === targetRow.data.category) {
           eachOption.isSelected = true;
           targetDefinition.data.highlightSelectedOptionList.push(eachOption);
@@ -243,8 +243,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       });
       filterList.push(targetDefinition);
     }
-    const fundDefinition = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.PORTFOLIO);
-    fundDefinition.data.filterOptionList.forEach((eachOption) => {
+    const fundDefinition: SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.PORTFOLIO);
+    fundDefinition.data.displayOptionList.forEach((eachOption) => {
       if (eachOption.shortKey === this.breakdownData.data.portfolioName) {
         eachOption.isSelected = true;
         fundDefinition.data.highlightSelectedOptionList.push(eachOption);

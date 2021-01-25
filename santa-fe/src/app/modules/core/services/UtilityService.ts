@@ -425,8 +425,8 @@ export class UtilityService {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
-              eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
-              eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.filterOptionList.filter((eachFilter) => {
+              eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
+              eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
                 return !!eachFilter.isSelected;
               });
               eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;

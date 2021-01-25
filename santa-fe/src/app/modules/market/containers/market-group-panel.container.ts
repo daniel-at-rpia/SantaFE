@@ -279,11 +279,11 @@ export class MarketGroupPanel implements OnDestroy {
   private populateSearchShortcuts(){
     this.constants.searchShortcuts.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
-        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
+        const definitionDTO: SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
-          definitionDTO.data.filterOptionList.forEach((eachFilterOption) => {
+          definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
             if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
               eachFilterOption.isSelected = true;
             }
@@ -324,7 +324,7 @@ export class MarketGroupPanel implements OnDestroy {
         const attributeName = this.utilityService.convertFEKey(eachDefinition.data.key);
         if (attributeName !== 'n/a') {
           payload.groupFilters[attributeName] = [];
-          eachDefinition.data.filterOptionList.forEach((eachOption) => {
+          eachDefinition.data.displayOptionList.forEach((eachOption) => {
             if (eachOption.isSelected) {
               payload.groupFilters[attributeName].push(eachOption.displayLabel);
             }
@@ -564,7 +564,7 @@ export class MarketGroupPanel implements OnDestroy {
             if (eachDefinition.data.key === targetDefinition && !eachDefinition.state.isLocked) {
               eachDefinition.state.groupByActive = true;
               let allFiltersAreSelected = true;
-              eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+              eachDefinition.data.displayOptionList.forEach((eachFilter) => {
                 if (eachDefinition.data.key === 'TENOR') {
                   if (eachFilter.shortKey === this.utilityService.convertBETenorToFE(targetDefinitionValue)) {
                     eachFilter.isSelected = true;
@@ -581,7 +581,7 @@ export class MarketGroupPanel implements OnDestroy {
                 }
               });
               if (allFiltersAreSelected) {
-                eachDefinition.data.filterOptionList.forEach((eachFilter) => {
+                eachDefinition.data.displayOptionList.forEach((eachFilter) => {
                   eachFilter.isSelected = false;
                 });
                 eachDefinition.state.filterActive = false;
