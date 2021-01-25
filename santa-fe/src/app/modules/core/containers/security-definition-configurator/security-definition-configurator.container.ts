@@ -12,7 +12,8 @@
     import {
       ConfiguratorDefinitionLayout,
       DEFINITION_CAPPED_THRESHOLD,
-      SecurityDefinitionMap
+      SecurityDefinitionMap,
+      DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       DefinitionConfiguratorEmitterParams,
@@ -38,7 +39,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   @Output() boostConfigurator = new EventEmitter();
   constants = {
     map: SecurityDefinitionMap,
-    cappedAmount: 100,
+    cappedAmount: DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD,
   }
 
   constructor(
@@ -150,11 +151,11 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       if (newKeyword.length >= 0) {
         if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
           if (!hasAppliedFilter) {
-            this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = newKeyword !== '' ? this.getCustomFilterOptionList(newKeyword, this.configuratorData.state.showFiltersFromDefinition.data.prinstineFilterOptionList) : [];
+            this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = newKeyword !== '' ? this.utilityService.getCustomDisplayOptionListForConfiguator(newKeyword, this.configuratorData, this.constants.cappedAmount) : [];
           }
         } else {
           this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.forEach((eachOption) => {
-            if (this.applySearchFilter(eachOption, newKeyword)) {
+            if (this.utilityService.applySearchFilterForConfigurator(eachOption, newKeyword)) {
               eachOption.isFilteredOut = false;
             } else {
               eachOption.isFilteredOut = true;
@@ -224,12 +225,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         eachOption.isSelected = !!existInSelected;
       });
     }
-  }
-
-  private applySearchFilter(targetOption: SecurityDefinitionFilterBlock, keyword: string): boolean {
-    const normalizedTarget = targetOption.displayLabel.toLowerCase();
-    const normalizedKeyword = keyword.toLowerCase();
-    return normalizedTarget.includes(normalizedKeyword);
   }
 
   private clearSearchFilter(hasAppliedFilter: boolean) {
@@ -311,49 +306,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         return of('error');
       })
     ).subscribe();
-  }
-
-  private getCustomFilterOptionList(newKeyword: string, prinstineList: Array<SecurityDefinitionFilterBlock>): Array<SecurityDefinitionFilterBlock> {
-    const filterSpecificOptionList: Array<SecurityDefinitionFilterBlock> = [];
-    prinstineList.forEach((eachOption) => {
-      const optionCopy = {...eachOption};
-      if (this.applySearchFilter(eachOption, newKeyword)) {
-        optionCopy.isFilteredOut = false;
-      } else {
-        optionCopy.isFilteredOut = true;
-      }
-      !optionCopy.isFilteredOut && filterSpecificOptionList.push(optionCopy);
-    });
-    if (filterSpecificOptionList.length > 0) {
-      const parsedKeyword = newKeyword.toLowerCase();
-      const exactMatchOptionList: Array<SecurityDefinitionFilterBlock> = filterSpecificOptionList.filter((option: SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) === 0);
-      const generalMatchOptionList = exactMatchOptionList.length > 0 ? filterSpecificOptionList.filter((option: SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) > 0) : filterSpecificOptionList;
-      if (exactMatchOptionList.length > 0) {
-        exactMatchOptionList.sort((optionA: SecurityDefinitionFilterBlock, optionB: SecurityDefinitionFilterBlock) => {
-          if (optionA.displayLabel < optionB.displayLabel) {
-            return - 1
-          } else if (optionA.displayLabel > optionB.displayLabel) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-      }
-      const limit = exactMatchOptionList.length > 0 ? this.constants.cappedAmount - exactMatchOptionList.length : this.constants.cappedAmount;
-      const cappedGeneralMatchList = generalMatchOptionList.length > limit ? generalMatchOptionList.filter((option: SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : generalMatchOptionList;
-      const formattedFilteredList: Array<SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedGeneralMatchList] : cappedGeneralMatchList;
-      if (this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
-        this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((highlightOption: SecurityDefinitionFilterBlock) => {
-          const filterOptionIndex = formattedFilteredList.findIndex((filterOption: SecurityDefinitionFilterBlock) => filterOption.displayLabel === highlightOption.displayLabel);
-          if (filterOptionIndex >= 0) {
-            formattedFilteredList[filterOptionIndex] = highlightOption;
-          }
-        })
-      }
-      return formattedFilteredList;
-    } else {
-      return [];
-    }
   }
 
   private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: SecurityDefinitionDTO): boolean {

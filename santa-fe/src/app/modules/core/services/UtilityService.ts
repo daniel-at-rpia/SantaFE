@@ -1174,6 +1174,58 @@ export class UtilityService {
       }
     }
 
+    public applySearchFilterForConfigurator(targetOption: Blocks.SecurityDefinitionFilterBlock, keyword: string): boolean {
+      const normalizedTarget = targetOption.displayLabel.toLowerCase();
+      const normalizedKeyword = keyword.toLowerCase();
+      return normalizedTarget.includes(normalizedKeyword);
+    }
+
+    public getCustomDisplayOptionListForConfiguator(
+      newKeyword: string,
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,cappedDisplayAmount: number
+      ): Array<Blocks.SecurityDefinitionFilterBlock> {
+      const filterSpecificOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = [];
+      configurator.state.showFiltersFromDefinition.data.prinstineFilterOptionList.forEach((eachOption) => {
+        const optionCopy = {...eachOption};
+        if (this.applySearchFilterForConfigurator(eachOption, newKeyword)) {
+          optionCopy.isFilteredOut = false;
+        } else {
+          optionCopy.isFilteredOut = true;
+        }
+        !optionCopy.isFilteredOut && filterSpecificOptionList.push(optionCopy);
+      });
+      if (filterSpecificOptionList.length > 0) {
+        const parsedKeyword = newKeyword.toLowerCase();
+        const exactMatchOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) === 0);
+        const generalMatchOptionList = exactMatchOptionList.length > 0 ? filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) > 0) : filterSpecificOptionList;
+        if (exactMatchOptionList.length > 0) {
+          exactMatchOptionList.sort((optionA: Blocks.SecurityDefinitionFilterBlock, optionB: Blocks.SecurityDefinitionFilterBlock) => {
+            if (optionA.displayLabel < optionB.displayLabel) {
+              return - 1
+            } else if (optionA.displayLabel > optionB.displayLabel) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+        }
+        const limit = exactMatchOptionList.length > 0 ? cappedDisplayAmount - exactMatchOptionList.length : cappedDisplayAmount;
+        const cappedGeneralMatchList = generalMatchOptionList.length > limit ? generalMatchOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : generalMatchOptionList;
+        const formattedFilteredList: Array<Blocks.SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedGeneralMatchList] : cappedGeneralMatchList;
+        if (configurator.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
+          configurator.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((highlightOption: Blocks.SecurityDefinitionFilterBlock) => {
+            const filterOptionIndex = formattedFilteredList.findIndex((filterOption: Blocks.SecurityDefinitionFilterBlock) => filterOption.displayLabel === highlightOption.displayLabel);
+            if (filterOptionIndex >= 0) {
+              formattedFilteredList[filterOptionIndex] = highlightOption;
+            }
+          })
+        }
+        return formattedFilteredList;
+      } else {
+        return [];
+      }
+    }
+
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;
