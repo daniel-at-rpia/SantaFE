@@ -683,7 +683,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--positive {
-            @include mix_active_view_style;
+            @include mix_cta_active;
           }
         }
       }
@@ -694,7 +694,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--improving {
-            @include mix_active_view_style;
+            @include mix_cta_active;
           }
         }
       }
@@ -705,7 +705,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--deteriorating {
-            @include mix_active_view_style;
+            @include mix_cta_active;
           }
         }
       }
@@ -716,7 +716,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--negative {
-            @include mix_active_view_style;
+            @include mix_cta_active;
           }
         }
       }
@@ -727,7 +727,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       &__setView {
         &-btn {
           &--neutral {
-            @include mix_active_view_style;
+            @include mix_cta_active;
           }
         }
       }
