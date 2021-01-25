@@ -314,9 +314,34 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
     #{$blockName} {
       &__strategySelect {
         &-bottom-ctas-all {
-          @include material('none');
-          background-color: $color_active;
-          color: $font_color_inverse;
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewStrategNonHedging {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-nonHedging {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewStrategyNonShortCarry {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-nonShortCarry {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewStrategyShortCarry {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-shortCarry {
+          @include mix_cta_active;
         }
       }
     }

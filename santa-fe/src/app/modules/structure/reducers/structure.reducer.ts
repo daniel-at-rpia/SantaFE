@@ -92,6 +92,11 @@ export function structureReducer(
         ...state,
         dataDatestamp: action.dateStampInUnix
       };
+    case StructureActions.ChangeSubPortfolioViewFilter:
+      return {
+        ...state,
+        activeSubPortfolioFilter: action.filterOption
+      }
     default:
       return state;
   }

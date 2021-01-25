@@ -329,7 +329,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--positive {
-              @include mix_active_view_style;
+              @include mix_cta_active;
             }
           }
         }
@@ -352,7 +352,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--improving {
-              @include mix_active_view_style;
+              @include mix_cta_active;
             }
           }
         }
@@ -375,7 +375,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--deteriorating {
-              @include mix_active_view_style;
+              @include mix_cta_active;
             }
           }
         }
@@ -395,7 +395,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--negative {
-              @include mix_active_view_style;
+              @include mix_cta_active;
             }
           }
         }
@@ -415,7 +415,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--neutral {
-              @include mix_active_view_style;
+              @include mix_cta_active;
               #{$blockName} {
                 &__utility {
                   &-ctas {
