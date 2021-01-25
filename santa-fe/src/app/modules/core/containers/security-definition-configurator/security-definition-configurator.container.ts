@@ -251,7 +251,13 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         const activeFilters = eachDefinition.data.filterOptionList.filter((eachOption) => {
           return eachOption.isSelected;
         })
-        const prevActiveFilters = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.filterOptionList.filter((eachOption) => {
+        let previousListForCompare: Array<SecurityDefinitionFilterBlock>;
+        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
+          previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
+        } else {
+          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.filterOptionList;
+        }
+        const prevActiveFilters = previousListForCompare.filter((eachOption) => {
           return eachOption.isSelected;
         })
         if (activeFilters.length === prevActiveFilters.length) {
