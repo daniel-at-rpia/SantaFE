@@ -131,15 +131,15 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       }
     });
     targetDefinition.state.filterActive = filterActive;
-    if (this.configuratorData.state.groupByDisabled) {
-      this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
-    }
     if (targetOption.isSelected) {
       targetDefinition.data.highlightSelectedOptionList.push(targetOption);
     } else {
       targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.highlightSelectedOptionList.filter((eachFilter) => {
         return eachFilter.key !== targetOption.key;
       });
+    }
+    if (this.configuratorData.state.groupByDisabled) {
+      this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
   }
 
