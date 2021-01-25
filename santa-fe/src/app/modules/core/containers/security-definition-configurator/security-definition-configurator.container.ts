@@ -257,9 +257,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         } else {
           previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
-        const prevActiveFilters = previousListForCompare.filter((eachOption) => {
-          return eachOption.isSelected;
-        })
+        const prevActiveFilters = !this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
         if (activeFilters.length === prevActiveFilters.length) {
           for (let i = 0; i < activeFilters.length; ++i) {
             if (activeFilters[i].shortKey !== prevActiveFilters[i].shortKey) {
