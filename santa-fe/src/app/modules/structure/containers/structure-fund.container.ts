@@ -25,10 +25,11 @@ import {
 import { BEStructuringFundBlockWithSubPortfolios, BEStructuringBreakdownMetricBlock } from 'BEModels/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent } from 'Structure/actions/structure.actions';
-import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
+import { BEPortfolioTargetMetricValues, SubPortfolioFilter } from 'Core/constants/structureConstants.constants';
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.selectors';
 
 @Component({
   selector: 'structure-fund',
@@ -171,8 +172,13 @@ export class StructureFund implements OnInit, OnDestroy {
       checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);
       checkTargetUpdates(targetLeverage, this.fund.data.target.target.creditLeverage, this.constants.BECreditLeverage);
       if (updatedTargetData.length > 0) {
-        this.fund.state.isEditingFund = false;
-        this.updateFundTarget(updatedTargetData);
+        this.store$.pipe(
+          first(),
+          select(selectActiveSubPortfolioFilter)
+        ).subscribe((activeSubPortfolioFilter) => {
+          this.fund.state.isEditingFund = false;
+          this.updateFundTarget(updatedTargetData, activeSubPortfolioFilter);
+        });
       }
     }
     // reset at last so the logic for save can still access the states
@@ -180,7 +186,8 @@ export class StructureFund implements OnInit, OnDestroy {
   }
 
   private updateFundTarget(
-    updatedTargetDataList: Array<UpdateTargetBlock>
+    updatedTargetDataList: Array<UpdateTargetBlock>,
+    activeSubPortfolioFilter: SubPortfolioFilter
   ) {
     const targetFund = this.fund;
     const payload: PayloadUpdatePortfolioStructuresTargets = {
@@ -190,9 +197,11 @@ export class StructureFund implements OnInit, OnDestroy {
       },
       shouldAutoScale: !!this.fund.state.autoScalingActive && !!this.fund.state.autoScalingAvailable
     };
-    updatedTargetDataList.forEach((targetBlock: UpdateTargetBlock ) => {
-      const { metric, target } = targetBlock
-      payload.portfolioTarget.target[metric] = target;
+    const subPortfolio = this.utilityService.convertFESubPortfolioTextToBEKey(activeSubPortfolioFilter);
+    payload.portfolioTarget.target[subPortfolio] = {};
+    updatedTargetDataList.forEach((targetBlock: UpdateTargetBlock) => {
+      const { metric, target } = targetBlock;
+      payload.portfolioTarget.target[subPortfolio][metric] = target;
     });
     targetFund.state.isStencil = true;
     targetFund.data.cs01TargetBar.state.isStencil = true;
