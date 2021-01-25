@@ -119,7 +119,18 @@ export interface PayloadUpdatePortfolioStructuresTargets {
     date?: string,
     portfolioId: number,
     target: {
-      [metric in BEPortfolioTargetMetricValues]?: number;
+      All?: {
+        [metric in BEPortfolioTargetMetricValues]?: number;
+      };
+      NonHedging?: {
+        [metric in BEPortfolioTargetMetricValues]?: number;
+      };
+      NonShortCarry?: {
+        [metric in BEPortfolioTargetMetricValues]?: number;
+      };
+      ShortCarry?: {
+        [metric in BEPortfolioTargetMetricValues]?: number;
+      }
     }
   },
   shouldAutoScale: boolean
