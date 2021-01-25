@@ -28,7 +28,10 @@
       AlertSubTypes,
       TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
-    import { BICS_DIVE_IN_UNAVAILABLE_CATEGORIES } from 'Core/constants/structureConstants.constants';
+    import {
+      BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
+      SubPortfolioFilter
+    } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
@@ -1455,9 +1458,10 @@ export class UtilityService {
       return parsedValue;
     }
 
-    public checkIfDiveInIsAvailable(code: string): boolean {
-      const isDiveInAvailable = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === code);
-      return !isDiveInAvailable;
+    public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
+      const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
+      const isDiveInAvailable = !isNonDiveInCategory && row.data.bicsLevel < 4 ? true : false;
+      return isDiveInAvailable;
     }
 
     public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {
@@ -1478,5 +1482,24 @@ export class UtilityService {
       return viewData;
     }
 
+    public convertFESubPortfolioTextToBEKey(subPortfolio: SubPortfolioFilter): string {
+      switch (subPortfolio) {
+        case SubPortfolioFilter.all:
+          return 'All';
+          break;
+        case SubPortfolioFilter.nonHedging:
+          return 'NonHedging';
+          break;
+        case SubPortfolioFilter.nonShortCarry:
+          return 'NonShortCarry';
+          break;
+        case SubPortfolioFilter.shortCarry:
+          return 'ShortCarry';
+          break;
+        default:
+          return null;
+          break;
+      }
+    }
   // structuring specific end
 }

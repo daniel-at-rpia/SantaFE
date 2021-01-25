@@ -570,11 +570,34 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
 }
 
 export interface BEGetPortfolioStructureServerReturn {
-  Now: Array<BEStructuringFundBlock>;
-  DoD?: Array<BEStructuringFundBlock>;
-  Wow?: Array<BEStructuringFundBlock>;
-  Mom?: Array<BEStructuringFundBlock>;
-  Ytd?: Array<BEStructuringFundBlock>;
+  Now: Array<BEStructuringFundBlockWithSubPortfolios>;
+  DoD?: Array<BEStructuringFundBlockWithSubPortfolios>;
+  Wow?: Array<BEStructuringFundBlockWithSubPortfolios>;
+  Mom?: Array<BEStructuringFundBlockWithSubPortfolios>;
+  Ytd?: Array<BEStructuringFundBlockWithSubPortfolios>;
+}
+
+export interface BEStructuringFundBlockWithSubPortfolios extends Omit<BEStructuringFundBlock, 'target'|'currentTotals'|'breakdowns'|'overrides'> {
+  target: {
+    portfolioTargetId: string;
+    date: string;
+    portfolioId: number;
+    target: BEStructuringFundMetricTotalBlockWithSubPortfolios;
+  }
+  currentTotals: BEStructuringFundMetricTotalBlockWithSubPortfolios;
+  breakdowns: {
+    BicsCodeLevel1?: BEStructuringBreakdownBlockWithSubPortfolios;
+    BicsCodeLevel2?: BEStructuringBreakdownBlockWithSubPortfolios;
+    BicsCodeLevel3?: BEStructuringBreakdownBlockWithSubPortfolios;
+    BicsCodeLevel4?: BEStructuringBreakdownBlockWithSubPortfolios;
+    BicsCodeLevel5?: BEStructuringBreakdownBlockWithSubPortfolios;
+    BicsCodeLevel6?: BEStructuringBreakdownBlockWithSubPortfolios;
+    BicsCodeLevel7?: BEStructuringBreakdownBlockWithSubPortfolios;
+    Ccy?: BEStructuringBreakdownBlockWithSubPortfolios;
+    RatingNoNotch?: BEStructuringBreakdownBlockWithSubPortfolios;
+    Tenor?: BEStructuringBreakdownBlockWithSubPortfolios;
+  }
+  overrides?: Array<BEStructuringOverrideBlockWithSubPortfolios>;
 }
 
 export interface BEStructuringFundBlock {
@@ -609,10 +632,23 @@ export interface BEStructuringFundBlock {
   isIndexValid: boolean;
 }
 
+interface BEStructuringFundMetricTotalBlockWithSubPortfolios {
+  All: BEStructuringFundMetricTotalBlock;
+  NonHedging: BEStructuringFundMetricTotalBlock;
+  NonShortCarry: BEStructuringFundMetricTotalBlock;
+  ShortCarry: BEStructuringFundMetricTotalBlock;
+}
+
 interface BEStructuringFundMetricTotalBlock {
   CreditLeverage: number;
   Cs01: number;
   CreditDuration: number;
+}
+
+export interface BEStructuringBreakdownBlockWithSubPortfolios extends Omit<BEStructuringBreakdownBlock, 'breakdown'> {
+  breakdown: {
+    [property: string]: BEStructuringBreakdownMetricBlockWithSubPortfolios;
+  }
 }
 
 export interface BEStructuringBreakdownBlock {
@@ -624,6 +660,10 @@ export interface BEStructuringBreakdownBlock {
   breakdown: {
     [property: string]: BEStructuringBreakdownMetricBlock;
   }
+}
+
+export interface BEStructuringOverrideBlockWithSubPortfolios extends Omit<BEStructuringOverrideBlock, 'breakdown'>{
+  breakdown?: BEStructuringBreakdownMetricBlockWithSubPortfolios;
 }
 
 export interface BEStructuringOverrideBlock {
@@ -639,6 +679,31 @@ export interface BEStructuringOverrideBlock {
   }
   breakdown?: BEStructuringBreakdownMetricBlock;
   title?: string;
+}
+
+export interface BEStructuringBreakdownMetricBlockWithSubPortfolios extends Omit<BEStructuringBreakdownMetricBlock, 'metricBreakdowns'>{
+  metricBreakdowns: {
+    All?: {
+      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
+      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
+      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
+    };
+    NonHedging?: {
+      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
+      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
+      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
+    };
+    NonShortCarry?: {
+      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
+      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
+      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
+    };
+    ShortCarry?: {
+      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
+      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
+      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
+    };
+  }
 }
 
 export interface BEStructuringBreakdownMetricBlock {

@@ -7,7 +7,8 @@
     'sat-structureUtilityPanel--viewBreakdownBICSOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.BICSOnly,
     'sat-structureUtilityPanel--viewBreakdownRegularsOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.regularsOnly,
     'sat-structureUtilityPanel--viewBreakdownAll': state.activeBreakdownViewFilter === constants.breakdownViewFilter.all,
-    'sat-structureUtilityPanel--viewingHistoricalData': state.viewingHistoricalData
+    'sat-structureUtilityPanel--viewingHistoricalData': state.viewingHistoricalData,
+    'sat-structureUtilityPanel--viewStrategyAll': true
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
     <div class="sat-structureUtilityPanel__metricSelect-top">
@@ -17,6 +18,19 @@
       <div class="sat-structureUtilityPanel__metricSelect-bottom-ctas santaBtnGroup">
         <button (click)="setMetricLevel(constants.leverage)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditLeverage">{{constants.leverage}}</button>
         <button (click)="setMetricLevel(constants.cs01)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditDuration">{{constants.cs01}} / {{constants.creditDuration}}</button>
+      </div>
+    </div>
+  </section>
+  <section class="sat-structureUtilityPanel__strategySelect">
+    <div class="sat-structureUtilityPanel__strategySelect-top">
+      <span class="sat-structureUtilityPanel__strategySelect-top-label">Viewing Sub-Portfolios</span>
+    </div>
+    <div class="sat-structureUtilityPanel__strategySelect-bottom">
+      <div class="sat-structureUtilityPanel__strategySelect-bottom-ctas santaBtnGroup">
+        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonHedging">{{constants.subPortfolioFilter.nonHedging}}</button>
+        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonShortCarry">{{constants.subPortfolioFilter.nonShortCarry}}</button>
+        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-shortCarry">{{constants.subPortfolioFilter.shortCarry}}</button>
+        <button class="sat-structureUtilityPanel__strategySelect-bottom-ctas-all">{{constants.subPortfolioFilter.all}}</button>
       </div>
     </div>
   </section>

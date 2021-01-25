@@ -38,7 +38,12 @@ import {
 import {
   BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
-  BEGetPortfolioStructureServerReturn
+  BEGetPortfolioStructureServerReturn,
+  BEStructuringBreakdownBlockWithSubPortfolios,
+  BEStructuringBreakdownMetricBlock,
+  BEStructuringFundBlockWithSubPortfolios,
+  BEStructuringOverrideBlockWithSubPortfolios,
+  BEStructuringOverrideBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
@@ -154,10 +159,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
       select(selectReloadFundDataPostEdit)
-    ).subscribe((targetFund: BEStructuringFundBlock) => {
+    ).subscribe((targetFund: BEStructuringFundBlockWithSubPortfolios) => {
       if (!!targetFund) {
-        const targetFundCopy = this.utilityService.deepCopy(targetFund);
-        this.loadFund(targetFundCopy);
+        const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
+        this.loadFund(this.extractSubPortfolioFromFundReturn(targetFundCopy));
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -204,7 +209,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true, this.state.selectedMetricValue);
+      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFullServerReturn(PortfolioStructuringSample)[0], true, this.state.selectedMetricValue);
       eachFund.data.portfolioShortName = eachPortfolioName;
       eachFund.data.displayChildren = eachFund.data.children;
       return eachFund;
@@ -240,7 +245,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
-        this.processStructureData(serverReturn.Now);
+        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(serverReturn));
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -285,8 +290,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEStructuringFundBlock>) => {
-        this.processStructureData(serverReturn);
+      tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
+        const packagedServerReturn: BEGetPortfolioStructureServerReturn = {
+          Now: serverReturn
+        };
+        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(packagedServerReturn));
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
@@ -474,6 +482,71 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         // code...
         break;
     }
+  }
+
+  private extractSubPortfolioFromFullServerReturn(serverReturn: BEGetPortfolioStructureServerReturn): Array<BEStructuringFundBlock> {
+    const targetListWithSubPortfolios = serverReturn.Now;  // hardcoding it to Now until implemntation of delta
+    const targetListWithoutSubPortfolios: Array<BEStructuringFundBlock> = targetListWithSubPortfolios.map((eachFundWithSub) => {
+      return this.extractSubPortfolioFromFundReturn(eachFundWithSub);
+    });
+    return targetListWithoutSubPortfolios;
+  }
+
+  private extractSubPortfolioFromFundReturn(fundReturn: BEStructuringFundBlockWithSubPortfolios): BEStructuringFundBlock {
+    const {
+      target: targetWithSub,
+      currentTotals: currentTotalsWithSub,
+      breakdowns: breakdownsWithSub,
+      overrides: overridesWithSub,
+      ...inheritFundValues
+    } = fundReturn;
+    const eachFundWithoutSub: BEStructuringFundBlock = {
+      target: {
+        target: targetWithSub.target.All,
+        portfolioTargetId: targetWithSub.portfolioTargetId,
+        portfolioId: targetWithSub.portfolioId,
+        date: targetWithSub.date
+      },
+      currentTotals: currentTotalsWithSub.All,
+      breakdowns: {},
+      overrides: [],
+      ...inheritFundValues
+    };
+    for (const eachBreakdownKey in breakdownsWithSub) {
+      const eachBreakdownWithSub:BEStructuringBreakdownBlockWithSubPortfolios = breakdownsWithSub[eachBreakdownKey];
+      const {
+        breakdown: breakdownCategoriesWithSub,
+        ...inheritBreakdownValues
+      } = eachBreakdownWithSub;
+      const eachBreakdownWithoutSub: BEStructuringBreakdownBlock = {
+        breakdown: {},
+        ...inheritBreakdownValues
+      };
+      for (const eachCategoryKey in breakdownCategoriesWithSub) {
+        const eachCategoryWithSub = breakdownCategoriesWithSub[eachCategoryKey];
+        const eachBreakdownCategoryWithoutSub: BEStructuringBreakdownMetricBlock = {
+          metricBreakdowns: eachCategoryWithSub.metricBreakdowns.All,
+          view: eachCategoryWithSub.view
+        };
+        eachBreakdownWithoutSub.breakdown[eachCategoryKey] = eachBreakdownCategoryWithoutSub;
+      }
+      eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
+    }
+    overridesWithSub.forEach((eachOverrideWithSub:BEStructuringOverrideBlockWithSubPortfolios) => {
+      const {
+        breakdown: overrideCategoriesWithSub,
+        ...inheritOverrideValues
+      } = eachOverrideWithSub;
+      const eachOverrideWithoutSub: BEStructuringOverrideBlock = {
+        breakdown: {
+          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns.All,
+          view: overrideCategoriesWithSub.view
+        },
+        ...inheritOverrideValues
+      };
+      eachFundWithoutSub.overrides.push(eachOverrideWithoutSub);
+    });
+    return eachFundWithoutSub;
   }
 
 }
