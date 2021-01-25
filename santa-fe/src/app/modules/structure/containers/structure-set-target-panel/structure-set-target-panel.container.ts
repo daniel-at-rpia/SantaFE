@@ -1066,19 +1066,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
           metricBreakdowns: {}
         };
-        modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter] = {};
+        const subPortfolio = this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter);
+        modifiedMetricBreakdowns.metricBreakdowns[subPortfolio] = {};
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter].Cs01 = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
           if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
-            modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter].CreditDuration = {
+            modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter].CreditLeverage = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditLeverage = {
             targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }
@@ -1120,19 +1121,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
           metricBreakdowns: {}
         };
-        modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter] = {};
+        const subPortfolio = this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter);
+        modifiedMetricBreakdowns.metricBreakdowns[subPortfolio] = {};
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter].Cs01 = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
           if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
-            modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter].CreditDuration = {
+            modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns[this.state.activeSubPortfolioFilter].CreditLeverage = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditLeverage = {
             targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }

@@ -13,7 +13,8 @@ import {
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
   selectActivePortfolioViewFilter,
-  selectDataDatestamp
+  selectDataDatestamp,
+  selectActiveSubPortfolioFilter
 } from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
@@ -76,7 +77,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     reloadFundUponEditSub: null,
     viewData: null,
     activeBreakdownViewFilterSub: null,
-    activePortfolioViewFilterSub: null
+    activePortfolioViewFilterSub: null,
+    activeSubPortfolioViewFilterSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -104,10 +106,12 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       selectedMetricValue: this.constants.cs01,
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
+      activeSubPortfolioFilter: null,
       fetchResult: {
         fundList: [],
         fetchFundDataFailed: false,
-        fetchFundDataFailedError: ''
+        fetchFundDataFailedError: '',
+        rawServerReturn: null
       }
     }
     return state; 
@@ -185,6 +189,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((activeFilter) => {
       this.state.activePortfolioViewFilter = activeFilter;
     });
+    this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      select(selectActiveSubPortfolioFilter)
+    ).subscribe((activeFilter) => {
+      this.state.activeSubPortfolioFilter = activeFilter;
+      if (!!this.state.fetchResult.rawServerReturn) {
+        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturn));
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -244,6 +256,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
+        this.state.fetchResult.rawServerReturn = serverReturn;
         this.processStructureData(this.extractSubPortfolioFromFullServerReturn(serverReturn));
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
@@ -499,14 +512,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       overrides: overridesWithSub,
       ...inheritFundValues
     } = fundReturn;
+    const subPortfolio = this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter);
     const eachFundWithoutSub: BEStructuringFundBlock = {
       target: {
-        target: targetWithSub.target.All,
+        target: targetWithSub.target[subPortfolio],
         portfolioTargetId: targetWithSub.portfolioTargetId,
         portfolioId: targetWithSub.portfolioId,
         date: targetWithSub.date
       },
-      currentTotals: currentTotalsWithSub.All,
+      currentTotals: currentTotalsWithSub[subPortfolio],
       breakdowns: {},
       overrides: [],
       ...inheritFundValues
@@ -524,7 +538,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       for (const eachCategoryKey in breakdownCategoriesWithSub) {
         const eachCategoryWithSub = breakdownCategoriesWithSub[eachCategoryKey];
         const eachBreakdownCategoryWithoutSub: BEStructuringBreakdownMetricBlock = {
-          metricBreakdowns: eachCategoryWithSub.metricBreakdowns.All,
+          metricBreakdowns: eachCategoryWithSub.metricBreakdowns[subPortfolio],
           view: eachCategoryWithSub.view
         };
         eachBreakdownWithoutSub.breakdown[eachCategoryKey] = eachBreakdownCategoryWithoutSub;
@@ -538,7 +552,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       } = eachOverrideWithSub;
       const eachOverrideWithoutSub: BEStructuringOverrideBlock = {
         breakdown: {
-          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns.All,
+          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
           view: overrideCategoriesWithSub.view
         },
         ...inheritOverrideValues

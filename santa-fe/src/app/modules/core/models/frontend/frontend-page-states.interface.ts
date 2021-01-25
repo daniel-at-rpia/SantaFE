@@ -14,7 +14,7 @@ import {
   PortfolioView,
   SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants';
-import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
+import { BEStructuringBreakdownBlock, BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
@@ -132,10 +132,12 @@ export interface StructureMainPanelState {
   selectedMetricValue: PortfolioMetricValues;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  activeSubPortfolioFilter: SubPortfolioFilter;
   fetchResult: {
     fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;
     fetchFundDataFailedError: string;
+    rawServerReturn: BEGetPortfolioStructureServerReturn;
   }
 }
 
