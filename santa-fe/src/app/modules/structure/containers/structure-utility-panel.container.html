@@ -8,11 +8,11 @@
     'sat-structureUtilityPanel--viewBreakdownRegularsOnly': state.activeBreakdownViewFilter === constants.breakdownViewFilter.regularsOnly,
     'sat-structureUtilityPanel--viewBreakdownAll': state.activeBreakdownViewFilter === constants.breakdownViewFilter.all,
     'sat-structureUtilityPanel--viewingHistoricalData': state.viewingHistoricalData,
-    'sat-structureUtilityPanel--viewStrategyAll': true
+    'sat-structureUtilityPanel--viewStrategyAll': state.activeSubPortfolioFilter === constants.subPortfolioFilter.all
   }">
   <section class="sat-structureUtilityPanel__metricSelect">
     <div class="sat-structureUtilityPanel__metricSelect-top">
-      <span class="sat-structureUtilityPanel__metricSelect-top-label">Show Data In Metric</span>
+      <span class="sat-structureUtilityPanel__metricSelect-top-label">View Data In Metric</span>
     </div>
     <div class="sat-structureUtilityPanel__metricSelect-bottom">
       <div class="sat-structureUtilityPanel__metricSelect-bottom-ctas santaBtnGroup">
@@ -23,7 +23,7 @@
   </section>
   <section class="sat-structureUtilityPanel__strategySelect">
     <div class="sat-structureUtilityPanel__strategySelect-top">
-      <span class="sat-structureUtilityPanel__strategySelect-top-label">Viewing Sub-Portfolios</span>
+      <span class="sat-structureUtilityPanel__strategySelect-top-label">View Sub-Portfolios</span>
     </div>
     <div class="sat-structureUtilityPanel__strategySelect-bottom">
       <div class="sat-structureUtilityPanel__strategySelect-bottom-ctas santaBtnGroup">
@@ -36,7 +36,7 @@
   </section>
   <section class="sat-structureUtilityPanel__breakdownSelect">
     <div class="sat-structureUtilityPanel__breakdownSelect-top">
-      <span class="sat-structureUtilityPanel__breakdownSelect-top-label">Viewing Breakdowns</span>
+      <span class="sat-structureUtilityPanel__breakdownSelect-top-label">View Breakdowns</span>
     </div>
     <div class="sat-structureUtilityPanel__breakdownSelect-bottom">
       <div class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas santaBtnGroup">
@@ -60,7 +60,7 @@
   </section>
   <section class="sat-structureUtilityPanel__portfolioSelect">
     <div class="sat-structureUtilityPanel__portfolioSelect-top">
-      <span class="sat-structureUtilityPanel__portfolioSelect-top-label">Viewing Portfolios</span>
+      <span class="sat-structureUtilityPanel__portfolioSelect-top-label">View Portfolios</span>
     </div>
     <div class="sat-structureUtilityPanel__portfolioSelect-bottom">
       <button
@@ -101,7 +101,7 @@
   -->
   <section class="sat-structureUtilityPanel__updateNow">
     <div class="sat-structureUtilityPanel__updateNow-top">
-      <span class="sat-structureUtilityPanel__updateNow-top-label">Viewing Data From</span>
+      <span class="sat-structureUtilityPanel__updateNow-top-label">View Data From</span>
       <span class="sat-structureUtilityPanel__updateNow-top-label sat-structureUtilityPanel__updateNow-top-label--historicalData">{{constants.beginningOfDay}}</span>
       <span class="sat-structureUtilityPanel__updateNow-top-highlightText"> {{state.lastUpdateTime}}</span>
     </div>

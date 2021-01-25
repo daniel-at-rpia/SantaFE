@@ -281,6 +281,7 @@ export interface StructureUtilityPanelState {
   currentDatestampDisplayText: string;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  activeSubPortfolioFilter: SubPortfolioFilter;
   viewingHistoricalData: boolean;
   switchDate: {
     datepicker: SantaDatePicker;

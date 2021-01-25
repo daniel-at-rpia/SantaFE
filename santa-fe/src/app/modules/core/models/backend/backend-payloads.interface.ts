@@ -2,7 +2,8 @@ import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant
 import { AxeAlertType } from "Core/constants/tradeConstants.constant";
 import {
   PortfolioView,
-  BEPortfolioTargetMetricValues
+  BEPortfolioTargetMetricValues,
+  SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants'
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
@@ -119,16 +120,7 @@ export interface PayloadUpdatePortfolioStructuresTargets {
     date?: string,
     portfolioId: number,
     target: {
-      All?: {
-        [metric in BEPortfolioTargetMetricValues]?: number;
-      };
-      NonHedging?: {
-        [metric in BEPortfolioTargetMetricValues]?: number;
-      };
-      NonShortCarry?: {
-        [metric in BEPortfolioTargetMetricValues]?: number;
-      };
-      ShortCarry?: {
+      [subPortfolio in SubPortfolioFilter]?: {
         [metric in BEPortfolioTargetMetricValues]?: number;
       }
     }

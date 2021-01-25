@@ -17,7 +17,8 @@ import {
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
   selectActivePortfolioViewFilter,
-  selectDataDatestamp
+  selectDataDatestamp,
+  selectActiveSubPortfolioFilter
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
@@ -43,7 +44,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     lastUpdateSub: null,
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
-    dataDatestampSub: null
+    dataDatestampSub: null,
+    subPortfolioSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -69,6 +71,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
+      activeSubPortfolioFilter: null,
       viewingHistoricalData: false,
       switchDate: {
         datepicker: this.dtoService.formSantaDatepicker('Choose Historical Date', 'Date'),
@@ -112,6 +115,13 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       first()  // same reason as above
     ).subscribe((newDatestampInUnix) => {
       this.updateDataDatestamp(moment.unix(newDatestampInUnix), true);
+    });
+
+    this.subscriptions.subPortfolioSub = this.store$.pipe(
+      select(selectActiveSubPortfolioFilter),
+      first()  // same reason as above
+    ).subscribe((activeFilter) => {
+      this.state.activeSubPortfolioFilter = activeFilter;
     });
   }
 
@@ -177,6 +187,12 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
     this.updateDataDatestamp(now);
     this.state.lastUpdateTime = now.format('hh:mm:ss a');
+  }
+
+  public onClickSubPortfolioChange(targetFilterOption: SubPortfolioFilter) {
+    if (this.state) {
+      // code...
+    }
   }
 
   private updateDataDatestamp(
