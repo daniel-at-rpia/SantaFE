@@ -111,7 +111,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         fundList: [],
         fetchFundDataFailed: false,
         fetchFundDataFailedError: '',
-        rawServerReturn: null
+        rawServerReturnCache: null
       }
     }
     return state; 
@@ -166,6 +166,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((targetFund: BEStructuringFundBlockWithSubPortfolios) => {
       if (!!targetFund) {
         const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
+        this.updateRawServerReturnCache(targetFundCopy);
         this.loadFund(this.extractSubPortfolioFromFundReturn(targetFundCopy));
       }
     });
@@ -193,8 +194,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectActiveSubPortfolioFilter)
     ).subscribe((activeFilter) => {
       this.state.activeSubPortfolioFilter = activeFilter;
-      if (!!this.state.fetchResult.rawServerReturn) {
-        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturn));
+      if (!!this.state.fetchResult.rawServerReturnCache) {
+        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache));
       }
     });
   }
@@ -256,7 +257,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
-        this.state.fetchResult.rawServerReturn = serverReturn;
+        this.state.fetchResult.rawServerReturnCache = serverReturn;
         this.processStructureData(this.extractSubPortfolioFromFullServerReturn(serverReturn));
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
@@ -303,9 +304,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
+        // TODO: intergrate with delta when implemented
         const packagedServerReturn: BEGetPortfolioStructureServerReturn = {
           Now: serverReturn
         };
+        this.state.fetchResult.rawServerReturnCache = packagedServerReturn;
         this.processStructureData(this.extractSubPortfolioFromFullServerReturn(packagedServerReturn));
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -560,6 +563,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       eachFundWithoutSub.overrides.push(eachOverrideWithoutSub);
     });
     return eachFundWithoutSub;
+  }
+
+  private updateRawServerReturnCache(newFundData: BEStructuringFundBlockWithSubPortfolios) {
+    // TODO: integrate with delta when implemented
+    this.state.fetchResult.rawServerReturnCache.Now.forEach((eachFund, index) => {
+      if (eachFund.portfolioId === newFundData.portfolioId) {
+        this.state.fetchResult.rawServerReturnCache.Now[index] = newFundData;
+      }
+    });
   }
 
 }

@@ -137,7 +137,7 @@ export interface StructureMainPanelState {
     fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;
     fetchFundDataFailedError: string;
-    rawServerReturn: BEGetPortfolioStructureServerReturn;
+    rawServerReturnCache: BEGetPortfolioStructureServerReturn;  // need to store a copy of the serverReturn because when switching
   }
 }
 
