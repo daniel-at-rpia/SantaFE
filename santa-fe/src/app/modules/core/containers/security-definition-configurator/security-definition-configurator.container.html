@@ -72,7 +72,9 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
         <span class="sat-securityDefinitionConfigurator__filters-content-search-results">
-          <span class="sat-securityDefinitionConfigurator__filters-content-search-results-text">There are <span class="sat-securityDefinitionConfigurator__filters-content-search-results-text-amount">{{ configuratorData.state.showFiltersFromDefinition?.data.totalMatchingResults }}</span> {{ configuratorData.state.showFiltersFromDefinition?.data.name | lowercase }}s that match the keyword.
+          <span class="sat-securityDefinitionConfigurator__filters-content-search-results-text">There are
+            <span class="sat-securityDefinitionConfigurator__filters-content-search-results-text-amount">{{ configuratorData.state.showFiltersFromDefinition?.data.totalMatchingResults }}</span>
+            {{ configuratorData.state.showFiltersFromDefinition?.data.name | lowercase }}s that match the keyword.
           </span>
         </span>
         <span class="sat-securityDefinitionConfigurator__filters-content-search-text">Displayed results are capped up to 100 matches. Type more to keep filtering.</span>

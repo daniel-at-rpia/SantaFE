@@ -1196,7 +1196,7 @@ export class UtilityService {
       });
       if (filterSpecificOptionList.length > 0) {
         const parsedKeyword = newKeyword.toLowerCase();
-        const exactMatchOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) === 0);
+        const exactMatchOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase() === parsedKeyword);
         const generalMatchOptionList = exactMatchOptionList.length > 0 ? filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) > 0) : filterSpecificOptionList;
         if (exactMatchOptionList.length > 0) {
           exactMatchOptionList.sort((optionA: Blocks.SecurityDefinitionFilterBlock, optionB: Blocks.SecurityDefinitionFilterBlock) => {

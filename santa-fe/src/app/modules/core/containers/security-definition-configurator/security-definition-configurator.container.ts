@@ -125,7 +125,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onClickFilterOption(targetOption:SecurityDefinitionFilterBlock) {
     const targetDefinition = this.configuratorData.state.showFiltersFromDefinition;
     targetOption.isSelected = !targetOption.isSelected;
-    let filterActive = false;
     if (targetOption.isSelected) {
       targetDefinition.data.highlightSelectedOptionList.push(targetOption);
     } else {
@@ -133,6 +132,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         return eachFilter.key !== targetOption.key;
       });
     }
+    let filterActive = false;
     targetDefinition.data.displayOptionList.forEach((eachOption) => {
       if (eachOption.isSelected || this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
         filterActive = true;
