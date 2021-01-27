@@ -8,7 +8,8 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
-    import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
+    import { DTOs } from 'Core/models/frontend';
+    import { BEAlertDTO } from 'Core/models/backend/backend-models.interface';
     import { PayloadSetAlertsToInactive } from 'BEModels/backend-payloads.interface';
     import {
       ALERT_COUNTDOWN,
@@ -75,9 +76,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.newAlertSubscription = this.store$.pipe(
       select(selectNewAlerts),
-    ).subscribe((alertList: AlertDTO[]) => {
+    ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
-      const alertListSorted: AlertDTO[] = this.utilityService.deepCopy(alertList).reverse();
+      const alertListSorted: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
       try {
         alertListSorted.forEach((eachAlert) => {
           if (eachAlert.state.isCancelled) {
@@ -179,7 +180,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  public onClickAlertThumbnail(targetAlert: AlertDTO) {
+  public onClickAlertThumbnail(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
       targetAlert.state.isSlidedOut = !targetAlert.state.isSlidedOut;
       if (!targetAlert.state.isSlidedOut && !targetAlert.state.isCountdownFinished) {
@@ -194,12 +195,12 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public loadAlertToTable(targetAlert: AlertDTO) {
+  public loadAlertToTable(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
     }
   }
 
-  public onClickAlertRemove(targetAlert: AlertDTO) {
+  public onClickAlertRemove(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
       targetAlert.state.willBeRemoved = true;
       const removeTarget = () => {
@@ -215,7 +216,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onAlertExpired(targetAlert: AlertDTO) {
+  public onAlertExpired(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
       const isFromPresent = !!this.state.presentList.find((eachAlert) => {
         return targetAlert.data.id === eachAlert.data.id;
@@ -234,8 +235,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   private generateNewAlert(
-    newAlert: AlertDTO,
-    entireListForDebugging: Array<AlertDTO>
+    newAlert: DTOs.AlertDTO,
+    entireListForDebugging: Array<DTOs.AlertDTO>
   ) {
     const existIndexInPresent = this.state.presentList.findIndex((eachAlert) => {
       return eachAlert.data.id === newAlert.data.id;
@@ -281,7 +282,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private initiateStateProgressionForNewAlert(newAlert: AlertDTO) {
+  private initiateStateProgressionForNewAlert(newAlert: DTOs.AlertDTO) {
     setTimeout(function(){
       if (!!newAlert) {
         newAlert.state.isNew = false;
@@ -320,7 +321,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     // counting all types in buckets
     const allAlerts = [...this.state.presentList, ...this.state.storeList, ...this.state.secondaryStoreList];
     const grouped = this.groupBy(allAlerts, alert => alert.data.type);
-    const payload: Array<AlertCountSummaryDTO> = [];
+    const payload: Array<DTOs.AlertCountSummaryDTO> = [];
     grouped.forEach((value, key) => {
       payload.push(this.dtoService.formAlertCountSummaryObject(key, value.length));
     });
@@ -328,7 +329,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   private removeSingleAlert(
-    targetAlert: AlertDTO,
+    targetAlert: DTOs.AlertDTO,
     isFromPresent: boolean
   ) {
     if (!!targetAlert) {
