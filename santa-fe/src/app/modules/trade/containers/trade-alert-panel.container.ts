@@ -27,7 +27,8 @@
       selectAlertCounts,
       selectSecurityMapContent,
       selectSecurityMapValidStatus,
-      selectUserInitials
+      selectUserInitials,
+      selectNewAlerts
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -91,7 +92,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     startNewUpdateSub: null,
-    keywordSearchSub: null
+    keywordSearchSub: null,
+    newAlertSubscription: null
   }
   keywordChanged$: Subject<string> = new Subject<string>();
   autoUpdateCount$: Observable<any>;
@@ -132,7 +134,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         configureAlert: false,
         isAlertPaused: true,
         securityMap: [],
-        alertUpdateTimestamp: null,
         // focusMode: false,
         configuration: {
           axe: {
@@ -143,10 +144,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
             searchIsValid: false
           }
         },
-        autoUpdateCountdown: 4,
         alertUpdateInProgress: false,
         isCenterPanelPresetSelected: false,
-        receivedActiveAlertsMap: {},
         displayAlertTable: false,
         table: {
           alertMetrics: alertTableMetrics,
@@ -204,25 +203,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.securityMap = mapContent;
           this.state.isAlertPaused = false;
           this.store$.dispatch(new CoreFlushSecurityMap());
-        }
-      });
-
-      this.autoUpdateCount$ = interval(1000);
-      this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
-        if (this.state.isCenterPanelPresetSelected && !this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
-          this.state.autoUpdateCountdown = this.state.autoUpdateCountdown + 1;
-          if (this.state.autoUpdateCountdown >= this.constants.countdown) {
-            this.updateAlert();
-            this.state.autoUpdateCountdown = 0;
-          }
-          if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
-            const numOfUpdate = this.marketListAlertsCountdownUpdate();
-            if (numOfUpdate > 0){
-              // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
-              this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
-              this.state.alert.recentUpdatedAlertList = [];
-            }
-          }
         }
       });
       this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
@@ -290,6 +270,28 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.isUserPM = this.constants.fullOwnerList.indexOf(userInitials) >= 0;
         }
       });
+
+      this.subscriptions.newAlertSubscription = this.store$.pipe(
+      select(selectNewAlerts),
+    ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
+      // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
+      const alertListSorted: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+      try {
+        this.updateAlertTable(alertListSorted);
+        if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
+          const numOfUpdate = this.marketListAlertsCountdownUpdate();
+          if (numOfUpdate > 0){
+            // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
+            this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
+            this.state.alert.recentUpdatedAlertList = [];
+          }
+        }
+      } catch {
+        this.restfulCommService.logError('received new alerts but failed to generate');
+        console.error('received new alerts but failed to generate');
+      }
+    });
+
       this.loadAllConfigurations();
     }
 
@@ -301,91 +303,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     public ngOnDestroy() {
       for (const eachItem in this.subscriptions) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
+        if (this.subscriptions[eachItem]) {
+          const eachSub = this.subscriptions[eachItem] as Subscription;
+          eachSub.unsubscribe();
+        }
       }
-    }
-
-    private updateAlert() {
-      this.state.alertUpdateInProgress = true;
-      const payload = {
-        "timeStamp": this.state.alertUpdateTimestamp ||  moment().hour(0).minute(0).second(0).format("YYYY-MM-DDTHH:mm:ss.SSS")
-      };
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
-        first(),
-        tap((serverReturn: Array<BEAlertDTO>) => {
-          // using synthetic alerts for dev purposes
-          // serverReturn = !this.state.alert.initialAlertListReceived ? AlertSample : [];
-          const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
-            // no filtering logic for now
-            return true;
-          }) : [];
-          const updateList: Array<DTOs.AlertDTO> = [];
-          const alertTableList: Array<DTOs.AlertDTO> = [];
-          const alertTableRemovalList: Array<DTOs.AlertDTO> = [];  // currently the only alerts that needs to be removed are the cancelled trade alerts
-          filteredServerReturn.forEach((eachRawAlert) => {
-            // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
-            if (!!eachRawAlert.marketListAlert) {
-              if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
-                // ignore, already have it
-              } else if (!eachRawAlert.isActive) {
-                // ignore, already expired
-                const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-                if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  alertTableList.push(newAlert);
-                }
-              } else {
-                this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
-                const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-                updateList.push(newAlert);
-                if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  alertTableList.push(newAlert);
-                }
-              }
-            } else {
-              const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-              if (eachRawAlert.isCancelled) {
-                // cancellation of alerts carries diff meaning depending on the alert type:
-                // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
-                // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
-                if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
-                  !newAlert.state.isRead && alertTableList.push(newAlert);
-                  updateList.push(newAlert);
-                } else if (newAlert.data.type === this.constants.alertTypes.tradeAlert || newAlert.data.type === this.constants.alertTypes.traceAlert) {
-                  alertTableRemovalList.push(newAlert);
-                }
-              } else {
-                if (!newAlert.state.isRead && newAlert.data.isUrgent) {
-                  updateList.push(newAlert);
-                }
-                if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  alertTableList.push(newAlert);
-                }
-              }
-            }
-          });
-          updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
-          if (alertTableRemovalList.length > 0) {
-            console.log('remove alerts', alertTableRemovalList);
-            this.populateTableRowRemovalList(alertTableRemovalList);
-          }
-          if (alertTableList.length > 0) {
-            if (this.state.alert.initialAlertListReceived) {
-              this.fetchUpdate(alertTableList);
-            } else {
-              this.loadFreshData(alertTableList);
-            }
-          }
-          this.state.alertUpdateInProgress = false;
-        }),
-        catchError(err => {
-          this.state.alertUpdateInProgress = false;
-          console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
-          return of('error');
-        })
-      ).subscribe();
-      // timeStamp needs to be updated right after the API call initiates, NOT when it returns
-      this.state.alertUpdateTimestamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
     }
 
     private marketListAlertsCountdownUpdate(): number {
@@ -1278,6 +1200,54 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       });
       this.alertCountDecrement(alertList);
+    }
+
+    private updateAlertTable(alertList: Array<DTOs.AlertDTO>) {
+      this.state.alertUpdateInProgress = true;
+      const alertTableList: Array<DTOs.AlertDTO> = [];
+      const alertTableRemovalList: Array<DTOs.AlertDTO> = [];  // currently the only alerts that needs to be removed are the cancelled trade alerts
+      alertList.forEach((eachAlert) => {
+        // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
+        if (!!eachAlert.marketListAlert) {
+           if (!eachAlert.isActive) {
+            // ignore, already expired
+            if (eachAlert.data.security && eachAlert.data.security.data.securityID) {
+              alertTableList.push(eachAlert);
+            }
+          } else {
+            if (eachAlert.data.security && eachAlert.data.security.data.securityID) {
+              alertTableList.push(eachAlert);
+            }
+          }
+        } else {
+          if (eachAlert.isCancelled) {
+            // cancellation of alerts carries diff meaning depending on the alert type:
+            // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
+            // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
+            if (eachAlert.data.type === this.constants.alertTypes.markAlert || eachAlert.data.type === this.constants.alertTypes.axeAlert) {
+              !eachAlert.state.isRead && alertTableList.push(eachAlert);
+            } else if (eachAlert.data.type === this.constants.alertTypes.tradeAlert || eachAlert.data.type === this.constants.alertTypes.traceAlert) {
+              alertTableRemovalList.push(eachAlert);
+            }
+          } else {
+            if (eachAlert.data.security && eachAlert.data.security.data.securityID) {
+              alertTableList.push(eachAlert);
+            }
+          }
+        }
+      });
+      if (alertTableRemovalList.length > 0) {
+        console.log('remove alerts', alertTableRemovalList);
+        this.populateTableRowRemovalList(alertTableRemovalList);
+      }
+      if (alertTableList.length > 0) {
+        if (this.state.alert.initialAlertListReceived) {
+          this.fetchUpdate(alertTableList);
+        } else {
+          this.loadFreshData(alertTableList);
+        }
+      }
+      this.state.alertUpdateInProgress = false;
     }
   // table section end
 
