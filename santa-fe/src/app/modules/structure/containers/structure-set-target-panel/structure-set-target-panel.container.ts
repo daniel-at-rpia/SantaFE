@@ -89,7 +89,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
     definitionMap: SecurityDefinitionMap,
-    view: PortfolioView
+    view: PortfolioView,
+    subPortfolio: SubPortfolioFilter
   };
 
   constructor(
@@ -899,12 +900,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
             callCount++;
             if (callCount === necessaryUpdateNumOfCalls) {
+              const alertCoreMessage = `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`;
               this.store$.dispatch(
                 new CoreSendNewAlerts([
                   this.dtoService.formSystemAlertObject(
                     'Structuring',
                     'Updated',
-                    `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`,
+                    this.state.activeSubPortfolioFilter === this.constants.subPortfolio.all ? alertCoreMessage : `${alertCoreMessage}, within ${this.state.activeSubPortfolioFilter}`,
                     null
                   )]
                 )

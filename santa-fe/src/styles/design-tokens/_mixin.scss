@@ -305,7 +305,7 @@
     flex-direction: column;
   }
 
-  @mixin mix_active_view_style {
+  @mixin mix_cta_active {
     @include material('none');
     background-color: $color_active;
     color: $font_color_inverse;
