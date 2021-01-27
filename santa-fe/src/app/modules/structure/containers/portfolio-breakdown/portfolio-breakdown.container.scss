@@ -113,6 +113,9 @@ $portfolioBreakdown_rating_height: 1rem;
       &:hover>&-tooltip {
         display: block;
       }
+      &--index {
+        display: none;
+      }
     }
   }
   &__categoryContent {

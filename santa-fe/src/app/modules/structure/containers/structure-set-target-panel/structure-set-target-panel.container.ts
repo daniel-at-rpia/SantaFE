@@ -1343,7 +1343,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         }
       })
-      const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, definitionList, isDisplayCs01, false);
+      const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, definitionList, isDisplayCs01, false);
       if (!!customBreakdown) {
         const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
         const listWithTargets = list.filter(newRow => newRow.data.targetLevel !== null);

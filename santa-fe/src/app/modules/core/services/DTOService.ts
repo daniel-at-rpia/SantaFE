@@ -2024,6 +2024,7 @@ export class DTOService {
 
   public formStructureFundObject(
     rawData: BEModels.BEStructuringFundBlock,
+    comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     isStencil: boolean,
     selectedMetricValue: PortfolioMetricValues
   ): DTOs.PortfolioFundDTO {
@@ -2105,6 +2106,7 @@ export class DTOService {
       this.processBreakdownDataForStructureFund(
         object,
         rawData,
+        comparedDeltaRawData,
         isStencil,
         selectedMetricValue
       );
@@ -2122,6 +2124,7 @@ export class DTOService {
   public formPortfolioBreakdown(
     isStencil: boolean,
     rawData: BEModels.BEStructuringBreakdownBlock,
+    comparedDeltaRawData: BEModels.BEStructuringBreakdownBlock,
     definitionList: Array<string>,
     isDisplayCs01: boolean,
     isOverride = false
@@ -2173,6 +2176,7 @@ export class DTOService {
           isStencil,
           eachCategoryText,
           rawData,
+          comparedDeltaRawData,
           true,
           isOverride,
           object.data.diveInLevel
@@ -2186,6 +2190,7 @@ export class DTOService {
           isStencil,
           eachCategoryText,
           rawData,
+          comparedDeltaRawData,
           false,
           isOverride,
           object.data.diveInLevel
@@ -2204,7 +2209,7 @@ export class DTOService {
     for (let eachCategory in rawData.breakdown) {
       definitionList.push(eachCategory);
     }
-    const newBreakdown = this.formPortfolioBreakdown(false, rawData, definitionList, isDisplayCs01, true);
+    const newBreakdown = this.formPortfolioBreakdown(false, rawData, null, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
@@ -2218,11 +2223,13 @@ export class DTOService {
     isStencil: boolean,
     categoryName: string,
     rawData: BEModels.BEStructuringBreakdownBlock,
+    comparedDeltaRawData: BEModels.BEStructuringBreakdownBlock,
     isCs01: boolean,
     isOverride: boolean,
     diveInLevel: number
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     const categoryData = rawData.breakdown[categoryName];
+    const comparedDeltaCategoryData = !!comparedDeltaRawData ? comparedDeltaRawData.breakdown[categoryName] : null;
     if (!!categoryData) {
       const portfolioID = rawData.portfolioId;
       const groupOption = rawData.groupOption;
@@ -2252,6 +2259,7 @@ export class DTOService {
             isStencil,
             categoryName,
             isCs01 ? categoryData.metricBreakdowns.Cs01 : categoryData.metricBreakdowns.CreditLeverage,
+            !!comparedDeltaCategoryData ? isCs01 ? comparedDeltaCategoryData.metricBreakdowns.Cs01 : comparedDeltaCategoryData.metricBreakdowns.CreditLeverage : null,
             isCs01,
             portfolioID,
             groupOption,
@@ -2296,6 +2304,7 @@ export class DTOService {
     isStencil: boolean,
     categoryName: string,
     rawCategoryData: BEModels.BEStructuringBreakdownMetricSingleEntryBlock,
+    comparedDeltaRawCategoryData: BEModels.BEStructuringBreakdownMetricSingleEntryBlock,
     isCs01: boolean,
     portfolioID: number,
     groupOption: string,
@@ -2338,6 +2347,7 @@ export class DTOService {
         isCs01
       );
       const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.currentLevel, parsedRawData.targetLevel, isCs01);
+      const deltaLevel = !!comparedDeltaRawCategoryData ? this.utility.getRoundedValuesForVisualizer(comparedDeltaRawCategoryData.currentLevel - rawCategoryData.currentLevel, isCs01) : null;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
@@ -2352,6 +2362,8 @@ export class DTOService {
         currentPctDisplay: parsedRawData.currentPct != null ? `${parsedRawData.currentPct}%` : '-',
         indexPct: parsedRawData.indexPct,
         indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
+        deltaLevel: deltaLevel,
+        deltaLevelDisplay: deltaLevel != null ? `${deltaLevel}` : '-',
         moveVisualizer: eachMoveVisualizer,
         bicsLevel: !!customLevel ? customLevel : null,
         children: null,
@@ -2557,11 +2569,18 @@ export class DTOService {
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEStructuringFundBlock,
+    comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     isStencil: boolean,
     selectedMetricValue: PortfolioMetricValues
   ){
     const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const currencyBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Ccy, FilterOptionsCurrency, isDisplayCs01);
+    const currencyBreakdown = this.formPortfolioBreakdown(
+      isStencil,
+      rawData.breakdowns.Ccy,
+      !!comparedDeltaRawData ? comparedDeltaRawData.breakdowns.Ccy : null,
+      FilterOptionsCurrency,
+      isDisplayCs01
+    );
     currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
     currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
     currencyBreakdown.data.indexName = rawData.indexShortName;
@@ -2569,14 +2588,26 @@ export class DTOService {
     object.data.children.push(currencyBreakdown);
     currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     if (!isStencil) {
-      const ratingBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.RatingNoNotch, FilterOptionsRating, isDisplayCs01);
+      const ratingBreakdown = this.formPortfolioBreakdown(
+        isStencil,
+        rawData.breakdowns.RatingNoNotch,
+        !!comparedDeltaRawData ? comparedDeltaRawData.breakdowns.RatingNoNotch : null,
+        FilterOptionsRating,
+        isDisplayCs01
+      );
       ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
       ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
       ratingBreakdown.data.indexName = rawData.indexShortName;
       ratingBreakdown.data.portfolioName = rawData.portfolioShortName;
       object.data.children.push(ratingBreakdown);
       ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-      const tenorBreakdown = this.formPortfolioBreakdown(isStencil, rawData.breakdowns.Tenor, FilterOptionsTenor, isDisplayCs01);
+      const tenorBreakdown = this.formPortfolioBreakdown(
+        isStencil,
+        rawData.breakdowns.Tenor,
+        !!comparedDeltaRawData ? comparedDeltaRawData.breakdowns.Tenor : null,
+        FilterOptionsTenor,
+        isDisplayCs01
+      );
       tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
       tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
       tenorBreakdown.data.indexName = rawData.indexShortName;

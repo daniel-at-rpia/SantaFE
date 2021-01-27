@@ -62,9 +62,9 @@ export class PortfolioBreakdownRow {
 
   public showSubLevels(breakdownRow: StructurePortfolioBreakdownRowDTO) {
     !!this.viewMainDisplaySubLevels && this.viewMainDisplaySubLevels.emit(breakdownRow);
- }
+  }
 
- public onCollapseActionMenu() {
-   this.breakdownRow.state.isSelected = false;
- }
+  public onCollapseActionMenu() {
+    this.breakdownRow.state.isSelected = false;
+  }
 }

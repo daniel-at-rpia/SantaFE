@@ -298,6 +298,8 @@ export interface PortfolioBreakdownCategoryBlock {
   currentPctDisplay: string;
   indexPct: number;
   indexPctDisplay: string;
+  deltaLevel: number;
+  deltaLevelDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
   bicsLevel: number;
   portfolioID: number;
@@ -318,6 +320,7 @@ export interface PortfolioBreakdownCategoryBlock {
   editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
 }
+
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
   legend: string;

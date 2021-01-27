@@ -269,7 +269,7 @@ export class BICsDataProcessingService {
         }
       });
       const definitionList = subTierList
-      const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, definitionList, isDisplayCs01);
+      const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, object, null, definitionList, isDisplayCs01);
       breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
       this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
       this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
@@ -301,7 +301,7 @@ export class BICsDataProcessingService {
           (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
           (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
         }
-        const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, [categoryName], isCs01, false);
+        const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, [categoryName], isCs01, false);
         const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
         const creditLeverageRow = customBreakdown.data.rawLeverageCategoryList[0];
         if (!!cs01Row && !!creditLeverageRow) {

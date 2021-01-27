@@ -167,7 +167,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       if (!!targetFund) {
         const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
         this.updateRawServerReturnCache(targetFundCopy);
-        this.loadFund(this.extractSubPortfolioFromFundReturn(targetFundCopy));
+        this.loadFund(this.extractSubPortfolioFromFundReturn(targetFundCopy), null);
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -195,7 +195,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe((activeFilter) => {
       this.state.activeSubPortfolioFilter = activeFilter;
       if (!!this.state.fetchResult.rawServerReturnCache) {
-        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache));
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+          null
+        );
       }
     });
   }
@@ -222,7 +225,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFullServerReturn(PortfolioStructuringSample)[0], true, this.state.selectedMetricValue);
+      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFullServerReturn(PortfolioStructuringSample.Now)[0], null, true, this.state.selectedMetricValue);
       eachFund.data.portfolioShortName = eachPortfolioName;
       eachFund.data.displayChildren = eachFund.data.children;
       return eachFund;
@@ -259,7 +262,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
         this.state.fetchResult.rawServerReturnCache = serverReturn;
-        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(serverReturn));
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(serverReturn.Now),
+          this.extractSubPortfolioFromFullServerReturn(serverReturn.Dod)
+        );
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -305,12 +311,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
-        // TODO: intergrate with delta when implemented
-        const packagedServerReturn: BEGetPortfolioStructureServerReturn = {
-          Now: serverReturn
-        };
-        this.state.fetchResult.rawServerReturnCache = packagedServerReturn;
-        this.processStructureData(this.extractSubPortfolioFromFullServerReturn(packagedServerReturn));
+        this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(serverReturn),
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
+        );
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
@@ -361,7 +366,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       customBICSDefinitionList
     );
     const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
-    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, parsedCustomBICSDefinitionList, isCs01);
+    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, null, parsedCustomBICSDefinitionList, isCs01);
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     BICSBreakdown.data.indexName = rawData.indexShortName;
@@ -418,11 +423,22 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return parsedCustomBICSDefinitionListNoNull;
   }
 
-  private processStructureData(serverReturn: Array<BEStructuringFundBlock>) {
+  private processStructureData(
+    serverReturn: Array<BEStructuringFundBlock>,
+    deltaServerReturn: Array<BEStructuringFundBlock>
+  ) {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
-      serverReturn.forEach(eachFund => {
-        this.loadFund(eachFund);
+      serverReturn.forEach((eachFund, index) => {
+        if (!!deltaServerReturn) {
+          if (!!deltaServerReturn[index]) {
+            this.loadFund(eachFund, deltaServerReturn[index]);
+          } else {
+            console.error('DeltaServerReturn does not have valid data');
+          }
+        } else {
+          this.loadFund(eachFund, null)
+        }
       })
       try {
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
@@ -450,10 +466,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return breakdowns;
   }
 
-  private loadFund(rawData: BEStructuringFundBlock) {
+  private loadFund(rawData: BEStructuringFundBlock, deltaRawData: BEStructuringFundBlock) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.bicsDataProcessingService.setRawBICsData(rawData);
-      const newFund = this.dtoService.formStructureFundObject(rawData, false, this.state.selectedMetricValue);
+      const newFund = this.dtoService.formStructureFundObject(rawData, deltaRawData, false, this.state.selectedMetricValue);
       if (!!newFund) {
         this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
         if (newFund.data.children.length > 0) {
@@ -500,8 +516,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     }
   }
 
-  private extractSubPortfolioFromFullServerReturn(serverReturn: BEGetPortfolioStructureServerReturn): Array<BEStructuringFundBlock> {
-    const targetListWithSubPortfolios = serverReturn.Now;  // hardcoding it to Now until implemntation of delta
+  private extractSubPortfolioFromFullServerReturn(targetListWithSubPortfolios: Array<BEStructuringFundBlockWithSubPortfolios>): Array<BEStructuringFundBlock> {
     const targetListWithoutSubPortfolios: Array<BEStructuringFundBlock> = targetListWithSubPortfolios.map((eachFundWithSub) => {
       return this.extractSubPortfolioFromFundReturn(eachFundWithSub);
     });
