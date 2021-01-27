@@ -4,13 +4,14 @@ import * as moment from 'moment';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewTransferPack
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { BEStructuringFundBlock } from 'BEModels/backend-models.interface';
+import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
 
 export enum StructureActions {
   StructureStoreReset = '[Structure] Reset Store Upon Entering',
@@ -21,6 +22,7 @@ export enum StructureActions {
   UpdateMainPanel = '[Structure] Update Main Panel',
   ChangeBreakdownViewFilter = '[Structure] Change Breakdown View Filter',
   ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter',
+  ChangeSubPortfolioViewFilter = '[Structure] Change Sub-Portfolio View Filter',
   SwitchDataDatestamp = '[Structure] Switch Data Datestamp'
 }
 
@@ -47,8 +49,8 @@ export class StructureSendSetTargetTransferEvent implements Action {
 
 export class StructureReloadFundDataPostEditEvent implements Action {
   readonly type = StructureActions.ReloadBreakdownDataPostEdit;
-  readonly targetRawFund: BEStructuringFundBlock;
-  constructor(targetRawFund: BEStructuringFundBlock) {
+  readonly targetRawFund: BEStructuringFundBlockWithSubPortfolios;
+  constructor(targetRawFund: BEStructuringFundBlockWithSubPortfolios) {
     this.targetRawFund = targetRawFund;
   }
 }
@@ -78,6 +80,14 @@ export class StructureChangePortfolioViewFilterEvent implements Action {
   readonly type = StructureActions.ChangePortfolioViewFilter;
   readonly filterOption: Array<PortfolioShortNames>;
   constructor(filterOption: Array<PortfolioShortNames>) {
+    this.filterOption = filterOption;
+  }
+}
+
+export class StructureChangeSubPortfolioViewFilterEvent implements Action {
+  readonly type = StructureActions.ChangeSubPortfolioViewFilter;
+  readonly filterOption: SubPortfolioFilter;
+  constructor(filterOption: SubPortfolioFilter) {
     this.filterOption = filterOption;
   }
 }

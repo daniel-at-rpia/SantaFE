@@ -31,6 +31,30 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &__strategySelect {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-top {
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+      }
+    }
+    &-bottom {
+      display: flex;
+      &-ctas {
+
+      }
+    }
+  }
   &__breakdownSelect {
     @include mix_border_generator(0 $typical_border_width 0 0);
     flex: 1 1 auto;
@@ -286,8 +310,55 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &--viewStrategyAll {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-all {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewStrategNonHedging {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-nonHedging {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewStrategyNonShortCarry {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-nonShortCarry {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewStrategyShortCarry {
+    #{$blockName} {
+      &__strategySelect {
+        &-bottom-ctas-shortCarry {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
   @include mq-x-large-min {
     &__metricSelect {
+      flex-direction: row;
+      justify-content: center;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
+      }
+    }
+    &__strategySelect {
       flex-direction: row;
       justify-content: center;
       &-top {

@@ -590,11 +590,12 @@ export class DTOService {
         key: rawData.key,
         urlForGetLongOptionListFromServer: rawData.urlForGetLongOptionListFromServer || null,
         prinstineFilterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
-        filterOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
+        displayOptionList: this.generateSecurityDefinitionFilterOptionList(rawData.key, rawData.optionList),
         securityDTOAttr: rawData.securityDTOAttr,
         securityDTOAttrBlock: rawData.securityDTOAttrBlock,
         highlightSelectedOptionList: [],
-        backendDtoAttrName: rawData.backendDtoAttrName
+        backendDtoAttrName: rawData.backendDtoAttrName,
+        totalMatchingResults: 0
       },
       style: {
         icon: rawData.icon,
@@ -608,7 +609,8 @@ export class DTOService {
         filterActive: false,
         isMiniPillVariant: false,
         isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
-        currentFilterPathInConsolidatedBICS: []
+        currentFilterPathInConsolidatedBICS: [],
+        isFilterCapped: false
       }
     }
     return object;
@@ -620,10 +622,10 @@ export class DTOService {
     bicsLevel?: number
   ): DTOs.SecurityDefinitionDTO {
     targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
-    targetDefinition.data.filterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
+    targetDefinition.data.displayOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
     if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
-      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+      targetDefinition.data.displayOptionList.forEach((eachOption) => {
         const exist = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
           return eachSelectedOption.shortKey === eachOption.shortKey;
         });
@@ -2283,7 +2285,7 @@ export class DTOService {
         }
       }
       const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
-      object.state.isBtnDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(object.data.code) : false;
+      object.state.isBtnDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(object) : false;
       return object;
     } else {
       return null;

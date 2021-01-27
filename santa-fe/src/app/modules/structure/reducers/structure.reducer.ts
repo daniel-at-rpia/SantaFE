@@ -3,23 +3,25 @@ import { StructureActions } from 'Structure/actions/structure.actions';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewTransferPack,
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { BEStructuringFundBlock } from 'BEModels/backend-models.interface';
+import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
 import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
   setTargetTransfer: StructureSetTargetOverlayTransferPack;
-  reloadFundDataPostEdit: BEStructuringFundBlock;
+  reloadFundDataPostEdit: BEStructuringFundBlockWithSubPortfolios;
   updateTick: number;
   viewData: StructureSetViewTransferPack;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  activeSubPortfolioFilter: SubPortfolioFilter;
   dataDatestamp: number;
 }
 
@@ -39,6 +41,7 @@ const initialState: StructureState = {
     PortfolioShortNames.DOF,
     PortfolioShortNames.SOF
   ],
+  activeSubPortfolioFilter: SubPortfolioFilter.all,
   dataDatestamp: moment().unix()
 }
 
@@ -89,6 +92,11 @@ export function structureReducer(
         ...state,
         dataDatestamp: action.dateStampInUnix
       };
+    case StructureActions.ChangeSubPortfolioViewFilter:
+      return {
+        ...state,
+        activeSubPortfolioFilter: action.filterOption
+      }
     default:
       return state;
   }

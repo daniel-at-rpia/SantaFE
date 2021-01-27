@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { of, Subscription } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
+import { catchError, first, tap, withLatestFrom } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { StructureSetTargetPanelState } from 'FEModels/frontend-page-states.interface';
@@ -8,7 +8,10 @@ import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
-import { selectSetTargetTransferPack } from 'Structure/selectors/structure.selectors';
+import {
+  selectSetTargetTransferPack,
+  selectActiveSubPortfolioFilter
+} from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import {
   StructureSetTargetOverlayTransferPack,
@@ -42,10 +45,12 @@ import {
 } from 'BEModels/backend-payloads.interface';
 import {
   BEStructuringBreakdownBlock,
-  BEStructuringFundBlock,
+  BEStructuringFundBlockWithSubPortfolios,
   BEStructuringBreakdownMetricBlock,
   BEStructuringOverrideBlock,
-  BEStructuringBreakdownMetricSingleEntryBlock
+  BEStructuringOverrideBlockWithSubPortfolios,
+  BEStructuringBreakdownMetricSingleEntryBlock,
+  BEStructuringBreakdownMetricBlockWithSubPortfolios
 } from 'BEModels/backend-models.interface';
 import {
   PayloadGetPortfolioOverride,
@@ -59,7 +64,8 @@ import {
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   CustomeBreakdownConfiguratorDefinitionLayout,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+  SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { BICSDictionaryLookupService} from 'Core/services/BICSDictionaryLookupService';
@@ -83,7 +89,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
     definitionMap: SecurityDefinitionMap,
-    view: PortfolioView
+    view: PortfolioView,
+    subPortfolio: SubPortfolioFilter
   };
 
   constructor(
@@ -125,7 +132,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       removalList: [],
       clearAllTargetSelected: false,
       editViewMode: false,
-      ownerInitial: null
+      ownerInitial: null,
+      activeSubPortfolioFilter: null
     };
     return state;
   }
@@ -138,10 +146,14 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.state.ownerInitial = value;
     });
     this.subscriptions.setTargetTransferPackSub = this.store$.pipe(
-      select(selectSetTargetTransferPack)
-    ).subscribe((pack: StructureSetTargetOverlayTransferPack) => {
-      if (!!pack) {
+      select(selectSetTargetTransferPack),
+      withLatestFrom(
+        this.store$.pipe(select(selectActiveSubPortfolioFilter))
+      )
+    ).subscribe(([pack, activeSubPortfolioFilter]: [StructureSetTargetOverlayTransferPack, SubPortfolioFilter]) => {
+      if (!!pack && !!activeSubPortfolioFilter) {
         this.state = this.initializePageState();
+        this.state.activeSubPortfolioFilter = activeSubPortfolioFilter;
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.configurator.display = false;
@@ -374,12 +386,23 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringOverrideBlock) => {
-            const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([serverReturn]);
+          tap((serverReturn: BEStructuringOverrideBlockWithSubPortfolios) => {
+            const {
+              breakdown: breakdownWithSubPortfolio,
+              ...inheritValues
+            } = serverReturn;
+            const overrideData: BEStructuringOverrideBlock = {
+              breakdown: {
+                view: breakdownWithSubPortfolio.view,
+                metricBreakdowns: breakdownWithSubPortfolio.metricBreakdowns[this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter)]
+              },
+              ...inheritValues
+            }
+            const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([overrideData]);
             const rawBreakdownList = returnPack.list;
             this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
-            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(serverReturn);
-            const newCategoryKey = this.utilityService.formCategoryKeyForOverride(serverReturn);
+            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(overrideData);
+            const newCategoryKey = this.utilityService.formCategoryKeyForOverride(overrideData);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
               const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
               this.state.targetBreakdownRawData.breakdown[newCategoryKey] = newDataBlock;
@@ -874,15 +897,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       payloads.forEach((payload) => {
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringFundBlock) => {
+          tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
             callCount++;
             if (callCount === necessaryUpdateNumOfCalls) {
+              const alertCoreMessage = `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`;
               this.store$.dispatch(
                 new CoreSendNewAlerts([
                   this.dtoService.formSystemAlertObject(
                     'Structuring',
                     'Updated',
-                    `Successfully updated targets for ${this.state.targetBreakdown.data.title} in ${this.state.targetFund.data.portfolioShortName}`,
+                    this.state.activeSubPortfolioFilter === this.constants.subPortfolio.all ? alertCoreMessage : `${alertCoreMessage}, within ${this.state.activeSubPortfolioFilter}`,
                     null
                   )]
                 )
@@ -896,7 +920,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             return of('error');
           })
         ).subscribe();
-      })
+      });
       return true;
     } else {
       this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
@@ -918,7 +942,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!payload) {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
             first(),
-            tap((serverReturn: BEStructuringFundBlock) => {
+            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
               this.store$.dispatch(
                 new CoreSendNewAlerts([
                   this.dtoService.formSystemAlertObject(
@@ -958,7 +982,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         updatePayload.forEach((eachPayload) => {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
             first(),
-            tap((serverReturn: BEStructuringFundBlock) => {
+            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
                 if (necessaryDeleteNumOfCalls > 0) {
@@ -1003,7 +1027,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     deletePayload.forEach((eachPayload, index) => {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
         first(),
-        tap((serverReturn: BEStructuringFundBlock) => {
+        tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
           callCount++;
           if (callCount === necessaryDeleteNumOfCalls) {
             this.store$.dispatch(new StructureUpdateMainPanelEvent());
@@ -1053,21 +1077,23 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.editRowList.forEach((eachRow) => {
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         hasModification = true;
-        const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlock = {
+        const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
           metricBreakdowns: {}
         };
+        const subPortfolio = this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter);
+        modifiedMetricBreakdowns.metricBreakdowns[subPortfolio] = {};
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
           if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
-            modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
+            modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditLeverage = {
             targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }
@@ -1106,22 +1132,23 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
-        const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlock = {
-          view: null,
+        const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
           metricBreakdowns: {}
         };
+        const subPortfolio = this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter);
+        modifiedMetricBreakdowns.metricBreakdowns[subPortfolio] = {};
         if (this.cs01ModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns.Cs01 = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].Cs01 = {
             targetPct: eachRow.targetCs01.percent.savedUnderlineValue
           };
           if (eachRow.targetCs01.percent.savedUnderlineValue === null) {
-            modifiedMetricBreakdowns.metricBreakdowns.CreditDuration = {
+            modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditDuration = {
               targetPct: eachRow.targetCs01.percent.savedUnderlineValue
             };
           }
         }
         if (this.creditLeverageModifiedInEditRow(eachRow)) {
-          modifiedMetricBreakdowns.metricBreakdowns.CreditLeverage = {
+          modifiedMetricBreakdowns.metricBreakdowns[subPortfolio].CreditLeverage = {
             targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }
@@ -1510,7 +1537,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return !!isViewPayloadValid ? viewPayload : null;
   }
 
-  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEStructuringFundBlock = null): boolean {
+  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEStructuringFundBlockWithSubPortfolios = null): boolean {
     const endpoint = this.restfulCommService.apiMap.setView;
     const { bucket, view } = data;
     const payload: PayloadSetView = {
@@ -1519,7 +1546,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEStructuringFundBlock>) => {
+      tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
         const completeAlertMessage = `Successfully updated views`;
         this.store$.dispatch(new StructureUpdateMainPanelEvent());
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
@@ -1561,7 +1588,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const level = payload.portfolioBreakdown.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1];
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioBreakdown, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringFundBlock) => {
+          tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
             if (!!serverReturn) {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {

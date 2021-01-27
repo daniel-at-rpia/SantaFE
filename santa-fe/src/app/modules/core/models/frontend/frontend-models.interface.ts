@@ -229,11 +229,12 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     key: string;
     urlForGetLongOptionListFromServer: string;
     prinstineFilterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
-    filterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
+    displayOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
     highlightSelectedOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
     securityDTOAttrBlock: string;
     backendDtoAttrName: string;
+    totalMatchingResults: number;
   }
   style: {
     icon: string;
@@ -247,6 +248,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isMiniPillVariant: boolean;
     isFilterLong: boolean;
     currentFilterPathInConsolidatedBICS: Array<string>;
+    isFilterCapped: boolean;
   }
 }
 
