@@ -88,7 +88,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   subscriptions = {
     userInitialsSub: null,
     securityMapSub: null,
-    autoUpdateCountSub: null,
     selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     startNewUpdateSub: null,
