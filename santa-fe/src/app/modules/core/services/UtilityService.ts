@@ -1429,7 +1429,7 @@ export class UtilityService {
       }
     }
 
-    public getRowDiffToTargetText(amount: number, isCs01: boolean): string {
+    public getBreakdownRowDiffText(amount: number, isCs01: boolean): string {
       let displayText: string;
       if (amount < 0) {
         displayText = !!isCs01 ? `${amount}k` : `${amount}`;

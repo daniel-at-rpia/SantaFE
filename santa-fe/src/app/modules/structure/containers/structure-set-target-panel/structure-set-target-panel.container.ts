@@ -415,7 +415,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               this.state.targetBreakdownRawData = rawBreakdownList[0];
             }
             const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, null, isDisplayCs01);
             newBreakdown.state.isPreviewVariant = true;
             this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
               this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdownBucketIdentifier],
@@ -448,7 +448,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetBreakdownRawData.breakdown = this.utilityService.removePropertyFromObject(this.state.targetBreakdownRawData.breakdown, targetRow.rowIdentifier);
       !!targetRow.existInServer && this.state.removalList.push(targetRow);
       const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-      const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+      const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, null, isDisplayCs01);
       this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
         this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
         newBreakdown
@@ -831,7 +831,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           const parsedCurrentLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.currentLevel, isCs01);
           const parsedTargetLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.targetLevel, isCs01);
           const newDiffToTarget = this.utilityService.getRowDiffToTarget(parsedCurrentLevel, parsedTargetLevel, isCs01);
-          const newDiffToTargetDisplay = this.utilityService.getRowDiffToTargetText(newDiffToTarget, isCs01);
+          const newDiffToTargetDisplay = this.utilityService.getBreakdownRowDiffText(newDiffToTarget, isCs01);
           this.setNewDiffToTargetsForRows(row, newDiffToTarget, newDiffToTargetDisplay);
         }
         this.updateRowVisualizer(row, rawBreakdownData, minValue, maxValue, isCs01, isBICS);

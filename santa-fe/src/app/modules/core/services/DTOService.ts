@@ -2113,6 +2113,7 @@ export class DTOService {
       !isStencil && this.processOverrideDataForStructureFund(
         object,
         rawData,
+        comparedDeltaRawData,
         selectedMetricValue
       )
     } catch (err) {
@@ -2203,13 +2204,14 @@ export class DTOService {
 
   public formPortfolioOverrideBreakdown(
     rawData: BEModels.BEStructuringBreakdownBlock,
+    comparedDeltaRawData: BEModels.BEStructuringBreakdownBlock,
     isDisplayCs01: boolean
   ): DTOs.PortfolioBreakdownDTO {
     const definitionList = [];
     for (let eachCategory in rawData.breakdown) {
       definitionList.push(eachCategory);
     }
-    const newBreakdown = this.formPortfolioBreakdown(false, rawData, null, definitionList, isDisplayCs01, true);
+    const newBreakdown = this.formPortfolioBreakdown(false, rawData, comparedDeltaRawData, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
@@ -2363,7 +2365,7 @@ export class DTOService {
         indexPct: parsedRawData.indexPct,
         indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
         deltaLevel: deltaLevel,
-        deltaLevelDisplay: deltaLevel != null ? `${deltaLevel}` : '-',
+        deltaLevelDisplay: '-',
         moveVisualizer: eachMoveVisualizer,
         bicsLevel: !!customLevel ? customLevel : null,
         children: null,
@@ -2384,7 +2386,8 @@ export class DTOService {
         editedSubLevelRowsWithTargets: [],
         code: code
       };
-      eachCategoryBlock.diffToTargetDisplay = this.utility.getRowDiffToTargetText(eachCategoryBlock.diffToTarget, isCs01);
+      eachCategoryBlock.diffToTargetDisplay = this.utility.getBreakdownRowDiffText(eachCategoryBlock.diffToTarget, isCs01);
+      eachCategoryBlock.deltaLevelDisplay = this.utility.getBreakdownRowDiffText(eachCategoryBlock.deltaLevel, isCs01);
       return eachCategoryBlock;
     } else {
       return null;
@@ -2624,9 +2627,17 @@ export class DTOService {
   private processOverrideDataForStructureFund(
     object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEStructuringFundBlock,
+    comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     selectedMetricValue: PortfolioMetricValues
   ){
     if(rawData.overrides) {
+      const deltaReturnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = {
+        list: [],
+        displayLabelMap: {}
+      };
+      if (!!comparedDeltaRawData && comparedDeltaRawData.overrides) {
+        deltaReturnPack.list = this.utility.convertRawOverrideToRawBreakdown(comparedDeltaRawData.overrides).list;
+      }
       const returnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = returnPack.list;
       overrideList.sort((overrideA, overrideB) =>{
@@ -2640,7 +2651,10 @@ export class DTOService {
       });
       overrideList.forEach((eachRawBreakdown) => {
         const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, isDisplayCs01);
+        const existDeltaData = deltaReturnPack.list.find((eachDeltaRawBreakdown) => {
+          return eachDeltaRawBreakdown.groupOption === eachRawBreakdown.groupOption;
+        });
+        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, existDeltaData, isDisplayCs01);
         newBreakdown.data.indexName = rawData.indexShortName;
         newBreakdown.data.portfolioName = rawData.portfolioShortName;
         this.utility.updateDisplayLabelForOverrideConvertedBreakdown(

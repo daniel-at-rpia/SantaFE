@@ -255,10 +255,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
   &__subLevelTargetGauge {
     display: none;
     flex: 0 0 100%;
+    margin: $spacing_minimum 0 $spacing_x_small 0;
     &-content {
       flex: 0 0 100%;
       display: flex;
-      padding: $spacing_minimum 0 $spacing_x_small 0;
       align-items: center;
       overflow: hidden;
       &-label {

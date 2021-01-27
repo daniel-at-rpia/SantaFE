@@ -345,6 +345,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private formCustomBICsBreakdownWithSubLevels(
     rawData: BEStructuringFundBlock,
+    deltaRawData: BEStructuringFundBlock,
     fund: PortfolioFundDTO
   ) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
@@ -365,8 +366,28 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       customBICSBreakdown,
       customBICSDefinitionList
     );
+    const customDeltaBICSBreakdown = this.dtoService.formCustomRawBreakdownData(
+      deltaRawData,
+      deltaRawData.breakdowns.BicsCodeLevel1,
+      ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+    ).customBreakdown;
+    this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
+      deltaRawData,
+      customDeltaBICSBreakdown,
+      customBICSDefinitionList
+    );
+    this.formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
+      customDeltaBICSBreakdown,
+      customBICSDefinitionList
+    );
     const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
-    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, null, parsedCustomBICSDefinitionList, isCs01);
+    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(
+      false,
+      customBICSBreakdown,
+      customDeltaBICSBreakdown,
+      parsedCustomBICSDefinitionList,
+      isCs01
+    );
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     BICSBreakdown.data.indexName = rawData.indexShortName;
@@ -466,12 +487,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return breakdowns;
   }
 
-  private loadFund(rawData: BEStructuringFundBlock, deltaRawData: BEStructuringFundBlock) {
+  private loadFund(
+    rawData: BEStructuringFundBlock,
+    deltaRawData: BEStructuringFundBlock
+  ) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.bicsDataProcessingService.setRawBICsData(rawData);
       const newFund = this.dtoService.formStructureFundObject(rawData, deltaRawData, false, this.state.selectedMetricValue);
       if (!!newFund) {
-        this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
+        this.formCustomBICsBreakdownWithSubLevels(rawData, deltaRawData, newFund);
         if (newFund.data.children.length > 0) {
           newFund.data.children = this.getSortedBreakdownDisplayListForFund(newFund.data.children);
         }
