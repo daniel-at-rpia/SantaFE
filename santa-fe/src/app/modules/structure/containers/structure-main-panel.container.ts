@@ -14,7 +14,8 @@ import {
   selectActiveBreakdownViewFilter,
   selectActivePortfolioViewFilter,
   selectDataDatestamp,
-  selectActiveSubPortfolioFilter
+  selectActiveSubPortfolioFilter,
+  selectActiveDeltaScope
 } from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
@@ -78,7 +79,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     viewData: null,
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
-    activeSubPortfolioViewFilterSub: null
+    activeSubPortfolioViewFilterSub: null,
+    activeDeltaScopeSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -107,6 +109,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
       activeSubPortfolioFilter: null,
+      activeDeltaScope: null,
       fetchResult: {
         fundList: [],
         fetchFundDataFailed: false,
@@ -201,6 +204,17 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         );
       }
     });
+    this.subscriptions.activeDeltaScopeSub = this.store$.pipe(
+      select(selectActiveDeltaScope)
+    ).subscribe((activeScope) => {
+      this.state.activeDeltaScope = activeScope;
+      if (!!this.state.fetchResult.rawServerReturnCache) {
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[activeScope])
+        );
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -264,7 +278,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.state.fetchResult.rawServerReturnCache = serverReturn;
         this.processStructureData(
           this.extractSubPortfolioFromFullServerReturn(serverReturn.Now),
-          this.extractSubPortfolioFromFullServerReturn(serverReturn.Dod)
+          this.extractSubPortfolioFromFullServerReturn(serverReturn[this.state.activeDeltaScope])
         );
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
