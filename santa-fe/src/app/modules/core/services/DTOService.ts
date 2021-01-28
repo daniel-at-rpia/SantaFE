@@ -2160,7 +2160,8 @@ export class DTOService {
         isEditingViewAvail: false,
         isDisplaySubLevels: false,
         isDisplayPopover: false,
-        isViewingHistoricalData: false
+        isViewingHistoricalData: false,
+        isViewingIndex: !comparedDeltaRawData
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
@@ -2289,7 +2290,8 @@ export class DTOService {
           isDoveIn: false,
           isWithinEditRow: false,
           isWithinSetTargetPreview: false,
-          isViewingHistoricalData: false
+          isViewingHistoricalData: false,
+          isViewingIndex: !comparedDeltaRawData
         }
       }
       const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;

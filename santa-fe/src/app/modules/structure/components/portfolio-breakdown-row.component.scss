@@ -668,6 +668,18 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
+  &--isViewingIndex {
+    #{$blockName} {
+      &__cell {
+        &--index {
+          display: flex;
+        }
+        &--delta {
+          display: none;
+        }
+      }
+    }
+  }
   &--stencilState {
     #{$blockName} {
       &__cta {

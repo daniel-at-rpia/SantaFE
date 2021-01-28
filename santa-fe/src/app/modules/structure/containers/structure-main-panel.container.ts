@@ -239,7 +239,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFullServerReturn(PortfolioStructuringSample.Now)[0], null, true, this.state.selectedMetricValue);
+      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFundReturn(PortfolioStructuringSample.Now[0]), null, true, this.state.selectedMetricValue);
       eachFund.data.portfolioShortName = eachPortfolioName;
       eachFund.data.displayChildren = eachFund.data.children;
       return eachFund;
@@ -380,20 +380,24 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       customBICSBreakdown,
       customBICSDefinitionList
     );
-    const customDeltaBICSBreakdown = this.dtoService.formCustomRawBreakdownData(
-      deltaRawData,
-      deltaRawData.breakdowns.BicsCodeLevel1,
-      ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
-    ).customBreakdown;
-    this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
-      deltaRawData,
-      customDeltaBICSBreakdown,
-      customBICSDefinitionList
-    );
-    this.formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
-      customDeltaBICSBreakdown,
-      customBICSDefinitionList
-    );
+    const customDeltaBICSBreakdown = deltaRawData 
+      ? this.dtoService.formCustomRawBreakdownData(
+          deltaRawData,
+          deltaRawData.breakdowns.BicsCodeLevel1,
+          ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+        ).customBreakdown
+      : null;
+    if (!!customDeltaBICSBreakdown) {
+      this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
+        deltaRawData,
+        customDeltaBICSBreakdown,
+        customBICSDefinitionList
+      );
+      this.formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
+        customDeltaBICSBreakdown,
+        customBICSDefinitionList
+      );
+    }
     const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
     const BICSBreakdown = this.dtoService.formPortfolioBreakdown(
       false,
@@ -555,10 +559,14 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private extractSubPortfolioFromFullServerReturn(targetListWithSubPortfolios: Array<BEStructuringFundBlockWithSubPortfolios>): Array<BEStructuringFundBlock> {
-    const targetListWithoutSubPortfolios: Array<BEStructuringFundBlock> = targetListWithSubPortfolios.map((eachFundWithSub) => {
-      return this.extractSubPortfolioFromFundReturn(eachFundWithSub);
-    });
-    return targetListWithoutSubPortfolios;
+    if (!!targetListWithSubPortfolios) {
+      const targetListWithoutSubPortfolios: Array<BEStructuringFundBlock> = targetListWithSubPortfolios.map((eachFundWithSub) => {
+        return this.extractSubPortfolioFromFundReturn(eachFundWithSub);
+      });
+      return targetListWithoutSubPortfolios;
+    } else {
+      return null;
+    }
   }
 
   private extractSubPortfolioFromFundReturn(fundReturn: BEStructuringFundBlockWithSubPortfolios): BEStructuringFundBlock {
