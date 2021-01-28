@@ -88,7 +88,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       @include mix_enable_scrollbar('vertical');
       display: flex;
       background-color: $color_gray_1;
-      padding: $spacing_small 0;
+      padding: $spacing_small 0 $spacing_x_large 0; // the x_large is to avoid triggering the undesirable "clipped" effect on the diveIn button
       &-category {
         @include mix_bics_level_category;
         &-text {

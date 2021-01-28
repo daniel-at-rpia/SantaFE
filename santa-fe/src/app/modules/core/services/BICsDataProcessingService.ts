@@ -14,7 +14,8 @@ import {
   BICS_DICTIONARY_KEY_PREFIX,
   BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  BICS_BREAKDOWN_FRONTEND_KEY
+  BICS_BREAKDOWN_FRONTEND_KEY,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
@@ -25,7 +26,8 @@ import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupS
 @Injectable()
 
 export class BICsDataProcessingService {
-  private bicsRawData: Array<Blocks.BICsCategorizationBlock> = [];
+  private bicsRawData: Array<Blocks.BICSCategorizationBlock> = [];
+  private bicsComparedDeltaRawData: Array<Blocks.BICSCategorizationBlock> = [];
   private formattedBICsHierarchyData: Blocks.BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
 
@@ -166,9 +168,17 @@ export class BICsDataProcessingService {
     return allBICSList;
   }
 
-  public setRawBICsData(rawData: BEStructuringFundBlock) {
-    const { BicsCodeLevel1, BicsCodeLevel2, BicsCodeLevel3, BicsCodeLevel4 } = rawData.breakdowns;
-    const block: Blocks.BICsCategorizationBlock = {
+  public setRawBICsData(
+    rawData: BEStructuringFundBlock,
+    comparedDeltaRawData: BEStructuringFundBlock
+  ) {
+    const {
+      BicsCodeLevel1,
+      BicsCodeLevel2,
+      BicsCodeLevel3,
+      BicsCodeLevel4
+    } = rawData.breakdowns;
+    const block: Blocks.BICSCategorizationBlock = {
       portfolioID: rawData.portfolioId,
       bicsLevel1: BicsCodeLevel1,
       bicsLevel2: BicsCodeLevel2,
@@ -180,6 +190,26 @@ export class BICsDataProcessingService {
       this.bicsRawData[existingPortfolioIndex] = block;
     } else {
       this.bicsRawData.push(block);
+    }
+    if (!!comparedDeltaRawData) {
+      const {
+        BicsCodeLevel1: deltaBicsCodeLevel1,
+        BicsCodeLevel2: deltaBicsCodeLevel2,
+        BicsCodeLevel3: deltaBicsCodeLevel3,
+        BicsCodeLevel4: deltaBicsCodeLevel4
+      } = comparedDeltaRawData.breakdowns;
+      const deltaBlock: Blocks.BICSCategorizationBlock = {
+        portfolioID: rawData.portfolioId,
+        bicsLevel1: deltaBicsCodeLevel1,
+        bicsLevel2: deltaBicsCodeLevel2,
+        bicsLevel3: deltaBicsCodeLevel3,
+        bicsLevel4: deltaBicsCodeLevel4
+      }
+      if (existingPortfolioIndex > -1) {
+        this.bicsComparedDeltaRawData[existingPortfolioIndex] = deltaBlock;
+      } else {
+        this.bicsComparedDeltaRawData.push(deltaBlock);
+      }
     }
   }
 
@@ -279,39 +309,33 @@ export class BICsDataProcessingService {
     }
   }
 
-  public formBICSRow(code: string, portfolioID: number, level: number, isCs01: boolean): Array<DTOs.StructurePortfolioBreakdownRowDTO> {
-    const rawData: Blocks.BICsCategorizationBlock = this.bicsRawData.find(bicsData => bicsData.portfolioID === portfolioID);
-    if (!!rawData) {
-      const bicsLevel = BICsLevels[level];
-      const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
-      if (!!rawBreakdown) {
-        const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
-        const customRawBreakdown: BEStructuringBreakdownBlock = {
-          date,
-          groupOption,
-          indexId,
-          portfolioBreakdownId,
-          portfolioId,
-          breakdown: {}
-        }
-        const breakdownData = rawData[bicsLevel].breakdown[code];
-        const categoryName = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
-        if (!!breakdownData) {
-          customRawBreakdown.breakdown[categoryName] = breakdownData;
-          (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
-          (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
-        }
-        const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, [categoryName], isCs01, false);
-        const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
-        const creditLeverageRow = customBreakdown.data.rawLeverageCategoryList[0];
-        if (!!cs01Row && !!creditLeverageRow) {
-          cs01Row.state.isStencil = false;
-          cs01Row.data.moveVisualizer.state.isStencil = false;
-          creditLeverageRow.state.isStencil = false;
-          creditLeverageRow.data.moveVisualizer.state.isStencil = false;
-          return [cs01Row, creditLeverageRow];
-        }
+  public formBICSRow(mainRowData: Blocks.BICSMainRowDataBlock): Array<DTOs.StructurePortfolioBreakdownRowDTO> {
+    const { code, portfolioID, level, isCs01} = mainRowData;
+    const rawData: Blocks.BICSCategorizationBlock = this.bicsRawData.find(bicsData => bicsData.portfolioID === portfolioID);
+    const deltaRawData: Blocks.BICSCategorizationBlock = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(bicsData => bicsData.portfolioID === portfolioID) : null;
+    const customRawBreakdown: BEStructuringBreakdownBlock = this.formBEBreakdownRawDataFromCategorizationBlock(rawData, level, code);
+    const customRawDeltaBreakdown: BEStructuringBreakdownBlock = this.formBEBreakdownRawDataFromCategorizationBlock(deltaRawData, level, code);
+    if (!!customRawBreakdown) {
+      const categoryName = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
+      const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(
+        false,
+        customRawBreakdown,
+        customRawDeltaBreakdown,
+        [categoryName],
+        isCs01,
+        false
+      );
+      const cs01Row = customBreakdown.data.rawCs01CategoryList[0];
+      const creditLeverageRow = customBreakdown.data.rawLeverageCategoryList[0];
+      if (!!cs01Row && !!creditLeverageRow) {
+        cs01Row.state.isStencil = false;
+        cs01Row.data.moveVisualizer.state.isStencil = false;
+        creditLeverageRow.state.isStencil = false;
+        creditLeverageRow.data.moveVisualizer.state.isStencil = false;
       }
+      return [cs01Row, creditLeverageRow];
+    } else {
+      return [null, null];
     }
   }
 
@@ -557,4 +581,35 @@ export class BICsDataProcessingService {
     }
     return loopCategoryList;
   }
+
+  private formBEBreakdownRawDataFromCategorizationBlock(
+    rawData: Blocks.BICSCategorizationBlock,
+    level: number,
+    code: string
+  ): BEStructuringBreakdownBlock {
+    const bicsLevel = BICsLevels[level];
+    const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
+    if (!!rawBreakdown) {
+      const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
+      const customRawBreakdown: BEStructuringBreakdownBlock = {
+        date,
+        groupOption,
+        indexId,
+        portfolioBreakdownId,
+        portfolioId,
+        breakdown: {}
+      }
+      const breakdownData = rawData[bicsLevel].breakdown[code];
+      const categoryName = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
+      if (!!breakdownData) {
+        customRawBreakdown.breakdown[categoryName] = breakdownData;
+        (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
+        (customRawBreakdown.breakdown[categoryName] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
+      }
+      return customRawBreakdown;
+    } else {
+      return null;
+    }
+  }
+
 }

@@ -372,7 +372,7 @@ export interface BICsHierarchyAllDataBlock {
   children: Array<BICsHierarchyBlock>;
 }
 
-export interface BICsCategorizationBlock {
+export interface BICSCategorizationBlock {
   portfolioID: number,
   bicsLevel1: BEStructuringBreakdownBlock,
   bicsLevel2?: BEStructuringBreakdownBlock,

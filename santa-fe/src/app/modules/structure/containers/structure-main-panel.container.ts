@@ -510,7 +510,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     deltaRawData: BEStructuringFundBlock
   ) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
-      this.bicsDataProcessingService.setRawBICsData(rawData);
+      this.bicsDataProcessingService.setRawBICsData(rawData, deltaRawData);
       const newFund = this.dtoService.formStructureFundObject(rawData, deltaRawData, false, this.state.selectedMetricValue);
       if (!!newFund) {
         this.formCustomBICsBreakdownWithSubLevels(rawData, deltaRawData, newFund);
