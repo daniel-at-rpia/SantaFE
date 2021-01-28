@@ -1,6 +1,14 @@
-import {Component, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
+import {Component, Input, Output, ViewEncapsulation, EventEmitter, OnInit, OnDestroy} from '@angular/core';
+import { of, Subscription } from 'rxjs';
+import { catchError, first, tap, withLatestFrom } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import { PortfolioView } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioView,
+  DeltaScope,
+  DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT
+} from 'Core/constants/structureConstants.constants';
 import { StructureRowSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
 
 @Component({
@@ -10,7 +18,7 @@ import { StructureRowSetViewData } from 'App/modules/core/models/frontend/fronte
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class PortfolioBreakdownRow {
+export class PortfolioBreakdownRow implements OnInit, OnDestroy {
   @Input() breakdownRow: StructurePortfolioBreakdownRowDTO;
   @Output() viewMainDisplaySubLevels = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() rowDiveInClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
@@ -18,6 +26,10 @@ export class PortfolioBreakdownRow {
   @Output() seeBondClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() enterSetViewModeClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() setViewForRowClicked = new EventEmitter<StructureRowSetViewData>();
+  deltaScope: DeltaScope = null;
+  subscriptions = {
+    
+  }
   constants = {
     positive: PortfolioView.positive,
     improving: PortfolioView.improving,
@@ -25,9 +37,23 @@ export class PortfolioBreakdownRow {
     deteriorating: PortfolioView.deteriorating,
     negative: PortfolioView.negative,
     diveInText: 'Dive In',
-    diveOutText: 'Dive Out'
+    diveOutText: 'Dive Out',
+    deltaSignificantCoefficient: DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT
   }
   constructor() {}
+
+  public ngOnInit() {
+
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
+      }
+    }
+  }
 
   public onClickCategory() {
     !!this.categoryClicked && this.categoryClicked.emit(this.breakdownRow);

@@ -177,6 +177,11 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
     &--index {
       display: none;
     }
+    &--delta {
+      @include mix_border_radius(5px);
+      padding: $spacing_x_small 0;
+      margin: $spacing_x_small 0;
+    }
   }
   &__cellDivider {
     @include mix_border_generator(0 $typical_border_width 0 0);
@@ -287,6 +292,26 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
     }
     &:hover>&-tooltip {
       display: flex;
+    }
+  }
+  &--deltaSignificantPositive {
+    #{$blockName} {
+      &__cell {
+        &--delta {
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--deltaSignificantNegative {
+    #{$blockName} {
+      &__cell {
+        &--delta {
+          background-color: $color_red_5;
+          color: $font_color_inverse;
+        }
+      }
     }
   }
   &--isBicsDiveIn {
