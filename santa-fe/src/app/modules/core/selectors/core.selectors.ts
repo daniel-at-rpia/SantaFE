@@ -67,3 +67,8 @@ export const selectGlobalAlertMakeAPICall = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.makeAPICall
 )
+
+export const selectGlobalAlertSendNewAlertsToTradePanel = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.newAlertsToTradeAlertPanel
+)

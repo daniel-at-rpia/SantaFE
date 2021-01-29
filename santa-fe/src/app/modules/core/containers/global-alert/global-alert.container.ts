@@ -25,7 +25,8 @@
       CoreSendNewAlerts,
       CoreGlobalLiveUpdateInternalCountEvent,
       CoreGlobalAlertProcessingEvent,
-      CoreGlobalAlertsProcessedRawAlerts
+      CoreGlobalAlertsProcessedRawAlerts,
+      CoreGlobalAlertsSendNewAlertsToTradeAlertPanel
     } from 'Core/actions/core.actions';
     import {
       selectNewAlerts,
@@ -428,7 +429,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           // no filtering logic for now
           return true;
         }) : [];
-        const updateList: Array<DTOs.AlertDTO> = [];
+        const urgentAlertUpdateList: Array<DTOs.AlertDTO> = [];
+        const tradeAlertPanelList: Array<DTOs.AlertDTO> = [];
         filteredServerReturn.forEach((eachRawAlert: BEAlertDTO) => {
           // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
           if (!!eachRawAlert.marketListAlert) {
@@ -437,7 +439,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
             } else {
               this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
               const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-              updateList.push(newAlert);
+              urgentAlertUpdateList.push(newAlert);
             }
           } else {
             const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
@@ -446,17 +448,21 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
               // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
               // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
               if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
-                updateList.push(newAlert);
+                urgentAlertUpdateList.push(newAlert);
               }
             } else {
-              if ((!newAlert.state.isRead && newAlert.data.isUrgent) || (newAlert.data.security && newAlert.data.security.data.securityID)) {
-                updateList.push(newAlert);
+              if (!newAlert.state.isRead && newAlert.data.isUrgent) {
+                urgentAlertUpdateList.push(newAlert);
+              }
+              if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                tradeAlertPanelList.push(newAlert)
               }
             }
           }
         });
         this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
-        updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(updateList));
+        urgentAlertUpdateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(urgentAlertUpdateList));
+        tradeAlertPanelList.length > 0 && this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(tradeAlertPanelList));
         this.state.alertUpdateInProgress = false;
       }),
       catchError(err => {

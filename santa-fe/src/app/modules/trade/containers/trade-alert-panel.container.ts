@@ -28,7 +28,8 @@
       selectSecurityMapContent,
       selectSecurityMapValidStatus,
       selectUserInitials,
-      selectNewAlerts
+      selectNewAlerts,
+      selectGlobalAlertSendNewAlertsToTradePanel
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -271,7 +272,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.newAlertSubscription = this.store$.pipe(
-      select(selectNewAlerts),
+      select(selectGlobalAlertSendNewAlertsToTradePanel),
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList);
       try {

@@ -182,6 +182,14 @@ export function coreReducer(
           makeAPICall: action.newState
         }
       }
+  case CoreActions.GlobalAlertsPassNewAlertsToTradeAlertPanel:
+    return {
+      ...state,
+      globalAlert: {
+        ...state.globalAlert,
+        newAlertsToTradeAlertPanel: action.list
+      }
+    }
     default:
       return {
         ...state

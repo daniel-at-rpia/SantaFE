@@ -23,7 +23,7 @@ export enum CoreActions {
   GlobalAlertsReadyForNextAlertCall = '[Core] Global Alerts Ready For Next Alert Call',
   GlobalAlertsProcessingRawAlertsEvent = '[Core] Processing Raw Global Alerts',
   GlobalAlertsProcessedRawAlerts = '[Core] Raw Alerts Processed For Global Alerts',
-  PassedAlertsToTradeTable = '[Core] Passed Alerts to Trade Alert'
+  GlobalAlertsPassNewAlertsToTradeAlertPanel = '[Core] Passed Alerts to Trade Alert',
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -150,4 +150,14 @@ export class CoreGlobalAlertsMakeAPICallEvent implements Action {
   constructor(newState: boolean) {
     this.newState = newState;
   };
+}
+
+export class CoreGlobalAlertsSendNewAlertsToTradeAlertPanel implements Action {
+  readonly type = CoreActions.GlobalAlertsPassNewAlertsToTradeAlertPanel;
+  readonly list: Array<AlertDTO>;
+  constructor(
+    list: Array<AlertDTO>
+  ){
+    this.list = list;
+  }
 }
