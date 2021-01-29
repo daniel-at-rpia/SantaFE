@@ -273,10 +273,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.subscriptions.newAlertSubscription = this.store$.pipe(
       select(selectNewAlerts),
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
-      // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
-      const alertListSorted: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+      const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList);
       try {
-        this.updateAlertTable(alertListSorted);
+        this.updateAlertTable(alertListCopy);
         if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
           const numOfUpdate = this.marketListAlertsCountdownUpdate();
           if (numOfUpdate > 0){
