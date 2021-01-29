@@ -28,6 +28,7 @@ export interface CoreState {
     readyForNextAlertCall: boolean;
     processingAlerts: boolean;
     makeAPICall: boolean;
+    apiCallForAlertFailed: boolean;
     //passedProcessedAlertsToAlertTable: boolean;
   }
 }
@@ -52,7 +53,8 @@ const initialState: CoreState = {
     mainThreadOccupied: false,
     readyForNextAlertCall: false,
     processingAlerts: false,
-    makeAPICall: false
+    makeAPICall: false,
+    apiCallForAlertFailed: false
   }
 };
 
@@ -182,14 +184,22 @@ export function coreReducer(
           makeAPICall: action.newState
         }
       }
-  case CoreActions.GlobalAlertsPassNewAlertsToTradeAlertPanel:
-    return {
-      ...state,
-      globalAlert: {
-        ...state.globalAlert,
-        newAlertsToTradeAlertPanel: action.list
+    case CoreActions.GlobalAlertsPassNewAlertsToTradeAlertPanel:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          newAlertsToTradeAlertPanel: action.list
+        }
       }
-    }
+    case CoreActions.GlobalAlertsAPIAlertCallFailed:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          apiCallForAlertFailed: action.newState
+        }
+      }
     default:
       return {
         ...state

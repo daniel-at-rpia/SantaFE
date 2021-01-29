@@ -16,12 +16,14 @@ import {
   CoreActions,
   CoreIsReadyToMakeAlertCall,
   CoreGlobalAlertsMakeAPICallEvent,
-  CoreGlobalLiveUpdateInternalCountEvent
+  CoreGlobalLiveUpdateInternalCountEvent,
+  CoreGlobalAlertFailedToMakeAlertAPICall
 } from 'Core/actions/core.actions';
 import {
   selectMainThreadOccupied,
   selectGlobalAlertIsReadyToMakeNextAlertCall,
-  selectGlobalAlertProcessingAlertState
+  selectGlobalAlertProcessingAlertState,
+  selectGlobalAlertFailedToMakeAlertAPICall
 } from 'Core/selectors/core.selectors';
 
 @Injectable()
@@ -35,13 +37,20 @@ export class CoreEffect {
     withLatestFrom(
       this.store$.pipe(select(selectMainThreadOccupied)),
       this.store$.pipe(select(selectGlobalAlertIsReadyToMakeNextAlertCall)),
-      this.store$.pipe(select(selectGlobalAlertProcessingAlertState))
+      this.store$.pipe(select(selectGlobalAlertProcessingAlertState)),
+      this.store$.pipe(select(selectGlobalAlertFailedToMakeAlertAPICall))
     ),
-    tap(([tick, isMainThreadOccupied, isReady, isProcessing]) => {
-      // use remainder of 300 000 and then flip error state to false
-      if (!isReady) {
-        if (tick.count % 5 === 0) {
-          this.store$.dispatch(new CoreIsReadyToMakeAlertCall());
+    tap(([tick, isMainThreadOccupied, isReady, isProcessing, isFailedAPICall]) => {
+      if (!!isFailedAPICall) {
+        // 5 min delay before making another API call
+        if (tick.count % 300 === 0) {
+          this.store$.dispatch(new CoreGlobalAlertFailedToMakeAlertAPICall(false))
+        }
+      } else {
+        if (!isReady) {
+          if (tick.count % 5 === 0) {
+            this.store$.dispatch(new CoreIsReadyToMakeAlertCall());
+          }
         }
       }
     }),

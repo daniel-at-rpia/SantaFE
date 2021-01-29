@@ -26,7 +26,8 @@
       CoreGlobalLiveUpdateInternalCountEvent,
       CoreGlobalAlertProcessingEvent,
       CoreGlobalAlertsProcessedRawAlerts,
-      CoreGlobalAlertsSendNewAlertsToTradeAlertPanel
+      CoreGlobalAlertsSendNewAlertsToTradeAlertPanel,
+      CoreGlobalAlertFailedToMakeAlertAPICall
     } from 'Core/actions/core.actions';
     import {
       selectNewAlerts,
@@ -468,6 +469,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       catchError(err => {
         this.state.alertUpdateInProgress = false;
         console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
+        this.store$.dispatch(new CoreGlobalAlertFailedToMakeAlertAPICall(true))
         return of('error');
       })
     ).subscribe();
