@@ -22,10 +22,16 @@
       CoreLoadSecurityMap,
       CoreSendAlertCountsByType,
       CoreToggleAlertThumbnailDisplay,
-      CoreSendNewAlerts
+      CoreSendNewAlerts,
+      CoreGlobalLiveUpdateInternalCountEvent,
+      CoreGlobalAlertProcessingEvent,
+      CoreGlobalAlertsProcessedRawAlerts
     } from 'Core/actions/core.actions';
-    import {selectAlertCounts, selectNewAlerts} from 'Core/selectors/core.selectors';
-    import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
+    import {
+      selectNewAlerts,
+      selectGlobalAlertProcessingAlertState,
+      selectGlobalAlertMakeAPICall
+    } from 'Core/selectors/core.selectors';
     import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
     import * as moment from 'moment';
 
@@ -43,10 +49,11 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   subscriptions = {
     newAlertSubscription: null,
     browserTabNotificationSub: null,
-    autoUpdateCountSub: null
+    autoCountForRawAlertsSub: null,
+    makeAlertAPICallSub: null
   }
   browserTabNotificationCount$: Observable<any>;
-  autoUpdateCount$: Observable<any>;
+  autoCountForRawAlerts$: Observable<any>;
   constants = {
     sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
     totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD,
@@ -70,7 +77,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       alertUpdateTimeStamp: '',
       receivedActiveAlertsMap: {},
       alertUpdateInProgress: false,
-      autoUpdateCountdown: 4
+      autoUpdateCountdown: 0
     };
     return state;
   }
@@ -85,17 +92,17 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-
-    this.autoUpdateCount$ = interval(1000);
-    this.subscriptions.autoUpdateCountSub = this.autoUpdateCount$.subscribe(count => {
+    this.autoCountForRawAlerts$ = interval(1000);
+    this.subscriptions.autoCountForRawAlertsSub = this.autoCountForRawAlerts$.subscribe((count: Observable<number>) => {
       this.state.autoUpdateCountdown = this.state.autoUpdateCountdown + 1;
       if (!this.state.alertUpdateInProgress) {
-        this.state.autoUpdateCountdown = this.state.autoUpdateCountdown + 1;
-        if (this.state.autoUpdateCountdown >= this.constants.countdown) {
-          this.getRawAlerts();
-          this.state.autoUpdateCountdown = 0;
-        }
+        this.store$.dispatch(new CoreGlobalLiveUpdateInternalCountEvent(this.state.autoUpdateCountdown))
       }
+    });
+    this.subscriptions.makeAlertAPICallSub = this.store$.pipe(
+      select(selectGlobalAlertMakeAPICall)
+      ).subscribe((makeAPICall: boolean) => {
+      !!makeAPICall && this.getRawAlerts();
     });
     this.subscriptions.newAlertSubscription = this.store$.pipe(
       select(selectNewAlerts),
@@ -448,7 +455,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
             }
           }
         });
-        updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(this.utilityService.deepCopy(updateList)));
+        this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
+        updateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(updateList));
         this.state.alertUpdateInProgress = false;
       }),
       catchError(err => {
@@ -457,6 +465,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         return of('error');
       })
     ).subscribe();
+    this.store$.dispatch(new CoreGlobalAlertProcessingEvent());
     this.state.alertUpdateTimeStamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
   }
 

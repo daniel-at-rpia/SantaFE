@@ -46,7 +46,11 @@ import {
   BEStructuringOverrideBlockWithSubPortfolios,
   BEStructuringOverrideBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
-import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+import {
+  CoreSendNewAlerts,
+  CoreMainThreadOccupiedState,
+  CoreMainThreadUnoccupiedState
+} from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
   PayloadSetView
@@ -249,6 +253,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private fetchFunds() {
+    this.store$.dispatch(new CoreMainThreadOccupiedState(true));
     let payload: PayloadGetPortfolioStructures = {
       yyyyMMdd: parseInt(this.state.currentDataDatestamp.format('YYYYMMDD'))
     };
@@ -263,6 +268,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
         });
+        this.store$.dispatch(new CoreMainThreadUnoccupiedState(false));
       }),
       catchError(err => {
         setTimeout(() => {
@@ -277,9 +283,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500);
         this.restfulCommService.logError('Get Portfolio Structures API called failed')
         console.error(`${endpoint} failed`, err);
+        this.store$.dispatch(new CoreMainThreadOccupiedState(false));
         return of('error')
       })
-    ).subscribe()
+    ).subscribe();
   }
 
   private updateViewData(data: StructureSetViewTransferPack) {
