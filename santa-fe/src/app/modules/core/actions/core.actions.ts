@@ -15,7 +15,15 @@ export enum CoreActions {
   SendAlertCountsByType = '[Core] Send Alert Counts',
   ReceivedNewAlerts = '[Core] Received New Alerts',
   GlobalWorkflowSendNewState = '[Core] Global Workflow Send New State',
-  GlobalWorkflowUpdateCurrentState = '[Core] Global Workflow Update Current State'
+  GlobalWorkflowUpdateCurrentState = '[Core] Global Workflow Update Current State',
+  MainThreadOccupiedState = '[Core] Main Thread Is Occupied',
+  MainThreadUnoccupiedState = '[Core] Main Thread Is Unoccupied',
+  GlobalAlertIncrementInternalCountEvent = '[Core] Global Alert Increment Count Event',
+  GlobalAlertMakeAPICall = '[Core] Global Alert Make API Alert Call',
+  GlobalAlertsReadyForNextAlertCall = '[Core] Global Alerts Ready For Next Alert Call',
+  GlobalAlertsProcessingRawAlertsEvent = '[Core] Processing Raw Global Alerts',
+  GlobalAlertsProcessedRawAlerts = '[Core] Raw Alerts Processed For Global Alerts',
+  PassedAlertsToTradeTable = '[Core] Passed Alerts to Trade Alert'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -96,4 +104,50 @@ export class CoreGlobalWorkflowUpdateCurrentState implements Action {
   ){
     this.uuid = uuid;
   }
+}
+
+export class CoreMainThreadOccupiedState implements Action {
+  readonly type = CoreActions.MainThreadOccupiedState;
+  readonly occupiedState: boolean;
+  constructor(occupiedState: boolean) {
+    this.occupiedState = occupiedState;
+  };
+}
+
+export class CoreMainThreadUnoccupiedState implements Action {
+  readonly type = CoreActions.MainThreadUnoccupiedState;
+  readonly unoccupiedState: boolean;
+  constructor(unoccupiedState: boolean) {
+    this.unoccupiedState = unoccupiedState;
+  };
+}
+
+export class CoreGlobalLiveUpdateInternalCountEvent implements Action {
+  readonly type = CoreActions.GlobalAlertIncrementInternalCountEvent;
+  readonly count: number;
+  constructor(count: number) {
+    this.count = count;
+  }
+}
+
+export class CoreIsReadyToMakeAlertCall implements Action {
+  readonly type = CoreActions.GlobalAlertsReadyForNextAlertCall;
+  constructor() {}
+}
+
+export class CoreGlobalAlertProcessingEvent implements Action {
+  readonly type = CoreActions.GlobalAlertsProcessingRawAlertsEvent;
+  constructor() {}
+}
+export class CoreGlobalAlertsProcessedRawAlerts implements Action {
+  readonly type = CoreActions.GlobalAlertsProcessedRawAlerts;
+  constructor() {};
+}
+
+export class CoreGlobalAlertsMakeAPICallEvent implements Action {
+  readonly type = CoreActions.GlobalAlertMakeAPICall;
+  readonly newState: boolean;
+  constructor(newState: boolean) {
+    this.newState = newState;
+  };
 }
