@@ -5,7 +5,7 @@ import { getCoreState } from 'App/selectors';
 
 export const selectAlertUpdate = createSelector(
   getCoreState,
-  (state: CoreState) => state.alert.newAlerts
+  (state: CoreState) => state.globalAlert.newAlerts
 );
 
 export const selectUserInitials = createSelector(
@@ -15,7 +15,7 @@ export const selectUserInitials = createSelector(
 
 export const selectDislayAlertThumbnail = createSelector(
   getCoreState,
-  (state: CoreState) => state.alert.displayThumbnail
+  (state: CoreState) => state.globalAlert.displayThumbnail
 );
 
 export const selectSecurityMapContent = createSelector(
@@ -30,12 +30,12 @@ export const selectSecurityMapValidStatus = createSelector(
 
 export const selectNewAlerts = createSelector(
   getCoreState,
-  (state: CoreState) => state.alert.newAlerts
+  (state: CoreState) => state.globalAlert.newAlerts
 );
 
 export const selectAlertCounts = createSelector(
   getCoreState,
-  (state: CoreState) => state.alert.countByTypeArr
+  (state: CoreState) => state.globalAlert.countByTypeArr
 );
 
 export const selectGlobalWorkflowNewState = createSelector(
@@ -47,3 +47,23 @@ export const selectGlobalWorkflowUpdateCurrentState = createSelector(
   getCoreState,
   (state: CoreState) => state.globalWorkflow.currentStateUUID
 );
+
+export const selectMainThreadOccupied = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.mainThreadOccupied
+)
+
+export const selectGlobalAlertIsReadyToMakeNextAlertCall = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.readyForNextAlertCall
+)
+
+export const selectGlobalAlertProcessingAlertState = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.processingAlerts
+)
+
+export const selectGlobalAlertMakeAPICall = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.makeAPICall
+)
