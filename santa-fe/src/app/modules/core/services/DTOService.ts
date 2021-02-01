@@ -2208,7 +2208,8 @@ export class DTOService {
   public formPortfolioOverrideBreakdown(
     rawData: BEModels.BEStructuringBreakdownBlock,
     comparedDeltaRawData: BEModels.BEStructuringBreakdownBlock,
-    isDisplayCs01: boolean
+    isDisplayCs01: boolean,
+    deltaEnabled: boolean  // this boolean is necessary because unlike regular breakdown, there are two scenarios that could cause the comparedDeltaRawData to be null when creating an override: 1. the normal scenario that the user is selected "index", or 2. that override does not exist in the delta scope. So, we need to distinguish the two in override creation. if "comparedDeltaRawData" is null while "deltaEnabled" is true, then it is the second scenario
   ): DTOs.PortfolioBreakdownDTO {
     const definitionList = [];
     for (let eachCategory in rawData.breakdown) {
@@ -2219,6 +2220,17 @@ export class DTOService {
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
     newBreakdown.data.title = newBreakdown.data.title.replace(BICS_OVERRIDES_IDENTIFIER, BICS_OVERRIDES_TITLE);
+    if (deltaEnabled && !comparedDeltaRawData) {
+      newBreakdown.state.isViewingIndex = false;
+      newBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
+        eachCategory.data.deltaDisplay = '-';
+        eachCategory.state.isViewingIndex = false;
+      });
+      newBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
+        eachCategory.data.deltaDisplay = '-';
+        eachCategory.state.isViewingIndex = false;
+      });
+    }
     return newBreakdown;
   }
 
@@ -2662,7 +2674,12 @@ export class DTOService {
         const existDeltaData = deltaReturnPack.list.find((eachDeltaRawBreakdown) => {
           return eachDeltaRawBreakdown.groupOption === eachRawBreakdown.groupOption;
         });
-        const newBreakdown = this.formPortfolioOverrideBreakdown(eachRawBreakdown, existDeltaData, isDisplayCs01);
+        const newBreakdown = this.formPortfolioOverrideBreakdown(
+          eachRawBreakdown,
+          existDeltaData,
+          isDisplayCs01,
+          !!comparedDeltaRawData
+        );
         newBreakdown.data.indexName = rawData.indexShortName;
         newBreakdown.data.portfolioName = rawData.portfolioShortName;
         this.utility.updateDisplayLabelForOverrideConvertedBreakdown(

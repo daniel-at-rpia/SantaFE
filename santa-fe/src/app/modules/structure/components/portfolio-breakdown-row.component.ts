@@ -18,7 +18,7 @@ import { StructureRowSetViewData } from 'App/modules/core/models/frontend/fronte
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class PortfolioBreakdownRow implements OnInit, OnDestroy {
+export class PortfolioBreakdownRow {
   @Input() breakdownRow: StructurePortfolioBreakdownRowDTO;
   @Output() viewMainDisplaySubLevels = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() rowDiveInClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
@@ -27,9 +27,6 @@ export class PortfolioBreakdownRow implements OnInit, OnDestroy {
   @Output() enterSetViewModeClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() setViewForRowClicked = new EventEmitter<StructureRowSetViewData>();
   deltaScope: DeltaScope = null;
-  subscriptions = {
-    
-  }
   constants = {
     positive: PortfolioView.positive,
     improving: PortfolioView.improving,
@@ -41,19 +38,6 @@ export class PortfolioBreakdownRow implements OnInit, OnDestroy {
     deltaSignificantCoefficient: DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT
   }
   constructor() {}
-
-  public ngOnInit() {
-
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
-  }
 
   public onClickCategory() {
     !!this.categoryClicked && this.categoryClicked.emit(this.breakdownRow);
