@@ -4,7 +4,8 @@ import {
   PortfolioMetricValues,
   BreakdownViewFilter,
   PortfolioShortNames,
-  SubPortfolioFilter
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
@@ -22,6 +23,7 @@ export interface StructureState {
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   activeSubPortfolioFilter: SubPortfolioFilter;
+  activeDeltaScope: DeltaScope;
   dataDatestamp: number;
 }
 
@@ -42,6 +44,7 @@ const initialState: StructureState = {
     PortfolioShortNames.SOF
   ],
   activeSubPortfolioFilter: SubPortfolioFilter.all,
+  activeDeltaScope: DeltaScope.dod,
   dataDatestamp: moment().unix()
 }
 
@@ -96,6 +99,11 @@ export function structureReducer(
       return {
         ...state,
         activeSubPortfolioFilter: action.filterOption
+      }
+    case StructureActions.ChangeDeltaScope:
+      return {
+        ...state,
+        activeDeltaScope: action.deltaScope
       }
     default:
       return state;

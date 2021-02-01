@@ -5,7 +5,8 @@ import {
   PortfolioMetricValues,
   BreakdownViewFilter,
   PortfolioShortNames,
-  SubPortfolioFilter
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
@@ -23,6 +24,7 @@ export enum StructureActions {
   ChangeBreakdownViewFilter = '[Structure] Change Breakdown View Filter',
   ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter',
   ChangeSubPortfolioViewFilter = '[Structure] Change Sub-Portfolio View Filter',
+  ChangeDeltaScope = '[Structure] Change Delta Scope',
   SwitchDataDatestamp = '[Structure] Switch Data Datestamp'
 }
 
@@ -97,5 +99,13 @@ export class StructureSwitchDataDatestampEvent implements Action {
   readonly dateStampInUnix: number;
   constructor(dateStampInMoment: moment.Moment) {
     this.dateStampInUnix = parseInt(dateStampInMoment.format('X'));
+  }
+}
+
+export class StructureChangeDeltaScopeEvent implements Action {
+  readonly type = StructureActions.ChangeDeltaScope;
+  readonly deltaScope: DeltaScope;
+  constructor(newDeltaScope: DeltaScope) {
+    this.deltaScope = newDeltaScope;
   }
 }

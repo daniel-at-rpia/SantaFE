@@ -3,7 +3,8 @@ import { AxeAlertType } from "Core/constants/tradeConstants.constant";
 import {
   PortfolioView,
   BEPortfolioTargetMetricValues,
-  SubPortfolioFilter
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants'
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
@@ -113,6 +114,7 @@ export interface PayloadSetAlertsToInactive {
 
 export interface PayloadGetPortfolioStructures {
   yyyyMMdd?: number;
+  deltaTypes?: Array<DeltaScope>;
 }
 
 export interface PayloadUpdatePortfolioStructuresTargets {
