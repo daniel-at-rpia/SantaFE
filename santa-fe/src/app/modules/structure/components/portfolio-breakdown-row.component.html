@@ -22,7 +22,10 @@
     'sat-portfolioBreakdownRow--isWithinEditRow': !!breakdownRow.state.isWithinEditRow,
     'sat-portfolioBreakdownRow--isWithinSetTargetPreview': !!breakdownRow.state.isWithinSetTargetPreview,
     'sat-portfolioBreakdownRow--isViewingHistoricalData': !!breakdownRow.state.isViewingHistoricalData,
-    'sat-portfolioBreakdownRow--hasEditedSubLevels': breakdownRow.data.editedSubLevelRowsWithTargets.length > 0 && !!breakdownRow.state.isWithinEditRow
+    'sat-portfolioBreakdownRow--hasEditedSubLevels': breakdownRow.data.editedSubLevelRowsWithTargets.length > 0 && !!breakdownRow.state.isWithinEditRow,
+    'sat-portfolioBreakdownRow--deltaSignificantPositive': breakdownRow.data.delta > 5,
+    'sat-portfolioBreakdownRow--deltaSignificantNegative': breakdownRow.data.delta < -5,
+    'sat-portfolioBreakdownRow--isViewingIndex': breakdownRow.state.isViewingIndex
   }">
   <section class="sat-portfolioBreakdownRow__branch" *ngIf="breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover" [ngStyle]="{'height': breakdownRow.style.branchHeight, 'top': breakdownRow.style.top}"></section>
   <section class="sat-portfolioBreakdownRow__cta">
@@ -112,6 +115,9 @@
   <hr class="sat-portfolioBreakdownRow__cellDivider">
   <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">
     {{breakdownRow.data.indexPctDisplay}}
+  </section>
+  <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--delta">
+    {{breakdownRow.data.deltaDisplay}}
   </section>
   <section class="sat-portfolioBreakdownRow__subLevelTargetGauge">
     <div class="sat-portfolioBreakdownRow__subLevelTargetGauge-content">

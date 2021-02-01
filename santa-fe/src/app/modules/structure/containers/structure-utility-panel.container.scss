@@ -108,6 +108,30 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &__deltaSelect {
+    @include mix_border_generator(0 $typical_border_width 0 0);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: $spacing_medium;
+    padding-right: $spacing_medium;
+    &-top {
+      display: flex;
+      margin-bottom: $spacing_small;
+      &-label {
+        color: $font_color_minor;
+        font-size: $font_size_normal;
+      }
+    }
+    &-bottom {
+      display: flex;
+      &-ctas {
+
+      }
+    }
+  }
   &__dateSwitch {
     @include mix_border_generator(0 $typical_border_width 0 0);
     display: flex;
@@ -346,6 +370,51 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
+  &--viewDeltaDod {
+    #{$blockName} {
+      &__deltaSelect {
+        &-bottom-ctas-dod {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewDeltaWow {
+    #{$blockName} {
+      &__deltaSelect {
+        &-bottom-ctas-wow {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewDeltaMom {
+    #{$blockName} {
+      &__deltaSelect {
+        &-bottom-ctas-mom {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewDeltaYtd {
+    #{$blockName} {
+      &__deltaSelect {
+        &-bottom-ctas-ytd {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
+  &--viewIndex {
+    #{$blockName} {
+      &__deltaSelect {
+        &-bottom-ctas-index {
+          @include mix_cta_active;
+        }
+      }
+    }
+  }
   @include mq-x-large-min {
     &__metricSelect {
       flex-direction: row;
@@ -393,6 +462,17 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       &-bottom {
         flex: 0 1 auto;
         align-self: unset;
+      }
+    }
+    &__deltaSelect {
+      flex-direction: row;
+      justify-content: center;
+      &-top {
+        margin-bottom: 0;
+        margin-right: $spacing_medium;
+        &-label {
+          font-size: $font_size_small;
+        }
       }
     }
     &__dateSwitch {

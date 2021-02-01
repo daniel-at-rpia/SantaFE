@@ -46,3 +46,9 @@ export const selectActiveSubPortfolioFilter = createSelector(
   getStructureState,
   (state: StructureState) => state.activeSubPortfolioFilter
 );
+
+export const selectActiveDeltaScope = createSelector(
+  getStructureState,
+  (state: StructureState) => state.activeDeltaScope
+);
+

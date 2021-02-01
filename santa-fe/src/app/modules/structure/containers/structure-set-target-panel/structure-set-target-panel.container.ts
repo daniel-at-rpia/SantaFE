@@ -133,7 +133,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       clearAllTargetSelected: false,
       editViewMode: false,
       ownerInitial: null,
-      activeSubPortfolioFilter: null
+      activeSubPortfolioFilter: null,
+      isViewingIndexOnBICS: false
     };
     return state;
   }
@@ -172,6 +173,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               row.state.isEditingView = false;
             })
           }
+          this.state.isViewingIndexOnBICS = this.state.targetBreakdown.state.isViewingIndex;
         }
         this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();
@@ -415,7 +417,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               this.state.targetBreakdownRawData = rawBreakdownList[0];
             }
             const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+            const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, null, isDisplayCs01, false);
             newBreakdown.state.isPreviewVariant = true;
             this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
               this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdownBucketIdentifier],
@@ -448,7 +450,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       this.state.targetBreakdownRawData.breakdown = this.utilityService.removePropertyFromObject(this.state.targetBreakdownRawData.breakdown, targetRow.rowIdentifier);
       !!targetRow.existInServer && this.state.removalList.push(targetRow);
       const isDisplayCs01 = this.state.activeMetric === PortfolioMetricValues.cs01;
-      const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, isDisplayCs01);
+      const newBreakdown = this.dtoService.formPortfolioOverrideBreakdown(this.state.targetBreakdownRawData, null, isDisplayCs01, false);
       this.utilityService.updateDisplayLabelForOverrideConvertedBreakdown(
         this.state.targetBreakdownRawDataDisplayLabelMap[newBreakdown.data.backendGroupOptionIdentifier],
         newBreakdown
@@ -831,7 +833,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           const parsedCurrentLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.currentLevel, isCs01);
           const parsedTargetLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.targetLevel, isCs01);
           const newDiffToTarget = this.utilityService.getRowDiffToTarget(parsedCurrentLevel, parsedTargetLevel, isCs01);
-          const newDiffToTargetDisplay = this.utilityService.getRowDiffToTargetText(newDiffToTarget, isCs01);
+          const newDiffToTargetDisplay = this.utilityService.getBreakdownRowDiffText(newDiffToTarget, isCs01);
           this.setNewDiffToTargetsForRows(row, newDiffToTarget, newDiffToTargetDisplay);
         }
         this.updateRowVisualizer(row, rawBreakdownData, minValue, maxValue, isCs01, isBICS);
@@ -1343,7 +1345,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           }
         }
       })
-      const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, definitionList, isDisplayCs01, false);
+      const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, definitionList, isDisplayCs01, false);
       if (!!customBreakdown) {
         const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
         const listWithTargets = list.filter(newRow => newRow.data.targetLevel !== null);
