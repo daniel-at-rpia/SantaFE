@@ -29,7 +29,8 @@ import {
   BEPortfolioTargetMetricValues,
   BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  BreakdownViewFilter
+  BreakdownViewFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import {
@@ -86,7 +87,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
     supportedFundList: SUPPORTED_PORTFOLIO_LIST,
-    breakdownViewFilter: BreakdownViewFilter
+    breakdownViewFilter: BreakdownViewFilter,
+    deltaScope: DeltaScope
   };
   
   constructor(
@@ -266,9 +268,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private fetchFunds() {
+    const allDeltaScopes = [];
+    for (const eachDeltaKey in this.constants.deltaScope) {
+      allDeltaScopes.push(this.constants.deltaScope[eachDeltaKey]);
+    }
     let payload: PayloadGetPortfolioStructures = {
       yyyyMMdd: parseInt(this.state.currentDataDatestamp.format('YYYYMMDD')),
-      deltaTypes: ["Dod","Wow","Mom","Ytd"]
+      deltaTypes: allDeltaScopes
     };
     const endpoint = this.restfulCommService.apiMap.getPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
