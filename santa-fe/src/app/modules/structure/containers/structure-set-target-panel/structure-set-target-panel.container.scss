@@ -481,13 +481,11 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         }
       }
     }
-
   }
   &__details {
     flex: 1 1 auto;
     display: none;
     align-items: center;
-    padding: $spacing_x_small 0 $spacing_small $spacing_medium;
   }
   &__remove {
     @include mix_fixed_div(relative, $z_index_base_item);

@@ -416,6 +416,7 @@ export interface BICSMainRowDataBlock {
   portfolioID: number;
   level: number;
   isCs01?: boolean;
+  isIndex: boolean;
 }
 
 export interface TradeCenterPanelStateFilterBlock {

@@ -856,6 +856,7 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
   state: {
     isActive: boolean;
     isDisplayCs01: boolean;
+    isViewingIndex: boolean;
   }
 }
 

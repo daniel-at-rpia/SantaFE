@@ -58,6 +58,9 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       &:hover>&-tooltip {
         display: block;
       }
+      &--index {
+        display: none;
+      }
     }
   }
   &__mainCategory {
@@ -151,6 +154,20 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       }
       &--active {
         display: flex;
+      }
+    }
+  }
+  &--isViewingIndex {
+    #{$blockName} {
+      &__categoryHeader {
+        &-cell {
+          &--index {
+            display: flex;
+          }
+          &--delta {
+            display: none;
+          }
+        }
       }
     }
   }

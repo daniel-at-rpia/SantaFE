@@ -116,7 +116,7 @@ export class StructurePopover implements OnInit, OnChanges {
     const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(categoryRow, isCs01, [categoryRow]);
     categoryRow.data.children = subBicsLevel;
     categoryRow.state.isWithinPopover = true;
-    this.popover = this.dtoService.formStructurePopoverObject(categoryRow, isCs01);
+    this.popover = this.dtoService.formStructurePopoverObject(categoryRow, isCs01, this.mainRowData.isIndex);
     this.popover.state.isActive = true;
     categoryRow.state.isDoveIn = !categoryRow.state.isDoveIn;
   }

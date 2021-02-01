@@ -140,7 +140,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       const rowProcessingData: Blocks.BICSMainRowDataBlock = {
         code: breakdownRow.data.code,
         portfolioID: this.breakdownData.data.portfolioId,
-        level: breakdownRow.data.bicsLevel
+        level: breakdownRow.data.bicsLevel,
+        isIndex: this.breakdownData.state.isViewingIndex
       }
       this.breakdownData.data.popoverMainRow = rowProcessingData;
       this.breakdownData.state.isDisplayPopover = true;
