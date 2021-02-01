@@ -139,6 +139,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       }
       &--active {
         display: flex;
+        margin-top: $spacing_small;
       }
     }
     &-thirdDiveIn {
@@ -154,6 +155,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       }
       &--active {
         display: flex;
+        margin-top: $spacing_small;
       }
     }
   }

@@ -133,7 +133,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       clearAllTargetSelected: false,
       editViewMode: false,
       ownerInitial: null,
-      activeSubPortfolioFilter: null
+      activeSubPortfolioFilter: null,
+      isViewingIndexOnBICS: false
     };
     return state;
   }
@@ -172,6 +173,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
               row.state.isEditingView = false;
             })
           }
+          this.state.isViewingIndexOnBICS = this.state.targetBreakdown.state.isViewingIndex;
         }
         this.state.targetBreakdownIsOverride = !!pack.isCreateNewOverride || pack.targetBreakdown.state.isOverrideVariant;
         this.state.targetBreakdownRawData = this.retrieveRawBreakdownDataForTargetBreakdown();

@@ -165,11 +165,13 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
             flex: 0 0 100%;
             margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
             &-index {
+              display: none;
               flex: 0 0 100%;
               text-align: right;
               &-text {
                 display: inline-block;
                 width: 6rem;
+                color: $font_color_minor;
               }
             }
             &-cell {
@@ -195,6 +197,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
               }
               &:hover>&-tooltip {
                 display: block;
+              }
+              &--index {
+                display: none;
               }
             }
           }
@@ -265,6 +270,25 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
           padding-bottom: $spacing_x_large;
           margin-top: $spacing_small;
           padding: .5rem;
+        }
+      }
+    }
+  }
+  &--viewingIndexOnBICSState {
+    #{$blockName} {
+      &__main {
+        &-edit-content-header-categories {
+          &-index {
+            display: block;
+          }
+          &-cell {
+            &--index {
+              display: flex;
+            }
+            &--delta {
+              display: none;
+            }
+          }
         }
       }
     }

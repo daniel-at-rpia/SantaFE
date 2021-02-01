@@ -322,4 +322,5 @@ export interface StructureSetTargetPanelState {
   editViewMode: boolean;
   ownerInitial: string;
   activeSubPortfolioFilter: SubPortfolioFilter;
+  isViewingIndexOnBICS: boolean;
 }
