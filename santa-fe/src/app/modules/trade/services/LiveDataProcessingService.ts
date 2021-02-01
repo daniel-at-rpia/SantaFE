@@ -471,10 +471,11 @@ export class LiveDataProcessingService {
     let includeFlag = false;
     const filterObj = panelStateFilterBlock.securityFilters.filter(f => f.targetAttribute === 'seniority')[0];
     if (filterObj) {
-      const includes = filterObj.filterBy.map(v => v.toLowerCase());
-      const {seniority} = row.data.security.data;
-      const seniorityName = seniority.split(' - ')[1];
-      includeFlag = includes.indexOf(seniorityName.toLowerCase()) !== -1;
+      const includes = filterObj.filterBy.map((eachSeniorityFilter) => {
+        return this.utilityService.mapSeniorities(eachSeniorityFilter);
+      });
+      const seniority = this.utilityService.mapSeniorities(row.data.security.data.genericSeniority);
+      includeFlag = includes.indexOf(seniority) >= 0;
     }
     return includeFlag;
   }
