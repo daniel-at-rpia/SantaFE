@@ -172,7 +172,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       if (!!targetFund) {
         const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
         this.updateRawServerReturnCache(targetFundCopy);
-        this.loadFund(this.extractSubPortfolioFromFundReturn(targetFundCopy), null);
+        let deltaRawDataFromCache: BEStructuringFundBlockWithSubPortfolios = null;
+        if (!!this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope] && this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].length > 0) {
+          deltaRawDataFromCache = this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].find((eachFund) => {
+            return eachFund.portfolioId === targetFund.portfolioId;
+          });
+        }
+        this.loadFund(
+          this.extractSubPortfolioFromFundReturn(targetFundCopy), 
+          !!deltaRawDataFromCache ? this.extractSubPortfolioFromFundReturn(deltaRawDataFromCache) : null
+        );
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -202,7 +211,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       if (!!this.state.fetchResult.rawServerReturnCache) {
         this.processStructureData(
           this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-          null
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
         );
       }
     });
