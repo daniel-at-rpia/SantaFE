@@ -298,8 +298,8 @@ export interface PortfolioBreakdownCategoryBlock {
   currentPctDisplay: string;
   indexPct: number;
   indexPctDisplay: string;
-  deltaLevel: number;
-  deltaLevelDisplay: string;
+  delta: number;
+  deltaDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
   bicsLevel: number;
   portfolioID: number;

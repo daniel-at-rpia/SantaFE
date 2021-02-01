@@ -210,6 +210,8 @@ export class BICsDataProcessingService {
       } else {
         this.bicsComparedDeltaRawData.push(deltaBlock);
       }
+    } else {
+      this.bicsComparedDeltaRawData = [];
     }
   }
 
@@ -572,8 +574,8 @@ export class BICsDataProcessingService {
     targetCodeList: Array<string>
   ): BEStructuringBreakdownBlock {
     const bicsLevel = BICsLevels[level];
-    const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
-    if (!!rawBreakdown) {
+    if (!!rawData && !!rawData[bicsLevel]) {
+      const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
       const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
       const customRawBreakdown: BEStructuringBreakdownBlock = {
         date,
