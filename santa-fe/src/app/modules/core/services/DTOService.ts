@@ -2351,7 +2351,7 @@ export class DTOService {
         isCs01
       );
       const diffToTarget = this.utility.getRowDiffToTarget(parsedRawData.currentLevel, parsedRawData.targetLevel, isCs01);
-      const delta = !!comparedDeltaRawCategoryData ? this.utility.round((comparedDeltaRawCategoryData.currentPct - rawCategoryData.currentPct)*100, 1) : null;
+      const delta = !!comparedDeltaRawCategoryData ? this.utility.round((rawCategoryData.currentPct - comparedDeltaRawCategoryData.currentPct)*100, 1) : null;
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {

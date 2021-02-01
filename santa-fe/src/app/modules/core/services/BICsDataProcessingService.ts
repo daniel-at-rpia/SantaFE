@@ -265,6 +265,7 @@ export class BICsDataProcessingService {
   ): DTOs.PortfolioBreakdownDTO {
     const categoryPortfolioID = breakdownRow.data.portfolioID;
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
+    const deltaRawData = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(rawData => rawData.portfolioID === categoryPortfolioID) : null;
     const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
     const targetCodeList = [];
     subTierList.forEach(subTier => {
@@ -276,17 +277,22 @@ export class BICsDataProcessingService {
       breakdownRow.data.bicsLevel + 1,
       targetCodeList
     );
+    const customRawDeltaBreakdown: BEStructuringBreakdownBlock = this.formBEBreakdownRawDataFromCategorizationBlock(
+      deltaRawData,
+      breakdownRow.data.bicsLevel + 1,
+      targetCodeList
+    );
     // Allows the visualziers to be formed relative to any existing categories/parents
     // Doesnt affect the actual breakdown being created since that's derived from the definition list
-    // if (!!existingDisplayList && existingDisplayList.length > 0) {
-    //   existingDisplayList.forEach(existingRow => {
-    //     const selectedRawData = selectedSubRawBICsData[`${BICS_BREAKDOWN_FRONTEND_KEY}${existingRow.data.bicsLevel}`];
-    //     if (!!selectedRawData.breakdown[existingRow.data.code]) {
-    //       object.breakdown[existingRow.data.displayCategory] = selectedRawData.breakdown[existingRow.data.code];
-    //     }
-    //   })
-    // }
-    const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, subTierList, isDisplayCs01);
+    if (!!existingDisplayList && existingDisplayList.length > 0) {
+      existingDisplayList.forEach(existingRow => {
+        const selectedRawData = selectedSubRawBICsData[`${BICS_BREAKDOWN_FRONTEND_KEY}${existingRow.data.bicsLevel}`];
+        if (!!selectedRawData.breakdown[existingRow.data.code]) {
+          customRawBreakdown.breakdown[existingRow.data.displayCategory] = selectedRawData.breakdown[existingRow.data.code];
+        }
+      })
+    }
+    const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, customRawDeltaBreakdown, subTierList, isDisplayCs01);
     breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
     this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
     this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
