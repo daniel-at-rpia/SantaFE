@@ -54,8 +54,8 @@ export class CoreEffect {
         }
       }
     }),
-    filter(([tick, isMainThreadOccupied, isReady, isProcessing]) => { // need another flag for a error (normally as false)
-      return !!isReady && !isProcessing && !isMainThreadOccupied
+    filter(([tick, isMainThreadOccupied, isReady, isProcessing, isFailedAPICall]) => {
+      return !!isReady && !isProcessing && !isMainThreadOccupied && !isFailedAPICall
     }),
     switchMap(() => {
       return of(new CoreGlobalAlertsMakeAPICallEvent(true));
