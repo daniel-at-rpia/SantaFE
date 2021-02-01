@@ -7,7 +7,8 @@
     'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter,
     'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
     'sat-securityDefinitionConfigurator--filterLongState': configuratorData.state.showFiltersFromDefinition?.state.isFilterLong,
-    'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.BICS_CONSOLIDATED.key
+    'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.BICS_CONSOLIDATED.key,
+    'sat-securityDefinitionConfigurator--cappedFilterListState': configuratorData.state.showFiltersFromDefinition?.state.isFilterCapped
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">
@@ -70,6 +71,13 @@
           [placeholder]="'search'"
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
+        <span class="sat-securityDefinitionConfigurator__filters-content-search-results">
+          <span class="sat-securityDefinitionConfigurator__filters-content-search-results-text">There are
+            <span class="sat-securityDefinitionConfigurator__filters-content-search-results-text-amount">{{ configuratorData.state.showFiltersFromDefinition?.data.totalMatchingResults }}</span>
+            {{ configuratorData.state.showFiltersFromDefinition?.data.name | lowercase }}s that match the keyword.
+          </span>
+        </span>
+        <span class="sat-securityDefinitionConfigurator__filters-content-search-text">Displayed results are capped up to 100 matches. Type more to keep filtering.</span>
       </div>
       <div class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn">
         <div *ngFor="let eachLevel of configuratorData.state.showFiltersFromDefinition?.state.currentFilterPathInConsolidatedBICS; let eachIndex = index;" class="sat-securityDefinitionConfigurator__filters-content-bicsDiveIn-entry">
@@ -84,7 +92,7 @@
       </div>
       <ul class="sat-securityDefinitionConfigurator__filters-content-optionList sat-securityDefinitionConfigurator__filters-content-optionList--regular">
         <button
-          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.displayOptionList"
           (click)="onClickFilterOption(eachOption)"
           [ngClass]="{
             'sat-securityDefinitionConfigurator__filters-content-optionList-item': true,
@@ -96,7 +104,7 @@
       </ul>
       <ul class="sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList">
         <div
-          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.filterOptionList"
+          *ngFor="let eachOption of configuratorData.state.showFiltersFromDefinition?.data.displayOptionList"
           [ngClass]="{
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item': true,
             'sat-securityDefinitionConfigurator__filters-content-consolidatedBICSList-item--selected': eachOption.isSelected,

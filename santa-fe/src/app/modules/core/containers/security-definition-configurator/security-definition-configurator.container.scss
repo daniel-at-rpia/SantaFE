@@ -107,8 +107,31 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
       &-search {
         display: flex;
+        flex-direction: column;
         align-self: stretch;
         margin: $spacing_medium;
+        &-results {
+          display: none;
+          &-text {
+            line-height: $line_height_normal;
+            font-size: $font_size_small;
+            color: $font_color_minor;
+            margin-bottom: $spacing_small;
+            &-amount {
+              @include mix_border_radius(3px);
+              margin: 0 $spacing_xx_small;
+              background-color: $color_active;
+              color: $font_color_inverse;
+              padding: 0 $spacing_x_small;
+            }
+          }
+        }
+        &-text {
+         display: none;
+         line-height: $line_height_normal;
+         font-size: $font_size_small;
+         color: $font_color_minor;
+        }
         santa-input {
           flex: 1 1 auto;
         }
@@ -354,6 +377,25 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         }
         &-bicsDiveIn {
           display: flex;
+        }
+      }
+    }
+  }
+  &--cappedFilterListState {
+    #{$blockName} {
+      &__filters {
+        &-content {
+          &-search {
+            &-results {
+              display: flex;
+            }
+            &-text {
+              display: flex;
+            }
+            santa-input {
+              margin-bottom: $spacing_medium;
+            }
+          }
         }
       }
     }
