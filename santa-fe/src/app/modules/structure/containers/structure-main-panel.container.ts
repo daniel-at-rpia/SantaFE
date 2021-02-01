@@ -211,7 +211,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       if (!!this.state.fetchResult.rawServerReturnCache) {
         this.processStructureData(
           this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-          null
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
         );
       }
     });
