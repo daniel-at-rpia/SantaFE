@@ -470,11 +470,10 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           }
         } else if (eachAlert.data.isUrgent) {
           this.generateNewAlert(eachAlert, alertListSorted);
-        } else {
-          this.state.secondaryStoreList.push(eachAlert);
         }
       });
       this.updateTotalSize();
+      this.store$.dispatch(new CoreGlobalAlertClearAllUrgentAlerts());
     } catch {
       this.restfulCommService.logError('received new alerts but failed to generate');
       console.error('received new alerts but failed to generate');
