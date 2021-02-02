@@ -3,7 +3,7 @@
     import { interval, Observable, of, Subscription } from 'rxjs';
     import { catchError, filter, first, tap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
-
+    import { Router, NavigationEnd } from '@angular/router';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -27,13 +27,16 @@
       CoreGlobalAlertProcessingEvent,
       CoreGlobalAlertsProcessedRawAlerts,
       CoreGlobalAlertsSendNewAlertsToTradeAlertPanel,
-      CoreGlobalAlertFailedToMakeAlertAPICall
+      CoreGlobalAlertFailedToMakeAlertAPICall,
+      CoreGlobalAlertClearAllUrgentAlerts,
+      CoreGlobalAlertsClearAllTradeAlertTableAlerts
     } from 'Core/actions/core.actions';
     import {
       selectNewAlerts,
       selectGlobalAlertProcessingAlertState,
       selectGlobalAlertMakeAPICall
     } from 'Core/selectors/core.selectors';
+    import { NavigationModule } from 'Core/constants/coreConstants.constant';
     import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
     import * as moment from 'moment';
 
@@ -52,7 +55,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     newAlertSubscription: null,
     browserTabNotificationSub: null,
     autoCountForRawAlertsSub: null,
-    makeAlertAPICallSub: null
+    makeAlertAPICallSub: null,
+    navigationStartSub: null
   }
   browserTabNotificationCount$: Observable<any>;
   autoCountForRawAlerts$: Observable<any>;
@@ -60,7 +64,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
     totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD,
     alertTypes: AlertTypes,
-    countdown: ALERT_UPDATE_COUNTDOWN
+    countdown: ALERT_UPDATE_COUNTDOWN,
+    moduleUrl: NavigationModule
 
   };
 
@@ -71,7 +76,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       triggerActionMenuOpen: false,
       presentList: [],
       storeList: [],
-      secondaryStoreList: [],
+      allAlertsList: [],
       totalSize: 0,
       displayTotalSize: '',
       originalDocumentTitle: document.title,
@@ -88,7 +93,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private router: Router
   ) {
     this.state = this.initializePageState();
   }
@@ -111,7 +117,14 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       alertList.length > 0 && this.getAlertsForUrgentAlertList(alertList);
     });
-
+    this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
+        if (this.constants.moduleUrl.trade === modulePortion) {
+          this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
+        }
+      }
+    });
     this.browserTabNotificationCount$ = interval(500);
     this.state.favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
     this.subscriptions.browserTabNotificationSub = this.browserTabNotificationCount$.subscribe(count => {
@@ -328,7 +341,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       this.state.displayTotalSize = `${this.state.totalSize}`;
     }
     // counting all types in buckets
-    const allAlerts = [...this.state.presentList, ...this.state.storeList, ...this.state.secondaryStoreList];
+    const allAlerts = [...this.state.presentList, ...this.state.storeList];
     const grouped = this.groupBy(allAlerts, alert => alert.data.type);
     const payload: Array<DTOs.AlertCountSummaryDTO> = [];
     grouped.forEach((value, key) => {
@@ -408,39 +421,51 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           return true;
         }) : [];
         const urgentAlertUpdateList: Array<DTOs.AlertDTO> = [];
-        const tradeAlertPanelList: Array<DTOs.AlertDTO> = [];
+        const allAlertsUpdateList: Array<DTOs.AlertDTO> = [];
         filteredServerReturn.forEach((eachRawAlert: BEAlertDTO) => {
-          // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
-          if (!!eachRawAlert.marketListAlert) {
-            if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
-              // ignore, already have it
-            } else {
-              this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
+          if (!!eachRawAlert) {
               const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-              urgentAlertUpdateList.push(newAlert);
-            }
-          } else {
-            const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-            if (eachRawAlert.isCancelled) {
-              // cancellation of alerts carries diff meaning depending on the alert type:
-              // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
-              // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
-              if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
+            // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
+            if (!!eachRawAlert.marketListAlert) {
+              if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
+                // ignore, already have it
+              } else if (!eachRawAlert.isActive) {
+                // ignore, already expired
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  allAlertsUpdateList.push(newAlert);
+                }
+              } else {
+                this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
                 urgentAlertUpdateList.push(newAlert);
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  allAlertsUpdateList.push(newAlert);
+                }
               }
             } else {
-              if (!newAlert.state.isRead && newAlert.data.isUrgent) {
-                urgentAlertUpdateList.push(newAlert);
-              }
-              if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                tradeAlertPanelList.push(newAlert)
+              if (eachRawAlert.isCancelled) {
+                // cancellation of alerts carries diff meaning depending on the alert type:
+                // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
+                !newAlert.state.isRead && allAlertsUpdateList.push(newAlert);
+                if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
+                  urgentAlertUpdateList.push(newAlert);
+                }
+              } else {
+                if (!newAlert.state.isRead && newAlert.data.isUrgent) {
+                  urgentAlertUpdateList.push(newAlert);
+                }
+                if (newAlert.data.security && newAlert.data.security.data.securityID) {
+                  allAlertsUpdateList.push(newAlert)
+                }
               }
             }
           }
         });
         this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
         urgentAlertUpdateList.length > 0 && this.getAlertsForUrgentAlertList(urgentAlertUpdateList);
-        tradeAlertPanelList.length > 0 && this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(tradeAlertPanelList));
+        if (allAlertsUpdateList.length > 0) {
+          this.state.allAlertsList = [...this.state.allAlertsList, ...allAlertsUpdateList];
+          this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
+        }
         this.state.alertUpdateInProgress = false;
       }),
       catchError(err => {

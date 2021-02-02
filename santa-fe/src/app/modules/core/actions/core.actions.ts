@@ -177,6 +177,7 @@ export class CoreGlobalAlertClearAllUrgentAlerts implements Action {
   readonly type = CoreActions.GlobalAlertsClearAllUrgentAlerts;
   constructor() {};
 }
+
 export class CoreGlobalAlertsClearAllTradeAlertTableAlerts implements Action {
   readonly type = CoreActions.GlobalAlertsClearAllTradeAlertTableAlerts;
   constructor() {};

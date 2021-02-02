@@ -42,7 +42,7 @@ export interface GlobalAlertState {
   displayTotalSize: string;
   originalDocumentTitle: string;
   favicon: HTMLLinkElement;
-  secondaryStoreList: Array<DTOs.AlertDTO>;  // for alerts that are not suppose to be displayed, need this for calculating total count
+  allAlertsList: Array<DTOs.AlertDTO>;
   alertUpdateTimeStamp: string;
   receivedActiveAlertsMap: object; // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
   alertUpdateInProgress: boolean;
