@@ -1215,15 +1215,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       alertList.forEach((eachAlert) => {
         // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
         if (!!eachAlert.marketListAlert) {
-           if (!eachAlert.isActive) {
-            // ignore, already expired
-            if (eachAlert.data.security && eachAlert.data.security.data.securityID) {
-              alertTableList.push(eachAlert);
-            }
-          } else {
-            if (eachAlert.data.security && eachAlert.data.security.data.securityID) {
-              alertTableList.push(eachAlert);
-            }
+          if (eachAlert.data.security && eachAlert.data.security.data.securityID) {
+            alertTableList.push(eachAlert);
           }
         } else {
           if (eachAlert.isCancelled) {
