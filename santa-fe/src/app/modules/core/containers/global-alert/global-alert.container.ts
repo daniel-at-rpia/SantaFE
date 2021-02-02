@@ -296,7 +296,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       this.state.storeList.splice(existIndexInStore, 1);
     }
     this.state.presentList.unshift(newAlert);
-    this.initiateStateProgressionForNewAlert(newAlert);
     if (this.state.presentList.length >= this.constants.sizeCap) {
       const lastAlert = this.state.presentList[this.state.presentList.length - 1];
       this.state.storeList.unshift(lastAlert);
@@ -497,6 +496,12 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           this.generateNewAlert(eachAlert, alertListSorted);
         }
       });
+      this.state.presentList.forEach((alert: DTOs.AlertDTO, index: number) => {
+        const displayCutOff = alertList.length < this.constants.sizeCap ? alertList.length : this.constants.sizeCap;
+        if (index < displayCutOff) {
+          this.initiateStateProgressionForNewAlert(alert);
+        }
+      })
       this.updateTotalSize();
       this.store$.dispatch(new CoreGlobalAlertClearAllUrgentAlerts());
     } catch {
