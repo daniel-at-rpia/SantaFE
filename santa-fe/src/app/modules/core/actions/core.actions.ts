@@ -24,7 +24,9 @@ export enum CoreActions {
   GlobalAlertsProcessingRawAlertsEvent = '[Core] Processing Raw Global Alerts',
   GlobalAlertsProcessedRawAlerts = '[Core] Raw Alerts Processed For Global Alerts',
   GlobalAlertsPassNewAlertsToTradeAlertPanel = '[Core] Passed Alerts to Trade Alert',
-  GlobalAlertsAPIAlertCallFailed = '[Core] Global Alerts Failed to Make API Call For Alerts'
+  GlobalAlertsAPIAlertCallFailed = '[Core] Global Alerts Failed to Make API Call For Alerts',
+  GlobalAlertsClearAllUrgentAlerts = '[Core] Global Alerts Clear All Urgent Alerts In Store',
+  GlobalAlertsClearAllTradeAlertTableAlerts = '[Core] Global Alerts Clear All Alerts For Trade Alert Panel In Store'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -169,4 +171,13 @@ export class CoreGlobalAlertFailedToMakeAlertAPICall implements Action {
   constructor(newState: boolean) {
     this.newState = newState;
   }
+}
+
+export class CoreGlobalAlertClearAllUrgentAlerts implements Action {
+  readonly type = CoreActions.GlobalAlertsClearAllUrgentAlerts;
+  constructor() {};
+}
+export class CoreGlobalAlertsClearAllTradeAlertTableAlerts implements Action {
+  readonly type = CoreActions.GlobalAlertsClearAllTradeAlertTableAlerts;
+  constructor() {};
 }
