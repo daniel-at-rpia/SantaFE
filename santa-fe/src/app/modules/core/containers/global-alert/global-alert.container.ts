@@ -109,30 +109,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.newAlertSubscription = this.store$.pipe(
       select(selectNewAlerts),
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
-      // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
-      const alertListSorted: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
-      try {
-        alertListSorted.forEach((eachAlert) => {
-          if (eachAlert.state.isCancelled) {
-            if (eachAlert.state.isExpired) {
-              // if it is naturally expired, then don't do anything
-              // because if it is the first load after refreshing the FE, then nothing needs to be done for the naturally expired ones
-              // and if it is not the first load, the expiration will be picked up at individual alert level
-            } else {
-              console.log('cancel alert ', eachAlert);
-              this.onAlertExpired(eachAlert);
-            }
-          } else if (eachAlert.data.isUrgent) {
-            this.generateNewAlert(eachAlert, alertListSorted);
-          } else {
-            this.state.secondaryStoreList.push(eachAlert);
-          }
-        });
-        this.updateTotalSize();
-      } catch {
-        this.restfulCommService.logError('received new alerts but failed to generate');
-        console.error('received new alerts but failed to generate');
-      }
+      alertList.length > 0 && this.getAlertsForUrgentAlertList(alertList);
     });
 
     this.browserTabNotificationCount$ = interval(500);
@@ -462,7 +439,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           }
         });
         this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
-        urgentAlertUpdateList.length > 0 && this.store$.dispatch(new CoreSendNewAlerts(urgentAlertUpdateList));
+        urgentAlertUpdateList.length > 0 && this.getAlertsForUrgentAlertList(urgentAlertUpdateList);
         tradeAlertPanelList.length > 0 && this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(tradeAlertPanelList));
         this.state.alertUpdateInProgress = false;
       }),
@@ -477,4 +454,30 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.state.alertUpdateTimeStamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
   }
 
+  private getAlertsForUrgentAlertList(alertList: Array<DTOs.AlertDTO>) {
+    // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
+    const alertListSorted: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+    try {
+      alertListSorted.forEach((eachAlert) => {
+        if (eachAlert.state.isCancelled) {
+          if (eachAlert.state.isExpired) {
+            // if it is naturally expired, then don't do anything
+            // because if it is the first load after refreshing the FE, then nothing needs to be done for the naturally expired ones
+            // and if it is not the first load, the expiration will be picked up at individual alert level
+          } else {
+            console.log('cancel alert ', eachAlert);
+            this.onAlertExpired(eachAlert);
+          }
+        } else if (eachAlert.data.isUrgent) {
+          this.generateNewAlert(eachAlert, alertListSorted);
+        } else {
+          this.state.secondaryStoreList.push(eachAlert);
+        }
+      });
+      this.updateTotalSize();
+    } catch {
+      this.restfulCommService.logError('received new alerts but failed to generate');
+      console.error('received new alerts but failed to generate');
+    }
+  }
 }
