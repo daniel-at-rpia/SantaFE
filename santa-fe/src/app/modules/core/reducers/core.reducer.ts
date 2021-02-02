@@ -200,6 +200,22 @@ export function coreReducer(
           apiCallForAlertFailed: action.newState
         }
       }
+    case CoreActions.GlobalAlertsClearAllUrgentAlerts:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          newUrgentAlerts: []
+        }
+      }
+    case CoreActions.GlobalAlertsClearAllTradeAlertTableAlerts:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          newTradeAlertTableAlerts: []
+        }
+      }
     default:
       return {
         ...state
