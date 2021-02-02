@@ -1211,15 +1211,15 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private updateAlertTable(alertList: Array<DTOs.AlertDTO>) {
       this.state.alertUpdateInProgress = true;
       const alertTableList: Array<DTOs.AlertDTO> = [];
-      const alertTableRemovalList: Array<DTOs.AlertDTO> = [];  // currently the only alerts that needs to be removed are the cancelled trade alerts
-      alertList.forEach((eachAlert) => {
+      const alertTableRemovalList: Array<DTOs.AlertDTO> = [];
+      alertList.forEach((eachAlert: DTOs.AlertDTO) => {
         // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
-        if (!!eachAlert.marketListAlert) {
+        if (!!eachAlert.state.isMarketListVariant) {
           if (eachAlert.data.security && eachAlert.data.security.data.securityID) {
             alertTableList.push(eachAlert);
           }
         } else {
-          if (eachAlert.isCancelled) {
+          if (eachAlert.state.isCancelled) {
             // cancellation of alerts carries diff meaning depending on the alert type:
             // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
             // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
