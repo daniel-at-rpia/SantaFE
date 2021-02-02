@@ -14,7 +14,7 @@ import { Store, select } from '@ngrx/store';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import {
   CoreActions,
-  CoreIsReadyToMakeAlertCall,
+  CoreGlobalAlertIsReadyToMakeAlertCall,
   CoreGlobalAlertsMakeAPICallEvent,
   CoreGlobalLiveUpdateInternalCountEvent,
   CoreGlobalAlertFailedToMakeAlertAPICall
@@ -49,7 +49,7 @@ export class CoreEffect {
       } else {
         if (!isReady) {
           if (tick.count % 5 === 0) {
-            this.store$.dispatch(new CoreIsReadyToMakeAlertCall());
+            this.store$.dispatch(new CoreGlobalAlertIsReadyToMakeAlertCall());
           }
         }
       }

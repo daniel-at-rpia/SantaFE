@@ -131,7 +131,7 @@ export class CoreGlobalLiveUpdateInternalCountEvent implements Action {
   }
 }
 
-export class CoreIsReadyToMakeAlertCall implements Action {
+export class CoreGlobalAlertIsReadyToMakeAlertCall implements Action {
   readonly type = CoreActions.GlobalAlertsReadyForNextAlertCall;
   constructor() {}
 }
