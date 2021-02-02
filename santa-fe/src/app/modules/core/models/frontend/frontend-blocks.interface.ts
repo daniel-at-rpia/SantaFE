@@ -298,6 +298,8 @@ export interface PortfolioBreakdownCategoryBlock {
   currentPctDisplay: string;
   indexPct: number;
   indexPctDisplay: string;
+  delta: number;
+  deltaDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
   bicsLevel: number;
   portfolioID: number;
@@ -318,6 +320,7 @@ export interface PortfolioBreakdownCategoryBlock {
   editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
 }
+
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
   legend: string;
@@ -369,7 +372,7 @@ export interface BICsHierarchyAllDataBlock {
   children: Array<BICsHierarchyBlock>;
 }
 
-export interface BICsCategorizationBlock {
+export interface BICSCategorizationBlock {
   portfolioID: number,
   bicsLevel1: BEStructuringBreakdownBlock,
   bicsLevel2?: BEStructuringBreakdownBlock,
@@ -413,6 +416,7 @@ export interface BICSMainRowDataBlock {
   portfolioID: number;
   level: number;
   isCs01?: boolean;
+  isIndex: boolean;
 }
 
 export interface TradeCenterPanelStateFilterBlock {

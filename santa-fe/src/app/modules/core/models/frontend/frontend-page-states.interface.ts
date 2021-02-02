@@ -12,7 +12,8 @@ import {
   BreakdownViewFilter,
   PortfolioShortNames,
   PortfolioView,
-  SubPortfolioFilter
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock, BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
 
@@ -137,6 +138,7 @@ export interface StructureMainPanelState {
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   activeSubPortfolioFilter: SubPortfolioFilter;
+  activeDeltaScope: DeltaScope;
   fetchResult: {
     fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;
@@ -285,6 +287,7 @@ export interface StructureUtilityPanelState {
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   activeSubPortfolioFilter: SubPortfolioFilter;
+  currentDeltaScope: DeltaScope;
   viewingHistoricalData: boolean;
   switchDate: {
     datepicker: SantaDatePicker;
@@ -320,4 +323,5 @@ export interface StructureSetTargetPanelState {
   editViewMode: boolean;
   ownerInitial: string;
   activeSubPortfolioFilter: SubPortfolioFilter;
+  isViewingIndexOnBICS: boolean;
 }

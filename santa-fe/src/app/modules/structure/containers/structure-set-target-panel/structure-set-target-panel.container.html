@@ -10,7 +10,8 @@
     'sat-structureSetTargetPanel--ratingAvailableState': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--goodRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 80 &&state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--averageRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 60 && state.targetBreakdown?.style.ratingFillWidth < 80 && state.targetBreakdown?.state.isBICs,
-    'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs
+    'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--viewingIndexOnBICSState': state.isViewingIndexOnBICS
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-setView">
@@ -87,7 +88,11 @@
               <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-chart-pie"></i>
               <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Current %</div>
             </div>
-            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell sat-structureSetTargetPanel__main-edit-content-header-categories-cell--delta">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fal fa-triangle"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Delta %</div>
+            </div>
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell sat-structureSetTargetPanel__main-edit-content-header-categories-cell--index">
               <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-analytics"></i>
               <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Index %</div>
             </div>

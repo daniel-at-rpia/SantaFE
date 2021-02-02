@@ -122,3 +122,18 @@ export enum SubPortfolioFilter {
   nonShortCarry = 'Non-Short Carry',
   shortCarry = 'Short Carry'
 }
+
+// for the sake of simplicity, the values of the DeltaScope enum are exact matches to their counterparts in BE, expect Index obviously
+export enum DeltaScope {
+  dod = 'Dod',
+  wow = 'Wow',
+  mom = 'Mom',
+  ytd = 'Ytd'
+}
+
+export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
+  Dod: 0.1,
+  Wow: 0.2,
+  Mom: 0.3,
+  Ytd: 0.4
+}

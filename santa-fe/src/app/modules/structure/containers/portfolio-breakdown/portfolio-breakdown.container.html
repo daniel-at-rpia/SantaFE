@@ -11,7 +11,8 @@
     'sat-portfolioBreakdown--previewVariant': breakdownData.state.isPreviewVariant,
     'sat-portfolioBreakdown--overrideVariant': breakdownData.state.isOverrideVariant,
     'sat-portfolioBreakdown--isEditingViewAvailableState': breakdownData.state.isEditingViewAvail,
-    'sat-portfolioBreakdown--displayAllTargetState': breakdownData.state.isDisplaySubLevels
+    'sat-portfolioBreakdown--displayAllTargetState': breakdownData.state.isDisplaySubLevels,
+    'sat-portfolioBreakdown--viewIndexState': breakdownData.state.isViewingIndex
   }">
   <section class="sat-portfolioBreakdown__title">
     <div class="sat-portfolioBreakdown__title-definition">
@@ -46,6 +47,10 @@
     <div class="sat-portfolioBreakdown__categoryHeader-cell sat-portfolioBreakdown__categoryHeader-cell--index">
       <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fas fa-analytics"></i>
       <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Index %</div>
+    </div>
+    <div class="sat-portfolioBreakdown__categoryHeader-cell sat-portfolioBreakdown__categoryHeader-cell--delta">
+      <i class="sat-portfolioBreakdown__categoryHeader-cell-icon fal fa-triangle"></i>
+      <div class="sat-portfolioBreakdown__categoryHeader-cell-tooltip">Delta %</div>
     </div>
   </section>
   <section class="sat-portfolioBreakdown__categoryContent">

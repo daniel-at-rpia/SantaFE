@@ -571,7 +571,7 @@ export interface BEAlertMarketListQuoteBlock extends BEQuoteBaseBlock {
 
 export interface BEGetPortfolioStructureServerReturn {
   Now: Array<BEStructuringFundBlockWithSubPortfolios>;
-  DoD?: Array<BEStructuringFundBlockWithSubPortfolios>;
+  Dod?: Array<BEStructuringFundBlockWithSubPortfolios>;
   Wow?: Array<BEStructuringFundBlockWithSubPortfolios>;
   Mom?: Array<BEStructuringFundBlockWithSubPortfolios>;
   Ytd?: Array<BEStructuringFundBlockWithSubPortfolios>;
