@@ -22,8 +22,8 @@ export interface CoreState {
   globalAlert: {
     displayThumbnail: boolean;
     countByTypeArr: Array<DTOs.AlertCountSummaryDTO>;
-    newAlerts: Array<DTOs.AlertDTO>;
-    newAlertsToTradeAlertPanel: Array<DTOs.AlertDTO>;
+    newUrgentAlerts: Array<DTOs.AlertDTO>;
+    newTradeAlertTableAlerts: Array<DTOs.AlertDTO>;
     mainThreadOccupied: boolean;
     readyForNextAlertCall: boolean;
     processingAlerts: boolean;
@@ -48,8 +48,8 @@ const initialState: CoreState = {
   globalAlert: {
     displayThumbnail: true,
     countByTypeArr: [],
-    newAlerts: [],
-    newAlertsToTradeAlertPanel: [],
+    newUrgentAlerts: [],
+    newTradeAlertTableAlerts: [],
     mainThreadOccupied: false,
     readyForNextAlertCall: false,
     processingAlerts: false,
@@ -99,7 +99,7 @@ export function coreReducer(
         ...state,
         globalAlert: {
           ...state.globalAlert,
-          newAlerts: action.list
+          newUrgentAlerts: action.list
         }
       };
     case CoreActions.SendAlertCountsByType:
@@ -115,7 +115,7 @@ export function coreReducer(
         ...state,
         globalAlert: {
           ...state.globalAlert,
-          newAlerts: []
+          newUrgentAlerts: []
         }
       };
     case CoreActions.GlobalWorkflowSendNewState:
@@ -189,7 +189,7 @@ export function coreReducer(
         ...state,
         globalAlert: {
           ...state.globalAlert,
-          newAlertsToTradeAlertPanel: action.list
+          newTradeAlertTableAlerts: action.list
         }
       }
     case CoreActions.GlobalAlertsAPIAlertCallFailed:

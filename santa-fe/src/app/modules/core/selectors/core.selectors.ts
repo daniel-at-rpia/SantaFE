@@ -5,7 +5,7 @@ import { getCoreState } from 'App/selectors';
 
 export const selectAlertUpdate = createSelector(
   getCoreState,
-  (state: CoreState) => state.globalAlert.newAlerts
+  (state: CoreState) => state.globalAlert.newUrgentAlerts
 );
 
 export const selectUserInitials = createSelector(
@@ -30,7 +30,7 @@ export const selectSecurityMapValidStatus = createSelector(
 
 export const selectNewAlerts = createSelector(
   getCoreState,
-  (state: CoreState) => state.globalAlert.newAlerts
+  (state: CoreState) => state.globalAlert.newUrgentAlerts
 );
 
 export const selectAlertCounts = createSelector(
@@ -70,7 +70,7 @@ export const selectGlobalAlertMakeAPICall = createSelector(
 
 export const selectGlobalAlertSendNewAlertsToTradePanel = createSelector(
   getCoreState,
-  (state: CoreState) => state.globalAlert.newAlertsToTradeAlertPanel
+  (state: CoreState) => state.globalAlert.newTradeAlertTableAlerts
 )
 
 export const selectGlobalAlertFailedToMakeAlertAPICall = createSelector(
