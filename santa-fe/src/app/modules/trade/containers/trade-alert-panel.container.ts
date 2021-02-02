@@ -279,7 +279,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       select(selectGlobalAlertSendNewAlertsToTradePanel),
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       if (alertList.length > 0) {
-        const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList);
+        const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
         try {
           this.updateAlertTable(alertListCopy);
           if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
