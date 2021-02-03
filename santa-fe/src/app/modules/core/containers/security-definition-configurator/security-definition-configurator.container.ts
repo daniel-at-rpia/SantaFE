@@ -144,7 +144,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onSearchKeywordChange(newKeyword: string, hasAppliedFilter: boolean) {
+  public onSearchKeywordChange(newKeyword: string, hasAppliedFilter: boolean = false) {
     if (this.configuratorData.state.showFiltersFromDefinition) {
       this.configuratorData.data.filterSearchInputValue = newKeyword;
       // Checking for empty string when ticker is selected
