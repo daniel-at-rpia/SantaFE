@@ -148,8 +148,13 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       select(selectUtilityPanelLoadState)
     ).subscribe((newState) => {
       if (!!newState) {
+        console.log('inheriting previous config', newState);
         this.setMetricLevel(newState.selectedMetricValue);
         this.onClickBreakdownFilterChange(newState.activeBreakdownViewFilter);
+        this.state.activePortfolioViewFilter = newState.activePortfolioViewFilter;
+        this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
+        this.onClickDeltaScope(newState.currentDeltaScope);
+        this.onClickSubPortfolioChange(newState.activeSubPortfolioFilter);
       }
     });
   }
@@ -203,6 +208,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       this.state.activePortfolioViewFilter.push(targetFilterOption);
     }
     this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
+    this.pushStateSnapshotToGlobalState();
   }
 
   public onSelectedDateFromSwitchDateDatepicker(targetDate: moment.Moment) {
@@ -231,6 +237,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       this.state.activeSubPortfolioFilter = targetFilterOption;
       this.store$.dispatch(new StructureChangeSubPortfolioViewFilterEvent(targetFilterOption));
     }
+    this.pushStateSnapshotToGlobalState();
   }
 
   public onClickDeltaScope(newDeltaScope: DeltaScope) {
@@ -238,6 +245,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       this.state.currentDeltaScope = newDeltaScope;
       this.store$.dispatch(new StructureChangeDeltaScopeEvent(newDeltaScope));
     }
+    this.pushStateSnapshotToGlobalState();
   }
 
   private updateDataDatestamp(
