@@ -9,14 +9,18 @@ import {
   BreakdownViewFilter,
   SUPPORTED_PORTFOLIO_LIST,
   PortfolioShortNames,
-  UTILITY_PANEL_HISTORICAL_TIME_LABEL
+  UTILITY_PANEL_HISTORICAL_TIME_LABEL,
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import {
   selectMetricLevel,
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
   selectActivePortfolioViewFilter,
-  selectDataDatestamp
+  selectDataDatestamp,
+  selectActiveSubPortfolioFilter,
+  selectActiveDeltaScope
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
@@ -24,7 +28,9 @@ import {
   StructureMetricSelect,
   StructureChangeBreakdownViewFilterEvent,
   StructureChangePortfolioViewFilterEvent,
-  StructureSwitchDataDatestampEvent
+  StructureSwitchDataDatestampEvent,
+  StructureChangeSubPortfolioViewFilterEvent,
+  StructureChangeDeltaScopeEvent
 } from 'Structure/actions/structure.actions';
 import { UtilityService, DTOService } from 'Core/services';
 
@@ -42,7 +48,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     lastUpdateSub: null,
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
-    dataDatestampSub: null
+    dataDatestampSub: null,
+    subPortfolioSub: null,
+    deltaScopeSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -50,7 +58,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     creditDuration: PortfolioMetricValues.creditDuration,
     breakdownViewFilter: BreakdownViewFilter,
     portfolios: SUPPORTED_PORTFOLIO_LIST,
-    beginningOfDay: UTILITY_PANEL_HISTORICAL_TIME_LABEL
+    beginningOfDay: UTILITY_PANEL_HISTORICAL_TIME_LABEL,
+    subPortfolioFilter: SubPortfolioFilter,
+    deltaScope: DeltaScope
   }
 
   constructor(
@@ -67,6 +77,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       currentDatestampDisplayText: 'n/a',
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
+      activeSubPortfolioFilter: null,
+      currentDeltaScope: null,
       viewingHistoricalData: false,
       switchDate: {
         datepicker: this.dtoService.formSantaDatepicker('Choose Historical Date', 'Date'),
@@ -110,6 +122,20 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       first()  // same reason as above
     ).subscribe((newDatestampInUnix) => {
       this.updateDataDatestamp(moment.unix(newDatestampInUnix), true);
+    });
+
+    this.subscriptions.subPortfolioSub = this.store$.pipe(
+      select(selectActiveSubPortfolioFilter),
+      first()  // same reason as above
+    ).subscribe((activeFilter) => {
+      this.state.activeSubPortfolioFilter = activeFilter;
+    });
+
+    this.subscriptions.deltaScopeSub = this.store$.pipe(
+      select(selectActiveDeltaScope),
+      first()  // same reason as above
+    ).subscribe((activeScope) => {
+      this.state.currentDeltaScope = activeScope;
     });
   }
 
@@ -175,6 +201,20 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
     this.updateDataDatestamp(now);
     this.state.lastUpdateTime = now.format('hh:mm:ss a');
+  }
+
+  public onClickSubPortfolioChange(targetFilterOption: SubPortfolioFilter) {
+    if (this.state.activeSubPortfolioFilter !== targetFilterOption) {
+      this.state.activeSubPortfolioFilter = targetFilterOption;
+      this.store$.dispatch(new StructureChangeSubPortfolioViewFilterEvent(targetFilterOption));
+    }
+  }
+
+  public onClickDeltaScope(newDeltaScope: DeltaScope) {
+    if (this.state.currentDeltaScope !== newDeltaScope) {
+      this.state.currentDeltaScope = newDeltaScope;
+      this.store$.dispatch(new StructureChangeDeltaScopeEvent(newDeltaScope));
+    }
   }
 
   private updateDataDatestamp(

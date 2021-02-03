@@ -115,3 +115,25 @@ export enum BreakdownViewFilter {
 }
 
 export const UTILITY_PANEL_HISTORICAL_TIME_LABEL = 'Beginning Of Day';
+
+export enum SubPortfolioFilter {
+  all = 'All',
+  nonHedging = 'Non-Hedging',
+  nonShortCarry = 'Non-Short Carry',
+  shortCarry = 'Short Carry'
+}
+
+// for the sake of simplicity, the values of the DeltaScope enum are exact matches to their counterparts in BE, expect Index obviously
+export enum DeltaScope {
+  dod = 'Dod',
+  wow = 'Wow',
+  mom = 'Mom',
+  ytd = 'Ytd'
+}
+
+export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
+  Dod: 0.1,
+  Wow: 0.2,
+  Mom: 0.3,
+  Ytd: 0.4
+}

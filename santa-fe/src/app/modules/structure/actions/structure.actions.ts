@@ -4,13 +4,15 @@ import * as moment from 'moment';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
   StructureSetViewTransferPack
 } from 'FEModels/frontend-adhoc-packages.interface';
-import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
+import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
 
 export enum StructureActions {
   StructureStoreReset = '[Structure] Reset Store Upon Entering',
@@ -21,6 +23,8 @@ export enum StructureActions {
   UpdateMainPanel = '[Structure] Update Main Panel',
   ChangeBreakdownViewFilter = '[Structure] Change Breakdown View Filter',
   ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter',
+  ChangeSubPortfolioViewFilter = '[Structure] Change Sub-Portfolio View Filter',
+  ChangeDeltaScope = '[Structure] Change Delta Scope',
   SwitchDataDatestamp = '[Structure] Switch Data Datestamp'
 }
 
@@ -47,8 +51,8 @@ export class StructureSendSetTargetTransferEvent implements Action {
 
 export class StructureReloadFundDataPostEditEvent implements Action {
   readonly type = StructureActions.ReloadBreakdownDataPostEdit;
-  readonly targetRawFund: BEPortfolioStructuringDTO;
-  constructor(targetRawFund: BEPortfolioStructuringDTO) {
+  readonly targetRawFund: BEStructuringFundBlockWithSubPortfolios;
+  constructor(targetRawFund: BEStructuringFundBlockWithSubPortfolios) {
     this.targetRawFund = targetRawFund;
   }
 }
@@ -82,10 +86,26 @@ export class StructureChangePortfolioViewFilterEvent implements Action {
   }
 }
 
+export class StructureChangeSubPortfolioViewFilterEvent implements Action {
+  readonly type = StructureActions.ChangeSubPortfolioViewFilter;
+  readonly filterOption: SubPortfolioFilter;
+  constructor(filterOption: SubPortfolioFilter) {
+    this.filterOption = filterOption;
+  }
+}
+
 export class StructureSwitchDataDatestampEvent implements Action {
   readonly type = StructureActions.SwitchDataDatestamp;
   readonly dateStampInUnix: number;
   constructor(dateStampInMoment: moment.Moment) {
     this.dateStampInUnix = parseInt(dateStampInMoment.format('X'));
+  }
+}
+
+export class StructureChangeDeltaScopeEvent implements Action {
+  readonly type = StructureActions.ChangeDeltaScope;
+  readonly deltaScope: DeltaScope;
+  constructor(newDeltaScope: DeltaScope) {
+    this.deltaScope = newDeltaScope;
   }
 }

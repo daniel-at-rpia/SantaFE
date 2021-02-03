@@ -133,19 +133,10 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
   const FilterOptionsSeniorityType = [
-    'Secured',  // 0
-    '1st lien',  // 1
-    '2nd lien',  // 2
-    '3rd lien',  // 3
-    'Asset Backed',  // 4
-    'Sr Preferred',  // 5
-    'Sr Unsecured',  // 6
-    'Sr Non Preferred',  // 7
-    'Unsecured',  // 8
-    'SLA',  // 9
-    'Sr Subordinated',  // 10
-    'Subordinated',  // 11
-    'Jr Subordinated'  // 12
+    'SECURED',  // 1
+    'SR',  // 2
+    'SLA',  // 3
+    'SUB'  // 4
   ];
 
   const FilterOptionsIndustryType = [
@@ -622,3 +613,7 @@ export const FilterTraceTradesOptions = [
 ]
 
 export const DEFINITION_LONG_THRESHOLD = 5;
+
+export const DEFINITION_CAPPED_THRESHOLD = 300;
+
+export const DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD = 100;

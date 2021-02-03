@@ -15,7 +15,7 @@ import {
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
-import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
+import { BEStructuringFundBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 interface BasicDTOStructure {
@@ -229,11 +229,12 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     key: string;
     urlForGetLongOptionListFromServer: string;
     prinstineFilterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
-    filterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
+    displayOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
     highlightSelectedOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
     securityDTOAttrBlock: string;
     backendDtoAttrName: string;
+    totalMatchingResults: number;
   }
   style: {
     icon: string;
@@ -247,6 +248,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isMiniPillVariant: boolean;
     isFilterLong: boolean;
     currentFilterPathInConsolidatedBICS: Array<string>;
+    isFilterCapped: boolean;
   }
 }
 
@@ -757,6 +759,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isDisplaySubLevels: boolean;
     isDisplayPopover: boolean;
     isViewingHistoricalData: boolean;
+    isViewingIndex: boolean;
   }
 }
 
@@ -782,7 +785,7 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
-    originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
+    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
@@ -855,6 +858,7 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
   state: {
     isActive: boolean;
     isDisplayCs01: boolean;
+    isViewingIndex: boolean;
   }
 }
 
@@ -877,6 +881,7 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isWithinEditRow: boolean;
     isWithinSetTargetPreview: boolean;
     isViewingHistoricalData: boolean;
+    isViewingIndex: boolean;
   }
 }
 
