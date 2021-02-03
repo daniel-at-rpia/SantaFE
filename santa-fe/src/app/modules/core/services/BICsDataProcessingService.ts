@@ -288,7 +288,8 @@ export class BICsDataProcessingService {
       existingDisplayList.forEach(existingRow => {
         const selectedRawData = selectedSubRawBICsData[`${BICS_BREAKDOWN_FRONTEND_KEY}${existingRow.data.bicsLevel}`];
         if (!!selectedRawData.breakdown[existingRow.data.code]) {
-          customRawBreakdown.breakdown[existingRow.data.displayCategory] = selectedRawData.breakdown[existingRow.data.code];
+          const parsedCategoryName = `${existingRow.data.displayCategory} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${existingRow.data.bicsLevel}`;
+          customRawBreakdown.breakdown[parsedCategoryName] = selectedRawData.breakdown[existingRow.data.code];
         }
       })
     }
