@@ -1182,7 +1182,8 @@ export class UtilityService {
 
     public getCustomDisplayOptionListForConfiguator(
       newKeyword: string,
-      configurator: DTOs.SecurityDefinitionConfiguratorDTO,cappedDisplayAmount: number
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      cappedDisplayAmount: number
       ): Array<Blocks.SecurityDefinitionFilterBlock> {
       const filterSpecificOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = [];
       configurator.state.showFiltersFromDefinition.data.prinstineFilterOptionList.forEach((eachOption) => {
@@ -1196,22 +1197,10 @@ export class UtilityService {
       });
       if (filterSpecificOptionList.length > 0) {
         const parsedKeyword = newKeyword.toLowerCase();
-        const exactMatchOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase() === parsedKeyword);
-        const generalMatchOptionList = exactMatchOptionList.length > 0 ? filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) >= 0 && option.displayLabel.toLowerCase() !== parsedKeyword) : filterSpecificOptionList;
-        if (exactMatchOptionList.length > 0) {
-          exactMatchOptionList.sort((optionA: Blocks.SecurityDefinitionFilterBlock, optionB: Blocks.SecurityDefinitionFilterBlock) => {
-            if (optionA.displayLabel < optionB.displayLabel) {
-              return - 1
-            } else if (optionA.displayLabel > optionB.displayLabel) {
-              return 1;
-            } else {
-              return 0;
-            }
-          });
-        }
-        const limit = exactMatchOptionList.length > 0 ? cappedDisplayAmount - exactMatchOptionList.length : cappedDisplayAmount;
-        const cappedGeneralMatchList = generalMatchOptionList.length > limit ? generalMatchOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : generalMatchOptionList;
-        const formattedFilteredList: Array<Blocks.SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedGeneralMatchList] : cappedGeneralMatchList;
+        const exactMatchOption: Blocks.SecurityDefinitionFilterBlock = filterSpecificOptionList.find((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase() === parsedKeyword);
+        const generalMatchOptionList = !!exactMatchOption ? filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase() !== parsedKeyword) : filterSpecificOptionList;
+        const cappedGeneralMatchList = generalMatchOptionList.length > cappedDisplayAmount ? generalMatchOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock, i: number) => i < cappedDisplayAmount - 1) : generalMatchOptionList;
+        const formattedFilteredList: Array<Blocks.SecurityDefinitionFilterBlock> = !!exactMatchOption ? [exactMatchOption, ...cappedGeneralMatchList] : cappedGeneralMatchList;
         if (configurator.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
           configurator.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((highlightOption: Blocks.SecurityDefinitionFilterBlock) => {
             const filterOptionIndex = formattedFilteredList.findIndex((filterOption: Blocks.SecurityDefinitionFilterBlock) => filterOption.displayLabel === highlightOption.displayLabel);
