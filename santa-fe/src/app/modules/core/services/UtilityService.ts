@@ -28,7 +28,10 @@
       AlertSubTypes,
       TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
-    import { BICS_DIVE_IN_UNAVAILABLE_CATEGORIES } from 'Core/constants/structureConstants.constants';
+    import {
+      BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
+      SubPortfolioFilter
+    } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
@@ -416,13 +419,16 @@ export class UtilityService {
       targetShortcut: DTOs.SearchShortcutDTO,
       targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
     ): DTOs.SecurityDefinitionConfiguratorDTO {
-      const newConfig = this.deepCopy(targetConfigurator);
-      const shortcutCopy = this.deepCopy(targetShortcut);
+      const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
+      const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
       shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
-              eachDefinition.data.filterOptionList = eachShortcutDef.data.filterOptionList;
+              eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
+              eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
+                return !!eachFilter.isSelected;
+              });
               eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
               eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
             }
@@ -1168,6 +1174,58 @@ export class UtilityService {
       }
     }
 
+    public applySearchFilterForConfigurator(targetOption: Blocks.SecurityDefinitionFilterBlock, keyword: string): boolean {
+      const normalizedTarget = targetOption.displayLabel.toLowerCase();
+      const normalizedKeyword = keyword.toLowerCase();
+      return normalizedTarget.includes(normalizedKeyword);
+    }
+
+    public getCustomDisplayOptionListForConfiguator(
+      newKeyword: string,
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,cappedDisplayAmount: number
+      ): Array<Blocks.SecurityDefinitionFilterBlock> {
+      const filterSpecificOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = [];
+      configurator.state.showFiltersFromDefinition.data.prinstineFilterOptionList.forEach((eachOption) => {
+        const optionCopy = {...eachOption};
+        if (this.applySearchFilterForConfigurator(eachOption, newKeyword)) {
+          optionCopy.isFilteredOut = false;
+        } else {
+          optionCopy.isFilteredOut = true;
+        }
+        !optionCopy.isFilteredOut && filterSpecificOptionList.push(optionCopy);
+      });
+      if (filterSpecificOptionList.length > 0) {
+        const parsedKeyword = newKeyword.toLowerCase();
+        const exactMatchOptionList: Array<Blocks.SecurityDefinitionFilterBlock> = filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase() === parsedKeyword);
+        const generalMatchOptionList = exactMatchOptionList.length > 0 ? filterSpecificOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock) => option.displayLabel.toLowerCase().indexOf(parsedKeyword) > 0) : filterSpecificOptionList;
+        if (exactMatchOptionList.length > 0) {
+          exactMatchOptionList.sort((optionA: Blocks.SecurityDefinitionFilterBlock, optionB: Blocks.SecurityDefinitionFilterBlock) => {
+            if (optionA.displayLabel < optionB.displayLabel) {
+              return - 1
+            } else if (optionA.displayLabel > optionB.displayLabel) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+        }
+        const limit = exactMatchOptionList.length > 0 ? cappedDisplayAmount - exactMatchOptionList.length : cappedDisplayAmount;
+        const cappedGeneralMatchList = generalMatchOptionList.length > limit ? generalMatchOptionList.filter((option: Blocks.SecurityDefinitionFilterBlock, i: number) => i < limit - 1) : generalMatchOptionList;
+        const formattedFilteredList: Array<Blocks.SecurityDefinitionFilterBlock> = exactMatchOptionList.length > 0 ? [...exactMatchOptionList, ...cappedGeneralMatchList] : cappedGeneralMatchList;
+        if (configurator.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
+          configurator.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((highlightOption: Blocks.SecurityDefinitionFilterBlock) => {
+            const filterOptionIndex = formattedFilteredList.findIndex((filterOption: Blocks.SecurityDefinitionFilterBlock) => filterOption.displayLabel === highlightOption.displayLabel);
+            if (filterOptionIndex >= 0) {
+              formattedFilteredList[filterOptionIndex] = highlightOption;
+            }
+          })
+        }
+        return formattedFilteredList;
+      } else {
+        return [];
+      }
+    }
+
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;
@@ -1375,7 +1433,7 @@ export class UtilityService {
             totalLevel = totalLevel + eachCategory.data.currentLevel;
           });
           const filteredListWithTargets = filteredList.filter((eachCategory) => {
-            return !!eachCategory.data.targetLevel;
+            return eachCategory.data.targetLevel !== null;
           });
           if (filteredListWithTargets.length > 0) {
             let misalignmentAggregate = 0;
@@ -1416,10 +1474,14 @@ export class UtilityService {
     }
 
     public getRowDiffToTarget(currentLevel: number, targetLevel: number, isCs01: boolean): number {
-      return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
+      if (!!targetLevel || targetLevel === 0) {
+        return !!isCs01 ? Math.round(targetLevel - currentLevel) : this.round(targetLevel - currentLevel, 2);
+      } else {
+        return 0;
+      }
     }
 
-    public getRowDiffToTargetText(amount: number, isCs01: boolean): string {
+    public getBreakdownRowDiffText(amount: number, isCs01: boolean): string {
       let displayText: string;
       if (amount < 0) {
         displayText = !!isCs01 ? `${amount}k` : `${amount}`;
@@ -1437,16 +1499,59 @@ export class UtilityService {
       return [minValue, maxValue];
     }
 
-    public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number {
+    public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number | null {
+      let parsedValue: number | null;
       // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
-      const roundedValue = !!isCs01 ? Math.abs(value) >= 1000 ? this.round(value/1000, 0) : 0 : this.round(value, 2);
-      return roundedValue;
+      if (!!value || value === 0) {
+        parsedValue = !!isCs01 ? Math.abs(value) >= 1000 ? this.round(value/1000, 0) : 0 : this.round(value, 2);
+      } else {
+        parsedValue = null;
+      }
+      return parsedValue;
     }
 
-    public checkIfDiveInIsAvailable(code: string): boolean {
-      const isDiveInAvailable = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === code);
-      return !isDiveInAvailable;
+    public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
+      const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
+      const isDiveInAvailable = !isNonDiveInCategory && row.data.bicsLevel < 4 ? true : false;
+      return isDiveInAvailable;
     }
 
+    public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {
+      const { view, row } = data;
+      const isRegularBICSRow = row.data.bicsLevel >= 1 && !!row.data.code;
+      let formattedDisplayCategory: string;
+      if (!!isRegularBICSRow) {
+        const level = row.data.bicsLevel;
+        formattedDisplayCategory = `${row.data.displayCategory} (Lv.${level})`;
+      } else {
+        formattedDisplayCategory = row.data.displayCategory;
+      }
+      const viewData: AdhocPacks.StructureSetViewTransferPack = {
+        bucket: [row.data.bucket],
+        view: view !== row.data.view ? [view] : [null],
+        displayCategory: formattedDisplayCategory
+      }
+      return viewData;
+    }
+
+    public convertFESubPortfolioTextToBEKey(subPortfolio: SubPortfolioFilter): string {
+      switch (subPortfolio) {
+        case SubPortfolioFilter.all:
+          return 'All';
+          break;
+        case SubPortfolioFilter.nonHedging:
+          return 'NonHedging';
+          break;
+        case SubPortfolioFilter.nonShortCarry:
+          return 'NonShortCarry';
+          break;
+        case SubPortfolioFilter.shortCarry:
+          return 'ShortCarry';
+          break;
+        default:
+          return null;
+          break;
+      }
+    }
   // structuring specific end
 }

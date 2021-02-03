@@ -10,9 +10,12 @@ import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.const
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  PortfolioView,
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
-import { BEStructuringBreakdownBlock } from 'BEModels/backend-models.interface';
+import { BEStructuringBreakdownBlock, BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
@@ -120,20 +123,7 @@ export interface TradeCenterPanelState {
     fetchTableDataFailedError: string;
     mainTable: Blocks.TableFetchResultBlock;
   }
-  filters: {
-    keyword: {
-      defaultValueForUI: string;
-    }
-    quickFilters: {
-      driverType: string;
-      portfolios: Array<string>;
-      keyword: string;
-      owner: Array<string>;
-      strategy: Array<string>;
-      tenor: Array<string>;
-    }
-    securityFilters: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>
-  }
+  filters: Blocks.TradeCenterPanelStateFilterBlock;
 }
 
 export interface StructureMainPanelState {
@@ -143,10 +133,13 @@ export interface StructureMainPanelState {
   selectedMetricValue: PortfolioMetricValues;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  activeSubPortfolioFilter: SubPortfolioFilter;
+  activeDeltaScope: DeltaScope;
   fetchResult: {
     fundList: DTOs.PortfolioFundDTO[];
     fetchFundDataFailed: boolean;
     fetchFundDataFailedError: string;
+    rawServerReturnCache: BEGetPortfolioStructureServerReturn;  // need to store a copy of the serverReturn because we don't make new API call when switching strategy & deltas
   }
 }
 
@@ -292,6 +285,8 @@ export interface StructureUtilityPanelState {
   currentDatestampDisplayText: string;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  activeSubPortfolioFilter: SubPortfolioFilter;
+  currentDeltaScope: DeltaScope;
   viewingHistoricalData: boolean;
   switchDate: {
     datepicker: SantaDatePicker;
@@ -324,4 +319,8 @@ export interface StructureSetTargetPanelState {
   }
   removalList: Array<Blocks.StructureSetTargetPanelEditRowBlock>;
   clearAllTargetSelected: boolean;
+  editViewMode: boolean;
+  ownerInitial: string;
+  activeSubPortfolioFilter: SubPortfolioFilter;
+  isViewingIndexOnBICS: boolean;
 }

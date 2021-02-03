@@ -68,7 +68,7 @@ $portfolioBreakdown_rating_height: 1rem;
   &__index {
     @include mix_fixed_div(absolute, $z_index_base_item);
     @include mix_calculate(bottom, 100%, $portfolioBreakdown_rating_thickness + $spacing_x_small, '-');
-    display: flex;
+    display: none;
     justify-content: flex-end;
     align-items: center;
     width: 6rem;
@@ -105,13 +105,12 @@ $portfolioBreakdown_rating_height: 1rem;
         width: 4.25rem;
         background-color: $color_active;
         text-align: center;
-        // &--index {
-          // width: 8rem;
-          // right: 0;
-        // }
       }
       &:hover>&-tooltip {
         display: block;
+      }
+      &--index {
+        display: none;
       }
     }
   }
@@ -185,6 +184,23 @@ $portfolioBreakdown_rating_height: 1rem;
         visibility: visible;
         &-hoverText {
           color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--viewIndexState {
+    #{$blockName} {
+      &__index {
+        display: flex;
+      }
+      &__categoryHeader {
+        &-cell {
+          &--index {
+            display: flex;
+          }
+          &--delta {
+            display: none;
+          }
         }
       }
     }

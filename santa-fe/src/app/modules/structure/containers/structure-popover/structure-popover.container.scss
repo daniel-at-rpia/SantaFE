@@ -58,6 +58,9 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       &:hover>&-tooltip {
         display: block;
       }
+      &--index {
+        display: none;
+      }
     }
   }
   &__mainCategory {
@@ -88,11 +91,11 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       @include mix_enable_scrollbar('vertical');
       display: flex;
       background-color: $color_gray_1;
-      padding: $spacing_small 0;
+      padding: $spacing_small 0 $spacing_x_large 0; // the x_large is to avoid triggering the undesirable "clipped" effect on the diveIn button
       &-category {
-        @include bicsLevelCategory;
+        @include mix_bics_level_category;
         &-text {
-          @include bicsLevelCategoryText;
+          @include mix_bics_level_category_text;
         }
       }
       &-list {
@@ -117,9 +120,9 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       background-color: $color_gray_2;
       padding: $spacing_small 0;
       &-category {
-        @include bicsLevelCategory;
+        @include mix_bics_level_category;
         &-text {
-         @include bicsLevelCategoryText;
+         @include mix_bics_level_category_text;
         }
       }
       &-list {
@@ -136,6 +139,7 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       }
       &--active {
         display: flex;
+        margin-top: $spacing_small;
       }
     }
     &-thirdDiveIn {
@@ -151,6 +155,21 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
       }
       &--active {
         display: flex;
+        margin-top: $spacing_small;
+      }
+    }
+  }
+  &--isViewingIndex {
+    #{$blockName} {
+      &__categoryHeader {
+        &-cell {
+          &--index {
+            display: flex;
+          }
+          &--delta {
+            display: none;
+          }
+        }
       }
     }
   }

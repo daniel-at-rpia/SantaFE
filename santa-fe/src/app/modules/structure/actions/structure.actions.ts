@@ -4,14 +4,16 @@ import * as moment from 'moment';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
-  StructureSetViewData
+  StructureSetViewTransferPack
 } from 'FEModels/frontend-adhoc-packages.interface';
+import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
 import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
-import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 
 export enum StructureActions {
   StructureStoreReset = '[Structure] Reset Store Upon Entering',
@@ -22,6 +24,8 @@ export enum StructureActions {
   UpdateMainPanel = '[Structure] Update Main Panel',
   ChangeBreakdownViewFilter = '[Structure] Change Breakdown View Filter',
   ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter',
+  ChangeSubPortfolioViewFilter = '[Structure] Change Sub-Portfolio View Filter',
+  ChangeDeltaScope = '[Structure] Change Delta Scope',
   SwitchDataDatestamp = '[Structure] Switch Data Datestamp',
   UtilityPanelLoadState = '[Structure] Utility Panel Load State'
 }
@@ -49,8 +53,8 @@ export class StructureSendSetTargetTransferEvent implements Action {
 
 export class StructureReloadFundDataPostEditEvent implements Action {
   readonly type = StructureActions.ReloadBreakdownDataPostEdit;
-  readonly targetRawFund: BEPortfolioStructuringDTO;
-  constructor(targetRawFund: BEPortfolioStructuringDTO) {
+  readonly targetRawFund: BEStructuringFundBlockWithSubPortfolios;
+  constructor(targetRawFund: BEStructuringFundBlockWithSubPortfolios) {
     this.targetRawFund = targetRawFund;
   }
 }
@@ -62,8 +66,8 @@ export class StructureUpdateMainPanelEvent implements Action {
 
 export class StructureSetView implements Action {
   readonly type = StructureActions.SetView;
-  readonly viewData: StructureSetViewData;
-  constructor(viewData: StructureSetViewData) {
+  readonly viewData: StructureSetViewTransferPack;
+  constructor(viewData: StructureSetViewTransferPack) {
     this.viewData = viewData;
   }
 }
@@ -84,11 +88,27 @@ export class StructureChangePortfolioViewFilterEvent implements Action {
   }
 }
 
+export class StructureChangeSubPortfolioViewFilterEvent implements Action {
+  readonly type = StructureActions.ChangeSubPortfolioViewFilter;
+  readonly filterOption: SubPortfolioFilter;
+  constructor(filterOption: SubPortfolioFilter) {
+    this.filterOption = filterOption;
+  }
+}
+
 export class StructureSwitchDataDatestampEvent implements Action {
   readonly type = StructureActions.SwitchDataDatestamp;
   readonly dateStampInUnix: number;
   constructor(dateStampInMoment: moment.Moment) {
     this.dateStampInUnix = parseInt(dateStampInMoment.format('X'));
+  }
+}
+
+export class StructureChangeDeltaScopeEvent implements Action {
+  readonly type = StructureActions.ChangeDeltaScope;
+  readonly deltaScope: DeltaScope;
+  constructor(newDeltaScope: DeltaScope) {
+    this.deltaScope = newDeltaScope;
   }
 }
 

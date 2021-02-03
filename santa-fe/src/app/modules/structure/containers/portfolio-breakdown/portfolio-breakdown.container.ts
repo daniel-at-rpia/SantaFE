@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as moment from 'moment';
 
+import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import {
   UtilityService,
   DTOService,
@@ -10,20 +11,13 @@ import {
   BICSDictionaryLookupService
 } from 'Core/services';
 import {
-  PortfolioBreakdownDTO,
-  StructurePopoverDTO,
-  StructurePortfolioBreakdownRowDTO,
-  SecurityDefinitionDTO,
-  SecurityDefinitionConfiguratorDTO
-} from 'FEModels/frontend-models.interface';
-import {
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER
+  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+  PortfolioView
 } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import { PortfolioBreakdownCategoryBlock, BICSMainRowDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
   editingViewAvailableUsers,
   StructuringTeamPMList,
@@ -32,6 +26,7 @@ import {
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
+import { StructureSetView } from 'Structure/actions/structure.actions';
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -41,9 +36,9 @@ import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
 })
 
 export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
-  @Input() breakdownData: PortfolioBreakdownDTO;
+  @Input() breakdownData: DTOs.PortfolioBreakdownDTO;
   @Input() dataIsReady: boolean;
-  @Output() clickedEdit = new EventEmitter<PortfolioBreakdownDTO>();
+  @Output() clickedEdit = new EventEmitter<DTOs.PortfolioBreakdownDTO>();
   subscriptions = {
     ownerInitialsSub: null,
     dataDatestampSub: null
@@ -54,7 +49,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     navigationModule: NavigationModule,
     securityDefinitionMap: SecurityDefinitionMap,
     bicsBreakdownId: BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    metrics: PortfolioMetricValues
   }
 
   constructor(
@@ -139,12 +135,13 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     !!this.clickedEdit && this.clickedEdit.emit(this.breakdownData);
   }
 
-  public getPopoverMainRow(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+  public getPopoverMainRow(breakdownRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     if (!!breakdownRow) {
-      const rowProcessingData: BICSMainRowDataBlock = {
+      const rowProcessingData: Blocks.BICSMainRowDataBlock = {
         code: breakdownRow.data.code,
         portfolioID: this.breakdownData.data.portfolioId,
-        level: breakdownRow.data.bicsLevel
+        level: breakdownRow.data.bicsLevel,
+        isIndex: this.breakdownData.state.isViewingIndex
       }
       this.breakdownData.data.popoverMainRow = rowProcessingData;
       this.breakdownData.state.isDisplayPopover = true;
@@ -156,11 +153,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.breakdownData.data.popoverMainRow = null;
   }
 
-  public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+  public onClickBreakdownCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isSelected = !targetRow.state.isSelected;
   }
 
-  public getMainDisplaySubLevels(row: StructurePortfolioBreakdownRowDTO) {
+  public getMainDisplaySubLevels(row: DTOs.StructurePortfolioBreakdownRowDTO) {
     row.state.isShowingSubLevels = !row.state.isShowingSubLevels;
     this.bicsDataProcessingService.getDisplayedSubLevelsForCategory(row, this.breakdownData.data.displayCategoryList);
   }
@@ -168,7 +165,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   public onClickShowAllSubLevels() {
     if (this.breakdownData.data.displayCategoryList.length > 0) {
       this.breakdownData.state.isDisplaySubLevels = !this.breakdownData.state.isDisplaySubLevels;
-      this.breakdownData.data.displayCategoryList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
+      this.breakdownData.data.displayCategoryList.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO) => {
         if (row.data.bicsLevel === 1 && row.data.displayedSubLevelRows.length > 0) {
           row.state.isShowingSubLevels = !!this.breakdownData.state.isDisplaySubLevels;
         }
@@ -179,7 +176,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private toggleSetView(row: StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
+  private toggleSetView(row: DTOs.StructurePortfolioBreakdownRowDTO, isEditing: boolean) {
     if (!row) {
       return null;
     } else {
@@ -208,10 +205,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onClickSeeBond(targetRow: StructurePortfolioBreakdownRowDTO) {
+  public onClickSeeBond(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    newWorkflowState.data.stateInfo.activeMetric = !!this.breakdownData.state.isDisplayingCs01 ? this.constants.metrics.cs01 : this.constants.metrics.creditLeverage;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
-    const filterList: Array<SecurityDefinitionDTO> = [];
+    const filterList: Array<DTOs.SecurityDefinitionDTO> = [];
     if (this.breakdownData.state.isOverrideVariant) {
       this.seeBondPackageOverrideDataTransfer(
         configurator,
@@ -226,8 +224,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       );
     } else {
       // other regular breakdowns will come here (ccy, rating, tenor);
-      const targetDefinition = this.utilityService.deepCopy(this.breakdownData.data.definition);
-      targetDefinition.data.filterOptionList.forEach((eachOption) => {
+      const targetDefinition: DTOs.SecurityDefinitionDTO = this.utilityService.deepCopy(this.breakdownData.data.definition);
+      targetDefinition.data.displayOptionList.forEach((eachOption) => {
         if (eachOption.shortKey === targetRow.data.category) {
           eachOption.isSelected = true;
           targetDefinition.data.highlightSelectedOptionList.push(eachOption);
@@ -235,8 +233,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       });
       filterList.push(targetDefinition);
     }
-    const fundDefinition = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.PORTFOLIO);
-    fundDefinition.data.filterOptionList.forEach((eachOption) => {
+    const fundDefinition: DTOs.SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.PORTFOLIO);
+    fundDefinition.data.displayOptionList.forEach((eachOption) => {
       if (eachOption.shortKey === this.breakdownData.data.portfolioName) {
         eachOption.isSelected = true;
         fundDefinition.data.highlightSelectedOptionList.push(eachOption);
@@ -247,11 +245,20 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 
-  public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
+  public onClickEnterSetViewMode(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isEditingView = !targetRow.state.isEditingView;
   }
 
-  private removeRowStencils(row: StructurePortfolioBreakdownRowDTO) {
+  public updateRowView(data: AdhocPacks.StructureRowSetViewData) {
+    if (!!data) {
+      const viewData = this.utilityService.formViewPayloadTransferPackForSingleEdit(data);
+      if (!!viewData) {
+        this.store$.dispatch(new StructureSetView(viewData));
+      }
+    }
+  }
+
+  private removeRowStencils(row: DTOs.StructurePortfolioBreakdownRowDTO) {
     if (!row) {
       return null;
     } else {
@@ -277,9 +284,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   private seeBondPackageBICSBreakdownDataTransfer(
-    configurator: SecurityDefinitionConfiguratorDTO,
-    targetRow: StructurePortfolioBreakdownRowDTO,
-    filterList: Array<SecurityDefinitionDTO>
+    configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
+    filterList: Array<DTOs.SecurityDefinitionDTO>
   ) {
     configurator.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
@@ -301,9 +308,9 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   private seeBondPackageOverrideDataTransfer(
-    configurator: SecurityDefinitionConfiguratorDTO,
-    targetRow: StructurePortfolioBreakdownRowDTO,
-    filterList: Array<SecurityDefinitionDTO>
+    configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
+    filterList: Array<DTOs.SecurityDefinitionDTO>
   ) {
     configurator.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {

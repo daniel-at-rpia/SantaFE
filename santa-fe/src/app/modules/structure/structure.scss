@@ -15,6 +15,8 @@ $gaugeColor_1: #fc5c7d;
 $gaugeColor_2: #c86aaa;
 $gaugeColor_3: #a174cc;
 $gaugeColor_4: #6a82fb;
+
+
 @mixin mix_bics_subLevel_target_gauge(){
   &--level-0 {
     @include mix_gradient($gaugeColor_1, $gaugeColor_2, $gaugePercentage, $gaugeDegree);
@@ -52,3 +54,10 @@ $gaugeColor_4: #6a82fb;
     background-color: $gaugeColor_4;
   }
 }
+
+// View Colours
+$viewPositiveColor: $color_green_6;
+$viewImprovingColor: $color_lime_10;
+$viewNeutralColor: $color_yellow_6;
+$viewDeterioratingColor: $color_orange_6;
+$viewNegativeColor: $color_red_6;

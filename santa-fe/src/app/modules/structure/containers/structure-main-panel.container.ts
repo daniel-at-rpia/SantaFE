@@ -13,7 +13,9 @@ import {
   selectMainPanelUpdateTick,
   selectActiveBreakdownViewFilter,
   selectActivePortfolioViewFilter,
-  selectDataDatestamp
+  selectDataDatestamp,
+  selectActiveSubPortfolioFilter,
+  selectActiveDeltaScope
 } from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
@@ -27,7 +29,8 @@ import {
   BEPortfolioTargetMetricValues,
   BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  BreakdownViewFilter
+  BreakdownViewFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
 import {
@@ -36,16 +39,24 @@ import {
   TargetBarDTO
 } from 'Core/models/frontend/frontend-models.interface';
 import {
-  BEPortfolioStructuringDTO,
+  BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
-  BEGetPortfolioStructureServerReturn
+  BEGetPortfolioStructureServerReturn,
+  BEStructuringBreakdownBlockWithSubPortfolios,
+  BEStructuringBreakdownMetricBlock,
+  BEStructuringFundBlockWithSubPortfolios,
+  BEStructuringOverrideBlockWithSubPortfolios,
+  BEStructuringOverrideBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
   PayloadSetView
 } from 'App/modules/core/models/backend/backend-payloads.interface';
-import { StructureSetViewData, AdhocExtensionBEMetricBreakdowns } from 'FEModels/frontend-adhoc-packages.interface';
+import {
+  StructureSetViewTransferPack,
+  AdhocExtensionBEStructuringBreakdownMetricBlock
+} from 'FEModels/frontend-adhoc-packages.interface';
 import {
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
@@ -68,13 +79,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     reloadFundUponEditSub: null,
     viewData: null,
     activeBreakdownViewFilterSub: null,
-    activePortfolioViewFilterSub: null
+    activePortfolioViewFilterSub: null,
+    activeSubPortfolioViewFilterSub: null,
+    activeDeltaScopeSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
     supportedFundList: SUPPORTED_PORTFOLIO_LIST,
-    breakdownViewFilter: BreakdownViewFilter
+    breakdownViewFilter: BreakdownViewFilter,
+    deltaScope: DeltaScope
   };
   
   constructor(
@@ -96,10 +110,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       selectedMetricValue: this.constants.cs01,
       activeBreakdownViewFilter: null,
       activePortfolioViewFilter: [],
+      activeSubPortfolioFilter: null,
+      activeDeltaScope: null,
       fetchResult: {
         fundList: [],
         fetchFundDataFailed: false,
-        fetchFundDataFailedError: ''
+        fetchFundDataFailedError: '',
+        rawServerReturnCache: null
       }
     }
     return state; 
@@ -144,17 +161,27 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500)
       })
     });
-    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewData) => {
+    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewTransferPack) => {
       if (!!value) {
         this.updateViewData(value);
       }
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
       select(selectReloadFundDataPostEdit)
-    ).subscribe((targetFund: BEPortfolioStructuringDTO) => {
+    ).subscribe((targetFund: BEStructuringFundBlockWithSubPortfolios) => {
       if (!!targetFund) {
-        const targetFundCopy = this.utilityService.deepCopy(targetFund);
-        this.loadFund(targetFundCopy);
+        const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
+        this.updateRawServerReturnCache(targetFundCopy);
+        let deltaRawDataFromCache: BEStructuringFundBlockWithSubPortfolios = null;
+        if (!!this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope] && this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].length > 0) {
+          deltaRawDataFromCache = this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].find((eachFund) => {
+            return eachFund.portfolioId === targetFund.portfolioId;
+          });
+        }
+        this.loadFund(
+          this.extractSubPortfolioFromFundReturn(targetFundCopy), 
+          !!deltaRawDataFromCache ? this.extractSubPortfolioFromFundReturn(deltaRawDataFromCache) : null
+        );
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
@@ -176,6 +203,28 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       select(selectActivePortfolioViewFilter)
     ).subscribe((activeFilter) => {
       this.state.activePortfolioViewFilter = activeFilter;
+    });
+    this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      select(selectActiveSubPortfolioFilter)
+    ).subscribe((activeFilter) => {
+      this.state.activeSubPortfolioFilter = activeFilter;
+      if (!!this.state.fetchResult.rawServerReturnCache) {
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+        );
+      }
+    });
+    this.subscriptions.activeDeltaScopeSub = this.store$.pipe(
+      select(selectActiveDeltaScope)
+    ).subscribe((activeScope) => {
+      this.state.activeDeltaScope = activeScope;
+      if (!!this.state.fetchResult.rawServerReturnCache) {
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[activeScope])
+        );
+      }
     });
   }
 
@@ -201,7 +250,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(PortfolioStructuringSample, true, this.state.selectedMetricValue);
+      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFundReturn(PortfolioStructuringSample.Now[0]), null, true, this.state.selectedMetricValue);
       eachFund.data.portfolioShortName = eachPortfolioName;
       eachFund.data.displayChildren = eachFund.data.children;
       return eachFund;
@@ -228,15 +277,24 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private fetchFunds() {
+    const allDeltaScopes = [];
+    for (const eachDeltaKey in this.constants.deltaScope) {
+      allDeltaScopes.push(this.constants.deltaScope[eachDeltaKey]);
+    }
     let payload: PayloadGetPortfolioStructures = {
-      yyyyMMdd: parseInt(this.state.currentDataDatestamp.format('YYYYMMDD'))
+      yyyyMMdd: parseInt(this.state.currentDataDatestamp.format('YYYYMMDD')),
+      deltaTypes: allDeltaScopes
     };
     const endpoint = this.restfulCommService.apiMap.getPortfolioStructures;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
-        this.processStructureData(serverReturn);
+        this.state.fetchResult.rawServerReturnCache = serverReturn;
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(serverReturn.Now),
+          this.extractSubPortfolioFromFullServerReturn(serverReturn[this.state.activeDeltaScope])
+        );
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -260,29 +318,33 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  private updateViewData(data: StructureSetViewData) {
+  private updateViewData(data: StructureSetViewTransferPack) {
     const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
     this.loadStencilFunds();
     const { bucket, view, displayCategory} = data;
     const payload: PayloadSetView = {
-      bucket: bucket,
-      view: view
+      buckets: bucket,
+      views: view
     }
     const endpoint = this.restfulCommService.apiMap.setView;
     let totalBucketValues = '';
-    const displayViewValue = !!view ? view : 'removed';
+    const [ updatedView ] = view;
+    const displayViewValue = !!updatedView ? updatedView : 'removed';
     for (let values in bucket) {
       if (!!bucket[values]) {
         totalBucketValues = totalBucketValues === '' ? `${bucket[values]}` : `${totalBucketValues} ${bucket[values]}`
       }
     }
-
     const messageDetails = `${displayCategory}, with view value ${displayViewValue}`;
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
-        this.processStructureData(serverReturn);
+      tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
+        this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
+        this.processStructureData(
+          this.extractSubPortfolioFromFullServerReturn(serverReturn),
+          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
+        );
         const completeAlertMessage = `Successfully updated ${messageDetails}`;
         const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
@@ -311,7 +373,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private formCustomBICsBreakdownWithSubLevels(
-    rawData: BEPortfolioStructuringDTO,
+    rawData: BEStructuringFundBlock,
+    deltaRawData: BEStructuringFundBlock,
     fund: PortfolioFundDTO
   ) {
     // Create regular BICs breakdown with sublevels here to avoid circular dependencies with using BICS and DTO service
@@ -332,8 +395,32 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       customBICSBreakdown,
       customBICSDefinitionList
     );
+    const customDeltaBICSBreakdown = deltaRawData 
+      ? this.dtoService.formCustomRawBreakdownData(
+          deltaRawData,
+          deltaRawData.breakdowns.BicsCodeLevel1,
+          ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+        ).customBreakdown
+      : null;
+    if (!!customDeltaBICSBreakdown) {
+      this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
+        deltaRawData,
+        customDeltaBICSBreakdown,
+        customBICSDefinitionList
+      );
+      this.formCustomBICsBreakdownWithSubLevelsConvertBicsCode(
+        customDeltaBICSBreakdown,
+        customBICSDefinitionList
+      );
+    }
     const isCs01 = this.state.selectedMetricValue === PortfolioMetricValues.cs01;
-    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(false, customBICSBreakdown, parsedCustomBICSDefinitionList, isCs01);
+    const BICSBreakdown = this.dtoService.formPortfolioBreakdown(
+      false,
+      customBICSBreakdown,
+      customDeltaBICSBreakdown,
+      parsedCustomBICSDefinitionList,
+      isCs01
+    );
     BICSBreakdown.data.title = 'BICS';
     BICSBreakdown.data.definition = this.dtoService.formSecurityDefinitionObject(SecurityDefinitionMap.BICS_LEVEL_1);
     BICSBreakdown.data.indexName = rawData.indexShortName;
@@ -342,13 +429,13 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
-    rawData: BEPortfolioStructuringDTO,
+    rawData: BEStructuringFundBlock,
     customBICSBreakdown: BEStructuringBreakdownBlock,
     customBICSDefinitionList: Array<string>
   ) {
     // After retrieving the rows with targets, get their corresponding hierarchy lists in order to get the parent categories to be displayed
     for (let code in customBICSBreakdown.breakdown) {
-      const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEMetricBreakdowns).customLevel;
+      const targetLevel: number = (customBICSBreakdown.breakdown[code] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel;
       // level 3+ since level 2 parent categories would already be in the breakdown
       if (!!customBICSBreakdown.breakdown[code] && targetLevel >= 3) {
         const targetHierarchyList: Array<BICsHierarchyBlock> = this.bicsDataProcessingService.getTargetSpecificHierarchyList(
@@ -363,8 +450,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
               const categoryBEData = rawData.breakdowns[formattedBEBICSKey].breakdown[category.code];
               if (!!categoryBEData) {
                 customBICSBreakdown.breakdown[category.code] = categoryBEData;
-                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).customLevel = category.bicsLevel;
-                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEMetricBreakdowns).code = category.code;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = category.bicsLevel;
+                (customBICSBreakdown.breakdown[category.code] as AdhocExtensionBEStructuringBreakdownMetricBlock).code = category.code;
                 customBICSDefinitionList.push(category.code);
               }
             }
@@ -390,12 +477,22 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return parsedCustomBICSDefinitionListNoNull;
   }
 
-  private processStructureData(serverReturn: BEGetPortfolioStructureServerReturn) {
+  private processStructureData(
+    serverReturn: Array<BEStructuringFundBlock>,
+    deltaServerReturn: Array<BEStructuringFundBlock>
+  ) {
     if (!!serverReturn) {
       this.state.fetchResult.fundList = [];
-      const nowData = serverReturn.Now;
-      nowData.forEach(eachFund => {
-        this.loadFund(eachFund);
+      serverReturn.forEach((eachFund, index) => {
+        if (!!deltaServerReturn) {
+          if (!!deltaServerReturn[index]) {
+            this.loadFund(eachFund, deltaServerReturn[index]);
+          } else {
+            console.error('DeltaServerReturn does not have valid data');
+          }
+        } else {
+          this.loadFund(eachFund, null)
+        }
       })
       try {
         this.state.fetchResult.fundList.length > 1 && this.sortFunds(this.state.fetchResult.fundList);
@@ -423,12 +520,15 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     return breakdowns;
   }
 
-  private loadFund(rawData: BEPortfolioStructuringDTO) {
+  private loadFund(
+    rawData: BEStructuringFundBlock,
+    deltaRawData: BEStructuringFundBlock
+  ) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
-      this.bicsDataProcessingService.setRawBICsData(rawData);
-      const newFund = this.dtoService.formStructureFundObject(rawData, false, this.state.selectedMetricValue);
+      this.bicsDataProcessingService.setRawBICsData(rawData, deltaRawData);
+      const newFund = this.dtoService.formStructureFundObject(rawData, deltaRawData, false, this.state.selectedMetricValue);
       if (!!newFund) {
-        this.formCustomBICsBreakdownWithSubLevels(rawData, newFund);
+        this.formCustomBICsBreakdownWithSubLevels(rawData, deltaRawData, newFund);
         if (newFund.data.children.length > 0) {
           newFund.data.children = this.getSortedBreakdownDisplayListForFund(newFund.data.children);
         }
@@ -471,6 +571,84 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         // code...
         break;
     }
+  }
+
+  private extractSubPortfolioFromFullServerReturn(targetListWithSubPortfolios: Array<BEStructuringFundBlockWithSubPortfolios>): Array<BEStructuringFundBlock> {
+    if (!!targetListWithSubPortfolios) {
+      const targetListWithoutSubPortfolios: Array<BEStructuringFundBlock> = targetListWithSubPortfolios.map((eachFundWithSub) => {
+        return this.extractSubPortfolioFromFundReturn(eachFundWithSub);
+      });
+      return targetListWithoutSubPortfolios;
+    } else {
+      return null;
+    }
+  }
+
+  private extractSubPortfolioFromFundReturn(fundReturn: BEStructuringFundBlockWithSubPortfolios): BEStructuringFundBlock {
+    const {
+      target: targetWithSub,
+      currentTotals: currentTotalsWithSub,
+      breakdowns: breakdownsWithSub,
+      overrides: overridesWithSub,
+      ...inheritFundValues
+    } = fundReturn;
+    const subPortfolio = this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter);
+    const eachFundWithoutSub: BEStructuringFundBlock = {
+      target: {
+        target: targetWithSub.target[subPortfolio],
+        portfolioTargetId: targetWithSub.portfolioTargetId,
+        portfolioId: targetWithSub.portfolioId,
+        date: targetWithSub.date
+      },
+      currentTotals: currentTotalsWithSub[subPortfolio],
+      breakdowns: {},
+      overrides: [],
+      ...inheritFundValues
+    };
+    for (const eachBreakdownKey in breakdownsWithSub) {
+      const eachBreakdownWithSub:BEStructuringBreakdownBlockWithSubPortfolios = breakdownsWithSub[eachBreakdownKey];
+      const {
+        breakdown: breakdownCategoriesWithSub,
+        ...inheritBreakdownValues
+      } = eachBreakdownWithSub;
+      const eachBreakdownWithoutSub: BEStructuringBreakdownBlock = {
+        breakdown: {},
+        ...inheritBreakdownValues
+      };
+      for (const eachCategoryKey in breakdownCategoriesWithSub) {
+        const eachCategoryWithSub = breakdownCategoriesWithSub[eachCategoryKey];
+        const eachBreakdownCategoryWithoutSub: BEStructuringBreakdownMetricBlock = {
+          metricBreakdowns: eachCategoryWithSub.metricBreakdowns[subPortfolio],
+          view: eachCategoryWithSub.view
+        };
+        eachBreakdownWithoutSub.breakdown[eachCategoryKey] = eachBreakdownCategoryWithoutSub;
+      }
+      eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
+    }
+    overridesWithSub.forEach((eachOverrideWithSub:BEStructuringOverrideBlockWithSubPortfolios) => {
+      const {
+        breakdown: overrideCategoriesWithSub,
+        ...inheritOverrideValues
+      } = eachOverrideWithSub;
+      const eachOverrideWithoutSub: BEStructuringOverrideBlock = {
+        breakdown: {
+          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
+          view: overrideCategoriesWithSub.view
+        },
+        ...inheritOverrideValues
+      };
+      eachFundWithoutSub.overrides.push(eachOverrideWithoutSub);
+    });
+    return eachFundWithoutSub;
+  }
+
+  private updateRawServerReturnCache(newFundData: BEStructuringFundBlockWithSubPortfolios) {
+    // TODO: integrate with delta when implemented
+    this.state.fetchResult.rawServerReturnCache.Now.forEach((eachFund, index) => {
+      if (eachFund.portfolioId === newFundData.portfolioId) {
+        this.state.fetchResult.rawServerReturnCache.Now[index] = newFundData;
+      }
+    });
   }
 
 }

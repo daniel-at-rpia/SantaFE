@@ -1,11 +1,15 @@
-import {Component, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
+import {Component, Input, Output, ViewEncapsulation, EventEmitter, OnInit, OnDestroy} from '@angular/core';
+import { of, Subscription } from 'rxjs';
+import { catchError, first, tap, withLatestFrom } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
 import { StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import { PortfolioView } from 'Core/constants/structureConstants.constants';
-import { Store } from '@ngrx/store';
-import { StructureSetView } from 'Structure/actions/structure.actions';
-import * as moment from 'moment';
-import { StructureSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+import {
+  PortfolioView,
+  DeltaScope,
+  DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT
+} from 'Core/constants/structureConstants.constants';
+import { StructureRowSetViewData } from 'App/modules/core/models/frontend/frontend-adhoc-packages.interface';
 
 @Component({
   selector: 'portfolio-breakdown-row',
@@ -21,6 +25,8 @@ export class PortfolioBreakdownRow {
   @Output() categoryClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() seeBondClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
   @Output() enterSetViewModeClicked = new EventEmitter<StructurePortfolioBreakdownRowDTO>();
+  @Output() setViewForRowClicked = new EventEmitter<StructureRowSetViewData>();
+  deltaScope: DeltaScope = null;
   constants = {
     positive: PortfolioView.positive,
     improving: PortfolioView.improving,
@@ -28,12 +34,10 @@ export class PortfolioBreakdownRow {
     deteriorating: PortfolioView.deteriorating,
     negative: PortfolioView.negative,
     diveInText: 'Dive In',
-    diveOutText: 'Dive Out'
+    diveOutText: 'Dive Out',
+    deltaSignificantCoefficient: DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT
   }
-  constructor(
-    private store$: Store<any>,
-    private bicsDataProcessingService: BICsDataProcessingService
-  ) {}
+  constructor() {}
 
   public onClickCategory() {
     !!this.categoryClicked && this.categoryClicked.emit(this.breakdownRow);
@@ -59,27 +63,18 @@ export class PortfolioBreakdownRow {
   }
 
   public onClickSetView(view: PortfolioView) {
-    const isRegularBICSRow = this.breakdownRow.data.bicsLevel >= 1 && !!this.breakdownRow.data.code;
-    let formattedDisplayCategory: string;
-    if (!!isRegularBICSRow) {
-      const level = this.breakdownRow.data.bicsLevel;
-      formattedDisplayCategory = `${this.breakdownRow.data.displayCategory} (Lv.${level})`;
-    } else {
-      formattedDisplayCategory = this.breakdownRow.data.displayCategory;
+    const data: StructureRowSetViewData = {
+      row: this.breakdownRow,
+      view: view
     }
-    const viewData: StructureSetViewData = {
-      bucket: this.breakdownRow.data.bucket,
-      view: view !== this.breakdownRow.data.view ? view : null,
-      displayCategory: formattedDisplayCategory
-    }
-    this.store$.dispatch(new StructureSetView(viewData));
+    !!this.setViewForRowClicked && this.setViewForRowClicked.emit(data);
   }
 
   public showSubLevels(breakdownRow: StructurePortfolioBreakdownRowDTO) {
     !!this.viewMainDisplaySubLevels && this.viewMainDisplaySubLevels.emit(breakdownRow);
- }
+  }
 
- public onCollapseActionMenu() {
-   this.breakdownRow.state.isSelected = false;
- }
+  public onCollapseActionMenu() {
+    this.breakdownRow.state.isSelected = false;
+  }
 }

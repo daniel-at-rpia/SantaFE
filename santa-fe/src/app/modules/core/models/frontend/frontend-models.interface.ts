@@ -15,8 +15,8 @@ import {
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
-import { BEPortfolioStructuringDTO } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
+import { BEStructuringFundBlock } from 'Core/models/backend/backend-models.interface';
+import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 import { StructureUtilityPanelState } from './frontend-page-states.interface';
 
 interface BasicDTOStructure {
@@ -59,6 +59,18 @@ export interface SecurityDTO extends BasicDTOStructure {
     portfolios: Array<Blocks.SecurityPortfolioBlock>;
     strategyFirm: string;
     strategyList: Array<string>;
+    weight: {
+      currentGroupCS01Value: number;
+      currentGroupBEVValue: number;
+      fundCS01Pct: number;
+      fundCS01PctDisplay: string;
+      groupCS01Pct: number;
+      groupCS01PctDisplay: string;
+      fundBEVPct: number;
+      fundBEVPctDisplay: string;
+      groupBEVPct: number;
+      groupBEVPctDisplay: string;
+    }
     position: {
       positionCurrent: number;
       positionCurrentInMM: string;
@@ -109,6 +121,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     cs01CadFirmInK: string;
     cs01CadCurrent: number;
     cs01CadCurrentInK: string;
+    bondEquivalentValueCurrent: number;
     hasIndex: boolean;
     hedgeFactor: number;
     alert: {
@@ -139,6 +152,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertTraceReportingParty?: TraceTradeParty;
       alertTraceVolumeEstimated?: number;
       alertTraceVolumeReported?: number;
+      alertTraceBenchmarkName?: string;
       alertTracePrice?: number;
       alertTraceSpread?: number;
     }
@@ -216,11 +230,12 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     key: string;
     urlForGetLongOptionListFromServer: string;
     prinstineFilterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
-    filterOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
+    displayOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
     highlightSelectedOptionList: Array<Blocks.SecurityDefinitionFilterBlock>;
     securityDTOAttr: string;
     securityDTOAttrBlock: string;
     backendDtoAttrName: string;
+    totalMatchingResults: number;
   }
   style: {
     icon: string;
@@ -234,6 +249,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isMiniPillVariant: boolean;
     isFilterLong: boolean;
     currentFilterPathInConsolidatedBICS: Array<string>;
+    isFilterCapped: boolean;
   }
 }
 
@@ -374,13 +390,17 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isAttrChangable: boolean;
     readyStage: number;
     metricPackDeltaScope: string;
-    frontendMetric: boolean;
+    isFrontendAggregation: boolean;
     isDataTypeText: boolean;
     isDriverDependent: boolean;
     pinned: boolean;
+    sortActivated: AggridSortOptions;
     groupBelongs: string;
     groupShow: boolean;
     activePortfolios: Array<string>;
+  },
+  style: {
+    columnWidthOverride: number;
   },
   state: {
     isSecurityCardVariant: boolean;
@@ -388,7 +408,6 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     isCustomComponent: boolean;
     isAxeSkewEnabled: boolean;
     istotalSkewEnabled: boolean;
-    isNarrowColumnVariant: boolean;
   }
 }
 
@@ -590,6 +609,7 @@ export interface AlertDTO extends BasicDTOStructure {
     traceSide?: string;
     traceVolumeEstimated?: number;
     traceVolumeReported?: number;
+    traceBenchmarkName?: string;
     tracePrice?: number;
     traceSpread?: number;
   },
@@ -740,6 +760,7 @@ export interface PortfolioBreakdownDTO extends BasicDTOStructure {
     isDisplaySubLevels: boolean;
     isDisplayPopover: boolean;
     isViewingHistoricalData: boolean;
+    isViewingIndex: boolean;
   }
 }
 
@@ -765,7 +786,7 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
-    originalBEData: BEPortfolioStructuringDTO; // used when updating portfolios for portfolio structuring
+    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
@@ -838,6 +859,7 @@ export interface StructurePopoverDTO extends BasicDTOStructure {
   state: {
     isActive: boolean;
     isDisplayCs01: boolean;
+    isViewingIndex: boolean;
   }
 }
 
@@ -860,6 +882,7 @@ export interface StructurePortfolioBreakdownRowDTO extends BasicDTOStructure {
     isWithinEditRow: boolean;
     isWithinSetTargetPreview: boolean;
     isViewingHistoricalData: boolean;
+    isViewingIndex: boolean;
   }
 }
 
@@ -895,6 +918,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
       filterList?: Array<SecurityDefinitionDTO>;
+      activeMetric?: PortfolioMetricValues;
       structureUtilityPanelSnapshot?: StructureUtilityPanelState;
     }
   },

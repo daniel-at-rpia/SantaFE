@@ -5,19 +5,20 @@ The main difference between blocks and components is blocks does not carry any c
 
 Because of this, while component models need to follow "BasicDTOStructure", blocks don't.
 */
-
-import * as DTOs from './frontend-models.interface';
 import * as am4charts from "@amcharts/amcharts4/charts";
 import {
   GridApi,
   ColumnApi,
   ValueFormatterParams
 } from 'ag-grid-community';
+
+import * as DTOs from './frontend-models.interface';
+import * as AdhocPacks from './frontend-adhoc-packages.interface';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
-import { BEStructuringBreakdownBlock, BEMetricBreakdowns } from 'Core/models/backend/backend-models.interface';
-import { TraceTradeParty } from 'Core/constants/securityTableConstants.constant';
+import { BEStructuringBreakdownBlock, BEStructuringBreakdownMetricBlock } from 'Core/models/backend/backend-models.interface';
+import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
 export interface SecurityPortfolioBlock {
   portfolioName: string;
@@ -25,6 +26,9 @@ export interface SecurityPortfolioBlock {
   strategy: string;
   cs01Cad: number;
   cs01Local: number;
+  cs01WeightPct: number;
+  bondEquivalentValueCad: number;
+  bondEquivalentValueWeightPct: number;
   costFifoSpread: number;
   costWeightedAvgSpread: number;
   costFifoPrice: number;
@@ -154,6 +158,7 @@ export interface AgGridColumnDefinition {
   cellRenderer?: string;
   resizable?: boolean;
   sortable?: boolean;
+  sort?: AggridSortOptions;
   filter?: string;
   pinned?: boolean;
   hide: boolean;
@@ -293,6 +298,8 @@ export interface PortfolioBreakdownCategoryBlock {
   currentPctDisplay: string;
   indexPct: number;
   indexPctDisplay: string;
+  delta: number;
+  deltaDisplay: string;
   moveVisualizer: DTOs.MoveVisualizerDTO;
   bicsLevel: number;
   portfolioID: number;
@@ -313,6 +320,7 @@ export interface PortfolioBreakdownCategoryBlock {
   editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
 }
+
 export interface GlobalNavLegendBlock {
   card: DTOs.SecurityDTO;
   legend: string;
@@ -333,9 +341,11 @@ export interface StructureSetTargetPanelEditRowBlock {
   };
   isLocked: boolean;
   isEven: boolean;
+  isViewEdited: boolean;
   existInServer: boolean;
   isVisible: boolean;
   rowDTO: DTOs.StructurePortfolioBreakdownRowDTO;
+  view: PortfolioView;
 }
 
 export interface StructureSetTargetPanelEditRowItemBlock {
@@ -362,7 +372,7 @@ export interface BICsHierarchyAllDataBlock {
   children: Array<BICsHierarchyBlock>;
 }
 
-export interface BICsCategorizationBlock {
+export interface BICSCategorizationBlock {
   portfolioID: number,
   bicsLevel1: BEStructuringBreakdownBlock,
   bicsLevel2?: BEStructuringBreakdownBlock,
@@ -375,6 +385,7 @@ export interface StructureBucketDataBlock {
 }
 
 export interface TraceTradeBlock {
+  benchmarkName: string;
   traceTradeId: string;
   tradeTime: string;
   displayTradeTime: string;
@@ -405,4 +416,20 @@ export interface BICSMainRowDataBlock {
   portfolioID: number;
   level: number;
   isCs01?: boolean;
+  isIndex: boolean;
+}
+
+export interface TradeCenterPanelStateFilterBlock {
+  keyword: {
+    defaultValueForUI: string;
+  }
+  quickFilters: {
+    driverType: string;
+    portfolios: Array<string>;
+    keyword: string;
+    owner: Array<string>;
+    strategy: Array<string>;
+    tenor: Array<string>;
+  }
+  securityFilters: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>;
 }

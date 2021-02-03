@@ -1,11 +1,15 @@
 import { AlertTypes, AlertSubTypes } from 'Core/constants/coreConstants.constant';
 import { AxeAlertType } from "Core/constants/tradeConstants.constant";
-import { PortfolioView, BEPortfolioTargetMetricValues} from 'Core/constants/structureConstants.constants'
 import {
-  BEPortfolioStructuringDTO,
-  BEStructuringBreakdownBlock,
-  BEStructuringOverrideBlock,
-  BEMetricBreakdowns
+  PortfolioView,
+  BEPortfolioTargetMetricValues,
+  SubPortfolioFilter,
+  DeltaScope
+} from 'Core/constants/structureConstants.constants'
+import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import {
+  BEStructuringOverrideBlockWithSubPortfolios,
+  BEStructuringBreakdownMetricBlockWithSubPortfolios
 } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
@@ -110,6 +114,7 @@ export interface PayloadSetAlertsToInactive {
 
 export interface PayloadGetPortfolioStructures {
   yyyyMMdd?: number;
+  deltaTypes?: Array<DeltaScope>;
 }
 
 export interface PayloadUpdatePortfolioStructuresTargets {
@@ -117,7 +122,9 @@ export interface PayloadUpdatePortfolioStructuresTargets {
     date?: string,
     portfolioId: number,
     target: {
-      [metric in BEPortfolioTargetMetricValues]?: number;
+      [subPortfolio in SubPortfolioFilter]?: {
+        [metric in BEPortfolioTargetMetricValues]?: number;
+      }
     }
   },
   shouldAutoScale: boolean
@@ -129,28 +136,26 @@ export interface PayloadUpdateBreakdown {
     groupOption: string;
     portfolioId: number;
     breakdown: {
-      [property: string]: BEMetricBreakdowns;
+      [property: string]: BEStructuringBreakdownMetricBlockWithSubPortfolios;
     }
   };
 }
 
 export interface PayloadUpdateOverride {
-  portfolioOverride: BEStructuringOverrideBlock;
+  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
 }
 
 export interface PayloadDeleteOverride {
-  portfolioOverride: BEStructuringOverrideBlock;
+  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
 }
 
 export interface PayloadGetPortfolioOverride {
-  portfolioOverride: BEStructuringOverrideBlock;
+  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
 }
 
 export interface PayloadSetView {
-  bucket: {
-    [property: string]: Array<string>
-  }
-  view: PortfolioView
+  buckets: Array<StructureBucketDataBlock>;
+  views: Array<PortfolioView>;
 }
 
 export interface PayloadGetAllTraceTrades {

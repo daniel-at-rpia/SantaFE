@@ -292,15 +292,21 @@
     @include mix_gradient($theme_color_1, $theme_color_2, 40%, 90deg);
   }
 
-  @mixin bicsLevelCategoryText {
+  @mixin mix_bics_level_category_text {
     writing-mode: vertical-rl;
     transform: rotate(-180deg);
     padding: $spacing_small;
   }
 
-  @mixin bicsLevelCategory {
+  @mixin mix_bics_level_category {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+  }
+
+  @mixin mix_cta_active {
+    @include material('none');
+    background-color: $color_active;
+    color: $font_color_inverse;
   }

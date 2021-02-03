@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { DTOs } from 'Core/models/frontend';
+import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
 export enum TradeActions {
   TradeStoreReset = '[Trade] Reset Store Upon Entering',
@@ -146,8 +147,13 @@ export class TradeKeywordSearchThisSecurityEvent implements Action {
 export class TradeCenterPanelLoadTableWithFilterEvent implements Action {
   readonly type = TradeActions.CenterPanelLoadTableWithFilter;
   readonly filterList: Array<DTOs.SecurityDefinitionDTO>;
-  constructor(filterList: Array<DTOs.SecurityDefinitionDTO>){
+  readonly metric: PortfolioMetricValues;
+  constructor(
+    filterList: Array<DTOs.SecurityDefinitionDTO>,
+    metric: PortfolioMetricValues
+  ){
     this.filterList = filterList;
+    this.metric = metric;
   }
 }
 

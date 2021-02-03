@@ -174,6 +174,14 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       color: $font_color_inverse;
       margin: $spacing_x_small 0;
     }
+    &--index {
+      display: none;
+    }
+    &--delta {
+      @include mix_border_radius(5px);
+      padding: $spacing_x_small 0;
+      margin: $spacing_x_small 0;
+    }
   }
   &__cellDivider {
     @include mix_border_generator(0 $typical_border_width 0 0);
@@ -210,10 +218,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           color: $font_color_inverse;
         }
         &--positive {
-          background-color: $color_green_6;
+          background-color: $viewPositiveColor;
         }
         &--improving {
-          background-color: $color_lime_10;
+          background-color: $viewImprovingColor;
           #{$blockName} {
             &__utility {
               &-ctas {
@@ -227,10 +235,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           }
         }
         &--neutral {
-          background-color: $color_yellow_6;
+          background-color: $viewNeutralColor;
         }
         &--deteriorating {
-          background-color: $color_orange_6;
+          background-color: $viewDeterioratingColor;
           #{$blockName} {
             &__utility {
               &-ctas {
@@ -244,7 +252,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           }
         }
         &--negative {
-          background-color: $color_red_6;
+          background-color: $viewNegativeColor;
         }
       }
     }
@@ -252,10 +260,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
   &__subLevelTargetGauge {
     display: none;
     flex: 0 0 100%;
+    margin: $spacing_minimum 0 $spacing_x_small 0;
     &-content {
       flex: 0 0 100%;
       display: flex;
-      padding: $spacing_minimum 0 $spacing_x_small 0;
       align-items: center;
       overflow: hidden;
       &-label {
@@ -284,6 +292,26 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
     }
     &:hover>&-tooltip {
       display: flex;
+    }
+  }
+  &--deltaSignificantPositive {
+    #{$blockName} {
+      &__cell {
+        &--delta {
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--deltaSignificantNegative {
+    #{$blockName} {
+      &__cell {
+        &--delta {
+          background-color: $color_red_5;
+          color: $font_color_inverse;
+        }
+      }
     }
   }
   &--isBicsDiveIn {
@@ -321,7 +349,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_green_6;
+            background-color: $viewPositiveColor;
           }
         }
       }
@@ -329,9 +357,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--positive {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_cta_active;
             }
           }
         }
@@ -343,7 +369,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_lime_10;
+            background-color: $viewImprovingColor;
             &-icon {
               transform: rotate(45deg);
             }
@@ -354,9 +380,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--improving {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_cta_active;
             }
           }
         }
@@ -368,7 +392,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_orange_6;
+            background-color: $viewDeterioratingColor;
             &-icon {
               transform: rotate(-45deg);
             }
@@ -379,9 +403,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--deteriorating {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_cta_active;
             }
           }
         }
@@ -393,7 +415,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_red_6;
+            background-color: $viewNegativeColor;
           }
         }
       }
@@ -401,9 +423,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--negative {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_cta_active;
             }
           }
         }
@@ -415,7 +435,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__cta {
         &-btn {
           &-view {
-            background-color: $color_yellow_6;
+            background-color: $viewNeutralColor;
           }
         }
       }
@@ -423,9 +443,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-ctas {
           &-btn {
             &--neutral {
-              @include material('none');
-              background-color: $color_active;
-              color: $font_color_inverse;
+              @include mix_cta_active;
               #{$blockName} {
                 &__utility {
                   &-ctas {
@@ -646,6 +664,18 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         &-actionMenu-top-viewBtn {
           visibility: hidden;
           pointer-events: none;
+        }
+      }
+    }
+  }
+  &--isViewingIndex {
+    #{$blockName} {
+      &__cell {
+        &--index {
+          display: flex;
+        }
+        &--delta {
+          display: none;
         }
       }
     }

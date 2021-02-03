@@ -1,18 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { PortfolioMetricValues } from 'App/modules/core/constants/structureConstants.constants';
+
+
+import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+import { PortfolioMetricValues, DeltaScope } from 'App/modules/core/constants/structureConstants.constants';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
-import {
-  StructurePopoverDTO,
-  StructurePortfolioBreakdownRowDTO
-} from 'Core/models/frontend/frontend-models.interface';
 import { DTOService, BICsDataProcessingService } from 'Core/services';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import {
-  PortfolioBreakdownCategoryBlock,
-  BICSMainRowDataBlock
-} from 'Core/models/frontend/frontend-blocks.interface';
+import { StructureSetView } from 'Structure/actions/structure.actions';
 import { UtilityService } from 'Core/services/UtilityService';
 
 @Component({
@@ -23,12 +19,12 @@ import { UtilityService } from 'Core/services/UtilityService';
 })
 
 export class StructurePopover implements OnInit, OnChanges {
-  @Input() mainRowData: BICSMainRowDataBlock;
+  @Input() mainRowData: Blocks.BICSMainRowDataBlock;
   @Input() breakdownDisplayPopover: boolean;
   @Output() resetPopover = new EventEmitter();
-  popover: StructurePopoverDTO = null;
-  cs01MainRow: StructurePortfolioBreakdownRowDTO;
-  creditLeverageMainRow: StructurePortfolioBreakdownRowDTO;
+  popover: DTOs.StructurePopoverDTO = null;
+  cs01MainRow: DTOs.StructurePortfolioBreakdownRowDTO;
+  creditLeverageMainRow: DTOs.StructurePortfolioBreakdownRowDTO;
   activeMetric: PortfolioMetricValues;
   constants = {
     navigationModule: NavigationModule,
@@ -67,10 +63,9 @@ export class StructurePopover implements OnInit, OnChanges {
 
   public ngOnChanges() {
     if (!!this.mainRowData && !!this.breakdownDisplayPopover) {
-      const mainRowData: BICSMainRowDataBlock = this.mainRowData;
+      const mainRowData: Blocks.BICSMainRowDataBlock = this.mainRowData;
       mainRowData.isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
-      const { code, portfolioID, level, isCs01} = mainRowData;
-      const [cs01Row, creditLeverageRow] = this.bicsDataProcessingService.formBICSRow(code, portfolioID, level, isCs01);
+      const [cs01Row, creditLeverageRow] = this.bicsDataProcessingService.formBICSRow(mainRowData);
       this.cs01MainRow = cs01Row;
       this.creditLeverageMainRow = creditLeverageRow;
       if (this.activeMetric === PortfolioMetricValues.cs01) {
@@ -81,7 +76,7 @@ export class StructurePopover implements OnInit, OnChanges {
     }
   }
 
-  public changeMetricSpecificRowData(mainRow: StructurePortfolioBreakdownRowDTO, targetRow: StructurePortfolioBreakdownRowDTO): StructurePortfolioBreakdownRowDTO {
+  public changeMetricSpecificRowData(mainRow: DTOs.StructurePortfolioBreakdownRowDTO, targetRow: DTOs.StructurePortfolioBreakdownRowDTO): DTOs.StructurePortfolioBreakdownRowDTO {
     const mainRowCopy = this.utilityService.deepCopy(mainRow);
     const targetRowCopy = this.utilityService.deepCopy(targetRow);
     this.constants.mainRowMetricKeys.forEach(key => {
@@ -90,11 +85,11 @@ export class StructurePopover implements OnInit, OnChanges {
     return mainRowCopy;
   }
 
-  public onClickBreakdownCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+  public onClickBreakdownCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isSelected = !targetRow.state.isSelected;
   }
 
-  public getNextBicsLevel(breakdownRow: StructurePortfolioBreakdownRowDTO) {
+  public getNextBicsLevel(breakdownRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     if (breakdownRow.data.diveInLevel === 0) {
       this.closePopover();
     } else if (breakdownRow.data.children) {
@@ -112,21 +107,21 @@ export class StructurePopover implements OnInit, OnChanges {
     ));
   }
 
-  public onClickEnterSetViewMode(targetRow: StructurePortfolioBreakdownRowDTO) {
+  public onClickEnterSetViewMode(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isEditingView = !targetRow.state.isEditingView;
   }
 
-  public createPopover(categoryRow: StructurePortfolioBreakdownRowDTO) {
+  public createPopover(categoryRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     const isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
     const subBicsLevel = this.bicsDataProcessingService.formSubLevelBreakdown(categoryRow, isCs01, [categoryRow]);
     categoryRow.data.children = subBicsLevel;
     categoryRow.state.isWithinPopover = true;
-    this.popover = this.dtoService.formStructurePopoverObject(categoryRow, isCs01);
+    this.popover = this.dtoService.formStructurePopoverObject(categoryRow, isCs01, this.mainRowData.isIndex);
     this.popover.state.isActive = true;
     categoryRow.state.isDoveIn = !categoryRow.state.isDoveIn;
   }
 
-  public switchPopoverSubLevels(block: PortfolioBreakdownCategoryBlock, activeMetric: PortfolioMetricValues) {
+  public switchPopoverSubLevels(block: Blocks.PortfolioBreakdownCategoryBlock, activeMetric: PortfolioMetricValues) {
     if (!block.children) {
       return;
     } else {
@@ -154,6 +149,15 @@ export class StructurePopover implements OnInit, OnChanges {
     !!this.resetPopover && this.resetPopover.emit();
   }
 
+  public updatePopoverRowView(data: AdhocPacks.StructureRowSetViewData) {
+    if (!!data) {
+      const viewData = this.utilityService.formViewPayloadTransferPackForSingleEdit(data);
+      if (!!viewData) {
+        this.store$.dispatch(new StructureSetView(viewData));
+      }
+    }
+  }
+
   private removeStencils() {
     this.popover.data.mainRow.state.isStencil = false;
     if (!!this.popover.data.mainRow.data.moveVisualizer) {
@@ -162,7 +166,7 @@ export class StructurePopover implements OnInit, OnChanges {
     this.removePopoverRowStencils(this.popover.data.mainRow)
   }
 
-  private removePopoverRowStencils(row: StructurePortfolioBreakdownRowDTO) {
+  private removePopoverRowStencils(row: DTOs.StructurePortfolioBreakdownRowDTO) {
     if (!row) {
       return null;
     } else {

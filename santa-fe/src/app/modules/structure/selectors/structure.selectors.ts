@@ -42,6 +42,16 @@ export const selectDataDatestamp = createSelector(
   (state: StructureState) => state.dataDatestamp
 );
 
+export const selectActiveSubPortfolioFilter = createSelector(
+  getStructureState,
+  (state: StructureState) => state.activeSubPortfolioFilter
+);
+
+export const selectActiveDeltaScope = createSelector(
+  getStructureState,
+  (state: StructureState) => state.activeDeltaScope
+);
+
 export const selectUtilityPanelLoadState = createSelector(
   getStructureState,
   (state: StructureState) => state.utilityPanelLoadState

@@ -14,15 +14,18 @@
     'sat-portfolioBreakdownRow--neutral': breakdownRow.data.view === constants.neutral,
     'sat-portfolioBreakdownRow--hasSubLevels': !breakdownRow.state.isWithinPopover && !!breakdownRow.state.isBtnDiveIn && breakdownRow.data.displayedSubLevelRows.length > 0,
     'sat-portfolioBreakdownRow--showSubLevels': !breakdownRow.state.isWithinPopover && !!breakdownRow.state.isBtnDiveIn && breakdownRow.state.isShowingSubLevels,
-    'sat-portfolioBreakdownRow--parallelLevel1Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1 && !!breakdownRow.state.isBtnDiveIn,
-    'sat-portfolioBreakdownRow--parallelLevel2Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2 && !!breakdownRow.state.isBtnDiveIn,
-    'sat-portfolioBreakdownRow--parallelLevel3Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3 && !!breakdownRow.state.isBtnDiveIn,
+    'sat-portfolioBreakdownRow--parallelLevel1Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1,
+    'sat-portfolioBreakdownRow--parallelLevel2Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2,
+    'sat-portfolioBreakdownRow--parallelLevel3Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3,
     'sat-portfolioBreakdownRow--parallelLevel4Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4,
     'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover,
     'sat-portfolioBreakdownRow--isWithinEditRow': !!breakdownRow.state.isWithinEditRow,
     'sat-portfolioBreakdownRow--isWithinSetTargetPreview': !!breakdownRow.state.isWithinSetTargetPreview,
     'sat-portfolioBreakdownRow--isViewingHistoricalData': !!breakdownRow.state.isViewingHistoricalData,
-    'sat-portfolioBreakdownRow--hasEditedSubLevels': breakdownRow.data.editedSubLevelRowsWithTargets.length > 0 && !!breakdownRow.state.isWithinEditRow
+    'sat-portfolioBreakdownRow--hasEditedSubLevels': breakdownRow.data.editedSubLevelRowsWithTargets.length > 0 && !!breakdownRow.state.isWithinEditRow,
+    'sat-portfolioBreakdownRow--deltaSignificantPositive': breakdownRow.data.delta > 5,
+    'sat-portfolioBreakdownRow--deltaSignificantNegative': breakdownRow.data.delta < -5,
+    'sat-portfolioBreakdownRow--isViewingIndex': breakdownRow.state.isViewingIndex
   }">
   <section class="sat-portfolioBreakdownRow__branch" *ngIf="breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover" [ngStyle]="{'height': breakdownRow.style.branchHeight, 'top': breakdownRow.style.top}"></section>
   <section class="sat-portfolioBreakdownRow__cta">
@@ -82,23 +85,23 @@
     <div class="sat-portfolioBreakdownRow__utility-ctas">
       <button (click)="onClickSetView(constants.positive)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--inverseLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--positive">
         <i class="fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
-        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">positive</span>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">{{ constants.positive }}</span>
       </button>
       <button (click)="onClickSetView(constants.improving)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small santaBtn--inverseLabelled sat-portfolioBreakdownRow__utility-ctas-btn--improving">
         <i class="fal fa-arrow-up sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
-        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">improving</span>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">{{ constants.improving }}</span>
       </button>
       <button (click)="onClickSetView(constants.neutral)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--neutral">
         <i class="fal fa-arrows-alt-h sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
-        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">neutral</span>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">{{ constants.neutral }}</span>
       </button>
       <button (click)="onClickSetView(constants.deteriorating)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--deteriorating">
         <i class="fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
-        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">deteriorating</span>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">{{ constants.deteriorating }}</span>
       </button>
       <button (click)="onClickSetView(constants.negative)"class="sat-portfolioBreakdownRow__utility-ctas-btn santaBtn--circleLabelled santaBtn--small sat-portfolioBreakdownRow__utility-ctas-btn--negative">
         <i class="fal fa-arrow-down sat-portfolioBreakdownRow__utility-ctas-btn-icon"></i>
-        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">negative</span>
+        <span class="sat-portfolioBreakdownRow__utility-ctas-btn-text">{{ constants.negative }}</span>
       </button>
     </div>
   </section>
@@ -112,6 +115,9 @@
   <hr class="sat-portfolioBreakdownRow__cellDivider">
   <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--index">
     {{breakdownRow.data.indexPctDisplay}}
+  </section>
+  <section class="sat-portfolioBreakdownRow__cell sat-portfolioBreakdownRow__cell--delta">
+    {{breakdownRow.data.deltaDisplay}}
   </section>
   <section class="sat-portfolioBreakdownRow__subLevelTargetGauge">
     <div class="sat-portfolioBreakdownRow__subLevelTargetGauge-content">

@@ -83,7 +83,7 @@ export class TradePage implements OnInit, OnDestroy {
         if (!!state) {
           if (state.data.workflowType === this.constants.globalWorkflowTypes.launchTradeToSeeBonds) {
             if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
-              this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList));
+              this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList, state.data.stateInfo.activeMetric));
             }
           }
         }

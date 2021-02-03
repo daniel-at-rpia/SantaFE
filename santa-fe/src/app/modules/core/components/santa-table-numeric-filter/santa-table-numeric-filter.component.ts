@@ -43,13 +43,13 @@ export class SantaTableNumericFilter implements  IFilterAngularComp {
     if (min != null && max != null) {
       this.filterData.data.minNumber = parseFloat(min as string);
       this.filterData.data.maxNumber = parseFloat(max as string);
-      return value >= min && value <= max;
+      return parsedValue >= min && parsedValue <= max;
     } else if (min != null) {
       this.filterData.data.minNumber = parseFloat(min as string);
-      return value >= min;
+      return parsedValue >= min;
     } else if (max != null) {
       this.filterData.data.maxNumber = parseFloat(max as string);
-      return value <= max;
+      return parsedValue <= max;
     } else {
       return true;
     }

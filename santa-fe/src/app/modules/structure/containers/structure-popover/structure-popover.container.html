@@ -1,7 +1,8 @@
 <article [ngClass]="{
   'sat-popover': true,
   'sat-popover--active': !!popover && popover.state.isActive,
-  'sat-popover--noDataAvailable': !!popover && !!popover.data.mainRow.data.children && popover.data.mainRow.data.children.data.displayCategoryList.length === 0
+  'sat-popover--noDataAvailable': !!popover && !!popover.data.mainRow.data.children && popover.data.mainRow.data.children.data.displayCategoryList.length === 0,
+  'sat-popover--isViewingIndex': !!popover && popover.state.isViewingIndex
 }">
   <button *ngIf="!!popover" (click)="closePopover()" class="sat-popover__closeBtn santaBtn--circleLabelled">
     <i class="fal fa-times"></i>
@@ -16,7 +17,11 @@
       <i class="sat-popover__categoryHeader-cell-icon fas fa-chart-pie"></i>
       <div class="sat-popover__categoryHeader-cell-tooltip">Current %</div>
     </div>
-    <div class="sat-popover__categoryHeader-cell">
+    <div class="sat-popover__categoryHeader-cell sat-popover__categoryHeader-cell--delta">
+      <i class="sat-popover__categoryHeader-cell-icon fal fa-triangle"></i>
+      <div class="sat-popover__categoryHeader-cell-tooltip">Delta %</div>
+    </div>
+    <div class="sat-popover__categoryHeader-cell sat-popover__categoryHeader-cell--index">
       <i class="sat-popover__categoryHeader-cell-icon fas fa-analytics"></i>
       <div class="sat-popover__categoryHeader-cell-tooltip">Index %</div>
     </div>
@@ -29,7 +34,8 @@
           (categoryClicked)="onClickBreakdownCategory($event)"
           (rowDiveInClicked)="getNextBicsLevel($event)"
           (seeBondClicked)="onClickSeeBond()"
-          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+          (setViewForRowClicked)="updatePopoverRowView($event)">
         </portfolio-breakdown-row>
       </li>
     </ul>
@@ -49,7 +55,8 @@
             (categoryClicked)="onClickBreakdownCategory($event)"
             (rowDiveInClicked)="getNextBicsLevel($event)"
             (seeBondClicked)="onClickSeeBond()"
-            (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+            (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+            (setViewForRowClicked)="updatePopoverRowView($event)">
           </portfolio-breakdown-row>
           <div [ngClass]="{
             'sat-popover__levels-secondDiveIn': true,
@@ -67,7 +74,8 @@
                   (categoryClicked)="onClickBreakdownCategory($event)"
                   (rowDiveInClicked)="getNextBicsLevel($event)"
                   (seeBondClicked)="onClickSeeBond()"
-                  (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+                  (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+                  (setViewForRowClicked)="updatePopoverRowView($event)">
                 </portfolio-breakdown-row>
                 <div [ngClass]="{
                   'sat-popover__levels-thirdDiveIn': true,
@@ -80,7 +88,8 @@
                         [breakdownRow]="fourthLevel"
                         (categoryClicked)="onClickBreakdownCategory($event)"
                         (seeBondClicked)="onClickSeeBond()"
-                        (enterSetViewModeClicked)="onClickEnterSetViewMode($event)">
+                        (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+                        (setViewForRowClicked)="updatePopoverRowView($event)">
                       </portfolio-breakdown-row>
                     </li>
                   </ul>

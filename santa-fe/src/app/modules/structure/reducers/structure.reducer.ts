@@ -3,24 +3,28 @@ import { StructureActions } from 'Structure/actions/structure.actions';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames
+  PortfolioShortNames,
+  SubPortfolioFilter,
+  DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import {
   StructureSetTargetOverlayTransferPack,
-  StructureSetViewData,
+  StructureSetViewTransferPack,
 } from 'FEModels/frontend-adhoc-packages.interface';
+import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
 import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
-import { BEPortfolioStructuringDTO } from 'BEModels/backend-models.interface';
 import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
   setTargetTransfer: StructureSetTargetOverlayTransferPack;
-  reloadFundDataPostEdit: BEPortfolioStructuringDTO;
+  reloadFundDataPostEdit: BEStructuringFundBlockWithSubPortfolios;
   updateTick: number;
-  viewData: StructureSetViewData;
+  viewData: StructureSetViewTransferPack;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
+  activeSubPortfolioFilter: SubPortfolioFilter;
+  activeDeltaScope: DeltaScope;
   dataDatestamp: number;
   utilityPanelLoadState: StructureUtilityPanelState;
 }
@@ -41,6 +45,8 @@ const initialState: StructureState = {
     PortfolioShortNames.DOF,
     PortfolioShortNames.SOF
   ],
+  activeSubPortfolioFilter: SubPortfolioFilter.all,
+  activeDeltaScope: DeltaScope.dod,
   dataDatestamp: moment().unix(),
   utilityPanelLoadState: null
 }
@@ -92,6 +98,16 @@ export function structureReducer(
         ...state,
         dataDatestamp: action.dateStampInUnix
       };
+    case StructureActions.ChangeSubPortfolioViewFilter:
+      return {
+        ...state,
+        activeSubPortfolioFilter: action.filterOption
+      }
+    case StructureActions.ChangeDeltaScope:
+      return {
+        ...state,
+        activeDeltaScope: action.deltaScope
+      }
     case StructureActions.UtilityPanelLoadState:
       return {
         ...state,

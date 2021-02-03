@@ -18,11 +18,12 @@
         [ngClass]="{
           'sat-tradeAlertPanel__overview-tabIndicate-icon': true,
           'fal': !state.alert.scopedAlertType || state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
+          'fas': state.alert.scopedAlertType === constants.alertTypes.axeAlert || state.alert.scopedAlertType === constants.alertTypes.traceAlert,
           'fa-bell': !state.alert.scopedAlertType,
-          'fas fa-axe': state.alert.scopedAlertType === constants.alertTypes.axeAlert,
+          'fa-axe': state.alert.scopedAlertType === constants.alertTypes.axeAlert,
           'far fa-bullseye-arrow': state.alert.scopedAlertType === constants.alertTypes.markAlert,
           'fa-handshake': state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
-          'fas fa-analytics': state.alert.scopedAlertType === constants.alertTypes.traceAlert
+          'fa-analytics': state.alert.scopedAlertType === constants.alertTypes.traceAlert
         }">
       </i>
     </div>

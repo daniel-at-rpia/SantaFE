@@ -10,9 +10,19 @@
     'sat-structureSetTargetPanel--ratingAvailableState': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--goodRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 80 &&state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--averageRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 60 && state.targetBreakdown?.style.ratingFillWidth < 80 && state.targetBreakdown?.state.isBICs,
-    'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs
+    'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs,
+    'sat-structureSetTargetPanel--viewingIndexOnBICSState': state.isViewingIndexOnBICS
   }">
   <section class="sat-structureSetTargetPanel__utilities">
+    <div class="sat-structureSetTargetPanel__utilities-setView">
+      <button (click)="onToggleSetViewMode()" class="sat-structureSetTargetPanel__utilities-setView-btn">
+        <i class="sat-structureSetTargetPanel__utilities-setView-btn-icon">
+          <i class="sat-structureSetTargetPanel__utilities-setView-btn-icon--up fal fa-arrow-up"></i>
+          <i class="sat-structureSetTargetPanel__utilities-setView-btn-icon--down fal fa-arrow-down"></i>
+        </i>
+        <span>Bulk Set View</span>
+      </button>
+    </div>
     <div class="sat-structureSetTargetPanel__utilities-distribution">
       <div class="sat-structureSetTargetPanel__utilities-distribution-label sat-structureSetTargetPanel__utilities-distribution-label--cs01">
         {{state.displayRemainingUnallocatedCS01}} ({{state.displayPercentageUnallocatedCS01}}%)
@@ -78,7 +88,11 @@
               <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-chart-pie"></i>
               <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Current %</div>
             </div>
-            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell">
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell sat-structureSetTargetPanel__main-edit-content-header-categories-cell--delta">
+              <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fal fa-triangle"></i>
+              <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Delta %</div>
+            </div>
+            <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell sat-structureSetTargetPanel__main-edit-content-header-categories-cell--index">
               <i class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-icon fas fa-analytics"></i>
               <div class="sat-structureSetTargetPanel__main-edit-content-header-categories-cell-tooltip">Index %</div>
             </div>
@@ -143,8 +157,37 @@
               'sat-structureSetTargetEditRow--bicsLevel2Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 2,
               'sat-structureSetTargetEditRow--bicsLevel3Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 3,
               'sat-structureSetTargetEditRow--bicsLevel4Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 4,
-              'sat-structureSetTargetEditRow--visibleState': eachCategory.isVisible
+              'sat-structureSetTargetEditRow--visibleState': eachCategory.isVisible,
+              'sat-structureSetTargetEditRow--editingViewState': state.editViewMode,
+              'sat-structureSetTargetEditRow--hasUpdatedViewState': eachCategory.isViewEdited,
+              'sat-structureSetTargetEditRow--selectedPositiveView': eachCategory.view === constants.view.positive,
+              'sat-structureSetTargetEditRow--selectedImprovingView': eachCategory.view === constants.view.improving,
+              'sat-structureSetTargetEditRow--selectedDeterioratingView': eachCategory.view === constants.view.deteriorating,
+              'sat-structureSetTargetEditRow--selectedNegativeView': eachCategory.view === constants.view.negative,
+              'sat-structureSetTargetEditRow--selectedNeutralView': eachCategory.view === constants.view.neutral
             }">
+            <section class="sat-structureSetTargetEditRow__setView">
+              <button (click)="onClickSetView(eachCategory, constants.view.positive)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--positive">
+                <i class="fal fa-arrow-up sat-structureSetTargetEditRow__setView-btn-icon"></i>
+                <span class="sat-structureSetTargetEditRow__setView-btn-text">{{ constants.view.positive }}</span>
+              </button>
+              <button (click)="onClickSetView(eachCategory, constants.view.improving)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--improving">
+                <i class="fal fa-arrow-up sat-structureSetTargetEditRow__setView-btn-icon"></i>
+                <span class="sat-structureSetTargetEditRow__setView-btn-text">{{ constants.view.improving }}</span>
+              </button>
+              <button (click)="onClickSetView(eachCategory, constants.view.neutral)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--neutral">
+                <i class="fal fa-arrows-alt-h sat-structureSetTargetEditRow__setView-btn-icon"></i>
+                <span class="sat-structureSetTargetEditRow__setView-btn-text">{{ constants.view.neutral }}</span>
+              </button>
+              <button (click)="onClickSetView(eachCategory, constants.view.deteriorating)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--deteriorating">
+                <i class="fal fa-arrow-down sat-structureSetTargetEditRow__setView-btn-icon"></i>
+                <span class="sat-structureSetTargetEditRow__setView-btn-text">{{ constants.view.deteriorating }}</span>
+              </button>
+              <button (click)="onClickSetView(eachCategory, constants.view.negative)"class="sat-structureSetTargetEditRow__setView-btn santaBtn--circleLabelled santaBtn--small sat-structureSetTargetEditRow__setView-btn--negative">
+                <i class="fal fa-arrow-down sat-structureSetTargetEditRow__setView-btn-icon"></i>
+                <span class="sat-structureSetTargetEditRow__setView-btn-text">{{ constants.view.negative }}</span>
+              </button>
+            </section>
             <section class="sat-structureSetTargetEditRow__details">
               <portfolio-breakdown-row
                 *ngIf="eachCategory.rowDTO"
