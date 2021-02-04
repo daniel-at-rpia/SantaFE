@@ -15,7 +15,8 @@ export enum CoreActions {
   SendAlertCountsByType = '[Core] Send Alert Counts',
   ReceivedNewAlerts = '[Core] Received New Alerts',
   GlobalWorkflowSendNewState = '[Core] Global Workflow Send New State',
-  GlobalWorkflowUpdateCurrentState = '[Core] Global Workflow Update Current State'
+  GlobalWorkflowUpdateCurrentState = '[Core] Global Workflow Update Current State',
+  GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -96,4 +97,9 @@ export class CoreGlobalWorkflowUpdateCurrentState implements Action {
   ){
     this.uuid = uuid;
   }
+}
+
+export class CoreGlobalWorkflowIndexedDBReady implements Action {
+  readonly type = CoreActions.GlobalWorkflowIndexedDBReady;
+  constructor(){}
 }

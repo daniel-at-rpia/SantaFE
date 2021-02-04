@@ -1,19 +1,8 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
     import { ActivatedRoute } from '@angular/router';
-    import {
-      Observable,
-      Subscription,
-      interval,
-      of
-    } from 'rxjs';
-    import {
-      tap,
-      first,
-      withLatestFrom,
-      switchMap,
-      catchError
-    } from 'rxjs/operators';
+    import { Observable, Subscription, interval, of } from 'rxjs';
+    import { tap, first, withLatestFrom, switchMap, catchError, combineLatest, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import {
@@ -23,6 +12,7 @@
       GlobalWorkflowIOService
     } from 'Core/services';
     import { StructureState } from 'FEModels/frontend-page-states.interface';
+    import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { StructureStoreResetEvent, StructureUtilityPanelLoadStateEvent } from 'Structure/actions/structure.actions';
     import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
     import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from 'FEModels/frontend-blocks.interface';
@@ -81,7 +71,13 @@ export class StructurePage implements OnInit, OnDestroy {
     this.store$.dispatch(new StructureStoreResetEvent);
     this.fetchBICsHierarchy();
     this.subscriptions.routeChange = this.route.paramMap.pipe(
-      switchMap((params) => {
+      combineLatest(
+        this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))
+      ),
+      filter(([params, indexedDBIsReady]) => {
+        return !!indexedDBIsReady;
+      }),
+      switchMap(([params, indexedDBIsReady]) => {
         return this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
       })
     ).subscribe((result) => {
@@ -90,6 +86,12 @@ export class StructurePage implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (!!this.subscriptions[eachItem]) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
+      }
+    }
   }
 
   private updateBICsFetch(receivedData: boolean, message: string = '') {

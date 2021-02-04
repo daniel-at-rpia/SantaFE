@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { DetachedRouteHandle } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { DTOs } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
 
 @Injectable()
 
@@ -25,6 +27,7 @@ export class GlobalWorkflowIOService {
   private workflowIO: IDBTransaction;
 
   constructor(
+    private store$: Store<any>,
     private utilityService: UtilityService,
     private dtoService: DTOService
   ){
@@ -115,6 +118,7 @@ export class GlobalWorkflowIOService {
     openRequest.onsuccess = (successEvent) => {
       console.log('IDB open request success.', successEvent);
       this.workflowIndexedDBAPI = openRequest.result;
+      this.store$.dispatch(new CoreGlobalWorkflowIndexedDBReady());
     }
 
     openRequest.onupgradeneeded = (newVersionDetectedEvent) => {
@@ -126,6 +130,7 @@ export class GlobalWorkflowIOService {
           // version 0 means that the client had no database
           // perform initialization
           this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME, { keyPath: "uuid" });  // this key field has to be the "id" field 
+          this.store$.dispatch(new CoreGlobalWorkflowIndexedDBReady());
           break;
         default:
           window.indexedDB.deleteDatabase(this.INDEXEDDB_WORKFLOW_DATABASE_NAME);

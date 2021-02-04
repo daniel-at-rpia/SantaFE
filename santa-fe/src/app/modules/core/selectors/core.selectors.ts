@@ -47,3 +47,8 @@ export const selectGlobalWorkflowUpdateCurrentState = createSelector(
   getCoreState,
   (state: CoreState) => state.globalWorkflow.currentStateUUID
 );
+
+export const selectGlobalWorkflowIndexedDBReadyState = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalWorkflow.indexedDBReady
+);

@@ -23,6 +23,7 @@ export interface CoreState {
   globalWorkflow: {
     newState: DTOs.GlobalWorkflowStateDTO;
     currentStateUUID: string;
+    indexedDBReady: boolean;
   }
 }
 
@@ -41,7 +42,8 @@ const initialState: CoreState = {
   },
   globalWorkflow: {
     newState: null,
-    currentStateUUID: null
+    currentStateUUID: null,
+    indexedDBReady: false
   }
 };
 
@@ -121,6 +123,14 @@ export function coreReducer(
           currentStateUUID: action.uuid
         }
       }
+    case CoreActions.GlobalWorkflowIndexedDBReady:
+      return {
+        ...state,
+        globalWorkflow: {
+          ...state.globalWorkflow,
+          indexedDBReady: true
+        }
+      };
     default:
       return {
         ...state
