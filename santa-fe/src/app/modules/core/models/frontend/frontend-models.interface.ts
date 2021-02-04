@@ -20,7 +20,7 @@ import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTable
 import { StructureUtilityPanelState } from './frontend-page-states.interface';
 
 interface BasicDTOStructure {
-  [property: string]: object;
+  id?: string;
   data: object;
   state: object;
   style?: object;
@@ -912,6 +912,7 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
 
 // Even though this is not used for any component, but we still want it as a DTO because in the future it will likely be a component when we decide to visualize the workflow through UI
 export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
+  uuid: string;  // this is necessary because indexedDB requires a root level id
   data: {
     uuid: string;
     module: NavigationModule;

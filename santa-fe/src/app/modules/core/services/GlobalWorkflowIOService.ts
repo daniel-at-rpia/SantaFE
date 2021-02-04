@@ -12,9 +12,12 @@ export class GlobalWorkflowIOService {
   // given that storing workflow state is the only application of indexedDB in Santa at the moment, there is no need to over-engineer the indexedDB layer in santa, just put it in IOService for now
   private INDEXEDDB_VERSION = 1;
   private INDEXEDDB_WORKFLOW_DATABASE_NAME = 'GlobalWorkflow';
+  private INDEXEDDB_WORKFLOW_STORE_NAME = 'WorkflowStore';
 
   private temporaryStore: Map<string, DTOs.GlobalWorkflowStateDTO> = new Map();
   private workflowIndexedDBAPI: IDBDatabase;
+  private workflowStore: IDBObjectStore;
+  private workflowIO: IDBTransaction;
 
   constructor(
     private utilityService: UtilityService,
@@ -26,11 +29,22 @@ export class GlobalWorkflowIOService {
 
   public storeState(targetState: DTOs.GlobalWorkflowStateDTO) {
     const writableCopy = this.utilityService.deepCopy(targetState);
-    const exist = this.temporaryStore.get(writableCopy.data.uuid);
-    if (!!exist && exist.data.workflowType === GlobalWorkflowTypes.routeHandlerPlaceholder) {
-      writableCopy.api.routeHandler = exist.api.routeHandler;
+    writableCopy.data.stateInfo = JSON.stringify(writableCopy.data.stateInfo);
+    writableCopy.api = null;
+    this.workflowIO = this.workflowIndexedDBAPI.transaction([this.INDEXEDDB_WORKFLOW_STORE_NAME], "readwrite");
+    this.workflowStore = this.workflowIO.objectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME);
+    this.workflowIO.oncomplete = (event) => {
+      console.log('IDB fetch complete', event);
     }
-    this.temporaryStore.set(targetState.data.uuid, writableCopy);
+    this.workflowIO.onerror = (event) => {
+      console.log('IDB fetch error', event);
+    }
+    this.workflowStore.put(writableCopy);
+    // const exist = this.temporaryStore.get(writableCopy.data.uuid);
+    // if (!!exist && exist.data.workflowType === GlobalWorkflowTypes.routeHandlerPlaceholder) {
+    //   writableCopy.api.routeHandler = exist.api.routeHandler;
+    // }
+    // this.temporaryStore.set(targetState.data.uuid, writableCopy);
   }
 
   public fetchState(targetUUID: string): DTOs.GlobalWorkflowStateDTO {
@@ -79,17 +93,19 @@ export class GlobalWorkflowIOService {
     }
 
     openRequest.onsuccess = (successEvent) => {
-      // do something if necessary
+      console.log('IDB open request success.', successEvent);
+      this.workflowIndexedDBAPI = openRequest.result;
     }
 
     openRequest.onupgradeneeded = (newVersionDetectedEvent) => {
+      console.log('IDB open request upgrade needed.', newVersionDetectedEvent);
       // reconstruct the database upon version change
       this.workflowIndexedDBAPI = openRequest.result;
       switch(newVersionDetectedEvent.oldVersion) {
         case 0:
           // version 0 means that the client had no database
           // perform initialization
-          const objectStore = this.workflowIndexedDBAPI.createObjectStore("workflow", { keyPath: "id" });
+          this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME, { keyPath: "uuid" });  // this key field has to be the "id" field 
           break;
         default:
           window.indexedDB.deleteDatabase(this.INDEXEDDB_WORKFLOW_DATABASE_NAME);
