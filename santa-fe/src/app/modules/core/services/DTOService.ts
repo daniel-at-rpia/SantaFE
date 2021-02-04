@@ -2223,11 +2223,11 @@ export class DTOService {
     if (deltaEnabled && !comparedDeltaRawData) {
       newBreakdown.state.isViewingIndex = false;
       newBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
-        eachCategory.data.deltaDisplay = '-';
+        eachCategory.data.deltaDisplay = 'n/a';
         eachCategory.state.isViewingIndex = false;
       });
       newBreakdown.data.rawLeverageCategoryList.forEach((eachCategory) => {
-        eachCategory.data.deltaDisplay = '-';
+        eachCategory.data.deltaDisplay = 'n/a';
         eachCategory.state.isViewingIndex = false;
       });
     }
@@ -2381,7 +2381,7 @@ export class DTOService {
         indexPct: parsedRawData.indexPct,
         indexPctDisplay: parsedRawData.indexPct != null ? `${parsedRawData.indexPct}%` : '-',
         delta: delta,
-        deltaDisplay: delta != null ? `${delta}%` : '-',
+        deltaDisplay: !!delta ? `${delta}%` : '-',
         moveVisualizer: eachMoveVisualizer,
         bicsLevel: !!customLevel ? customLevel : null,
         children: null,
