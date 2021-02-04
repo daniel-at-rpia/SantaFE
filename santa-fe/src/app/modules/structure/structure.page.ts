@@ -81,21 +81,12 @@ export class StructurePage implements OnInit, OnDestroy {
     this.store$.dispatch(new StructureStoreResetEvent);
     this.fetchBICsHierarchy();
     this.subscriptions.routeChange = this.route.paramMap.pipe(
-      tap(params => {
-        const state = this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
-        if (!!state) {
-          switch(state.data.workflowType) {
-            case this.constants.workflowType.changedStructureUtilityConfig: 
-              if (!!state.data.stateInfo && !!state.data.stateInfo.structureUtilityPanelSnapshot) {
-                this.store$.dispatch(new StructureUtilityPanelLoadStateEvent(state.data.stateInfo.structureUtilityPanelSnapshot));
-              }
-              break;
-            default:
-              break;
-          }
-        }
+      switchMap((params) => {
+        return this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
       })
-    ).subscribe();
+    ).subscribe((result) => {
+      console.log('test, result is', result);
+    });
   }
 
   public ngOnDestroy() {

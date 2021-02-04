@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DetachedRouteHandle } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import { DTOs } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
@@ -13,6 +14,10 @@ export class GlobalWorkflowIOService {
   private INDEXEDDB_VERSION = 1;
   private INDEXEDDB_WORKFLOW_DATABASE_NAME = 'GlobalWorkflow';
   private INDEXEDDB_WORKFLOW_STORE_NAME = 'WorkflowStore';
+
+  // enum IndexedDBTransactionModes {
+
+  // }
 
   private temporaryStore: Map<string, DTOs.GlobalWorkflowStateDTO> = new Map();
   private workflowIndexedDBAPI: IDBDatabase;
@@ -47,13 +52,28 @@ export class GlobalWorkflowIOService {
     // this.temporaryStore.set(targetState.data.uuid, writableCopy);
   }
 
-  public fetchState(targetUUID: string): DTOs.GlobalWorkflowStateDTO {
-    if (!!targetUUID) {
-      return this.temporaryStore.get(targetUUID) || null;
-    } else {
-      return null;
-    }
+  public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
+    this.workflowIO = this.workflowIndexedDBAPI.transaction([this.INDEXEDDB_WORKFLOW_STORE_NAME], "readwrite");
+    this.workflowStore = this.workflowIO.objectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME);
+    return new Observable(subscriber => {
+      const request = this.workflowStore.get("0f196e5f-caa9-45f8-b2f9-f97b44065670");
+      this.workflowIO.oncomplete = ((event) => {
+        console.log('test, onComplete', request.result);
+        subscriber.next(request.result);
+      });
+      this.workflowIO.onerror = ((event) => {
+        console.log('test, onError', request.result);
+      });
+    });
   }
+
+  // public fetchState(targetUUID: string): DTOs.GlobalWorkflowStateDTO {
+  //   if (!!targetUUID) {
+  //     return this.temporaryStore.get(targetUUID) || null;
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
     if (!!targetUUID) {

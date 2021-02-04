@@ -77,18 +77,18 @@ export class TradePage implements OnInit, OnDestroy {
   public ngOnInit() {
     this.initializePageState();
     this.store$.dispatch(new TradeStoreResetEvent());
-    this.subscriptions.routeChange = this.route.paramMap.pipe(
-      tap(params => {
-        const state = this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
-        if (!!state) {
-          if (state.data.workflowType === this.constants.globalWorkflowTypes.launchTradeToSeeBonds) {
-            if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
-              this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList, state.data.stateInfo.activeMetric));
-            }
-          }
-        }
-      })
-    ).subscribe();
+    // this.subscriptions.routeChange = this.route.paramMap.pipe(
+    //   tap(params => {
+    //     const state = this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
+    //     if (!!state) {
+    //       if (state.data.workflowType === this.constants.globalWorkflowTypes.launchTradeToSeeBonds) {
+    //         if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
+    //           this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList, state.data.stateInfo.activeMetric));
+    //         }
+    //       }
+    //     }
+    //   })
+    // ).subscribe();
 
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis)
@@ -110,7 +110,7 @@ export class TradePage implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
+      if (!!this.subscriptions[eachItem]) {
         const eachSub = this.subscriptions[eachItem] as Subscription;
         eachSub.unsubscribe();
       }
