@@ -3,10 +3,6 @@ import { createSelector } from '@ngrx/store';
 import { CoreState } from 'Core/reducers/core.reducer';
 import { getCoreState } from 'App/selectors';
 
-export const selectAlertUpdate = createSelector(
-  getCoreState,
-  (state: CoreState) => state.globalAlert.newUrgentAlerts
-);
 
 export const selectUserInitials = createSelector(
   getCoreState,
