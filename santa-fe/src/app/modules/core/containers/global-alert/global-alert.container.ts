@@ -424,7 +424,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         filteredServerReturn.forEach((eachRawAlert: BEAlertDTO) => {
           if (!!eachRawAlert) {
               const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-            // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
+            // Inquiry alerts are handled differently since BE passes the same inquiry alerts regardless of the timestamp FE provides
             if (!!eachRawAlert.marketListAlert) {
               if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
                 // ignore, already have it
