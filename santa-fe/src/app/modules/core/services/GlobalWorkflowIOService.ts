@@ -8,30 +8,31 @@ import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
+import {
+  INDEXEDDB_VERSION,
+  INDEXEDDB_WORKFLOW_DATABASE_NAME,
+  INDEXEDDB_WORKFLOW_STORE_NAME
+} from 'Core/constants/globalWorkflowConstants.constants';
 
 @Injectable()
 
 export class GlobalWorkflowIOService {
   // given that storing workflow state is the only application of indexedDB in Santa at the moment, there is no need to over-engineer the indexedDB layer in santa, just put it in IOService for now
-  private INDEXEDDB_VERSION = 1;
-  private INDEXEDDB_WORKFLOW_DATABASE_NAME = 'GlobalWorkflow';
-  private INDEXEDDB_WORKFLOW_STORE_NAME = 'WorkflowStore';
-
-  // enum IndexedDBTransactionModes {
-
-  // }
-
-  private temporaryStore: Map<string, DTOs.GlobalWorkflowStateDTO> = new Map();
   private workflowIndexedDBAPI: IDBDatabase;
   private workflowStore: IDBObjectStore;
   private workflowIO: IDBTransaction;
+  constants = {
+    idbVersion: INDEXEDDB_VERSION,
+    idbWorkflowDbName: INDEXEDDB_WORKFLOW_DATABASE_NAME,
+    idbWorkflowStoreName: INDEXEDDB_WORKFLOW_STORE_NAME
+  }
 
   constructor(
     private store$: Store<any>,
     private utilityService: UtilityService,
     private dtoService: DTOService
   ){
-    const openRequest = window.indexedDB.open(this.INDEXEDDB_WORKFLOW_DATABASE_NAME, this.INDEXEDDB_VERSION);
+    const openRequest = window.indexedDB.open(this.constants.idbWorkflowDbName, this.constants.idbVersion);
     this.initiateIndexedDBRequestHandler(openRequest);
   }
 
@@ -39,8 +40,8 @@ export class GlobalWorkflowIOService {
     const writableCopy = this.utilityService.deepCopy(targetState);
     writableCopy.data.stateInfo = JSON.stringify(writableCopy.data.stateInfo);
     writableCopy.api = null;
-    this.workflowIO = this.workflowIndexedDBAPI.transaction([this.INDEXEDDB_WORKFLOW_STORE_NAME], "readwrite");
-    this.workflowStore = this.workflowIO.objectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME);
+    this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowStoreName], "readwrite");
+    this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowStoreName);
     this.workflowIO.onerror = (event) => {
       console.error('Global Workflow, store state error', event);
     }
@@ -48,8 +49,8 @@ export class GlobalWorkflowIOService {
   }
 
   public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
-    this.workflowIO = this.workflowIndexedDBAPI.transaction([this.INDEXEDDB_WORKFLOW_STORE_NAME], "readwrite");
-    this.workflowStore = this.workflowIO.objectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME);
+    this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowStoreName], "readwrite");
+    this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowStoreName);
     return new Observable(subscriber => {
       const request = this.workflowStore.get(targetUUID);
       this.workflowIO.oncomplete = ((event) => {
@@ -89,31 +90,31 @@ export class GlobalWorkflowIOService {
 
   public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
     if (!!targetUUID) {
-      const targetState = this.temporaryStore.get(targetUUID);
-      if (!!targetState) {
-        targetState.api.routeHandler = targetHandler;
-      } else {
-        const newState = this.dtoService.formGlobalWorkflow(null, false, GlobalWorkflowTypes.routeHandlerPlaceholder);
-        newState.data.uuid = targetUUID;
-        this.storeState(newState);
-      }
+      // const targetState = this.temporaryStore.get(targetUUID);
+      // if (!!targetState) {
+      //   targetState.api.routeHandler = targetHandler;
+      // } else {
+      //   const newState = this.dtoService.formGlobalWorkflow(null, false, GlobalWorkflowTypes.routeHandlerPlaceholder);
+      //   newState.data.uuid = targetUUID;
+      //   this.storeState(newState);
+      // }
     }
   }
 
   public fetchHandler(targetUUID: string): DetachedRouteHandle {
     if (!!targetUUID) {
-      const targetState = this.temporaryStore.get(targetUUID);
-      if (!!targetState && targetState.state.triggersRedirect) {
-        if (!!targetState.api.routeHandler) {
-          return targetState.api.routeHandler;
-        } else {
-          console.warn('Tried to fetch for route handler while it is not stored', targetState);
-          return null;
-        }
-      } else {
-        console.warn('Fetching route handler from a null state or non-redirect state', targetState);
-        return null;
-      }
+      // const targetState = this.temporaryStore.get(targetUUID);
+      // if (!!targetState && targetState.state.triggersRedirect) {
+      //   if (!!targetState.api.routeHandler) {
+      //     return targetState.api.routeHandler;
+      //   } else {
+      //     console.warn('Tried to fetch for route handler while it is not stored', targetState);
+      //     return null;
+      //   }
+      // } else {
+      //   console.warn('Fetching route handler from a null state or non-redirect state', targetState);
+      //   return null;
+      // }
     } else {
       return null;
     }
@@ -138,11 +139,11 @@ export class GlobalWorkflowIOService {
         case 0:
           // version 0 means that the client had no database
           // perform initialization
-          this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME, { keyPath: "uuid" });  // this key field has to be the "id" field 
+          this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowStoreName, { keyPath: "uuid" });  // this key field has to be the "id" field 
           this.store$.dispatch(new CoreGlobalWorkflowIndexedDBReady());
           break;
         default:
-          window.indexedDB.deleteDatabase(this.INDEXEDDB_WORKFLOW_DATABASE_NAME);
+          window.indexedDB.deleteDatabase(this.constants.idbWorkflowDbName);
           break;
       }
     }
