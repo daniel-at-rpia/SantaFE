@@ -30,6 +30,10 @@ export interface GlobalNavState {
     seniority: Array<Blocks.GlobalNavLegendBlock>;
     rating: Array<Blocks.GlobalNavLegendBlock>;
   }
+  currentState: {
+    trade: string;
+    structure: string;
+  }
 }
 
 export interface GlobalAlertState {

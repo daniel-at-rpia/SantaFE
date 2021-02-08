@@ -22,7 +22,8 @@ export interface CoreState {
   };
   globalWorkflow: {
     newState: DTOs.GlobalWorkflowStateDTO;
-    currentStateUUID: string;
+    currentStateInStructure: string;
+    currentStateInTrade: string;
     indexedDBReady: boolean;
   }
 }
@@ -42,7 +43,8 @@ const initialState: CoreState = {
   },
   globalWorkflow: {
     newState: null,
-    currentStateUUID: null,
+    currentStateInStructure: null,
+    currentStateInTrade: null,
     indexedDBReady: false
   }
 };
@@ -115,12 +117,20 @@ export function coreReducer(
           newState: action.newState
         }
       };
-    case CoreActions.GlobalWorkflowUpdateCurrentState:
+    case CoreActions.GlobalWorkflowUpdateCurrentTradeState:
       return {
         ...state,
         globalWorkflow: {
           ...state.globalWorkflow,
-          currentStateUUID: action.uuid
+          currentStateInTrade: action.uuid
+        }
+      };
+    case CoreActions.GlobalWorkflowUpdateCurrentStructureState:
+      return {
+        ...state,
+        globalWorkflow: {
+          ...state.globalWorkflow,
+          currentStateInStructure: action.uuid
         }
       }
     case CoreActions.GlobalWorkflowIndexedDBReady:

@@ -8,9 +8,10 @@
 
     import * as GlobalServices from 'Core/services/index';
     import { selectGlobalWorkflowNewState } from 'Core/selectors/core.selectors';
-    import { CoreGlobalWorkflowUpdateCurrentState } from 'Core/actions/core.actions';
+    import { CoreGlobalWorkflowUpdateCurrentStructureState, CoreGlobalWorkflowUpdateCurrentTradeState } from 'Core/actions/core.actions';
     import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
     import { GlobalWorkflowState } from 'FEModels/frontend-page-states.interface';
+    import { NavigationModule } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -26,6 +27,9 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
     navigationStartSub: null,
     newStateSub: null
   };
+  constants = {
+    moduleUrl: NavigationModule
+  }
 
   constructor(
     private store$: Store<any>,
@@ -58,7 +62,11 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
             this.storeState(newState);
             // need to deepCopy because the one in ngrx store is readonly
             this.state.currentState = this.utilityService.deepCopy(newState);
-            this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentState(newState.data.uuid));
+            if (newState.data.module === this.constants.moduleUrl.structuring) {
+              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentStructureState(newState.data.uuid));
+            } else if (newState.data.module === this.constants.moduleUrl.trade) {
+              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentTradeState(newState.data.uuid));
+            }
           }
         }
       }
