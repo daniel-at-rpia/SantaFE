@@ -25,6 +25,7 @@ export interface TradeState {
     initialDataLoaded: boolean;
     liveUpdateInProgress: boolean;
     liveUpdateProcessingRawData: boolean;
+    readyToReceiveAdditionalAlerts: boolean
   },
   tradeMainTable: {
     initialDataLoaded: boolean;
@@ -56,7 +57,8 @@ const initialState: TradeState = {
   tradeAlertTable: {
     initialDataLoaded: false,
     liveUpdateInProgress: false,
-    liveUpdateProcessingRawData: false
+    liveUpdateProcessingRawData: false,
+    readyToReceiveAdditionalAlerts: false
   },
   tradeMainTable: {
     initialDataLoaded: false,
@@ -231,6 +233,14 @@ export function tradeReducer(
       return {
         ...state,
         bicsDataLoaded: true
+      }
+    case TradeActions.AlertTableReadyToReceiveAdditionalAlerts:
+      return {
+        ...state,
+        tradeAlertTable: {
+          ...state.tradeAlertTable,
+          readyToReceiveAdditionalAlerts: action.newState
+        }
       }
     default:
       return state;

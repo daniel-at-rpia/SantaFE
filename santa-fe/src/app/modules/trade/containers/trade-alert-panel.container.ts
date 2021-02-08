@@ -49,7 +49,8 @@
       TradeAlertTableSendNewAlertsEvent,
       TradeLiveUpdatePassRawDataToAlertTableEvent,
       TradeLiveUpdateProcessDataCompleteInAlertTableEvent,
-      TradeKeywordSearchThisSecurityEvent
+      TradeKeywordSearchThisSecurityEvent,
+      TradeAlertTableReadyToReceiveAdditionalAlerts
     } from 'Trade/actions/trade.actions';
     import {
       selectNewAlertsForAlertTable,
@@ -281,7 +282,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       if (alertList.length > 0) {
         const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
         try {
-          this.updateAlertTable(alertListCopy);
+          setTimeout(() => {
+            this.updateAlertTable(alertListCopy);
+          }, 3000) // account for 3 second delay for initial data for trade table from global alerts
           if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
             const numOfUpdate = this.marketListAlertsCountdownUpdate();
             if (numOfUpdate > 0){
@@ -290,7 +293,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               this.state.alert.recentUpdatedAlertList = [];
             }
           }
-          this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
+          alertListCopy.length > 0 && this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
         } catch {
           this.restfulCommService.logError('received new alerts but failed to generate');
           console.error('received new alerts but failed to generate');
@@ -314,6 +317,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           eachSub.unsubscribe();
         }
       }
+      this.store$.dispatch(new TradeAlertTableReadyToReceiveAdditionalAlerts(false));
     }
 
     private marketListAlertsCountdownUpdate(): number {
@@ -1039,6 +1043,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       };
       this.state.fetchResult.alertTable.fetchComplete = false;
+      !!isInitialFetch && this.store$.dispatch(new TradeAlertTableReadyToReceiveAdditionalAlerts(true));
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
         first(),
         tap((serverReturn) => {

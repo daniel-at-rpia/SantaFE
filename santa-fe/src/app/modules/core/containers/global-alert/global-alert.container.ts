@@ -36,6 +36,7 @@
       selectGlobalAlertProcessingAlertState,
       selectGlobalAlertMakeAPICall
     } from 'Core/selectors/core.selectors';
+    import { selectTradeAlertTableIsReadyToReceiveAdditionalAlerts } from 'Trade/selectors/trade.selectors';
     import { NavigationModule } from 'Core/constants/coreConstants.constant';
     import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
     import * as moment from 'moment';
@@ -56,7 +57,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     browserTabNotificationSub: null,
     autoCountForRawAlertsSub: null,
     makeAlertAPICallSub: null,
-    navigationStartSub: null
+    navigationStartSub: null,
+    tradeAlertTableReadyToReceiveAdditionalAlerts: null
   }
   browserTabNotificationCount$: Observable<any>;
   autoCountForRawAlerts$: Observable<any>;
@@ -84,7 +86,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       alertUpdateTimeStamp: '',
       receivedActiveAlertsMap: {},
       alertUpdateInProgress: false,
-      autoUpdateCountdown: 0
+      autoUpdateCountdown: 0,
+      tradeAlertTableReadyToReceiveAdditionalAlerts: false
     };
     return state;
   }
@@ -117,11 +120,20 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       alertList.length > 0 && this.getAlertsForUrgentAlertList(alertList);
     });
+    this.subscriptions.tradeAlertTableReadyToReceiveAdditionalAlerts = this.store$.pipe(
+      select(selectTradeAlertTableIsReadyToReceiveAdditionalAlerts),
+    ).subscribe((state: boolean) => {
+      this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = state;
+    })
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
         if (this.constants.moduleUrl.trade === modulePortion) {
-          this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
+          if (!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
+            setTimeout(() => {
+              this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
+            }, 3000) // delay so that new updates that occur simulatenously from getRawAlerts are added to allAlertsList
+          }
         }
       }
     });
@@ -462,8 +474,15 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
         urgentAlertUpdateList.length > 0 && this.getAlertsForUrgentAlertList(urgentAlertUpdateList);
         if (allAlertsUpdateList.length > 0) {
-          this.state.allAlertsList = [...this.state.allAlertsList, ...allAlertsUpdateList];
-          this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
+          if (this.state.allAlertsList.length === 0) {
+            this.state.allAlertsList = [...allAlertsUpdateList];
+            this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
+          } else {
+            this.state.allAlertsList = [...this.state.allAlertsList, ...allAlertsUpdateList];
+            if (!!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
+              this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
+            }
+          }
         }
         this.state.alertUpdateInProgress = false;
       }),

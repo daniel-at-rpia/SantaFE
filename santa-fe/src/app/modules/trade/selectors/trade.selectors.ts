@@ -89,3 +89,8 @@ export const selectBICSDataLoaded = createSelector(
   getTradeState,
   (state: TradeState) => state.bicsDataLoaded
 );
+
+export const selectTradeAlertTableIsReadyToReceiveAdditionalAlerts = createSelector(
+  getTradeState,
+  (state: TradeState) => state.tradeAlertTable.readyToReceiveAdditionalAlerts
+)

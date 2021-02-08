@@ -47,6 +47,7 @@ export interface GlobalAlertState {
   receivedActiveAlertsMap: object; // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
   alertUpdateInProgress: boolean;
   autoUpdateCountdown: number;
+  tradeAlertTableReadyToReceiveAdditionalAlerts: boolean;
 }
 
 export interface GlobalWorkflowState {
