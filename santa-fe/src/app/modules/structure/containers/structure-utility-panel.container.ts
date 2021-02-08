@@ -232,20 +232,26 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.state.lastUpdateTime = now.format('hh:mm:ss a');
   }
 
-  public onClickSubPortfolioChange(targetFilterOption: SubPortfolioFilter) {
+  public onClickSubPortfolioChange(
+    targetFilterOption: SubPortfolioFilter,
+    pushToGlobalState: boolean = false
+  ) {
     if (this.state.activeSubPortfolioFilter !== targetFilterOption) {
       this.state.activeSubPortfolioFilter = targetFilterOption;
       this.store$.dispatch(new StructureChangeSubPortfolioViewFilterEvent(targetFilterOption));
     }
-    this.pushStateSnapshotToGlobalState();
+    !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
   }
 
-  public onClickDeltaScope(newDeltaScope: DeltaScope) {
+  public onClickDeltaScope(
+    newDeltaScope: DeltaScope,
+    pushToGlobalState: boolean = false
+  ) {
     if (this.state.currentDeltaScope !== newDeltaScope) {
       this.state.currentDeltaScope = newDeltaScope;
       this.store$.dispatch(new StructureChangeDeltaScopeEvent(newDeltaScope));
     }
-    this.pushStateSnapshotToGlobalState();
+    !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
   }
 
   private updateDataDatestamp(
