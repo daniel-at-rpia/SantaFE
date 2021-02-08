@@ -1148,19 +1148,39 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           switch (eachAlert.data.type) {
             case this.constants.alertTypes.axeAlert:
               if (eachAlert.state.isMarketListVariant) {
-                this.state.alert.marketListAxeAlertCount--;
+                if (this.state.alert.marketListAxeAlertCount > 0) {
+                  this.state.alert.marketListAxeAlertCount--;
+                } else {
+                  this.state.alert.marketListAxeAlertCount = 0
+                }
               } else {
-                this.state.alert.nonMarketListAxeAlertCount--;
+                if (this.state.alert.nonMarketListAxeAlertCount > 0) {
+                  this.state.alert.nonMarketListAxeAlertCount--;
+                } else {
+                  this.state.alert.nonMarketListAxeAlertCount = 0;
+                }
               }
               break;
             case this.constants.alertTypes.markAlert:
-              this.state.alert.markAlertCount--;
+              if (this.state.alert.markAlertCount > 0) {
+                this.state.alert.markAlertCount--;
+              } else {
+                this.state.alert.markAlertCount = 0;
+              }
               break;
             case this.constants.alertTypes.tradeAlert:
-              this.state.alert.tradeAlertCount--;
+              if (this.state.alert.tradeAlertCount > 0) {
+                this.state.alert.tradeAlertCount--;
+              } else {
+                this.state.alert.tradeAlertCount = 0;
+              }
               break;
             case this.constants.alertTypes.traceAlert:
-              this.state.alert.traceAlertCount--;
+              if (this.state.alert.traceAlertCount > 0) {
+                this.state.alert.traceAlertCount--;
+              } else {
+                this.state.alert.traceAlertCount = 0;
+              }
               break;
             default:
               break;
