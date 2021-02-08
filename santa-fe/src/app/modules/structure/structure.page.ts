@@ -5,17 +5,16 @@
     import { tap, first, withLatestFrom, switchMap, catchError, combineLatest, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
+    import { PageStates, DTOs } from 'Core/models/frontend';
     import {
       DTOService,
       UtilityService,
       RestfulCommService,
       GlobalWorkflowIOService
     } from 'Core/services';
-    import { StructureState } from 'FEModels/frontend-page-states.interface';
     import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { StructureStoreResetEvent, StructureUtilityPanelLoadStateEvent } from 'Structure/actions/structure.actions';
     import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
-    import { BICsHierarchyAllDataBlock, BICsHierarchyBlock } from 'FEModels/frontend-blocks.interface';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
     import { GLOBAL_WORKFLOW_STATE_ID_KEY, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
@@ -29,7 +28,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 export class StructurePage implements OnInit, OnDestroy {
-  state: StructureState;
+  state: PageStates.StructureState;
   subscriptions = {
     routeChange: null
   };
@@ -39,8 +38,8 @@ export class StructurePage implements OnInit, OnDestroy {
     workflowType: GlobalWorkflowTypes
   };
 
-  private initializePageState(): StructureState {
-    const state: StructureState = {
+  private initializePageState(): PageStates.StructureState {
+    const state: PageStates.StructureState = {
       BICsData: {
         formattedBICsHierarchy: {
           children: [],
@@ -80,8 +79,8 @@ export class StructurePage implements OnInit, OnDestroy {
       switchMap(([params, indexedDBIsReady]) => {
         return this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
       })
-    ).subscribe((result) => {
-      console.log('test, result is', result);
+    ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
+      this.globalStateHandler(result);
     });
   }
 
@@ -114,5 +113,19 @@ export class StructurePage implements OnInit, OnDestroy {
         return of('error');
       })
     ).subscribe()
+  }
+
+  private globalStateHandler(state: DTOs.GlobalWorkflowStateDTO) {
+    if (!!state) {
+      switch(state.data.workflowType) {
+        case this.constants.workflowType.changedStructureUtilityConfig: 
+          if (!!state.data.stateInfo && !!state.data.stateInfo.structureUtilityPanelSnapshot) {
+            this.store$.dispatch(new StructureUtilityPanelLoadStateEvent(state.data.stateInfo.structureUtilityPanelSnapshot));
+          }
+          break;
+        default:
+          break;
+      }
+    }
   }
 }

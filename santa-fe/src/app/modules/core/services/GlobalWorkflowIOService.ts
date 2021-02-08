@@ -41,31 +41,40 @@ export class GlobalWorkflowIOService {
     writableCopy.api = null;
     this.workflowIO = this.workflowIndexedDBAPI.transaction([this.INDEXEDDB_WORKFLOW_STORE_NAME], "readwrite");
     this.workflowStore = this.workflowIO.objectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME);
-    this.workflowIO.oncomplete = (event) => {
-      console.log('IDB fetch complete', event);
-    }
     this.workflowIO.onerror = (event) => {
-      console.log('IDB fetch error', event);
+      console.error('Global Workflow, store state error', event);
     }
     this.workflowStore.put(writableCopy);
-    // const exist = this.temporaryStore.get(writableCopy.data.uuid);
-    // if (!!exist && exist.data.workflowType === GlobalWorkflowTypes.routeHandlerPlaceholder) {
-    //   writableCopy.api.routeHandler = exist.api.routeHandler;
-    // }
-    // this.temporaryStore.set(targetState.data.uuid, writableCopy);
   }
 
   public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
     this.workflowIO = this.workflowIndexedDBAPI.transaction([this.INDEXEDDB_WORKFLOW_STORE_NAME], "readwrite");
     this.workflowStore = this.workflowIO.objectStore(this.INDEXEDDB_WORKFLOW_STORE_NAME);
     return new Observable(subscriber => {
-      const request = this.workflowStore.get("0f196e5f-caa9-45f8-b2f9-f97b44065670");
+      const request = this.workflowStore.get(targetUUID);
       this.workflowIO.oncomplete = ((event) => {
-        console.log('test, onComplete', request.result);
-        subscriber.next(request.result);
+        if (!!request.result && !!request.result.data) {
+          const workflowDTO: DTOs.GlobalWorkflowStateDTO = {
+            uuid: request.result.uuid,
+            data: {
+              uuid: request.result.data.uuid,
+              module: request.result.data.module,
+              workflowType: request.result.data.workflowType,
+              stateInfo: {}
+            },
+            api: request.result.api,
+            state: request.result.state
+          };
+          workflowDTO.data.stateInfo = JSON.parse(request.result['data']['stateInfo']);
+          console.log('Global Workflow, Retrieved State', workflowDTO);
+          subscriber.next(workflowDTO);
+        } else {
+          console.warn('Global Workflow, could not find state', targetUUID);
+          subscriber.next(null);
+        }
       });
       this.workflowIO.onerror = ((event) => {
-        console.log('test, onError', request.result);
+        console.error('Global Workflow, retrieve state failure', event, targetUUID);
       });
     });
   }
