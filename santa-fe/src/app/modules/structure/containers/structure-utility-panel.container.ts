@@ -151,7 +151,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
         console.log('inheriting previous config', newState);
         this.setMetricLevel(newState.selectedMetricValue);
         this.onClickBreakdownFilterChange(newState.activeBreakdownViewFilter);
-        this.state.activePortfolioViewFilter = newState.activePortfolioViewFilter;
+        this.state.activePortfolioViewFilter = this.utilityService.deepCopy(newState.activePortfolioViewFilter);
         this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
         this.onClickDeltaScope(newState.currentDeltaScope);
         this.onClickSubPortfolioChange(newState.activeSubPortfolioFilter);
