@@ -16,6 +16,13 @@
         <div class="sat-fundStructuring__configuration-metric-data-index">
           <target-bar [targetBar]="fund.data.creditLeverageIndexBar"></target-bar>
         </div>
+        <div class="sat-fundStructuring__configuration-metric-data-delta">
+          <div class="sat-fundStructuring__configuration-metric-data-delta-text">
+            <span class="fal fa-triangle sat-fundStructuring__configuration-metric-data-delta-text-icon"></span>
+            <span class="sat-fundStructuring__configuration-metric-data-delta-text-type">{{ fund.data.activeDelta }}: </span>
+            <span class="sat-fundStructuring__configuration-metric-data-delta-text-difference">{{ fund.data.currentTotalDeltaCreditLeverageDisplayText }}</span>
+          </div>
+        </div>
       </div>
     </div>
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
@@ -24,6 +31,13 @@
       <div class="sat-fundStructuring__configuration-metric-data">
         <div class="sat-fundStructuring__configuration-metric-data-index">
           <target-bar [targetBar]="fund.data.creditDurationIndexBar"></target-bar>
+        </div>
+        <div class="sat-fundStructuring__configuration-metric-data-delta">
+          <div class="sat-fundStructuring__configuration-metric-data-delta-text">
+            <span class="fal fa-triangle sat-fundStructuring__configuration-metric-data-delta-text-icon"></span>
+            <span class="sat-fundStructuring__configuration-metric-data-delta-text-type">{{ fund.data.activeDelta }}: </span>
+            <span class="sat-fundStructuring__configuration-metric-data-delta-text-difference">{{ fund.data.currentTotalDeltaCreditDurationDisplayText }}</span>
+          </div>
         </div>
       </div>
     </div>

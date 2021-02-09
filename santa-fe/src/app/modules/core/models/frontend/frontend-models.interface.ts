@@ -792,7 +792,11 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     creditDurationIndexBar: TargetBarDTO;
     creditLeverageIndexBar: TargetBarDTO;
     activeDelta: DeltaScope;
-    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring
+    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring,
+    currentTotalDeltaCreditLeverage: number;
+    currentTotalDeltaCreditDuration: number;
+    currentTotalDeltaCreditLeverageDisplayText: string;
+    currentTotalDeltaCreditDurationDisplayText: string;
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;

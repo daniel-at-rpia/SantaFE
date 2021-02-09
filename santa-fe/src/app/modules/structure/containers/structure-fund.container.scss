@@ -23,11 +23,21 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       width: 8rem;
       &-data {
         display: flex;
+        justify-content: center;
+        margin-top: $spacing_small;
         &-index {
           display: none;
           flex: 1 1 auto;
           & > target-bar {
             flex: 1 1 auto;
+          }
+        }
+        &-delta {
+          display: flex;
+          &-text {
+            &-icon {
+              margin-right: $spacing_xx_small
+            }
           }
         }
       }
@@ -242,6 +252,9 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
           &-data {
             &-index {
               display: flex;
+            }
+            &-delta {
+              display: none;
             }
           }
         }

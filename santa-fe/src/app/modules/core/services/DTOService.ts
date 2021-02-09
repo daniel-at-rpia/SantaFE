@@ -2109,8 +2109,14 @@ export class DTOService {
         creditDurationIndexBar: null,
         creditLeverageIndexBar: null,
         activeDelta: activeDelta,
-        originalBEData: rawData
+        originalBEData: rawData,
+        currentTotalDeltaCreditDuration: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditDuration - comparedDeltaRawData.currentTotals.CreditDuration), 2) : null,
+        currentTotalDeltaCreditLeverage: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditLeverage - comparedDeltaRawData.currentTotals.CreditLeverage), 2) : null,
+        currentTotalDeltaCreditDurationDisplayText: '',
+        currentTotalDeltaCreditLeverageDisplayText: '',
       };
+      object.data.currentTotalDeltaCreditDurationDisplayText = !!object.data.currentTotalDeltaCreditDuration ? `${object.data.currentTotalDeltaCreditDuration}` : '-';
+      object.data.currentTotalDeltaCreditLeverageDisplayText = !!object.data.currentTotalDeltaCreditLeverage ? `${object.data.currentTotalDeltaCreditLeverage}` : '-';
       object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue, null);
       object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue, null);
       object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue, null);
