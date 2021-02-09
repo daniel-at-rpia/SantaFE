@@ -41,7 +41,8 @@
     import {
       CoreFlushSecurityMap,
       CoreSendNewAlerts,
-      CoreGlobalAlertsClearAllTradeAlertTableAlerts
+      CoreGlobalAlertsClearAllTradeAlertTableAlerts,
+      CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts
     } from 'Core/actions/core.actions';
     import {
       TradeAlertTableReceiveNewAlertsEvent,
@@ -50,7 +51,6 @@
       TradeLiveUpdatePassRawDataToAlertTableEvent,
       TradeLiveUpdateProcessDataCompleteInAlertTableEvent,
       TradeKeywordSearchThisSecurityEvent,
-      TradeAlertTableReadyToReceiveAdditionalAlerts
     } from 'Trade/actions/trade.actions';
     import {
       selectNewAlertsForAlertTable,
@@ -280,9 +280,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       select(selectGlobalAlertSendNewAlertsToTradePanel),
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       if (alertList.length > 0) {
-        const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
         try {
           setTimeout(() => {
+            const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
             this.updateAlertTable(alertListCopy);
           }, 3000) // account for 3 second delay for initial data for trade table from global alerts
           if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
@@ -293,7 +293,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
               this.state.alert.recentUpdatedAlertList = [];
             }
           }
-          alertListCopy.length > 0 && this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
+          this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
         } catch {
           this.restfulCommService.logError('received new alerts but failed to generate');
           console.error('received new alerts but failed to generate');
@@ -317,7 +317,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           eachSub.unsubscribe();
         }
       }
-      this.store$.dispatch(new TradeAlertTableReadyToReceiveAdditionalAlerts(false));
+      this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(false));
     }
 
     private marketListAlertsCountdownUpdate(): number {
@@ -1043,7 +1043,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       };
       this.state.fetchResult.alertTable.fetchComplete = false;
-      !!isInitialFetch && this.store$.dispatch(new TradeAlertTableReadyToReceiveAdditionalAlerts(true));
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
         first(),
         tap((serverReturn) => {

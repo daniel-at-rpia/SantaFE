@@ -234,14 +234,6 @@ export function tradeReducer(
         ...state,
         bicsDataLoaded: true
       }
-    case TradeActions.AlertTableReadyToReceiveAdditionalAlerts:
-      return {
-        ...state,
-        tradeAlertTable: {
-          ...state.tradeAlertTable,
-          readyToReceiveAdditionalAlerts: action.newState
-        }
-      }
     default:
       return state;
   }

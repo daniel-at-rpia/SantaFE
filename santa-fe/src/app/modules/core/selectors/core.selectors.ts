@@ -73,3 +73,8 @@ export const selectGlobalAlertFailedToMakeAlertAPICall = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.apiCallForAlertFailed
 )
+
+export const selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.tradeTableReadyToReceiveAdditionalAlerts
+)

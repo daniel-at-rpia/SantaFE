@@ -29,14 +29,15 @@
       CoreGlobalAlertsSendNewAlertsToTradeAlertPanel,
       CoreGlobalAlertFailedToMakeAlertAPICall,
       CoreGlobalAlertClearAllUrgentAlerts,
-      CoreGlobalAlertsClearAllTradeAlertTableAlerts
+      CoreGlobalAlertsClearAllTradeAlertTableAlerts,
+      CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts
     } from 'Core/actions/core.actions';
     import {
       selectNewAlerts,
       selectGlobalAlertProcessingAlertState,
-      selectGlobalAlertMakeAPICall
+      selectGlobalAlertMakeAPICall,
+      selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts
     } from 'Core/selectors/core.selectors';
-    import { selectTradeAlertTableIsReadyToReceiveAdditionalAlerts } from 'Trade/selectors/trade.selectors';
     import { NavigationModule } from 'Core/constants/coreConstants.constant';
     import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
     import * as moment from 'moment';
@@ -121,7 +122,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       alertList.length > 0 && this.getAlertsForUrgentAlertList(alertList);
     });
     this.subscriptions.tradeAlertTableReadyToReceiveAdditionalAlerts = this.store$.pipe(
-      select(selectTradeAlertTableIsReadyToReceiveAdditionalAlerts),
+      select(selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts),
     ).subscribe((state: boolean) => {
       this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = state;
     })
@@ -130,9 +131,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
         if (this.constants.moduleUrl.trade === modulePortion) {
           if (!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
-            setTimeout(() => {
-              this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
-            }, 3000) // delay so that new updates that occur simulatenously from getRawAlerts are added to allAlertsList
+            this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
+            this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(true));
           }
         }
       }
@@ -431,46 +431,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           // no filtering logic for now
           return true;
         }) : [];
-        const urgentAlertUpdateList: Array<DTOs.AlertDTO> = [];
-        const allAlertsUpdateList: Array<DTOs.AlertDTO> = [];
-        filteredServerReturn.forEach((eachRawAlert: BEAlertDTO) => {
-          if (!!eachRawAlert) {
-              const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
-            // Inquiry alerts are handled differently since BE passes the same inquiry alerts regardless of the timestamp FE provides
-            if (!!eachRawAlert.marketListAlert) {
-              if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
-                // ignore, already have it
-              } else if (!eachRawAlert.isActive) {
-                // ignore, already expired
-                if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  allAlertsUpdateList.push(newAlert);
-                }
-              } else {
-                this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
-                urgentAlertUpdateList.push(newAlert);
-                if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  allAlertsUpdateList.push(newAlert);
-                }
-              }
-            } else {
-              if (eachRawAlert.isCancelled) {
-                // cancellation of alerts carries diff meaning depending on the alert type:
-                // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
-                !newAlert.state.isRead && allAlertsUpdateList.push(newAlert);
-                if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
-                  urgentAlertUpdateList.push(newAlert);
-                }
-              } else {
-                if (!newAlert.state.isRead && newAlert.data.isUrgent) {
-                  urgentAlertUpdateList.push(newAlert);
-                }
-                if (newAlert.data.security && newAlert.data.security.data.securityID) {
-                  allAlertsUpdateList.push(newAlert)
-                }
-              }
-            }
-          }
-        });
+        const [urgentAlertUpdateList, allAlertsUpdateList ] = this.createAlertsLists(filteredServerReturn);
         this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
         urgentAlertUpdateList.length > 0 && this.getAlertsForUrgentAlertList(urgentAlertUpdateList);
         if (allAlertsUpdateList.length > 0) {
@@ -527,5 +488,49 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       this.restfulCommService.logError('received new alerts but failed to generate');
       console.error('received new alerts but failed to generate');
     }
+  }
+
+  private createAlertsLists(serverReturn: Array<BEAlertDTO>):Array<Array<DTOs.AlertDTO>> {
+    const urgentAlertUpdateList: Array<DTOs.AlertDTO> = [];
+    const allAlertsUpdateList: Array<DTOs.AlertDTO> = [];
+    serverReturn.forEach((eachRawAlert: BEAlertDTO) => {
+      if (!!eachRawAlert) {
+          const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
+        // Inquiry alerts are handled differently since BE passes the same inquiry alerts regardless of the timestamp FE provides
+        if (!!eachRawAlert.marketListAlert) {
+          if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
+            // ignore, already have it
+          } else if (!eachRawAlert.isActive) {
+            // ignore, already expired
+            if (newAlert.data.security && newAlert.data.security.data.securityID) {
+              allAlertsUpdateList.push(newAlert);
+            }
+          } else {
+            this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
+            urgentAlertUpdateList.push(newAlert);
+            if (newAlert.data.security && newAlert.data.security.data.securityID) {
+              allAlertsUpdateList.push(newAlert);
+            }
+          }
+        } else {
+          if (eachRawAlert.isCancelled) {
+            // cancellation of alerts carries diff meaning depending on the alert type:
+            // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
+            !newAlert.state.isRead && allAlertsUpdateList.push(newAlert);
+            if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
+              urgentAlertUpdateList.push(newAlert);
+            }
+          } else {
+            if (!newAlert.state.isRead && newAlert.data.isUrgent) {
+              urgentAlertUpdateList.push(newAlert);
+            }
+            if (newAlert.data.security && newAlert.data.security.data.securityID) {
+              allAlertsUpdateList.push(newAlert)
+            }
+          }
+        }
+      }
+    });
+    return [urgentAlertUpdateList, allAlertsUpdateList];
   }
 }
