@@ -131,8 +131,13 @@
       &__indicator {
         height: 1.25rem;
       }
-      &__toolTip {
-        display: none;
+    }
+    &:hover,
+    &:focus {
+      #{$blockName} {
+        &__tooltip {
+          display: none;
+        }
       }
     }
   }
