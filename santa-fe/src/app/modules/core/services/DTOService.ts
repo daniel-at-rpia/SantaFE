@@ -67,7 +67,8 @@
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
       BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
       BICS_OVERRIDES_IDENTIFIER,
-      BICS_OVERRIDES_TITLE
+      BICS_OVERRIDES_TITLE,
+      DeltaScope
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -1943,7 +1944,13 @@ export class DTOService {
     return object;
   }
 
-  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, isStencil: boolean, activeMetricValue: PortfolioMetricValues) {
+  public formTargetBarObject(
+    targetMetric: PortfolioMetricValues,
+    currentValue: number,
+    targetValue: number,
+    isStencil: boolean,
+    activeMetricValue: PortfolioMetricValues,
+    indexTotal: number) {
     const object: DTOs.TargetBarDTO = {
       data: {
         targetMetric,
@@ -1953,13 +1960,16 @@ export class DTOService {
         displayedTargetValue: '',
         currentPercentage: '',
         exceededPercentage: '',
-        displayedResults: ''
+        displayedResults: '',
+        index: indexTotal,
+        title: indexTotal !== null ? 'Index' : targetMetric
       },
       state: {
         isInactiveMetric: false,
         isStencil: !!isStencil,
         isEmpty: false,
-        isDataUnavailable: false
+        isDataUnavailable: false,
+        isIndexVariant: indexTotal !== null ? true : false,
       }
     }
 
@@ -2014,11 +2024,15 @@ export class DTOService {
         targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
       }
     }
-    convertValuesForDisplay(object);
-    getDisplayedValues(object);
-    if (!targetValue) {
-      object.state.isEmpty = true;
-      object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
+    if (!object.state.isIndexVariant) {
+      convertValuesForDisplay(object);
+      getDisplayedValues(object);
+      if (!targetValue) {
+        object.state.isEmpty = true;
+        object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
+      }
+    } else {
+      object.data.displayedResults = this.utility.round(object.data.index, 2);
     }
     object.state.isInactiveMetric = object.data.targetMetric === PortfolioMetricValues.creditDuration ? activeMetricValue === PortfolioMetricValues.creditLeverage : object.data.targetMetric !== activeMetricValue;
     return object;
@@ -2028,7 +2042,8 @@ export class DTOService {
     rawData: BEModels.BEStructuringFundBlock,
     comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: PortfolioMetricValues,
+    activeDelta: DeltaScope
   ): DTOs.PortfolioFundDTO {
     const object: DTOs.PortfolioFundDTO = {
       data: null,
@@ -2091,11 +2106,16 @@ export class DTOService {
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
         creditDurationTargetBar: null,
+        creditDurationIndexBar: null,
+        creditLeverageIndexBar: null,
+        activeDelta: activeDelta,
         originalBEData: rawData
       };
-      object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
-      object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
-      object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
+      object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue, null);
+      object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue, null);
+      object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue, null);
+      object.data.creditDurationIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditDuration);
+      object.data.creditLeverageIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditLeverage);
       if (!!object.data.creditDurationTargetBar) {
         const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
         const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';

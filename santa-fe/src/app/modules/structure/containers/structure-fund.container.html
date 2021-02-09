@@ -5,16 +5,27 @@
   'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCreditDuration || fund.state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable,
   'sat-fundStructuring--autoScalingAvailableState': fund.state.autoScalingAvailable,
-  'sat-fundStructuring--autoScalingSelectedState': fund.state.autoScalingActive
+  'sat-fundStructuring--autoScalingSelectedState': fund.state.autoScalingActive,
+  'sat-fundStructuring--isViewingIndex': !fund.data.activeDelta
   }">
   <header *ngIf="fund.data" class="sat-fundStructuring__configuration">
-    <div class="sat-fundStructuring__targetBar">
+    <div class="sat-fundStructuring__configuration-metric">
       <target-bar [targetBar]="fund.data.creditLeverageTargetBar">
       </target-bar>
+      <div class="sat-fundStructuring__configuration-metric-data">
+        <div class="sat-fundStructuring__configuration-metric-data-index">
+          <target-bar [targetBar]="fund.data.creditLeverageIndexBar"></target-bar>
+        </div>
+      </div>
     </div>
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
-    <div class="sat-fundStructuring__targetBar">
+    <div class="sat-fundStructuring__configuration-metric">
       <target-bar [targetBar]="fund.data.creditDurationTargetBar"></target-bar>
+      <div class="sat-fundStructuring__configuration-metric-data">
+        <div class="sat-fundStructuring__configuration-metric-data-index">
+          <target-bar [targetBar]="fund.data.creditDurationIndexBar"></target-bar>
+        </div>
+      </div>
     </div>
   </header>
   <section *ngIf="fund.data" class="sat-fundStructuring__editFund">

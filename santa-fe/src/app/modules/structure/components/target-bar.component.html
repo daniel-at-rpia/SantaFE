@@ -5,10 +5,11 @@
   'sat-fundTargetBar--stencilState': targetBar.state.isStencil,
   'sat-fundTargetBar--emptyState': targetBar.state.isEmpty,
   'sat-fundTargetBar--errorState': targetBar.state.isDataUnavailable,
-  'sat-fundTargetBar--additionalMetricTargetDataState': targetBar.data.additionalMetricTargetData
+  'sat-fundTargetBar--additionalMetricTargetDataState': targetBar.data.additionalMetricTargetData,
+  'sat-fundTargetBar--indexVariant': targetBar.state.isIndexVariant
   }"
 >
-    <p class="sat-fundTargetBar__type">{{ targetBar.data.targetMetric }}</p>
+    <p class="sat-fundTargetBar__title">{{ targetBar.data.title }}</p>
     <section class="sat-fundTargetBar__indicator">
       <div
       [ngStyle]="{'width': targetBar.data.exceededPercentage}"
@@ -22,7 +23,7 @@
       </div>
     </section>
     <section *ngIf="targetBar.data.additionalMetricTargetData" class="sat-fundTargetBar__additionalMetricTargetData">
-      <span class="sat-fundTargetBar__additionalMetricTargetData-type">{{ targetBar.data.additionalMetricTargetData.metric}}</span>
+      <span class="sat-fundTargetBar__additionalMetricTargetData-type">{{ targetBar.data.additionalMetricTargetData.metric}}:</span>
       <span class="sat-fundTargetBar__additionalMetricTargetData-value">{{ targetBar.data.additionalMetricTargetData.current }} / {{ targetBar.data.additionalMetricTargetData.target }}</span>
     </section>
     <div class="sat-fundTargetBar__tooltip">Current / Target</div>

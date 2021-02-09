@@ -19,6 +19,19 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     align-items: flex-start;
     padding: $spacing_x_small 0;
     background-color: $color_gray_2;
+    &-metric {
+      width: 8rem;
+      &-data {
+        display: flex;
+        &-index {
+          display: none;
+          flex: 1 1 auto;
+          & > target-bar {
+            flex: 1 1 auto;
+          }
+        }
+      }
+    }
     &-title {
       flex: 0 0 auto;
       text-align: center;
@@ -127,9 +140,6 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       margin: $spacing_medium $spacing_large;
     }
   }
-  &__targetBar {
-    width: 8rem;
-  }
   &__content {
     flex: 1 1 auto;
     display: flex;
@@ -221,6 +231,19 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-message {
           visibility: visible; 
           flex: 0 0 auto;
+        }
+      }
+    }
+  }
+  &--isViewingIndex {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-index {
+              display: flex;
+            }
+          }
         }
       }
     }

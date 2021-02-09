@@ -3,7 +3,7 @@
 .sat-fundTargetBar {
   @include mix_fixed_div(relative, $z_index_base_item);
   $blockName: &;
-  &__type {
+  &__title {
     font-size: $font_size_small;
     margin: 0 0 $spacing_x_small 0;
     text-align: center;
@@ -53,9 +53,8 @@
   }
   &__additionalMetricTargetData {
     display: flex;
-    flex-direction: column;
     flex: 1 1 auto;
-    align-items: center;
+    margin-bottom: $spacing_x_small;
       &-type {
         margin-bottom: $spacing_xx_small;
       }
@@ -67,6 +66,7 @@
   &__tooltip {
     @include mix_fixed_div(absolute, $z_index_hovering_item);
     @include mix_border_radius(3px);
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
     display: none;
@@ -99,7 +99,7 @@
   }
   &--inactiveState {
     #{$blockName} {
-      &__type {
+      &__title {
         color: $color_disabled;
       }
       &__indicator {
@@ -120,6 +120,19 @@
         &-bar {
           display: none;
         }
+      }
+    }
+  }
+  &--indexVariant {
+    #{$blockName} {
+      &__title {
+        margin-bottom: 0;
+      }
+      &__indicator {
+        height: 1.25rem;
+      }
+      &__toolTip {
+        display: none;
       }
     }
   }
