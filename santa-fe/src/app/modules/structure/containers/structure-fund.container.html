@@ -6,7 +6,11 @@
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable,
   'sat-fundStructuring--autoScalingAvailableState': fund.state.autoScalingAvailable,
   'sat-fundStructuring--autoScalingSelectedState': fund.state.autoScalingActive,
-  'sat-fundStructuring--isViewingIndex': !fund.data.activeDelta
+  'sat-fundStructuring--isViewingIndex': !fund.data.activeDelta,
+  'sat-fundStructuring--creditLeverageDeltaSignificantPositive': fund.data.currentTotalDeltaCreditLeverageSignificantPositive,
+  'sat-fundStructuring--creditLeverageDeltaSignificantNegative': fund.data.currentTotalDeltaCreditLeverageSignificantNegative,
+  'sat-fundStructuring--creditDurationDeltaSignificantPositive': fund.data.currentTotalDeltaCreditDurationSignificantPositive,
+  'sat-fundStructuring--creditDurationDeltaSignificantNegative': fund.data.currentTotalDeltaCreditDurationSignificantNegative
   }">
   <header *ngIf="fund.data" class="sat-fundStructuring__configuration">
     <div class="sat-fundStructuring__configuration-metric">
@@ -20,7 +24,7 @@
           <div class="sat-fundStructuring__configuration-metric-data-delta-text">
             <span class="fal fa-triangle sat-fundStructuring__configuration-metric-data-delta-text-icon"></span>
             <span class="sat-fundStructuring__configuration-metric-data-delta-text-type">{{ fund.data.activeDelta }}: </span>
-            <span class="sat-fundStructuring__configuration-metric-data-delta-text-difference">{{ fund.data.currentTotalDeltaCreditLeverageDisplayText }}</span>
+            <span class="sat-fundStructuring__configuration-metric-data-delta-text-difference sat-fundStructuring__configuration-metric-data-delta-text-difference--creditLeverage">{{ fund.data.currentTotalDeltaCreditLeverageDisplayText }}</span>
           </div>
         </div>
       </div>
@@ -36,7 +40,7 @@
           <div class="sat-fundStructuring__configuration-metric-data-delta-text">
             <span class="fal fa-triangle sat-fundStructuring__configuration-metric-data-delta-text-icon"></span>
             <span class="sat-fundStructuring__configuration-metric-data-delta-text-type">{{ fund.data.activeDelta }}: </span>
-            <span class="sat-fundStructuring__configuration-metric-data-delta-text-difference">{{ fund.data.currentTotalDeltaCreditDurationDisplayText }}</span>
+            <span class="sat-fundStructuring__configuration-metric-data-delta-text-difference sat-fundStructuring__configuration-metric-data-delta-text-difference--creditDuration">{{ fund.data.currentTotalDeltaCreditDurationDisplayText }}</span>
           </div>
         </div>
       </div>

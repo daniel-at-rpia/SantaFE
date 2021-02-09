@@ -35,6 +35,10 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-delta {
           display: flex;
           &-text {
+            &-difference {
+              @include mix_border_radius(3px);
+              padding: $spacing_x_small;
+            }
             &-icon {
               margin-right: $spacing_xx_small
             }
@@ -255,6 +259,86 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
             }
             &-delta {
               display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--creditLeverageDeltaSignificantPositive {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-delta {
+              &-text {
+                &-difference {
+                  &--creditLeverage {
+                    background-color: $color_active;
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--creditDurationDeltaSignificantPositive {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-delta {
+              &-text {
+                &-difference {
+                  &--creditDuration {
+                    background-color: $color_active;
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--creditLeverageDeltaSignificantNegative {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-delta {
+              &-text {
+                &-difference {
+                  &--creditLeverage {
+                    background-color: $color_red_5;
+                    color: $font_color_inverse;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--creditDurationDeltaSignificantNegative {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-delta {
+              &-text {
+                &-difference {
+                  &--creditDuration {
+                    background-color: $color_red_5;
+                    color: $font_color_inverse;
+                  }
+                }
+              }
             }
           }
         }

@@ -797,6 +797,10 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     currentTotalDeltaCreditDuration: number;
     currentTotalDeltaCreditLeverageDisplayText: string;
     currentTotalDeltaCreditDurationDisplayText: string;
+    currentTotalDeltaCreditLeverageSignificantPositive: boolean;
+    currentTotalDeltaCreditLeverageSignificantNegative: boolean;
+    currentTotalDeltaCreditDurationSignificantPositive: boolean;
+    currentTotalDeltaCreditDurationSignificantNegative: boolean;
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
