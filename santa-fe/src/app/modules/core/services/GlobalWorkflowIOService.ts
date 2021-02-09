@@ -49,34 +49,38 @@ export class GlobalWorkflowIOService {
   }
 
   public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
-    this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowStoreName], "readwrite");
-    this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowStoreName);
     return new Observable(subscriber => {
-      const request = this.workflowStore.get(targetUUID);
-      this.workflowIO.oncomplete = ((event) => {
-        if (!!request.result && !!request.result.data) {
-          const workflowDTO: DTOs.GlobalWorkflowStateDTO = {
-            uuid: request.result.uuid,
-            data: {
-              uuid: request.result.data.uuid,
-              module: request.result.data.module,
-              workflowType: request.result.data.workflowType,
-              stateInfo: {}
-            },
-            api: request.result.api,
-            state: request.result.state
-          };
-          workflowDTO.data.stateInfo = JSON.parse(request.result['data']['stateInfo']);
-          console.log('Global Workflow, Retrieved State', workflowDTO);
-          subscriber.next(workflowDTO);
-        } else {
-          console.warn('Global Workflow, could not find state', targetUUID);
-          subscriber.next(null);
-        }
-      });
-      this.workflowIO.onerror = ((event) => {
-        console.error('Global Workflow, retrieve state failure', event, targetUUID);
-      });
+      if (!!targetUUID) {
+        this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowStoreName], "readwrite");
+        this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowStoreName);
+        const request = this.workflowStore.get(targetUUID);
+        this.workflowIO.oncomplete = ((event) => {
+          if (!!request.result && !!request.result.data) {
+            const workflowDTO: DTOs.GlobalWorkflowStateDTO = {
+              uuid: request.result.uuid,
+              data: {
+                uuid: request.result.data.uuid,
+                module: request.result.data.module,
+                workflowType: request.result.data.workflowType,
+                stateInfo: {}
+              },
+              api: request.result.api,
+              state: request.result.state
+            };
+            workflowDTO.data.stateInfo = JSON.parse(request.result['data']['stateInfo']);
+            console.log('Global Workflow, Retrieved State', workflowDTO);
+            subscriber.next(workflowDTO);
+          } else {
+            console.warn('Global Workflow, could not find state', targetUUID);
+            subscriber.next(null);
+          }
+        });
+        this.workflowIO.onerror = ((event) => {
+          console.error('Global Workflow, retrieve state failure', event, targetUUID);
+        });
+      } else {
+        subscriber.next(null);
+      }
     });
   }
 
@@ -122,12 +126,13 @@ export class GlobalWorkflowIOService {
 
   private initiateIndexedDBRequestHandler(openRequest: IDBOpenDBRequest) {
     openRequest.onerror = (errorEvent) => {
-      // do something if necessary
+      console.error('IDB open request failed', errorEvent);
     }
 
     openRequest.onsuccess = (successEvent) => {
       console.log('IDB open request success.', successEvent);
       this.workflowIndexedDBAPI = openRequest.result;
+      // only dispatch action when request is success, even in case of upgradeNeeded, it will still come to success once the upgrade is completed
       this.store$.dispatch(new CoreGlobalWorkflowIndexedDBReady());
     }
 
@@ -139,14 +144,17 @@ export class GlobalWorkflowIOService {
         case 0:
           // version 0 means that the client had no database
           // perform initialization
-          this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowStoreName, { keyPath: "uuid" });  // this key field has to be the "id" field 
-          this.store$.dispatch(new CoreGlobalWorkflowIndexedDBReady());
+          this.upgradeIndexedDB(newVersionDetectedEvent);
           break;
         default:
           window.indexedDB.deleteDatabase(this.constants.idbWorkflowDbName);
           break;
       }
     }
+  }
+
+  private upgradeIndexedDB(newVersionDetectedEvent: IDBVersionChangeEvent) {
+    this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowStoreName, { keyPath: "uuid" });  // this key field has to be the "id" field 
   }
 
 }

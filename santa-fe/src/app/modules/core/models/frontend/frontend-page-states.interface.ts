@@ -51,6 +51,7 @@ export interface GlobalAlertState {
 
 export interface GlobalWorkflowState {
   currentState: DTOs.GlobalWorkflowStateDTO;
+  isIndexedDBReady: boolean;
 }
 
 export interface MarketState {
