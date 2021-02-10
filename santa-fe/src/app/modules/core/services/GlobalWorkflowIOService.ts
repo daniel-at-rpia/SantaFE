@@ -84,14 +84,6 @@ export class GlobalWorkflowIOService {
     });
   }
 
-  // public fetchState(targetUUID: string): DTOs.GlobalWorkflowStateDTO {
-  //   if (!!targetUUID) {
-  //     return this.temporaryStore.get(targetUUID) || null;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
   public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
     if (!!targetUUID) {
       // const targetState = this.temporaryStore.get(targetUUID);
