@@ -154,6 +154,21 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
         }
         &-securityType {
           display: flex;
+          &--subType {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &--isSecuritySubType {
+    #{$securityDefinitionBlockName} {
+      &__icon {
+        &-regularImg {
+          display: none;
+        }
+        &-securityType--subType {
+          display: flex;
         }
       }
     }

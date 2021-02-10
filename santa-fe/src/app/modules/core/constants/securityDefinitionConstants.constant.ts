@@ -108,7 +108,27 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
   const FilterOptionsSecurityType = [
     'Bond',
-    'CDS'
+    'GovtBond',
+    'Loan',
+    'Preferred',
+    'CDS',
+    'CDSIndex'
+  ];
+
+  const FilterOptionSecuritySubType = [
+    'AmortizingBond',
+    'BA',
+    'GovtBond',
+    'Corp',
+    'FRN',
+    'Loan',
+    'AT1',
+    'Hybrid',
+    'Preferred',
+    'SPAC',
+    'Stock',
+    'CDS',
+    'CDSIndex'
   ];
 
   const FilterOptionsSectorType = [
@@ -303,7 +323,16 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-slash',
     optionList: FilterOptionsSecurityType,
     locked: true,
+    securityDTOAttr: 'securityType',
     backendDtoAttrName: FrontendKayToBackendKeyDictionary['SECURITY_TYPE']
+  },
+  SECURITY_SUB_TYPE: {
+    key: 'SECURITY_SUB_TYPE',
+    displayName: 'Security Sub-Type',
+    icon: 'fal fa-slash',
+    optionList: FilterOptionSecuritySubType,
+    securityDTOAttr: 'securitySubType',
+    backendDtoAttrName: FrontendKayToBackendKeyDictionary['SECURITY_SUB_TYPE']
   },
   BACKEND_TENOR: {
     key: 'BACKEND_TENOR',
@@ -555,6 +584,7 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.TICKER,
       SecurityDefinitionMap.COUPON_TYPE,
       SecurityDefinitionMap.SECURITY_TYPE,
+      SecurityDefinitionMap.SECURITY_SUB_TYPE,
       SecurityDefinitionMap.BACKEND_TENOR,
       SecurityDefinitionMap.BAIL_IN_STATUS,
       SecurityDefinitionMap.MATURITY,
