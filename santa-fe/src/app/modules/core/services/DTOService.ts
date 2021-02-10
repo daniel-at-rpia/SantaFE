@@ -1950,7 +1950,8 @@ export class DTOService {
     targetValue: number,
     isStencil: boolean,
     activeMetricValue: PortfolioMetricValues,
-    indexTotal: number) {
+    indexTotal: number
+    ) {
     const object: DTOs.TargetBarDTO = {
       data: {
         targetMetric,

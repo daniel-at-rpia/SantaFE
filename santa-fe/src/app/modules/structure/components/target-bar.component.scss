@@ -52,13 +52,16 @@
     }
   }
   &__additionalMetricTargetData {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    top: $spacing_xx_small;
+    right: -5.5rem;
     display: flex;
     flex: 1 1 auto;
+    flex-direction: column;
     margin-bottom: $spacing_x_small;
       &-type {
         margin-bottom: $spacing_xx_small;
       }
-      &-type,
       &-value {
         flex: 1 1 auto;
       }
