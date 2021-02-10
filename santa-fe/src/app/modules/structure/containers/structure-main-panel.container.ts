@@ -250,7 +250,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
 
   private loadStencilFunds() {
     this.state.fetchResult.fundList = this.constants.supportedFundList.map((eachPortfolioName) => {
-      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFundReturn(PortfolioStructuringSample.Now[0]), null, true, this.state.selectedMetricValue);
+      const eachFund = this.dtoService.formStructureFundObject(this.extractSubPortfolioFromFundReturn(PortfolioStructuringSample.Now[0]), null, true, this.state.selectedMetricValue, this.state.activeDeltaScope);
       eachFund.data.portfolioShortName = eachPortfolioName;
       eachFund.data.displayChildren = eachFund.data.children;
       return eachFund;
@@ -526,7 +526,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   ) {
     if (this.constants.supportedFundList.indexOf(rawData.portfolioShortName) >= 0) {
       this.bicsDataProcessingService.setRawBICsData(rawData, deltaRawData);
-      const newFund = this.dtoService.formStructureFundObject(rawData, deltaRawData, false, this.state.selectedMetricValue);
+      const newFund = this.dtoService.formStructureFundObject(rawData, deltaRawData, false, this.state.selectedMetricValue, this.state.activeDeltaScope);
       if (!!newFund) {
         this.formCustomBICsBreakdownWithSubLevels(rawData, deltaRawData, newFund);
         if (newFund.data.children.length > 0) {
