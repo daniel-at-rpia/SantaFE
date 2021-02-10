@@ -38,9 +38,14 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
             &-difference {
               @include mix_border_radius(3px);
               padding: $spacing_x_small;
+              color: $color_active;
             }
             &-icon {
+              color: $color_active;
               margin-right: $spacing_xx_small
+            }
+            &-difference {
+              color: $color_active;
             }
           }
         }
@@ -271,11 +276,15 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-metric {
           &-data {
             &-delta {
-              &-text {
-                &-difference {
-                  &--creditLeverage {
-                    background-color: $color_active;
-                    color: $font_color_inverse;
+              &--creditLeverage {
+                #{$blockName} {
+                  &__configuration-metric-data-delta {
+                    &-text {
+                      &-difference {
+                        background-color: $color_active;
+                        color: $font_color_inverse;
+                      }
+                    }
                   }
                 }
               }
@@ -291,11 +300,15 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-metric {
           &-data {
             &-delta {
-              &-text {
-                &-difference {
-                  &--creditDuration {
-                    background-color: $color_active;
-                    color: $font_color_inverse;
+              &--creditDuration {
+                #{$blockName} {
+                  &__configuration-metric-data-delta {
+                    &-text {
+                      &-difference {
+                        background-color: $color_active;
+                        color: $font_color_inverse;
+                      }
+                    }
                   }
                 }
               }
@@ -311,11 +324,15 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-metric {
           &-data {
             &-delta {
-              &-text {
-                &-difference {
-                  &--creditLeverage {
-                    background-color: $color_red_5;
-                    color: $font_color_inverse;
+              &--creditLeverage {
+                #{$blockName} {
+                  &__configuration-metric-delta {
+                    &-text {
+                      &-difference {
+                        background-color: $color_red_5;
+                        color: $font_color_inverse;
+                      }
+                    }
                   }
                 }
               }
@@ -331,11 +348,71 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-metric {
           &-data {
             &-delta {
-              &-text {
-                &-difference {
-                  &--creditDuration {
-                    background-color: $color_red_5;
-                    color: $font_color_inverse;
+              &--creditDuration {
+                #{$blockName} {
+                  &__configuration-metric-data-delta {
+                    &-text {
+                      &-difference {
+                        background-color: $color_red_5;
+                        color: $font_color_inverse;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--isDisplayCs01 {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-delta {
+              &--creditLeverage {
+                #{$blockName} {
+                  &__configuration-metric-data-delta {
+                    &-text {
+                      &-icon,
+                      &-type {
+                        color: $color_disabled;
+                      }
+                      &-difference {
+                        color: $color_disabled;
+                        background-color: transparent;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--isDisplayCreditLeverage {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-delta {
+              &--creditDuration {
+                #{$blockName} {
+                  &__configuration-metric-data-delta {
+                    &-text {
+                      &-icon,
+                      &-type {
+                        color: $color_disabled;
+                      }
+                      &-difference {
+                        background-color: transparent;
+                        color: $color_disabled;
+                      }
+                    }
                   }
                 }
               }
