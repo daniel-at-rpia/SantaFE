@@ -2167,8 +2167,8 @@ export class DTOService {
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
-    if (rawData.groupOption === 'Tenor') {
-      // Tenor does not need to be sorted alphabetically
+    if (rawData.groupOption === 'Tenor' || rawData.groupOption === "RatingNoNotch") {
+      // Tenor & Rating do not need to be sorted alphabetically
     } else {
       definitionList.sort();
     }
