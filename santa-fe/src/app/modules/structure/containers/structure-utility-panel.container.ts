@@ -20,7 +20,8 @@ import {
   selectActivePortfolioViewFilter,
   selectDataDatestamp,
   selectActiveSubPortfolioFilter,
-  selectActiveDeltaScope
+  selectActiveDeltaScope,
+  selectUtilityPanelLoadState
 } from 'Structure/selectors/structure.selectors';
 import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
@@ -33,6 +34,8 @@ import {
   StructureChangeDeltaScopeEvent
 } from 'Structure/actions/structure.actions';
 import { UtilityService, DTOService } from 'Core/services';
+import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 
 @Component({
   selector: 'structure-utility-panel',
@@ -50,7 +53,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     activePortfolioViewFilterSub: null,
     dataDatestampSub: null,
     subPortfolioSub: null,
-    deltaScopeSub: null
+    deltaScopeSub: null,
+    utilityPanelLoadStateSub: null
   }
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -60,7 +64,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     portfolios: SUPPORTED_PORTFOLIO_LIST,
     beginningOfDay: UTILITY_PANEL_HISTORICAL_TIME_LABEL,
     subPortfolioFilter: SubPortfolioFilter,
-    deltaScope: DeltaScope
+    deltaScope: DeltaScope,
+    modules: NavigationModule,
+    globalWorkflowTypes: GlobalWorkflowTypes
   }
 
   constructor(
@@ -137,6 +143,20 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     ).subscribe((activeScope) => {
       this.state.currentDeltaScope = activeScope;
     });
+
+    this.subscriptions.utilityPanelLoadStateSub = this.store$.pipe(
+      select(selectUtilityPanelLoadState)
+    ).subscribe((newState) => {
+      if (!!newState) {
+        console.log('inheriting previous config', newState);
+        this.setMetricLevel(newState.selectedMetricValue);
+        this.onClickBreakdownFilterChange(newState.activeBreakdownViewFilter);
+        this.state.activePortfolioViewFilter = this.utilityService.deepCopy(newState.activePortfolioViewFilter);
+        this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
+        this.onClickDeltaScope(newState.currentDeltaScope);
+        this.onClickSubPortfolioChange(newState.activeSubPortfolioFilter);
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -148,13 +168,17 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
   }
 
-  public setMetricLevel(metricLevel: PortfolioMetricValues) {
+  public setMetricLevel(
+    metricLevel: PortfolioMetricValues,
+    pushToGlobalState: boolean = false
+  ) {
     if (metricLevel !== this.state.selectedMetricValue) {
       this.state.selectedMetricValue = metricLevel;
       const dispatchMetricChange = () => {
         this.store$.dispatch(new StructureMetricSelect(metricLevel));
       };
       setTimeout(dispatchMetricChange.bind(this), 300);
+      !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
     }
   }
 
@@ -164,10 +188,14 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onClickBreakdownFilterChange(targetFilterOption: BreakdownViewFilter) {
+  public onClickBreakdownFilterChange(
+    targetFilterOption: BreakdownViewFilter,
+    pushToGlobalState: boolean = false
+  ) {
     if (this.state.activeBreakdownViewFilter !== targetFilterOption) {
       this.state.activeBreakdownViewFilter = targetFilterOption;
       this.store$.dispatch(new StructureChangeBreakdownViewFilterEvent(targetFilterOption));
+      !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
     }
   }
 
@@ -180,6 +208,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       this.state.activePortfolioViewFilter.push(targetFilterOption);
     }
     this.store$.dispatch(new StructureChangePortfolioViewFilterEvent(this.utilityService.deepCopy(this.state.activePortfolioViewFilter)));
+    this.pushStateSnapshotToGlobalState();
   }
 
   public onSelectedDateFromSwitchDateDatepicker(targetDate: moment.Moment) {
@@ -203,18 +232,26 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     this.state.lastUpdateTime = now.format('hh:mm:ss a');
   }
 
-  public onClickSubPortfolioChange(targetFilterOption: SubPortfolioFilter) {
+  public onClickSubPortfolioChange(
+    targetFilterOption: SubPortfolioFilter,
+    pushToGlobalState: boolean = false
+  ) {
     if (this.state.activeSubPortfolioFilter !== targetFilterOption) {
       this.state.activeSubPortfolioFilter = targetFilterOption;
       this.store$.dispatch(new StructureChangeSubPortfolioViewFilterEvent(targetFilterOption));
     }
+    !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
   }
 
-  public onClickDeltaScope(newDeltaScope: DeltaScope) {
+  public onClickDeltaScope(
+    newDeltaScope: DeltaScope,
+    pushToGlobalState: boolean = false
+  ) {
     if (this.state.currentDeltaScope !== newDeltaScope) {
       this.state.currentDeltaScope = newDeltaScope;
       this.store$.dispatch(new StructureChangeDeltaScopeEvent(newDeltaScope));
     }
+    !!pushToGlobalState && this.pushStateSnapshotToGlobalState();
   }
 
   private updateDataDatestamp(
@@ -228,6 +265,12 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
       this.state.lastUpdateTime = this.constants.beginningOfDay;
     }
     !skipNgRX && this.store$.dispatch(new StructureSwitchDataDatestampEvent(this.state.currentDatestamp));
+  }
+
+  private pushStateSnapshotToGlobalState() {
+    const newState = this.dtoService.formGlobalWorkflow(this.constants.modules.structuring, false, this.constants.globalWorkflowTypes.changedStructureUtilityConfig);
+    newState.data.stateInfo.structureUtilityPanelSnapshot = this.utilityService.deepCopy(this.state);
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
   }
 
 }

@@ -12,6 +12,7 @@ import {
   StructureSetViewTransferPack,
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
+import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
 import * as moment from 'moment';
 
 export interface StructureState {
@@ -25,6 +26,7 @@ export interface StructureState {
   activeSubPortfolioFilter: SubPortfolioFilter;
   activeDeltaScope: DeltaScope;
   dataDatestamp: number;
+  utilityPanelLoadState: StructureUtilityPanelState;
 }
 
 const initialState: StructureState = {
@@ -45,7 +47,8 @@ const initialState: StructureState = {
   ],
   activeSubPortfolioFilter: SubPortfolioFilter.all,
   activeDeltaScope: DeltaScope.dod,
-  dataDatestamp: moment().unix()
+  dataDatestamp: moment().unix(),
+  utilityPanelLoadState: null
 }
 
 export function structureReducer(
@@ -105,6 +108,11 @@ export function structureReducer(
         ...state,
         activeDeltaScope: action.deltaScope
       }
+    case StructureActions.UtilityPanelLoadState:
+      return {
+        ...state,
+        utilityPanelLoadState: action.panelState
+      };
     default:
       return state;
   }
