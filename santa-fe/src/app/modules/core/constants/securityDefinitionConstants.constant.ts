@@ -557,7 +557,9 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.TENOR,
       SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.COUNTRY
+      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.SECURITY_TYPE,
+      SecurityDefinitionMap.SECURITY_SUB_TYPE
     ]
   }, {
     label: 'BICS',
@@ -583,8 +585,6 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
     list: [
       SecurityDefinitionMap.TICKER,
       SecurityDefinitionMap.COUPON_TYPE,
-      SecurityDefinitionMap.SECURITY_TYPE,
-      SecurityDefinitionMap.SECURITY_SUB_TYPE,
       SecurityDefinitionMap.BACKEND_TENOR,
       SecurityDefinitionMap.BAIL_IN_STATUS,
       SecurityDefinitionMap.MATURITY,
