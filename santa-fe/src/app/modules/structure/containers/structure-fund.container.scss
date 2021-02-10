@@ -35,28 +35,38 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-creditLeverageDelta {
           display: flex;
           &-text {
+            &-type {
+              font-size: $font_size_normal;
+            }
             &-difference {
               @include mix_border_radius(3px);
               padding: $spacing_x_small;
               color: $color_active;
+              font-size: $font_size_normal;
             }
             &-icon {
               color: $color_active;
               margin: 0 $spacing_x_small;
+              font-size: $font_size_normal;
             }
           }
         }
         &-creditDurationDelta {
           display: flex;
           &-text {
+            &-type {
+              font-size: $font_size_normal;
+            }
             &-difference {
               @include mix_border_radius(3px);
               padding: $spacing_x_small;
               color: $color_active;
+              font-size: $font_size_normal;
             }
             &-icon {
               color: $color_active;
               margin: 0 $spacing_x_small;
+              font-size: $font_size_normal;
             }
             &-difference {
               color: $color_active;
