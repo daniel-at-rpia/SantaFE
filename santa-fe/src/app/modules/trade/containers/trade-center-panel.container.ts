@@ -4,12 +4,9 @@
     import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
-    import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
+    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService } from 'Core/services';
+    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
       BEPortfolioDTO,
@@ -25,10 +22,16 @@
       AlertTypes,
       KEYWORDSEARCH_DEBOUNCE_TIME,
       FAILED_USER_INITIALS_FALLBACK,
-      DevWhitelist
+      DevWhitelist,
+      NavigationModule,
+      GlobalWorkflowTypes
     } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
-    import { CoreLoadSecurityMap, CoreUserLoggedIn } from 'Core/actions/core.actions';
+    import {
+      CoreLoadSecurityMap,
+      CoreUserLoggedIn,
+      CoreGlobalWorkflowSendNewState
+    } from 'Core/actions/core.actions';
     import {
       SecurityTableHeaderConfigs,
       SECURITY_TABLE_FINAL_STAGE,
@@ -106,7 +109,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     weigthHeaderNameDelimiterStart: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
     weigthHeaderNameDelimiterEnd: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
     sortOption: AggridSortOptions,
-    defaultMetrics: SecurityTableHeaderConfigs
+    defaultMetrics: SecurityTableHeaderConfigs,
+    navigationModule: NavigationModule,
+    globalWorkflowTypes: GlobalWorkflowTypes
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -312,6 +317,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.state.fetchResult = this.initializePageState().fetchResult;
     // this.state.fetchResult.alertTable = alertTableCopy;
     this.store$.dispatch(new TradeTogglePresetEvent);
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, this.constants.globalWorkflowTypes.unselectPreset);
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 
   public buryConfigurator() {
