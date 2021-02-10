@@ -5,6 +5,7 @@
     'sat-securityDefinition--isBackendTenor': definitionData?.data.key === 'BACKEND_TENOR',
     'sat-securityDefinition--isRatingBucket': definitionData?.data.key === 'RATING_BUCKET',
     'sat-securityDefinition--isSecurityType': definitionData?.data.key === 'SECURITY_TYPE',
+    'sat-securityDefinition--isSecuritySubType': definitionData?.data.key === 'SECURITY_SUB_TYPE',
     'sat-securityDefinition--selectedState': !!selected,
     'sat-securityDefinition--groupByActiveState': definitionData?.state.groupByActive || definitionData?.state.isLocked || groupByDisabled,
     'sat-securityDefinition--filterActiveState': definitionData?.state.filterActive,
@@ -26,6 +27,12 @@
       <div class="sat-securityDefinition__icon-securityType-box">
         <span class="sat-securityDefinition__icon-securityType-box-text">CDS</span>
         <span class="sat-securityDefinition__icon-securityType-box-text">Bond</span>
+      </div>
+    </span>
+    <span class="sat-securityDefinition__icon-securityType sat-securityDefinition__icon-securityType--subType">
+      <div class="sat-securityDefinition__icon-securityType-box">
+        <span class="sat-securityDefinition__icon-securityType-box-text">FRN</span>
+        <span class="sat-securityDefinition__icon-securityType-box-text">Corp</span>
       </div>
     </span>
     <span class="sat-securityDefinition__icon-backendTenor fa-stack">

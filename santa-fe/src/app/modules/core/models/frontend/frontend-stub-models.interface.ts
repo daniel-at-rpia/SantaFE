@@ -34,6 +34,7 @@ export interface SecurityDefinitionBundleStub {
 
 export interface SecurityDefinitionMapStub {
   SECURITY_TYPE: SecurityDefinitionStub;
+  SECURITY_SUB_TYPE: SecurityDefinitionStub;
   BACKEND_TENOR: SecurityDefinitionStub;
   BAIL_IN_STATUS: SecurityDefinitionStub;
   COUPON_TYPE: SecurityDefinitionStub;
