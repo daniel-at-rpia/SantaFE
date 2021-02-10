@@ -907,6 +907,25 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'securitySubType',
+    content: {
+      label: 'Security Sub-Type',
+      attrName: 'securitySubType',
+      underlineAttrName: 'securitySubType',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      columnWidth: 95,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
     key: 'seniority',
     content: {
       label: 'Seniority',
