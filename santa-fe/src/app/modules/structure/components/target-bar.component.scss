@@ -8,6 +8,7 @@
     margin: 0 0 $spacing_x_small 0;
     text-align: center;
     color: $font_color_major;
+    white-space: nowrap;
   }
   &__indicator {
     @include mix_border_generator($static_color: $color_active);
