@@ -167,7 +167,7 @@
     <div class="sat-tradeCenterPanel__result-table">
       <santa-table
         [tableName]="'tradeMain'"
-        [activated]="true"
+        [activated]="!!state.presets.selectedPreset"
         [activePortfolios]="state.filters.quickFilters.portfolios"
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.mainTable.rowList"
