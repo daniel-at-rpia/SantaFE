@@ -14,12 +14,17 @@ import {
 } from 'Core/constants/coreConstants.constant';
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
-import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioShortNames,
+  PortfolioMetricValues,
+  DeltaScope
+} from 'Core/constants/structureConstants.constants';
 import { BEStructuringFundBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
+import { StructureUtilityPanelState } from './frontend-page-states.interface';
 
 interface BasicDTOStructure {
-  [property: string]: object;
+  id?: string;
   data: object;
   state: object;
   style?: object;
@@ -785,7 +790,18 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
-    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring
+    creditDurationIndexBar: TargetBarDTO;
+    creditLeverageIndexBar: TargetBarDTO;
+    activeDelta: DeltaScope;
+    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring,
+    currentTotalDeltaCreditLeverage: number;
+    currentTotalDeltaCreditDuration: number;
+    currentTotalDeltaCreditLeverageDisplayText: string;
+    currentTotalDeltaCreditDurationDisplayText: string;
+    currentTotalDeltaCreditLeverageSignificantPositive: boolean;
+    currentTotalDeltaCreditLeverageSignificantNegative: boolean;
+    currentTotalDeltaCreditDurationSignificantPositive: boolean;
+    currentTotalDeltaCreditDurationSignificantNegative: boolean;
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
@@ -821,6 +837,8 @@ export interface TargetBarDTO extends BasicDTOStructure {
     currentPercentage: string;
     exceededPercentage: string;
     displayedResults: string;
+    index: number;
+    title: string;
     additionalMetricTargetData?: {
       metric: PortfolioMetricValues;
       current: string;
@@ -832,6 +850,7 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isStencil: boolean;
     isEmpty: boolean;
     isDataUnavailable: boolean;
+    isIndexVariant: boolean;
   }
 }
 
@@ -911,6 +930,7 @@ export interface TraceTradesVisualizerDTO extends BasicDTOStructure {
 
 // Even though this is not used for any component, but we still want it as a DTO because in the future it will likely be a component when we decide to visualize the workflow through UI
 export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
+  uuid: string;  // this is necessary because indexedDB requires a root level id
   data: {
     uuid: string;
     module: NavigationModule;
@@ -918,6 +938,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     stateInfo: {
       filterList?: Array<SecurityDefinitionDTO>;
       activeMetric?: PortfolioMetricValues;
+      structureUtilityPanelSnapshot?: StructureUtilityPanelState;
     }
   },
   api: {

@@ -67,7 +67,8 @@
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
       BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
       BICS_OVERRIDES_IDENTIFIER,
-      BICS_OVERRIDES_TITLE
+      BICS_OVERRIDES_TITLE,
+      DeltaScope
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -1943,7 +1944,15 @@ export class DTOService {
     return object;
   }
 
-  public formTargetBarObject(targetMetric: PortfolioMetricValues, currentValue: number, targetValue: number, isStencil: boolean, activeMetricValue: PortfolioMetricValues) {
+  public formTargetBarObject(
+    targetMetric: PortfolioMetricValues,
+    currentValue: number,
+    targetValue: number,
+    isStencil: boolean,
+    activeMetricValue: PortfolioMetricValues,
+    indexTotal: number,
+    indexName: string
+    ) {
     const object: DTOs.TargetBarDTO = {
       data: {
         targetMetric,
@@ -1953,13 +1962,16 @@ export class DTOService {
         displayedTargetValue: '',
         currentPercentage: '',
         exceededPercentage: '',
-        displayedResults: ''
+        displayedResults: '',
+        index: indexTotal,
+        title: !!indexName ? indexName : targetMetric
       },
       state: {
         isInactiveMetric: false,
         isStencil: !!isStencil,
         isEmpty: false,
-        isDataUnavailable: false
+        isDataUnavailable: false,
+        isIndexVariant: indexTotal !== null ? true : false,
       }
     }
 
@@ -2014,11 +2026,15 @@ export class DTOService {
         targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
       }
     }
-    convertValuesForDisplay(object);
-    getDisplayedValues(object);
-    if (!targetValue) {
-      object.state.isEmpty = true;
-      object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
+    if (!object.state.isIndexVariant) {
+      convertValuesForDisplay(object);
+      getDisplayedValues(object);
+      if (!targetValue) {
+        object.state.isEmpty = true;
+        object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
+      }
+    } else {
+      object.data.displayedResults = this.utility.round(object.data.index, 2);
     }
     object.state.isInactiveMetric = object.data.targetMetric === PortfolioMetricValues.creditDuration ? activeMetricValue === PortfolioMetricValues.creditLeverage : object.data.targetMetric !== activeMetricValue;
     return object;
@@ -2028,7 +2044,8 @@ export class DTOService {
     rawData: BEModels.BEStructuringFundBlock,
     comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: PortfolioMetricValues,
+    activeDelta: DeltaScope
   ): DTOs.PortfolioFundDTO {
     const object: DTOs.PortfolioFundDTO = {
       data: null,
@@ -2091,11 +2108,34 @@ export class DTOService {
         cs01TargetBar: null,
         creditLeverageTargetBar: null,
         creditDurationTargetBar: null,
-        originalBEData: rawData
+        creditDurationIndexBar: null,
+        creditLeverageIndexBar: null,
+        activeDelta: activeDelta,
+        originalBEData: rawData,
+        currentTotalDeltaCreditDuration: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditDuration - comparedDeltaRawData.currentTotals.CreditDuration), 2) : null,
+        currentTotalDeltaCreditLeverage: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditLeverage - comparedDeltaRawData.currentTotals.CreditLeverage), 2) : null,
+        currentTotalDeltaCreditDurationDisplayText: '',
+        currentTotalDeltaCreditLeverageDisplayText: '',
+        currentTotalDeltaCreditDurationSignificantPositive: false,
+        currentTotalDeltaCreditDurationSignificantNegative: false,
+        currentTotalDeltaCreditLeverageSignificantPositive: false,
+        currentTotalDeltaCreditLeverageSignificantNegative: false
       };
-      object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue);
-      object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue);
-      object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue);
+      object.data.currentTotalDeltaCreditDurationDisplayText = !!object.data.currentTotalDeltaCreditDuration ? `${object.data.currentTotalDeltaCreditDuration}` : '-';
+      object.data.currentTotalDeltaCreditLeverageDisplayText = !!object.data.currentTotalDeltaCreditLeverage ? `${object.data.currentTotalDeltaCreditLeverage}` : '-';
+      if (!!object.data.currentTotalDeltaCreditDuration && !!comparedDeltaRawData) {
+        object.data.currentTotalDeltaCreditDurationSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditDuration,comparedDeltaRawData.currentTotals.CreditDuration);
+        object.data.currentTotalDeltaCreditDurationSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditDuration,comparedDeltaRawData.currentTotals.CreditDuration);
+      }
+      if (!!object.data.currentTotalDeltaCreditLeverage && !!comparedDeltaRawData) {
+        object.data.currentTotalDeltaCreditLeverageSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditLeverage, comparedDeltaRawData.currentTotals.CreditLeverage)
+        object.data.currentTotalDeltaCreditLeverageSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditLeverage, comparedDeltaRawData.currentTotals.CreditLeverage)
+      }
+      object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue, null, null);
+      object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue, null, null);
+      object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue, null, null);
+      object.data.creditDurationIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditDuration, object.data.indexShortName);
+      object.data.creditLeverageIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditLeverage, object.data.indexShortName);
       if (!!object.data.creditDurationTargetBar) {
         const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
         const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
@@ -2141,7 +2181,7 @@ export class DTOService {
         ratingHoverText: !isStencil ? 'n/a' : '33%',
         rawCs01CategoryList: [],
         rawLeverageCategoryList: [],
-        backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
+        backendGroupOptionIdentifier: rawData.groupOption,
         popoverMainRow: null,
         portfolioId: rawData.portfolioId,
         portfolioName: '',
@@ -2167,8 +2207,8 @@ export class DTOService {
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
-    if (rawData.groupOption === 'Tenor') {
-      // Tenor does not need to be sorted alphabetically
+    if (rawData.groupOption === 'Tenor' || rawData.groupOption === "RatingNoNotch") {
+      // Tenor & Rating do not need to be sorted alphabetically
     } else {
       definitionList.sort();
     }
@@ -2697,9 +2737,11 @@ export class DTOService {
     isRedirect: boolean,
     workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
   ): DTOs.GlobalWorkflowStateDTO {
+    const uuid = this.utility.generateUUID();
     const object: DTOs.GlobalWorkflowStateDTO = {
+      uuid: uuid,
       data: {
-        uuid: this.utility.generateUUID(),
+        uuid: uuid,
         module: targetModule,
         workflowType: workflowType,
         stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis

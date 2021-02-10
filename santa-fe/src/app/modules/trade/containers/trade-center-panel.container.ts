@@ -105,11 +105,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     securityTableHeaderConfigGroups: SecurityTableHeaderConfigGroups,
     weigthHeaderNameDelimiterStart: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
     weigthHeaderNameDelimiterEnd: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
-    sortOption: AggridSortOptions
+    sortOption: AggridSortOptions,
+    defaultMetrics: SecurityTableHeaderConfigs
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
-    const mainTableMetrics = SecurityTableHeaderConfigs.filter((eachStub) => {
+    const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
@@ -130,7 +131,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         boosted: false
       },
       table: {
-        metrics: mainTableMetrics,
+        metrics: this.utilityService.deepCopy(mainTableMetrics),
         dto: this.dtoService.formSecurityTableObject(true, true)
       },
       fetchResult: {
@@ -301,6 +302,10 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
+    this.state.table.metrics = this.constants.defaultMetrics.filter((eachStub) => {
+      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
+      return !targetSpecifics.disabled;
+    });
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     this.state.filters.keyword.defaultValueForUI = null;
     // const alertTableCopy = this.utilityService.deepCopy(this.state.fetchResult.alertTable);

@@ -9,7 +9,12 @@
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
-    import { selectUserInitials, selectGlobalWorkflowNewState } from 'Core/selectors/core.selectors';
+    import {
+      selectUserInitials,
+      selectGlobalWorkflowNewState,
+      selectGlobalWorkflowUpdateTradeState,
+      selectGlobalWorkflowUpdateStructureState
+    } from 'Core/selectors/core.selectors';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
     import { SeniorityLegendList, RatingLegendList } from 'Core/stubs/securities.stub';
     import { SeniorityValueToLevelMapping, RatingValueToLevelMapping } from 'Core/constants/securityDefinitionConstants.constant';
@@ -33,7 +38,9 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
   subscriptions = {
     userInitialsSub: null,
     navigationStartSub: null,
-    newGlobalWorkflowStateSub: null
+    newGlobalWorkflowStateSub: null,
+    currentTradeStateChangeSub: null,
+    currentStructureStateChangeSub: null
   };
   constants = {
     seniorityMapping: SeniorityValueToLevelMapping,
@@ -50,6 +57,10 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       legend: {
         seniority: this.loadLegend(this.constants.seniorityMapping, SeniorityLegendList),
         rating: this.loadLegend(this.constants.ratingMapping, RatingLegendList)
+      },
+      currentState: {
+        trade: this.utilityService.generateUUID(),  // the default current state is a fresh new state
+        structure: this.utilityService.generateUUID()  // the default current state is a fresh new state
       }
     };
     return state;
@@ -115,6 +126,20 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
         }
       }
     );
+    this.subscriptions.currentTradeStateChangeSub = this.store$.pipe(
+      select(selectGlobalWorkflowUpdateTradeState)
+    ).subscribe((newStateId: string) => {
+      if (!!newStateId) {
+        this.state.currentState.trade = newStateId;
+      }
+    });
+    this.subscriptions.currentStructureStateChangeSub = this.store$.pipe(
+      select(selectGlobalWorkflowUpdateStructureState)
+    ).subscribe((newStateId: string) => {
+      if (!!newStateId) {
+        this.state.currentState.structure = newStateId;
+      }
+    });
   }
 
   public ngOnChanges() {
@@ -136,8 +161,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       this.state.menuIsActive = false;
       const navigateToStructuring = () => {
         const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring, true);
-        this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
-        this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+        this.router.navigateByUrl(`/${this.constants.moduleUrl.structuring}/${this.state.currentState.structure}`);
+        // no need to record this state, since it's meant as going to a diff module with a fresh state, recording it causs problem in history
       };
       setTimeout(navigateToStructuring.bind(this), 500);
     }
@@ -147,9 +172,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     if (this.state.currentModule !== this.constants.moduleUrl.trade) {
       this.state.menuIsActive = false;
       const navigateToTrade = () => {
-        const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.trade, true);
-        this.router.navigateByUrl(`/${newState.data.module}/${newState.data.uuid}`);
-        this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
+        this.router.navigateByUrl(`/${this.constants.moduleUrl.trade}/${this.state.currentState.trade}`);
+        // no need to record this state, since it's meant as going to a diff module with a fresh state, recording it causs problem in history
       }
       setTimeout(navigateToTrade.bind(this), 500);
     };

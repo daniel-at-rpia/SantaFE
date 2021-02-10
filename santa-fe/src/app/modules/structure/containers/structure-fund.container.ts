@@ -29,7 +29,10 @@ import { BEPortfolioTargetMetricValues, SubPortfolioFilter } from 'Core/constant
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
-import { selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.selectors';
+import {
+  selectActiveSubPortfolioFilter,
+  selectMetricLevel
+} from 'Structure/selectors/structure.selectors';
 
 @Component({
   selector: 'structure-fund',
@@ -40,6 +43,7 @@ import { selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.se
 
 export class StructureFund implements OnInit, OnDestroy {
   @Input() fund: PortfolioFundDTO;
+  activeMetric: PortfolioMetricValues = null;
   constants = {
     cs01: PortfolioMetricValues.cs01,
     creditLeverage: PortfolioMetricValues.creditLeverage,
@@ -49,10 +53,11 @@ export class StructureFund implements OnInit, OnDestroy {
     BECs01: BEPortfolioTargetMetricValues.Cs01,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
     structuringTeamPMList: StructuringTeamPMList,
-    navigationModule: NavigationModule
+    navigationModule: NavigationModule,
   }
   subscriptions = {
-    ownerInitialsSub: null
+    ownerInitialsSub: null,
+    activeMetricSub: null,
   }
 
   constructor(
@@ -69,6 +74,9 @@ export class StructureFund implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.fund.state.isEditAvailable = this.constants.structuringTeamPMList.indexOf(value) >= 0;
     });
+    this.subscriptions.activeMetricSub = this.store$.pipe(select(selectMetricLevel)).subscribe(metric => {
+      this.activeMetric = metric as PortfolioMetricValues;
+    })
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
   }
 

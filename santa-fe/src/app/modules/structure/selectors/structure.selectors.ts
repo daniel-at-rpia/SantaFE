@@ -52,3 +52,7 @@ export const selectActiveDeltaScope = createSelector(
   (state: StructureState) => state.activeDeltaScope
 );
 
+export const selectUtilityPanelLoadState = createSelector(
+  getStructureState,
+  (state: StructureState) => state.utilityPanelLoadState
+);
