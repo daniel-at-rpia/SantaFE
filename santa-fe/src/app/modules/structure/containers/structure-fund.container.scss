@@ -42,7 +42,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
             }
             &-icon {
               color: $color_active;
-              margin-right: $spacing_xx_small
+              margin: 0 $spacing_x_small;
             }
           }
         }
@@ -56,7 +56,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
             }
             &-icon {
               color: $color_active;
-              margin-right: $spacing_xx_small
+              margin: 0 $spacing_x_small;
             }
             &-difference {
               color: $color_active;
