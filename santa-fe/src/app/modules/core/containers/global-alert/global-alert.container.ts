@@ -131,8 +131,11 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
         if (this.constants.moduleUrl.trade === modulePortion) {
           if (!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
-            this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
-            this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(true));
+            if (this.state.allAlertsList.length > 0) {
+              this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
+            }
+            this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = true;
+            this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(true))
           }
         }
       }
@@ -435,14 +438,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
         urgentAlertUpdateList.length > 0 && this.getAlertsForUrgentAlertList(urgentAlertUpdateList);
         if (allAlertsUpdateList.length > 0) {
-          if (this.state.allAlertsList.length === 0) {
-            this.state.allAlertsList = [...allAlertsUpdateList];
+          this.state.allAlertsList = [...this.state.allAlertsList, ...allAlertsUpdateList];
+          if (!!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
             this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
-          } else {
-            this.state.allAlertsList = [...this.state.allAlertsList, ...allAlertsUpdateList];
-            if (!!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
-              this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
-            }
           }
         }
         this.state.alertUpdateInProgress = false;

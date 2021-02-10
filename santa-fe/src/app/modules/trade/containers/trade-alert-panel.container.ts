@@ -281,10 +281,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       if (alertList.length > 0) {
         try {
-          setTimeout(() => {
-            const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
-            this.updateAlertTable(alertListCopy);
-          }, 3000) // account for 3 second delay for initial data for trade table from global alerts
+          const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+          this.updateAlertTable(alertListCopy);
           if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
             const numOfUpdate = this.marketListAlertsCountdownUpdate();
             if (numOfUpdate > 0){
@@ -311,13 +309,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnDestroy() {
+      this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(false));
       for (const eachItem in this.subscriptions) {
         if (this.subscriptions[eachItem]) {
           const eachSub = this.subscriptions[eachItem] as Subscription;
           eachSub.unsubscribe();
         }
       }
-      this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(false));
     }
 
     private marketListAlertsCountdownUpdate(): number {
