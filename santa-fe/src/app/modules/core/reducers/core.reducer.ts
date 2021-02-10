@@ -17,7 +17,9 @@ export interface CoreState {
   };
   globalWorkflow: {
     newState: DTOs.GlobalWorkflowStateDTO;
-    currentStateUUID: string;
+    currentStateInStructure: string;
+    currentStateInTrade: string;
+    indexedDBReady: boolean;
   }
   globalAlert: {
     displayThumbnail: boolean;
@@ -43,7 +45,9 @@ const initialState: CoreState = {
   },
   globalWorkflow: {
     newState: null,
-    currentStateUUID: null
+    currentStateInStructure: null,
+    currentStateInTrade: null,
+    indexedDBReady: false
   },
   globalAlert: {
     displayThumbnail: true,
@@ -127,12 +131,20 @@ export function coreReducer(
           newState: action.newState
         }
       };
-    case CoreActions.GlobalWorkflowUpdateCurrentState:
+    case CoreActions.GlobalWorkflowUpdateCurrentTradeState:
       return {
         ...state,
         globalWorkflow: {
           ...state.globalWorkflow,
-          currentStateUUID: action.uuid
+          currentStateInTrade: action.uuid
+        }
+      };
+    case CoreActions.GlobalWorkflowUpdateCurrentStructureState:
+      return {
+        ...state,
+        globalWorkflow: {
+          ...state.globalWorkflow,
+          currentStateInStructure: action.uuid
         }
       }
     case CoreActions.MainThreadOccupiedState:
@@ -225,6 +237,14 @@ export function coreReducer(
             tradeTableReadyToReceiveAdditionalAlerts: action.newState
           }
         }
+    case CoreActions.GlobalWorkflowIndexedDBReady:
+      return {
+        ...state,
+        globalWorkflow: {
+          ...state.globalWorkflow,
+          indexedDBReady: true
+        }
+      };
     default:
       return {
         ...state

@@ -2141,7 +2141,7 @@ export class DTOService {
         ratingHoverText: !isStencil ? 'n/a' : '33%',
         rawCs01CategoryList: [],
         rawLeverageCategoryList: [],
-        backendGroupOptionIdentifier: !isStencil ? rawData.groupOption : null,
+        backendGroupOptionIdentifier: rawData.groupOption,
         popoverMainRow: null,
         portfolioId: rawData.portfolioId,
         portfolioName: '',
@@ -2167,8 +2167,8 @@ export class DTOService {
       }
     };
     const [findCs01Min, findCs01Max, findLeverageMin, findLeverageMax] = this.utility.getCompareValuesForStructuringVisualizer(rawData);
-    if (rawData.groupOption === 'Tenor') {
-      // Tenor does not need to be sorted alphabetically
+    if (rawData.groupOption === 'Tenor' || rawData.groupOption === "RatingNoNotch") {
+      // Tenor & Rating do not need to be sorted alphabetically
     } else {
       definitionList.sort();
     }
@@ -2697,9 +2697,11 @@ export class DTOService {
     isRedirect: boolean,
     workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
   ): DTOs.GlobalWorkflowStateDTO {
+    const uuid = this.utility.generateUUID();
     const object: DTOs.GlobalWorkflowStateDTO = {
+      uuid: uuid,
       data: {
-        uuid: this.utility.generateUUID(),
+        uuid: uuid,
         module: targetModule,
         workflowType: workflowType,
         stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis

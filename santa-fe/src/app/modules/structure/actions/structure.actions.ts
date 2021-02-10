@@ -13,6 +13,7 @@ import {
   StructureSetViewTransferPack
 } from 'FEModels/frontend-adhoc-packages.interface';
 import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
+import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
 
 export enum StructureActions {
   StructureStoreReset = '[Structure] Reset Store Upon Entering',
@@ -25,7 +26,8 @@ export enum StructureActions {
   ChangePortfolioViewFilter = '[Structure] Change Portfolio View Filter',
   ChangeSubPortfolioViewFilter = '[Structure] Change Sub-Portfolio View Filter',
   ChangeDeltaScope = '[Structure] Change Delta Scope',
-  SwitchDataDatestamp = '[Structure] Switch Data Datestamp'
+  SwitchDataDatestamp = '[Structure] Switch Data Datestamp',
+  UtilityPanelLoadState = '[Structure] Utility Panel Load State'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -107,5 +109,13 @@ export class StructureChangeDeltaScopeEvent implements Action {
   readonly deltaScope: DeltaScope;
   constructor(newDeltaScope: DeltaScope) {
     this.deltaScope = newDeltaScope;
+  }
+}
+
+export class StructureUtilityPanelLoadStateEvent implements Action {
+  readonly type = StructureActions.UtilityPanelLoadState;
+  readonly panelState: StructureUtilityPanelState;
+  constructor(panelState: StructureUtilityPanelState) {
+    this.panelState = panelState;
   }
 }

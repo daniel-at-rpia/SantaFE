@@ -39,9 +39,19 @@ export const selectGlobalWorkflowNewState = createSelector(
   (state: CoreState) => state.globalWorkflow.newState
 );
 
-export const selectGlobalWorkflowUpdateCurrentState = createSelector(
+export const selectGlobalWorkflowUpdateTradeState = createSelector(
   getCoreState,
-  (state: CoreState) => state.globalWorkflow.currentStateUUID
+  (state: CoreState) => state.globalWorkflow.currentStateInTrade
+);
+
+export const selectGlobalWorkflowUpdateStructureState = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalWorkflow.currentStateInStructure
+);
+
+export const selectGlobalWorkflowIndexedDBReadyState = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalWorkflow.indexedDBReady
 );
 
 export const selectMainThreadOccupied = createSelector(

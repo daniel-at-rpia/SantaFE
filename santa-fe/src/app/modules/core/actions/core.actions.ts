@@ -27,7 +27,10 @@ export enum CoreActions {
   GlobalAlertsAPIAlertCallFailed = '[Core] Global Alerts Failed to Make API Call For Alerts',
   GlobalAlertsClearAllUrgentAlerts = '[Core] Global Alerts Clear All Urgent Alerts In Store',
   GlobalAlertsClearAllTradeAlertTableAlerts = '[Core] Global Alerts Clear All Alerts For Trade Alert Panel In Store',
-  GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Ready To Receive Additional Alerts'
+  GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Ready To Receive Additional Alerts',
+  GlobalWorkflowUpdateCurrentTradeState = '[Core] Global Workflow Update Current Trade State',
+  GlobalWorkflowUpdateCurrentStructureState = '[Core] Global Workflow Update Current Structure State',
+  GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -100,8 +103,8 @@ export class CoreGlobalWorkflowSendNewState implements Action {
   }
 }
 
-export class CoreGlobalWorkflowUpdateCurrentState implements Action {
-  readonly type = CoreActions.GlobalWorkflowUpdateCurrentState;
+export class CoreGlobalWorkflowUpdateCurrentTradeState implements Action {
+  readonly type = CoreActions.GlobalWorkflowUpdateCurrentTradeState;
   readonly uuid: string;
   constructor(
     uuid: string
@@ -190,4 +193,18 @@ export class CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts {
   constructor(newState: boolean) {
     this.newState = newState;
   }
+}
+export class CoreGlobalWorkflowUpdateCurrentStructureState implements Action {
+  readonly type = CoreActions.GlobalWorkflowUpdateCurrentStructureState;
+  readonly uuid: string;
+  constructor(
+    uuid: string
+  ){
+    this.uuid = uuid;
+  }
+}
+
+export class CoreGlobalWorkflowIndexedDBReady implements Action {
+  readonly type = CoreActions.GlobalWorkflowIndexedDBReady;
+  constructor(){}
 }

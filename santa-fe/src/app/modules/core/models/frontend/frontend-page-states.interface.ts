@@ -30,6 +30,10 @@ export interface GlobalNavState {
     seniority: Array<Blocks.GlobalNavLegendBlock>;
     rating: Array<Blocks.GlobalNavLegendBlock>;
   }
+  currentState: {
+    trade: string;
+    structure: string;
+  }
 }
 
 export interface GlobalAlertState {
@@ -52,6 +56,7 @@ export interface GlobalAlertState {
 
 export interface GlobalWorkflowState {
   currentState: DTOs.GlobalWorkflowStateDTO;
+  isIndexedDBReady: boolean;
 }
 
 export interface MarketState {

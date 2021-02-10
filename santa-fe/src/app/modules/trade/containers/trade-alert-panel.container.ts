@@ -789,7 +789,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           if (eachEntry.state.isDeleted) {
             payload.isDeleted = true;
           }
-          if (!eachEntry.groupId && eachEntry.isDeleted) {
+          if (!eachEntry.data.groupId && eachEntry.state.isDeleted) {
             // if the entry does not have a groupId but is deleted, then it means it was only created on FE and deleted on FE, therefore no need to save to BE
           } else {
             entirePayload.alertConfigs.push(payload);

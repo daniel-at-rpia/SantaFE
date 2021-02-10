@@ -1,15 +1,17 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { Router, ActivatedRoute } from '@angular/router';
+    import { Location } from '@angular/common';
     import { Observable, Subscription, interval, of } from 'rxjs';
     import { tap, first, withLatestFrom, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
     import * as GlobalServices from 'Core/services/index';
-    import { selectGlobalWorkflowNewState } from 'Core/selectors/core.selectors';
-    import { CoreGlobalWorkflowUpdateCurrentState } from 'Core/actions/core.actions';
+    import { selectGlobalWorkflowNewState, selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
+    import { CoreGlobalWorkflowUpdateCurrentStructureState, CoreGlobalWorkflowUpdateCurrentTradeState } from 'Core/actions/core.actions';
     import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
     import { GlobalWorkflowState } from 'FEModels/frontend-page-states.interface';
+    import { NavigationModule } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({
@@ -23,18 +25,24 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
   state: GlobalWorkflowState;
   subscriptions = {
     navigationStartSub: null,
-    newStateSub: null
+    newStateSub: null,
+    indexedDBReadySub: null
   };
+  constants = {
+    moduleUrl: NavigationModule
+  }
 
   constructor(
     private store$: Store<any>,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private utilityService: GlobalServices.UtilityService,
-    private GlobalWorkflowIOService: GlobalServices.GlobalWorkflowIOService
+    private GlobalWorkflowIOService: GlobalServices.GlobalWorkflowIOService,
+    private angularLocation: Location
   ) {
     this.state = {
-      currentState: null
+      currentState: null,
+      isIndexedDBReady: false
     }
   }
 
@@ -48,23 +56,34 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
           if (!newState.state.triggersRedirect) {
             // don't block current thread
             setTimeout(function(){
-              history.pushState(newState, newState.data.workflowType, `/${newState.data.module}/${newState.data.uuid}`);
-            }, 1);
+              // angular's Location API is a wrapper on History API that go through more logic within the angular application before calling History API
+              this.angularLocation.go(`/${newState.data.module}/${newState.data.uuid}`);
+            }.bind(this), 1);
           }
           if (!this.state.currentState || this.state.currentState.data.uuid !== newState.data.uuid) {
             this.storeState(newState);
             // need to deepCopy because the one in ngrx store is readonly
             this.state.currentState = this.utilityService.deepCopy(newState);
-            this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentState(newState.data.uuid));
+            if (newState.data.module === this.constants.moduleUrl.structuring) {
+              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentStructureState(newState.data.uuid));
+            } else if (newState.data.module === this.constants.moduleUrl.trade) {
+              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentTradeState(newState.data.uuid));
+            }
           }
         }
       }
     );
+
+    this.subscriptions.indexedDBReadySub = this.store$.pipe(
+      select(selectGlobalWorkflowIndexedDBReadyState)
+    ).subscribe((isReady) => {
+      this.state.isIndexedDBReady = !!isReady;
+    });
   }
 
   public ngOnDestroy() {
     for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
+      if (!!this.subscriptions[eachItem]) {
         const eachSub = this.subscriptions[eachItem] as Subscription;
         eachSub.unsubscribe();
       }
@@ -72,9 +91,7 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
   }
 
   private storeState(targetState: GlobalWorkflowStateDTO) {
-    // temporarily putting it in the page state, eventually need to be put into indexedDB
-    if (!!targetState) {
-      // this.state.temporaryStore[targetState.data.uuid] = targetState;
+    if (!!targetState && this.state.isIndexedDBReady) {
       this.GlobalWorkflowIOService.storeState(targetState);
     }
   }

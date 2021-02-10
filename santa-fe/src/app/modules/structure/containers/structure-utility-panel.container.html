@@ -24,8 +24,8 @@
     </div>
     <div class="sat-structureUtilityPanel__metricSelect-bottom">
       <div class="sat-structureUtilityPanel__metricSelect-bottom-ctas santaBtnGroup">
-        <button (click)="setMetricLevel(constants.leverage)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditLeverage">{{constants.leverage}}</button>
-        <button (click)="setMetricLevel(constants.cs01)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditDuration">{{constants.cs01}} / {{constants.creditDuration}}</button>
+        <button (click)="setMetricLevel(constants.leverage, true)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditLeverage">{{constants.leverage}}</button>
+        <button (click)="setMetricLevel(constants.cs01, true)" class="sat-structureUtilityPanel__metricSelect-bottom-ctas-creditDuration">{{constants.cs01}} / {{constants.creditDuration}}</button>
       </div>
     </div>
   </section>
@@ -35,10 +35,10 @@
     </div>
     <div class="sat-structureUtilityPanel__strategySelect-bottom">
       <div class="sat-structureUtilityPanel__strategySelect-bottom-ctas santaBtnGroup">
-        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.nonHedging)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonHedging">{{constants.subPortfolioFilter.nonHedging}}</button>
-        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.nonShortCarry)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonShortCarry">{{constants.subPortfolioFilter.nonShortCarry}}</button>
-        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.shortCarry)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-shortCarry">{{constants.subPortfolioFilter.shortCarry}}</button>
-        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.all)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-all">{{constants.subPortfolioFilter.all}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.nonHedging, true)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonHedging">{{constants.subPortfolioFilter.nonHedging}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.nonShortCarry, true)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-nonShortCarry">{{constants.subPortfolioFilter.nonShortCarry}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.shortCarry, true)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-shortCarry">{{constants.subPortfolioFilter.shortCarry}}</button>
+        <button (click)="onClickSubPortfolioChange(constants.subPortfolioFilter.all, true)" class="sat-structureUtilityPanel__strategySelect-bottom-ctas-all">{{constants.subPortfolioFilter.all}}</button>
       </div>
     </div>
   </section>
@@ -48,19 +48,19 @@
     </div>
     <div class="sat-structureUtilityPanel__breakdownSelect-bottom">
       <div class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas santaBtnGroup">
-        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.overridesOnly)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-overrides santaBtn--labelled">
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.overridesOnly, true)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-overrides santaBtn--labelled">
           <i class="fal fa-star"></i>
           <span>{{constants.breakdownViewFilter.overridesOnly}}</span>
         </button>
-        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.BICSOnly)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-BICS santaBtn--labelled">
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.BICSOnly, true)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-BICS santaBtn--labelled">
           <i class="fal fa-industry-alt"></i>
           <span>{{constants.breakdownViewFilter.BICSOnly}}</span>
         </button>
-        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.regularsOnly)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-regulars santaBtn--labelled">
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.regularsOnly, true)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-regulars santaBtn--labelled">
           <i class="fal fa-award"></i>
           <span>{{constants.breakdownViewFilter.regularsOnly}}</span>
         </button>
-        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.all)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-all">
+        <button (click)="onClickBreakdownFilterChange(constants.breakdownViewFilter.all, true)" class="sat-structureUtilityPanel__breakdownSelect-bottom-ctas-all">
           <span>{{constants.breakdownViewFilter.all}}</span>
         </button>
       </div>
@@ -115,11 +115,11 @@
     </div>
     <div class="sat-structureUtilityPanel__deltaSelect-bottom">
       <div class="sat-structureUtilityPanel__deltaSelect-bottom-ctas santaBtnGroup">
-        <button (click)="onClickDeltaScope(constants.deltaScope.dod)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-dod">{{constants.deltaScope.dod}}</button>
-        <button (click)="onClickDeltaScope(constants.deltaScope.wow)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-wow">{{constants.deltaScope.wow}}</button>
-        <button (click)="onClickDeltaScope(constants.deltaScope.mom)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-mom">{{constants.deltaScope.mom}}</button>
-        <button (click)="onClickDeltaScope(constants.deltaScope.ytd)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-ytd">{{constants.deltaScope.ytd}}</button>
-        <button (click)="onClickDeltaScope(null)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-index">Index</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.dod, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-dod">{{constants.deltaScope.dod}}</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.wow, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-wow">{{constants.deltaScope.wow}}</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.mom, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-mom">{{constants.deltaScope.mom}}</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.ytd, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-ytd">{{constants.deltaScope.ytd}}</button>
+        <button (click)="onClickDeltaScope(null, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-index">Index</button>
       </div>
     </div>
   </section>

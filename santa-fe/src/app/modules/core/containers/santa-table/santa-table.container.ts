@@ -177,7 +177,7 @@ export class SantaTable implements OnInit, OnChanges {
         this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
         this.tableData.state.loadedContentStage = this.receivedContentStage;
         this.loadTableRows(this.newRows);
-      } else if (this.securityTableHeaderConfigsCache !== this.receivedSecurityTableHeaderConfigsUpdate && this.receivedContentStage === this.constants.securityTableFinalStage) {
+      } else if (this.securityTableHeaderConfigsCache !== this.receivedSecurityTableHeaderConfigsUpdate) {
         console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableHeaderConfigsUpdate);
         this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
         this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
