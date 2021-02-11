@@ -130,10 +130,17 @@ export class TradePage implements OnInit, OnDestroy {
 
   private globalStateHandler(state: DTOs.GlobalWorkflowStateDTO) {
     if (!!state) {
-      if (state.data.workflowType === this.constants.globalWorkflowTypes.launchTradeToSeeBonds) {
-        if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
-          this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList, state.data.stateInfo.activeMetric));
-        }
+      switch (state.data.workflowType) {
+        case this.constants.globalWorkflowTypes.launchTradeToSeeBonds:
+          if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
+            this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList, state.data.stateInfo.activeMetric));
+          }
+          break;
+        case this.constants.globalWorkflowTypes.unselectPreset:
+          // do nothing as nothing is needed
+        default:
+          // code...
+          break;
       }
     }
   }

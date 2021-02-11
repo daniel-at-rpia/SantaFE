@@ -15,16 +15,70 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: flex-start;
     padding: $spacing_x_small 0;
     background-color: $color_gray_2;
+    &-metric {
+      width: 8rem;
+      &-data {
+        display: flex;
+        justify-content: center;
+        margin-top: $spacing_small;
+        &-index {
+          display: none;
+          flex: 1 1 auto;
+          & > target-bar {
+            flex: 1 1 auto;
+          }
+        }
+        &-creditLeverageDelta {
+          display: flex;
+          &-text {
+            &-type {
+              font-size: $font_size_normal;
+            }
+            &-difference {
+              @include mix_border_radius(3px);
+              padding: $spacing_x_small;
+              color: $color_active;
+              font-size: $font_size_normal;
+            }
+            &-icon {
+              color: $color_active;
+              margin: 0 $spacing_x_small;
+              font-size: $font_size_normal;
+            }
+          }
+        }
+        &-creditDurationDelta {
+          display: flex;
+          &-text {
+            &-type {
+              font-size: $font_size_normal;
+            }
+            &-difference {
+              @include mix_border_radius(3px);
+              padding: $spacing_x_small;
+              color: $color_active;
+              font-size: $font_size_normal;
+            }
+            &-icon {
+              color: $color_active;
+              margin: 0 $spacing_x_small;
+              font-size: $font_size_normal;
+            }
+          }
+        }
+      }
+    }
     &-title {
       flex: 0 0 auto;
       text-align: center;
       font-size: $font_size_x_large;
       font-weight: 700;
       color: $font_color_minor;
+      margin: auto $spacing_large;
     }
   }
   &__editFund {
@@ -127,9 +181,6 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       margin: $spacing_medium $spacing_large;
     }
   }
-  &__targetBar {
-    width: 8rem;
-  }
   &__content {
     flex: 1 1 auto;
     display: flex;
@@ -221,6 +272,97 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         &-message {
           visibility: visible; 
           flex: 0 0 auto;
+        }
+      }
+    }
+  }
+  &--isViewingIndex {
+    #{$blockName} {
+      &__configuration {
+        &-metric {
+          &-data {
+            &-index {
+              display: flex;
+            }
+            &-creditDurationDelta {
+              display: none;
+            }
+            &-creditLeverageDelta {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+  &--creditLeverageDeltaSignificantPositive {
+    #{$blockName} {
+      &__configuration {
+        &-metric-data-creditLeverageDelta-text-difference {
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--creditLeverageDeltaSignificantNegative {
+    #{$blockName} {
+      &__configuration {
+        &-metric-data-creditLeverageDelta-text-difference {
+          background-color: $color_red_5;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--creditDurationDeltaSignificantPositive {
+    #{$blockName} {
+      &__configuration {
+        &-metric-data-creditDurationDelta-text-difference {
+          background-color: $color_active;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--creditDurationDeltaSignificantNegative {
+    #{$blockName} {
+      &__configuration {
+        &-metric-data-creditDurationDelta-text-difference {
+          background-color: $color_red_5;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--isDisplayCs01 {
+    #{$blockName} {
+      &__configuration {
+        &-metric-data-creditLeverageDelta-text {
+          &-icon,
+          &-type {
+            color: $color_disabled;
+          }
+          &-difference {
+            color: $color_disabled;
+            background-color: transparent;
+          }
+        }
+      }
+    }
+  }
+  &--isDisplayCreditLeverage {
+    #{$blockName} {
+      &__configuration {
+        &-metric-data-creditDurationDelta-text {
+          &-icon,
+          &-type {
+            color: $color_disabled;
+          }
+          &-difference {
+            background-color: transparent;
+            color: $color_disabled;
+          }
         }
       }
     }

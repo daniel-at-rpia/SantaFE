@@ -14,7 +14,11 @@ import {
 } from 'Core/constants/coreConstants.constant';
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
-import { PortfolioShortNames, PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioShortNames,
+  PortfolioMetricValues,
+  DeltaScope
+} from 'Core/constants/structureConstants.constants';
 import { BEStructuringFundBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 import { StructureUtilityPanelState } from './frontend-page-states.interface';
@@ -787,7 +791,18 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     cs01TargetBar: TargetBarDTO;
     creditLeverageTargetBar: TargetBarDTO;
     creditDurationTargetBar: TargetBarDTO;
-    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring
+    creditDurationIndexBar: TargetBarDTO;
+    creditLeverageIndexBar: TargetBarDTO;
+    activeDelta: DeltaScope;
+    originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring,
+    currentTotalDeltaCreditLeverage: number;
+    currentTotalDeltaCreditDuration: number;
+    currentTotalDeltaCreditLeverageDisplayText: string;
+    currentTotalDeltaCreditDurationDisplayText: string;
+    currentTotalDeltaCreditLeverageSignificantPositive: boolean;
+    currentTotalDeltaCreditLeverageSignificantNegative: boolean;
+    currentTotalDeltaCreditDurationSignificantPositive: boolean;
+    currentTotalDeltaCreditDurationSignificantNegative: boolean;
   },
   api: {
     onSubmitMetricValues: (CS01: number, leverage: number) => void;
@@ -823,6 +838,8 @@ export interface TargetBarDTO extends BasicDTOStructure {
     currentPercentage: string;
     exceededPercentage: string;
     displayedResults: string;
+    index: number;
+    title: string;
     additionalMetricTargetData?: {
       metric: PortfolioMetricValues;
       current: string;
@@ -834,6 +851,7 @@ export interface TargetBarDTO extends BasicDTOStructure {
     isStencil: boolean;
     isEmpty: boolean;
     isDataUnavailable: boolean;
+    isIndexVariant: boolean;
   }
 }
 

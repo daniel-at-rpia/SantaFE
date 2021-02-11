@@ -5,16 +5,49 @@
   'sat-fundStructuring--invalidInput': fund.state.hasErrors.updatedCreditDuration || fund.state.hasErrors.updatedCreditLeverage,
   'sat-fundStructuring--errorState': fund.state.isDataUnavailable,
   'sat-fundStructuring--autoScalingAvailableState': fund.state.autoScalingAvailable,
-  'sat-fundStructuring--autoScalingSelectedState': fund.state.autoScalingActive
+  'sat-fundStructuring--autoScalingSelectedState': fund.state.autoScalingActive,
+  'sat-fundStructuring--isViewingIndex': !fund.data.activeDelta,
+  'sat-fundStructuring--creditLeverageDeltaSignificantPositive': fund.data.currentTotalDeltaCreditLeverageSignificantPositive,
+  'sat-fundStructuring--creditLeverageDeltaSignificantNegative': fund.data.currentTotalDeltaCreditLeverageSignificantNegative,
+  'sat-fundStructuring--creditDurationDeltaSignificantPositive': fund.data.currentTotalDeltaCreditDurationSignificantPositive,
+  'sat-fundStructuring--creditDurationDeltaSignificantNegative': fund.data.currentTotalDeltaCreditDurationSignificantNegative,
+  'sat-fundStructuring--isDisplayCs01': activeMetric === this.constants.cs01,
+  'sat-fundStructuring--isDisplayCreditLeverage': activeMetric === this.constants.creditLeverage
   }">
   <header *ngIf="fund.data" class="sat-fundStructuring__configuration">
-    <div class="sat-fundStructuring__targetBar">
+    <div class="sat-fundStructuring__configuration-metric">
       <target-bar [targetBar]="fund.data.creditLeverageTargetBar">
       </target-bar>
+      <div class="sat-fundStructuring__configuration-metric-data">
+        <div class="sat-fundStructuring__configuration-metric-data-index">
+          <target-bar [targetBar]="fund.data.creditLeverageIndexBar"></target-bar>
+        </div>
+        <div class="sat-fundStructuring__configuration-metric-data-creditLeverageDelta">
+          <div class="sat-fundStructuring__configuration-metric-data-creditLeverageDelta-text">
+            <span class="sat-fundStructuring__configuration-metric-data-creditLeverageDelta-text-type">{{ fund.data.activeDelta }}</span>
+            <i class="fal fa-triangle sat-fundStructuring__configuration-metric-data-creditLeverageDelta-text-icon"></i>
+            <span class="sat-fundStructuring__configuration-metric-data-creditLeverageDelta-text-type">: </span>
+            <span class="sat-fundStructuring__configuration-metric-data-creditLeverageDelta-text-difference">{{ fund.data.currentTotalDeltaCreditLeverageDisplayText }}</span>
+          </div>
+        </div>
+      </div>
     </div>
     <h2 class="sat-fundStructuring__configuration-title">{{ fund.data.portfolioShortName }}</h2>
-    <div class="sat-fundStructuring__targetBar">
+    <div class="sat-fundStructuring__configuration-metric">
       <target-bar [targetBar]="fund.data.creditDurationTargetBar"></target-bar>
+      <div class="sat-fundStructuring__configuration-metric-data">
+        <div class="sat-fundStructuring__configuration-metric-data-index">
+          <target-bar [targetBar]="fund.data.creditDurationIndexBar"></target-bar>
+        </div>
+        <div class="sat-fundStructuring__configuration-metric-data-creditDurationDelta">
+          <div class="sat-fundStructuring__configuration-metric-data-creditDurationDelta-text">
+            <span class="sat-fundStructuring__configuration-metric-data-creditDurationDelta-text-type">{{ fund.data.activeDelta }}</span>
+            <i class="fal fa-triangle sat-fundStructuring__configuration-metric-data-creditDurationDelta-text-icon"></i>
+            <span class="sat-fundStructuring__configuration-metric-data-creditDurationDelta-text-type">: </span>
+            <span class="sat-fundStructuring__configuration-metric-data-creditDurationDelta-text-difference">{{ fund.data.currentTotalDeltaCreditDurationDisplayText }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
   <section *ngIf="fund.data" class="sat-fundStructuring__editFund">
