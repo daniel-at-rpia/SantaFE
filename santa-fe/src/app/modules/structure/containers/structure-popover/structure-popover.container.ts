@@ -3,13 +3,19 @@ import { Store, select } from '@ngrx/store';
 
 
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import { PortfolioMetricValues, DeltaScope } from 'App/modules/core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  DeltaScope,
+  PORTFOLIO_ID_TO_SHORTNAMES
+} from 'App/modules/core/constants/structureConstants.constants';
 import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
-import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 import { DTOService, BICsDataProcessingService } from 'Core/services';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { StructureSetView } from 'Structure/actions/structure.actions';
 import { UtilityService } from 'Core/services/UtilityService';
+import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+
 
 @Component({
   selector: 'structure-popover',
@@ -28,7 +34,10 @@ export class StructurePopover implements OnInit, OnChanges {
   activeMetric: PortfolioMetricValues;
   constants = {
     navigationModule: NavigationModule,
-    mainRowMetricKeys: ['targetLevel', 'targetPct', 'diffToTarget', 'diffToTargetDisplay', 'currentLevel', 'currentPct', 'currentPctDisplay', 'indexPct', 'indexPctDisplay', 'moveVisualizer']
+    mainRowMetricKeys: ['targetLevel', 'targetPct', 'diffToTarget', 'diffToTargetDisplay', 'currentLevel', 'currentPct', 'currentPctDisplay', 'indexPct', 'indexPctDisplay', 'moveVisualizer'],
+    securityDefinitionMap: SecurityDefinitionMap,
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    portfolioIdToShortnames: PORTFOLIO_ID_TO_SHORTNAMES
   }
   subscriptions = {
     selectedMetricLevelSub: null
@@ -101,10 +110,27 @@ export class StructurePopover implements OnInit, OnChanges {
     }
   }
 
-  public onClickSeeBond() {
-    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(
-      this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true)
-    ));
+  public onClickSeeBond(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    newWorkflowState.data.stateInfo.activeMetric = this.activeMetric;
+    const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
+    const filterList: Array<DTOs.SecurityDefinitionDTO> = [];
+    this.seeBondPackageBICSBreakdownDataTransfer(
+      configurator,
+      targetRow,
+      filterList
+    );
+    const fundDefinition: DTOs.SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.PORTFOLIO);
+    const portfolioShortName = this.constants.portfolioIdToShortnames[this.mainRowData.portfolioID];
+    fundDefinition.data.displayOptionList.forEach((eachOption) => {
+      if (eachOption.shortKey === portfolioShortName) {
+        eachOption.isSelected = true;
+        fundDefinition.data.highlightSelectedOptionList.push(eachOption);
+      }
+    });
+    filterList.push(fundDefinition);
+    newWorkflowState.data.stateInfo.filterList = filterList;
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 
   public onClickEnterSetViewMode(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
@@ -180,6 +206,30 @@ export class StructurePopover implements OnInit, OnChanges {
         })
       }
     }
+  }
+
+  private seeBondPackageBICSBreakdownDataTransfer(
+    configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
+    filterList: Array<DTOs.SecurityDefinitionDTO>
+  ) {
+    configurator.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
+          const selectedOptionList = [];
+          selectedOptionList.push(targetRow.data.category);
+          eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
+            eachDefinition.data.key,
+            selectedOptionList,
+            targetRow.data.bicsLevel
+          );
+          eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+            eachOption.isSelected = true;
+          });
+          filterList.push(eachDefinition);
+        }
+      });
+    });
   }
 
 }

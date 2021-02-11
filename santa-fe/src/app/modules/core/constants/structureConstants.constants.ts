@@ -27,6 +27,16 @@ export enum PortfolioShortNames {
   BBB = 'BBB'
 }
 
+export const PORTFOLIO_ID_TO_SHORTNAMES = {
+  5: 'FIP',
+  6: 'STIP',
+  7: 'CIP',
+  12: 'DOF',
+  15: 'SOF',
+  18: 'BBB',
+  19: 'AGB'
+}
+
 export const SUPPORTED_PORTFOLIO_LIST: Array<PortfolioShortNames> = [
   PortfolioShortNames.FIP,
   PortfolioShortNames.BBB,
