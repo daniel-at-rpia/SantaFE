@@ -307,7 +307,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
-    this.state.table.metrics = this.constants.defaultMetrics.filter((eachStub) => {
+    this.state.table.metrics = this.utilityService.deepCopy(this.constants.defaultMetrics).filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
