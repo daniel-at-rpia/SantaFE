@@ -169,6 +169,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
 export const FrontendKayToBackendKeyDictionary = {
   // definitions
   'SECURITY_TYPE': 'SecurityType',
+  'SECURITY_SUB_TYPE': 'SecuritySubType',
   'RATING': 'RatingNoNotch',
   'CURRENCY': 'Ccy',
   'TENOR': 'Tenor',
