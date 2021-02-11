@@ -303,7 +303,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
-  public onUnselectPreset() {
+  public onUnselectPreset(captureNewState: boolean) {
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
@@ -313,12 +313,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     this.state.filters.keyword.defaultValueForUI = null;
-    // const alertTableCopy = this.utilityService.deepCopy(this.state.fetchResult.alertTable);
     this.state.fetchResult = this.initializePageState().fetchResult;
-    // this.state.fetchResult.alertTable = alertTableCopy;
     this.store$.dispatch(new TradeTogglePresetEvent);
-    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, this.constants.globalWorkflowTypes.unselectPreset);
-    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
+    if (!!captureNewState) {
+      const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, this.constants.globalWorkflowTypes.unselectPreset);
+      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
+    }
   }
 
   public buryConfigurator() {
@@ -708,6 +708,24 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     filterList: Array<DTOs.SecurityDefinitionDTO>,
     portfolioMetric: PortfolioMetricValues
   ) {
+    if (!!this.state.presets.selectedPreset) {
+      this.onUnselectPreset(false);
+      const delayToLoad = 1;  // the actual load needs to be executed on a delay because we need to give time for agGrid to react on santaTable's "activated" flag being set to false, this way when the autoLoadTable actually set it to "true" again, it will rebuild the header, otherwise the headers won't be rebuild. The time it takes for agGrid to react is trivial, we just need to wait for a single frame
+      setTimeout(
+        function(){
+          this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+        }.bind(this),
+        delayToLoad
+      );
+    } else {
+      this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+    }
+  }
+
+  private autoLoadTablePerformLoad(
+    filterList: Array<DTOs.SecurityDefinitionDTO>,
+    portfolioMetric: PortfolioMetricValues
+  ){
     this.onSelectPreset(this.state.presets.portfolioShortcutList[0]);
     filterList.forEach((eachFilterDefinition) => {
       this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {

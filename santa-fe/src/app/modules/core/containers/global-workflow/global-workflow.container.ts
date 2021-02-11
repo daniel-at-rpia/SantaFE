@@ -55,10 +55,11 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
           // the states that triggers redirect don't need to be manually pushed into document history
           if (!newState.state.triggersRedirect) {
             // don't block current thread
-            setTimeout(function(){
-              // angular's Location API is a wrapper on History API that go through more logic within the angular application before calling History API
-              this.angularLocation.go(`/${newState.data.module}/${newState.data.uuid}`);
-            }.bind(this), 1);
+            // setTimeout(function(){
+            //   // angular's Location API is a wrapper on History API that go through more logic within the angular application before calling History API
+            //   this.angularLocation.go(`${newState.data.module}/${newState.data.uuid}`);
+            // }.bind(this), 1);
+            this.router.navigate([newState.data.module, newState.data.uuid]);
           }
           if (!this.state.currentState || this.state.currentState.data.uuid !== newState.data.uuid) {
             this.storeState(newState);
