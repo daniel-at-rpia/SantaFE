@@ -111,6 +111,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'GovtBond',
     'Loan',
     'Preferred',
+    'Stock',
     'CDS',
     'CDSIndex'
   ];
