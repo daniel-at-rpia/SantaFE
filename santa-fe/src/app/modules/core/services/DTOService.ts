@@ -129,6 +129,7 @@ export class DTOService {
         industry: !isStencil ? rawData.industry : null,
         subIndustry: !isStencil ? rawData.subIndustry : null,
         securityType: !isStencil ? rawData.securityType : null,
+        securitySubType: !isStencil ? rawData.securitySubType : null,
         seniority: null,
         genericSeniority: !isStencil ? rawData.genericSeniority : null,
         maturityType: !isStencil ? rawData.maturityType : null,

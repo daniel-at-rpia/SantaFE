@@ -890,9 +890,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'securityType',
     content: {
-      label: 'Security Type',
+      label: 'Type',
       attrName: 'securityType',
       underlineAttrName: 'securityType',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      columnWidth: 95,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'securitySubType',
+    content: {
+      label: 'Sub-Type',
+      attrName: 'securitySubType',
+      underlineAttrName: 'securitySubType',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       columnWidth: 95,
