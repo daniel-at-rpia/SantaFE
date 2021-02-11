@@ -291,7 +291,8 @@ export enum GlobalWorkflowTypes {
   genericType = 'Generic',
   launchTradeToSeeBonds = 'Launch Trade To See Bonds',
   routeHandlerPlaceholder = 'Placeholder for Route Handler',
-  changedStructureUtilityConfig = 'Changed Structure Utility Config'
+  changedStructureUtilityConfig = 'Changed Structure Utility Config',
+  unselectPreset = 'Unselect Trade Preset'
 }
 
 export const GLOBAL_WORKFLOW_STATE_ID_KEY = 'stateId';
