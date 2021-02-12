@@ -131,6 +131,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.highlightSelectedOptionList.filter((eachFilter) => {
         return eachFilter.key !== targetOption.key;
       });
+      const findExistingOptionItem = targetDefinition.data.displayOptionList.find((option: SecurityDefinitionFilterBlock) => option.shortKey === targetOption.shortKey);
+      if (!!findExistingOptionItem) {
+        findExistingOptionItem.isSelected = false;
+      }
     }
     let filterActive = false;
     targetDefinition.data.displayOptionList.forEach((eachOption) => {
