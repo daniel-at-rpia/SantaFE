@@ -29,7 +29,8 @@
       selectSecurityMapValidStatus,
       selectUserInitials,
       selectNewAlerts,
-      selectGlobalAlertSendNewAlertsToTradePanel
+      selectGlobalAlertSendNewAlertsToTradePanel,
+      selectGlobalAlertLiveInternalCountEvent
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -98,7 +99,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     centerPanelPresetSelectedSub: null,
     startNewUpdateSub: null,
     keywordSearchSub: null,
-    newAlertSubscription: null
+    newAlertSubscription: null,
+    globalAlertLiveInternalCountEventSub: null
   }
   keywordChanged$: Subject<string> = new Subject<string>();
   autoUpdateCount$: Observable<any>;
@@ -289,14 +291,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         try {
           const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
           this.updateAlertTable(alertListCopy);
-          if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
-            const numOfUpdate = this.marketListAlertsCountdownUpdate();
-            if (numOfUpdate > 0){
-              // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
-              this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
-              this.state.alert.recentUpdatedAlertList = [];
-            }
-          }
           this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
         } catch {
           this.restfulCommService.logError('received new alerts but failed to generate');
@@ -304,9 +298,19 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
-
-      this.loadAllConfigurations();
-    }
+    this.subscriptions.globalAlertLiveInternalCountEventSub = this.store$.pipe(
+      select(selectGlobalAlertLiveInternalCountEvent)
+    ).subscribe((count: number) => {
+      if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
+        const numOfUpdate = this.marketListAlertsCountdownUpdate();
+        if (numOfUpdate > 0){
+          // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
+          this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
+          this.state.alert.recentUpdatedAlertList = [];
+        }
+      }
+    });
+  }
 
     public ngOnChanges() {
       if (!!this.collapseConfiguration) {

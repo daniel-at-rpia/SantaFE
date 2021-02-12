@@ -88,3 +88,8 @@ export const selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts = 
   getCoreState,
   (state: CoreState) => state.globalAlert.tradeTableReadyToReceiveAdditionalAlerts
 )
+
+export const selectGlobalAlertLiveInternalCountEvent = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.liveInternalCountEvent
+)
