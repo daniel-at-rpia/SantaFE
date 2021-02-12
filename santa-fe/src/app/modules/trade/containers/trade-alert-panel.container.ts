@@ -280,6 +280,12 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       select(selectGlobalAlertSendNewAlertsToTradePanel),
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       if (alertList.length > 0) {
+        if (!this.state.alert.initialAlertListReceived) {
+          this.state.alert.initialAlertListReceived = true;
+        }
+        if (!this.state.fetchResult.alertTable.fetchComplete) {
+          this.state.fetchResult.alertTable.fetchComplete = true;
+        }
         try {
           const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
           this.updateAlertTable(alertListCopy);
@@ -1040,7 +1046,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           SecurityIdentifier: securityList
         }
       };
-      this.state.fetchResult.alertTable.fetchComplete = false;
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolios, { req: 'POST' }, payload, false, false).pipe(
         first(),
         tap((serverReturn) => {
@@ -1077,11 +1082,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         this.onClickedSecurityCardSearch.bind(this)
       );
       this.calculateBestQuoteComparerWidthAndHeight();
-      this.state.fetchResult.alertTable.fetchComplete = true;
       this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
-      if (!this.state.alert.initialAlertListReceived) {
-        this.state.alert.initialAlertListReceived = true;
-      }
     }
 
     private updateStage(
