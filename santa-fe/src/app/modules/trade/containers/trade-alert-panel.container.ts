@@ -1239,8 +1239,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       this.state.alertUpdateInProgress = true;
       const alertTableList: Array<DTOs.AlertDTO> = [];
       const alertTableRemovalList: Array<DTOs.AlertDTO> = [];
-      const filteredList = alertList.filter((alert: DTOs.AlertDTO) => alert.state.isMarketListVariant);
-      filteredList.forEach((eachAlert: DTOs.AlertDTO) => {
+      alertList.forEach((eachAlert: DTOs.AlertDTO) => {
         // Trade alerts are handled differently since BE passes the same trade alerts regardless of the timestamp FE provides
         if (!!eachAlert.state.isMarketListVariant) {
           if (this.state.alert.alertTableAlertList[eachAlert.data.id]) {
