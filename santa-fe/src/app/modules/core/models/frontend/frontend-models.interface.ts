@@ -255,6 +255,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isFilterLong: boolean;
     currentFilterPathInConsolidatedBICS: Array<string>;
     isFilterCapped: boolean;
+    includesSubLevels: boolean;
   }
 }
 

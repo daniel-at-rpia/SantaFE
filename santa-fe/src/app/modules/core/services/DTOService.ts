@@ -612,7 +612,8 @@ export class DTOService {
         isMiniPillVariant: false,
         isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
         currentFilterPathInConsolidatedBICS: [],
-        isFilterCapped: false
+        isFilterCapped: false,
+        includesSubLevels: rawData.displayName === SecurityDefinitionMap.BICS_CONSOLIDATED.displayName
       }
     }
     return object;

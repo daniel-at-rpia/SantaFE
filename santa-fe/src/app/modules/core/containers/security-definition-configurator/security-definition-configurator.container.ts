@@ -254,10 +254,14 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         }
         const prevActiveFilters = !this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
         if (activeFilters.length === prevActiveFilters.length) {
-          for (let i = 0; i < activeFilters.length; ++i) {
-            if (activeFilters[i].shortKey !== prevActiveFilters[i].shortKey) {
-              canApply = true;
-              break;
+          if (eachDefinition.state.includesSubLevels) {
+            canApply = true;
+          } else {
+            for (let i = 0; i < activeFilters.length; ++i) {
+              if (activeFilters[i].shortKey !== prevActiveFilters[i].shortKey) {
+                canApply = true;
+                break;
+              }
             }
           }
         } else {
