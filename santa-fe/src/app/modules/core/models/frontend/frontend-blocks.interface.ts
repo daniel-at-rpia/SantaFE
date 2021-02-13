@@ -433,3 +433,11 @@ export interface TradeCenterPanelStateFilterBlock {
   }
   securityFilters: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>;
 }
+
+export interface StructureSetBulkOverridesEditRow {
+  displayRowTitle: string;
+  modifiedDisplayRowTitle: string;
+  rowIdentifier: string;
+  simpleBucket: StructureBucketDataBlock;
+  isEven: boolean;
+}
