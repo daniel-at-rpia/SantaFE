@@ -1,0 +1,126 @@
+@import "global.scss";
+@import "modules/structure/structure.scss";
+$structureSetTargetPanel_edit_column_size: 14rem;
+$setOverridesAcrossFundsPanel_edit_column_size: 14rem;
+$setOverridesAcrossFundsPanel_configurator_container_leftPadding: $spacing_large;
+$setOverridesAcrossFundsPanel_configurator_container_width: $securityDefinitionConfigurator_width + $setOverridesAcrossFundsPanel_configurator_container_leftPadding;
+$setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
+
+.sat-setOverridesAcrossFundsPanel {
+  $blockName: &;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spacing_large;
+  &__main {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    flex: 1 1 auto;
+    display: flex;
+    overflow: hidden;
+    min-height: 44rem;
+    &-configurator {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      @include mix_alive('light');
+      overflow: hidden;
+      height: 100%;
+      width: 0rem;
+      right: 50%;
+      padding-left: 0;
+      &-content { 
+        height: 100%;
+        background-color: $color_gray_2;
+        security-definition-configurator {
+          height: 100%;
+          display: flex;
+        }
+      }
+    }
+    &-edit {
+      flex: 0 0 50%;
+      display: flex;
+      flex-direction: column;
+      margin-left: 50%;
+      &-content {
+        @include mix_fixed_div(relative, $z_index_base_item);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding-left: $spacing_large;
+        &-border {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          @include mix_border_generator(2px, $color_active);
+          @include mix_border_radius(5px);
+          @include mix_alive('light');
+          width: $structureSetTargetPanel_edit_column_size + $spacing_small;
+          height: 100%;
+          pointer-events: none;
+        }
+        &-header {
+          flex: 0 0 auto;
+          display: flex;
+          justify-content: flex-end;
+          margin-right: $scroll_bar_width;
+          &-createRow {
+            display: flex;
+            align-self: flex-start;
+            background-color: $color_create;
+            margin-top: $spacing_small;
+            margin-right: auto;
+          }
+        }
+        &-rowList {
+          @include mix_enable_scrollbar('vertical');
+          display: flex;
+          flex-direction: column;
+          padding-bottom: $spacing_x_large;
+          margin-top: $spacing_small;
+          padding: .5rem;
+        }
+      }
+    }
+  }
+  &--displayConfiguratorState {
+    #{$blockName} {
+      &__main {
+        &-configurator {
+          width: $setOverridesAcrossFundsPanel_configurator_container_width;
+          padding-left: $setOverridesAcrossFundsPanel_configurator_container_leftPadding;
+          &-content {
+            display: flex;
+          }
+        }
+        &-edit {
+          &-content {
+            &-header-createRow {
+              @include material('none');
+              background-color: $color_active;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.sat-setOverridesAcrossFundsPanelEditRow {
+  $blockName: &;
+  @include mix_alive('custom', $animation_duration_light background-color);
+  background-color: $color_gray_2;
+  display: flex;
+  &__remove {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    flex: 0 0 auto;
+    margin: $spacing_small;
+    &-btn {
+      background-color: $color_kill;
+      color: $font_color_inverse;
+    }
+  }
+  &__label {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
