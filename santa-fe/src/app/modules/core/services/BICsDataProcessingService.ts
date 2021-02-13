@@ -382,6 +382,16 @@ export class BICsDataProcessingService {
     targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
+  public loadBICSOptionsIntoConfigurator(configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO) {
+    this.dtoService.loadBICSOptionsIntoConfigurator(
+      configuratorDTO,
+      this.returnAllBICSBasedOnHierarchyDepth(1),
+      this.returnAllBICSBasedOnHierarchyDepth(2),
+      this.returnAllBICSBasedOnHierarchyDepth(3),
+      this.returnAllBICSBasedOnHierarchyDepth(4)
+    )
+  }
+
   private setBreakdownListProperties(
     breakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO>,
     parentRow: DTOs.StructurePortfolioBreakdownRowDTO

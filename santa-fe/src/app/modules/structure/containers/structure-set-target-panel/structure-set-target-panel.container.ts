@@ -189,7 +189,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.loadEditRows();
         this.calculateAllocation();
         this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
-        this.loadBICSOptionsIntoConfigurator();
+        this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
         if (!!this.state.clearAllTargetSelected) {
           this.state.clearAllTargetSelected = false;
         }
@@ -439,7 +439,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     this.state.configurator.display = false;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
-    this.loadBICSOptionsIntoConfigurator();
+    this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
   }
 
   public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
@@ -1219,16 +1219,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       return false;
     }
-  }
-
-  private loadBICSOptionsIntoConfigurator() {
-    this.dtoService.loadBICSOptionsIntoConfigurator(
-      this.state.configurator.dto,
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(1),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(2),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(3),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(4)
-    )
   }
 
   private earMarkNewRow(targetTitle: string) {
