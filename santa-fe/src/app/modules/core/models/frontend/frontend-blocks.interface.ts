@@ -438,6 +438,7 @@ export interface StructureSetBulkOverridesEditRow {
   displayRowTitle: string;
   modifiedDisplayRowTitle: string;
   rowIdentifier: string;
+  displayBucket: string;
   simpleBucket: StructureBucketDataBlock;
   isEven: boolean;
 }

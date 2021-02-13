@@ -106,18 +106,20 @@ export class StructureSetBulkOverrides implements OnInit {
   public onSelectForRemoval(category: Blocks.StructureSetBulkOverridesEditRow) {
     const modifiedEditRowList = this.state.editRowList.filter((row: Blocks.StructureSetBulkOverridesEditRow) => row.rowIdentifier !== category.rowIdentifier);
     this.state.editRowList = modifiedEditRowList;
+    this.setRowAsEvenState()
   }
 
   public onEditRowRenamed(targetName: string, targetRow: Blocks.StructureSetBulkOverridesEditRow) {
     targetRow.modifiedDisplayRowTitle = targetName;
   }
 
-  private createEditRow(title: string, bucket: Blocks.StructureBucketDataBlock): Blocks.StructureSetBulkOverridesEditRow {
+  private createEditRow(title: string, simpleBucket: Blocks.StructureBucketDataBlock): Blocks.StructureSetBulkOverridesEditRow {
     const editRow: Blocks.StructureSetBulkOverridesEditRow = {
       displayRowTitle: title,
       modifiedDisplayRowTitle: title,
       rowIdentifier: title,
-      simpleBucket: bucket,
+      displayBucket: this.utilityService.formBucketIdentifierForOverride(simpleBucket),
+      simpleBucket: simpleBucket,
       isEven: false
     }
     return editRow;

@@ -108,6 +108,7 @@ $setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
   @include mix_alive('custom', $animation_duration_light background-color);
   background-color: $color_gray_2;
   display: flex;
+  align-items: center;
   &__remove {
     @include mix_fixed_div(relative, $z_index_base_item);
     flex: 0 0 auto;
