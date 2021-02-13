@@ -127,10 +127,14 @@ export class StructureSetBulkOverrides implements OnInit {
 
   private sortEditRows() {
     this.state.editRowList.sort((rowA: Blocks.StructureSetBulkOverridesEditRow, rowB: Blocks.StructureSetBulkOverridesEditRow) => {
-      if (rowA.displayRowTitle < rowB.displayRowTitle) {
+      if (rowA.displayBucket < rowB.displayBucket) {
         return -1;
-      } else if (rowA.displayRowTitle > rowB.displayRowTitle) {
+      } else if (rowA.displayBucket > rowB.displayBucket) {
         return 1;
+      } else if (rowA.displayRowTitle < rowB.displayRowTitle) {
+        return -4
+      } else if (rowA.displayRowTitle > rowB.displayRowTitle) {
+        return 4;
       } else {
         return 0;
       }
