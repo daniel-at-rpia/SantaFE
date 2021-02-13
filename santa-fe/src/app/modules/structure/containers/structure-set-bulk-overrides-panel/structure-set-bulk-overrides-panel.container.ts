@@ -95,6 +95,7 @@ export class StructureSetBulkOverrides implements OnInit {
       });
       const newEditRow = this.createEditRow(bucketToString, simpleBucket)
       this.state.editRowList.push(newEditRow);
+      this.sortEditRows();
       this.setRowAsEvenState();
     }
     this.state.configurator.display = false;
@@ -120,6 +121,18 @@ export class StructureSetBulkOverrides implements OnInit {
       isEven: false
     }
     return editRow;
+  }
+
+  private sortEditRows() {
+    this.state.editRowList.sort((rowA: Blocks.StructureSetBulkOverridesEditRow, rowB: Blocks.StructureSetBulkOverridesEditRow) => {
+      if (rowA.displayRowTitle < rowB.displayRowTitle) {
+        return -1;
+      } else if (rowA.displayRowTitle > rowB.displayRowTitle) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
   }
 
   private setRowAsEvenState() {
