@@ -95,6 +95,7 @@ export class StructureSetBulkOverrides implements OnInit {
       });
       const newEditRow = this.createEditRow(bucketToString, simpleBucket)
       this.state.editRowList.push(newEditRow);
+      this.setRowAsEvenState();
     }
     this.state.configurator.display = false;
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
@@ -119,6 +120,10 @@ export class StructureSetBulkOverrides implements OnInit {
       isEven: false
     }
     return editRow;
+  }
+
+  private setRowAsEvenState() {
+    this.state.editRowList.forEach((row:Blocks.StructureSetBulkOverridesEditRow, index: number) => row.isEven = index % 2 === 0);
   }
 
   private submitTargetChanges(): boolean {
