@@ -170,3 +170,11 @@ export interface PayloadClearPortfolioBreakdown {
   }
   groupOptionValue?: string;
 }
+
+export interface PayloadUpdatePortfolioOverridesForAllPortfolios {
+  portfolioOverride: {
+    date?: string;
+    simpleBucket: StructureBucketDataBlock;
+    title: string;
+  }
+}
