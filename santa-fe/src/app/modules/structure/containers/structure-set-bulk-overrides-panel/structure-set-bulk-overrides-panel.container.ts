@@ -106,6 +106,7 @@ export class StructureSetBulkOverrides implements OnInit {
   public onSelectForRemoval(category: Blocks.StructureSetBulkOverridesEditRow) {
     const modifiedEditRowList = this.state.editRowList.filter((row: Blocks.StructureSetBulkOverridesEditRow) => row.rowIdentifier !== category.rowIdentifier);
     this.state.editRowList = modifiedEditRowList;
+    this.sortEditRows();
     this.setRowAsEvenState()
   }
 
@@ -125,6 +126,17 @@ export class StructureSetBulkOverrides implements OnInit {
     return editRow;
   }
 
+  private updateRowIdentifier(simpleBucket: Blocks.StructureBucketDataBlock, rowNumber: number): string {
+    const values: Array<string> = [];
+    for (let groupOption in simpleBucket) {
+      if (simpleBucket[groupOption]) {
+        simpleBucket[groupOption].forEach((option:string) => values.push(option));
+      }
+    }
+    const rowIdentifier = `Row${rowNumber}-${values.join('-')}`;
+    return rowIdentifier;
+  }
+
   private sortEditRows() {
     this.state.editRowList.sort((rowA: Blocks.StructureSetBulkOverridesEditRow, rowB: Blocks.StructureSetBulkOverridesEditRow) => {
       if (rowA.displayBucket < rowB.displayBucket) {
@@ -138,6 +150,10 @@ export class StructureSetBulkOverrides implements OnInit {
       } else {
         return 0;
       }
+    })
+    this.state.editRowList.forEach((editRow: Blocks.StructureSetBulkOverridesEditRow, index: number) => {
+      const updatedIdentifier = this.updateRowIdentifier(editRow.simpleBucket,index);
+      editRow.rowIdentifier = updatedIdentifier;
     })
   }
 
