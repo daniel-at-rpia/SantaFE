@@ -14,7 +14,10 @@
     } from 'Core/services';
     import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { StructureStoreResetEvent, StructureUtilityPanelLoadStateEvent } from 'Structure/actions/structure.actions';
-    import { STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+    import {
+      STRUCTURE_EDIT_MODAL_ID,
+      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
+    } from 'Core/constants/structureConstants.constants';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
     import { GLOBAL_WORKFLOW_STATE_ID_KEY, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
@@ -34,6 +37,7 @@ export class StructurePage implements OnInit, OnDestroy {
   };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
+    setBulkOverridesModalId: STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
     stateId: GLOBAL_WORKFLOW_STATE_ID_KEY,
     workflowType: GlobalWorkflowTypes
   };

@@ -5,7 +5,11 @@ import { Store, select } from '@ngrx/store';
 import * as moment from 'moment';
 
 import { PortfolioFundDTO } from 'Core/models/frontend/frontend-models.interface';
-import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  STRUCTURE_EDIT_MODAL_ID,
+  STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
+} from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
@@ -52,6 +56,7 @@ export class StructureFund implements OnInit, OnDestroy {
     BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
     BECs01: BEPortfolioTargetMetricValues.Cs01,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
+    setBulkOverridesModalId: STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
     structuringTeamPMList: StructuringTeamPMList,
     navigationModule: NavigationModule,
   }
@@ -132,6 +137,10 @@ export class StructureFund implements OnInit, OnDestroy {
     if (this.fund.state.autoScalingAvailable) {
       this.fund.state.autoScalingActive = !this.fund.state.autoScalingActive;
     }
+  }
+
+  public onClickedAddBulkOverrides() {
+    this.modalService.triggerModalOpen(this.constants.setBulkOverridesModalId);
   }
 
   private validateInput(value: number | string) {

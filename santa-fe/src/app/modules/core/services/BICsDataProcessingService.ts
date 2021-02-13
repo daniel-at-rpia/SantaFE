@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
+import { DTOs, Blocks, AdhocPacks, PageStates } from '../models/frontend';
 import {
   BEBICsHierarchyBlock,
   BEStructuringFundBlock,
