@@ -240,6 +240,8 @@ export class StructureSetBulkOverrides implements OnInit {
     // reset states upon closing modal
     this.state.editRowList = [];
     this.state.configurator.display = false;
+    this.state.configurator.dto.state.showFiltersFromDefinition = null;
+    this.state.configurator.newOverrideNameCache = null;
     if (!!this.state.configurator.dto.data.definitionList) {
       this.state.configurator.dto.data.definitionList.forEach((definition: DTOs.SecurityDefinitionBundleDTO) => {
         if (definition.data.list.length > 0) {
@@ -250,6 +252,7 @@ export class StructureSetBulkOverrides implements OnInit {
                 displayOption.isSelected = false;
               })
             }
+            option.data.highlightSelectedOptionList = [];
           })
         }
       })
