@@ -11,11 +11,6 @@ export interface CoreState {
   user: {
     initials: string;
   };
-  alert: {
-    newAlerts: Array<DTOs.AlertDTO>;
-    countByTypeArr: Array<DTOs.AlertCountSummaryDTO>;
-    displayThumbnail: boolean;
-  };
   securityMap: {
     valid: boolean;
     mapContent: Array<AdhocPacks.SecurityMapEntry>;
@@ -26,16 +21,23 @@ export interface CoreState {
     currentStateInTrade: string;
     indexedDBReady: boolean;
   }
+  globalAlert: {
+    displayThumbnail: boolean;
+    countByTypeArr: Array<DTOs.AlertCountSummaryDTO>;
+    newUrgentAlerts: Array<DTOs.AlertDTO>;
+    newTradeAlertTableAlerts: Array<DTOs.AlertDTO>;
+    mainThreadOccupied: boolean;
+    readyForNextAlertCall: boolean;
+    processingAlerts: boolean;
+    makeAPICall: boolean;
+    apiCallForAlertFailed: boolean;
+    tradeTableReadyToReceiveAdditionalAlerts: boolean;
+  }
 }
 
 const initialState: CoreState = {
   user: {
     initials: null
-  },
-  alert: {
-    newAlerts: [],
-    countByTypeArr: [],
-    displayThumbnail: true
   },
   securityMap: {
     valid: false,
@@ -46,6 +48,18 @@ const initialState: CoreState = {
     currentStateInStructure: null,
     currentStateInTrade: null,
     indexedDBReady: false
+  },
+  globalAlert: {
+    displayThumbnail: true,
+    countByTypeArr: [],
+    newUrgentAlerts: [],
+    newTradeAlertTableAlerts: [],
+    mainThreadOccupied: false,
+    readyForNextAlertCall: false,
+    processingAlerts: false,
+    makeAPICall: false,
+    apiCallForAlertFailed: false,
+    tradeTableReadyToReceiveAdditionalAlerts: false
   }
 };
 
@@ -64,8 +78,8 @@ export function coreReducer(
     case CoreActions.ToggleAlertThumbnailDisplay:
        return {
          ...state,
-         alert: {
-           ...state.alert,
+         globalAlert: {
+           ...state.globalAlert,
            displayThumbnail: action.value
          }
        };
@@ -88,25 +102,25 @@ export function coreReducer(
     case CoreActions.SendNewAlerts:
       return {
         ...state,
-        alert: {
-          ...state.alert,
-          newAlerts: action.list
+        globalAlert: {
+          ...state.globalAlert,
+          newUrgentAlerts: action.list
         }
       };
     case CoreActions.SendAlertCountsByType:
       return {
         ...state,
-        alert: {
-          ...state.alert,
+        globalAlert: {
+          ...state.globalAlert,
           countByTypeArr: action.payload
         }
       };
     case CoreActions.ReceivedNewAlerts:
       return {
         ...state,
-        alert: {
-          ...state.alert,
-          newAlerts: []
+        globalAlert: {
+          ...state.globalAlert,
+          newUrgentAlerts: []
         }
       };
     case CoreActions.GlobalWorkflowSendNewState:
@@ -133,6 +147,96 @@ export function coreReducer(
           currentStateInStructure: action.uuid
         }
       }
+    case CoreActions.MainThreadOccupiedState:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          mainThreadOccupied: action.occupiedState
+        }
+      }
+    case CoreActions.MainThreadUnoccupiedState:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          mainThreadOccupied: action.unoccupiedState
+        }
+      }
+    case CoreActions.GlobalAlertsReadyForNextAlertCall:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          readyForNextAlertCall: true
+        }
+      }
+    case CoreActions.GlobalAlertsProcessingRawAlertsEvent:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          readyForNextAlertCall: false,
+          processingAlerts: true,
+        }
+      }
+    case CoreActions.GlobalAlertsProcessedRawAlerts:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          makeAPICall: false,
+          processingAlerts: false
+        }
+      }
+    case CoreActions.GlobalAlertMakeAPICall:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          makeAPICall: action.newState
+        }
+      }
+    case CoreActions.GlobalAlertsPassNewAlertsToTradeAlertPanel:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          newTradeAlertTableAlerts: action.list
+        }
+      }
+    case CoreActions.GlobalAlertsAPIAlertCallFailed:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          apiCallForAlertFailed: action.newState
+        }
+      }
+    case CoreActions.GlobalAlertsClearAllUrgentAlerts:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          newUrgentAlerts: []
+        }
+      }
+    case CoreActions.GlobalAlertsClearAllTradeAlertTableAlerts:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          newTradeAlertTableAlerts: []
+        }
+      }
+      case CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts:
+        return {
+          ...state,
+          globalAlert: {
+            ...state.globalAlert,
+            tradeTableReadyToReceiveAdditionalAlerts: action.newState
+          }
+        }
     case CoreActions.GlobalWorkflowIndexedDBReady:
       return {
         ...state,
