@@ -124,6 +124,9 @@ $setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
     justify-content: flex-start;
     align-items: center;
   }
+  &__bucket {
+    padding-right: $spacing_small;
+  }
   &--evenState {
     background-color: $color_blue_gray_1;
   }
