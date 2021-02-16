@@ -241,7 +241,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     let canApply = false;
     this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
       eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
-        const activeFilters = eachDefinition.state.isBICSVariant || eachDefinition.state.isFilterCapped ? eachDefinition.data.highlightSelectedOptionList.filter((eachOption) => {
+        const activeFilters = eachDefinition.state.isConsolidatedBICSVariant || eachDefinition.state.isFilterCapped ? eachDefinition.data.highlightSelectedOptionList.filter((eachOption) => {
           return eachOption.isSelected;
         }) : eachDefinition.data.displayOptionList.filter((eachOption) => {
           return eachOption.isSelected;
@@ -250,7 +250,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         if (eachDefinition.state.isFilterCapped) {
           previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
         } else {
-          previousListForCompare = eachDefinition.state.isBICSVariant ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
+          previousListForCompare = eachDefinition.state.isConsolidatedBICSVariant ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
         const prevActiveFilters = !eachDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
         if (activeFilters.length === prevActiveFilters.length) {
