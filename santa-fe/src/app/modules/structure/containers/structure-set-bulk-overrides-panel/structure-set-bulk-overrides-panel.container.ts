@@ -177,6 +177,7 @@ export class StructureSetBulkOverrides implements OnInit {
 
   private submitTargetChanges(): boolean {
     this.submitOverrideChanges();
+    this.state.editRowList = [];
     return true;
   }
 
