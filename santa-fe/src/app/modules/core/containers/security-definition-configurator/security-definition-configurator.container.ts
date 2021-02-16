@@ -67,17 +67,20 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
           });
         });
       }
-      this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
-      this.configuratorData.data.definitionList.forEach((eachBundle) => {
-        eachBundle.data.list.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
-            this.fetchCountryCode(eachDefinition);
-          }
-          if (eachDefinition.data.key === this.constants.map.TICKER.key) {
-            this.fetchTicker(eachDefinition);
-          }
+      if (!this.lastExecutedConfiguration) {
+        // no last executed config means it is being initialized for the first time
+        this.configuratorData.data.definitionList.forEach((eachBundle) => {
+          eachBundle.data.list.forEach((eachDefinition) => {
+            if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
+              this.fetchCountryCode(eachDefinition);
+            }
+            if (eachDefinition.data.key === this.constants.map.TICKER.key) {
+              this.fetchTicker(eachDefinition);
+            }
+          });
         });
-      });
+      }
+      this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     }
   }
 
