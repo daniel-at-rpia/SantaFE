@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { of } from 'rxjs';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { of, Subscription } from 'rxjs';
 import { catchError, first, tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { StructureSetOverridesAcrossFundsPanelState } from 'Core/models/frontend/frontend-page-states.interface';
@@ -21,8 +21,8 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService'
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
-import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions'; 
-
+import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
+import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
 @Component({
   selector: 'structure-set-bulk-overrides-panel',
   templateUrl: './structure-set-bulk-overrides-panel.container.html',
@@ -32,9 +32,9 @@ import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actio
 
 export class StructureSetBulkOverrides implements OnInit {
   state: StructureSetOverridesAcrossFundsPanelState;
-  // subscriptions = {
-  //   setOverridesAcrossAllFundsSub: null
-  // }
+  subscriptions = {
+    setBulkOverridesSub: null
+  }
   constants = {
     setBulkOverridesModalId: STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
     configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
@@ -66,9 +66,22 @@ export class StructureSetBulkOverrides implements OnInit {
   public ngOnInit() {
     this.state = this.initializePageState();
     this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
-    this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
+    this.subscriptions.setBulkOverridesSub = this.store$.pipe(select(selectSetBulkOverridesEvent)).subscribe((state:boolean) =>{
+      if (!!state) {
+        this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
+      }
+    })
     this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Set Overrides Across Multiple Funds');
     this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitTargetChanges.bind(this));
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions[eachItem]) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe()
+      }
+    }
   }
 
   public onClickNewOverrideRow() {

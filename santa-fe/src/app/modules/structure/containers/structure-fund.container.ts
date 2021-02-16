@@ -28,7 +28,10 @@ import {
 } from 'BEModels/backend-payloads.interface';
 import { BEStructuringFundBlockWithSubPortfolios, BEStructuringBreakdownMetricBlock } from 'BEModels/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent } from 'Structure/actions/structure.actions';
+import {
+  StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent,
+  StructureSetBulkOverridesEvent
+} from 'Structure/actions/structure.actions';
 import { BEPortfolioTargetMetricValues, SubPortfolioFilter } from 'Core/constants/structureConstants.constants';
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
@@ -140,6 +143,7 @@ export class StructureFund implements OnInit, OnDestroy {
   }
 
   public onClickedAddBulkOverrides() {
+    this.store$.dispatch(new StructureSetBulkOverridesEvent());
     this.modalService.triggerModalOpen(this.constants.setBulkOverridesModalId);
   }
 

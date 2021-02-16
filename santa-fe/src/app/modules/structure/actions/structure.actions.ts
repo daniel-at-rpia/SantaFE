@@ -27,7 +27,8 @@ export enum StructureActions {
   ChangeSubPortfolioViewFilter = '[Structure] Change Sub-Portfolio View Filter',
   ChangeDeltaScope = '[Structure] Change Delta Scope',
   SwitchDataDatestamp = '[Structure] Switch Data Datestamp',
-  UtilityPanelLoadState = '[Structure] Utility Panel Load State'
+  UtilityPanelLoadState = '[Structure] Utility Panel Load State',
+  SetBulkOverridesEvent = '[Structure] Set Bulk Overrides Event'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -118,4 +119,9 @@ export class StructureUtilityPanelLoadStateEvent implements Action {
   constructor(panelState: StructureUtilityPanelState) {
     this.panelState = panelState;
   }
+}
+
+export class StructureSetBulkOverridesEvent implements Action {
+  readonly type = StructureActions.SetBulkOverridesEvent;
+  constructor() {}
 }

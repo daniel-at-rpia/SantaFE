@@ -27,6 +27,7 @@ export interface StructureState {
   activeDeltaScope: DeltaScope;
   dataDatestamp: number;
   utilityPanelLoadState: StructureUtilityPanelState;
+  setBulkOverrides: boolean;
 }
 
 const initialState: StructureState = {
@@ -48,7 +49,8 @@ const initialState: StructureState = {
   activeSubPortfolioFilter: SubPortfolioFilter.all,
   activeDeltaScope: DeltaScope.dod,
   dataDatestamp: moment().unix(),
-  utilityPanelLoadState: null
+  utilityPanelLoadState: null,
+  setBulkOverrides: false
 }
 
 export function structureReducer(
@@ -112,6 +114,11 @@ export function structureReducer(
       return {
         ...state,
         utilityPanelLoadState: action.panelState
+      };
+    case StructureActions.SetBulkOverridesEvent:
+      return {
+        ...state,
+        setBulkOverrides: true
       };
     default:
       return state;
