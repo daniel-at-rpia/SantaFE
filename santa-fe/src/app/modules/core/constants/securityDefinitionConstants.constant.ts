@@ -283,7 +283,8 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   export const StructuringTeamPMList = [
     'AY',
     'DM',
-    'LP'
+    'LP',
+    'PM'
   ];
 
   export const BICsLevel1DefinitionList = [
