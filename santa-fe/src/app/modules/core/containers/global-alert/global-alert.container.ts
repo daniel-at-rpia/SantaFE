@@ -3,12 +3,13 @@
     import { interval, Observable, of, Subscription } from 'rxjs';
     import { catchError, filter, first, tap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
-
+    import { Router, NavigationEnd } from '@angular/router';
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { GlobalAlertState } from 'FEModels/frontend-page-states.interface';
-    import { AlertDTO, AlertCountSummaryDTO } from 'FEModels/frontend-models.interface';
+    import { DTOs } from 'Core/models/frontend';
+    import { BEAlertDTO } from 'Core/models/backend/backend-models.interface';
     import { PayloadSetAlertsToInactive } from 'BEModels/backend-payloads.interface';
     import {
       ALERT_COUNTDOWN,
@@ -16,14 +17,30 @@
       ALERT_PRESENT_LIST_SIZE_CAP,
       ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
+    import { ALERT_UPDATE_COUNTDOWN } from 'Core/constants/tradeConstants.constant';
     import {
       CoreLoadSecurityMap,
       CoreSendAlertCountsByType,
-      CoreToggleAlertThumbnailDisplay
+      CoreToggleAlertThumbnailDisplay,
+      CoreSendNewAlerts,
+      CoreGlobalLiveUpdateInternalCountEvent,
+      CoreGlobalAlertProcessingEvent,
+      CoreGlobalAlertsProcessedRawAlerts,
+      CoreGlobalAlertsSendNewAlertsToTradeAlertPanel,
+      CoreGlobalAlertFailedToMakeAlertAPICall,
+      CoreGlobalAlertClearAllUrgentAlerts,
+      CoreGlobalAlertsClearAllTradeAlertTableAlerts,
+      CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts
     } from 'Core/actions/core.actions';
-    import {selectAlertCounts, selectNewAlerts} from 'Core/selectors/core.selectors';
-    import { CoreReceivedNewAlerts } from 'Core/actions/core.actions';
+    import {
+      selectNewAlerts,
+      selectGlobalAlertProcessingAlertState,
+      selectGlobalAlertMakeAPICall,
+      selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts
+    } from 'Core/selectors/core.selectors';
+    import { NavigationModule } from 'Core/constants/coreConstants.constant';
     import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
+    import * as moment from 'moment';
 
 //
 
@@ -38,12 +55,21 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   state: GlobalAlertState;
   subscriptions = {
     newAlertSubscription: null,
-    browserTabNotificationSub: null
+    browserTabNotificationSub: null,
+    autoCountForRawAlertsSub: null,
+    makeAlertAPICallSub: null,
+    navigationStartSub: null,
+    tradeAlertTableReadyToReceiveAdditionalAlerts: null
   }
   browserTabNotificationCount$: Observable<any>;
+  autoCountForRawAlerts$: Observable<any>;
   constants = {
     sizeCap: ALERT_PRESENT_LIST_SIZE_CAP,
-    totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD
+    totalSizeMaxDisplay: ALERT_TOTALSIZE_MAX_DISPLAY_THRESHOLD,
+    alertTypes: AlertTypes,
+    countdown: ALERT_UPDATE_COUNTDOWN,
+    moduleUrl: NavigationModule
+
   };
 
   private initializePageState(): GlobalAlertState {
@@ -53,11 +79,16 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       triggerActionMenuOpen: false,
       presentList: [],
       storeList: [],
-      secondaryStoreList: [],
+      allAlertsList: [],
       totalSize: 0,
       displayTotalSize: '',
       originalDocumentTitle: document.title,
-      favicon: null
+      favicon: null,
+      alertUpdateTimeStamp: '',
+      receivedActiveAlertsMap: {},
+      alertUpdateInProgress: false,
+      autoUpdateCountdown: 0,
+      tradeAlertTableReadyToReceiveAdditionalAlerts: false
     };
     return state;
   }
@@ -66,42 +97,49 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private router: Router
   ) {
     this.state = this.initializePageState();
   }
 
   public ngOnInit() {
-
-    this.subscriptions.newAlertSubscription = this.store$.pipe(
-      select(selectNewAlerts),
-    ).subscribe((alertList: AlertDTO[]) => {
-      // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
-      const alertListSorted: AlertDTO[] = this.utilityService.deepCopy(alertList).reverse();
-      try {
-        alertListSorted.forEach((eachAlert) => {
-          if (eachAlert.state.isCancelled) {
-            if (eachAlert.state.isExpired) {
-              // if it is naturally expired, then don't do anything
-              // because if it is the first load after refreshing the FE, then nothing needs to be done for the naturally expired ones
-              // and if it is not the first load, the expiration will be picked up at individual alert level
-            } else {
-              console.log('cancel alert ', eachAlert);
-              this.onAlertExpired(eachAlert);
-            }
-          } else if (eachAlert.data.isUrgent) {
-            this.generateNewAlert(eachAlert, alertListSorted);
-          } else {
-            this.state.secondaryStoreList.push(eachAlert);
-          }
-        });
-        this.updateTotalSize();
-      } catch {
-        this.restfulCommService.logError('received new alerts but failed to generate');
-        console.error('received new alerts but failed to generate');
+    this.autoCountForRawAlerts$ = interval(1000);
+    this.subscriptions.autoCountForRawAlertsSub = this.autoCountForRawAlerts$.subscribe((count: Observable<number>) => {
+      this.state.autoUpdateCountdown = this.state.autoUpdateCountdown + 1;
+      if (!this.state.alertUpdateInProgress) {
+        this.store$.dispatch(new CoreGlobalLiveUpdateInternalCountEvent(this.state.autoUpdateCountdown))
       }
     });
-
+    this.subscriptions.makeAlertAPICallSub = this.store$.pipe(
+      select(selectGlobalAlertMakeAPICall)
+      ).subscribe((makeAPICall: boolean) => {
+      !!makeAPICall && this.getRawAlerts();
+    });
+    this.subscriptions.newAlertSubscription = this.store$.pipe(
+      select(selectNewAlerts),
+    ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
+      alertList.length > 0 && this.getAlertsForUrgentAlertList(alertList);
+    });
+    this.subscriptions.tradeAlertTableReadyToReceiveAdditionalAlerts = this.store$.pipe(
+      select(selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts),
+    ).subscribe((state: boolean) => {
+      this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = state;
+    })
+    this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
+        if (this.constants.moduleUrl.trade === modulePortion) {
+          if (!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
+            if (this.state.allAlertsList.length > 0) {
+              this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
+            }
+            this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = true;
+            this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(true))
+          }
+        }
+      }
+    });
     this.browserTabNotificationCount$ = interval(500);
     this.state.favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
     this.subscriptions.browserTabNotificationSub = this.browserTabNotificationCount$.subscribe(count => {
@@ -179,7 +217,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  public onClickAlertThumbnail(targetAlert: AlertDTO) {
+  public onClickAlertThumbnail(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
       targetAlert.state.isSlidedOut = !targetAlert.state.isSlidedOut;
       if (!targetAlert.state.isSlidedOut && !targetAlert.state.isCountdownFinished) {
@@ -194,12 +232,12 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public loadAlertToTable(targetAlert: AlertDTO) {
+  public loadAlertToTable(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
     }
   }
 
-  public onClickAlertRemove(targetAlert: AlertDTO) {
+  public onClickAlertRemove(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
       targetAlert.state.willBeRemoved = true;
       const removeTarget = () => {
@@ -215,7 +253,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onAlertExpired(targetAlert: AlertDTO) {
+  public onAlertExpired(targetAlert: DTOs.AlertDTO) {
     if (targetAlert) {
       const isFromPresent = !!this.state.presentList.find((eachAlert) => {
         return targetAlert.data.id === eachAlert.data.id;
@@ -234,8 +272,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   private generateNewAlert(
-    newAlert: AlertDTO,
-    entireListForDebugging: Array<AlertDTO>
+    newAlert: DTOs.AlertDTO,
+    entireListForDebugging: Array<DTOs.AlertDTO>
   ) {
     const existIndexInPresent = this.state.presentList.findIndex((eachAlert) => {
       return eachAlert.data.id === newAlert.data.id;
@@ -273,7 +311,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       this.state.storeList.splice(existIndexInStore, 1);
     }
     this.state.presentList.unshift(newAlert);
-    this.initiateStateProgressionForNewAlert(newAlert);
     if (this.state.presentList.length >= this.constants.sizeCap) {
       const lastAlert = this.state.presentList[this.state.presentList.length - 1];
       this.state.storeList.unshift(lastAlert);
@@ -281,7 +318,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private initiateStateProgressionForNewAlert(newAlert: AlertDTO) {
+  private initiateStateProgressionForNewAlert(newAlert: DTOs.AlertDTO) {
     setTimeout(function(){
       if (!!newAlert) {
         newAlert.state.isNew = false;
@@ -318,9 +355,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       this.state.displayTotalSize = `${this.state.totalSize}`;
     }
     // counting all types in buckets
-    const allAlerts = [...this.state.presentList, ...this.state.storeList, ...this.state.secondaryStoreList];
+    const allAlerts = [...this.state.presentList, ...this.state.storeList];
     const grouped = this.groupBy(allAlerts, alert => alert.data.type);
-    const payload: Array<AlertCountSummaryDTO> = [];
+    const payload: Array<DTOs.AlertCountSummaryDTO> = [];
     grouped.forEach((value, key) => {
       payload.push(this.dtoService.formAlertCountSummaryObject(key, value.length));
     });
@@ -328,7 +365,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
   }
 
   private removeSingleAlert(
-    targetAlert: AlertDTO,
+    targetAlert: DTOs.AlertDTO,
     isFromPresent: boolean
   ) {
     if (!!targetAlert) {
@@ -384,4 +421,114 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  private getRawAlerts() {
+    const payload = {
+      "timeStamp": this.state.alertUpdateTimeStamp ||  moment().hour(0).minute(0).second(0).format("YYYY-MM-DDTHH:mm:ss.SSS")
+    };
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: Array<BEAlertDTO>) => {
+        // using synthetic alerts for dev purposes
+        // serverReturn = !this.state.alert.initialAlertListReceived ? AlertSample : [];
+        const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
+          // no filtering logic for now
+          return true;
+        }) : [];
+        const [urgentAlertUpdateList, allAlertsUpdateList ] = this.createAlertsLists(filteredServerReturn);
+        this.store$.dispatch(new CoreGlobalAlertsProcessedRawAlerts());
+        urgentAlertUpdateList.length > 0 && this.getAlertsForUrgentAlertList(urgentAlertUpdateList);
+        if (allAlertsUpdateList.length > 0) {
+          this.state.allAlertsList = [...this.state.allAlertsList, ...allAlertsUpdateList];
+          if (!!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
+            this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
+          }
+        }
+        this.state.alertUpdateInProgress = false;
+      }),
+      catchError(err => {
+        this.state.alertUpdateInProgress = false;
+        console.error(`${this.restfulCommService.apiMap.getAlerts} failed`, err);
+        this.store$.dispatch(new CoreGlobalAlertFailedToMakeAlertAPICall(true))
+        return of('error');
+      })
+    ).subscribe();
+    this.store$.dispatch(new CoreGlobalAlertProcessingEvent());
+    this.state.alertUpdateTimeStamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
+  }
+
+  private getAlertsForUrgentAlertList(alertList: Array<DTOs.AlertDTO>) {
+    // the BE returns the array in a sequential order with the latest one on top, because the Alert present list is in a first-in-last-out order, we need to sort it reversely so it is presented in a sequential order
+    const alertListSorted: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+    try {
+      alertListSorted.forEach((eachAlert) => {
+        if (eachAlert.state.isCancelled) {
+          if (eachAlert.state.isExpired) {
+            // if it is naturally expired, then don't do anything
+            // because if it is the first load after refreshing the FE, then nothing needs to be done for the naturally expired ones
+            // and if it is not the first load, the expiration will be picked up at individual alert level
+          } else {
+            console.log('cancel alert ', eachAlert);
+            this.onAlertExpired(eachAlert);
+          }
+        } else if (eachAlert.data.isUrgent) {
+          this.generateNewAlert(eachAlert, alertListSorted);
+        }
+      });
+      this.state.presentList.forEach((alert: DTOs.AlertDTO, index: number) => {
+        const displayCutOff = alertList.length < this.constants.sizeCap ? alertList.length : this.constants.sizeCap;
+        if (index < displayCutOff) {
+          this.initiateStateProgressionForNewAlert(alert);
+        }
+      })
+      this.updateTotalSize();
+      this.store$.dispatch(new CoreGlobalAlertClearAllUrgentAlerts());
+    } catch {
+      this.restfulCommService.logError('received new alerts but failed to generate');
+      console.error('received new alerts but failed to generate');
+    }
+  }
+
+  private createAlertsLists(serverReturn: Array<BEAlertDTO>):Array<Array<DTOs.AlertDTO>> {
+    const urgentAlertUpdateList: Array<DTOs.AlertDTO> = [];
+    const allAlertsUpdateList: Array<DTOs.AlertDTO> = [];
+    serverReturn.forEach((eachRawAlert: BEAlertDTO) => {
+      if (!!eachRawAlert) {
+          const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
+        // Inquiry alerts are handled differently since BE passes the same inquiry alerts regardless of the timestamp FE provides
+        if (!!eachRawAlert.marketListAlert) {
+          if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
+            // ignore, already have it
+          } else if (!eachRawAlert.isActive) {
+            // ignore, already expired
+            if (newAlert.data.security && newAlert.data.security.data.securityID) {
+              allAlertsUpdateList.push(newAlert);
+            }
+          } else {
+            this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
+            urgentAlertUpdateList.push(newAlert);
+            if (newAlert.data.security && newAlert.data.security.data.securityID) {
+              allAlertsUpdateList.push(newAlert);
+            }
+          }
+        } else {
+          if (eachRawAlert.isCancelled) {
+            // cancellation of alerts carries diff meaning depending on the alert type:
+            // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
+            !newAlert.state.isRead && allAlertsUpdateList.push(newAlert);
+            if (newAlert.data.type === this.constants.alertTypes.markAlert || newAlert.data.type === this.constants.alertTypes.axeAlert) {
+              urgentAlertUpdateList.push(newAlert);
+            }
+          } else {
+            if (!newAlert.state.isRead && newAlert.data.isUrgent) {
+              urgentAlertUpdateList.push(newAlert);
+            }
+            if (newAlert.data.security && newAlert.data.security.data.securityID) {
+              allAlertsUpdateList.push(newAlert)
+            }
+          }
+        }
+      }
+    });
+    return [urgentAlertUpdateList, allAlertsUpdateList];
+  }
 }
