@@ -19,7 +19,8 @@ import {
   GlobalWorkflowIOService,
   BICSDictionaryLookupService
 } from 'Core/services';
-
+import { CoreEffect } from 'Core/effects/core.effects';
+import { EffectsModule } from '@ngrx/effects';
 import { AgGridModule } from 'ag-grid-angular';
 
 import { SecurityCard } from 'Core/containers/security-card/security-card.container';
@@ -97,7 +98,7 @@ import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
       SantaTableAlertStatusCell,
       SantaTableFullWidthCellRenderer
     ]),
-
+    EffectsModule.forFeature([CoreEffect]),
     FormModule
   ],
   providers: [

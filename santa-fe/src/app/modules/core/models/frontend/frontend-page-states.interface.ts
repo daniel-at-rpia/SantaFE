@@ -46,7 +46,12 @@ export interface GlobalAlertState {
   displayTotalSize: string;
   originalDocumentTitle: string;
   favicon: HTMLLinkElement;
-  secondaryStoreList: Array<DTOs.AlertDTO>;  // for alerts that are not suppose to be displayed, need this for calculating total count
+  allAlertsList: Array<DTOs.AlertDTO>;
+  alertUpdateTimeStamp: string;
+  receivedActiveAlertsMap: object; // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
+  alertUpdateInProgress: boolean;
+  autoUpdateCountdown: number;
+  tradeAlertTableReadyToReceiveAdditionalAlerts: boolean;
 }
 
 export interface GlobalWorkflowState {
@@ -223,7 +228,6 @@ export interface TradeAlertPanelState {
   // focusMode: boolean;
   isAlertPaused: boolean;
   securityMap: Array<AdhocPacks.SecurityMapEntry>;
-  alertUpdateTimestamp: string;
   configuration: {
     axe: {
       securitySearchKeyword: string;
@@ -233,10 +237,8 @@ export interface TradeAlertPanelState {
       searchIsValid: boolean;
     }
   }
-  autoUpdateCountdown: number;
   alertUpdateInProgress: boolean;
   isCenterPanelPresetSelected: boolean;
-  receivedActiveAlertsMap: object;  // currently BE passes the same marketlist alerts regardless of the timestamp FE provides, until the alert expires. This map is to avoid duplicates being created over and over on each heartbeat
   displayAlertTable: boolean;
   table: {
     alertMetrics: Array<Stubs.SecurityTableHeaderConfigStub>;

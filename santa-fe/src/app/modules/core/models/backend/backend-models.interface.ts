@@ -429,7 +429,7 @@ export interface BEAlertDTO {
   };
   trades?: Array<BETradeBlock>; // for trade alerts
   quote?: BEAlertRegularQuoteBlock|BEAlertMarketListQuoteBlock|BEAlertCDSQuoteBlock;
-  marketListAlert?: BEAlertMarketListBlock;
+  marketListAlert?: BEAlertMarketListBlock; // usually this is in sync with isMarketListAlert, unless the alert is cancelled, in which this would be set to null
   sendEmail: boolean;
   trade?: BETraceTradesBlock; // for trace alerts
 }
