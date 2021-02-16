@@ -198,6 +198,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
+    this.modalService.bindModalCloseCallback(STRUCTURE_EDIT_MODAL_ID, this.closeModal.bind(this));
   }
 
   public ngOnDestroy() {
@@ -1619,5 +1620,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         return false;
       }
     }
+  }
+
+  private closeModal(): boolean {
+    return true;
   }
 }

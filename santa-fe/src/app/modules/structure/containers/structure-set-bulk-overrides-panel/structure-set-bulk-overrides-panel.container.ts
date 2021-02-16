@@ -73,6 +73,7 @@ export class StructureSetBulkOverrides implements OnInit {
     })
     this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Set Overrides Across Multiple Funds');
     this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitTargetChanges.bind(this));
+    this.modalService.bindModalCloseCallback(this.constants.setBulkOverridesModalId, this.closeModal.bind(this));
   }
 
   public ngOnDestroy() {
@@ -232,6 +233,27 @@ export class StructureSetBulkOverrides implements OnInit {
       this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
       return false;
     }
+  }
+
+  private closeModal(): boolean {
+    // reset states upon closing modal
+    this.state.editRowList = [];
+    this.state.configurator.display = false;
+    if (!!this.state.configurator.dto.data.definitionList) {
+      this.state.configurator.dto.data.definitionList.forEach((definition: DTOs.SecurityDefinitionBundleDTO) => {
+        if (definition.data.list.length > 0) {
+          definition.data.list.forEach((option: DTOs.SecurityDefinitionDTO) => {
+            option.state.filterActive = false;
+            if (option.data.displayOptionList.length > 0) {
+              option.data.displayOptionList.forEach((displayOption: Blocks.SecurityDefinitionFilterBlock) => {
+                displayOption.isSelected = false;
+              })
+            }
+          })
+        }
+      })
+    }
+    return true;
   }
 }
 

@@ -48,7 +48,14 @@ export class SantaModal implements OnInit, OnDestroy {
   }
 
   public closeModal() {
-    this.modalData.state.isPresenting = false;
+    if (!!this.modalData.api.closeModal) {
+      const canClose = this.modalData.api.closeModal();
+      if (canClose) {
+        this.modalData.state.isPresenting = false;
+      }
+    } else {
+      this.modalData.state.isPresenting = false;
+    }
   }
 
   public saveModal() {
