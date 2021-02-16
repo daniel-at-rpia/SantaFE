@@ -74,7 +74,17 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
       min: 0,
       max: 2.5
     },
+    '2Y (<= 2.5)': {
+      displayLabel: '2Y (<= 2.5)',
+      min: 0,
+      max: 2.5
+    },
     '3Y': {
+      displayLabel: '3Y (2.6 ~ 4.0)',
+      min: 2.6,
+      max: 4.0
+    },
+    '3Y (2.6 ~ 4.0)': {
       displayLabel: '3Y (2.6 ~ 4.0)',
       min: 2.6,
       max: 4.0
@@ -84,7 +94,17 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
       min: 4.1,
       max: 6.0
     },
+    '5Y (4.1 ~ 6.0)': {
+      displayLabel: '5Y (4.1 ~ 6.0)',
+      min: 4.1,
+      max: 6.0
+    },
     '7Y': {
+      displayLabel: '7Y (6.1 ~ 8.5)',
+      min: 6.1,
+      max: 8.5
+    },
+    '7Y (6.1 ~ 8.5)': {
       displayLabel: '7Y (6.1 ~ 8.5)',
       min: 6.1,
       max: 8.5
@@ -94,12 +114,27 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
       min: 8.6,
       max: 15.0
     },
+    '10Y (8.6 ~ 15.0)': {
+      displayLabel: '10Y (8.6 ~ 15.0)',
+      min: 8.6,
+      max: 15.0
+    },
     '20Y': {
       displayLabel: '20Y (15.1 ~ 25.0)',
       min: 15.1,
       max: 25.0
     },
+    '20Y (15.1 ~ 25.0)': {
+      displayLabel: '20Y (15.1 ~ 25.0)',
+      min: 15.1,
+      max: 25.0
+    },
     '30Y': {
+      displayLabel: '30Y (25.1 ~ 99.9)',
+      min: 25.1,
+      max: 99.9
+    },
+    '30Y (25.1 ~ 99.9)': {
       displayLabel: '30Y (25.1 ~ 99.9)',
       min: 25.1,
       max: 99.9
