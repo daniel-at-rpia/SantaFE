@@ -15,6 +15,19 @@ export enum CoreActions {
   SendAlertCountsByType = '[Core] Send Alert Counts',
   ReceivedNewAlerts = '[Core] Received New Alerts',
   GlobalWorkflowSendNewState = '[Core] Global Workflow Send New State',
+  GlobalWorkflowUpdateCurrentState = '[Core] Global Workflow Update Current State',
+  MainThreadOccupiedState = '[Core] Main Thread Is Occupied',
+  MainThreadUnoccupiedState = '[Core] Main Thread Is Unoccupied',
+  GlobalAlertIncrementInternalCountEvent = '[Core] Global Alert Increment Count Event',
+  GlobalAlertMakeAPICall = '[Core] Global Alert Make API Alert Call',
+  GlobalAlertsReadyForNextAlertCall = '[Core] Global Alerts Ready For Next Alert Call',
+  GlobalAlertsProcessingRawAlertsEvent = '[Core] Processing Raw Global Alerts',
+  GlobalAlertsProcessedRawAlerts = '[Core] Raw Alerts Processed For Global Alerts',
+  GlobalAlertsPassNewAlertsToTradeAlertPanel = '[Core] Passed Alerts to Trade Alert',
+  GlobalAlertsAPIAlertCallFailed = '[Core] Global Alerts Failed to Make API Call For Alerts',
+  GlobalAlertsClearAllUrgentAlerts = '[Core] Global Alerts Clear All Urgent Alerts In Store',
+  GlobalAlertsClearAllTradeAlertTableAlerts = '[Core] Global Alerts Clear All Alerts For Trade Alert Panel In Store',
+  GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Ready To Receive Additional Alerts',
   GlobalWorkflowUpdateCurrentTradeState = '[Core] Global Workflow Update Current Trade State',
   GlobalWorkflowUpdateCurrentStructureState = '[Core] Global Workflow Update Current Structure State',
   GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready'
@@ -100,6 +113,87 @@ export class CoreGlobalWorkflowUpdateCurrentTradeState implements Action {
   }
 }
 
+export class CoreMainThreadOccupiedState implements Action {
+  readonly type = CoreActions.MainThreadOccupiedState;
+  readonly occupiedState: boolean;
+  constructor(occupiedState: boolean) {
+    this.occupiedState = occupiedState;
+  };
+}
+
+export class CoreMainThreadUnoccupiedState implements Action {
+  readonly type = CoreActions.MainThreadUnoccupiedState;
+  readonly unoccupiedState: boolean;
+  constructor(unoccupiedState: boolean) {
+    this.unoccupiedState = unoccupiedState;
+  };
+}
+
+export class CoreGlobalLiveUpdateInternalCountEvent implements Action {
+  readonly type = CoreActions.GlobalAlertIncrementInternalCountEvent;
+  readonly count: number;
+  constructor(count: number) {
+    this.count = count;
+  }
+}
+
+export class CoreGlobalAlertIsReadyToMakeAlertCall implements Action {
+  readonly type = CoreActions.GlobalAlertsReadyForNextAlertCall;
+  constructor() {}
+}
+
+export class CoreGlobalAlertProcessingEvent implements Action {
+  readonly type = CoreActions.GlobalAlertsProcessingRawAlertsEvent;
+  constructor() {}
+}
+export class CoreGlobalAlertsProcessedRawAlerts implements Action {
+  readonly type = CoreActions.GlobalAlertsProcessedRawAlerts;
+  constructor() {};
+}
+
+export class CoreGlobalAlertsMakeAPICallEvent implements Action {
+  readonly type = CoreActions.GlobalAlertMakeAPICall;
+  readonly newState: boolean;
+  constructor(newState: boolean) {
+    this.newState = newState;
+  };
+}
+
+export class CoreGlobalAlertsSendNewAlertsToTradeAlertPanel implements Action {
+  readonly type = CoreActions.GlobalAlertsPassNewAlertsToTradeAlertPanel;
+  readonly list: Array<AlertDTO>;
+  constructor(
+    list: Array<AlertDTO>
+  ){
+    this.list = list;
+  }
+}
+
+export class CoreGlobalAlertFailedToMakeAlertAPICall implements Action {
+  readonly type = CoreActions.GlobalAlertsAPIAlertCallFailed;
+  readonly newState: boolean;
+  constructor(newState: boolean) {
+    this.newState = newState;
+  }
+}
+
+export class CoreGlobalAlertClearAllUrgentAlerts implements Action {
+  readonly type = CoreActions.GlobalAlertsClearAllUrgentAlerts;
+  constructor() {};
+}
+
+export class CoreGlobalAlertsClearAllTradeAlertTableAlerts implements Action {
+  readonly type = CoreActions.GlobalAlertsClearAllTradeAlertTableAlerts;
+  constructor() {};
+}
+
+export class CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts {
+  readonly type = CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts;
+  readonly newState: boolean;
+  constructor(newState: boolean) {
+    this.newState = newState;
+  }
+}
 export class CoreGlobalWorkflowUpdateCurrentStructureState implements Action {
   readonly type = CoreActions.GlobalWorkflowUpdateCurrentStructureState;
   readonly uuid: string;

@@ -36,6 +36,7 @@
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
     import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
+    import { NavigationEnd } from '@angular/router';
   // dependencies
 
 @Injectable()
@@ -1213,6 +1214,12 @@ export class UtilityService {
       } else {
         return [];
       }
+    }
+
+    public getModulePortionFromNavigation(event: NavigationEnd):string {
+      const removeForwardSlash = event.urlAfterRedirects.slice(1);
+      const modulePortion = removeForwardSlash.split('/').length > 0 ? removeForwardSlash.split('/')[0] : '';
+      return modulePortion;
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
