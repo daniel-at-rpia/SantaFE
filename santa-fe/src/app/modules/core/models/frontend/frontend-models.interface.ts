@@ -247,6 +247,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     secondaryIcon: string;
   }
   state: {
+    isBICSVariant: boolean;
     isLocked: boolean;
     isUnactivated: boolean;
     groupByActive: boolean;
@@ -255,7 +256,6 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isFilterLong: boolean;
     currentFilterPathInConsolidatedBICS: Array<string>;
     isFilterCapped: boolean;
-    includesSubLevels: boolean;
   }
 }
 

@@ -613,7 +613,7 @@ export class DTOService {
         isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
         currentFilterPathInConsolidatedBICS: [],
         isFilterCapped: false,
-        includesSubLevels: rawData.displayName === SecurityDefinitionMap.BICS_CONSOLIDATED.displayName
+        isBICSVariant: rawData.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key
       }
     }
     return object;

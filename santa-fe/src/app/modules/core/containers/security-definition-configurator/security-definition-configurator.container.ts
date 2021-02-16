@@ -247,27 +247,25 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     let canApply = false;
     this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
       eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
-        const activeFilters = eachDefinition.data.displayOptionList.filter((eachOption) => {
+        const activeFilters = eachDefinition.state.isBICSVariant || eachDefinition.state.isFilterCapped ? eachDefinition.data.highlightSelectedOptionList.filter((eachOption) => {
+          return eachOption.isSelected;
+        }) : eachDefinition.data.displayOptionList.filter((eachOption) => {
           return eachOption.isSelected;
         })
         let previousListForCompare: Array<SecurityDefinitionFilterBlock>;
-        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
-          previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
+        if (eachDefinition.state.isFilterCapped) {
+          previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
         } else {
-          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
+          previousListForCompare = eachDefinition.state.isBICSVariant ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
-        const prevActiveFilters = !this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
+        const prevActiveFilters = !eachDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
         if (activeFilters.length === prevActiveFilters.length) {
-          if (eachDefinition.state.includesSubLevels) {
-            canApply = true;
-          } else {
-            for (let i = 0; i < activeFilters.length; ++i) {
-              if (activeFilters[i].shortKey !== prevActiveFilters[i].shortKey) {
-                canApply = true;
-                break;
-              }
+          activeFilters.forEach((activeFilter: Blocks.SecurityDefinitionFilterBlock) => {
+            const match = prevActiveFilters.find((prevFilter: Blocks.SecurityDefinitionFilterBlock) => activeFilter.key === prevFilter.key);
+            if (!match) {
+              canApply = true
             }
-          }
+          })
         } else {
           canApply = true;
         }
