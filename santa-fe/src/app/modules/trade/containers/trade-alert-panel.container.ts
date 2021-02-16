@@ -29,8 +29,7 @@
       selectSecurityMapValidStatus,
       selectUserInitials,
       selectNewAlerts,
-      selectGlobalAlertSendNewAlertsToTradePanel,
-      selectGlobalAlertLiveInternalCountEvent
+      selectGlobalAlertSendNewAlertsToTradePanel
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -91,6 +90,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   @Output() saveConfig = new EventEmitter();
   @Output() showAlertTable = new EventEmitter();
   @Output() collapseAlertTable = new EventEmitter();
+  marketListAlertCountdown$: Observable<any>;
   state: PageStates.TradeAlertPanelState;
   subscriptions = {
     userInitialsSub: null,
@@ -100,7 +100,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     startNewUpdateSub: null,
     keywordSearchSub: null,
     newAlertSubscription: null,
-    globalAlertLiveInternalCountEventSub: null
+    globalAlertLiveInternalCountEventSub: null,
+    marketListAlertCountdownSub: null
   }
   keywordChanged$: Subject<string> = new Subject<string>();
   autoUpdateCount$: Observable<any>;
@@ -298,9 +299,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
-    this.subscriptions.globalAlertLiveInternalCountEventSub = this.store$.pipe(
-      select(selectGlobalAlertLiveInternalCountEvent)
-    ).subscribe((count: number) => {
+    this.marketListAlertCountdown$ = interval(1000);
+    this.subscriptions.marketListAlertCountdownSub = this.marketListAlertCountdown$.subscribe((count: Observable<number>) => {
       if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
         const numOfUpdate = this.marketListAlertsCountdownUpdate();
         if (numOfUpdate > 0){
@@ -309,7 +309,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           this.state.alert.recentUpdatedAlertList = [];
         }
       }
-    });
+    })
   }
 
     public ngOnChanges() {

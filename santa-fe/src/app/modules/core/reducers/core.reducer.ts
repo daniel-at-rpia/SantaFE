@@ -32,7 +32,6 @@ export interface CoreState {
     makeAPICall: boolean;
     apiCallForAlertFailed: boolean;
     tradeTableReadyToReceiveAdditionalAlerts: boolean;
-    liveInternalCountEvent: number;
   }
 }
 
@@ -60,8 +59,7 @@ const initialState: CoreState = {
     processingAlerts: false,
     makeAPICall: false,
     apiCallForAlertFailed: false,
-    tradeTableReadyToReceiveAdditionalAlerts: false,
-    liveInternalCountEvent: 0
+    tradeTableReadyToReceiveAdditionalAlerts: false
   }
 };
 
@@ -247,14 +245,6 @@ export function coreReducer(
           indexedDBReady: true
         }
       };
-      case CoreActions.GlobalAlertIncrementInternalCountEvent:
-        return {
-          ...state,
-          globalAlert: {
-            ...state.globalAlert,
-            liveInternalCountEvent: action.count
-          }
-        };
     default:
       return {
         ...state
