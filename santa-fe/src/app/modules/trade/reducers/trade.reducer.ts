@@ -25,6 +25,7 @@ export interface TradeState {
     initialDataLoaded: boolean;
     liveUpdateInProgress: boolean;
     liveUpdateProcessingRawData: boolean;
+    readyToReceiveAdditionalAlerts: boolean
   },
   tradeMainTable: {
     initialDataLoaded: boolean;
@@ -56,7 +57,8 @@ const initialState: TradeState = {
   tradeAlertTable: {
     initialDataLoaded: false,
     liveUpdateInProgress: false,
-    liveUpdateProcessingRawData: false
+    liveUpdateProcessingRawData: false,
+    readyToReceiveAdditionalAlerts: false
   },
   tradeMainTable: {
     initialDataLoaded: false,
