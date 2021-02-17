@@ -33,7 +33,7 @@
           [breakdownRow]="popover.data.mainRow"
           (categoryClicked)="onClickBreakdownCategory($event)"
           (rowDiveInClicked)="getNextBicsLevel($event)"
-          (seeBondClicked)="onClickSeeBond()"
+          (seeBondClicked)="onClickSeeBond($event)"
           (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
           (setViewForRowClicked)="updatePopoverRowView($event)">
         </portfolio-breakdown-row>
@@ -54,7 +54,7 @@
             [breakdownRow]="secondLevel"
             (categoryClicked)="onClickBreakdownCategory($event)"
             (rowDiveInClicked)="getNextBicsLevel($event)"
-            (seeBondClicked)="onClickSeeBond()"
+            (seeBondClicked)="onClickSeeBond($event)"
             (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
             (setViewForRowClicked)="updatePopoverRowView($event)">
           </portfolio-breakdown-row>
@@ -73,7 +73,7 @@
                   [breakdownRow]="thirdLevel"
                   (categoryClicked)="onClickBreakdownCategory($event)"
                   (rowDiveInClicked)="getNextBicsLevel($event)"
-                  (seeBondClicked)="onClickSeeBond()"
+                  (seeBondClicked)="onClickSeeBond($event)"
                   (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
                   (setViewForRowClicked)="updatePopoverRowView($event)">
                 </portfolio-breakdown-row>
@@ -87,7 +87,7 @@
                       <portfolio-breakdown-row
                         [breakdownRow]="fourthLevel"
                         (categoryClicked)="onClickBreakdownCategory($event)"
-                        (seeBondClicked)="onClickSeeBond()"
+                        (seeBondClicked)="onClickSeeBond($event)"
                         (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
                         (setViewForRowClicked)="updatePopoverRowView($event)">
                       </portfolio-breakdown-row>
