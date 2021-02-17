@@ -280,37 +280,37 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.newAlertSubscription = this.store$.pipe(
-      select(selectGlobalAlertSendNewAlertsToTradePanel),
-    ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
-      if (alertList.length > 0) {
-        if (!this.state.alert.initialAlertListReceived) {
-          this.state.alert.initialAlertListReceived = true;
+        select(selectGlobalAlertSendNewAlertsToTradePanel),
+      ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
+        if (alertList.length > 0) {
+          if (!this.state.alert.initialAlertListReceived) {
+            this.state.alert.initialAlertListReceived = true;
+          }
+          if (!this.state.fetchResult.alertTable.fetchComplete) {
+            this.state.fetchResult.alertTable.fetchComplete = true;
+          }
+          try {
+            const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+            this.updateAlertTable(alertListCopy);
+            this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
+          } catch {
+            this.restfulCommService.logError('received new alerts but failed to generate');
+            console.error('received new alerts but failed to generate');
+          }
         }
-        if (!this.state.fetchResult.alertTable.fetchComplete) {
-          this.state.fetchResult.alertTable.fetchComplete = true;
+      });
+      this.marketListAlertCountdown$ = interval(1000);
+      this.subscriptions.marketListAlertCountdownSub = this.marketListAlertCountdown$.subscribe((count: Observable<number>) => {
+        if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
+          const numOfUpdate = this.marketListAlertsCountdownUpdate();
+          if (numOfUpdate > 0){
+            // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
+            this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
+            this.state.alert.recentUpdatedAlertList = [];
+          }
         }
-        try {
-          const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
-          this.updateAlertTable(alertListCopy);
-          this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
-        } catch {
-          this.restfulCommService.logError('received new alerts but failed to generate');
-          console.error('received new alerts but failed to generate');
-        }
-      }
-    });
-    this.marketListAlertCountdown$ = interval(1000);
-    this.subscriptions.marketListAlertCountdownSub = this.marketListAlertCountdown$.subscribe((count: Observable<number>) => {
-      if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
-        const numOfUpdate = this.marketListAlertsCountdownUpdate();
-        if (numOfUpdate > 0){
-          // if there is no new alert, but there are existing active marketlist alerts, then the table still needs to be updated for refreshing the countdowns
-          this.state.fetchResult.alertTable.liveUpdatedRowList = this.identifyTableUpdate(this.state.fetchResult.alertTable, true);
-          this.state.alert.recentUpdatedAlertList = [];
-        }
-      }
-    })
-  }
+      })
+    }
 
     public ngOnChanges() {
       if (!!this.collapseConfiguration) {
@@ -412,14 +412,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const formattedAlert = alertType !== this.constants.alertTypes.traceAlert ? alertType.toLowerCase() : alertType.toLowerCase().split('trade')[0];
       const headerAlertConfig = SecurityTableAlertHeaderConfigs[formattedAlert];
       securityTableHeaderConfigsCopy.forEach(metric => {
-          if (headerAlertConfig.include.indexOf(metric.key) > -1) {
-            metric.content.tableSpecifics.tradeAlert.active = true;
-          } else if (headerAlertConfig.exclude.indexOf(metric.key) > -1) {
-            metric.content.tableSpecifics.tradeAlert.active = false;
-          }
-        })
-        const nonDisabledAlertHeaders: Array<Stubs.SecurityTableHeaderConfigStub> = securityTableHeaderConfigsCopy.filter((header: Stubs.SecurityTableHeaderConfigStub) => (!!header.content.tableSpecifics.default && !header.content.tableSpecifics.tradeAlert) || (!header.content.tableSpecifics.tradeAlert.disabled));
-        this.state.table.alertMetrics = nonDisabledAlertHeaders;
+        if (headerAlertConfig.include.indexOf(metric.key) > -1) {
+          metric.content.tableSpecifics.tradeAlert.active = true;
+        } else if (headerAlertConfig.exclude.indexOf(metric.key) > -1) {
+          metric.content.tableSpecifics.tradeAlert.active = false;
+        }
+      })
+      const nonDisabledAlertHeaders: Array<Stubs.SecurityTableHeaderConfigStub> = securityTableHeaderConfigsCopy.filter((header: Stubs.SecurityTableHeaderConfigStub) => (!!header.content.tableSpecifics.default && !header.content.tableSpecifics.tradeAlert) || (!header.content.tableSpecifics.tradeAlert.disabled));
+      this.state.table.alertMetrics = nonDisabledAlertHeaders;
     }
 
     public onClickSpecificAlertTypeTab(
