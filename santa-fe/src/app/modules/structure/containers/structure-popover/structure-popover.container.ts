@@ -115,7 +115,7 @@ export class StructurePopover implements OnInit, OnChanges {
     newWorkflowState.data.stateInfo.activeMetric = this.activeMetric;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<DTOs.SecurityDefinitionDTO> = [];
-    this.seeBondPackageBICSBreakdownDataTransfer(
+    this.bicsDataProcessingService.seeBondPackageBICSBreakdownDataTransfer(
       configurator,
       targetRow,
       filterList
@@ -206,30 +206,6 @@ export class StructurePopover implements OnInit, OnChanges {
         })
       }
     }
-  }
-
-  private seeBondPackageBICSBreakdownDataTransfer(
-    configurator: DTOs.SecurityDefinitionConfiguratorDTO,
-    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
-    filterList: Array<DTOs.SecurityDefinitionDTO>
-  ) {
-    configurator.data.definitionList.forEach((eachBundle) => {
-      eachBundle.data.list.forEach((eachDefinition) => {
-        if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
-          const selectedOptionList = [];
-          selectedOptionList.push(targetRow.data.category);
-          eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
-            eachDefinition.data.key,
-            selectedOptionList,
-            targetRow.data.bicsLevel
-          );
-          eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
-            eachOption.isSelected = true;
-          });
-          filterList.push(eachDefinition);
-        }
-      });
-    });
   }
 
 }

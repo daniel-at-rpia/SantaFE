@@ -382,6 +382,30 @@ export class BICsDataProcessingService {
     targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
+  public seeBondPackageBICSBreakdownDataTransfer(
+    configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
+    filterList: Array<DTOs.SecurityDefinitionDTO>
+  ) {
+    configurator.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+          const selectedOptionList = [];
+          selectedOptionList.push(targetRow.data.category);
+          eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
+            eachDefinition.data.key,
+            selectedOptionList,
+            targetRow.data.bicsLevel
+          );
+          eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+            eachOption.isSelected = true;
+          });
+          filterList.push(eachDefinition);
+        }
+      });
+    });
+  }
+
   private setBreakdownListProperties(
     breakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO>,
     parentRow: DTOs.StructurePortfolioBreakdownRowDTO

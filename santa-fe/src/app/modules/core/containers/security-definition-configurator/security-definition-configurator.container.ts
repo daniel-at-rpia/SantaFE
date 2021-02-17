@@ -2,23 +2,17 @@
     import { Component, OnInit, OnChanges, ViewEncapsulation, Input, Output, EventEmitter, isDevMode } from '@angular/core';
     import { of } from 'rxjs';
     import { tap, first, delay, catchError } from 'rxjs/operators';
-
+    import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
     import { DTOService } from 'Core/services/DTOService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
-    import { SecurityDefinitionConfiguratorDTO,SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
-    import { SecurityDefinitionFilterBlock } from 'FEModels/frontend-blocks.interface';
     import {
       ConfiguratorDefinitionLayout,
       DEFINITION_CAPPED_THRESHOLD,
       SecurityDefinitionMap,
       DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      DefinitionConfiguratorEmitterParams,
-      DefinitionConfiguratorEmitterParamsItem
-    } from 'FEModels/frontend-adhoc-packages.interface';
   //
 
 @Component({
@@ -30,11 +24,11 @@
 
 export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   configuratorDefinitionlayout: Array<any>;
-  @Input() configuratorData: SecurityDefinitionConfiguratorDTO;
+  @Input() configuratorData: DTOs.SecurityDefinitionConfiguratorDTO;
   @Input() highlightedVariant: boolean;
   @Output() clickedSearch = new EventEmitter();
-  @Output() clickedApplyFilter = new EventEmitter<DefinitionConfiguratorEmitterParams>();
-  lastExecutedConfiguration: SecurityDefinitionConfiguratorDTO;
+  @Output() clickedApplyFilter = new EventEmitter<AdhocPacks.DefinitionConfiguratorEmitterParams>();
+  lastExecutedConfiguration: DTOs.SecurityDefinitionConfiguratorDTO;
   @Output() buryConfigurator = new EventEmitter();
   @Output() boostConfigurator = new EventEmitter();
   constants = {
@@ -84,7 +78,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public selectDefinitionForGrouping(targetDefinition: SecurityDefinitionDTO) {
+  public selectDefinitionForGrouping(targetDefinition: DTOs.SecurityDefinitionDTO) {
     if (!targetDefinition.state.isLocked) {
       targetDefinition.state.groupByActive = !targetDefinition.state.groupByActive;
       // disable the two-step config workflow through commenting, so we can bring it back up easily if necessary
@@ -104,7 +98,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onClickDefinition(targetDefinition: SecurityDefinitionDTO, hasAppliedFilter: boolean = false) {
+  public onClickDefinition(targetDefinition: DTOs.SecurityDefinitionDTO, hasAppliedFilter: boolean = false) {
     if (!!targetDefinition && !targetDefinition.state.isUnactivated) {
       this.clearSearchFilter(hasAppliedFilter);
       this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
@@ -112,7 +106,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
          this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = [];
          if (this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
-          this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((selectedOption: SecurityDefinitionFilterBlock) => {
+          this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => {
             this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.push(selectedOption);
           })
          }
@@ -125,7 +119,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  public onClickFilterOption(targetOption:SecurityDefinitionFilterBlock) {
+  public onClickFilterOption(targetOption:Blocks.SecurityDefinitionFilterBlock) {
     const targetDefinition = this.configuratorData.state.showFiltersFromDefinition;
     targetOption.isSelected = !targetOption.isSelected;
     if (targetOption.isSelected) {
@@ -134,6 +128,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       targetDefinition.data.highlightSelectedOptionList = targetDefinition.data.highlightSelectedOptionList.filter((eachFilter) => {
         return eachFilter.key !== targetOption.key;
       });
+      const findExistingOptionItem = targetDefinition.data.displayOptionList.find((option: Blocks.SecurityDefinitionFilterBlock) => option.shortKey === targetOption.shortKey);
+      if (!!findExistingOptionItem) {
+        findExistingOptionItem.isSelected = false;
+      }
     }
     let filterActive = false;
     targetDefinition.data.displayOptionList.forEach((eachOption) => {
@@ -188,7 +186,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.configuratorData.state.canApplyFilter = false;
   }
 
-  public onClickConsolidatedBICSDiveIn(targetOption: SecurityDefinitionFilterBlock) {
+  public onClickConsolidatedBICSDiveIn(targetOption: Blocks.SecurityDefinitionFilterBlock) {
     const consolidatedBICSDefinition = this.configuratorData.state.showFiltersFromDefinition;
     if (!!consolidatedBICSDefinition) {
       consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
@@ -235,7 +233,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.onSearchKeywordChange('', hasAppliedFilter);
   }
 
-  private clearDefinitionFilterOptions(targetDefinition: SecurityDefinitionDTO) {
+  private clearDefinitionFilterOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
     targetDefinition.data.displayOptionList.forEach((eachOption) => {
       eachOption.isSelected = false;
     });
@@ -246,23 +244,25 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     let canApply = false;
     this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
       eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
-        const activeFilters = eachDefinition.data.displayOptionList.filter((eachOption) => {
+        const activeFilters = eachDefinition.state.isConsolidatedBICSVariant || eachDefinition.state.isFilterCapped ? eachDefinition.data.highlightSelectedOptionList.filter((eachOption) => {
+          return eachOption.isSelected;
+        }) : eachDefinition.data.displayOptionList.filter((eachOption) => {
           return eachOption.isSelected;
         })
-        let previousListForCompare: Array<SecurityDefinitionFilterBlock>;
-        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
-          previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
+        let previousListForCompare: Array<Blocks.SecurityDefinitionFilterBlock>;
+        if (eachDefinition.state.isFilterCapped) {
+          previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
         } else {
-          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
+          previousListForCompare = eachDefinition.state.isConsolidatedBICSVariant ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
-        const prevActiveFilters = !this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
+        const prevActiveFilters = !eachDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
         if (activeFilters.length === prevActiveFilters.length) {
-          for (let i = 0; i < activeFilters.length; ++i) {
-            if (activeFilters[i].shortKey !== prevActiveFilters[i].shortKey) {
-              canApply = true;
-              break;
+          activeFilters.forEach((activeFilter: Blocks.SecurityDefinitionFilterBlock) => {
+            const match = prevActiveFilters.find((prevFilter: Blocks.SecurityDefinitionFilterBlock) => activeFilter.key === prevFilter.key);
+            if (!match) {
+              canApply = true
             }
-          }
+          })
         } else {
           canApply = true;
         }
@@ -284,7 +284,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  private fetchCountryCode(targetDefinition: SecurityDefinitionDTO) {
+  private fetchCountryCode(targetDefinition: DTOs.SecurityDefinitionDTO) {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getCountries, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: Array<string>) => {
@@ -297,7 +297,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     ).subscribe();
   }
 
-  private fetchTicker(targetDefinition: SecurityDefinitionDTO) {
+  private fetchTicker(targetDefinition: DTOs.SecurityDefinitionDTO) {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getTickers, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: Array<string>) => {
@@ -311,7 +311,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     ).subscribe();
   }
 
-  private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: SecurityDefinitionDTO): boolean {
+  private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: DTOs.SecurityDefinitionDTO): boolean {
     return !!targetDefinition.data.prinstineFilterOptionList ? targetDefinition.data.prinstineFilterOptionList.length > DEFINITION_CAPPED_THRESHOLD : false;
   }
 

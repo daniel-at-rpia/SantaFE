@@ -553,30 +553,34 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   }
 
   private updateTargetFundBreakdownDisplay(targetFund: PortfolioFundDTO) {
-    switch (this.state.activeBreakdownViewFilter) {
-      case this.constants.breakdownViewFilter.overridesOnly:
-        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
-          return eachChild.state.isOverrideVariant;
-        });
-        break;
-      case this.constants.breakdownViewFilter.BICSOnly:
-        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
-          return eachChild.data.backendGroupOptionIdentifier.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) === 0 && !eachChild.state.isOverrideVariant;
-        });
-        break;
-      case this.constants.breakdownViewFilter.regularsOnly:
-        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
-          return eachChild.data.backendGroupOptionIdentifier.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) < 0 && !eachChild.state.isOverrideVariant;
-        });
-        break;
-      case this.constants.breakdownViewFilter.all:
-        targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
-          return true;  // simply to retain the same behavior as other filters that generates a new reference
-        });
-        break;
-      default:
-        // code...
-        break;
+    if (targetFund.state.isStencil) {
+      targetFund.data.displayChildren = targetFund.data.children;
+    } else {
+      switch (this.state.activeBreakdownViewFilter) {
+        case this.constants.breakdownViewFilter.overridesOnly:
+          targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+            return eachChild.state.isOverrideVariant;
+          });
+          break;
+        case this.constants.breakdownViewFilter.BICSOnly:
+          targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+            return eachChild.data.backendGroupOptionIdentifier.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) === 0 && !eachChild.state.isOverrideVariant;
+          });
+          break;
+        case this.constants.breakdownViewFilter.regularsOnly:
+          targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+            return eachChild.data.backendGroupOptionIdentifier.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) < 0 && !eachChild.state.isOverrideVariant;
+          });
+          break;
+        case this.constants.breakdownViewFilter.all:
+          targetFund.data.displayChildren = targetFund.data.children.filter((eachChild) => {
+            return true;  // simply to retain the same behavior as other filters that generates a new reference
+          });
+          break;
+        default:
+          // code...
+          break;
+      }
     }
   }
 
