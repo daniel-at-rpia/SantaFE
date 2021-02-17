@@ -890,7 +890,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'securityType',
     content: {
-      label: 'Security Type',
+      label: 'Type',
       attrName: 'securityType',
       underlineAttrName: 'securityType',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
@@ -909,7 +909,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'securitySubType',
     content: {
-      label: 'Security Sub-Type',
+      label: 'Sub-Type',
       attrName: 'securitySubType',
       underlineAttrName: 'securitySubType',
       readyStage: SECURITY_TABLE_FINAL_STAGE,

@@ -612,7 +612,8 @@ export class DTOService {
         isMiniPillVariant: false,
         isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
         currentFilterPathInConsolidatedBICS: [],
-        isFilterCapped: false
+        isFilterCapped: false,
+        isConsolidatedBICSVariant: rawData.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key
       }
     }
     return object;
@@ -682,6 +683,28 @@ export class DTOService {
         securityAttrOnly: securityAttrOnly
       }
     };
+    return object;
+  }
+
+  public resetSecurityDefinitionConfigurator(
+    targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO,
+    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
+  ): DTOs.SecurityDefinitionConfiguratorDTO {
+    const object: DTOs.SecurityDefinitionConfiguratorDTO = this.createSecurityDefinitionConfigurator(
+      targetConfigurator.state.groupByDisabled,
+      targetConfigurator.state.noMainCTA,
+      targetConfigurator.state.securityAttrOnly
+    );
+    object.data.definitionList = targetConfigurator.data.definitionList;
+    object.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        eachDefinition.data.displayOptionList = this.utility.deepCopy(eachDefinition.data.prinstineFilterOptionList);
+        eachDefinition.data.highlightSelectedOptionList = [];
+        eachDefinition.state.filterActive = false;
+        eachDefinition.state.groupByActive = false;
+        eachDefinition.state.currentFilterPathInConsolidatedBICS = [];
+      });
+    });
     return object;
   }
 

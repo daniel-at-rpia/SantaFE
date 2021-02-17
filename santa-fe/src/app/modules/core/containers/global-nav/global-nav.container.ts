@@ -86,8 +86,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     });
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        const removeForwardSlash = event.urlAfterRedirects.slice(1);
-        const modulePortion = removeForwardSlash.split('/').length > 0 ? removeForwardSlash.split('/')[0] : '';
+        const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
         switch (modulePortion) {
           case this.constants.moduleUrl.trade:
             this.state.currentModule = this.constants.moduleUrl.trade;
