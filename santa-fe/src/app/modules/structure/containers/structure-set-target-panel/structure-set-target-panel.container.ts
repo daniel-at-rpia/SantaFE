@@ -106,6 +106,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private initializePageState(): StructureSetTargetPanelState {
+    const inheritConfigurator = this.state && this.state.configurator ? this.state.configurator.dto : this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
     const state: StructureSetTargetPanelState = {
       targetBreakdown: null,
       targetFund: null,
@@ -125,7 +126,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayRemainingUnallocatedCreditLeverage: '',
       targetBreakdownIsOverride: false,
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),
+        dto: inheritConfigurator,
         display: false,
         newOverrideNameCache: null
       },
@@ -188,7 +189,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         this.loadEditRows();
         this.calculateAllocation();
-        this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
+        this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
         this.loadBICSOptionsIntoConfigurator();
         if (!!this.state.clearAllTargetSelected) {
           this.state.clearAllTargetSelected = false;
@@ -438,7 +439,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     }
     this.state.configurator.display = false;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
+    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
     this.loadBICSOptionsIntoConfigurator();
   }
 

@@ -284,7 +284,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
-      this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
+      this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
     } else {
       this.checkInitialPageLoadData();
       this.restfulCommService.logEngagement(
