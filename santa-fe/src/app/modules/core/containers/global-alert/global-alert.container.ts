@@ -428,6 +428,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAlerts, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: Array<BEAlertDTO>) => {
+        this.state.alertUpdateTimeStamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
         // using synthetic alerts for dev purposes
         // serverReturn = !this.state.alert.initialAlertListReceived ? AlertSample : [];
         const filteredServerReturn = !!serverReturn ? serverReturn.filter((eachRawAlert) => {
@@ -453,7 +454,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       })
     ).subscribe();
     this.store$.dispatch(new CoreGlobalAlertProcessingEvent());
-    this.state.alertUpdateTimeStamp = moment().format("YYYY-MM-DDTHH:mm:ss.SSS");
   }
 
   private getAlertsForUrgentAlertList(alertList: Array<DTOs.AlertDTO>) {
