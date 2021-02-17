@@ -27,6 +27,8 @@ export class GlobalWorkflowIOService {
     idbWorkflowStoreName: INDEXEDDB_WORKFLOW_STORE_NAME
   }
 
+  private routeHanlderStore: Map<string, DetachedRouteHandle> = new Map();
+
   constructor(
     private store$: Store<any>,
     private utilityService: UtilityService,
@@ -86,6 +88,7 @@ export class GlobalWorkflowIOService {
 
   public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
     if (!!targetUUID) {
+      this.routeHanlderStore.set(targetUUID, targetHandler);
       // const targetState = this.temporaryStore.get(targetUUID);
       // if (!!targetState) {
       //   targetState.api.routeHandler = targetHandler;
@@ -99,6 +102,7 @@ export class GlobalWorkflowIOService {
 
   public fetchHandler(targetUUID: string): DetachedRouteHandle {
     if (!!targetUUID) {
+      this.routeHanlderStore.get(targetUUID) || null;
       // const targetState = this.temporaryStore.get(targetUUID);
       // if (!!targetState && targetState.state.triggersRedirect) {
       //   if (!!targetState.api.routeHandler) {

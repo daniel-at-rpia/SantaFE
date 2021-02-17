@@ -19,7 +19,13 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   */
 
   public shouldAttach(route: ActivatedRouteSnapshot): boolean {
-    return false;
+    const targetHandler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
+    if (!!targetHandler) {
+      return true;
+    } else {
+      return false;
+    }
+    // return false;
     // const targetState = this.globalWorkflowIOService.fetchState(this.getRouteIdentifier(route));
     // if (!!targetState && !!targetState.api.routeHandler) {
     //   return true;
@@ -29,16 +35,19 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   }
 
   public shouldDetach(route: ActivatedRouteSnapshot): boolean {
-    return false;
+    return true;
+    // return false;
     // return true;
   }
 
   public store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle) {
+    this.globalWorkflowIOService.attachRouteHandlerToState(this.getRouteIdentifier(route), handle);
     // this.globalWorkflowIOService.attachRouteHandlerToState(this.getRouteIdentifier(route), handle);
   }
 
   public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
-    return null;
+    return this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
+    // return null;
     // const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
     // return handler;
   }
@@ -47,7 +56,12 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     futureRoute: ActivatedRouteSnapshot,
     currentRoute: ActivatedRouteSnapshot
   ): boolean {
-    return futureRoute.routeConfig === currentRoute.routeConfig;
+    if (!!futureRoute.routeConfig && !!currentRoute.routeConfig && futureRoute.routeConfig === currentRoute.routeConfig) {
+      return true;
+    } else {
+      return false;
+    }
+    // return futureRoute.routeConfig === currentRoute.routeConfig;
     // if (!!futureRoute.routeConfig && !!currentRoute.routeConfig && futureRoute.routeConfig === currentRoute.routeConfig) {
     //   return true;
     // } else {
