@@ -304,16 +304,17 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   public onUnselectPreset(captureNewState: boolean) {
+    const newState = this.initializePageState();
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
+    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
     this.state.table.metrics = this.utilityService.deepCopy(this.constants.defaultMetrics).filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
-    this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
+    this.state.filters.quickFilters = newState.filters.quickFilters;
     this.state.filters.keyword.defaultValueForUI = null;
-    this.state.fetchResult = this.initializePageState().fetchResult;
+    this.state.fetchResult = newState.fetchResult;
     this.store$.dispatch(new TradeTogglePresetEvent);
     if (!!captureNewState) {
       const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, this.constants.globalWorkflowTypes.unselectPreset);
