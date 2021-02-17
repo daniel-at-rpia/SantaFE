@@ -102,7 +102,7 @@ export class GlobalWorkflowIOService {
 
   public fetchHandler(targetUUID: string): DetachedRouteHandle {
     if (!!targetUUID) {
-      this.routeHanlderStore.get(targetUUID) || null;
+      return this.routeHanlderStore.get(targetUUID) || null;
       // const targetState = this.temporaryStore.get(targetUUID);
       // if (!!targetState && targetState.state.triggersRedirect) {
       //   if (!!targetState.api.routeHandler) {

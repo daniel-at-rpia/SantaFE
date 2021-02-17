@@ -46,7 +46,8 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   }
 
   public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
-    return this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
+    const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
+    return handler;
     // return null;
     // const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
     // return handler;
@@ -56,7 +57,7 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     futureRoute: ActivatedRouteSnapshot,
     currentRoute: ActivatedRouteSnapshot
   ): boolean {
-    if (!!futureRoute.routeConfig && !!currentRoute.routeConfig && futureRoute.routeConfig === currentRoute.routeConfig) {
+    if (futureRoute.routeConfig === currentRoute.routeConfig) {
       return true;
     } else {
       return false;

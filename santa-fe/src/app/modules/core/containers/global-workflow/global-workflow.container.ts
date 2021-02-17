@@ -54,8 +54,8 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
         if (!!newState && !!newState.data.uuid && !!newState.data.module) {
           // the states that triggers redirect don't need to be manually pushed into document history
           if (!newState.state.triggersRedirect) {
-            // this.router.navigate([newState.data.module, newState.data.uuid]);
-            this.angularLocation.go(`/${newState.data.module}/${newState.data.uuid}`);
+            this.router.navigate([newState.data.module, newState.data.uuid]);
+            // this.angularLocation.go(`/${newState.data.module}/${newState.data.uuid}`);
           }
           if (!this.state.currentState || this.state.currentState.data.uuid !== newState.data.uuid) {
             this.storeState(newState);
