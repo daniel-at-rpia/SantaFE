@@ -686,6 +686,28 @@ export class DTOService {
     return object;
   }
 
+  public resetSecurityDefinitionConfigurator(
+    targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO,
+    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
+  ): DTOs.SecurityDefinitionConfiguratorDTO {
+    const object: DTOs.SecurityDefinitionConfiguratorDTO = this.createSecurityDefinitionConfigurator(
+      targetConfigurator.state.groupByDisabled,
+      targetConfigurator.state.noMainCTA,
+      targetConfigurator.state.securityAttrOnly
+    );
+    object.data.definitionList = targetConfigurator.data.definitionList;
+    object.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        eachDefinition.data.displayOptionList = this.utility.deepCopy(eachDefinition.data.prinstineFilterOptionList);
+        eachDefinition.data.highlightSelectedOptionList = [];
+        eachDefinition.state.filterActive = false;
+        eachDefinition.state.groupByActive = false;
+        eachDefinition.state.currentFilterPathInConsolidatedBICS = [];
+      });
+    });
+    return object;
+  }
+
   public loadBICSOptionsIntoConfigurator(
     configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO,
     sortedLevel1List: Array<string>,
