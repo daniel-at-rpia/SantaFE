@@ -7,27 +7,24 @@ import {
   SubPortfolioFilter,
   DeltaScope
 } from 'Core/constants/structureConstants.constants';
-import {
-  StructureSetTargetOverlayTransferPack,
-  StructureSetViewTransferPack,
-} from 'FEModels/frontend-adhoc-packages.interface';
+import { AdhocPacks, PageStates } from 'Core/models/frontend';
 import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
-import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
 import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
-  setTargetTransfer: StructureSetTargetOverlayTransferPack;
+  setTargetTransfer: AdhocPacks.StructureSetTargetOverlayTransferPack;
   reloadFundDataPostEdit: BEStructuringFundBlockWithSubPortfolios;
   updateTick: number;
-  viewData: StructureSetViewTransferPack;
+  viewData: AdhocPacks.StructureSetViewTransferPack;
   activeBreakdownViewFilter: BreakdownViewFilter;
   activePortfolioViewFilter: Array<PortfolioShortNames>;
   activeSubPortfolioFilter: SubPortfolioFilter;
   activeDeltaScope: DeltaScope;
   dataDatestamp: number;
-  utilityPanelLoadState: StructureUtilityPanelState;
+  utilityPanelLoadState: PageStates.StructureUtilityPanelState;
   setBulkOverrides: boolean;
+  setBulkOverridesTranfer: AdhocPacks.StructureSetBulkOverridesTransferPack;
 }
 
 const initialState: StructureState = {
@@ -50,7 +47,8 @@ const initialState: StructureState = {
   activeDeltaScope: DeltaScope.dod,
   dataDatestamp: moment().unix(),
   utilityPanelLoadState: null,
-  setBulkOverrides: false
+  setBulkOverrides: false,
+  setBulkOverridesTranfer: null
 }
 
 export function structureReducer(
@@ -119,6 +117,11 @@ export function structureReducer(
       return {
         ...state,
         setBulkOverrides: true
+      };
+    case StructureActions.SendSetBulkOverridesTransfer:
+      return {
+        ...state,
+        setBulkOverridesTranfer: action.pack
       };
     default:
       return state;

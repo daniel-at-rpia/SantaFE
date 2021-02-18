@@ -8,12 +8,8 @@ import {
   SubPortfolioFilter,
   DeltaScope
 } from 'Core/constants/structureConstants.constants';
-import {
-  StructureSetTargetOverlayTransferPack,
-  StructureSetViewTransferPack
-} from 'FEModels/frontend-adhoc-packages.interface';
+import { AdhocPacks, PageStates } from 'Core/models/frontend';
 import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
-import { StructureUtilityPanelState } from 'FEModels/frontend-page-states.interface';
 
 export enum StructureActions {
   StructureStoreReset = '[Structure] Reset Store Upon Entering',
@@ -28,7 +24,8 @@ export enum StructureActions {
   ChangeDeltaScope = '[Structure] Change Delta Scope',
   SwitchDataDatestamp = '[Structure] Switch Data Datestamp',
   UtilityPanelLoadState = '[Structure] Utility Panel Load State',
-  SetBulkOverridesEvent = '[Structure] Set Bulk Overrides Event'
+  SetBulkOverridesEvent = '[Structure] Set Bulk Overrides Event',
+  SendSetBulkOverridesTransfer = '[Structure] Send Set Bulk Overrides Transfer'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -46,8 +43,8 @@ export class StructureMetricSelect implements Action {
 
 export class StructureSendSetTargetTransferEvent implements Action {
   readonly type = StructureActions.SendSetTargetTransfer;
-  readonly pack: StructureSetTargetOverlayTransferPack;
-  constructor(pack: StructureSetTargetOverlayTransferPack) {
+  readonly pack: AdhocPacks.StructureSetTargetOverlayTransferPack;
+  constructor(pack: AdhocPacks.StructureSetTargetOverlayTransferPack) {
     this.pack = pack;
   }
 }
@@ -67,8 +64,8 @@ export class StructureUpdateMainPanelEvent implements Action {
 
 export class StructureSetView implements Action {
   readonly type = StructureActions.SetView;
-  readonly viewData: StructureSetViewTransferPack;
-  constructor(viewData: StructureSetViewTransferPack) {
+  readonly viewData: AdhocPacks.StructureSetViewTransferPack;
+  constructor(viewData: AdhocPacks.StructureSetViewTransferPack) {
     this.viewData = viewData;
   }
 }
@@ -115,8 +112,8 @@ export class StructureChangeDeltaScopeEvent implements Action {
 
 export class StructureUtilityPanelLoadStateEvent implements Action {
   readonly type = StructureActions.UtilityPanelLoadState;
-  readonly panelState: StructureUtilityPanelState;
-  constructor(panelState: StructureUtilityPanelState) {
+  readonly panelState: PageStates.StructureUtilityPanelState;
+  constructor(panelState: PageStates.StructureUtilityPanelState) {
     this.panelState = panelState;
   }
 }
@@ -124,4 +121,12 @@ export class StructureUtilityPanelLoadStateEvent implements Action {
 export class StructureSetBulkOverridesEvent implements Action {
   readonly type = StructureActions.SetBulkOverridesEvent;
   constructor() {}
+}
+
+export class StructureSendSetBulkOverridesTransferEvent implements Action {
+  readonly type = StructureActions.SendSetBulkOverridesTransfer;
+  readonly pack: AdhocPacks.StructureSetBulkOverridesTransferPack;
+  constructor(pack: AdhocPacks.StructureSetBulkOverridesTransferPack) {
+    this.pack = pack;
+  }
 }

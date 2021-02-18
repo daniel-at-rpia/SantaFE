@@ -14,6 +14,7 @@ import {
   BEStructuringBreakdownBlock,
   BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';
+import { PayloadUpdatePortfolioOverridesForAllPortfolios } from 'Core/models/backend/backend-payloads.interface';
 import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 
@@ -189,6 +190,10 @@ export interface BICSGroupingByCodeBlock {
 export interface StructureRowSetViewData  {
   row: DTOs.StructurePortfolioBreakdownRowDTO;
   view: PortfolioView;
+}
+
+export interface StructureSetBulkOverridesTransferPack {
+  overrides: Array<PayloadUpdatePortfolioOverridesForAllPortfolios>
 }
 
 interface SecurityDefinitionFilterOptionTenorRangeItem {

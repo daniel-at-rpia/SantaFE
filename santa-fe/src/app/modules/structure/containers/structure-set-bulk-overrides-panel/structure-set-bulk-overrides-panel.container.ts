@@ -21,7 +21,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService'
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
-import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
+import { StructureSendSetBulkOverridesTransferEvent } from 'Structure/actions/structure.actions';
 import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
 @Component({
   selector: 'structure-set-bulk-overrides-panel',
@@ -72,7 +72,7 @@ export class StructureSetBulkOverrides implements OnInit {
       }
     })
     this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Set Overrides Across Multiple Funds');
-    this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitTargetChanges.bind(this));
+    this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitOverrideChanges.bind(this));
     this.modalService.bindModalCloseCallback(this.constants.setBulkOverridesModalId, this.closeModal.bind(this));
   }
 
@@ -175,12 +175,6 @@ export class StructureSetBulkOverrides implements OnInit {
     this.state.editRowList.forEach((row:Blocks.StructureSetBulkOverridesEditRow, index: number) => row.isEven = index % 2 === 0);
   }
 
-  private submitTargetChanges(): boolean {
-    this.submitOverrideChanges();
-    this.state.editRowList = [];
-    return true;
-  }
-
   private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdatePortfolioOverridesForAllPortfolios> {
     const payload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = [];
     this.state.editRowList.forEach((eachRow: Blocks.StructureSetBulkOverridesEditRow) => {
@@ -200,35 +194,12 @@ export class StructureSetBulkOverrides implements OnInit {
 
   private submitOverrideChanges(): boolean {
     const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = this.traverseEditRowsToFormUpdateOverridePayload();
-    const necessaryUpdateNumOfCalls = updatePayload.length;
-    if (updatePayload.length > 0) {
-      let callCount = 0;
-      updatePayload.forEach((eachPayload) => {
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
-          first(),
-          tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
-            callCount++;
-            if (callCount === necessaryUpdateNumOfCalls) {
-              this.store$.dispatch(
-                new CoreSendNewAlerts([
-                  this.dtoService.formSystemAlertObject(
-                    'Structuring',
-                    'Updated',
-                    `Successfully Updated All Funds With New Overrides`,
-                    null
-                  )]
-                )
-              );
-              this.store$.dispatch(new StructureUpdateMainPanelEvent());
-            }
-          }),
-          catchError(err => {
-            console.error('update breakdown failed');
-            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-            return of('error');
-          })
-        ).subscribe();
-      });
+    const updatePayloadTransferPack: AdhocPacks.StructureSetBulkOverridesTransferPack = {
+      overrides: updatePayload
+    };
+    if (updatePayloadTransferPack.overrides.length > 0) {
+      this.store$.dispatch(new StructureSendSetBulkOverridesTransferEvent(updatePayloadTransferPack));
+      this.state.editRowList = [];
       return true;
     } else {
       this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
