@@ -690,8 +690,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
               new CoreSendNewAlerts([
                 this.dtoService.formSystemAlertObject(
                   'Structuring',
-                  'Updated',
-                  `Successfully Updated All Funds With New Overrides`,
+                  'Added',
+                  `Successfully Added New Overrides to All Funds`,
                   null
                 )]
               )
@@ -700,7 +700,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }),
         catchError(err => {
           console.error('update portfolio overrides for all portfolios failed', err);
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Overrides', 'Unable to Update Overrides Across All Funds', null)]));
+          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
           return of('error');
         })
       ).subscribe();

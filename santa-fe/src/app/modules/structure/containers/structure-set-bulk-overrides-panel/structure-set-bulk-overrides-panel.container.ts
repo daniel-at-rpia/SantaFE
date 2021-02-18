@@ -74,7 +74,7 @@ export class StructureSetBulkOverrides implements OnInit {
         this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
       }
     })
-    this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Set Overrides Across Multiple Funds');
+    this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Add Overrides To All Funds');
     this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitOverrideChanges.bind(this));
     this.modalService.bindModalCloseCallback(this.constants.setBulkOverridesModalId, this.closeModal.bind(this));
   }
@@ -207,7 +207,7 @@ export class StructureSetBulkOverrides implements OnInit {
       this.state.editRowList = [];
       return true;
     } else {
-      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Add Overrides', 'Can not submit new overrides because no change is detected', null)]));
       return false;
     }
   }
