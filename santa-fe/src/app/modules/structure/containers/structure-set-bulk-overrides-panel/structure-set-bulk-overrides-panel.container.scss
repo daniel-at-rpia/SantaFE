@@ -125,7 +125,22 @@ $setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
     align-items: center;
   }
   &__bucket {
+    display: flex;
+    align-items: center;
     padding-right: $spacing_small;
+  }
+  &__icon {
+    @include mix_border_radius(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: $spacing_small;
+    background-color: $color_active;
+    width: 20px;
+    height: 20px;
+    & > i {
+      color: $font_color_inverse;
+    }
   }
   &--evenState {
     background-color: $color_blue_gray_1;
