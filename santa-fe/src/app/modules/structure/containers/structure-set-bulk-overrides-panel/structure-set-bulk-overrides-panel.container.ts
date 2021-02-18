@@ -69,7 +69,6 @@ export class StructureSetBulkOverrides implements OnInit {
 
   public ngOnInit() {
     this.state = this.initializePageState();
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
     this.subscriptions.setBulkOverridesSub = this.store$.pipe(select(selectSetBulkOverridesEvent)).subscribe((state:boolean) =>{
       if (!!state) {
         this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
