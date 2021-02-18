@@ -2474,7 +2474,8 @@ export class DTOService {
   }
 
   public formSantaModal(
-    elementRef: ElementRef
+    elementRef: ElementRef,
+    isSetBulkOverrides: boolean
   ): DTOs.SantaModalDTO{
     const object: DTOs.SantaModalDTO = {
       data: {
@@ -2483,7 +2484,8 @@ export class DTOService {
         title: 'Edit'
       },
       state: {
-        isPresenting: false
+        isPresenting: false,
+        isSetBulkOverridesVariant: isSetBulkOverrides
       },
       api: {
         openModal: null,

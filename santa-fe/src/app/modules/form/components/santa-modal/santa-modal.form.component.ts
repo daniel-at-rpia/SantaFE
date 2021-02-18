@@ -4,6 +4,7 @@ import { DTOService } from 'Core/services/DTOService';
 import { SantaModalDTO } from 'FEModels/frontend-models.interface';
 import { ModalService } from 'Form/services/ModalService';
 import { Store, select } from '@ngrx/store';
+import { STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID } from 'Core/constants/structureConstants.constants';
 @Component({ 
   selector: 'santa-modal', 
   templateUrl: 'santa-modal.form.component.html', 
@@ -27,7 +28,8 @@ export class SantaModal implements OnInit, OnDestroy {
   public ngOnInit() {
     const exist = this.modalService.modalIsRegistered(this.modalId);
     if (!exist) {
-      this.modalData = this.dtoService.formSantaModal(this.elementRef);
+      const isSetBulkOverrides = this.modalId === STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID;
+      this.modalData = this.dtoService.formSantaModal(this.elementRef, isSetBulkOverrides);
       this.modalData.data.id = this.modalId;
       this.modalData.api.openModal = this.openModal.bind(this);
       this.modalData.api.closeModal = this.closeModal.bind(this);
