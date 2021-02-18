@@ -213,21 +213,7 @@ export class StructureSetBulkOverrides implements OnInit {
     this.state.configurator.display = false;
     this.state.configurator.dto.state.showFiltersFromDefinition = null;
     this.state.configurator.newOverrideNameCache = null;
-    if (!!this.state.configurator.dto.data.definitionList) {
-      this.state.configurator.dto.data.definitionList.forEach((definition: DTOs.SecurityDefinitionBundleDTO) => {
-        if (definition.data.list.length > 0) {
-          definition.data.list.forEach((option: DTOs.SecurityDefinitionDTO) => {
-            option.state.filterActive = false;
-            if (option.data.displayOptionList.length > 0) {
-              option.data.displayOptionList.forEach((displayOption: Blocks.SecurityDefinitionFilterBlock) => {
-                displayOption.isSelected = false;
-              })
-            }
-            option.data.highlightSelectedOptionList = [];
-          })
-        }
-      })
-    }
+    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
     return true;
   }
 }
