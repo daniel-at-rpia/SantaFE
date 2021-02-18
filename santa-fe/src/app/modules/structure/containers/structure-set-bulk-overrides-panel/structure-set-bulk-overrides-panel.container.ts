@@ -117,7 +117,7 @@ export class StructureSetBulkOverrides implements OnInit {
       this.setRowAsEvenState();
     }
     this.state.configurator.display = false;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
+    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
     this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
   }
 
