@@ -8,6 +8,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { GlobalWorkflowIOService } from 'Core/services/GlobalWorkflowIOService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
     import {
       selectUserInitials,
@@ -71,7 +72,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private globalWorkflowIOService: GlobalWorkflowIOService
   ) {
     this.state = this.initializePageState();
   }
@@ -87,6 +89,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
+        const stateId = this.utilityService.getStateUUIDFromNavigation(event);
+        stateId !== 'n/a' && this.globalWorkflowIOService.updateCurrentState(stateId);
         switch (modulePortion) {
           case this.constants.moduleUrl.trade:
             this.state.currentModule = this.constants.moduleUrl.trade;
