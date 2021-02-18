@@ -88,9 +88,9 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     });
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
+        const modulePortion = this.utilityService.getModulePortionFromNavigation(event) as NavigationModule;
         const stateId = this.utilityService.getStateUUIDFromNavigation(event);
-        stateId !== 'n/a' && this.globalWorkflowIOService.updateCurrentState(stateId);
+        stateId !== 'n/a' && this.globalWorkflowIOService.updateCurrentState(modulePortion, stateId);
         switch (modulePortion) {
           case this.constants.moduleUrl.trade:
             this.state.currentModule = this.constants.moduleUrl.trade;

@@ -97,6 +97,14 @@ export class TradePage implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
+    // const listOfSubs = [];
+    // for (const eachItem in this.subscriptions) {
+    //   if (!!this.subscriptions[eachItem]) {
+    //     const eachSub = this.subscriptions[eachItem] as Subscription;
+    //     listOfSubs.push(eachSub);
+    //   }
+    // }
+    // this.globalWorkflowIOService.storeSubscriptions(listOfSubs);
   }
 
   public ngOnDestroy() {

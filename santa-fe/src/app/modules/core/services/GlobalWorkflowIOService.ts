@@ -6,7 +6,10 @@ import { Store } from '@ngrx/store';
 import { DTOs } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
-import { GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+import {
+  GlobalWorkflowTypes,
+  NavigationModule
+} from 'Core/constants/coreConstants.constant';
 import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
 import {
   INDEXEDDB_VERSION,
@@ -28,8 +31,9 @@ export class GlobalWorkflowIOService {
   }
 
   private currentState: string = 'initialState';
+  private currentModule: NavigationModule = null;
   private routeHanlderStore: Map<string, DetachedRouteHandle> = new Map();
-  private subscriptionStore: Map<string, Array<Subscription>> = new Map();
+  private subscriptionStore: Map<NavigationModule, Map<string, Array<Subscription>>> = new Map();
 
   constructor(
     private store$: Store<any>,
@@ -38,10 +42,7 @@ export class GlobalWorkflowIOService {
   ){
     const openRequest = window.indexedDB.open(this.constants.idbWorkflowDbName, this.constants.idbVersion);
     this.initiateIndexedDBRequestHandler(openRequest);
-  }
-
-  public updateCurrentState(newStateId: string) {
-    this.currentState = newStateId;
+    this.initializeSubscriptionStore();
   }
 
   // Global Workflow States
@@ -131,6 +132,11 @@ export class GlobalWorkflowIOService {
 
   // Work with RouteReuseStrategy
 
+    public updateCurrentState(newModule: NavigationModule ,newStateId: string) {
+      this.currentModule = newModule;
+      this.currentState = newStateId;
+    }
+
     public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
       if (!!targetUUID) {
         this.routeHanlderStore.set(targetUUID, targetHandler);
@@ -166,11 +172,42 @@ export class GlobalWorkflowIOService {
     }
 
     public storeSubscriptions(subscriptionList: Array<Subscription>){
-      if (!!this.currentState && subscriptionList && subscriptionList.length > 0) {
-        const existingSubscriptions = this.subscriptionStore.get(this.currentState) || [];
-        this.subscriptionStore.set(this.currentState, existingSubscriptions.concat(subscriptionList));
+      console.log('test, storing subs', this.currentModule, this.currentState, subscriptionList);
+      if (!!this.currentModule && !!this.currentState && subscriptionList && subscriptionList.length > 0) {
+        const moduleStore = this.subscriptionStore[this.currentModule];
+        if (!!moduleStore) {
+          const existingSubscriptions = moduleStore.get(this.currentState) || [];
+          moduleStore.set(this.currentState, existingSubscriptions.concat(subscriptionList));
+          this.subscriptionStore.set(this.currentModule, moduleStore);
+        }
       }
     }
+
+    public closeLooseSubscriptions(targetModule: NavigationModule){
+      if (!!targetModule) {
+        const moduleStore = this.subscriptionStore[targetModule];
+        if (!!moduleStore) {
+          moduleStore.forEach((eachSubList) => {
+            eachSubList.forEach((eachSub) => {
+              if (!eachSub.closed) {
+                eachSub.unsubscribe();
+              }
+            })
+          });
+          this.subscriptionStore[targetModule] = new Map();
+        }
+      }
+    }
+
+    private initializeSubscriptionStore(){
+      this.subscriptionStore[NavigationModule.trade] = new Map();
+      this.subscriptionStore[NavigationModule.structuring] = new Map();
+      this.subscriptionStore[NavigationModule.market] = new Map();
+    }
+
+    // public closeSubscriptions(stateId: ){
+
+    // }
 
   // Work with RouteReuseStrategy End
 

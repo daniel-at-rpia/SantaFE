@@ -5,7 +5,7 @@
     import { select, Store } from '@ngrx/store';
 
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
-    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService } from 'Core/services';
+    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, GlobalWorkflowIOService } from 'Core/services';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
@@ -176,7 +176,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private globalWorkflowIOService: GlobalWorkflowIOService 
   ) {
     this.state = this.initializePageState();
   }
@@ -190,6 +191,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       )
     ).subscribe(([tick, isInitialDataLoaded]) => {
       if (tick > 0 && isInitialDataLoaded) {  // skip first beat
+        console.log('test, got a new tick', tick);
         if (this.state.fetchResult.fetchTableDataFailed) {
           window.location.reload(true);
         } else {
@@ -263,6 +265,14 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         }
       }
     });
+    const listOfSubs = [];
+    for (const eachItem in this.subscriptions) {
+      if (!!this.subscriptions[eachItem]) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        listOfSubs.push(eachSub);
+      }
+    }
+    this.globalWorkflowIOService.storeSubscriptions(listOfSubs);
   }
 
   public ngOnDestroy() {

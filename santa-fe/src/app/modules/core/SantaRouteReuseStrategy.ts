@@ -6,6 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 
 import { GlobalWorkflowIOService } from 'Core/services';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 @Injectable()
 export class SantaRouteReuseStrategy implements RouteReuseStrategy {
@@ -23,6 +24,9 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     if (!!targetHandler) {
       return true;
     } else {
+      // about to enter a new state in a module, by which time all components are going to be re-initialized, subscriptions for each will be re-created, so to avoid duplicate subscriptions, we need to close all existing subscriptions in that module
+      const targetModule = this.getModule(route);
+      // this.globalWorkflowIOService.closeLooseSubscriptions(targetModule);
       return false;
     }
     // return false;
@@ -75,6 +79,19 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
       return targetRoute.params['stateId'];
     } else {
       console.warn('route does not have uuid', targetRoute);
+      return null;
+    }
+  }
+
+  private getModule(targetRoute: ActivatedRouteSnapshot): NavigationModule {
+    if (!!targetRoute && !!targetRoute.routeConfig) {
+      const slicedPath = targetRoute.routeConfig.path.split('/');
+      if (slicedPath.length > 0) {
+        return slicedPath[0] as NavigationModule;
+      } else {
+        return null;
+      }
+    } else {
       return null;
     }
   }
