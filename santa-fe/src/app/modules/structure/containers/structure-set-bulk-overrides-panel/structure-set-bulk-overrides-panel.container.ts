@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { of, Subscription } from 'rxjs';
 import { catchError, first, tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { StructureSetOverridesAcrossFundsPanelState } from 'Core/models/frontend/frontend-page-states.interface';
+import { StructureSetBulkOverridesPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
   STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
   CustomeBreakdownConfiguratorDefinitionLayout,
@@ -33,7 +33,7 @@ import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selec
 })
 
 export class StructureSetBulkOverrides implements OnInit {
-  state: StructureSetOverridesAcrossFundsPanelState;
+  state: StructureSetBulkOverridesPanelState;
   subscriptions = {
     setBulkOverridesSub: null
   }
@@ -55,8 +55,8 @@ export class StructureSetBulkOverrides implements OnInit {
     this.state = this.initializePageState();
   }
 
-  private initializePageState(): StructureSetOverridesAcrossFundsPanelState {
-    const state: StructureSetOverridesAcrossFundsPanelState = {
+  private initializePageState(): StructureSetBulkOverridesPanelState {
+    const state: StructureSetBulkOverridesPanelState = {
       editRowList: [],
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),

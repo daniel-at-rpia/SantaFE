@@ -1,46 +1,46 @@
 <article
   [ngClass]="{
-    'sat-setOverridesAcrossFundsPanel': true,
-    'sat-setOverridesAcrossFundsPanel--displayConfiguratorState': state.configurator.display
+    'sat-setBulkOverridesPanel': true,
+    'sat-setBulkOverridesPanel--displayConfiguratorState': state.configurator.display
   }">
-  <section class="sat-setOverridesAcrossFundsPanel__main">
-    <div class="sat-setOverridesAcrossFundsPanel__main-configurator">
-      <div class="sat-setOverridesAcrossFundsPanel__main-configurator-content">
+  <section class="sat-setBulkOverridesPanel__main">
+    <div class="sat-setBulkOverridesPanel__main-configurator">
+      <div class="sat-setBulkOverridesPanel__main-configurator-content">
         <security-definition-configurator
           [configuratorData]="state.configurator.dto"
           (clickedApplyFilter)="onApplyConfiguratorFilter($event)"
         ></security-definition-configurator>
       </div>
     </div>
-    <div class="sat-setOverridesAcrossFundsPanel__main-edit">
-      <div class="sat-setOverridesAcrossFundsPanel__main-edit-content">
-        <div class="sat-setOverridesAcrossFundsPanel__main-edit-content-header">
-          <button (click)="onClickNewOverrideRow()" class="sat-setOverridesAcrossFundsPanel__main-edit-content-header-createRow santaBtn--labelled santaBtn--inverseLabelled">
+    <div class="sat-setBulkOverridesPanel__main-edit">
+      <div class="sat-setBulkOverridesPanel__main-edit-content">
+        <div class="sat-setBulkOverridesPanel__main-edit-content-cta">
+          <button (click)="onClickNewOverrideRow()" class="sat-setBulkOverridesPanel__main-edit-content-cta-createRow santaBtn--labelled santaBtn--inverseLabelled">
             <i class="fal fa-plus"></i>
             <span>New Override Row</span>
           </button>
         </div>
-        <ul class="sat-setOverridesAcrossFundsPanel__main-edit-content-rowList">
+        <ul class="sat-setBulkOverridesPanel__main-edit-content-rowList">
           <li
             *ngFor="let eachCategory of state.editRowList; let categoryIndex = index;"
             [ngClass]="{
-              'sat-setOverridesAcrossFundsPanelEditRow': true,
-              'sat-setOverridesAcrossFundsPanelEditRow--evenState': eachCategory.isEven
+              'sat-setBulkOverridesPanelEditRow': true,
+              'sat-setBulkOverridesPanelEditRow--evenState': eachCategory.isEven
             }">
-            <section class="sat-setOverridesAcrossFundsPanelEditRow__remove">
-              <button (click)="onSelectForRemoval(eachCategory)" class="sat-setOverridesAcrossFundsPanelEditRow__remove-btn santaBtn--iconOnly fal fa-times"></button>
+            <section class="sat-setBulkOverridesPanelEditRow__remove">
+              <button (click)="onSelectForRemoval(eachCategory)" class="sat-setBulkOverridesPanelEditRow__remove-btn santaBtn--iconOnly fal fa-times"></button>
             </section>
-            <section class="sat-setOverridesAcrossFundsPanelEditRow__label">
+            <section class="sat-setBulkOverridesPanelEditRow__label">
               <santa-textarea
-                class="sat-setOverridesAcrossFundsPanelEditRow__label-input"
+                class="sat-setBulkOverridesPanelEditRow__label-input"
                 [inputValue]="eachCategory.displayRowTitle"
                 [isExtendedWidth]="true"
                 (onInputChange)="onEditRowRenamed($event, eachCategory)"
                 >
               </santa-textarea>
             </section>
-            <section class="sat-setOverridesAcrossFundsPanelEditRow__bucket">
-              <div class="sat-setOverridesAcrossFundsPanelEditRow__icon">
+            <section class="sat-setBulkOverridesPanelEditRow__bucket">
+              <div class="sat-setBulkOverridesPanelEditRow__icon">
                 <i class="fas fa-star"></i>
               </div>
               {{ eachCategory.displayBucket }}

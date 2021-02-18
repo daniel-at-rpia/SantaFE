@@ -1,12 +1,11 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
-$structureSetTargetPanel_edit_column_size: 14rem;
-$setOverridesAcrossFundsPanel_edit_column_size: 14rem;
-$setOverridesAcrossFundsPanel_configurator_container_leftPadding: $spacing_large;
-$setOverridesAcrossFundsPanel_configurator_container_width: $securityDefinitionConfigurator_width + $setOverridesAcrossFundsPanel_configurator_container_leftPadding;
-$setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
+$setBulkOverridesPanel_edit_column_size: 14rem;
+$setBulkOverridesPanel_configurator_container_leftPadding: $spacing_large;
+$setBulkOverridesPanel_configurator_container_width: $securityDefinitionConfigurator_width + $setBulkOverridesPanel_configurator_container_leftPadding;
+$setBulkOverridesPanel_categoryList_cell_width: 3.5rem;
 
-.sat-setOverridesAcrossFundsPanel {
+.sat-setBulkOverridesPanel {
   $blockName: &;
   flex: 1 1 auto;
   display: flex;
@@ -52,11 +51,11 @@ $setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
           @include mix_border_generator(2px, $color_active);
           @include mix_border_radius(5px);
           @include mix_alive('light');
-          width: $structureSetTargetPanel_edit_column_size + $spacing_small;
+          width: $setBulkOverridesPanel_edit_column_size + $spacing_small;
           height: 100%;
           pointer-events: none;
         }
-        &-header {
+        &-cta {
           flex: 0 0 auto;
           display: flex;
           justify-content: flex-end;
@@ -84,15 +83,15 @@ $setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
     #{$blockName} {
       &__main {
         &-configurator {
-          width: $setOverridesAcrossFundsPanel_configurator_container_width;
-          padding-left: $setOverridesAcrossFundsPanel_configurator_container_leftPadding;
+          width: $setBulkOverridesPanel_configurator_container_width;
+          padding-left: $setBulkOverridesPanel_configurator_container_leftPadding;
           &-content {
             display: flex;
           }
         }
         &-edit {
           &-content {
-            &-header-createRow {
+            &-cta-createRow {
               @include material('none');
               background-color: $color_active;
             }
@@ -103,7 +102,7 @@ $setOverridesAcrossFundsPanel_categoryList_cell_width: 3.5rem;
   }
 }
 
-.sat-setOverridesAcrossFundsPanelEditRow {
+.sat-setBulkOverridesPanelEditRow {
   $blockName: &;
   @include mix_alive('custom', $animation_duration_light background-color);
   background-color: $color_gray_2;

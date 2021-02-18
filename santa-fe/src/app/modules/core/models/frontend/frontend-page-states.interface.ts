@@ -332,7 +332,7 @@ export interface StructureSetTargetPanelState {
   isViewingIndexOnBICS: boolean;
 }
 
-export interface StructureSetOverridesAcrossFundsPanelState {
+export interface StructureSetBulkOverridesPanelState {
   editRowList: Array<Blocks.StructureSetBulkOverridesEditRow>;
   configurator: {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;
