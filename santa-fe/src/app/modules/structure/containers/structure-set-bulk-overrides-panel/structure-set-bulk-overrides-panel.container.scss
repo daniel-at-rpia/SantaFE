@@ -142,6 +142,9 @@ $setBulkOverridesPanel_categoryList_cell_width: 3.5rem;
         color: $font_color_inverse;
       }
     }
+    &-text {
+      flex: 0 0 70%;
+    }
   }
   &--evenState {
     background-color: $color_blue_gray_1;
