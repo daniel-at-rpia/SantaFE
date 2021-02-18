@@ -126,19 +126,21 @@ $setBulkOverridesPanel_categoryList_cell_width: 3.5rem;
   &__bucket {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     padding-right: $spacing_small;
-  }
-  &__icon {
-    @include mix_border_radius(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: $spacing_small;
-    background-color: $color_active;
-    width: 20px;
-    height: 20px;
-    & > i {
-      color: $font_color_inverse;
+    flex: 0 0 30%;
+    &-icon {
+      @include mix_border_radius(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 0 0 20px;
+      height: 20px;
+      margin-right: $spacing_small;
+      background-color: $color_active;
+      & > i {
+        color: $font_color_inverse;
+      }
     }
   }
   &--evenState {
