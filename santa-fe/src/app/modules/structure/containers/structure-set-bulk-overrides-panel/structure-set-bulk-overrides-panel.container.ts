@@ -5,7 +5,9 @@ import { Store, select } from '@ngrx/store';
 import { StructureSetOverridesAcrossFundsPanelState } from 'Core/models/frontend/frontend-page-states.interface';
 import {
   STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
-  CustomeBreakdownConfiguratorDefinitionLayout
+  CustomeBreakdownConfiguratorDefinitionLayout,
+  BICS_OVERRIDES_IDENTIFIER,
+  BICS_OVERRIDES_TITLE
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
@@ -38,6 +40,8 @@ export class StructureSetBulkOverrides implements OnInit {
   constants = {
     setBulkOverridesModalId: STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
     configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
+    BICSOverrideIdentifier: BICS_OVERRIDES_IDENTIFIER,
+    BICSOverrideTitle: BICS_OVERRIDES_TITLE
   }
   constructor(
     private store$: Store<any>,
@@ -129,11 +133,13 @@ export class StructureSetBulkOverrides implements OnInit {
   }
 
   private createEditRow(title: string, simpleBucket: Blocks.StructureBucketDataBlock): Blocks.StructureSetBulkOverridesEditRow {
+    const originalBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(simpleBucket);
+    const parsedDisplayBucket = originalBucketIdentifier.replace(this.constants.BICSOverrideIdentifier, this.constants.BICSOverrideTitle);
     const editRow: Blocks.StructureSetBulkOverridesEditRow = {
       displayRowTitle: title,
       modifiedDisplayRowTitle: title,
       rowIdentifier: title,
-      displayBucket: this.utilityService.formBucketIdentifierForOverride(simpleBucket),
+      displayBucket: parsedDisplayBucket,
       simpleBucket: simpleBucket,
       isEven: false
     }
