@@ -217,7 +217,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         filterList
       );
     } else if (this.breakdownData.data.backendGroupOptionIdentifier.indexOf(this.constants.bicsBreakdownId) === 0) {
-      this.seeBondPackageBICSBreakdownDataTransfer(
+      this.bicsDataProcessingService.seeBondPackageBICSBreakdownDataTransfer(
         configurator,
         targetRow,
         filterList
@@ -280,30 +280,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     });
     this.breakdownData.data.rawLeverageCategoryList.forEach((eachRow) => {
       eachRow.state.isEditingViewAvail = this.breakdownData.state.isEditingViewAvail;
-    });
-  }
-
-  private seeBondPackageBICSBreakdownDataTransfer(
-    configurator: DTOs.SecurityDefinitionConfiguratorDTO,
-    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
-    filterList: Array<DTOs.SecurityDefinitionDTO>
-  ) {
-    configurator.data.definitionList.forEach((eachBundle) => {
-      eachBundle.data.list.forEach((eachDefinition) => {
-        if (eachDefinition.data.key === this.constants.securityDefinitionMap.BICS_CONSOLIDATED.key) {
-          const selectedOptionList = [];
-          selectedOptionList.push(targetRow.data.category);
-          eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
-            eachDefinition.data.key,
-            selectedOptionList,
-            targetRow.data.bicsLevel
-          );
-          eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
-            eachOption.isSelected = true;
-          });
-          filterList.push(eachDefinition);
-        }
-      });
     });
   }
 

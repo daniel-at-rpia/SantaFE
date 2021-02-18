@@ -206,11 +206,23 @@ export function coreReducer(
         }
       }
     case CoreActions.GlobalAlertsAPIAlertCallFailed:
-      return {
-        ...state,
-        globalAlert: {
-          ...state.globalAlert,
-          apiCallForAlertFailed: action.newState
+      if (!!action.newState) {
+        return {
+          ...state,
+          globalAlert: {
+            ...state.globalAlert,
+            processingAlerts: false,
+            makeAPICall: false,
+            apiCallForAlertFailed: true
+          }
+        }
+      } else {
+        return {
+          ...state,
+          globalAlert: {
+            ...state.globalAlert,
+            apiCallForAlertFailed: false
+          }
         }
       }
     case CoreActions.GlobalAlertsClearAllUrgentAlerts:

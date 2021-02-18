@@ -247,6 +247,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     secondaryIcon: string;
   }
   state: {
+    isConsolidatedBICSVariant: boolean;
     isLocked: boolean;
     isUnactivated: boolean;
     groupByActive: boolean;
