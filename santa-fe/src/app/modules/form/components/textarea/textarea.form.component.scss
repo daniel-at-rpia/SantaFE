@@ -1,5 +1,5 @@
 @import "global.scss";
-$textAreaWidth: 135px;
+$textAreaWidth: convert_px_to_rem(140px);
 $textAreaExtendedWidth: $textAreaWidth * 1.5;
 .santaTextarea {
   $blockName: &;

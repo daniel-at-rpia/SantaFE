@@ -24,7 +24,7 @@ export interface StructureState {
   dataDatestamp: number;
   utilityPanelLoadState: PageStates.StructureUtilityPanelState;
   setBulkOverrides: boolean;
-  setBulkOverridesTranfer: AdhocPacks.StructureSetBulkOverridesTransferPack;
+  setBulkOverridesTransfer: AdhocPacks.StructureSetBulkOverridesTransferPack;
 }
 
 const initialState: StructureState = {
@@ -48,7 +48,7 @@ const initialState: StructureState = {
   dataDatestamp: moment().unix(),
   utilityPanelLoadState: null,
   setBulkOverrides: false,
-  setBulkOverridesTranfer: null
+  setBulkOverridesTransfer: null
 }
 
 export function structureReducer(
@@ -121,7 +121,7 @@ export function structureReducer(
     case StructureActions.SendSetBulkOverridesTransfer:
       return {
         ...state,
-        setBulkOverridesTranfer: action.pack
+        setBulkOverridesTransfer: action.pack
       };
     default:
       return state;

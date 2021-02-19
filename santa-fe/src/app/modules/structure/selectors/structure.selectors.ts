@@ -64,5 +64,5 @@ export const selectSetBulkOverridesEvent = createSelector(
 
 export const selectSetBulkOverridesTransferPack = createSelector(
   getStructureState,
-  (state: StructureState) => state.setBulkOverridesTranfer
+  (state: StructureState) => state.setBulkOverridesTransfer
 )
