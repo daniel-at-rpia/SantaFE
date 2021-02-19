@@ -1290,7 +1290,7 @@ export class UtilityService {
         list.forEach((eachIdentifier) => {
           if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName ) {
             const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
-              return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode);
+              return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
             categoryKey = categoryKey === '' ? `${valueArray}` : `${categoryKey} ~ ${valueArray}`;
           } else {
