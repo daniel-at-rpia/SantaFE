@@ -109,7 +109,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       display: flex;
       padding-right: $spacing_large;
       margin: 5rem 0 0 0;
-      overflow: hidden;
+      overflow-x: scroll;
       &>portfolio-breakdown {
         flex: 1 1 auto;
       }
