@@ -251,7 +251,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         })
         let previousListForCompare: Array<Blocks.SecurityDefinitionFilterBlock>;
         if (eachDefinition.state.isFilterCapped) {
-          previousListForCompare = this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0 ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.prinstineFilterOptionList;
+          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList;
         } else {
           previousListForCompare = eachDefinition.state.isConsolidatedBICSVariant ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
