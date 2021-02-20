@@ -30,7 +30,8 @@
     } from 'Core/constants/coreConstants.constant';
     import {
       BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
-      SubPortfolioFilter
+      SubPortfolioFilter,
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
     } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
@@ -1558,6 +1559,20 @@ export class UtilityService {
     public checkIfFundDeltaIsSignificantNegative(delta: number, previousValue): boolean {
       const isSignificantNegative = delta < 0 && Math.abs(delta)/previousValue > 0.05 ? true : false;
       return isSignificantNegative;
+    }
+
+    public getFormattedRowDisplayCategory(
+      category: string,
+      isOverride: boolean
+      ): string {
+      const isBICSSubLevel = category.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX);
+      let displayCategory: string;
+      if (isBICSSubLevel) {
+        displayCategory = isOverride ? category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'): category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim();
+      } else {
+        displayCategory = category;
+      }
+      return displayCategory;
     }
   // structuring specific end
 }

@@ -2434,7 +2434,7 @@ export class DTOService {
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: categoryName,
-        displayCategory: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
+        displayCategory:  this.utility.getFormattedRowDisplayCategory(categoryName, isOverride),
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
