@@ -172,10 +172,10 @@ export class GlobalWorkflowIOService {
     }
 
     public storeSubscriptions(subscriptionList: Array<Subscription>){
-      console.log('test, storing subs', this.currentModule, this.currentState, subscriptionList);
       if (!!this.currentModule && !!this.currentState && subscriptionList && subscriptionList.length > 0) {
         const moduleStore = this.subscriptionStore[this.currentModule];
         if (!!moduleStore) {
+          console.log('test, storing subs', this.currentModule, this.currentState, subscriptionList);
           const existingSubscriptions = moduleStore.get(this.currentState) || [];
           moduleStore.set(this.currentState, existingSubscriptions.concat(subscriptionList));
           this.subscriptionStore.set(this.currentModule, moduleStore);
