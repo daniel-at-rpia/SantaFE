@@ -41,7 +41,8 @@ export const APIUrlMap = {
   getViews: 'portfolioStructuring/get-analyst-views',
   setView: 'portfolioStructuring/set-analyst-view',
   getAllTraceTrades: 'TraceTrade/get-all-trace-trades',
-  clearPortfolioBreakdown: 'portfolioStructuring/clear-portfolio-breakdown'
+  clearPortfolioBreakdown: 'portfolioStructuring/clear-portfolio-breakdown',
+  updatePortfolioOverridesForAllPortfolios: 'portfolioStructuring/update-portfolio-overrides-for-all-portfolios'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';

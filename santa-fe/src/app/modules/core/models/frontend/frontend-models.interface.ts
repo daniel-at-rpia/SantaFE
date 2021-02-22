@@ -864,10 +864,11 @@ export interface SantaModalDTO extends BasicDTOStructure {
   },
   state: {
     isPresenting: boolean;
+    isSetBulkOverridesVariant: boolean;
   },
   api: {
     openModal: () => void;
-    closeModal: () => void;
+    closeModal: () => boolean;
     saveModal: () => boolean;
   }
 }

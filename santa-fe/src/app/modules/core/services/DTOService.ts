@@ -68,7 +68,8 @@
       BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
       BICS_OVERRIDES_IDENTIFIER,
       BICS_OVERRIDES_TITLE,
-      DeltaScope
+      DeltaScope,
+      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -2474,7 +2475,8 @@ export class DTOService {
   }
 
   public formSantaModal(
-    elementRef: ElementRef
+    elementRef: ElementRef,
+    modalId: string
   ): DTOs.SantaModalDTO{
     const object: DTOs.SantaModalDTO = {
       data: {
@@ -2483,7 +2485,8 @@ export class DTOService {
         title: 'Edit'
       },
       state: {
-        isPresenting: false
+        isPresenting: false,
+        isSetBulkOverridesVariant: modalId === STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
       },
       api: {
         openModal: null,

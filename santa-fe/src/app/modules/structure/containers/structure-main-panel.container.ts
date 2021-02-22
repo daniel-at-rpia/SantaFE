@@ -15,7 +15,8 @@ import {
   selectActivePortfolioViewFilter,
   selectDataDatestamp,
   selectActiveSubPortfolioFilter,
-  selectActiveDeltaScope
+  selectActiveDeltaScope,
+  selectSetBulkOverridesTransferPack
 } from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
@@ -55,7 +56,8 @@ import {
 } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
-  PayloadSetView
+  PayloadSetView,
+  PayloadUpdatePortfolioOverridesForAllPortfolios
 } from 'App/modules/core/models/backend/backend-payloads.interface';
 import {
   StructureSetViewTransferPack,
@@ -65,6 +67,7 @@ import {
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import { AdhocPacks } from 'App/modules/core/models/frontend';
 
 @Component({
     selector: 'structure-main-panel',
@@ -85,7 +88,8 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
     activeSubPortfolioViewFilterSub: null,
-    activeDeltaScopeSub: null
+    activeDeltaScopeSub: null,
+    setBulkOverridesTransferSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -165,6 +169,11 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500)
       })
     });
+    this.subscriptions.setBulkOverridesTransferSub = this.store$.pipe(select(selectSetBulkOverridesTransferPack)).subscribe((pack: AdhocPacks.StructureSetBulkOverridesTransferPack) => {
+      if (!!pack) {
+        this.setBulkOverrides(pack);
+      }
+    })
     this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewTransferPack) => {
       if (!!value) {
         this.updateViewData(value);
@@ -662,4 +671,39 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     });
   }
 
+  private setBulkOverrides(pack: AdhocPacks.StructureSetBulkOverridesTransferPack) {
+    const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = pack.overrides;
+    const necessaryUpdateNumOfCalls = updatePayload.length;
+    let callCount = 0;
+    updatePayload.forEach((eachPayload) => {
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
+        first(),
+        tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
+          callCount++;
+          if (callCount === necessaryUpdateNumOfCalls) {
+            this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
+            this.processStructureData(
+              this.extractSubPortfolioFromFullServerReturn(serverReturn),
+              this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
+            );
+            this.store$.dispatch(
+              new CoreSendNewAlerts([
+                this.dtoService.formSystemAlertObject(
+                  'Structuring',
+                  'Added',
+                  `Successfully Added New Overrides to All Funds`,
+                  null
+                )]
+              )
+            );
+          }
+        }),
+        catchError(err => {
+          console.error('update portfolio overrides for all portfolios failed', err);
+          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
+          return of('error');
+        })
+      ).subscribe();
+    });
+  }
 }

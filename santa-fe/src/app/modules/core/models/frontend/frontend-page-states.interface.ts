@@ -331,3 +331,12 @@ export interface StructureSetTargetPanelState {
   activeSubPortfolioFilter: SubPortfolioFilter;
   isViewingIndexOnBICS: boolean;
 }
+
+export interface StructureSetBulkOverridesPanelState {
+  editRowList: Array<Blocks.StructureSetBulkOverridesEditRow>;
+  configurator: {
+    dto: DTOs.SecurityDefinitionConfiguratorDTO;
+    display: boolean;
+    newOverrideNameCache: string;
+  }
+}

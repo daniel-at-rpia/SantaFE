@@ -1233,9 +1233,9 @@ export class UtilityService {
   // trade specific end
 
   // structuring specific
-    public formBucketIdentifierForOverride(rawData: BEStructuringOverrideBlock): string {
+    public formBucketIdentifierForOverride(simpleBucket: Blocks.StructureBucketDataBlock): string {
       const list = [];
-      for (let eachIdentifier in rawData.simpleBucket) {
+      for (let eachIdentifier in simpleBucket) {
         list.push(eachIdentifier);
       }
       list.sort((identifierA, identifierB) => {
@@ -1331,7 +1331,7 @@ export class UtilityService {
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
       overrideRawDataList.forEach((eachRawOverride) => {
-        const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride);
+        const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride.simpleBucket);
         const matchExistBreakdown = breakdownList.find((eachBEDTO) => {
           return eachBEDTO.groupOption === overrideBucketIdentifier;
         });

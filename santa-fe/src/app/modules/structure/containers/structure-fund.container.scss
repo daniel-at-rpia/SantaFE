@@ -91,12 +91,22 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     height: 0;
     overflow: hidden;
     transform: translate(0, -$fundStructuring_setTarget_height);
-    &-overrideCta {
-      flex: 0 0 auto;
+    &-addOverrides {
       display: flex;
-      background-color: $color_create;
-      margin-right: $spacing_medium;
-      margin-bottom: $spacing_medium;
+      &-overrideCta {
+        flex: 0 0 auto;
+        display: flex;
+        background-color: $color_create;
+        margin-right: $spacing_medium;
+        margin-bottom: $spacing_medium;
+      }
+      &-bulkOverrideCta {
+        flex: 0 0 auto;
+        display: flex;
+        background-color: $color_create;
+        margin-right: $spacing_medium;
+        margin-bottom: $spacing_medium;
+      }
     }
     &-group {
       flex: 0 0 auto;
