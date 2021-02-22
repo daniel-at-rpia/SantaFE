@@ -1122,16 +1122,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
     const payload: Array<PayloadUpdateOverride> = [];
     this.state.editRowList.forEach((eachRow) => {
+      let isTitleChanged = false;
+      let isTargetChanged = false;
       const eachPayload: PayloadUpdateOverride = {
         portfolioOverride: {
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
       };
-      if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
+      if (eachRow.modifiedDisplayRowTitle !== eachRow.displayRowTitle) {
+        isTitleChanged = true;
         eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
+        isTargetChanged = true;
         const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
           metricBreakdowns: {}
         };
@@ -1154,7 +1158,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
       }
-      payload.push(eachPayload);
+      if (isTargetChanged || isTitleChanged) {
+        payload.push(eachPayload);
+      }
     });
     return payload;
   }
