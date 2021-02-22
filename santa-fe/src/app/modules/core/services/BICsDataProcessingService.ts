@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
+import { DTOs, Blocks, AdhocPacks, PageStates } from '../models/frontend';
 import {
   BEBICsHierarchyBlock,
   BEStructuringFundBlock,
@@ -380,6 +380,16 @@ export class BICsDataProcessingService {
   public getDisplayedSubLevelsWithTargetsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> ) {
     const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && row.data.targetLevel !== null);
     targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
+  }
+
+  public loadBICSOptionsIntoConfigurator(configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO) {
+    this.dtoService.loadBICSOptionsIntoConfigurator(
+      configuratorDTO,
+      this.returnAllBICSBasedOnHierarchyDepth(1),
+      this.returnAllBICSBasedOnHierarchyDepth(2),
+      this.returnAllBICSBasedOnHierarchyDepth(3),
+      this.returnAllBICSBasedOnHierarchyDepth(4)
+    )
   }
 
   public seeBondPackageBICSBreakdownDataTransfer(

@@ -15,7 +15,7 @@ import { StructureUtilityPanel } from 'Structure/containers/structure-utility-pa
 import { TargetBar } from 'App/modules/structure/components/target-bar.component'
 import { PortfolioBreakdown } from 'App/modules/structure/containers/portfolio-breakdown/portfolio-breakdown.container';
 import { StructureSetTargetPanel } from 'Structure/containers/structure-set-target-panel/structure-set-target-panel.container';
-
+import { StructureSetBulkOverrides } from 'App/modules/structure/containers/structure-set-bulk-overrides-panel/structure-set-bulk-overrides-panel.container';
 import { PortfolioBreakdownRow } from 'App/modules/structure/components/portfolio-breakdown-row.component';
 import { StructurePopover } from 'Structure/containers/structure-popover/structure-popover.container';
 
@@ -29,7 +29,8 @@ import { StructurePopover } from 'Structure/containers/structure-popover/structu
     PortfolioBreakdown,
     StructureSetTargetPanel,
     PortfolioBreakdownRow,
-    StructurePopover
+    StructurePopover,
+    StructureSetBulkOverrides
   ],
   imports: [
     // Angular framework modules

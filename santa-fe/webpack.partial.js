@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "2.1.54-alertPatch";
+const version = "2.1.56";
 module.exports = {
   output: {
     filename: `[name].${version}.min.js`
