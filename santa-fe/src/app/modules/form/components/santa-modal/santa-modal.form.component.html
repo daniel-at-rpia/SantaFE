@@ -2,7 +2,8 @@
   *ngIf="!!modalData"
   [ngClass]="{
     'santaModal': true,
-    'santaModal--presentState': modalData.state.isPresenting
+    'santaModal--presentState': modalData.state.isPresenting,
+    'santaModal--setBulkOverridesVariant': modalData.state.isSetBulkOverridesVariant
   }">
   <section (click)="closeModal()" class="santaModal__background"></section>
   <section class="santaModal__foreground">
