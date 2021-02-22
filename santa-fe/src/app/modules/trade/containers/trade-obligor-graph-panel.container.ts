@@ -1,6 +1,7 @@
-import { Component, ViewEncapsulation, NgZone, AfterViewInit, OnDestroy } from "@angular/core";
-import { GraphService } from 'Core/services/GraphService';
-import { UtilityService } from 'Core/services/UtilityService';
+import { Component, ViewEncapsulation, NgZone, OnInit, OnDestroy } from "@angular/core";
+
+import { UtilityService, GraphService, GlobalWorkflowIOService } from 'Core/services';
+import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
 import { 
   selectSelectedSecurityForAnalysis,
   selectSecurityTableRowDTOListForAnalysis,
@@ -29,7 +30,7 @@ import {
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
+export class TradeObligorGraphPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
   state: PageStates.TradeObligorGraphPanelState;
   subscriptions = {
     selectSecurityUpdateForAnalysis: null,
@@ -42,13 +43,14 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
     private graphService: GraphService,
     private restfulCommService: RestfulCommService,
     private utility: UtilityService,
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService 
   ) {
+    super(globalWorkflowIOService);
     this.initializeState();
   }
 
-  public ngAfterViewInit() {
-    
+  public ngOnInit() {
     this.subscriptions.selectBestQuoteValidWindow = this.store$.pipe(
       select(selectBestQuoteValidWindow)
     ).subscribe((data) => {
@@ -69,6 +71,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
       this.addMarksTochartCategory()
     });
 
+    return super.ngOnInit();
   }
 
   private setObligorSecurityID(data: DTOs.SecurityDTO) {
@@ -78,7 +81,7 @@ export class TradeObligorGraphPanel implements AfterViewInit, OnDestroy {
 
   public ngOnDestroy() {
     if (this.state.obligorChart) this.state.obligorChart.dispose();
-    this.initializeState();
+    return super.ngOnDestroy();
   }
 
   private fetchSecurityIDs() {

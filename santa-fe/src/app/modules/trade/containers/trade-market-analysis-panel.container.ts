@@ -4,11 +4,9 @@
     import { tap, first, catchError, delay } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { GraphService } from 'Core/services/GraphService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
+    import { DTOService, UtilityService, GraphService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import {
       BEHistoricalSummaryDTO,
       BEHistoricalSummaryOverviewDTO,
@@ -35,7 +33,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
+export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implements OnInit, OnChanges {
   @Output() populateGraph = new EventEmitter();
   @Input() collapseGraph: boolean;
   state: PageStates.TradeMarketAnalysisPanelState;
@@ -93,8 +91,10 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private graphService: GraphService
+    private graphService: GraphService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ){
+    super(globalWorkflowIOService);
     this.state = this.initializePageState();
   }
 
@@ -105,18 +105,12 @@ export class TradeMarketAnalysisPanel implements OnInit, OnDestroy, OnChanges {
     ).subscribe((targetSecurity) => {
       !!targetSecurity && this.onSecuritySelected(targetSecurity);
     });
+    return super.ngOnInit();
   }
 
   public ngOnChanges() {
     if (!!this.collapseGraph) {
       this.state.displayGraph = false;
-    }
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      const eachSub = this.subscriptions[eachItem] as Subscription;
-      eachSub.unsubscribe();
     }
   }
 

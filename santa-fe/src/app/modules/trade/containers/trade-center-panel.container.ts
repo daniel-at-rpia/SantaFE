@@ -178,7 +178,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
     private bicsDataProcessingService: BICsDataProcessingService,
-    globalWorkflowIOService: GlobalWorkflowIOService 
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ) {
     super(globalWorkflowIOService);
     this.state = this.initializePageState();

@@ -6,8 +6,8 @@
 
     import { TradeState } from 'Trade/reducers/trade.reducer';
     import { PageStates } from 'Core/models/frontend';
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
+    import { DTOService, UtilityService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import {
       TradeLiveUpdateStartEvent,
       TradeLiveUpdateUtilityInternalCountEvent,
@@ -36,7 +36,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeUtilityPanel implements OnInit, OnDestroy {
+export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit {
   @Input() sidePanelsDisplayed: boolean;
   state: PageStates.TradeUtilityPanelState;
   constants = {
@@ -73,8 +73,10 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   }
 
   constructor(
-    private store$: Store<any>
+    private store$: Store<any>,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ){
+    super(globalWorkflowIOService);
     this.initializePageState();
   }
 
@@ -130,13 +132,8 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
       this.state.isInitialDataLoaded = flag;
       this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
     });
-  }
 
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      const eachSub = this.subscriptions[eachItem] as Subscription;
-      eachSub.unsubscribe();
-    }
+    return super.ngOnInit();
   }
 
   // disabled temporarily

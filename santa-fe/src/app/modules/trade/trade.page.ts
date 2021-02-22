@@ -11,9 +11,10 @@
       RestfulCommService,
       GlobalWorkflowIOService
     } from 'Core/services';
-    import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
+    import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { CoreUserLoggedIn, CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
@@ -30,7 +31,7 @@
   styleUrls: ['./trade.page.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class TradePage implements OnInit, OnDestroy {
+export class TradePage extends SantaContainerComponentBase implements OnInit {
   state: PageStates.TradeState;
   subscriptions = {
     routeChange: null,
@@ -59,8 +60,9 @@ export class TradePage implements OnInit, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private route: ActivatedRoute,
-    private globalWorkflowIOService: GlobalWorkflowIOService 
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ) {
+    super(globalWorkflowIOService);
     this.initializePageState();
   }
 
@@ -105,15 +107,7 @@ export class TradePage implements OnInit, OnDestroy {
     //   }
     // }
     // this.globalWorkflowIOService.storeSubscriptions(listOfSubs);
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (!!this.subscriptions[eachItem]) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   public onToggleCollapseGraphs() {

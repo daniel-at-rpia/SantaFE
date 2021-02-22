@@ -5,11 +5,10 @@
     import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
     import * as moment from 'moment';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
+    import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import {
       BESecurityDTO,
       BEAlertConfigurationReturn,
@@ -83,7 +82,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
+export class TradeAlertPanel extends SantaContainerComponentBase implements OnInit, OnChanges, OnDestroy {
   @Input() sidePanelsDisplayed: boolean;
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
@@ -125,8 +124,10 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private processingService: LiveDataProcessingService
+    private processingService: LiveDataProcessingService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ){
+    super(globalWorkflowIOService);
     window['moment'] = moment;
     this.state = this.initializePageState();
   }
@@ -310,6 +311,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       })
+
+      return super.ngOnInit();
     }
 
     public ngOnChanges() {
@@ -320,12 +323,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     public ngOnDestroy() {
       this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(false));
-      for (const eachItem in this.subscriptions) {
-        if (this.subscriptions[eachItem]) {
-          const eachSub = this.subscriptions[eachItem] as Subscription;
-          eachSub.unsubscribe();
-        }
-      }
+      return super.ngOnDestroy();
     }
 
     private marketListAlertsCountdownUpdate(): number {

@@ -17,7 +17,7 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, 
   abstract subscriptions: {[property: string]: Subscription};
 
   constructor(
-    private globalWorkflowIOService: GlobalWorkflowIOService
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ){
 
   }

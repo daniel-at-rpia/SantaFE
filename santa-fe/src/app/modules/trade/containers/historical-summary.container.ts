@@ -6,10 +6,9 @@
       OnChanges
     } from '@angular/core';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { DTOs } from 'Core/models/frontend';
+    import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import {
       HISTORICAL_SUMMARY_ROUNDING
     } from 'Core/constants/tradeConstants.constant';
@@ -22,7 +21,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class HistoricalSummary implements OnChanges {
+export class HistoricalSummary extends SantaContainerComponentBase implements OnChanges {
   @Input() summaryData: DTOs.HistoricalSummaryDTO;
   subscriptions = {
   }
@@ -32,9 +31,10 @@ export class HistoricalSummary implements OnChanges {
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ){
-
+    super(globalWorkflowIOService);
   }
 
   public ngOnChanges() {
