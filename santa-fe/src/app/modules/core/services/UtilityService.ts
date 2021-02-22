@@ -1234,14 +1234,14 @@ export class UtilityService {
 
   // structuring specific
     public formBucketIdentifierForOverride(simpleBucket: Blocks.StructureBucketDataBlock): string {
-      const list = [];
+      const list: Array<string> = [];
       for (let eachIdentifier in simpleBucket) {
         list.push(eachIdentifier);
       }
       list.sort((identifierA, identifierB) => {
         if (identifierA > identifierB) {
           return 1;
-        } else if (identifierB < identifierA) {
+        } else if (identifierB > identifierA) {
           return -1;
         } else {
           return 0;
