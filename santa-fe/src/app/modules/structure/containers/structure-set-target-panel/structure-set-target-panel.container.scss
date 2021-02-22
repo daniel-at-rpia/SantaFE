@@ -267,9 +267,8 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
           @include mix_enable_scrollbar('vertical');
           display: flex;
           flex-direction: column;
-          padding-bottom: $spacing_x_large;
           margin-top: $spacing_small;
-          padding: .5rem;
+          padding: $spacing_small $spacing_small $spacing_large $spacing_small;
         }
       }
     }

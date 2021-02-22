@@ -16,6 +16,7 @@ import {
 
 export class SantaTextarea {
   @Input() inputValue: string;
+  @Input() isExtendedWidth: boolean;
   @Output() onInputChange = new EventEmitter<string>();
   @Output() onInputFocus = new EventEmitter();
   @Output() onInputBlur = new EventEmitter();

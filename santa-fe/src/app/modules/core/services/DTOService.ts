@@ -68,7 +68,8 @@
       BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
       BICS_OVERRIDES_IDENTIFIER,
       BICS_OVERRIDES_TITLE,
-      DeltaScope
+      DeltaScope,
+      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -683,6 +684,28 @@ export class DTOService {
         securityAttrOnly: securityAttrOnly
       }
     };
+    return object;
+  }
+
+  public resetSecurityDefinitionConfigurator(
+    targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO,
+    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
+  ): DTOs.SecurityDefinitionConfiguratorDTO {
+    const object: DTOs.SecurityDefinitionConfiguratorDTO = this.createSecurityDefinitionConfigurator(
+      targetConfigurator.state.groupByDisabled,
+      targetConfigurator.state.noMainCTA,
+      targetConfigurator.state.securityAttrOnly
+    );
+    object.data.definitionList = targetConfigurator.data.definitionList;
+    object.data.definitionList.forEach((eachBundle) => {
+      eachBundle.data.list.forEach((eachDefinition) => {
+        eachDefinition.data.displayOptionList = this.utility.deepCopy(eachDefinition.data.prinstineFilterOptionList);
+        eachDefinition.data.highlightSelectedOptionList = [];
+        eachDefinition.state.filterActive = false;
+        eachDefinition.state.groupByActive = false;
+        eachDefinition.state.currentFilterPathInConsolidatedBICS = [];
+      });
+    });
     return object;
   }
 
@@ -2452,7 +2475,8 @@ export class DTOService {
   }
 
   public formSantaModal(
-    elementRef: ElementRef
+    elementRef: ElementRef,
+    modalId: string
   ): DTOs.SantaModalDTO{
     const object: DTOs.SantaModalDTO = {
       data: {
@@ -2461,7 +2485,8 @@ export class DTOService {
         title: 'Edit'
       },
       state: {
-        isPresenting: false
+        isPresenting: false,
+        isSetBulkOverridesVariant: modalId === STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
       },
       api: {
         openModal: null,

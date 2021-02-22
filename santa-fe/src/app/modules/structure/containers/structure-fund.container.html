@@ -55,10 +55,16 @@
     <div class="sat-fundStructuring__editFund-message">
       <p class="sat-fundStructuring__editFund-message-text">{{ fund.state.hasErrors.errorMessage }}</p>
     </div>
-    <button (click)="onClickedAddCustomBreakdown()" class="sat-fundStructuring__editFund-overrideCta santaBtn--labelled santaBtn--inverseLabelled">
-      <i class="fal fa-plus"></i>
-      <span>Add Override</span>
-    </button>
+    <div class="sat-fundStructuring__editFund-addOverrides">
+      <button (click)="onClickedAddCustomBreakdown()" class="sat-fundStructuring__editFund-addOverrides-overrideCta santaBtn--labelled santaBtn--inverseLabelled">
+        <i class="fal fa-plus"></i>
+        <span>Add Override</span>
+      </button>
+      <button (click)="onClickedAddBulkOverrides()" class="sat-fundStructuring__editFund-addOverrides-bulkOverrideCta santaBtn--labelled santaBtn--inverseLabelled">
+        <i class="fal fa-plus"></i>
+        <span>Add Overrides To All Funds</span>
+      </button>
+    </div>
     <div class="sat-fundStructuring__editFund-group">
       <label for="creditDurationTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Duration:</label>
       <santa-input

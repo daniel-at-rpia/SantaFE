@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/structure/structure.scss";
 
-$portfolioBreakdownRowCategory_cell_width: 3.5rem;
+$portfolioBreakdownRowCategory_cell_width: 4rem - $spacing_x_small*4/3 - $typical_border_width*2/3;
 $portfolioBreakdownRowBtnMinHeight: 2.25rem;
 $portfolioBreakdownRowBranchLeftIncrement: 1.5rem;
 $portfolioBreakdownRowBranchLevel2Base: .5rem;
@@ -160,7 +160,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
   }
   &__cell {
     @include mix_text_overflow;
-    flex: 0 0 ($portfolioBreakdownRowCategory_cell_width - $spacing_x_small*4/3 - $typical_border_width*2/3);
+    flex: 0 0 $portfolioBreakdownRowCategory_cell_width;
     display: flex;
     align-items: center;
     justify-content: center;

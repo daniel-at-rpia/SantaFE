@@ -106,6 +106,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private initializePageState(): StructureSetTargetPanelState {
+    const inheritConfigurator = this.state && this.state.configurator ? this.state.configurator.dto : this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
     const state: StructureSetTargetPanelState = {
       targetBreakdown: null,
       targetFund: null,
@@ -125,7 +126,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       displayRemainingUnallocatedCreditLeverage: '',
       targetBreakdownIsOverride: false,
       configurator: {
-        dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout),
+        dto: inheritConfigurator,
         display: false,
         newOverrideNameCache: null
       },
@@ -188,8 +189,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         this.loadEditRows();
         this.calculateAllocation();
-        this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
-        this.loadBICSOptionsIntoConfigurator();
+        this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
+        this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
         if (!!this.state.clearAllTargetSelected) {
           this.state.clearAllTargetSelected = false;
         }
@@ -198,6 +199,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
+    this.modalService.bindModalCloseCallback(STRUCTURE_EDIT_MODAL_ID, this.closeModal.bind(this));
   }
 
   public ngOnDestroy() {
@@ -403,7 +405,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([overrideData]);
             const rawBreakdownList = returnPack.list;
             this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
-            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(overrideData);
+            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(overrideData.simpleBucket);
             const newCategoryKey = this.utilityService.formCategoryKeyForOverride(overrideData);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
               const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
@@ -438,8 +440,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     }
     this.state.configurator.display = false;
-    this.state.configurator.dto = this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
-    this.loadBICSOptionsIntoConfigurator();
+    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
+    this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
   }
 
   public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
@@ -1221,16 +1223,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private loadBICSOptionsIntoConfigurator() {
-    this.dtoService.loadBICSOptionsIntoConfigurator(
-      this.state.configurator.dto,
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(1),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(2),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(3),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(4)
-    )
-  }
-
   private earMarkNewRow(targetTitle: string) {
     const targetRow = this.state.editRowList.find((eachRow) => {
       return eachRow.rowIdentifier === targetTitle;
@@ -1629,5 +1621,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         return false;
       }
     }
+  }
+
+  private closeModal(): boolean {
+    return true;
   }
 }

@@ -1,0 +1,152 @@
+@import "global.scss";
+@import "modules/structure/structure.scss";
+$setBulkOverridesPanel_edit_column_size: 14rem;
+$setBulkOverridesPanel_configurator_container_leftPadding: $spacing_large;
+$setBulkOverridesPanel_configurator_container_width: $securityDefinitionConfigurator_width + $setBulkOverridesPanel_configurator_container_leftPadding;
+$setBulkOverridesPanel_categoryList_cell_width: 3.5rem;
+
+.sat-setBulkOverridesPanel {
+  $blockName: &;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spacing_large;
+  &__main {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    flex: 1 1 auto;
+    display: flex;
+    overflow: hidden;
+    min-height: 44rem;
+    &-configurator {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_generator(0 0 0 $typical_border_width);
+      @include mix_alive('light');
+      overflow: hidden;
+      height: 100%;
+      width: 0rem;
+      right: 60%;
+      padding-left: 0;
+      &-content { 
+        height: 100%;
+        background-color: $color_gray_2;
+        security-definition-configurator {
+          height: 100%;
+          display: flex;
+        }
+      }
+    }
+    &-edit {
+      flex: 0 0 60%;
+      display: flex;
+      flex-direction: column;
+      margin-left: 40%;
+      &-content {
+        @include mix_fixed_div(relative, $z_index_base_item);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding-left: $spacing_large;
+        &-border {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          @include mix_border_generator(2px, $color_active);
+          @include mix_border_radius(5px);
+          @include mix_alive('light');
+          width: $setBulkOverridesPanel_edit_column_size + $spacing_small;
+          height: 100%;
+          pointer-events: none;
+        }
+        &-cta {
+          flex: 0 0 auto;
+          display: flex;
+          justify-content: flex-end;
+          margin-right: $scroll_bar_width;
+          &-createRow {
+            display: flex;
+            align-self: flex-start;
+            background-color: $color_create;
+            margin-top: $spacing_small;
+            margin-right: auto;
+          }
+        }
+        &-rowList {
+          @include mix_enable_scrollbar('vertical');
+          display: flex;
+          flex-direction: column;
+          padding-bottom: $spacing_x_large;
+          margin-top: $spacing_small;
+          padding: .5rem;
+        }
+      }
+    }
+  }
+  &--displayConfiguratorState {
+    #{$blockName} {
+      &__main {
+        &-configurator {
+          width: $setBulkOverridesPanel_configurator_container_width;
+          padding-left: $setBulkOverridesPanel_configurator_container_leftPadding;
+          &-content {
+            display: flex;
+          }
+        }
+        &-edit {
+          &-content {
+            &-cta-createRow {
+              @include material('none');
+              background-color: $color_active;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.sat-setBulkOverridesPanelEditRow {
+  $blockName: &;
+  @include mix_alive('custom', $animation_duration_light background-color);
+  background-color: $color_gray_2;
+  display: flex;
+  align-items: center;
+  &__remove {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    flex: 0 0 auto;
+    margin: $spacing_small;
+    &-btn {
+      background-color: $color_kill;
+      color: $font_color_inverse;
+    }
+  }
+  &__label {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  &__bucket {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: $spacing_small;
+    flex: 0 0 30%;
+    &-icon {
+      @include mix_border_radius(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 0 0 20px;
+      height: 20px;
+      margin-right: $spacing_small;
+      background-color: $color_active;
+      & > i {
+        color: $font_color_inverse;
+      }
+    }
+    &-text {
+      flex: 0 0 70%;
+    }
+  }
+  &--evenState {
+    background-color: $color_blue_gray_1;
+  }
+}
