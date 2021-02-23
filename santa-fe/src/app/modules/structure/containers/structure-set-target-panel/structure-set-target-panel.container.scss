@@ -104,12 +104,12 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     overflow: hidden;
     &-preview {
       @include mix_alive('custom', margin-right $animation_duration_light);
+      @include mix_enable_scrollbar();
       flex: 0 1 50%;
       flex-wrap: wrap;
       display: flex;
       padding-right: $spacing_large;
       margin: 5rem 0 0 0;
-      overflow-x: scroll;
       &>portfolio-breakdown {
         flex: 1 1 auto;
       }
