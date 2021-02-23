@@ -1,45 +1,46 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import * as moment from 'moment';
+  // dependencies
+    import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
+    import { of, Subscription } from 'rxjs';
+    import { catchError, first, tap} from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
+    import * as moment from 'moment';
 
-import { PortfolioFundDTO } from 'Core/models/frontend/frontend-models.interface';
-import {
-  PortfolioMetricValues,
-  STRUCTURE_EDIT_MODAL_ID,
-  STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
-} from 'Core/constants/structureConstants.constants';
-import { DTOService } from 'Core/services/DTOService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { ModalService } from 'Form/services/ModalService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { selectUserInitials } from 'Core/selectors/core.selectors';
-import {
-  PortfolioBreakdownDTO,
-  TargetBarDTO,
-  StructurePortfolioBreakdownRowDTO
-} from 'FEModels/frontend-models.interface';
-import { UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
-import {
-  PayloadUpdatePortfolioStructuresTargets,
-  PayloadUpdateBreakdown,
-  PayloadUpdateOverride
-} from 'BEModels/backend-payloads.interface';
-import { BEStructuringFundBlockWithSubPortfolios, BEStructuringBreakdownMetricBlock } from 'BEModels/backend-models.interface';
-import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import {
-  StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent,
-  StructureSetBulkOverridesEvent
-} from 'Structure/actions/structure.actions';
-import { BEPortfolioTargetMetricValues, SubPortfolioFilter } from 'Core/constants/structureConstants.constants';
-import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
-import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import { NavigationModule } from 'Core/constants/coreConstants.constant';
-import {
-  selectActiveSubPortfolioFilter,
-  selectMetricLevel
-} from 'Structure/selectors/structure.selectors';
+    import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import { PortfolioFundDTO } from 'Core/models/frontend/frontend-models.interface';
+    import {
+      PortfolioMetricValues,
+      STRUCTURE_EDIT_MODAL_ID,
+      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
+    } from 'Core/constants/structureConstants.constants';
+    import { ModalService } from 'Form/services/ModalService';
+    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import {
+      PortfolioBreakdownDTO,
+      TargetBarDTO,
+      StructurePortfolioBreakdownRowDTO
+    } from 'FEModels/frontend-models.interface';
+    import { UpdateTargetBlock } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      PayloadUpdatePortfolioStructuresTargets,
+      PayloadUpdateBreakdown,
+      PayloadUpdateOverride
+    } from 'BEModels/backend-payloads.interface';
+    import { BEStructuringFundBlockWithSubPortfolios, BEStructuringBreakdownMetricBlock } from 'BEModels/backend-models.interface';
+    import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import {
+      StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent,
+      StructureSetBulkOverridesEvent
+    } from 'Structure/actions/structure.actions';
+    import { BEPortfolioTargetMetricValues, SubPortfolioFilter } from 'Core/constants/structureConstants.constants';
+    import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+    import { NavigationModule } from 'Core/constants/coreConstants.constant';
+    import {
+      selectActiveSubPortfolioFilter,
+      selectMetricLevel
+    } from 'Structure/selectors/structure.selectors';
+  //
 
 @Component({
   selector: 'structure-fund',
@@ -48,7 +49,7 @@ import {
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureFund implements OnInit, OnDestroy {
+export class StructureFund extends SantaContainerComponentBase implements OnInit {
   @Input() fund: PortfolioFundDTO;
   activeMetric: PortfolioMetricValues = null;
   constants = {
@@ -73,8 +74,11 @@ export class StructureFund implements OnInit, OnDestroy {
     private utilityService: UtilityService,
     private store$: Store<any>,
     private modalService: ModalService,
-    private restfulCommService: RestfulCommService
-  ){}
+    private restfulCommService: RestfulCommService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
+  ){
+    super(globalWorkflowIOService);
+  }
 
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
@@ -84,17 +88,9 @@ export class StructureFund implements OnInit, OnDestroy {
     });
     this.subscriptions.activeMetricSub = this.store$.pipe(select(selectMetricLevel)).subscribe(metric => {
       this.activeMetric = metric as PortfolioMetricValues;
-    })
+    });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   public onClickedEditInBreakdown(targetBreakdown: PortfolioBreakdownDTO) {

@@ -1,73 +1,70 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import * as moment from 'moment';
+  // dependencies
+    import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+    import { of, Subscription } from 'rxjs';
+    import { catchError, first, tap} from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
+    import * as moment from 'moment';
 
-import { DTOService } from 'Core/services/DTOService';
-import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
-import { selectUserInitials } from 'Core/selectors/core.selectors';
-import {
-  selectReloadFundDataPostEdit,
-  selectMainPanelUpdateTick,
-  selectActiveBreakdownViewFilter,
-  selectActivePortfolioViewFilter,
-  selectDataDatestamp,
-  selectActiveSubPortfolioFilter,
-  selectActiveDeltaScope,
-  selectSetBulkOverridesTransferPack
-} from 'Structure/selectors/structure.selectors';
-import {
-  RestfulCommService,
-  UtilityService,
-  BICsDataProcessingService,
-  BICSDictionaryLookupService
-} from 'Core/services';
-import {
-  PortfolioMetricValues,
-  SUPPORTED_PORTFOLIO_LIST,
-  BEPortfolioTargetMetricValues,
-  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  BreakdownViewFilter,
-  DeltaScope
-} from 'Core/constants/structureConstants.constants';
-import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
-import {
-  PortfolioBreakdownDTO,
-  PortfolioFundDTO,
-  TargetBarDTO
-} from 'Core/models/frontend/frontend-models.interface';
-import {
-  BEStructuringFundBlock,
-  BEStructuringBreakdownBlock,
-  BEGetPortfolioStructureServerReturn,
-  BEStructuringBreakdownBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlock,
-  BEStructuringFundBlockWithSubPortfolios,
-  BEStructuringOverrideBlockWithSubPortfolios,
-  BEStructuringOverrideBlock
-} from 'App/modules/core/models/backend/backend-models.interface';
-import {
-  CoreSendNewAlerts,
-  CoreMainThreadOccupiedState,
-  CoreMainThreadUnoccupiedState
-} from 'Core/actions/core.actions';
-import {
-  PayloadGetPortfolioStructures,
-  PayloadSetView,
-  PayloadUpdatePortfolioOverridesForAllPortfolios
-} from 'App/modules/core/models/backend/backend-payloads.interface';
-import {
-  StructureSetViewTransferPack,
-  AdhocExtensionBEStructuringBreakdownMetricBlock
-} from 'FEModels/frontend-adhoc-packages.interface';
-import {
-  SecurityDefinitionMap
-} from 'Core/constants/securityDefinitionConstants.constant';
-import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { AdhocPacks } from 'App/modules/core/models/frontend';
+    import { DTOService, RestfulCommService, UtilityService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
+    import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
+    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import {
+      selectReloadFundDataPostEdit,
+      selectMainPanelUpdateTick,
+      selectActiveBreakdownViewFilter,
+      selectActivePortfolioViewFilter,
+      selectDataDatestamp,
+      selectActiveSubPortfolioFilter,
+      selectActiveDeltaScope,
+      selectSetBulkOverridesTransferPack
+    } from 'Structure/selectors/structure.selectors';
+    import {
+      PortfolioMetricValues,
+      SUPPORTED_PORTFOLIO_LIST,
+      BEPortfolioTargetMetricValues,
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      BreakdownViewFilter,
+      DeltaScope
+    } from 'Core/constants/structureConstants.constants';
+    import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
+    import {
+      PortfolioBreakdownDTO,
+      PortfolioFundDTO,
+      TargetBarDTO
+    } from 'Core/models/frontend/frontend-models.interface';
+    import {
+      BEStructuringFundBlock,
+      BEStructuringBreakdownBlock,
+      BEGetPortfolioStructureServerReturn,
+      BEStructuringBreakdownBlockWithSubPortfolios,
+      BEStructuringBreakdownMetricBlock,
+      BEStructuringFundBlockWithSubPortfolios,
+      BEStructuringOverrideBlockWithSubPortfolios,
+      BEStructuringOverrideBlock
+    } from 'App/modules/core/models/backend/backend-models.interface';
+    import {
+      CoreSendNewAlerts,
+      CoreMainThreadOccupiedState,
+      CoreMainThreadUnoccupiedState
+    } from 'Core/actions/core.actions';
+    import {
+      PayloadGetPortfolioStructures,
+      PayloadSetView,
+      PayloadUpdatePortfolioOverridesForAllPortfolios
+    } from 'App/modules/core/models/backend/backend-payloads.interface';
+    import {
+      StructureSetViewTransferPack,
+      AdhocExtensionBEStructuringBreakdownMetricBlock
+    } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      SecurityDefinitionMap
+    } from 'Core/constants/securityDefinitionConstants.constant';
+    import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
+    import { AdhocPacks } from 'App/modules/core/models/frontend';
+  //
 
 @Component({
     selector: 'structure-main-panel',
@@ -76,7 +73,7 @@ import { AdhocPacks } from 'App/modules/core/models/frontend';
     encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureMainPanel implements OnInit, OnDestroy {
+export class StructureMainPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
   subscriptions = {
     receiveNewDateSub: null,
@@ -105,8 +102,10 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     private restfulCommService: RestfulCommService,
     private utilityService: UtilityService,
     private bicsDataProcessingService: BICsDataProcessingService,
-    private bicsDictionaryLookupService: BICSDictionaryLookupService
+    private bicsDictionaryLookupService: BICSDictionaryLookupService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ) {
+    super(globalWorkflowIOService);
     this.state = this.initializePageState();
   }
   
@@ -239,15 +238,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         );
       }
     });
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   private fullUpdate() {

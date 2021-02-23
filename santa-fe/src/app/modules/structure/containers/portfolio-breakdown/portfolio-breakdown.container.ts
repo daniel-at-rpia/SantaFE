@@ -1,32 +1,30 @@
-import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import * as moment from 'moment';
+  // dependencies
+    import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+    import { Subscription } from 'rxjs';
+    import { Store, select } from '@ngrx/store';
+    import * as moment from 'moment';
 
-import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import {
-  UtilityService,
-  DTOService,
-  BICsDataProcessingService,
-  BICSDictionaryLookupService
-} from 'Core/services';
-import {
-  PortfolioMetricValues,
-  STRUCTURE_EDIT_MODAL_ID,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  PortfolioView
-} from 'Core/constants/structureConstants.constants';
-import { ModalService } from 'Form/services/ModalService';
-import { selectUserInitials } from 'Core/selectors/core.selectors';
-import {
-  editingViewAvailableUsers,
-  StructuringTeamPMList,
-  SecurityDefinitionMap
-} from 'Core/constants/securityDefinitionConstants.constant';
-import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
-import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
-import { StructureSetView } from 'Structure/actions/structure.actions';
+    import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+    import { UtilityService, DTOService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import {
+      PortfolioMetricValues,
+      STRUCTURE_EDIT_MODAL_ID,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      PortfolioView
+    } from 'Core/constants/structureConstants.constants';
+    import { ModalService } from 'Form/services/ModalService';
+    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import {
+      editingViewAvailableUsers,
+      StructuringTeamPMList,
+      SecurityDefinitionMap
+    } from 'Core/constants/securityDefinitionConstants.constant';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
+    import { StructureSetView } from 'Structure/actions/structure.actions';
+  //
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -35,7 +33,7 @@ import { StructureSetView } from 'Structure/actions/structure.actions';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
+export class PortfolioBreakdown extends SantaContainerComponentBase implements OnInit, OnChanges {
   @Input() breakdownData: DTOs.PortfolioBreakdownDTO;
   @Input() dataIsReady: boolean;
   @Output() clickedEdit = new EventEmitter<DTOs.PortfolioBreakdownDTO>();
@@ -59,8 +57,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     private store$: Store<any>,
     private bicsDataProcessingService: BICsDataProcessingService,
     private dtoService: DTOService,
-    private bicsDictionaryLookupService: BICSDictionaryLookupService
-  ) { }
+    private bicsDictionaryLookupService: BICSDictionaryLookupService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
+  ) {
+    super(globalWorkflowIOService);
+  }
 
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
@@ -80,6 +81,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         eachRow.state.isViewingHistoricalData = this.breakdownData.state.isViewingHistoricalData;
       });
     });
+
+    return super.ngOnInit();
   }
 
   public ngOnChanges() {
@@ -87,15 +90,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.loadData();
       if (this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
         this.utilityService.sortOverrideRows(this.breakdownData);
-      }
-    }
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
       }
     }
   }

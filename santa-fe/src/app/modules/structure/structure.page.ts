@@ -6,12 +6,8 @@
     import { Store, select } from '@ngrx/store';
 
     import { PageStates, DTOs } from 'Core/models/frontend';
-    import {
-      DTOService,
-      UtilityService,
-      RestfulCommService,
-      GlobalWorkflowIOService
-    } from 'Core/services';
+    import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { StructureStoreResetEvent, StructureUtilityPanelLoadStateEvent } from 'Structure/actions/structure.actions';
     import {
@@ -30,7 +26,7 @@
   styleUrls: ['./structure.page.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class StructurePage implements OnInit, OnDestroy {
+export class StructurePage extends SantaContainerComponentBase implements OnInit, OnDestroy {
   state: PageStates.StructureState;
   subscriptions = {
     routeChange: null
@@ -64,8 +60,9 @@ export class StructurePage implements OnInit, OnDestroy {
     private restfulCommService: RestfulCommService,
     private bicsDataProcessingService: BICsDataProcessingService,
     private route: ActivatedRoute,
-    private globalWorkflowIOService: GlobalWorkflowIOService
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ) {
+    super(globalWorkflowIOService);
     this.state = this.initializePageState();
   }
 
@@ -86,15 +83,7 @@ export class StructurePage implements OnInit, OnDestroy {
     ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
       this.globalStateHandler(result);
     });
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (!!this.subscriptions[eachItem]) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   private updateBICsFetch(receivedData: boolean, message: string = '') {

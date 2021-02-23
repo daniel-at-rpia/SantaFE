@@ -1,21 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
-import { Store, select } from '@ngrx/store';
+  // dependencies
+    import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
+    import { Store, select } from '@ngrx/store';
 
-
-import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import {
-  PortfolioMetricValues,
-  DeltaScope,
-  PORTFOLIO_ID_TO_SHORTNAMES
-} from 'App/modules/core/constants/structureConstants.constants';
-import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
-import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
-import { DTOService, BICsDataProcessingService } from 'Core/services';
-import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import { StructureSetView } from 'Structure/actions/structure.actions';
-import { UtilityService } from 'Core/services/UtilityService';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-
+    import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+    import { DTOService, BICsDataProcessingService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import {
+      PortfolioMetricValues,
+      DeltaScope,
+      PORTFOLIO_ID_TO_SHORTNAMES
+    } from 'App/modules/core/constants/structureConstants.constants';
+    import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+    import { StructureSetView } from 'Structure/actions/structure.actions';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+  //
 
 @Component({
   selector: 'structure-popover',
@@ -24,7 +25,7 @@ import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstant
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructurePopover implements OnInit, OnChanges {
+export class StructurePopover extends SantaContainerComponentBase implements OnInit, OnChanges {
   @Input() mainRowData: Blocks.BICSMainRowDataBlock;
   @Input() breakdownDisplayPopover: boolean;
   @Output() resetPopover = new EventEmitter();
@@ -47,8 +48,11 @@ export class StructurePopover implements OnInit, OnChanges {
     private store$: Store<any>,
     private dtoService: DTOService,
     private bicsDataProcessingService: BICsDataProcessingService,
-    private utilityService: UtilityService
-  ) {}
+    private utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
+  ) {
+    super(globalWorkflowIOService);
+  }
 
   public ngOnInit() {
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
@@ -68,6 +72,8 @@ export class StructurePopover implements OnInit, OnChanges {
         }
       }
     });
+
+    return super.ngOnInit();
   };
 
   public ngOnChanges() {

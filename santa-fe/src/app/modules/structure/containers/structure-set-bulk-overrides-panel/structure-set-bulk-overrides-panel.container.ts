@@ -1,30 +1,30 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { catchError, first, tap } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { StructureSetBulkOverridesPanelState } from 'Core/models/frontend/frontend-page-states.interface';
-import {
-  STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
-  CustomeBreakdownConfiguratorDefinitionLayout,
-  BICS_OVERRIDES_IDENTIFIER,
-  BICS_OVERRIDES_TITLE
-} from 'Core/constants/structureConstants.constants';
-import { DTOService } from 'Core/services/DTOService';
-import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import {
-  PayloadUpdatePortfolioOverridesForAllPortfolios,
-  PayloadGetPortfolioOverride
-} from 'Core/models/backend/backend-payloads.interface';
-import { BEStructuringFundBlockWithSubPortfolios } from 'Core/models/backend/backend-models.interface';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
-import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService'
-import { ModalService } from 'Form/services/ModalService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { UtilityService } from 'Core/services/UtilityService'
-import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
-import { StructureSendSetBulkOverridesTransferEvent } from 'Structure/actions/structure.actions';
-import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
+  // dependencies
+    import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+    import { of, Subscription } from 'rxjs';
+    import { catchError, first, tap } from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
+
+    import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import { StructureSetBulkOverridesPanelState } from 'Core/models/frontend/frontend-page-states.interface';
+    import {
+      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
+      CustomeBreakdownConfiguratorDefinitionLayout,
+      BICS_OVERRIDES_IDENTIFIER,
+      BICS_OVERRIDES_TITLE
+    } from 'Core/constants/structureConstants.constants';
+    import {
+      PayloadUpdatePortfolioOverridesForAllPortfolios,
+      PayloadGetPortfolioOverride
+    } from 'Core/models/backend/backend-payloads.interface';
+    import { BEStructuringFundBlockWithSubPortfolios } from 'Core/models/backend/backend-models.interface';
+    import { ModalService } from 'Form/services/ModalService';
+    import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
+    import { StructureSendSetBulkOverridesTransferEvent } from 'Structure/actions/structure.actions';
+    import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
+  //
 @Component({
   selector: 'structure-set-bulk-overrides-panel',
   templateUrl: './structure-set-bulk-overrides-panel.container.html',
@@ -32,7 +32,7 @@ import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selec
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureSetBulkOverrides implements OnInit {
+export class StructureSetBulkOverrides extends SantaContainerComponentBase implements OnInit {
   state: StructureSetBulkOverridesPanelState;
   subscriptions = {
     setBulkOverridesSub: null
@@ -50,8 +50,10 @@ export class StructureSetBulkOverrides implements OnInit {
     private dtoService: DTOService,
     private modalService: ModalService,
     private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService
+    private utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
   ){
+    super(globalWorkflowIOService);
     this.state = this.initializePageState();
   }
 
@@ -77,15 +79,7 @@ export class StructureSetBulkOverrides implements OnInit {
     this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Add Overrides To All Funds');
     this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitOverrideChanges.bind(this));
     this.modalService.bindModalCloseCallback(this.constants.setBulkOverridesModalId, this.closeModal.bind(this));
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions[eachItem]) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe()
-      }
-    }
+    return this.ngOnInit();
   }
 
   public onClickNewOverrideRow() {
