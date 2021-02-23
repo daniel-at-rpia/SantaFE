@@ -1392,7 +1392,7 @@ export class UtilityService {
       let findLeverageMax = 0;
       let findLeverageMin = 0;
       for (const eachCategory in rawData.breakdown) {
-        const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
+        const eachCs01Entry = rawData.breakdown[eachCategory] && rawData.breakdown[eachCategory].metricBreakdowns ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
         if (!!eachCs01Entry) {
           const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
           const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
@@ -1403,7 +1403,7 @@ export class UtilityService {
             findCs01Min = lowestVal;
           }
         }
-        const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
+        const eachLeverageEntry = rawData.breakdown[eachCategory] && rawData.breakdown[eachCategory].metricBreakdowns ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
         if (!!eachLeverageEntry) {
           const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
           const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
