@@ -1170,7 +1170,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
-          indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
