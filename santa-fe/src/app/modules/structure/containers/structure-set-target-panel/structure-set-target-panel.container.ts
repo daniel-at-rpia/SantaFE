@@ -135,7 +135,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       editViewMode: false,
       ownerInitial: null,
       activeSubPortfolioFilter: null,
-      isViewingIndexOnBICS: false
+      isViewingIndexOnBICS: false,
+      isViewingClearTargets: false,
+      clearTargetsOptionsList: []
     };
     return state;
   }

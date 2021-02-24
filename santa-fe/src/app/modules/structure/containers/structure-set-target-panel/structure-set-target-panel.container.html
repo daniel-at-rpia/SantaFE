@@ -11,7 +11,8 @@
     'sat-structureSetTargetPanel--goodRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 80 &&state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--averageRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 60 && state.targetBreakdown?.style.ratingFillWidth < 80 && state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs,
-    'sat-structureSetTargetPanel--viewingIndexOnBICSState': state.isViewingIndexOnBICS
+    'sat-structureSetTargetPanel--viewingIndexOnBICSState': state.isViewingIndexOnBICS,
+    'sat-structureSetTargetPanel--viewingClearTargetsState': state.isViewingClearTargets
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-setView">

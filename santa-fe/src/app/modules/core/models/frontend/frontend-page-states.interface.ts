@@ -330,6 +330,8 @@ export interface StructureSetTargetPanelState {
   ownerInitial: string;
   activeSubPortfolioFilter: SubPortfolioFilter;
   isViewingIndexOnBICS: boolean;
+  isViewingClearTargets: boolean;
+  clearTargetsOptionsList: Array<Blocks.StructureClearTargetsOptionBlock>;
 }
 
 export interface StructureSetBulkOverridesPanelState {
