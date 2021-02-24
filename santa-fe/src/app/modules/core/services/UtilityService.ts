@@ -1235,14 +1235,14 @@ export class UtilityService {
 
   // structuring specific
     public formBucketIdentifierForOverride(simpleBucket: Blocks.StructureBucketDataBlock): string {
-      const list = [];
+      const list: Array<string> = [];
       for (let eachIdentifier in simpleBucket) {
         list.push(eachIdentifier);
       }
       list.sort((identifierA, identifierB) => {
         if (identifierA > identifierB) {
           return 1;
-        } else if (identifierB < identifierA) {
+        } else if (identifierB > identifierA) {
           return -1;
         } else {
           return 0;
@@ -1393,7 +1393,7 @@ export class UtilityService {
       let findLeverageMax = 0;
       let findLeverageMin = 0;
       for (const eachCategory in rawData.breakdown) {
-        const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
+        const eachCs01Entry = rawData.breakdown[eachCategory] && rawData.breakdown[eachCategory].metricBreakdowns ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
         if (!!eachCs01Entry) {
           const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
           const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
@@ -1404,7 +1404,7 @@ export class UtilityService {
             findCs01Min = lowestVal;
           }
         }
-        const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
+        const eachLeverageEntry = rawData.breakdown[eachCategory] && rawData.breakdown[eachCategory].metricBreakdowns ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
         if (!!eachLeverageEntry) {
           const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
           const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
