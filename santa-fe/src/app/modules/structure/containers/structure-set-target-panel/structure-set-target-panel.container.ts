@@ -476,15 +476,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     targetRow.modifiedDisplayRowTitle = targetName;
   }
 
-  public clearAllRowTargets() {
-    this.state.editRowList.forEach(row => {
-      this.resetRowTargets(row, this.constants.metric.cs01);
-      this.resetRowTargets(row, this.constants.metric.creditLeverage);
-    })
-    this.state.clearAllTargetSelected = true;
-    this.calculateAllocation();
-    this.setBtnText();
-    this.refresh()
+  public onClickClearAllTargets() {
+    this.state.isViewingClearTargets = !this.state.isViewingClearTargets;
   }
 
   public onClickEditCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
