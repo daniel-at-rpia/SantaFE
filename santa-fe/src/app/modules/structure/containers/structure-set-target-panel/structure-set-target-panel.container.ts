@@ -173,6 +173,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!this.state.targetBreakdown) {
           if (this.state.targetBreakdown.state.isBICs) {
             this.setModifiedRowListsForBICSVariant(this.state.targetBreakdown.data.rawCs01CategoryList, this.state.targetBreakdown.data.rawLeverageCategoryList, this.state.targetBreakdown);
+            this.state.clearTargetsOptionsList = [...this.constants.clearAllOptionsMap.BICS];
           } else {
             this.state.targetBreakdown.data.rawCs01CategoryList.forEach(rawCs01 => rawCs01.state.isWithinSetTargetPreview = true);
             this.state.targetBreakdown.data.rawLeverageCategoryList.forEach(rawLeverage => rawLeverage.state.isWithinSetTargetPreview = true);
@@ -523,7 +524,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.editViewMode = !this.state.editViewMode;
   }
 
-  private checkIfEvenRow(editRow: StructureSetTargetPanelEditRowBlock): boolean {
+  public onSelectClearAllOptions(identifier: string) {
+    const matchedOption = this.state.clearTargetsOptionsList.find((option: Blocks.StructureClearTargetsOptionBlock) => option.backendIdentifier === identifier);
+    if (!!matchedOption) {
+      matchedOption.isSelected = !matchedOption.isSelected
+    }
+  }
   private checkIfEvenRow(editRow: Blocks.StructureSetTargetPanelEditRowBlock): boolean {
     const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
     if (!!this.state.targetBreakdown.state.isBICs) {
