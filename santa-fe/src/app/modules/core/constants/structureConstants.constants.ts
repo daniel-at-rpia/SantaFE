@@ -1,5 +1,4 @@
-import { PortfolioFundDTO } from 'FEModels/frontend-models.interface';
-import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.interface';
+import { DTOs, Blocks, AdhocPacks, Stubs } from 'Core/models/frontend';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 export enum PortfolioView {
@@ -88,7 +87,7 @@ export const STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID = 'Set Bulk Overrides'
 
 export const BICS_DICTIONARY_KEY_PREFIX = 'item';
 
-export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
+export const CustomeBreakdownConfiguratorDefinitionLayout: Array<Stubs.SecurityDefinitionBundleStub> = [
   {
     label: 'Common',
     list: [
