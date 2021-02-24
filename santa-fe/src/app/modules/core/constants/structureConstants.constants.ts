@@ -148,3 +148,29 @@ export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
   Mom: 0.3,
   Ytd: 0.4
 }
+
+
+export const SET_TARGET_CLEAR_ALL_OPTIONS_MAP: Blocks.StructureClearTargetsOptionMapBlock = {
+  BICS: [
+    {
+      key: 'Level 1',
+      backendIdentifier: 'BicsCodeLevel1',
+      isSelected: false
+    },
+    {
+      key: 'Level 2',
+      backendIdentifier: 'BicsCodeLevel2',
+      isSelected: false
+    },
+    {
+      key: 'Level 3',
+      backendIdentifier: 'BicsCodeLevel3',
+      isSelected: false
+    },
+    {
+      key: 'Level 4',
+      backendIdentifier: 'BicsCodeLevel4',
+      isSelected: false
+    }
+  ]
+}
