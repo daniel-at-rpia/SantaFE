@@ -102,173 +102,253 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     flex: 1 1 auto;
     display: flex;
     overflow: hidden;
-    &-preview {
-      @include mix_alive('custom', margin-right $animation_duration_light);
-      flex: 0 1 50%;
-      flex-wrap: wrap;
-      display: flex;
-      padding-right: $spacing_large;
-      margin: 5rem 0 0 0;
-      overflow: hidden;
-      &>portfolio-breakdown {
-        flex: 1 1 auto;
-      }
-    }
-    &-configurator {
-      @include mix_fixed_div(absolute, $z_index_base_item);
-      @include mix_border_generator(0 0 0 $typical_border_width);
+    &-clearTargets {
       @include mix_alive('light');
-      overflow: hidden;
-      height: 100%;
-      width: 0rem;
-      right: 50%;
-      padding-left: 0;
-      &-content { 
-        display: none;
-        height: 100%;
-        background-color: $color_gray_2;
-        security-definition-configurator {
-          height: 100%;
-          display: flex;
-        }
-      }
-    }
-    &-edit {
-      flex: 0 0 50%;
       display: flex;
       flex-direction: column;
-      &-content {
-        @include mix_fixed_div(relative, $z_index_base_item);
+      align-items: center;
+      justify-content: center;
+      transform: scale(0);
+      width: 0;
+      &-cta {
+        display: flex;
+        justify-content: space-between;
+        &-btn {
+          &--cancel {
+            margin-right: $spacing_medium;
+            color: $font_color_inverse;
+            background-color: $color_negative;
+          }
+          &--confirm {
+            background-color: $color_positive;
+            color: $font_color_inverse;
+          }
+        }
+      }
+      &-header {
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-        padding-left: $spacing_large;
-        &-border {
-          @include mix_fixed_div(absolute, $z_index_base_item);
-          @include mix_border_generator(2px, $color_active);
-          @include mix_border_radius(5px);
-          @include mix_alive('light');
-          width: $structureSetTargetPanel_edit_column_size + $spacing_small;
-          height: 100%;
-          pointer-events: none;
+        align-items: center;
+        margin-bottom: $spacing_medium;
+        &-icon {
+          font-size: $font_size_hero;
+          color: $color_warning;
+          margin-bottom: $spacing_small;
+
         }
-        &-header {
-          flex: 0 0 auto;
+        &-text {
+          font-size: $font_size_xxxx_large;
+          color: $color_active;
+        }
+      }
+      &-options {
+        margin-bottom: $spacing_x_large;
+        &-text {
+          text-align: center;
+          margin-bottom: $spacing_medium;
+          font-size: $font_size_large;
+        }
+        &-list {
           display: flex;
-          justify-content: flex-end;
-          margin-right: $scroll_bar_width;
-          &-categories {
-            display: none;
-            justify-content: flex-end;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            flex: 0 0 100%;
-            margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
-            &-index {
-              display: none;
-              flex: 0 0 100%;
-              text-align: right;
-              &-text {
-                display: inline-block;
-                width: 6rem;
-                color: $font_color_minor;
-              }
-            }
-            &-cell {
-              @include mix_fixed_div(relative, $z_index_base_item);
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              width: $structureSetTargetPanel_categoryList_cell_width;
-              &-icon {
-                color: $font_color_minor;
-                font-size: $font_size_large;
-              }
-              &-tooltip {
-                @include mix_fixed_div(absolute, $z_index_hovering_item);
-                @include mix_border_radius(3px);
-                display: none;
-                top: -100%;
-                color: $font_color_inverse;
-                line-height: $line_height_small;
-                width: 4.25rem;
-                background-color: $color_active;
-                text-align: center;
-              }
-              &:hover>&-tooltip {
-                display: block;
-              }
-              &--index {
-                display: none;
-              }
-            }
-          }
           &-item {
-            flex: 0 0 $structureSetTargetPanel_edit_column_size;
-            display: flex;
-            flex-direction: column;
-            padding: 0 $spacing_medium;
+            margin-right: $spacing_medium;
             &-btn {
-              align-self: center;
-              margin-top: $spacing_small;
-              margin-bottom: $spacing_x_small;
-              min-width: 10rem;
-              justify-content: center;
-              &>i {
-                font-size: $font_size_large;
-              }
               &--selected {
-                @include material('none');
-                @extend .santaBtn--inverseLabelled;
-                background-color: $color_active;
+                @include mix_cta_active;
               }
-            }
-            &:first-of-type {
-              margin-right: $typical_border_width;
-            }
-          }
-          &-createRow {
-            display: none;
-            align-self: flex-start;
-            background-color: $color_create;
-            margin-top: $spacing_small;
-            margin-right: auto;
-          }
-          &-rating {
-            @include mix_fixed_div(absolute, $z_index_hovering_item);
-            @include mix_border_generator($structureSetTargetPanel_borderWidth, $color_active);
-            @include mix_border_radius(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            top: $structureSetTargetPanel_rating_top_offset;
-            left: $structureSetTargetPanel_bics_variant_column_width_half;
-            transform: translateX(-50%);
-            width: $structureSetTargetPanel_rating_width;
-            height: $structureSetTargetPanel_rating_thickness;
-            overflow: hidden;
-            background-color: $color_white;
-            visibility: hidden;
-            &-fill {
-              @include mix_fixed_div(absolute, $z_index_base_item_solid);
-              @include mix_border_radius(3px, 'left');
-              height: 100%;
-              background-color: $color_red_5;
-              left: 0;
-            }
-            &-hoverText {
-              @include mix_fixed_div(absolute, $z_index_hovering_item);
-              color: $font_color_minor;
-              font-size: $font_size_normal;
             }
           }
         }
-        &-rowList {
-          @include mix_enable_scrollbar('vertical');
+      }
+      &-text {
+        &-description {
+          text-align: center;
+          margin-bottom: $spacing_medium;
+          font-size: $font_size_large;
+        }
+        &-warning {
+          text-align: center;
+          margin-bottom: $spacing_medium;
+          font-size: $font_size_large;
+          &-keyTerm {
+            font-size: $font_size_large;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    &-setTargets {
+      @include mix_alive('light');
+      transform: scale(1);
+      flex: 1 1 auto;
+      &-preview {
+        @include mix_alive('custom', margin-right $animation_duration_light);
+        flex: 0 1 50%;
+        flex-wrap: wrap;
+        display: flex;
+        padding-right: $spacing_large;
+        margin: 5rem 0 0 0;
+        overflow: hidden;
+        &>portfolio-breakdown {
+          flex: 1 1 auto;
+        }
+      }
+      &-configurator {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_border_generator(0 0 0 $typical_border_width);
+        @include mix_alive('light');
+        overflow: hidden;
+        height: 100%;
+        width: 0rem;
+        right: 50%;
+        padding-left: 0;
+        &-content {
+          display: none;
+          height: 100%;
+          background-color: $color_gray_2;
+          security-definition-configurator {
+            height: 100%;
+            display: flex;
+          }
+        }
+      }
+      &-edit {
+        flex: 0 0 50%;
+        display: flex;
+        flex-direction: column;
+        &-content {
+          @include mix_fixed_div(relative, $z_index_base_item);
           display: flex;
           flex-direction: column;
-          margin-top: $spacing_small;
-          padding: $spacing_small $spacing_small $spacing_large $spacing_small;
+          overflow: hidden;
+          padding-left: $spacing_large;
+          &-border {
+            @include mix_fixed_div(absolute, $z_index_base_item);
+            @include mix_border_generator(2px, $color_active);
+            @include mix_border_radius(5px);
+            @include mix_alive('light');
+            width: $structureSetTargetPanel_edit_column_size + $spacing_small;
+            height: 100%;
+            pointer-events: none;
+          }
+          &-header {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            margin-right: $scroll_bar_width;
+            &-categories {
+              display: none;
+              justify-content: flex-end;
+              align-items: flex-end;
+              flex-wrap: wrap;
+              flex: 0 0 100%;
+              margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
+              &-index {
+                display: none;
+                flex: 0 0 100%;
+                text-align: right;
+                &-text {
+                  display: inline-block;
+                  width: 6rem;
+                  color: $font_color_minor;
+                }
+              }
+              &-cell {
+                @include mix_fixed_div(relative, $z_index_base_item);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: $structureSetTargetPanel_categoryList_cell_width;
+                &-icon {
+                  color: $font_color_minor;
+                  font-size: $font_size_large;
+                }
+                &-tooltip {
+                  @include mix_fixed_div(absolute, $z_index_hovering_item);
+                  @include mix_border_radius(3px);
+                  display: none;
+                  top: -100%;
+                  color: $font_color_inverse;
+                  line-height: $line_height_small;
+                  width: 4.25rem;
+                  background-color: $color_active;
+                  text-align: center;
+                }
+                &:hover>&-tooltip {
+                  display: block;
+                }
+                &--index {
+                  display: none;
+                }
+              }
+            }
+            &-item {
+              flex: 0 0 $structureSetTargetPanel_edit_column_size;
+              display: flex;
+              flex-direction: column;
+              padding: 0 $spacing_medium;
+              &-btn {
+                align-self: center;
+                margin-top: $spacing_small;
+                margin-bottom: $spacing_x_small;
+                min-width: 10rem;
+                justify-content: center;
+                &>i {
+                  font-size: $font_size_large;
+                }
+                &--selected {
+                  @include material('none');
+                  @extend .santaBtn--inverseLabelled;
+                  background-color: $color_active;
+                }
+              }
+              &:first-of-type {
+                margin-right: $typical_border_width;
+              }
+            }
+            &-createRow {
+              display: none;
+              align-self: flex-start;
+              background-color: $color_create;
+              margin-top: $spacing_small;
+              margin-right: auto;
+            }
+            &-rating {
+              @include mix_fixed_div(absolute, $z_index_hovering_item);
+              @include mix_border_generator($structureSetTargetPanel_borderWidth, $color_active);
+              @include mix_border_radius(5px);
+              display: none;
+              justify-content: center;
+              align-items: center;
+              top: $structureSetTargetPanel_rating_top_offset;
+              left: $structureSetTargetPanel_bics_variant_column_width_half;
+              transform: translateX(-50%);
+              width: $structureSetTargetPanel_rating_width;
+              height: $structureSetTargetPanel_rating_thickness;
+              overflow: hidden;
+              background-color: $color_white;
+              visibility: hidden;
+              &-fill {
+                @include mix_fixed_div(absolute, $z_index_base_item_solid);
+                @include mix_border_radius(3px, 'left');
+                height: 100%;
+                background-color: $color_red_5;
+                left: 0;
+              }
+              &-hoverText {
+                @include mix_fixed_div(absolute, $z_index_hovering_item);
+                color: $font_color_minor;
+                font-size: $font_size_normal;
+              }
+            }
+          }
+          &-rowList {
+            @include mix_enable_scrollbar('vertical');
+            display: flex;
+            flex-direction: column;
+            margin-top: $spacing_small;
+            padding: $spacing_small $spacing_small $spacing_large $spacing_small;
+          }
         }
       }
     }
@@ -276,7 +356,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--viewingIndexOnBICSState {
     #{$blockName} {
       &__main {
-        &-edit-content-header-categories {
+        &-setTargets-edit-content-header-categories {
           &-index {
             display: block;
           }
@@ -292,9 +372,23 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
     }
   }
+  &--viewingClearTargetsState {
+    #{$blockName} {
+      &__main {
+        &-clearTargets {
+          transform: scale(1);
+          width: 100%;
+        }
+        &-setTargets {
+          transform: scale(0);
+          width: 0;
+        }
+      }
+    }
+  }
   &--ratingAvailableState {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         display: flex;
         visibility: visible;
         &-fill {
@@ -305,7 +399,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--goodRating {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets--edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_green_5;
@@ -315,7 +409,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--averageRating {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets--edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_orange_5;
@@ -325,7 +419,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--badRating {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets--edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_red_5;
@@ -335,14 +429,8 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--cs01ActiveState {
     #{$blockName} {
-      &__main {
-        &-edit {
-          &-content {
-            &-border {
-              right: 0;
-            }
-          }
-        }
+      &__main-setTargets-edit-content-border {
+        right: 0;
       }
       &__utilities-distribution-label {
         &--cs01 {
@@ -356,14 +444,8 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--creditLeverageActiveState {
     #{$blockName} {
-      &__main {
-        &-edit {
-          &-content {
-            &-border {
-              right: $structureSetTargetPanel_edit_column_size + $spacing_small;
-            }
-          }
-        }
+      &__main-setTargets-edit-content-border {
+        right: $structureSetTargetPanel_edit_column_size + $spacing_small;
       }
       &__utilities-distribution-label {
         &--cs01 {
@@ -394,21 +476,23 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--displayConfiguratorState {
     #{$blockName} {
       &__main {
-        &-preview {
-          margin-right: $structureSetTargetPanel_configurator_container_width;
-        }
-        &-configurator {
-          width: $structureSetTargetPanel_configurator_container_width;
-          padding-left: $structureSetTargetPanel_configurator_container_leftPadding;
-          &-content {
-            display: flex;
+        &-setTargets {
+          &-preview {
+            margin-right: $structureSetTargetPanel_configurator_container_width;
           }
-        }
-        &-edit {
-          &-content {
-            &-header-createRow {
-              @include material('none');
-              background-color: $color_active;
+          &-configurator {
+            width: $structureSetTargetPanel_configurator_container_width;
+            padding-left: $structureSetTargetPanel_configurator_container_leftPadding;
+            &-content {
+              display: flex;
+            }
+          }
+          &-edit {
+            &-content {
+              &-header-createRow {
+                @include material('none');
+                background-color: $color_active;
+              }
             }
           }
         }
@@ -422,7 +506,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
       &__main {
         min-height: 44rem;
-        &-edit-content-header-createRow {
+        &-setTargets-edit-content-header-createRow {
           display: flex;
         }
       }
@@ -431,10 +515,11 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--bicsBreakdownVariant {
     #{$blockName} {
       &__main {
-        &-preview,
-        &-configurator {
-          display: none;
-        }
+        &-setTargets {
+          &-preview,
+          &-configurator {
+            display: none;
+          }
         &-edit {
           flex: 1 1 auto;
           &-content {
@@ -448,10 +533,11 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
             }
           }
         }
+        }
       }
-      &__utilities { //disable for now due to sub levels
-        &-clearTargets {
-          display: none;
+      &__utilities {
+        &-clearAll {
+          display: flex;
         }
         &-setView {
           display: flex;
