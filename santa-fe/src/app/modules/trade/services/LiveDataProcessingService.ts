@@ -170,17 +170,17 @@ export class LiveDataProcessingService {
         }
       }
     });
-    if (updateList.length > 0) {
-      console.log('=== new update ===');
-      newRowList.length > 0 && console.log('new rows', newRowList);
-      positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
-      markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
-      newBestQuoteUpdateList.length > 0 && console.log('Best Quote overwrite: ', newBestQuoteUpdateList);
-      betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
-      betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
-      validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
-      overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
-    }
+    // if (updateList.length > 0) {
+    //   console.log('=== new update ===');
+    //   newRowList.length > 0 && console.log('new rows', newRowList);
+    //   positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
+    //   markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
+    //   newBestQuoteUpdateList.length > 0 && console.log('Best Quote overwrite: ', newBestQuoteUpdateList);
+    //   betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
+    //   betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
+    //   validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
+    //   overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
+    // }
     return {
       newRowList: updateList,
       markDiffCount: markDiffCount,
