@@ -104,12 +104,11 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     overflow: hidden;
     &-clearTargets {
       @include mix_alive('light');
-      display: flex;
+      display: none;
+      flex: 1 1 auto;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transform: scale(0);
-      width: 0;
       &-cta {
         display: flex;
         justify-content: space-between;
@@ -179,8 +178,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     }
     &-setTargets {
       @include mix_alive('light');
-      transform: scale(1);
+      @include mix_enable_scrollbar();
       flex: 1 1 auto;
+      height: 100%;
       &-preview {
         @include mix_alive('custom', margin-right $animation_duration_light);
         flex: 0 1 50%;
@@ -374,14 +374,20 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--viewingClearTargetsState {
     #{$blockName} {
+      &__utilities {
+        &-clearAll {
+          &-btn {
+            @include mix_cta_active();
+          }
+        }
+      }
       &__main {
         &-clearTargets {
-          transform: scale(1);
-          width: 100%;
+          display: flex;
+          padding: $spacing_x_large 0;
         }
         &-setTargets {
-          transform: scale(0);
-          width: 0;
+          display: none;
         }
       }
     }
