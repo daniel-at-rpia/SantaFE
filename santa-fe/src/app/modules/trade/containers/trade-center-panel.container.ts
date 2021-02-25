@@ -116,6 +116,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     globalWorkflowTypes: GlobalWorkflowTypes
   }
 
+  constructor(
+    private store$: Store<any>,
+    private dtoService: DTOService,
+    private utilityService: UtilityService,
+    private restfulCommService: RestfulCommService,
+    private processingService: LiveDataProcessingService,
+    private bicsDataProcessingService: BICsDataProcessingService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
+  ) {
+    super(globalWorkflowIOService);
+    this.state = this.initializePageState();
+  }
+
   private initializePageState(): PageStates.TradeCenterPanelState {
     const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
@@ -172,21 +185,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     return state;
   }
 
-  constructor(
-    private store$: Store<any>,
-    private dtoService: DTOService,
-    private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService,
-    private processingService: LiveDataProcessingService,
-    private bicsDataProcessingService: BICsDataProcessingService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
-  ) {
-    super(globalWorkflowIOService);
-    this.state = this.initializePageState();
-  }
-
-  public ngOnInit() {
-    this.state = this.initializePageState();
+  protected startNewSubscriptions() {
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
       select(selectLiveUpdateTick),
       withLatestFrom(
@@ -268,7 +267,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       }
     });
+  }
 
+  public ngOnInit() {
+    this.state = this.initializePageState();
     return super.ngOnInit();
   }
 

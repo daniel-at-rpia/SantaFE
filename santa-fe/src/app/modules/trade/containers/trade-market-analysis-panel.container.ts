@@ -49,6 +49,18 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
     yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
   };
 
+  constructor(
+    private store$: Store<any>,
+    private dtoService: DTOService,
+    private utilityService: UtilityService,
+    private restfulCommService: RestfulCommService,
+    private graphService: GraphService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
+  ){
+    super(globalWorkflowIOService);
+    this.state = this.initializePageState();
+  }
+
   private initializePageState(): PageStates.TradeMarketAnalysisPanelState {
     if (!!this.state) {
       // there is an old state exists
@@ -87,25 +99,16 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
     return state;
   }
 
-  constructor(
-    private store$: Store<any>,
-    private dtoService: DTOService,
-    private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService,
-    private graphService: GraphService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
-  ){
-    super(globalWorkflowIOService);
-    this.state = this.initializePageState();
-  }
-
-  public ngOnInit() {
+  protected startNewSubscriptions() {
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
       select(selectSelectedSecurityForAnalysis),
       delay(500)
     ).subscribe((targetSecurity) => {
       !!targetSecurity && this.onSecuritySelected(targetSecurity);
     });
+  }
+
+  public ngOnInit() {
     return super.ngOnInit();
   }
 

@@ -55,6 +55,14 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     initialDataLoadedSub: null
   };
 
+  constructor(
+    private store$: Store<any>,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
+  ){
+    super(globalWorkflowIOService);
+    this.initializePageState();
+  }
+
   private initializePageState() {
     this.state = {
       tongueExpanded: false,
@@ -73,16 +81,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     };
   }
 
-  constructor(
-    private store$: Store<any>,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
-  ){
-    super(globalWorkflowIOService);
-    this.initializePageState();
-  }
-
-  public ngOnInit() {
-    this.initializePageState();
+  protected startNewSubscriptions() {
     this.internalCount$ = interval(1000);
 
     this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
@@ -133,7 +132,10 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
       this.state.isInitialDataLoaded = flag;
       this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
     });
+  }
 
+  public ngOnInit() {
+    this.initializePageState();
     return super.ngOnInit();
   }
 

@@ -55,21 +55,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
     };
   }
 
-  constructor(
-    private store$: Store<any>,
-    private dtoService: DTOService,
-    private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService,
-    private route: ActivatedRoute,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
-  ) {
-    super(globalWorkflowIOService);
-    this.initializePageState();
-  }
-
-  public ngOnInit() {
-    this.initializePageState();
-    this.store$.dispatch(new TradeStoreResetEvent());
+  protected startNewSubscriptions() {
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       combineLatest(
         this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))
@@ -100,6 +86,23 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
+  }
+
+  constructor(
+    private store$: Store<any>,
+    private dtoService: DTOService,
+    private utilityService: UtilityService,
+    private restfulCommService: RestfulCommService,
+    private route: ActivatedRoute,
+    protected globalWorkflowIOService: GlobalWorkflowIOService
+  ) {
+    super(globalWorkflowIOService);
+    this.initializePageState();
+  }
+
+  public ngOnInit() {
+    this.initializePageState();
+    this.store$.dispatch(new TradeStoreResetEvent());
     // const listOfSubs = [];
     // for (const eachItem in this.subscriptions) {
     //   if (!!this.subscriptions[eachItem]) {

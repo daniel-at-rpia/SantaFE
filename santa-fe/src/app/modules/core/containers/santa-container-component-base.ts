@@ -24,6 +24,12 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, 
   }
 
   public ngOnInit(): baseEnforceInheritanceKey {
+    const reuseSubscriptions = this.globalWorkflowIOService.retrieveSubscriptions(this.componentName);
+    if (!!reuseSubscriptions) {
+      this.subscriptions = reuseSubscriptions;
+    } else {
+      this.startNewSubscriptions();
+    }
     this.initializeSubscriptions();
     return 'SANTA_CONTAINER_COMPONENT';
   }
@@ -42,4 +48,6 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, 
     this.globalWorkflowIOService.storeSubscriptions(this.componentName, this.subscriptions);
     return 'SANTA_CONTAINER_COMPONENT';
   }
+  
+  protected abstract startNewSubscriptions();
 }

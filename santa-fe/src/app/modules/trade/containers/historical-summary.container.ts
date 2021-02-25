@@ -29,6 +29,10 @@ export class HistoricalSummary extends SantaContainerComponentBase implements On
   constants = {
   };
 
+  protected startNewSubscriptions() {
+    // do nothing
+  }
+
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,

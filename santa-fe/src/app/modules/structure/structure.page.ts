@@ -54,6 +54,22 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
     return state;
   }
 
+  protected startNewSubscriptions() {
+    this.subscriptions.routeChange = this.route.paramMap.pipe(
+      combineLatest(
+        this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))
+      ),
+      filter(([params, indexedDBIsReady]) => {
+        return !!indexedDBIsReady;
+      }),
+      switchMap(([params, indexedDBIsReady]) => {
+        return this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
+      })
+    ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
+      this.globalStateHandler(result);
+    });
+  }
+
   constructor(
     private store$: Store<any>,
     private dtoService: DTOService,
@@ -71,19 +87,6 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
     this.state = this.initializePageState();
     this.store$.dispatch(new StructureStoreResetEvent);
     this.fetchBICsHierarchy();
-    this.subscriptions.routeChange = this.route.paramMap.pipe(
-      combineLatest(
-        this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))
-      ),
-      filter(([params, indexedDBIsReady]) => {
-        return !!indexedDBIsReady;
-      }),
-      switchMap(([params, indexedDBIsReady]) => {
-        return this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
-      })
-    ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
-      this.globalStateHandler(result);
-    });
     return super.ngOnInit();
   }
 

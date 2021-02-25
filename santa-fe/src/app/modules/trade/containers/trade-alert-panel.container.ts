@@ -201,8 +201,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       return state;
     }
 
-    public ngOnInit() {
-      this.state = this.initializePageState();
+    protected startNewSubscriptions() {
       this.subscriptions.securityMapSub = this.store$.pipe(
         select(selectSecurityMapContent),
         withLatestFrom(
@@ -312,7 +311,10 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           }
         }
       })
+    }
 
+    public ngOnInit() {
+      this.state = this.initializePageState();
       return super.ngOnInit();
     }
 

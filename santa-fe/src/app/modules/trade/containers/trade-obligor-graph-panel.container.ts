@@ -51,7 +51,7 @@ export class TradeObligorGraphPanel extends SantaContainerComponentBase implemen
     this.initializeState();
   }
 
-  public ngOnInit() {
+  protected startNewSubscriptions() {
     this.subscriptions.selectBestQuoteValidWindow = this.store$.pipe(
       select(selectBestQuoteValidWindow)
     ).subscribe((data) => {
@@ -71,7 +71,9 @@ export class TradeObligorGraphPanel extends SantaContainerComponentBase implemen
       this.state.securityTableRowDTOList = data;
       this.addMarksTochartCategory()
     });
+  }
 
+  public ngOnInit() {
     return super.ngOnInit();
   }
 
