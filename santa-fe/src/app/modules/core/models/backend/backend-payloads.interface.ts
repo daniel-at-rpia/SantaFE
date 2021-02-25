@@ -9,7 +9,8 @@ import {
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
   BEStructuringOverrideBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios
+  BEStructuringBreakdownMetricBlockWithSubPortfolios,
+  BESubPortfolioFilter
 } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
