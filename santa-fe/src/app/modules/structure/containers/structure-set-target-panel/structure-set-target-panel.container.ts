@@ -37,7 +37,8 @@ import {
   BEStructuringOverrideBlock,
   BEStructuringOverrideBlockWithSubPortfolios,
   BEStructuringBreakdownMetricSingleEntryBlock,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios
+  BEStructuringBreakdownMetricBlockWithSubPortfolios,
+  BESubPortfolioFilter
 } from 'BEModels/backend-models.interface';
 import {
   PayloadGetPortfolioOverride,
@@ -120,7 +121,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         newOverrideNameCache: null
       },
       removalList: [],
-      clearAllTargetSelected: false,
       editViewMode: false,
       ownerInitial: null,
       activeSubPortfolioFilter: null,
@@ -183,9 +183,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.calculateAllocation();
         this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
         this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
-        if (!!this.state.clearAllTargetSelected) {
-          this.state.clearAllTargetSelected = false;
-        }
         const modalTitle = !!this.state.targetBreakdownIsOverride ? `${this.state.targetFund.data.portfolioShortName} - Edit Override Targets` : `${this.state.targetFund.data.portfolioShortName} - Edit Breakdown Targets`;
         this.modalService.setModalTitle(STRUCTURE_EDIT_MODAL_ID, modalTitle);
       }
@@ -874,7 +871,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private submitTargetChanges(): boolean {
     if (!this.state.targetBreakdownIsOverride) {
-      if (this.state.targetBreakdown.state.isBICs) {
+      if (this.state.isViewingClearTargets) {
+        // BE needs to implement the same functionality for overrides
+        return this.submitClearAllTargetChanges();
+      } else if (this.state.targetBreakdown.state.isBICs) {
         return this.submitRegularBICSBreakdownChanges();
       } else {
         return this.submitRegularBreakdownChanges()
@@ -924,46 +924,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitRegularBreakdownChanges(): boolean {
-    //checks if resetting all targets
-    if (!!this.state.clearAllTargetSelected) {
-      const allTargetsReset = this.state.editRowList.every(row => !row.targetCreditLeverage.level.savedUnderlineValue && !row.targetCreditLeverage.percent.savedUnderlineValue && !row.targetCs01.level.savedUnderlineValue && !row.targetCs01.percent.savedUnderlineValue);
-      if (!!allTargetsReset) {
-        const payload: PayloadClearPortfolioBreakdown = {
-          portfolioBreakdown: {
-            portfolioId: this.state.targetFund.data.portfolioId,
-            groupOption: this.state.targetBreakdownRawData.groupOption
-          }
-        }
-        if (!!payload) {
-          this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
-            first(),
-            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
-              this.store$.dispatch(
-                new CoreSendNewAlerts([
-                  this.dtoService.formSystemAlertObject(
-                    'Structuring',
-                    'Updated',
-                    `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
-                    null
-                  )]
-                )
-              );
-              this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
-            }),
-            catchError(err => {
-              console.error('clear portfolio breakdown failed');
-              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'clear portfolio breakdown failed', null)]));
-              return of('error');
-            })
-          ).subscribe();
-          return true;
-        }
-      } else {
-        return this.submitRegularBreakdownChangesUpdate();
-      }
-    } else {
-      return this.submitRegularBreakdownChangesUpdate();
-    }
+    return this.submitRegularBreakdownChangesUpdate();
   }
 
   private submitOverrideChanges(): boolean {
@@ -1615,6 +1576,83 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private closeModal(): boolean {
+    this.state.clearTargetsOptionsList.length > 0 && this.resetTargetOptionsListSelectedState();
     return true;
   }
+
+  private submitClearAllTargetChanges():boolean {
+    const updatePayload: Array<PayloadClearPortfolioBreakdown> = this.traverseOptionsForClearAll();
+    if (updatePayload.length > 0) {
+      const necessaryUpdateNumOfCalls = updatePayload.length;
+      let callCount = 0;
+      updatePayload.forEach((payload: PayloadClearPortfolioBreakdown) => {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
+            callCount++;
+            if (callCount === necessaryUpdateNumOfCalls) {
+              const breakdownTerm = updatePayload.length > 0 ? 'BICS breakdowns' : this.state.targetBreakdown.data.title;
+              const alertMessage = `Successfully cleared targets for ${breakdownTerm} in ${this.state.targetFund.data.portfolioShortName} (Sub-Portfolio: ${this.state.activeSubPortfolioFilter})`;
+              this.store$.dispatch(
+                new CoreSendNewAlerts([
+                  this.dtoService.formSystemAlertObject(
+                    'Success',
+                    'Clear Targets',
+                    alertMessage,
+                    null
+                  )]
+                )
+              );
+              this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+              this.state.clearTargetsOptionsList.length > 0 && this.resetTargetOptionsListSelectedState();
+            }
+          }),
+          catchError(err => {
+            console.error('clear portfolio breakdown failed', err);
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Clear Targets', 'Clear portfolio breakdown failed', null)]));
+            return of('error');
+          })
+        ).subscribe()
+      })
+      return true;
+    } else {
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Clear Targets', 'Can not clear breakdown as options are not selected', null)]));
+      return false;
+    }
+  }
+
+  private traverseOptionsForClearAll(): Array<PayloadClearPortfolioBreakdown> {
+    const payload: Array<PayloadClearPortfolioBreakdown> = [];
+    if (this.state.targetBreakdown.state.isBICs) {
+      if (this.state.clearTargetsOptionsList.length > 0 ) {
+        this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => {
+          if (option.isSelected) {
+            const object: PayloadClearPortfolioBreakdown = {
+              portfolioBreakdown: {
+                portfolioId: this.state.targetBreakdown.data.portfolioId,
+                groupOption: option.backendIdentifier
+              },
+              subPortfolioType: this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter) as BESubPortfolioFilter
+            }
+            payload.push(object);
+          }
+        })
+      }
+    } else {
+      const object: PayloadClearPortfolioBreakdown = {
+        portfolioBreakdown: {
+          portfolioId: this.state.targetBreakdown.data.portfolioId,
+          groupOption: this.state.targetBreakdown.data.backendGroupOptionIdentifier
+        },
+        subPortfolioType: this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter) as BESubPortfolioFilter
+      }
+      payload.push(object)
+    }
+    return payload
+  }
+
+  private resetTargetOptionsListSelectedState() {
+    this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => option.isSelected = false)
+  }
+
 }

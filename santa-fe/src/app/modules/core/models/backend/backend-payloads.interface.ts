@@ -169,7 +169,7 @@ export interface PayloadClearPortfolioBreakdown {
     portfolioId: number;
     groupOption: string;
   }
-  groupOptionValue?: string;
+  subPortfolioType: BESubPortfolioFilter;
 }
 
 export interface PayloadUpdatePortfolioOverridesForAllPortfolios {
