@@ -117,7 +117,7 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
   }
 
   public onClickSeeBond(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
-    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, false, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
     newWorkflowState.data.stateInfo.activeMetric = this.activeMetric;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<DTOs.SecurityDefinitionDTO> = [];

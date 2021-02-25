@@ -316,7 +316,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.fetchResult = newState.fetchResult;
     this.store$.dispatch(new TradeTogglePresetEvent);
     if (!!captureNewState) {
-      const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, this.constants.globalWorkflowTypes.unselectPreset);
+      const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, false, this.constants.globalWorkflowTypes.unselectPreset);
       this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
     }
   }

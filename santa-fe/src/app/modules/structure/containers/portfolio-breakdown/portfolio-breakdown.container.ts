@@ -200,7 +200,7 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
   }
 
   public onClickSeeBond(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
-    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, false, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
     newWorkflowState.data.stateInfo.activeMetric = !!this.breakdownData.state.isDisplayingCs01 ? this.constants.metrics.cs01 : this.constants.metrics.creditLeverage;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<DTOs.SecurityDefinitionDTO> = [];

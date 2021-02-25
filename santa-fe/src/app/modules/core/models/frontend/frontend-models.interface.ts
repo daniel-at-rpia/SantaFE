@@ -949,5 +949,6 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   }
   state: {
     triggersRedirect: boolean;
+    updateCurrentState: boolean;
   }
 }

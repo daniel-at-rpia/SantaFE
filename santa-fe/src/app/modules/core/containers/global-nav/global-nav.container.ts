@@ -163,7 +163,6 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     if (this.state.currentModule !== this.constants.moduleUrl.structuring) {
       this.state.menuIsActive = false;
       const navigateToStructuring = () => {
-        const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring, true);
         this.router.navigateByUrl(`/${this.constants.moduleUrl.structuring}/${this.state.currentState.structure}`);
         // no need to record this state, since it's meant as going to a diff module with a fresh state, recording it causs problem in history
       };

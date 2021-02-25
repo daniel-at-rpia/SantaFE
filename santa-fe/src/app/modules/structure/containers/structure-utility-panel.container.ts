@@ -266,7 +266,7 @@ export class StructureUtilityPanel extends SantaContainerComponentBase implement
   }
 
   private pushStateSnapshotToGlobalState() {
-    const newState = this.dtoService.formGlobalWorkflow(this.constants.modules.structuring, false, this.constants.globalWorkflowTypes.changedStructureUtilityConfig);
+    const newState = this.dtoService.formGlobalWorkflow(this.constants.modules.structuring, false, true, this.constants.globalWorkflowTypes.changedStructureUtilityConfig);
     newState.data.stateInfo.structureUtilityPanelSnapshot = this.utilityService.deepCopy(this.state);
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
   }
