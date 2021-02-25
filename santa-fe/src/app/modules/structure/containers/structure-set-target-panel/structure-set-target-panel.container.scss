@@ -399,7 +399,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--goodRating {
     #{$blockName} {
-      &__main-setTargets--edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_green_5;
@@ -409,7 +409,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--averageRating {
     #{$blockName} {
-      &__main-setTargets--edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_orange_5;
@@ -419,7 +419,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--badRating {
     #{$blockName} {
-      &__main-setTargets--edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_red_5;
