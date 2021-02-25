@@ -30,7 +30,8 @@
     } from 'Core/constants/coreConstants.constant';
     import {
       BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
-      SubPortfolioFilter
+      SubPortfolioFilter,
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
     } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
@@ -1244,14 +1245,14 @@ export class UtilityService {
 
   // structuring specific
     public formBucketIdentifierForOverride(simpleBucket: Blocks.StructureBucketDataBlock): string {
-      const list = [];
+      const list: Array<string> = [];
       for (let eachIdentifier in simpleBucket) {
         list.push(eachIdentifier);
       }
       list.sort((identifierA, identifierB) => {
         if (identifierA > identifierB) {
           return 1;
-        } else if (identifierB < identifierA) {
+        } else if (identifierB > identifierA) {
           return -1;
         } else {
           return 0;
@@ -1300,7 +1301,7 @@ export class UtilityService {
         list.forEach((eachIdentifier) => {
           if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName ) {
             const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
-              return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode);
+              return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
             categoryKey = categoryKey === '' ? `${valueArray}` : `${categoryKey} ~ ${valueArray}`;
           } else {
@@ -1402,7 +1403,7 @@ export class UtilityService {
       let findLeverageMax = 0;
       let findLeverageMin = 0;
       for (const eachCategory in rawData.breakdown) {
-        const eachCs01Entry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
+        const eachCs01Entry = rawData.breakdown[eachCategory] && rawData.breakdown[eachCategory].metricBreakdowns ? rawData.breakdown[eachCategory].metricBreakdowns.Cs01 : null;
         if (!!eachCs01Entry) {
           const highestVal = Math.max(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
           const lowestVal = Math.min(eachCs01Entry.currentLevel, eachCs01Entry.targetLevel);
@@ -1413,7 +1414,7 @@ export class UtilityService {
             findCs01Min = lowestVal;
           }
         }
-        const eachLeverageEntry = rawData.breakdown[eachCategory] ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
+        const eachLeverageEntry = rawData.breakdown[eachCategory] && rawData.breakdown[eachCategory].metricBreakdowns ? rawData.breakdown[eachCategory].metricBreakdowns.CreditLeverage : null;
         if (!!eachLeverageEntry) {
           const highestVal = Math.max(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
           const lowestVal = Math.min(eachLeverageEntry.currentLevel, eachLeverageEntry.targetLevel);
@@ -1568,6 +1569,20 @@ export class UtilityService {
     public checkIfFundDeltaIsSignificantNegative(delta: number, previousValue): boolean {
       const isSignificantNegative = delta < 0 && Math.abs(delta)/previousValue > 0.05 ? true : false;
       return isSignificantNegative;
+    }
+
+    public getFormattedRowDisplayCategory(
+      category: string,
+      isOverride: boolean
+      ): string {
+      const isBICSSubLevel = category.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX);
+      let displayCategory: string;
+      if (isBICSSubLevel) {
+        displayCategory = isOverride ? category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'): category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim();
+      } else {
+        displayCategory = category;
+      }
+      return displayCategory;
     }
   // structuring specific end
 }

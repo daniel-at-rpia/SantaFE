@@ -176,7 +176,7 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
     } else {
       row.state.isEditingView = !!isEditing;
       const oppositeMainList = this.breakdownData.state.isDisplayingCs01 ? this.breakdownData.data.rawLeverageCategoryList : this.breakdownData.data.rawCs01CategoryList;
-      const matchedOppositeRow = oppositeMainList.find(category => category.data.category === row.data.category);
+      const matchedOppositeRow = oppositeMainList.find(category => category.data.displayCategory === row.data.displayCategory);
       if (!!matchedOppositeRow) {
         matchedOppositeRow.state.isEditingView = !!isEditing;
       }
@@ -186,7 +186,7 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
         if (selectedChildList.length > 0) {
           selectedChildList.forEach(selectedRow => {
             selectedRow.state.isEditingView = !!isEditing;
-            const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.category === selectedRow.data.category);
+            const matchedOppositeCategory = oppositeChildList.find(oppositeRow => oppositeRow.data.displayCategory === selectedRow.data.displayCategory);
             if (!!matchedOppositeCategory) {
               matchedOppositeCategory.state.isEditingView = !!isEditing
             }
@@ -220,7 +220,7 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
       // other regular breakdowns will come here (ccy, rating, tenor);
       const targetDefinition: DTOs.SecurityDefinitionDTO = this.utilityService.deepCopy(this.breakdownData.data.definition);
       targetDefinition.data.displayOptionList.forEach((eachOption) => {
-        if (eachOption.shortKey === targetRow.data.category) {
+        if (eachOption.shortKey === targetRow.data.displayCategory) {
           eachOption.isSelected = true;
           targetDefinition.data.highlightSelectedOptionList.push(eachOption);
         }

@@ -1114,21 +1114,22 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   }
 
   private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
-    const now = moment();
     const payload: Array<PayloadUpdateOverride> = [];
     this.state.editRowList.forEach((eachRow) => {
+      let isTitleChanged = false;
+      let isTargetChanged = false;
       const eachPayload: PayloadUpdateOverride = {
         portfolioOverride: {
-          date: now.format('YYYY-MM-DD'),
-          indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
       };
-      if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
+      if (eachRow.modifiedDisplayRowTitle !== eachRow.displayRowTitle) {
+        isTitleChanged = true;
         eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
+        isTargetChanged = true;
         const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
           metricBreakdowns: {}
         };
@@ -1151,7 +1152,9 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
       }
-      payload.push(eachPayload);
+      if (isTargetChanged || isTitleChanged) {
+        payload.push(eachPayload);
+      }
     });
     return payload;
   }
@@ -1163,7 +1166,6 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
           date: now.format('YYYY-MM-DD'),
-          indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }

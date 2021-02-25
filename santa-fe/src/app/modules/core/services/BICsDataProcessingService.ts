@@ -104,8 +104,8 @@ export class BICsDataProcessingService {
           const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
           if (!!parentLevel) {
             const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);
-            row.data.parentRow = primaryRowList.find(targetRow => targetRow.data.category === parentRow.name && targetRow.data.bicsLevel === parentRow.bicsLevel);
-            const parentIndex = primaryRowList.findIndex(primaryRow => primaryRow.data.category === parentRow.name && primaryRow.data.bicsLevel === parentRow.bicsLevel);
+            row.data.parentRow = primaryRowList.find(targetRow => targetRow.data.code === parentRow.code);
+            const parentIndex = primaryRowList.findIndex(primaryRow => primaryRow.data.code === parentRow.code);
             const subRowIndex = parentIndex + 1;
             primaryRowList.splice(subRowIndex, 0, row);
           }
@@ -266,7 +266,7 @@ export class BICsDataProcessingService {
     const categoryPortfolioID = breakdownRow.data.portfolioID;
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
     const deltaRawData = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(rawData => rawData.portfolioID === categoryPortfolioID) : null;
-    const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
+    const subTierList = this.getSubLevelList(breakdownRow.data.displayCategory, breakdownRow.data.bicsLevel);
     const targetCodeList = [];
     subTierList.forEach(subTier => {
       const categoryCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
@@ -298,7 +298,7 @@ export class BICsDataProcessingService {
     this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
     this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
     breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
-    breakdown.data.title = breakdownRow.data.category;
+    breakdown.data.title = breakdownRow.data.displayCategory;
     return breakdown;
   }
 
@@ -401,7 +401,7 @@ export class BICsDataProcessingService {
       eachBundle.data.list.forEach((eachDefinition) => {
         if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
           const selectedOptionList = [];
-          selectedOptionList.push(targetRow.data.category);
+          selectedOptionList.push(targetRow.data.displayCategory);
           eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
             eachDefinition.data.key,
             selectedOptionList,
