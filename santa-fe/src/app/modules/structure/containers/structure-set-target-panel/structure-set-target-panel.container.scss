@@ -372,26 +372,6 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
     }
   }
-  &--viewingClearTargetsState {
-    #{$blockName} {
-      &__utilities {
-        &-clearAll {
-          &-btn {
-            @include mix_cta_active();
-          }
-        }
-      }
-      &__main {
-        &-clearTargets {
-          display: flex;
-          padding: $spacing_x_large 0;
-        }
-        &-setTargets {
-          display: none;
-        }
-      }
-    }
-  }
   &--ratingAvailableState {
     #{$blockName} {
       &__main-setTargets-edit-content-header-rating {
@@ -475,6 +455,48 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         }
         &-ctas {
           display: flex;
+        }
+      }
+    }
+  }
+  &--viewingClearTargetsState {
+    #{$blockName} {
+      &__utilities {
+        &-clearAll {
+          &-btn {
+            @include mix_cta_active();
+          }
+        }
+        &-distribution {
+          background: $color_disabled;
+          &-ctas {
+            &-evenly,
+            &-proportionally {
+              @include material('none');
+              @include mix_border_generator(1px,$font_color_inverse);
+              background-color: $color_disabled;
+              color: $font_color_inverse;
+              pointer-events: none;
+
+            }
+          }
+        }
+        &-setView {
+          &-btn {
+            @include material('none');
+            background-color: $color_disabled;
+            color: $font_color_inverse;
+            pointer-events: none;
+          }
+        }
+      }
+      &__main {
+        &-clearTargets {
+          display: flex;
+          padding: $spacing_x_large 0;
+        }
+        &-setTargets {
+          display: none;
         }
       }
     }

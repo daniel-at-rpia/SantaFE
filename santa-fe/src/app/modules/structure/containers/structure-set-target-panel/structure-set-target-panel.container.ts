@@ -287,59 +287,63 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onClickDistributeEvenly() {
-    const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel)
-    });
-    if (unlockedList.length > 0) {
-      const totalNumberOfRows = unlockedList.length;
-      const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
-      this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
-      const totalValue = isCs01 ? this.state.remainingUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage;
-      unlockedList.forEach((eachUnlockedRow) => {
-        const targetItem = isCs01 ? eachUnlockedRow.targetCs01.level : eachUnlockedRow.targetCreditLeverage.level;
-        const distributedValue = totalValue/totalNumberOfRows;
-        const parsedValue = isCs01 ? this.utilityService.round(distributedValue/1000, 3) : this.utilityService.round(distributedValue, 3);
-        this.setTarget(
-          `${parsedValue}`,
-          targetItem
-        );
-        this.onClickSaveEdit(
-          eachUnlockedRow,
-          targetItem,
-          true
-        );
+    if (!this.state.isViewingClearTargets) {
+      const unlockedList = this.state.editRowList.filter((eachRow) => {
+        return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel)
       });
-      this.calculateAllocation();
+      if (unlockedList.length > 0) {
+        const totalNumberOfRows = unlockedList.length;
+        const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+        this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
+        const totalValue = isCs01 ? this.state.remainingUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage;
+        unlockedList.forEach((eachUnlockedRow) => {
+          const targetItem = isCs01 ? eachUnlockedRow.targetCs01.level : eachUnlockedRow.targetCreditLeverage.level;
+          const distributedValue = totalValue/totalNumberOfRows;
+          const parsedValue = isCs01 ? this.utilityService.round(distributedValue/1000, 3) : this.utilityService.round(distributedValue, 3);
+          this.setTarget(
+            `${parsedValue}`,
+            targetItem
+          );
+          this.onClickSaveEdit(
+            eachUnlockedRow,
+            targetItem,
+            true
+          );
+        });
+        this.calculateAllocation();
+      }
     }
   }
 
   public onClickDistributeProportionally() {
-    const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel);
-    });
-    if (unlockedList.length > 0) {
-      const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
-      this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
-      let totalValue = 0;
-      const totalRemainingPercent = isCs01 ? this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage;
-      unlockedList.forEach((eachUnlockedRow) => {
-        totalValue = totalValue + eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel;
+    if (!this.state.isViewingClearTargets) {
+      const unlockedList = this.state.editRowList.filter((eachRow) => {
+        return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel);
       });
-      unlockedList.forEach((eachUnlockedRow) => {
-        const distributedValue = eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel/totalValue * 100 * totalRemainingPercent;
-        const parsedValue = this.utilityService.round(distributedValue, 3);
-        const targetItem = isCs01 ? eachUnlockedRow.targetCs01.percent : eachUnlockedRow.targetCreditLeverage.percent;
-        this.setTarget(
-          `${parsedValue}`,
-          targetItem
-        );
-        this.onClickSaveEdit(
-          eachUnlockedRow,
-          targetItem,
-          true
-        );
-      });
-      this.calculateAllocation();
+      if (unlockedList.length > 0) {
+        const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+        this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
+        let totalValue = 0;
+        const totalRemainingPercent = isCs01 ? this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage;
+        unlockedList.forEach((eachUnlockedRow) => {
+          totalValue = totalValue + eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel;
+        });
+        unlockedList.forEach((eachUnlockedRow) => {
+          const distributedValue = eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel/totalValue * 100 * totalRemainingPercent;
+          const parsedValue = this.utilityService.round(distributedValue, 3);
+          const targetItem = isCs01 ? eachUnlockedRow.targetCs01.percent : eachUnlockedRow.targetCreditLeverage.percent;
+          this.setTarget(
+            `${parsedValue}`,
+            targetItem
+          );
+          this.onClickSaveEdit(
+            eachUnlockedRow,
+            targetItem,
+            true
+          );
+        });
+        this.calculateAllocation();
+      }
     }
   }
 
@@ -518,7 +522,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onToggleSetViewMode() {
-    this.state.editViewMode = !this.state.editViewMode;
+    if (!this.state.isViewingClearTargets) {
+      this.state.editViewMode = !this.state.editViewMode;
+    }
   }
 
   public onSelectClearAllOptions(identifier: string) {
