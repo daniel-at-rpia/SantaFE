@@ -74,6 +74,7 @@
 })
 
 export class StructureMainPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
+  componentName = 'StructureMainPanel';
   state: StructureMainPanelState; 
   subscriptions = {
     receiveNewDateSub: null,

@@ -7,13 +7,14 @@
     import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, GlobalWorkflowIOService } from '../services';
   //
 
-type componentKey = 'SANTA_CONTAINER_COMPONENT';
+type baseEnforceInheritanceKey = 'SANTA_CONTAINER_COMPONENT';
 
 interface initializeSubscriptions {
-  initializeSubscriptions(): componentKey;
+  initializeSubscriptions(): baseEnforceInheritanceKey;
 }
 
 export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, initializeSubscriptions {
+  abstract componentName: string;
   abstract subscriptions: {[property: string]: Subscription};
 
   constructor(
@@ -22,12 +23,12 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, 
 
   }
 
-  public ngOnInit(): componentKey {
+  public ngOnInit(): baseEnforceInheritanceKey {
     this.initializeSubscriptions();
     return 'SANTA_CONTAINER_COMPONENT';
   }
 
-  public ngOnDestroy(): componentKey {
+  public ngOnDestroy(): baseEnforceInheritanceKey {
     for (const eachItem in this.subscriptions) {
       if (!!this.subscriptions[eachItem]) {
         const eachSub = this.subscriptions[eachItem];
@@ -37,15 +38,8 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, 
     return 'SANTA_CONTAINER_COMPONENT';
   }
 
-  public initializeSubscriptions(): componentKey {
-    const listOfSubs = [];
-    for (const eachItem in this.subscriptions) {
-      if (!!this.subscriptions[eachItem]) {
-        const eachSub = this.subscriptions[eachItem];
-        listOfSubs.push(eachSub);
-      }
-    }
-    this.globalWorkflowIOService.storeSubscriptions(listOfSubs);
+  public initializeSubscriptions(): baseEnforceInheritanceKey {
+    this.globalWorkflowIOService.storeSubscriptions(this.componentName, this.subscriptions);
     return 'SANTA_CONTAINER_COMPONENT';
   }
 }

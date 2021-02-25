@@ -26,6 +26,7 @@
 })
 
 export class StructurePopover extends SantaContainerComponentBase implements OnInit, OnChanges {
+  componentName = 'StructurePopover';
   @Input() mainRowData: Blocks.BICSMainRowDataBlock;
   @Input() breakdownDisplayPopover: boolean;
   @Output() resetPopover = new EventEmitter();

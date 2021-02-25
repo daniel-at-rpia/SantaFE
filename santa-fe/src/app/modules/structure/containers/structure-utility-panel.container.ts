@@ -48,6 +48,7 @@
 })
 
 export class StructureUtilityPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
+  componentName = 'StructureUtilityPanel';
   state: StructureUtilityPanelState;
   subscriptions = {
     selectedMetricLevelSub: null,

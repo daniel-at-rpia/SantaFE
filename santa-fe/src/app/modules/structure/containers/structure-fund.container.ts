@@ -50,6 +50,7 @@
 })
 
 export class StructureFund extends SantaContainerComponentBase implements OnInit {
+  componentName = 'StructureFund';
   @Input() fund: PortfolioFundDTO;
   activeMetric: PortfolioMetricValues = null;
   constants = {

@@ -31,6 +31,7 @@ import {
 })
 
 export class TradeObligorGraphPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
+  componentName = 'TradeObligorGraphPanel';
   state: PageStates.TradeObligorGraphPanelState;
   subscriptions = {
     selectSecurityUpdateForAnalysis: null,

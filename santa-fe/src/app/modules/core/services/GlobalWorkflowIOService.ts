@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DetachedRouteHandle } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
+import * as _ from 'lodash';
 
 import { DTOs } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
@@ -33,7 +34,14 @@ export class GlobalWorkflowIOService {
   private currentState: string = 'initialState';
   private currentModule: NavigationModule = null;
   private routeHanlderStore: Map<string, DetachedRouteHandle> = new Map();
-  private subscriptionStore: Map<NavigationModule, Map<string, Array<Subscription>>> = new Map();
+  private subscriptionStore: 
+    Map<
+      NavigationModule, 
+      Map<
+        string,  // container component name
+        Array<{[property: string]: Subscription}>  // this is an array because a component can have multiple instances, such as Fund in Structuring
+      >
+    > = new Map();
 
   constructor(
     private store$: Store<any>,
@@ -171,20 +179,48 @@ export class GlobalWorkflowIOService {
       }
     }
 
-    public storeSubscriptions(subscriptionList: Array<Subscription>){
-      if (!!this.currentModule && !!this.currentState && subscriptionList && subscriptionList.length > 0) {
-        const moduleStore = this.subscriptionStore[this.currentModule];
+    public storeSubscriptions(
+      componentName: string,
+      subscriptionMap: {[property: string]: Subscription}
+    ){
+      if (!!this.currentModule && !!this.currentState && subscriptionMap && _.size(subscriptionMap) > 0) {
+        const moduleStore = this.subscriptionStore.get(this.currentModule);
         if (!!moduleStore) {
-          console.log('test, storing subs', this.currentModule, this.currentState, subscriptionList);
-          const existingSubscriptions = moduleStore.get(this.currentState) || [];
-          moduleStore.set(this.currentState, existingSubscriptions.concat(subscriptionList));
-          this.subscriptionStore.set(this.currentModule, moduleStore);
+          console.log('test, storing subs', this.currentModule, subscriptionMap);
+          const targetComponentList: Array<{[property: string]: Subscription}> = moduleStore.get(componentName);
+          if (!!targetComponentList) {
+            targetComponentList.push(subscriptionMap);
+          } else {
+            const newList = [];
+            newList.push(subscriptionMap);
+            moduleStore.set(componentName, newList);
+          }
         }
       }
     }
 
+    public retrieveSubscriptions(
+      componentName: string
+    ): {[property: string]: Subscription} {
+      if (!!this.currentModule && !!componentName) {
+        const moduleStore = this.subscriptionStore.get(this.currentModule);
+        if (!!moduleStore) {
+          const targetComponentList: Array<{[property: string]: Subscription}> = moduleStore.get(componentName);
+          if (!!targetComponentList && targetComponentList.length > 0) {
+            return targetComponentList.pop();
+          } else {
+            return null;
+          }
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
+
     public closeLooseSubscriptions(targetModule: NavigationModule){
-      if (!!targetModule) {
+      // if (!!targetModule) {
         const moduleStore = this.subscriptionStore[targetModule];
         if (!!moduleStore) {
           moduleStore.forEach((eachSubList) => {
@@ -196,7 +232,7 @@ export class GlobalWorkflowIOService {
           });
           this.subscriptionStore[targetModule] = new Map();
         }
-      }
+      // }
     }
 
     private initializeSubscriptionStore(){

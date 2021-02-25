@@ -78,6 +78,7 @@
 })
 
 export class StructureSetTargetPanel extends SantaContainerComponentBase implements OnInit {
+  componentName = 'StructureSetTargetPanel';
   state: StructureSetTargetPanelState;
   subscriptions = {
     setTargetTransferPackSub: null,

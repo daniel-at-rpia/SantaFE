@@ -37,6 +37,7 @@
 })
 
 export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit {
+  componentName = 'TradeUtilityPanel';
   @Input() sidePanelsDisplayed: boolean;
   state: PageStates.TradeUtilityPanelState;
   constants = {

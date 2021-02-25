@@ -22,6 +22,7 @@
 })
 
 export class HistoricalSummary extends SantaContainerComponentBase implements OnChanges {
+  componentName = 'HistoricalSummary';
   @Input() summaryData: DTOs.HistoricalSummaryDTO;
   subscriptions = {
   }

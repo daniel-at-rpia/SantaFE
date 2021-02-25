@@ -27,6 +27,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 export class StructurePage extends SantaContainerComponentBase implements OnInit, OnDestroy {
+  componentName = 'StructurePage';
   state: PageStates.StructureState;
   subscriptions = {
     routeChange: null

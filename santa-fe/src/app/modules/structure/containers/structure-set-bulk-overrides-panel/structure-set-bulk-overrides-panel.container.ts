@@ -33,6 +33,7 @@
 })
 
 export class StructureSetBulkOverrides extends SantaContainerComponentBase implements OnInit {
+  componentName = 'StructureSetBulkOverrides';
   state: StructureSetBulkOverridesPanelState;
   subscriptions = {
     setBulkOverridesSub: null

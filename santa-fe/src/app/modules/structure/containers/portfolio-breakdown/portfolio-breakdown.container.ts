@@ -34,6 +34,7 @@
 })
 
 export class PortfolioBreakdown extends SantaContainerComponentBase implements OnInit, OnChanges {
+  componentName = 'PortfolioBreakdown';
   @Input() breakdownData: DTOs.PortfolioBreakdownDTO;
   @Input() dataIsReady: boolean;
   @Output() clickedEdit = new EventEmitter<DTOs.PortfolioBreakdownDTO>();

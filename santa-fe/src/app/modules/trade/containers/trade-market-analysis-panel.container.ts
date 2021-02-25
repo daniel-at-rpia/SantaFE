@@ -34,6 +34,7 @@
 })
 
 export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implements OnInit, OnChanges {
+  componentName = 'TradeMarketAnalysisPanel';
   @Output() populateGraph = new EventEmitter();
   @Input() collapseGraph: boolean;
   state: PageStates.TradeMarketAnalysisPanelState;
