@@ -1581,7 +1581,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitClearAllTargetChanges():boolean {
-    const updatePayload: Array<PayloadClearPortfolioBreakdown> = this.traverseOptionsForClearAll();
+    const updatePayload: Array<PayloadClearPortfolioBreakdown> = this.traverseOptionsForClearAllPayload();
     if (updatePayload.length > 0) {
       const necessaryUpdateNumOfCalls = updatePayload.length;
       let callCount = 0;
@@ -1621,38 +1621,35 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private traverseOptionsForClearAll(): Array<PayloadClearPortfolioBreakdown> {
+  private traverseOptionsForClearAllPayload(): Array<PayloadClearPortfolioBreakdown> {
     const payload: Array<PayloadClearPortfolioBreakdown> = [];
-    if (this.state.targetBreakdown.state.isBICs) {
-      if (this.state.clearTargetsOptionsList.length > 0 ) {
-        this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => {
-          if (option.isSelected) {
-            const object: PayloadClearPortfolioBreakdown = {
-              portfolioBreakdown: {
-                portfolioId: this.state.targetBreakdown.data.portfolioId,
-                groupOption: option.backendIdentifier
-              },
-              subPortfolioType: this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter) as BESubPortfolioFilter
-            }
-            payload.push(object);
-          }
-        })
-      }
+    if (this.state.clearTargetsOptionsList.length > 0) {
+      this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => {
+        if (option.isSelected) {
+          const object = this.getClearAllPayloadObject(option.backendIdentifier);
+          payload.push(object);
+        }
+      })
     } else {
-      const object: PayloadClearPortfolioBreakdown = {
-        portfolioBreakdown: {
-          portfolioId: this.state.targetBreakdown.data.portfolioId,
-          groupOption: this.state.targetBreakdown.data.backendGroupOptionIdentifier
-        },
-        subPortfolioType: this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter) as BESubPortfolioFilter
-      }
-      payload.push(object)
+      const object = this.getClearAllPayloadObject(this.state.targetBreakdown.data.backendGroupOptionIdentifier);
+      payload.push(object);
     }
     return payload
   }
 
   private resetTargetOptionsListSelectedState() {
     this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => option.isSelected = false)
+  }
+
+  private getClearAllPayloadObject(groupOption: string): PayloadClearPortfolioBreakdown {
+    const object: PayloadClearPortfolioBreakdown = {
+      portfolioBreakdown: {
+        portfolioId: this.state.targetBreakdown.data.portfolioId,
+        groupOption: groupOption
+      },
+      subPortfolioType: this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter) as BESubPortfolioFilter
+    }
+    return object;
   }
 
 }
