@@ -62,7 +62,11 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     currentRoute: ActivatedRouteSnapshot
   ): boolean {
     if (futureRoute.routeConfig === currentRoute.routeConfig) {
-      return true;
+      if (futureRoute.params.stateId === currentRoute.params.stateId) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
