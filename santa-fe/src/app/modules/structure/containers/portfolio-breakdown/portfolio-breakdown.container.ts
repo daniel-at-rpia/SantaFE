@@ -64,7 +64,7 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
     super(globalWorkflowIOService);
   }
 
-  public ngOnInit() {
+  protected startNewSubscriptions() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((initials) => {
@@ -82,7 +82,9 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
         eachRow.state.isViewingHistoricalData = this.breakdownData.state.isViewingHistoricalData;
       });
     });
+  }
 
+  public ngOnInit() {
     return super.ngOnInit();
   }
 

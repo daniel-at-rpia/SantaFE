@@ -142,8 +142,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     return state;
   }
 
-  public ngOnInit() {
-    this.state = this.initializePageState();
+  protected startNewSubscriptions() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((value) => {
@@ -200,6 +199,10 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         this.modalService.setModalTitle(STRUCTURE_EDIT_MODAL_ID, modalTitle);
       }
     });
+  }
+
+  public ngOnInit() {
+    this.state = this.initializePageState();
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
     this.modalService.bindModalCloseCallback(STRUCTURE_EDIT_MODAL_ID, this.closeModal.bind(this));
     return super.ngOnInit();

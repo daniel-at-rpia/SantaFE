@@ -55,7 +55,7 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
     super(globalWorkflowIOService);
   }
 
-  public ngOnInit() {
+  protected startNewSubscriptions() {
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel)
     ).subscribe((value) => {
@@ -73,7 +73,9 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
         }
       }
     });
+  }
 
+  public ngOnInit() {
     return super.ngOnInit();
   };
 

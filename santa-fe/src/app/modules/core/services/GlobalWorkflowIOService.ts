@@ -236,9 +236,9 @@ export class GlobalWorkflowIOService {
     }
 
     private initializeSubscriptionStore(){
-      this.subscriptionStore[NavigationModule.trade] = new Map();
-      this.subscriptionStore[NavigationModule.structuring] = new Map();
-      this.subscriptionStore[NavigationModule.market] = new Map();
+      this.subscriptionStore.set(NavigationModule.trade, new Map());
+      this.subscriptionStore.set(NavigationModule.structuring, new Map());
+      this.subscriptionStore.set(NavigationModule.market, new Map());
     }
 
     // public closeSubscriptions(stateId: ){

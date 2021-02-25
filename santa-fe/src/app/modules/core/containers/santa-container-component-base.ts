@@ -9,11 +9,7 @@
 
 type baseEnforceInheritanceKey = 'SANTA_CONTAINER_COMPONENT';
 
-interface initializeSubscriptions {
-  initializeSubscriptions(): baseEnforceInheritanceKey;
-}
-
-export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, initializeSubscriptions {
+export abstract class SantaContainerComponentBase implements OnInit, OnDestroy {
   abstract componentName: string;
   abstract subscriptions: {[property: string]: Subscription};
 
@@ -26,11 +22,12 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, 
   public ngOnInit(): baseEnforceInheritanceKey {
     const reuseSubscriptions = this.globalWorkflowIOService.retrieveSubscriptions(this.componentName);
     if (!!reuseSubscriptions) {
+      console.log('test, reuse subscription', this.componentName, reuseSubscriptions);
       this.subscriptions = reuseSubscriptions;
     } else {
       this.startNewSubscriptions();
+      this.storeSubscriptions();
     }
-    this.initializeSubscriptions();
     return 'SANTA_CONTAINER_COMPONENT';
   }
 
@@ -44,7 +41,7 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy, 
     return 'SANTA_CONTAINER_COMPONENT';
   }
 
-  public initializeSubscriptions(): baseEnforceInheritanceKey {
+  public storeSubscriptions(): baseEnforceInheritanceKey {
     this.globalWorkflowIOService.storeSubscriptions(this.componentName, this.subscriptions);
     return 'SANTA_CONTAINER_COMPONENT';
   }

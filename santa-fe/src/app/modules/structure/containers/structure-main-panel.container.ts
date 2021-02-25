@@ -129,9 +129,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     }
     return state; 
   }
-  
-  public ngOnInit() {
-    this.state = this.initializePageState();
+
+  protected startNewSubscriptions() {
     this.subscriptions.receiveNewDateSub = this.store$.pipe(
       select(selectDataDatestamp)
     ).subscribe((datestampInUnix) => {
@@ -239,6 +238,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         );
       }
     });
+  }
+  
+  public ngOnInit() {
+    this.state = this.initializePageState();
     return super.ngOnInit();
   }
 

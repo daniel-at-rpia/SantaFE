@@ -70,13 +70,16 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
     return state;
   }
 
-  public ngOnInit() {
-    this.state = this.initializePageState();
+  protected startNewSubscriptions() {
     this.subscriptions.setBulkOverridesSub = this.store$.pipe(select(selectSetBulkOverridesEvent)).subscribe((state:boolean) =>{
       if (!!state) {
         this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
       }
     })
+  }
+
+  public ngOnInit() {
+    this.state = this.initializePageState();
     this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Add Overrides To All Funds');
     this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitOverrideChanges.bind(this));
     this.modalService.bindModalCloseCallback(this.constants.setBulkOverridesModalId, this.closeModal.bind(this));

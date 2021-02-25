@@ -81,7 +81,7 @@ export class StructureFund extends SantaContainerComponentBase implements OnInit
     super(globalWorkflowIOService);
   }
 
-  public ngOnInit() {
+  protected startNewSubscriptions() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((value) => {
@@ -90,6 +90,9 @@ export class StructureFund extends SantaContainerComponentBase implements OnInit
     this.subscriptions.activeMetricSub = this.store$.pipe(select(selectMetricLevel)).subscribe(metric => {
       this.activeMetric = metric as PortfolioMetricValues;
     });
+  }
+
+  public ngOnInit() {
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
     return super.ngOnInit();
   }

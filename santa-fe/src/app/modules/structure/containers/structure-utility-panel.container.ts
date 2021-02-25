@@ -100,8 +100,7 @@ export class StructureUtilityPanel extends SantaContainerComponentBase implement
     };
   }
 
-  public ngOnInit() {
-    this.state = this.initializePageState();
+  protected startNewSubscriptions() {
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
       select(selectMetricLevel),
       first()  // Right now Utility Panel is the sole place to initiate a page-wide metric change, so there is no need to have Utility Panel react passively to the ngrx store, instead, it just need to subscribe to the initial value, and update its own state internally in setMetricLevel(). Updating it internally has the benefit of a faster UI response resulted in better UX, because going through the async ngrx flow takes more time
@@ -164,6 +163,10 @@ export class StructureUtilityPanel extends SantaContainerComponentBase implement
         this.onClickSubPortfolioChange(newState.activeSubPortfolioFilter);
       }
     });
+  }
+
+  public ngOnInit() {
+    this.state = this.initializePageState();
     return super.ngOnInit();
   }
 
