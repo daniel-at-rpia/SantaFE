@@ -157,7 +157,7 @@ export class StructurePopover implements OnInit, OnChanges {
       block.children.data.displayCategoryList = currentMetricList;
       block.children.data.displayCategoryList.forEach(row => {
         row.state.isStencil = true;
-        const selectedValue = oppositeMetricList.find(previousRow => previousRow.data.category === row.data.category);
+        const selectedValue = oppositeMetricList.find(previousRow => previousRow.data.displayCategory === row.data.displayCategory);
         row.state.isDoveIn = !!selectedValue.data.children && selectedValue.state.isDoveIn;
         row.data.children = selectedValue.data.children;
         row.data.moveVisualizer.state.isStencil = true;

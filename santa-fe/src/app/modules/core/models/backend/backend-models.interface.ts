@@ -668,7 +668,7 @@ export interface BEStructuringOverrideBlockWithSubPortfolios extends Omit<BEStru
 
 export interface BEStructuringOverrideBlock {
   portfolioOverrideId?: string;
-  date: string;
+  date?: string;
   portfolioId: number;
   indexId?: number;
   bucket?: {  // this is optional because in some API calls where FE passes this to BE, we just pass with "simple bucket" only and BE will form "bucket" itself

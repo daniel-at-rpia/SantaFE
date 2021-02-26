@@ -2434,8 +2434,8 @@ export class DTOService {
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
-        displayCategory: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
+        category: categoryName,
+        displayCategory:  this.utility.getFormattedRowDisplayCategory(categoryName, isOverride),
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2705,7 +2705,7 @@ export class DTOService {
       object.data.children.push(tenorBreakdown);
       tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
       tenorBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
-        const targetRange = FilterOptionsTenorRange[eachCategory.data.category];
+        const targetRange = FilterOptionsTenorRange[eachCategory.data.displayCategory];
         eachCategory.data.displayCategory = targetRange.displayLabel;
       });
     }
