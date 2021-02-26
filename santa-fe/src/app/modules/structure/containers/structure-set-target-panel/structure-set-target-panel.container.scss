@@ -179,6 +179,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     &-setTargets {
       @include mix_alive('light');
       @include mix_enable_scrollbar();
+      display: flex;
       flex: 1 1 auto;
       height: 100%;
       &-preview {
