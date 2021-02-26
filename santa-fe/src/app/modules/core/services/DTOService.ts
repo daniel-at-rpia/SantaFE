@@ -71,12 +71,14 @@
       DeltaScope,
       STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
     } from 'Core/constants/structureConstants.constants';
+    import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
 
 @Injectable()
 export class DTOService {
   constructor(
-    private utility: UtilityService
+    private utility: UtilityService,
+    private securityMap: SecurityMapService
   ){}
 
   public formSecurityCardObject(
@@ -1696,14 +1698,14 @@ export class DTOService {
         }
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
-        const { contraParty, reportingParty, volumeEstimated, volumeReported, price, spread, benchmarkName } = rawData.trade;
+        const { contraParty, reportingParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
         alertDTO.data.traceContraParty = contraParty;
         alertDTO.data.traceReportingParty = reportingParty;
         alertDTO.data.traceVolumeEstimated = volumeEstimated;
         alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
-        alertDTO.data.traceBenchmarkName = benchmarkName;
+        alertDTO.data.traceBenchmarkName = rawData.trade.benchmarkSecurityID ? this.securityMap.getSecurityName(`${rawData.trade.benchmarkSecurityID}`) : null;
       }
     }
     // check for isBenchmarkHedged
@@ -2519,7 +2521,7 @@ export class DTOService {
     const contraParty = !!rawData.contraParty ? rawData.contraParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.contraParty] : null;
     const reportingParty = !!rawData.reportingParty ? rawData.reportingParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.reportingParty] : null;
     const object: Blocks.TraceTradeBlock = {
-      benchmarkName: rawData.benchmarkName,
+      benchmarkName: rawData.benchmarkSecurityID ? this.securityMap.getSecurityName(`${rawData.benchmarkSecurityID}`) : null,
       traceTradeId: rawData.traceTradeID,
       tradeTime: rawData.eventTime,
       displayTradeTime: moment(rawData.eventTime).format(`MMM DD - HH:mm`),

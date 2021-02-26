@@ -752,7 +752,6 @@ export interface BETraceTradesBlock {
   actionFlag: string;
   benchmarkGlobalIdentifier: string;
   benchmarkGlobalIdentifierType: string;
-  benchmarkName: string;
   benchmarkSecurityID: number;
   contraParty: TraceTradeParty;
   reportingParty: TraceTradeParty;

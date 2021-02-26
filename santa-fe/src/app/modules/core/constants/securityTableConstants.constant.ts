@@ -440,8 +440,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           disabled: true
         },
         tradeAlert: {
-          active: false,
-          disabled: true,
+          active: true,
+          disabled: false,
           groupShow: true
         }
       }
@@ -2085,13 +2085,12 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     attrName: 'displayVolumeReported',
     size: 7
   },
-  // Temporarily disable benchmark name until feed becomes available in MA
-  //{
-  //   headerKey: 'displayBenchMarkName',
-  //   headerDisplayLabel: 'Benchmark Name',
-  //   attrName: 'displayBenchMarkName',
-  //   size: 8
-  // },
+  {
+    headerKey: 'benchmarkName',
+    headerDisplayLabel: 'Benchmark Name',
+    attrName: 'benchmarkName',
+    size: 11
+  },
   {
     headerKey: 'price',
     headerDisplayLabel: 'Px',
