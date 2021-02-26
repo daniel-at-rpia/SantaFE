@@ -227,8 +227,9 @@
                   [inputValue]="eachCategory.targetCreditLeverage.level.savedDisplayValue"
                   [placeholder]="''"
                   [isNumeric]="true"
-                  [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
-                  [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
+                  [isGrayedOut]="true"
+                  [isDisabled]="true"
+                  [isNonEditable]="true"
                   (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)"
                   (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.level)">
                 </santa-input>
@@ -242,8 +243,9 @@
                   [inputValue]="eachCategory.targetCreditLeverage.percent.savedDisplayValue"
                   [placeholder]="''"
                   [isNumeric]="true"
-                  [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
-                  [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
+                  [isGrayedOut]="true"
+                  [isDisabled]="true"
+                  [isNonEditable]="true"
                   (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)"
                   (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.percent)">
                 </santa-input>
