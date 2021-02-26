@@ -1599,8 +1599,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
             callCount++;
             if (callCount === necessaryUpdateNumOfCalls) {
-              const breakdownTerm = updatePayload.length > 0 ? 'BICS breakdowns' : this.state.targetBreakdown.data.title;
-              const alertMessage = `Successfully cleared targets for ${breakdownTerm} in ${this.state.targetFund.data.portfolioShortName} (Sub-Portfolio: ${this.state.activeSubPortfolioFilter})`;
+              const alertMessage = `Successfully cleared targets for ${this.state.targetBreakdown.data.title} ${updatePayload.length > 1 ? 'breakdowns' : 'breakdown'} in ${this.state.targetFund.data.portfolioShortName} (Sub-Portfolio: ${this.state.activeSubPortfolioFilter})`;
               this.store$.dispatch(
                 new CoreSendNewAlerts([
                   this.dtoService.formSystemAlertObject(
