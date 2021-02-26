@@ -1551,16 +1551,6 @@ export class UtilityService {
       }
     }
 
-    public checkIfFundDeltaIsSignificantPositive(delta: number, previousValue): boolean {
-      const isSignificantPositive = delta > 0 && Math.abs(delta)/previousValue > 0.05 ? true : false;
-      return isSignificantPositive;
-    }
-
-    public checkIfFundDeltaIsSignificantNegative(delta: number, previousValue): boolean {
-      const isSignificantNegative = delta < 0 && Math.abs(delta)/previousValue > 0.05 ? true : false;
-      return isSignificantNegative;
-    }
-
     public getFormattedRowDisplayCategory(
       category: string,
       isOverride: boolean

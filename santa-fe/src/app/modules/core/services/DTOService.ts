@@ -2149,12 +2149,12 @@ export class DTOService {
       object.data.currentTotalDeltaCreditDurationDisplayText = !!object.data.currentTotalDeltaCreditDuration ? `${object.data.currentTotalDeltaCreditDuration}` : '-';
       object.data.currentTotalDeltaCreditLeverageDisplayText = !!object.data.currentTotalDeltaCreditLeverage ? `${object.data.currentTotalDeltaCreditLeverage}` : '-';
       if (!!object.data.currentTotalDeltaCreditDuration && !!comparedDeltaRawData) {
-        object.data.currentTotalDeltaCreditDurationSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditDuration,comparedDeltaRawData.currentTotals.CreditDuration);
-        object.data.currentTotalDeltaCreditDurationSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditDuration,comparedDeltaRawData.currentTotals.CreditDuration);
+        object.data.currentTotalDeltaCreditDurationSignificantPositive = object.data.currentTotalDeltaCreditDuration > 0 && object.data.currentTotalDeltaCreditDuration >= 0.1 ? true : false;
+        object.data.currentTotalDeltaCreditDurationSignificantNegative = object.data.currentTotalDeltaCreditDuration < 0 && object.data.currentTotalDeltaCreditDuration <= -0.1 ? true : false;
       }
       if (!!object.data.currentTotalDeltaCreditLeverage && !!comparedDeltaRawData) {
-        object.data.currentTotalDeltaCreditLeverageSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditLeverage, comparedDeltaRawData.currentTotals.CreditLeverage)
-        object.data.currentTotalDeltaCreditLeverageSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditLeverage, comparedDeltaRawData.currentTotals.CreditLeverage)
+        object.data.currentTotalDeltaCreditLeverageSignificantPositive = object.data.currentTotalDeltaCreditLeverage > 0 && object.data.currentTotalDeltaCreditLeverage >= 0.1 ? true : false;
+        object.data.currentTotalDeltaCreditLeverageSignificantNegative = object.data.currentTotalDeltaCreditLeverage < 0 && object.data.currentTotalDeltaCreditLeverage <= -0.1 ? true : false;
       }
       object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue, null, null);
       object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue, null, null);
