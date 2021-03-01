@@ -44,4 +44,12 @@
       }
     }
   }
+  &--nonEditable {
+    #{$blockName} {
+      &__inputElement {
+        background-color: $color_white;
+        opacity: 0.2;
+      }
+    }
+  }
 }
