@@ -22,6 +22,7 @@ export class SantaInput implements OnChanges{
   @Input() hasError: boolean;
   @Input() isGrayedOut: boolean;
   @Input() isDisabled: boolean;
+  @Input() isNonEditable: boolean;
   @Output() onInputChange = new EventEmitter<string>();
   @Output() onInputFocus = new EventEmitter();
   @Output() onInputBlur = new EventEmitter();

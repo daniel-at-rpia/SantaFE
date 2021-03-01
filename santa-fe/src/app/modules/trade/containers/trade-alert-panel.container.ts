@@ -73,7 +73,7 @@
       KEYWORDSEARCH_DEBOUNCE_TIME,
       TriCoreDriverConfig
     } from 'Core/constants/coreConstants.constant';
-    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
+    import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
 
 @Component({
@@ -127,7 +127,8 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     private store$: Store<any>,
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
-    private processingService: LiveDataProcessingService
+    private processingService: LiveDataProcessingService,
+    private securityMapService: SecurityMapService
   ){
     super(utilityService, globalWorkflowIOService, router);
     window['moment'] = moment;
@@ -214,6 +215,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         )
       ).subscribe(([mapContent, isValid]) => {
         if (!!isValid) {
+          this.securityMapService.storeSecurityMap(mapContent);
           this.state.securityMap = mapContent;
           this.state.isAlertPaused = false;
           this.store$.dispatch(new CoreFlushSecurityMap());
