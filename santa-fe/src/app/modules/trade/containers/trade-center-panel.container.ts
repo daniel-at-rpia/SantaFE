@@ -302,23 +302,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
-  public onUnselectPreset(captureNewState: boolean) {
-    const newState = this.initializePageState();
-    this.state.presets.selectedPreset.state.isSelected = false;
-    this.state.presets.selectedPreset = null;
-    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
-    this.state.table.metrics = this.utilityService.deepCopy(this.constants.defaultMetrics).filter((eachStub) => {
-      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
-      return !targetSpecifics.disabled;
-    });
-    this.state.filters.quickFilters = newState.filters.quickFilters;
-    this.state.filters.keyword.defaultValueForUI = null;
-    this.state.fetchResult = newState.fetchResult;
-    this.store$.dispatch(new TradeTogglePresetEvent);
-    if (!!captureNewState) {
-      const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, false, this.constants.globalWorkflowTypes.unselectPreset);
-      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
-    }
+  public onUnselectPreset() {
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, false, this.constants.globalWorkflowTypes.unselectPreset);
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
+    // unselect preset would just need to trigger the reuse strategy to inintialize a new state now
   }
 
   public buryConfigurator() {
@@ -709,7 +696,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     portfolioMetric: PortfolioMetricValues
   ) {
     if (!!this.state.presets.selectedPreset) {
-      this.onUnselectPreset(false);
+      this.performUnselectPreset();
       const delayToLoad = 1;  // the actual load needs to be executed on a delay because we need to give time for agGrid to react on santaTable's "activated" flag being set to false, this way when the autoLoadTable actually set it to "true" again, it will rebuild the header, otherwise the headers won't be rebuild. The time it takes for agGrid to react is trivial, we just need to wait for a single frame
       setTimeout(
         function(){
@@ -846,5 +833,20 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
     // trigger the ngOnChanges in santa table, normally would be already triggered by modifyWeightColumnHeadersUpdateFundName(), so this is just defensive programming
     this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
+  }
+
+  private performUnselectPresetInBackground() {
+    const newState = this.initializePageState();
+    this.state.presets.selectedPreset.state.isSelected = false;
+    this.state.presets.selectedPreset = null;
+    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
+    this.state.table.metrics = this.utilityService.deepCopy(this.constants.defaultMetrics).filter((eachStub) => {
+      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
+      return !targetSpecifics.disabled;
+    });
+    this.state.filters.quickFilters = newState.filters.quickFilters;
+    this.state.filters.keyword.defaultValueForUI = null;
+    this.state.fetchResult = newState.fetchResult;
+    this.store$.dispatch(new TradeTogglePresetEvent);
   }
 }
