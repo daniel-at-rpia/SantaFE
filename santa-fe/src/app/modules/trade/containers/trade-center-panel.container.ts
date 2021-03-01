@@ -149,7 +149,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           prinstineRowList: [],
           liveUpdatedRowList: [],
           removalRowList: []
-        }
+        },
+        initialFetchForTableDataCompleted: false
       },
       filters: {
         keyword: {
@@ -584,11 +585,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         ),
         first(),
         tap(([isInitialDataLoaded, processingRawData]) => {
-          if (isInitialDataLoaded) {
+          if (isInitialDataLoaded && this.state.fetchResult.initialFetchForTableDataCompleted) {
             const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
             targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(targetTableDTO, newFilteredList).newRowList;
           } else {
             targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+            this.state.fetchResult.initialFetchForTableDataCompleted = true;
           }
           // only dispatch the action when both tables are done
           if (!!this.state.fetchResult.mainTable.fetchComplete) {
