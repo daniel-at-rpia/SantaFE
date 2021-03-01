@@ -38,8 +38,6 @@
 })
 
 export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit, OnChanges {
-  stateActive: boolean;
-  initialState: string;
   @Input() sidePanelsDisplayed: boolean;
   state: PageStates.TradeUtilityPanelState;
   constants = {

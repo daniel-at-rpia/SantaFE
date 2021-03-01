@@ -1,5 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+    import { Router } from '@angular/router';
     import { Observable, Subscription, of } from 'rxjs';
     import { tap, first, catchError, delay } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
@@ -34,7 +35,6 @@
 })
 
 export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implements OnInit, OnChanges {
-  @Input() stateActive: boolean;
   @Output() populateGraph = new EventEmitter();
   @Input() collapseGraph: boolean;
   state: PageStates.TradeMarketAnalysisPanelState;
@@ -88,14 +88,15 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private graphService: GraphService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private graphService: GraphService
   ){
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
 

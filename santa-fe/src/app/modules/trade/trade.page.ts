@@ -32,8 +32,6 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TradePage extends SantaContainerComponentBase implements OnInit {
-  stateActive: boolean = true;
-  initialState;
   state: PageStates.TradeState;
   subscriptions = {
     routeChange: null,

@@ -12,8 +12,9 @@ type componentKey = 'SANTA_CONTAINER_COMPONENT';
 
 export abstract class SantaContainerComponentBase implements OnInit, OnDestroy {
   abstract subscriptions: {[property: string]: Subscription};
-  abstract stateActive: boolean;
-  abstract initialState: string;
+  stateActive: boolean = true;
+  initialState: string;
+  stateActiveSub: Subscription;
 
   constructor(
     protected utilityService: UtilityService,
@@ -21,7 +22,7 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy {
     protected router: Router
   ){
     if (this.router) {
-      this.router.events.subscribe((event) => {
+      this.stateActiveSub = this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
           const currentStateId = this.utilityService.getStateUUIDFromNavigation(event);
           if (!this.initialState) {
@@ -45,6 +46,7 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy {
         eachSub.unsubscribe();
       }
     }
+    this.stateActiveSub.unsubscribe();
     return 'SANTA_CONTAINER_COMPONENT';
   }
 
@@ -56,6 +58,7 @@ export abstract class SantaContainerComponentBase implements OnInit, OnDestroy {
         listOfSubs.push(eachSub);
       }
     }
+    listOfSubs.push(this.stateActiveSub);
     this.globalWorkflowIOService.storeSubscriptions(listOfSubs);
     return 'SANTA_CONTAINER_COMPONENT';
   }

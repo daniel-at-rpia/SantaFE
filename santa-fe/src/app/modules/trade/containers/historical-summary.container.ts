@@ -5,6 +5,7 @@
       Input,
       OnChanges
     } from '@angular/core';
+    import { Router } from '@angular/router';
 
     import { DTOs } from 'Core/models/frontend';
     import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
@@ -30,12 +31,13 @@ export class HistoricalSummary extends SantaContainerComponentBase implements On
   };
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private restfulCommService: RestfulCommService
   ){
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
   }
 
   public ngOnChanges() {

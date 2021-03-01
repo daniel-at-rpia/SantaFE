@@ -83,8 +83,6 @@
 })
 
 export class TradeCenterPanel extends SantaContainerComponentBase implements OnInit {
-  stateActive: boolean;
-  initialState: string;
   state: PageStates.TradeCenterPanelState;
   subscriptions = {
     userInitialsSub: null,

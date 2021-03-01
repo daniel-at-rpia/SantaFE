@@ -1,8 +1,9 @@
   // dependencies
     import { Component, EventEmitter, Input, isDevMode, OnChanges, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+    import { Router } from '@angular/router';
     import { select, Store } from '@ngrx/store';
     import { interval, Observable, of, Subscription, Subject } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
     import * as moment from 'moment';
 
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
@@ -83,7 +84,6 @@
 })
 
 export class TradeAlertPanel extends SantaContainerComponentBase implements OnInit, OnChanges, OnDestroy {
-  @Input() stateActive: boolean;
   @Input() sidePanelsDisplayed: boolean;
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
@@ -121,14 +121,15 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
   }
 
   constructor(
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected utilityService: UtilityService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private processingService: LiveDataProcessingService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private processingService: LiveDataProcessingService
   ){
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     window['moment'] = moment;
     this.state = this.initializePageState();
   }
@@ -204,6 +205,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     public ngOnInit() {
       this.state = this.initializePageState();
       this.subscriptions.securityMapSub = this.store$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         select(selectSecurityMapContent),
         withLatestFrom(
           this.store$.pipe(select(selectSecurityMapValidStatus))
@@ -216,6 +220,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         }
       });
       this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
+          filter((tick) => {
+            return this.stateActive;
+          }),
           select(selectSelectedSecurityForAlertConfig)
         ).subscribe((targetSecurity) => {
           if (!!targetSecurity) {
@@ -233,12 +240,18 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       });
 
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         select(selectPresetSelected)
       ).subscribe(flag => {
         this.state.isCenterPanelPresetSelected = flag;
       });
 
       this.subscriptions.startNewUpdateSub = this.store$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         select(selectLiveUpdateTick),
         withLatestFrom(
           this.store$.pipe(select(selectInitialDataLoadedInAlertTable))
@@ -254,6 +267,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       });
 
       this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         debounceTime(this.constants.keywordSearchDebounceTime),
         distinctUntilChanged()
       ).subscribe((keyword) => {
@@ -274,6 +290,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       });
 
       this.subscriptions.userInitialsSub = this.store$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         select(selectUserInitials)
       ).subscribe((userInitials) => {
         if (userInitials) {
@@ -282,7 +301,10 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       });
 
       this.subscriptions.newAlertSubscription = this.store$.pipe(
-        select(selectGlobalAlertSendNewAlertsToTradePanel),
+        filter((tick) => {
+          return this.stateActive;
+        }),
+        select(selectGlobalAlertSendNewAlertsToTradePanel)
       ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
         if (alertList.length > 0) {
           if (!this.state.alert.initialAlertListReceived) {
@@ -302,7 +324,11 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         }
       });
       this.marketListAlertCountdown$ = interval(1000);
-      this.subscriptions.marketListAlertCountdownSub = this.marketListAlertCountdown$.subscribe((count: Observable<number>) => {
+      this.subscriptions.marketListAlertCountdownSub = this.marketListAlertCountdown$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        })
+      ).subscribe((count: Observable<number>) => {
         if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
           const numOfUpdate = this.marketListAlertsCountdownUpdate();
           if (numOfUpdate > 0){

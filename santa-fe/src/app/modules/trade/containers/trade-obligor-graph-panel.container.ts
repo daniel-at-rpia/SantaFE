@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation, NgZone, OnInit, OnDestroy, Input } from "@angular/core";
+import { Router } from '@angular/router';
 
 import { UtilityService, GraphService, GlobalWorkflowIOService } from 'Core/services';
 import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
@@ -40,14 +41,15 @@ export class TradeObligorGraphPanel extends SantaContainerComponentBase implemen
   }
 
   constructor(
+    protected utility: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private graphService: GraphService,
     private restfulCommService: RestfulCommService,
-    private utility: UtilityService,
-    private dtoService: DTOService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService 
+    private dtoService: DTOService
   ) {
-    super(globalWorkflowIOService);
+    super(utility, globalWorkflowIOService, router);
     this.initializeState();
   }
 
