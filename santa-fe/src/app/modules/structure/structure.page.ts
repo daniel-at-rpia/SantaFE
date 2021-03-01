@@ -27,6 +27,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 export class StructurePage extends SantaContainerComponentBase implements OnInit, OnDestroy {
+  stateActive: boolean = true;
   state: PageStates.StructureState;
   subscriptions = {
     routeChange: null
@@ -40,6 +41,7 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
 
   private initializePageState(): PageStates.StructureState {
     const state: PageStates.StructureState = {
+      responsibleStates: [],
       BICsData: {
         formattedBICsHierarchy: {
           children: [],
@@ -71,6 +73,15 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
     this.store$.dispatch(new StructureStoreResetEvent);
     this.fetchBICsHierarchy();
     this.subscriptions.routeChange = this.route.paramMap.pipe(
+      filter((params) => {
+        return this.stateActive;
+      }),
+      tap((params) => {
+        const newState = params.get(this.constants.stateId);
+        if (this.state.responsibleStates.indexOf(newState) < 0) {
+          this.state.responsibleStates.push(newState);
+        }
+      }),
       combineLatest(
         this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))
       ),

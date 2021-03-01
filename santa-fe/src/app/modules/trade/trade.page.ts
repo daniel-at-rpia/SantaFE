@@ -1,6 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-    import { ActivatedRoute } from '@angular/router';
+    import { ActivatedRoute, Router } from '@angular/router';
     import { Observable, Subscription, interval, of } from 'rxjs';
     import { tap, first, withLatestFrom, switchMap, catchError, combineLatest, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
@@ -32,6 +32,8 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TradePage extends SantaContainerComponentBase implements OnInit {
+  stateActive: boolean = true;
+  initialState;
   state: PageStates.TradeState;
   subscriptions = {
     routeChange: null,
@@ -55,14 +57,15 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private route: ActivatedRoute,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private route: ActivatedRoute
   ) {
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.initializePageState();
   }
 
@@ -70,6 +73,9 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
     this.initializePageState();
     this.store$.dispatch(new TradeStoreResetEvent());
     this.subscriptions.routeChange = this.route.paramMap.pipe(
+      filter((params) => {
+        return this.stateActive;
+      }),
       combineLatest(
         this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))
       ),
@@ -84,17 +90,26 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
     });
 
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+      filter((targetSecurity) => {
+        return this.stateActive;
+      }),
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
       this.state.sidePanelsCollapsed = !targetSecurity;
       this.state.lilMarketMaximized = false;
     });
     this.subscriptions.displayAlertThumbnailSub = this.store$.pipe(
+      filter((value) => {
+        return this.stateActive;
+      }),
       select(selectDislayAlertThumbnail)
     ).subscribe((value) => {
       this.state.displayAlertThumbnail = !!value;
     });
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      filter((value) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;

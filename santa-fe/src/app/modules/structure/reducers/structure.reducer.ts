@@ -33,15 +33,10 @@ const initialState: StructureState = {
   reloadFundDataPostEdit: null,
   updateTick: 0,
   viewData: null,
-  activeBreakdownViewFilter: BreakdownViewFilter.all,
+  activeBreakdownViewFilter: BreakdownViewFilter.BICSOnly,
   activePortfolioViewFilter: [
     PortfolioShortNames.FIP,
-    PortfolioShortNames.BBB,
-    PortfolioShortNames.CIP,
-    PortfolioShortNames.STIP,
-    PortfolioShortNames.AGB,
-    PortfolioShortNames.DOF,
-    PortfolioShortNames.SOF
+    PortfolioShortNames.BBB
   ],
   activeSubPortfolioFilter: SubPortfolioFilter.all,
   activeDeltaScope: DeltaScope.dod,

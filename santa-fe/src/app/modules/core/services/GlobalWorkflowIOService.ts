@@ -184,19 +184,19 @@ export class GlobalWorkflowIOService {
     }
 
     public closeLooseSubscriptions(targetModule: NavigationModule){
-      if (!!targetModule) {
-        const moduleStore = this.subscriptionStore[targetModule];
-        if (!!moduleStore) {
-          moduleStore.forEach((eachSubList) => {
-            eachSubList.forEach((eachSub) => {
-              if (!eachSub.closed) {
-                eachSub.unsubscribe();
-              }
-            })
-          });
-          this.subscriptionStore[targetModule] = new Map();
-        }
-      }
+      // if (!!targetModule) {
+      //   const moduleStore = this.subscriptionStore[targetModule];
+      //   if (!!moduleStore) {
+      //     moduleStore.forEach((eachSubList) => {
+      //       eachSubList.forEach((eachSub) => {
+      //         if (!eachSub.closed) {
+      //           eachSub.unsubscribe();
+      //         }
+      //       })
+      //     });
+      //     this.subscriptionStore[targetModule] = new Map();
+      //   }
+      // }
     }
 
     private initializeSubscriptionStore(){

@@ -1,7 +1,8 @@
   // dependencies
-    import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
+    import { Component, ViewEncapsulation, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
+    import { Router } from '@angular/router';
     import { Observable, Subscription, interval, of } from 'rxjs';
-    import { tap, first, withLatestFrom, switchMap } from 'rxjs/operators';
+    import { tap, first, withLatestFrom, switchMap, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { TradeState } from 'Trade/reducers/trade.reducer';
@@ -36,7 +37,9 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit {
+export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit, OnChanges {
+  stateActive: boolean;
+  initialState: string;
   @Input() sidePanelsDisplayed: boolean;
   state: PageStates.TradeUtilityPanelState;
   constants = {
@@ -73,10 +76,12 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
   }
 
   constructor(
-    private store$: Store<any>,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
+    private store$: Store<any>
   ){
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.initializePageState();
   }
 
@@ -84,8 +89,12 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     this.initializePageState();
     this.internalCount$ = interval(1000);
 
-    this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
-      if (internalCount > 0) {  // skip the first beat to sync both counts
+    this.subscriptions.internalCountSub = this.internalCount$.pipe(
+      filter((internalCount) => {
+        return this.stateActive;
+      })
+    ).subscribe(internalCount => {
+      if (internalCount > 0 && this.stateActive) {  // skip the first beat to sync both counts
         if (this.state.isPresetSelected && !this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
           const newCountdown = parseInt(this.state.updateCountdown) - 1;
           this.state.updateCountdown = newCountdown < 10 ? `0${newCountdown}` : `${newCountdown}`;
@@ -95,6 +104,9 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     });
 
     this.subscriptions.externalCountSub = this.store$.pipe(
+      filter((count) => {
+        return this.stateActive;
+      }),
       select(selectLiveUpdateCount),
       withLatestFrom(
         this.store$.pipe(select(selectPresetSelected)),
@@ -107,6 +119,9 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     });
 
     this.subscriptions.processingRawDataSub = this.store$.pipe(
+      filter((flag) => {
+        return this.stateActive;
+      }),
       select(selectLiveUpdateProcessingRawDataToMainTable)
     ).subscribe(flag => {
       if (!!flag) {
@@ -120,6 +135,9 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     });
 
     this.subscriptions.presetSelectedSub = this.store$.pipe(
+      filter((flag) => {
+        return this.stateActive;
+      }),
       select(selectPresetSelected)
     ).subscribe(flag => {
       this.state.isPresetSelected = flag;
@@ -127,6 +145,9 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     });
 
     this.subscriptions.initialDataLoadedSub = this.store$.pipe(
+      filter((flag) => {
+        return this.stateActive;
+      }),
       select(selectInitialDataLoadedInMainTable)
     ).subscribe(flag => {
       this.state.isInitialDataLoaded = flag;
@@ -134,6 +155,10 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     });
 
     return super.ngOnInit();
+  }
+
+  public ngOnChanges() {
+    console.log('test, got at utility on change', this.stateActive);
   }
 
   // disabled temporarily

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, NgZone, OnInit, OnDestroy } from "@angular/core";
+import { Component, ViewEncapsulation, NgZone, OnInit, OnDestroy, Input } from "@angular/core";
 
 import { UtilityService, GraphService, GlobalWorkflowIOService } from 'Core/services';
 import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
@@ -31,6 +31,7 @@ import {
 })
 
 export class TradeObligorGraphPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
+  @Input() stateActive: boolean;
   state: PageStates.TradeObligorGraphPanelState;
   subscriptions = {
     selectSecurityUpdateForAnalysis: null,

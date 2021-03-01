@@ -1,7 +1,8 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { Router } from '@angular/router';
     import { of, Subscription, Subject } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
@@ -82,6 +83,8 @@
 })
 
 export class TradeCenterPanel extends SantaContainerComponentBase implements OnInit {
+  stateActive: boolean;
+  initialState: string;
   state: PageStates.TradeCenterPanelState;
   subscriptions = {
     userInitialsSub: null,
@@ -172,21 +175,25 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
-    private bicsDataProcessingService: BICsDataProcessingService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
 
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectLiveUpdateTick),
       withLatestFrom(
         this.store$.pipe(select(selectInitialDataLoadedInMainTable))
@@ -203,18 +210,27 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
 
     this.subscriptions.securityIDListFromAnalysisSub = this.store$.pipe(
+      filter((data) => {
+        return this.stateActive;
+      }),
       select(selectSecurityIDsFromAnalysis)
     ).subscribe((data) => {
       this.processSecurityIDsFromAnalysis(data)
     });
 
     this.subscriptions.validWindowSub = this.store$.pipe(
+      filter((window) => {
+        return this.stateActive;
+      }),
       select(selectBestQuoteValidWindow)
     ).subscribe((window) => {
       this.state.bestQuoteValidWindow = window;
     });
 
     this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+      filter((keyword) => {
+        return this.stateActive;
+      }),
       debounceTime(this.constants.keywordSearchDebounceTime),
       distinctUntilChanged()
     ).subscribe((keyword) => {
@@ -229,6 +245,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
 
     this.subscriptions.receiveKeywordSearchInMainTable = this.store$.pipe(
+      filter((keyword) => {
+        return this.stateActive;
+      }),
       select(selectKeywordSearchInMainTable)
     ).subscribe((keyword) => {
       this.state.filters.keyword.defaultValueForUI = keyword;
@@ -236,6 +255,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
 
     this.subscriptions.userInitialsSub = this.store$.pipe(
+      filter((userInitials) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((userInitials) => {
       if (userInitials) {
@@ -254,6 +276,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
 
     this.subscriptions.selectCenterPanelFilterListForTableLoadSub = this.store$.pipe(
+      filter((pack) => {
+        return this.stateActive;
+      }),
       select(selectCenterPanelFilterListForTableLoad),
       combineLatest(
         this.store$.pipe(select(selectBICSDataLoaded))
@@ -696,7 +721,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     portfolioMetric: PortfolioMetricValues
   ) {
     if (!!this.state.presets.selectedPreset) {
-      this.performUnselectPreset();
+      this.performUnselectPresetInBackground();
       const delayToLoad = 1;  // the actual load needs to be executed on a delay because we need to give time for agGrid to react on santaTable's "activated" flag being set to false, this way when the autoLoadTable actually set it to "true" again, it will rebuild the header, otherwise the headers won't be rebuild. The time it takes for agGrid to react is trivial, we just need to wait for a single frame
       setTimeout(
         function(){

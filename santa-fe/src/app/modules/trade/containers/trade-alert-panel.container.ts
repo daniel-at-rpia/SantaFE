@@ -83,6 +83,7 @@
 })
 
 export class TradeAlertPanel extends SantaContainerComponentBase implements OnInit, OnChanges, OnDestroy {
+  @Input() stateActive: boolean;
   @Input() sidePanelsDisplayed: boolean;
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
