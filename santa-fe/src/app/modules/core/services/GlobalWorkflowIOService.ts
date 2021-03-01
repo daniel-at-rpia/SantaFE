@@ -30,9 +30,10 @@ export class GlobalWorkflowIOService {
     idbWorkflowStoreName: INDEXEDDB_WORKFLOW_STORE_NAME
   }
 
+  private routeHandlerStoreSizeCap = 5;
   private currentState: string = 'initialState';
   private currentModule: NavigationModule = null;
-  private routeHanlderStore: Map<string, DetachedRouteHandle> = new Map();
+  private routeHandlerStore: Array<{state: string, handle: DetachedRouteHandle}> = [];
   private subscriptionStore: Map<NavigationModule, Map<string, Array<Subscription>>> = new Map();
 
   constructor(
@@ -139,7 +140,21 @@ export class GlobalWorkflowIOService {
 
     public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
       if (!!targetUUID) {
-        this.routeHanlderStore.set(targetUUID, targetHandler);
+        const alreadyExist = this.routeHandlerStore.find((eachEntry) => {
+          return targetUUID === eachEntry.state;
+        });
+        if (alreadyExist) {
+          alreadyExist.handle = targetHandler;
+        } else {
+          if (this.routeHandlerStore.length >= this.routeHandlerStoreSizeCap) {
+            const removedState = this.routeHandlerStore.shift();
+            this.closeLooseSubscriptions(removedState.state);
+          }
+          this.routeHandlerStore.push({
+            state: targetUUID,
+            handle: targetHandler
+          });
+        }
         // const targetState = this.temporaryStore.get(targetUUID);
         // if (!!targetState) {
         //   targetState.api.routeHandler = targetHandler;
@@ -153,7 +168,14 @@ export class GlobalWorkflowIOService {
 
     public fetchHandler(targetUUID: string): DetachedRouteHandle {
       if (!!targetUUID) {
-        return this.routeHanlderStore.get(targetUUID) || null;
+        const targetHandler = this.routeHandlerStore.find((eachEntry) => {
+          return targetUUID === eachEntry.state;
+        });
+        if (!!targetHandler) {
+          return targetHandler.handle;
+        } else {
+          return null;
+        }
         // const targetState = this.temporaryStore.get(targetUUID);
         // if (!!targetState && targetState.state.triggersRedirect) {
         //   if (!!targetState.api.routeHandler) {
@@ -173,7 +195,7 @@ export class GlobalWorkflowIOService {
 
     public storeSubscriptions(subscriptionList: Array<Subscription>){
       if (!!this.currentModule && !!this.currentState && subscriptionList && subscriptionList.length > 0) {
-        const moduleStore = this.subscriptionStore[this.currentModule];
+        const moduleStore = this.subscriptionStore.get(this.currentModule);
         if (!!moduleStore) {
           // console.log('test, storing subs', this.currentModule, this.currentState, subscriptionList);
           const existingSubscriptions = moduleStore.get(this.currentState) || [];
@@ -183,7 +205,19 @@ export class GlobalWorkflowIOService {
       }
     }
 
-    public closeLooseSubscriptions(targetModule: NavigationModule){
+    public closeLooseSubscriptions(targetStateId: string){
+      this.subscriptionStore.forEach((eachModuleStore) => {
+        if (!!eachModuleStore) {
+          const existingSubscriptions = eachModuleStore.get(targetStateId) || [];
+          existingSubscriptions.forEach((eachSub) => {
+            if (!eachSub.closed) {
+              eachSub.unsubscribe();
+            }
+          });
+          console.log('test, removed subs from state', targetStateId, existingSubscriptions);
+          eachModuleStore.delete(targetStateId);
+        }
+      });
       // if (!!targetModule) {
       //   const moduleStore = this.subscriptionStore[targetModule];
       //   if (!!moduleStore) {
@@ -200,9 +234,9 @@ export class GlobalWorkflowIOService {
     }
 
     private initializeSubscriptionStore(){
-      this.subscriptionStore[NavigationModule.trade] = new Map();
-      this.subscriptionStore[NavigationModule.structuring] = new Map();
-      this.subscriptionStore[NavigationModule.market] = new Map();
+      this.subscriptionStore.set(NavigationModule.trade, new Map());
+      this.subscriptionStore.set(NavigationModule.structuring, new Map());
+      this.subscriptionStore.set(NavigationModule.market, new Map());
     }
 
     // public closeSubscriptions(stateId: ){

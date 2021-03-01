@@ -24,9 +24,7 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     if (!!targetHandler) {
       return true;
     } else {
-      // about to enter a new state in a module, by which time all components are going to be re-initialized, subscriptions for each will be re-created, so to avoid duplicate subscriptions, we need to close all existing subscriptions in that module
-      const targetModule = this.getModule(route);
-      this.globalWorkflowIOService.closeLooseSubscriptions(targetModule);
+      // about to enter a new state in a module, by which time new instance of all components are going to be initialized
       return false;
     }
     // return false;
