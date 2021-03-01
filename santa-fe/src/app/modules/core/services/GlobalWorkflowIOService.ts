@@ -14,7 +14,8 @@ import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
 import {
   INDEXEDDB_VERSION,
   INDEXEDDB_WORKFLOW_DATABASE_NAME,
-  INDEXEDDB_WORKFLOW_STORE_NAME
+  INDEXEDDB_WORKFLOW_STORE_NAME,
+  ROUTE_REUSE_HANDLER_STORE_SIZE_CAP
 } from 'Core/constants/globalWorkflowConstants.constants';
 
 @Injectable()
@@ -30,11 +31,23 @@ export class GlobalWorkflowIOService {
     idbWorkflowStoreName: INDEXEDDB_WORKFLOW_STORE_NAME
   }
 
-  private routeHandlerStoreSizeCap = 5;
   private currentState: string = 'initialState';
   private currentModule: NavigationModule = null;
-  private routeHandlerStore: Array<{state: string, handle: DetachedRouteHandle}> = [];
-  private subscriptionStore: Map<NavigationModule, Map<string, Array<Subscription>>> = new Map();
+  private routeHandlerStore: 
+    Array<
+      {
+        state: string,
+        handle: DetachedRouteHandle
+      }
+    > = [];
+  private subscriptionStore: 
+    Map<
+      NavigationModule,
+      Map<
+        string, 
+        Array<Subscription>
+      >
+    > = new Map();
 
   constructor(
     private store$: Store<any>,
@@ -146,7 +159,7 @@ export class GlobalWorkflowIOService {
         if (alreadyExist) {
           alreadyExist.handle = targetHandler;
         } else {
-          if (this.routeHandlerStore.length >= this.routeHandlerStoreSizeCap) {
+          if (this.routeHandlerStore.length >= ROUTE_REUSE_HANDLER_STORE_SIZE_CAP) {
             const removedState = this.routeHandlerStore.shift();
             this.closeLooseSubscriptions(removedState.state);
           }
