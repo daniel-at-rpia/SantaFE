@@ -1566,12 +1566,12 @@ export class UtilityService {
     }
 
     public checkIfFundDeltaIsSignificantPositive(delta: number): boolean {
-      const isSignificantPositive = delta > 0 && delta > 0.1 ? true : false;
+      const isSignificantPositive = delta > 0 && delta >= 0.1 ? true : false;
       return isSignificantPositive;
     }
 
     public checkIfFundDeltaIsSignificantNegative(delta: number): boolean {
-      const isSignificantNegative = delta < 0 && delta < -0.1 ? true : false;
+      const isSignificantNegative = delta < 0 && delta <= -0.1 ? true : false;
       return isSignificantNegative;
     }
   // structuring specific end
