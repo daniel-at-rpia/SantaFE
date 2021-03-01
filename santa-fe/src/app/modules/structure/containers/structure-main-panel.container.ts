@@ -1,7 +1,8 @@
   // dependencies
     import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+    import { Router } from '@angular/router';
     import { of, Subscription } from 'rxjs';
-    import { catchError, first, tap} from 'rxjs/operators';
+    import { catchError, first, tap, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
     import * as moment from 'moment';
 
@@ -97,15 +98,16 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   };
   
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private dtoService: DTOService,
     private store$: Store<any>,
     private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService,
     private bicsDataProcessingService: BICsDataProcessingService,
-    private bicsDictionaryLookupService: BICSDictionaryLookupService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
   
@@ -132,17 +134,26 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.receiveNewDateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectDataDatestamp)
     ).subscribe((datestampInUnix) => {
       this.state.currentDataDatestamp = moment.unix(datestampInUnix);
       this.fullUpdate();
     });
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((value) => {
         this.state.ownerInitial = value;
     });
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectMetricLevel)
     ).subscribe((value) => {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
@@ -168,17 +179,30 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         }, 500)
       })
     });
-    this.subscriptions.setBulkOverridesTransferSub = this.store$.pipe(select(selectSetBulkOverridesTransferPack)).subscribe((pack: AdhocPacks.StructureSetBulkOverridesTransferPack) => {
+    this.subscriptions.setBulkOverridesTransferSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
+      select(selectSetBulkOverridesTransferPack)
+    ).subscribe((pack: AdhocPacks.StructureSetBulkOverridesTransferPack) => {
       if (!!pack) {
         this.setBulkOverrides(pack);
       }
     })
-    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewTransferPack) => {
+    this.subscriptions.viewData = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
+      select(selectSetViewData)
+    ).subscribe((value: StructureSetViewTransferPack) => {
       if (!!value) {
         this.updateViewData(value);
       }
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectReloadFundDataPostEdit)
     ).subscribe((targetFund: BEStructuringFundBlockWithSubPortfolios) => {
       if (!!targetFund) {
@@ -197,6 +221,9 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectMainPanelUpdateTick)
     ).subscribe((tick) => {
       if (tick > 0) {  // ignore the initial page load
@@ -204,6 +231,9 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       }
     });
     this.subscriptions.activeBreakdownViewFilterSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectActiveBreakdownViewFilter)
     ).subscribe((activeFilter) => {
       this.state.activeBreakdownViewFilter = activeFilter;
@@ -212,11 +242,17 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       });
     });
     this.subscriptions.activePortfolioViewFilterSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectActivePortfolioViewFilter)
     ).subscribe((activeFilter) => {
       this.state.activePortfolioViewFilter = activeFilter;
     });
     this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectActiveSubPortfolioFilter)
     ).subscribe((activeFilter) => {
       this.state.activeSubPortfolioFilter = activeFilter;
@@ -228,6 +264,9 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       }
     });
     this.subscriptions.activeDeltaScopeSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectActiveDeltaScope)
     ).subscribe((activeScope) => {
       this.state.activeDeltaScope = activeScope;

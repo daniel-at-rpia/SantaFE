@@ -1,6 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-    import { ActivatedRoute } from '@angular/router';
+    import { ActivatedRoute, Router } from '@angular/router';
     import { Observable, Subscription, interval, of } from 'rxjs';
     import { tap, first, withLatestFrom, switchMap, catchError, combineLatest, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
@@ -41,7 +41,6 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
 
   private initializePageState(): PageStates.StructureState {
     const state: PageStates.StructureState = {
-      responsibleStates: [],
       BICsData: {
         formattedBICsHierarchy: {
           children: [],
@@ -56,15 +55,16 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private bicsDataProcessingService: BICsDataProcessingService,
-    private route: ActivatedRoute,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private route: ActivatedRoute
   ) {
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
 
@@ -75,12 +75,6 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       filter((params) => {
         return this.stateActive;
-      }),
-      tap((params) => {
-        const newState = params.get(this.constants.stateId);
-        if (this.state.responsibleStates.indexOf(newState) < 0) {
-          this.state.responsibleStates.push(newState);
-        }
       }),
       combineLatest(
         this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))

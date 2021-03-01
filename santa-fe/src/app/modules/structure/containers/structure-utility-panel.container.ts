@@ -1,8 +1,9 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
+    import { Router } from '@angular/router';
     import { select, Store } from '@ngrx/store';
     import { Subscription } from 'rxjs';
-    import { first } from 'rxjs/operators';
+    import { first, filter } from 'rxjs/operators';
     import * as moment from 'moment';
 
     import { UtilityService, DTOService, GlobalWorkflowIOService } from 'Core/services';
@@ -73,12 +74,13 @@ export class StructureUtilityPanel extends SantaContainerComponentBase implement
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
-    private utilityService: UtilityService,
-    private dtoService: DTOService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private dtoService: DTOService
   ) {
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
   }
 
   private initializePageState(): StructureUtilityPanelState {
@@ -110,6 +112,9 @@ export class StructureUtilityPanel extends SantaContainerComponentBase implement
     });
 
     this.subscriptions.lastUpdateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectMainPanelUpdateTick)
     ).subscribe((tick) => {
       this.state.lastUpdateTime = moment().format('hh:mm:ss a');
@@ -151,6 +156,9 @@ export class StructureUtilityPanel extends SantaContainerComponentBase implement
     });
 
     this.subscriptions.utilityPanelLoadStateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectUtilityPanelLoadState)
     ).subscribe((newState) => {
       if (!!newState) {

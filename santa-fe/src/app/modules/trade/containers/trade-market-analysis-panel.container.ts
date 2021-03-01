@@ -2,7 +2,7 @@
     import { Component, ViewEncapsulation, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter } from '@angular/core';
     import { Router } from '@angular/router';
     import { Observable, Subscription, of } from 'rxjs';
-    import { tap, first, catchError, delay } from 'rxjs/operators';
+    import { tap, first, catchError, delay, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
@@ -102,6 +102,9 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
 
   public ngOnInit() {
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+      filter((params) => {
+        return this.stateActive;
+      }),
       select(selectSelectedSecurityForAnalysis),
       delay(500)
     ).subscribe((targetSecurity) => {

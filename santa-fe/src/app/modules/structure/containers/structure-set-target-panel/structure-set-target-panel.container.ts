@@ -1,7 +1,8 @@
   // dependencies
     import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+    import { Router } from '@angular/router';
     import { of, Subscription } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
     import * as moment from 'moment';
 
@@ -93,16 +94,17 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   };
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
-    private utilityService: UtilityService,
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private modalService: ModalService,
     private bicsService: BICsDataProcessingService,
-    private bicsDictionaryLookupService: BICSDictionaryLookupService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
 

@@ -1,6 +1,8 @@
   // dependencies
     import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
+    import { Router } from '@angular/router';
     import { Store, select } from '@ngrx/store';
+    import { filter } from 'rxjs/operators';
 
     import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
     import { DTOService, BICsDataProcessingService, GlobalWorkflowIOService } from 'Core/services';
@@ -45,17 +47,21 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private bicsDataProcessingService: BICsDataProcessingService,
-    private utilityService: UtilityService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private bicsDataProcessingService: BICsDataProcessingService
   ) {
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
   }
 
   public ngOnInit() {
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectMetricLevel)
     ).subscribe((value) => {
       if (!!value) {
@@ -78,6 +84,7 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
 
   public ngOnChanges() {
     if (!!this.mainRowData && !!this.breakdownDisplayPopover) {
+      console.log('test, refreshing popover data');
       const mainRowData: Blocks.BICSMainRowDataBlock = this.mainRowData;
       mainRowData.isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
       const [cs01Row, creditLeverageRow] = this.bicsDataProcessingService.formBICSRow(mainRowData);

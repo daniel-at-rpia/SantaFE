@@ -1,6 +1,8 @@
   // dependencies
     import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+    import { Router } from '@angular/router';
     import { Subscription } from 'rxjs';
+    import { filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
     import * as moment from 'moment';
 
@@ -52,25 +54,32 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private modalService: ModalService,
-    private utilityService: UtilityService,
     private store$: Store<any>,
     private bicsDataProcessingService: BICsDataProcessingService,
     private dtoService: DTOService,
-    private bicsDictionaryLookupService: BICSDictionaryLookupService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
   }
 
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((initials) => {
       this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
       this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
     this.subscriptions.dataDatestampSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectDataDatestamp)
     ).subscribe((datestampInUnix) => {
       this.breakdownData.state.isViewingHistoricalData = !moment.unix(datestampInUnix).isSame(moment(), 'day');
@@ -87,6 +96,7 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
 
   public ngOnChanges() {
     if (!!this.breakdownData) {
+      console.log('test, refreshing breakdown data');
       this.loadData();
       if (this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
         this.utilityService.sortOverrideRows(this.breakdownData);

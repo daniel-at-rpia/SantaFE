@@ -1,7 +1,8 @@
   // dependencies
     import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+    import { Router } from '@angular/router';
     import { of, Subscription } from 'rxjs';
-    import { catchError, first, tap } from 'rxjs/operators';
+    import { catchError, first, tap, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
@@ -44,16 +45,17 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
     BICSOverrideTitle: BICS_OVERRIDES_TITLE
   }
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private bicsService: BICsDataProcessingService,
     private bicsLookUpService: BICSDictionaryLookupService,
     private dtoService: DTOService,
     private modalService: ModalService,
-    private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private restfulCommService: RestfulCommService
   ){
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
 
@@ -71,7 +73,12 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
 
   public ngOnInit() {
     this.state = this.initializePageState();
-    this.subscriptions.setBulkOverridesSub = this.store$.pipe(select(selectSetBulkOverridesEvent)).subscribe((state:boolean) =>{
+    this.subscriptions.setBulkOverridesSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
+      select(selectSetBulkOverridesEvent)
+    ).subscribe((state:boolean) =>{
       if (!!state) {
         this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
       }
@@ -79,7 +86,7 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
     this.modalService.setModalTitle(this.constants.setBulkOverridesModalId, 'Add Overrides To All Funds');
     this.modalService.bindModalSaveCallback(this.constants.setBulkOverridesModalId, this.submitOverrideChanges.bind(this));
     this.modalService.bindModalCloseCallback(this.constants.setBulkOverridesModalId, this.closeModal.bind(this));
-    return this.ngOnInit();
+    return super.ngOnInit();
   }
 
   public onClickNewOverrideRow() {

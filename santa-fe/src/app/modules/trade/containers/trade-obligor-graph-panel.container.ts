@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation, NgZone, OnInit, OnDestroy, Input } from "@angular/core";
 import { Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 import { UtilityService, GraphService, GlobalWorkflowIOService } from 'Core/services';
 import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
@@ -55,18 +56,27 @@ export class TradeObligorGraphPanel extends SantaContainerComponentBase implemen
 
   public ngOnInit() {
     this.subscriptions.selectBestQuoteValidWindow = this.store$.pipe(
+      filter((params) => {
+        return this.stateActive;
+      }),
       select(selectBestQuoteValidWindow)
     ).subscribe((data) => {
       this.state.lookBackHours = data;
     });
 
     this.subscriptions.selectSecurityUpdateForAnalysis = this.store$.pipe(
+      filter((params) => {
+        return this.stateActive;
+      }),
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((data) => {
       this.setObligorSecurityID(data)
     });
 
     this.subscriptions.selectSecurityTableRowDTOListForAnalysis = this.store$.pipe(
+      filter((params) => {
+        return this.stateActive;
+      }),
       select(selectSecurityTableRowDTOListForAnalysis),
       delay(500)
     ).subscribe((data) => {

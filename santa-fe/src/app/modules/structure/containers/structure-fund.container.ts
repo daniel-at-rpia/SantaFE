@@ -1,7 +1,8 @@
   // dependencies
     import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, OnChanges } from '@angular/core';
+    import { Router } from '@angular/router';
     import { of, Subscription } from 'rxjs';
-    import { catchError, first, tap} from 'rxjs/operators';
+    import { catchError, first, tap, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
     import * as moment from 'moment';
 
@@ -70,23 +71,32 @@ export class StructureFund extends SantaContainerComponentBase implements OnInit
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private store$: Store<any>,
     private modalService: ModalService,
-    private restfulCommService: RestfulCommService,
-    protected globalWorkflowIOService: GlobalWorkflowIOService
+    private restfulCommService: RestfulCommService
   ){
-    super(globalWorkflowIOService);
+    super(utilityService, globalWorkflowIOService, router);
   }
 
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((value) => {
       this.fund.state.isEditAvailable = this.constants.structuringTeamPMList.indexOf(value) >= 0;
     });
-    this.subscriptions.activeMetricSub = this.store$.pipe(select(selectMetricLevel)).subscribe(metric => {
+    this.subscriptions.activeMetricSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
+      select(selectMetricLevel)
+    ).subscribe(metric => {
       this.activeMetric = metric as PortfolioMetricValues;
     });
     this.fund.api.onSubmitMetricValues = this.saveEditDetails.bind(this);
