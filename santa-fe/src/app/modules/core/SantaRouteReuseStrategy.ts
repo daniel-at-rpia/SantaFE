@@ -14,10 +14,6 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   constructor(
     private globalWorkflowIOService: GlobalWorkflowIOService
   ) {}
-  
-  /*
-    Temporarily turn off all functionalities due to the problem with ngdestory requires more time to solve
-  */
 
   public shouldAttach(route: ActivatedRouteSnapshot): boolean {
     const targetHandler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
@@ -27,19 +23,10 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
       // about to enter a new state in a module, by which time new instance of all components are going to be initialized
       return false;
     }
-    // return false;
-    // const targetState = this.globalWorkflowIOService.fetchState(this.getRouteIdentifier(route));
-    // if (!!targetState && !!targetState.api.routeHandler) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
   }
 
   public shouldDetach(route: ActivatedRouteSnapshot): boolean {
     return true;
-    // return false;
-    // return true;
   }
 
   public store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle) {
@@ -48,15 +35,11 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
     if (!!handle) {
       this.globalWorkflowIOService.attachRouteHandlerToState(this.getRouteIdentifier(route), handle);
     }
-    // this.globalWorkflowIOService.attachRouteHandlerToState(this.getRouteIdentifier(route), handle);
   }
 
   public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
     const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
     return handler;
-    // return null;
-    // const handler = this.globalWorkflowIOService.fetchHandler(this.getRouteIdentifier(route));
-    // return handler;
   }
 
   public shouldReuseRoute(
@@ -65,10 +48,9 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   ): boolean {
     // In our application this function always get executed twice during a route change, first time the two routes are "primary" in "outlet" and null in "routeConfig", but only the second time contains the actual urls.
     // The first time triggered is because route change detection always starts at the root level, second time is the child of the first, which is at our "Page" level.
-    // So our reuse strategy is that we only trigger it when it's switching module
+    // So our reuse strategy is that is we only consider reusing a route if it has the same valid routeConfig, and same stateId
     if (!!futureRoute.routeConfig && !!currentRoute.routeConfig) {
       if (futureRoute.routeConfig === currentRoute.routeConfig) {
-        // return true;
         if (futureRoute.params.stateId === currentRoute.params.stateId) {
           return true;
         } else {
@@ -78,14 +60,9 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
         return false;
       }
     } else {
+      // gets here when comparing at the root level, root is always reused so that our global services & components are retained
       return true;
     }
-    // return futureRoute.routeConfig === currentRoute.routeConfig;
-    // if (!!futureRoute.routeConfig && !!currentRoute.routeConfig && futureRoute.routeConfig === currentRoute.routeConfig) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
   }
 
   private getRouteIdentifier(targetRoute: ActivatedRouteSnapshot): string {

@@ -96,7 +96,6 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
 
   public ngOnChanges() {
     if (!!this.breakdownData) {
-      console.log('test, refreshing breakdown data');
       this.loadData();
       if (this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
         this.utilityService.sortOverrideRows(this.breakdownData);

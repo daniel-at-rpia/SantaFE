@@ -199,7 +199,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       )
     ).subscribe(([tick, isInitialDataLoaded]) => {
       if (tick > 0 && isInitialDataLoaded) {  // skip first beat
-        console.log('test, got a new tick', tick);
         if (this.state.fetchResult.fetchTableDataFailed) {
           window.location.reload(true);
         } else {

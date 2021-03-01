@@ -168,14 +168,6 @@ export class GlobalWorkflowIOService {
             handle: targetHandler
           });
         }
-        // const targetState = this.temporaryStore.get(targetUUID);
-        // if (!!targetState) {
-        //   targetState.api.routeHandler = targetHandler;
-        // } else {
-        //   const newState = this.dtoService.formGlobalWorkflow(null, false, GlobalWorkflowTypes.routeHandlerPlaceholder);
-        //   newState.data.uuid = targetUUID;
-        //   this.storeState(newState);
-        // }
       }
     }
 
@@ -189,18 +181,6 @@ export class GlobalWorkflowIOService {
         } else {
           return null;
         }
-        // const targetState = this.temporaryStore.get(targetUUID);
-        // if (!!targetState && targetState.state.triggersRedirect) {
-        //   if (!!targetState.api.routeHandler) {
-        //     return targetState.api.routeHandler;
-        //   } else {
-        //     console.warn('Tried to fetch for route handler while it is not stored', targetState);
-        //     return null;
-        //   }
-        // } else {
-        //   console.warn('Fetching route handler from a null state or non-redirect state', targetState);
-        //   return null;
-        // }
       } else {
         return null;
       }
@@ -210,7 +190,6 @@ export class GlobalWorkflowIOService {
       if (!!this.currentModule && !!this.currentState && subscriptionList && subscriptionList.length > 0) {
         const moduleStore = this.subscriptionStore.get(this.currentModule);
         if (!!moduleStore) {
-          // console.log('test, storing subs', this.currentModule, this.currentState, subscriptionList);
           const existingSubscriptions = moduleStore.get(this.currentState) || [];
           moduleStore.set(this.currentState, existingSubscriptions.concat(subscriptionList));
           this.subscriptionStore.set(this.currentModule, moduleStore);
@@ -227,23 +206,9 @@ export class GlobalWorkflowIOService {
               eachSub.unsubscribe();
             }
           });
-          console.log('test, removed subs from state', targetStateId, existingSubscriptions);
           eachModuleStore.delete(targetStateId);
         }
       });
-      // if (!!targetModule) {
-      //   const moduleStore = this.subscriptionStore[targetModule];
-      //   if (!!moduleStore) {
-      //     moduleStore.forEach((eachSubList) => {
-      //       eachSubList.forEach((eachSub) => {
-      //         if (!eachSub.closed) {
-      //           eachSub.unsubscribe();
-      //         }
-      //       })
-      //     });
-      //     this.subscriptionStore[targetModule] = new Map();
-      //   }
-      // }
     }
 
     private initializeSubscriptionStore(){
@@ -251,11 +216,7 @@ export class GlobalWorkflowIOService {
       this.subscriptionStore.set(NavigationModule.structuring, new Map());
       this.subscriptionStore.set(NavigationModule.market, new Map());
     }
-
-    // public closeSubscriptions(stateId: ){
-
-    // }
-
+    
   // Work with RouteReuseStrategy End
 
 }

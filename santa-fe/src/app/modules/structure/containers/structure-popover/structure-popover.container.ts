@@ -84,7 +84,6 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
 
   public ngOnChanges() {
     if (!!this.mainRowData && !!this.breakdownDisplayPopover) {
-      console.log('test, refreshing popover data');
       const mainRowData: Blocks.BICSMainRowDataBlock = this.mainRowData;
       mainRowData.isCs01 = this.activeMetric === PortfolioMetricValues.cs01;
       const [cs01Row, creditLeverageRow] = this.bicsDataProcessingService.formBICSRow(mainRowData);

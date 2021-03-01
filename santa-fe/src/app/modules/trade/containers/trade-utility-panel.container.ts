@@ -37,7 +37,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit, OnChanges {
+export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit {
   @Input() sidePanelsDisplayed: boolean;
   state: PageStates.TradeUtilityPanelState;
   constants = {
@@ -153,10 +153,6 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     });
 
     return super.ngOnInit();
-  }
-
-  public ngOnChanges() {
-    console.log('test, got at utility on change', this.stateActive);
   }
 
   // disabled temporarily
