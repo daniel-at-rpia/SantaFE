@@ -112,14 +112,6 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
-    // const listOfSubs = [];
-    // for (const eachItem in this.subscriptions) {
-    //   if (!!this.subscriptions[eachItem]) {
-    //     const eachSub = this.subscriptions[eachItem] as Subscription;
-    //     listOfSubs.push(eachSub);
-    //   }
-    // }
-    // this.globalWorkflowIOService.storeSubscriptions(listOfSubs);
     return super.ngOnInit();
   }
 
