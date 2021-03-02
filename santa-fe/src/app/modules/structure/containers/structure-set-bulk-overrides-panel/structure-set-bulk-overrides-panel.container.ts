@@ -23,7 +23,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService'
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
-import { StructureSendSetBulkOverridesTransferEvent } from 'Structure/actions/structure.actions';
+import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
 @Component({
   selector: 'structure-set-bulk-overrides-panel',
@@ -199,11 +199,37 @@ export class StructureSetBulkOverrides implements OnInit {
 
   private submitOverrideChanges(): boolean {
     const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = this.traverseEditRowsToFormUpdateOverridePayload();
-    const updatePayloadTransferPack: AdhocPacks.StructureSetBulkOverridesTransferPack = {
-      overrides: updatePayload
-    };
-    if (updatePayloadTransferPack.overrides.length > 0) {
-      this.store$.dispatch(new StructureSendSetBulkOverridesTransferEvent(updatePayloadTransferPack));
+    if (updatePayload.length > 0) {
+      const necessaryUpdateNumOfCalls = updatePayload.length;
+      let callCount = 0;
+      updatePayload.forEach((eachPayload) => {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
+          first(),
+          tap((serverReturn: boolean) => {
+            callCount++;
+            if (callCount === necessaryUpdateNumOfCalls) {
+              if (serverReturn) {
+                this.store$.dispatch(
+                  new CoreSendNewAlerts([
+                    this.dtoService.formSystemAlertObject(
+                      'Structuring',
+                      'Add Overrides',
+                      `Successfully Added New Overrides to All Funds`,
+                      null
+                    )]
+                  )
+                );
+                this.store$.dispatch(new StructureUpdateMainPanelEvent());
+              }
+            }
+          }),
+          catchError(err => {
+            console.error('update portfolio overrides for all portfolios failed', err);
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
+            return of('error');
+          })
+        ).subscribe();
+      });
       this.state.editRowList = [];
       return true;
     } else {

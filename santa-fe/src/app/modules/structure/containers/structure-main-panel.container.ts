@@ -15,8 +15,7 @@ import {
   selectActivePortfolioViewFilter,
   selectDataDatestamp,
   selectActiveSubPortfolioFilter,
-  selectActiveDeltaScope,
-  selectSetBulkOverridesTransferPack
+  selectActiveDeltaScope
 } from 'Structure/selectors/structure.selectors';
 import {
   RestfulCommService,
@@ -170,11 +169,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500)
       })
     });
-    this.subscriptions.setBulkOverridesTransferSub = this.store$.pipe(select(selectSetBulkOverridesTransferPack)).subscribe((pack: AdhocPacks.StructureSetBulkOverridesTransferPack) => {
-      if (!!pack) {
-        this.setBulkOverrides(pack);
-      }
-    })
     this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewTransferPack) => {
       if (!!value) {
         this.updateViewData(value);
@@ -676,42 +670,6 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       if (eachFund.portfolioId === newFundData.portfolioId) {
         this.state.fetchResult.rawServerReturnCache.Now[index] = newFundData;
       }
-    });
-  }
-
-  private setBulkOverrides(pack: AdhocPacks.StructureSetBulkOverridesTransferPack) {
-    const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = pack.overrides;
-    const necessaryUpdateNumOfCalls = updatePayload.length;
-    let callCount = 0;
-    updatePayload.forEach((eachPayload) => {
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
-        first(),
-        tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
-          callCount++;
-          if (callCount === necessaryUpdateNumOfCalls) {
-            this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
-            this.processStructureData(
-              this.extractSubPortfolioFromFullServerReturn(serverReturn),
-              this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
-            );
-            this.store$.dispatch(
-              new CoreSendNewAlerts([
-                this.dtoService.formSystemAlertObject(
-                  'Structuring',
-                  'Added',
-                  `Successfully Added New Overrides to All Funds`,
-                  null
-                )]
-              )
-            );
-          }
-        }),
-        catchError(err => {
-          console.error('update portfolio overrides for all portfolios failed', err);
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
-          return of('error');
-        })
-      ).subscribe();
     });
   }
 }

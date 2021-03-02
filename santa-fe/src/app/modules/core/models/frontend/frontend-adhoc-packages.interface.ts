@@ -192,10 +192,6 @@ export interface StructureRowSetViewData  {
   view: PortfolioView;
 }
 
-export interface StructureSetBulkOverridesTransferPack {
-  overrides: Array<PayloadUpdatePortfolioOverridesForAllPortfolios>
-}
-
 interface SecurityDefinitionFilterOptionTenorRangeItem {
   displayLabel: string;
   min: number;
