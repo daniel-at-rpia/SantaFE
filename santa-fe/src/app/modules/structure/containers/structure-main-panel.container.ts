@@ -88,8 +88,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
     activeSubPortfolioViewFilterSub: null,
-    activeDeltaScopeSub: null,
-    setBulkOverridesTransferSub: null
+    activeDeltaScopeSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
