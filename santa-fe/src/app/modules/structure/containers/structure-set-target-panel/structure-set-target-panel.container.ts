@@ -987,7 +987,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         updatePayload.forEach((eachPayload) => {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
             first(),
-            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
+            tap((serverReturn: boolean) => {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
                 if (necessaryDeleteNumOfCalls > 0) {
@@ -1003,7 +1003,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
                       )]
                     )
                   );
-                  this.store$.dispatch(new StructureUpdateMainPanelEvent());
+                  serverReturn && this.store$.dispatch(new StructureUpdateMainPanelEvent());
                 }
               }
             }),
