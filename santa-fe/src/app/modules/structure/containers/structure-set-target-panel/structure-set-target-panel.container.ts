@@ -1003,7 +1003,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
                       )]
                     )
                   );
-                  this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+                  this.store$.dispatch(new StructureUpdateMainPanelEvent());
                 }
               }
             }),
