@@ -312,6 +312,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'IL',
     'PD',
     'PM',
+    'RV',
     'SP',
     'TW'
   ];
