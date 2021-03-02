@@ -46,8 +46,9 @@ import {
   BEStructuringBreakdownBlockWithSubPortfolios,
   BEStructuringBreakdownMetricBlock,
   BEStructuringFundBlockWithSubPortfolios,
-  BEStructuringOverrideBlockWithSubPortfolios,
-  BEStructuringOverrideBlock
+  BEStructuringOverrideBaseBlockWithSubPortfolios,
+  BEStructuringOverrideBlock,
+  BEStructuringOverrideBaseBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
 import {
   CoreSendNewAlerts,
@@ -622,7 +623,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       },
       currentTotals: currentTotalsWithSub[subPortfolio],
       breakdowns: {},
-      overrides: [],
+      overrides: {},
       ...inheritFundValues
     };
     for (const eachBreakdownKey in breakdownsWithSub) {
@@ -645,20 +646,27 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
       eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
     }
-    overridesWithSub.forEach((eachOverrideWithSub:BEStructuringOverrideBlockWithSubPortfolios) => {
-      const {
-        breakdown: overrideCategoriesWithSub,
-        ...inheritOverrideValues
-      } = eachOverrideWithSub;
-      const eachOverrideWithoutSub: BEStructuringOverrideBlock = {
-        breakdown: {
-          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
-          view: overrideCategoriesWithSub.view
-        },
-        ...inheritOverrideValues
-      };
-      eachFundWithoutSub.overrides.push(eachOverrideWithoutSub);
-    });
+    for (let bucket in overridesWithSub) {
+      if (overridesWithSub[bucket]) {
+        eachFundWithoutSub.overrides[bucket] = {};
+        for (let category in overridesWithSub[bucket]) {
+          if (overridesWithSub[bucket][category]) {
+            const {
+              breakdown: overrideCategoriesWithSub,
+              ...inheritOverrideValues
+            } = overridesWithSub[bucket][category];
+            const eachOverrideWithoutSub: BEStructuringOverrideBaseBlock = {
+              breakdown: {
+                metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
+                view: overrideCategoriesWithSub.view
+              },
+              ...inheritOverrideValues
+            };
+            eachFundWithoutSub.overrides[bucket][category] = eachOverrideWithoutSub;
+          }
+        }
+      }
+    }
     return eachFundWithoutSub;
   }
 

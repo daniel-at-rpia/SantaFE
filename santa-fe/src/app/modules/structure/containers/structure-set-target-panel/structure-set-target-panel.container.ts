@@ -50,7 +50,9 @@ import {
   BEStructuringOverrideBlock,
   BEStructuringOverrideBlockWithSubPortfolios,
   BEStructuringBreakdownMetricSingleEntryBlock,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios
+  BEStructuringBreakdownMetricBlockWithSubPortfolios,
+  BEStructuringOverrideBaseBlock,
+  BEStructuringOverrideBaseBlockWithSubPortfolios
 } from 'BEModels/backend-models.interface';
 import {
   PayloadGetPortfolioOverride,
@@ -383,21 +385,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const now = moment();
         const payload: PayloadGetPortfolioOverride = {
           portfolioOverride: {
-            date: now.format('YYYY-MM-DD'),
             portfolioId: this.state.targetFund.data.portfolioId,
             simpleBucket: simpleBucket
           }
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringOverrideBlockWithSubPortfolios) => {
+          tap((serverReturn: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
             const {
               breakdown: breakdownWithSubPortfolio,
               ...inheritValues
             } = serverReturn;
-            const overrideData: BEStructuringOverrideBlock = {
+            const overrideData: BEStructuringOverrideBaseBlock = {
               breakdown: {
-                view: breakdownWithSubPortfolio.view,
                 metricBreakdowns: breakdownWithSubPortfolio.metricBreakdowns[this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter)]
               },
               ...inheritValues
@@ -1058,7 +1058,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const rawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, i);
         const payload: PayloadUpdateBreakdown = {
           portfolioBreakdown: {
-            date: moment(rawBreakdown.date).format('YYYY-MM-DD'),
             groupOption: rawBreakdown.groupOption,
             portfolioId: rawBreakdown.portfolioId,
             breakdown: {}
@@ -1069,7 +1068,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       const payload: PayloadUpdateBreakdown = {
         portfolioBreakdown: {
-          date: now.format('YYYY-MM-DD'),
           groupOption: this.state.targetBreakdownRawData.groupOption,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           breakdown: {}
@@ -1172,7 +1170,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.removalList.forEach((eachRow) => {
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
-          date: now.format('YYYY-MM-DD'),
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
@@ -1194,7 +1191,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
       let rawDataObject;
       if (this.state.targetBreakdown.state.isOverrideVariant) {
-        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+        const rawOverrides = this.utilityService.getRawOverridesFromFund(this.state.targetFund.data.originalBEData.overrides);
+        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(rawOverrides);
         rawDataObject = resultPack.list;
         this.state.targetBreakdownRawDataDisplayLabelMap = resultPack.displayLabelMap;
       } else {
