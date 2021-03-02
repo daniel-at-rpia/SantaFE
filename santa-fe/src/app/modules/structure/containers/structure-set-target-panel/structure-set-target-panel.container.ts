@@ -398,6 +398,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             } = serverReturn;
             const overrideData: BEStructuringOverrideBaseBlock = {
               breakdown: {
+                view: breakdownWithSubPortfolio.view,
                 metricBreakdowns: breakdownWithSubPortfolio.metricBreakdowns[this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter)]
               },
               ...inheritValues
