@@ -202,7 +202,20 @@ export class StructureSetBulkOverrides implements OnInit {
     if (updatePayload.length > 0) {
       const necessaryUpdateNumOfCalls = updatePayload.length;
       let callCount = 0;
-      updatePayload.forEach((eachPayload) => {
+      updatePayload.forEach((eachPayload: PayloadUpdatePortfolioOverridesForAllPortfolios, index: number) => {
+        if (index === 0) {
+          // inform users that data is being processed as this API call can take a while, especially if there are multiple overrides added
+          this.store$.dispatch(
+            new CoreSendNewAlerts([
+              this.dtoService.formSystemAlertObject(
+                'Processing',
+                'Add Overrides',
+                `Processing Overrides To Be Added To All Funds`,
+                null
+              )]
+            )
+          );
+        }
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
           first(),
           tap((serverReturn: boolean) => {
@@ -212,7 +225,7 @@ export class StructureSetBulkOverrides implements OnInit {
                 this.store$.dispatch(
                   new CoreSendNewAlerts([
                     this.dtoService.formSystemAlertObject(
-                      'Structuring',
+                      'Success',
                       'Add Overrides',
                       `Successfully Added New Overrides to All Funds`,
                       null
