@@ -71,7 +71,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
       "breakdowns": {
         "Ccy": {
           "portfolioBreakdownId": "8dfcaf95-54b1-4600-9ad8-1108bde7be7b",
-          "date": "2021-01-21T00:00:00-05:00",
           "portfolioId": 6,
           "indexId": 23,
           "groupOption": "Ccy",
@@ -515,156 +514,159 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
           }
         }
       },
-      "overrides": [
-        {
-          "portfolioOverrideId": "0e397867-d9d3-4b42-abfb-e07ef58a7b39",
-          "date": "2021-01-21T00:00:00",
-          "portfolioId": 6,
-          "indexId": 23,
-          "bucket": {
-            "Ccy": [
-              "USD"
-            ],
-            "Tenor": [
-              "10Y",
-              "20Y",
-              "30Y",
-              "3Y",
-              "5Y",
-              "7Y"
-            ],
-            "CouponType": [
-              "Float"
-            ]
-          },
-          "simpleBucket": {
-            "Ccy": [
-              "USD"
-            ],
-            "Tenor": [
-              "10Y",
-              "20Y",
-              "30Y",
-              "3Y",
-              "5Y",
-              "7Y"
-            ],
-            "CouponType": [
-              "Float"
-            ]
-          },
-          "title": "USD FRNs Beyond Libor Cessation",
-          "breakdown": {
-            "metricBreakdowns": {
-              "All": {
-                "Cs01": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 1149.1,
-                  "currentPct": 0.002,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditDuration": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.01,
-                  "currentPct": 0.002,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditLeverage": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.0,
-                  "currentPct": 0.0,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                }
-              },
-              "NonHedging": {
-                "Cs01": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 1149.1,
-                  "currentPct": 0.002,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditDuration": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.01,
-                  "currentPct": 0.002,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditLeverage": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.0,
-                  "currentPct": 0.0,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                }
-              },
-              "ShortCarry": {
-                "Cs01": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 1149.1,
-                  "currentPct": 0.039,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditDuration": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.01,
-                  "currentPct": 0.04,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditLeverage": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.0,
-                  "currentPct": 0.0,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                }
-              },
-              "NonShortCarry": {
-                "Cs01": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.0,
-                  "currentPct": 0.0,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditDuration": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.0,
-                  "currentPct": 0.0,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                },
-                "CreditLeverage": {
-                  "targetLevel": null,
-                  "targetPct": null,
-                  "currentLevel": 0.0,
-                  "currentPct": 0.0,
-                  "indexLevel": 0.0,
-                  "indexPct": 0.0
-                }
-              }
+      "overrides": {
+        "Ccy|CouponType|Tenor": {
+          "USD|Float|10Y,20Y,30Y,3Y,5Y,7Y": {
+            "portfolioOverrideId": "0e397867-d9d3-4b42-abfb-e07ef58a7b39",
+            "portfolioId": 6,
+            "indexId": 23,
+            "bucket": {
+              "Ccy": [
+                "USD"
+              ],
+              "Tenor": [
+                "10Y",
+                "20Y",
+                "30Y",
+                "3Y",
+                "5Y",
+                "7Y"
+              ],
+              "CouponType": [
+                "Float"
+              ]
             },
-            "view": "Deteriorating"
+            "simpleBucket": {
+              "Ccy": [
+                "USD"
+              ],
+              "CouponType": [
+                "Float"
+              ],
+              "Tenor": [
+                "10Y",
+                "20Y",
+                "30Y",
+                "3Y",
+                "5Y",
+                "7Y"
+              ]
+            },
+            "simpleBucketOptions": "Ccy|CouponType|Tenor",
+            "simpleBucketValues": "USD|Float|10Y,20Y,30Y,3Y,5Y,7Y",
+            "title": "USD FRNs Beyond Libor Cessation",
+            "breakdown": {
+              "metricBreakdowns": {
+                "All": {
+                  "Cs01": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 1149.1,
+                    "currentPct": 0.002,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditDuration": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.01,
+                    "currentPct": 0.002,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditLeverage": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.0,
+                    "currentPct": 0.0,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  }
+                },
+                "NonHedging": {
+                  "Cs01": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 1149.1,
+                    "currentPct": 0.002,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditDuration": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.01,
+                    "currentPct": 0.002,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditLeverage": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.0,
+                    "currentPct": 0.0,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  }
+                },
+                "ShortCarry": {
+                  "Cs01": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 1149.1,
+                    "currentPct": 0.039,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditDuration": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.01,
+                    "currentPct": 0.04,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditLeverage": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.0,
+                    "currentPct": 0.0,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  }
+                },
+                "NonShortCarry": {
+                  "Cs01": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.0,
+                    "currentPct": 0.0,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditDuration": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.0,
+                    "currentPct": 0.0,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  },
+                  "CreditLeverage": {
+                    "targetLevel": null,
+                    "targetPct": null,
+                    "currentLevel": 0.0,
+                    "currentPct": 0.0,
+                    "indexLevel": 0.0,
+                    "indexPct": 0.0
+                  }
+                }
+              },
+              "view": "Deteriorating"
+            }
           }
         }
-      ]
+      }
     }
   ]
 }

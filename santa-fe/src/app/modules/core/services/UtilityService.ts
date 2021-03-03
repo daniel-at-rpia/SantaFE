@@ -11,7 +11,8 @@
       BESecurityDeltaMetricDTO,
       BESecurityGroupDTO,
       BEStructuringOverrideBlock,
-      BEStructuringBreakdownBlock
+      BEStructuringBreakdownBlock,
+      BEStructuringOverrideBaseBlock
     } from 'BEModels/backend-models.interface';
     import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
     import {
@@ -1272,7 +1273,7 @@ export class UtilityService {
       }
     }
 
-    public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
+    public formCategoryKeyForOverride(rawData: BEStructuringOverrideBaseBlock): string {
       if (!!rawData.simpleBucket) {
         const list = [];
         for (let eachIdentifier in rawData.simpleBucket) {
@@ -1327,11 +1328,11 @@ export class UtilityService {
     }
 
     public convertRawOverrideToRawBreakdown(
-      overrideRawDataList: Array<BEStructuringOverrideBlock>
+      overrideRawDataList: Array<BEStructuringOverrideBaseBlock>
     ): AdhocPacks.StructureOverrideToBreakdownConversionReturnPack {
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
-      overrideRawDataList.forEach((eachRawOverride) => {
+      overrideRawDataList.forEach((eachRawOverride: BEStructuringOverrideBaseBlock) => {
         const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride.simpleBucket);
         const matchExistBreakdown = breakdownList.find((eachBEDTO) => {
           return eachBEDTO.groupOption === overrideBucketIdentifier;
@@ -1346,7 +1347,6 @@ export class UtilityService {
           matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
-            date: eachRawOverride.date,
             groupOption: overrideBucketIdentifier,
             indexId: eachRawOverride.indexId,
             portfolioId: eachRawOverride.portfolioId,
@@ -1573,6 +1573,18 @@ export class UtilityService {
     public checkIfFundDeltaIsSignificantNegative(delta: number): boolean {
       const isSignificantNegative = delta < 0 && delta <= -0.1 ? true : false;
       return isSignificantNegative;
+    }
+
+    public getRawOverridesFromFund(rawOverrides: BEStructuringOverrideBlock): Array<BEStructuringOverrideBaseBlock> {
+      let rawOverridesList: Array<BEStructuringOverrideBaseBlock> = [];
+      for (let bucket in rawOverrides) {
+        if (rawOverrides[bucket]) {
+          for (let category in rawOverrides[bucket]) {
+            rawOverridesList = [...rawOverridesList, rawOverrides[bucket][category]];
+          }
+        }
+      }
+      return rawOverridesList;
     }
   // structuring specific end
 }
