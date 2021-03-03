@@ -5,9 +5,13 @@ import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import {
   PortfolioMetricValues,
   DeltaScope,
-  PORTFOLIO_ID_TO_SHORTNAMES
+  PORTFOLIO_ID_TO_SHORTNAMES,
+  SubPortfolioFilter
 } from 'App/modules/core/constants/structureConstants.constants';
-import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+import {
+  selectMetricLevel,
+  selectActiveSubPortfolioFilter
+} from 'Structure/selectors/structure.selectors';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 import { DTOService, BICsDataProcessingService } from 'Core/services';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
@@ -31,6 +35,7 @@ export class StructurePopover implements OnInit, OnChanges {
   cs01MainRow: DTOs.StructurePortfolioBreakdownRowDTO;
   creditLeverageMainRow: DTOs.StructurePortfolioBreakdownRowDTO;
   activeMetric: PortfolioMetricValues;
+  activeSubPortfolioFilter: SubPortfolioFilter;
   constants = {
     navigationModule: NavigationModule,
     mainRowMetricKeys: ['targetLevel', 'targetPct', 'diffToTarget', 'diffToTargetDisplay', 'currentLevel', 'currentPct', 'currentPctDisplay', 'indexPct', 'indexPctDisplay', 'moveVisualizer'],
@@ -39,7 +44,8 @@ export class StructurePopover implements OnInit, OnChanges {
     portfolioIdToShortnames: PORTFOLIO_ID_TO_SHORTNAMES
   }
   subscriptions = {
-    selectedMetricLevelSub: null
+    selectedMetricLevelSub: null,
+    activeSubPortfolioViewFilterSub: null
   }
 
   constructor(
@@ -67,6 +73,11 @@ export class StructurePopover implements OnInit, OnChanges {
         }
       }
     });
+    this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      select(selectActiveSubPortfolioFilter)
+    ).subscribe((activeFilter: SubPortfolioFilter) => {
+      this.activeSubPortfolioFilter = activeFilter;
+    })
   };
 
   public ngOnChanges() {
