@@ -9,8 +9,8 @@ import {APIUrlMap, EngagementActionList} from 'Core/constants/coreConstants.cons
 export class RestfulCommService {
 
   // private endpoint = 'https://rpiadev01.rpia.ca:1225';  // prod
-  // private endpoint = 'https://rpia-staging:51225'  // QA / staging
-  private endpoint = 'https://rpia-quant-dt.ad.rpia:51225';  // dev
+  // private endpoint = 'https://rpia-staging.rpia.ca:51225'  // QA / staging
+  private endpoint = 'https://rpia-quant-dt.rpia.ca:51225';  // dev
 
   private user = 'anonymous';
   public apiMap = {
