@@ -41,7 +41,8 @@
       BEGetPortfolioStructureServerReturn,
       BEStructuringBreakdownMetricBlock,
       BEStructuringFundBlockWithSubPortfolios,
-      BEStructuringOverrideBaseBlockWithSubPortfolios,
+      BEStructuringBreakdownBlockWithSubPortfolios,
+      BEStructuringOverrideBlockWithSubPortfolios,
       BEStructuringOverrideBlock,
       BEStructuringOverrideBaseBlock
     } from 'App/modules/core/models/backend/backend-models.interface';
@@ -132,7 +133,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.receiveNewDateSub = this.store$.pipe(
-      filter((tick) => {
+      filter((datestampInUnix) => {
         return this.stateActive;
       }),
       select(selectDataDatestamp)
@@ -141,7 +142,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       this.fullUpdate();
     });
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
-      filter((tick) => {
+      filter((value) => {
         return this.stateActive;
       }),
       select(selectUserInitials)
@@ -149,7 +150,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         this.state.ownerInitial = value;
     });
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
-      filter((tick) => {
+      filter((value) => {
         return this.stateActive;
       }),
       select(selectMetricLevel)
@@ -178,7 +179,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       })
     });
     this.subscriptions.viewData = this.store$.pipe(
-      filter((tick) => {
+      filter((value) => {
         return this.stateActive;
       }),
       select(selectSetViewData)
@@ -188,7 +189,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       }
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
-      filter((tick) => {
+      filter((targetFund) => {
         return this.stateActive;
       }),
       select(selectReloadFundDataPostEdit)
@@ -219,7 +220,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       }
     });
     this.subscriptions.activeBreakdownViewFilterSub = this.store$.pipe(
-      filter((tick) => {
+      filter((activeFilter) => {
         return this.stateActive;
       }),
       select(selectActiveBreakdownViewFilter)
@@ -230,7 +231,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       });
     });
     this.subscriptions.activePortfolioViewFilterSub = this.store$.pipe(
-      filter((tick) => {
+      filter((activeFilter) => {
         return this.stateActive;
       }),
       select(selectActivePortfolioViewFilter)
@@ -238,7 +239,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       this.state.activePortfolioViewFilter = activeFilter;
     });
     this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
-      filter((tick) => {
+      filter((activeFilter) => {
         return this.stateActive;
       }),
       select(selectActiveSubPortfolioFilter)
@@ -252,7 +253,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       }
     });
     this.subscriptions.activeDeltaScopeSub = this.store$.pipe(
-      filter((tick) => {
+      filter((activeScope) => {
         return this.stateActive;
       }),
       select(selectActiveDeltaScope)
