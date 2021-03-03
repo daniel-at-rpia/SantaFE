@@ -18,8 +18,7 @@
       selectActivePortfolioViewFilter,
       selectDataDatestamp,
       selectActiveSubPortfolioFilter,
-      selectActiveDeltaScope,
-      selectSetBulkOverridesTransferPack
+      selectActiveDeltaScope
     } from 'Structure/selectors/structure.selectors';
     import {
       PortfolioMetricValues,
@@ -40,11 +39,11 @@
       BEStructuringFundBlock,
       BEStructuringBreakdownBlock,
       BEGetPortfolioStructureServerReturn,
-      BEStructuringBreakdownBlockWithSubPortfolios,
       BEStructuringBreakdownMetricBlock,
       BEStructuringFundBlockWithSubPortfolios,
-      BEStructuringOverrideBlockWithSubPortfolios,
-      BEStructuringOverrideBlock
+      BEStructuringOverrideBaseBlockWithSubPortfolios,
+      BEStructuringOverrideBlock,
+      BEStructuringOverrideBaseBlock
     } from 'App/modules/core/models/backend/backend-models.interface';
     import {
       CoreSendNewAlerts,
@@ -86,8 +85,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
     activeSubPortfolioViewFilterSub: null,
-    activeDeltaScopeSub: null,
-    setBulkOverridesTransferSub: null
+    activeDeltaScopeSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -179,16 +177,6 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         }, 500)
       })
     });
-    this.subscriptions.setBulkOverridesTransferSub = this.store$.pipe(
-      filter((tick) => {
-        return this.stateActive;
-      }),
-      select(selectSetBulkOverridesTransferPack)
-    ).subscribe((pack: AdhocPacks.StructureSetBulkOverridesTransferPack) => {
-      if (!!pack) {
-        this.setBulkOverrides(pack);
-      }
-    })
     this.subscriptions.viewData = this.store$.pipe(
       filter((tick) => {
         return this.stateActive;
@@ -652,7 +640,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       },
       currentTotals: currentTotalsWithSub[subPortfolio],
       breakdowns: {},
-      overrides: [],
+      overrides: {},
       ...inheritFundValues
     };
     for (const eachBreakdownKey in breakdownsWithSub) {
@@ -675,20 +663,27 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       }
       eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
     }
-    overridesWithSub.forEach((eachOverrideWithSub:BEStructuringOverrideBlockWithSubPortfolios) => {
-      const {
-        breakdown: overrideCategoriesWithSub,
-        ...inheritOverrideValues
-      } = eachOverrideWithSub;
-      const eachOverrideWithoutSub: BEStructuringOverrideBlock = {
-        breakdown: {
-          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
-          view: overrideCategoriesWithSub.view
-        },
-        ...inheritOverrideValues
-      };
-      eachFundWithoutSub.overrides.push(eachOverrideWithoutSub);
-    });
+    for (let bucket in overridesWithSub) {
+      if (overridesWithSub[bucket]) {
+        eachFundWithoutSub.overrides[bucket] = {};
+        for (let category in overridesWithSub[bucket]) {
+          if (overridesWithSub[bucket][category]) {
+            const {
+              breakdown: overrideCategoriesWithSub,
+              ...inheritOverrideValues
+            } = overridesWithSub[bucket][category];
+            const eachOverrideWithoutSub: BEStructuringOverrideBaseBlock = {
+              breakdown: {
+                metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
+                view: overrideCategoriesWithSub.view
+              },
+              ...inheritOverrideValues
+            };
+            eachFundWithoutSub.overrides[bucket][category] = eachOverrideWithoutSub;
+          }
+        }
+      }
+    }
     return eachFundWithoutSub;
   }
 
@@ -698,42 +693,6 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       if (eachFund.portfolioId === newFundData.portfolioId) {
         this.state.fetchResult.rawServerReturnCache.Now[index] = newFundData;
       }
-    });
-  }
-
-  private setBulkOverrides(pack: AdhocPacks.StructureSetBulkOverridesTransferPack) {
-    const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = pack.overrides;
-    const necessaryUpdateNumOfCalls = updatePayload.length;
-    let callCount = 0;
-    updatePayload.forEach((eachPayload) => {
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
-        first(),
-        tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
-          callCount++;
-          if (callCount === necessaryUpdateNumOfCalls) {
-            this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
-            this.processStructureData(
-              this.extractSubPortfolioFromFullServerReturn(serverReturn),
-              this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
-            );
-            this.store$.dispatch(
-              new CoreSendNewAlerts([
-                this.dtoService.formSystemAlertObject(
-                  'Structuring',
-                  'Added',
-                  `Successfully Added New Overrides to All Funds`,
-                  null
-                )]
-              )
-            );
-          }
-        }),
-        catchError(err => {
-          console.error('update portfolio overrides for all portfolios failed', err);
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
-          return of('error');
-        })
-      ).subscribe();
     });
   }
 }

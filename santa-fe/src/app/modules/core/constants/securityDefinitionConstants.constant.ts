@@ -296,6 +296,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'LC',
     'LP',
     'PD',
+    'RV',
     'TW'
   ];
 
@@ -311,6 +312,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'IL',
     'PD',
     'PM',
+    'RV',
     'SP',
     'TW'
   ];

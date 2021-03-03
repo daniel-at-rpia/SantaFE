@@ -122,11 +122,3 @@ export class StructureSetBulkOverridesEvent implements Action {
   readonly type = StructureActions.SetBulkOverridesEvent;
   constructor() {}
 }
-
-export class StructureSendSetBulkOverridesTransferEvent implements Action {
-  readonly type = StructureActions.SendSetBulkOverridesTransfer;
-  readonly pack: AdhocPacks.StructureSetBulkOverridesTransferPack;
-  constructor(pack: AdhocPacks.StructureSetBulkOverridesTransferPack) {
-    this.pack = pack;
-  }
-}

@@ -2725,9 +2725,11 @@ export class DTOService {
         displayLabelMap: {}
       };
       if (!!comparedDeltaRawData && comparedDeltaRawData.overrides) {
-        deltaReturnPack.list = this.utility.convertRawOverrideToRawBreakdown(comparedDeltaRawData.overrides).list;
+        const deltaRawOverrides = this.utility.getRawOverridesFromFund(comparedDeltaRawData.overrides)
+        deltaReturnPack.list = this.utility.convertRawOverrideToRawBreakdown(deltaRawOverrides).list;
       }
-      const returnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
+      const rawOverrides = this.utility.getRawOverridesFromFund(rawData.overrides);
+      const returnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawOverrides);
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = returnPack.list;
       overrideList.sort((overrideA, overrideB) =>{
         if (overrideA.groupOption > overrideB.groupOption) {

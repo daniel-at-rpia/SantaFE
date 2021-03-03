@@ -24,7 +24,6 @@ export interface StructureState {
   dataDatestamp: number;
   utilityPanelLoadState: PageStates.StructureUtilityPanelState;
   setBulkOverrides: boolean;
-  setBulkOverridesTransfer: AdhocPacks.StructureSetBulkOverridesTransferPack;
 }
 
 const initialState: StructureState = {
@@ -47,8 +46,7 @@ const initialState: StructureState = {
   activeDeltaScope: DeltaScope.dod,
   dataDatestamp: moment().unix(),
   utilityPanelLoadState: null,
-  setBulkOverrides: false,
-  setBulkOverridesTransfer: null
+  setBulkOverrides: false
 }
 
 export function structureReducer(
@@ -117,11 +115,6 @@ export function structureReducer(
       return {
         ...state,
         setBulkOverrides: true
-      };
-    case StructureActions.SendSetBulkOverridesTransfer:
-      return {
-        ...state,
-        setBulkOverridesTransfer: action.pack
       };
     default:
       return state;

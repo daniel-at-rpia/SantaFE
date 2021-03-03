@@ -52,7 +52,9 @@
       BEStructuringOverrideBlock,
       BEStructuringOverrideBlockWithSubPortfolios,
       BEStructuringBreakdownMetricSingleEntryBlock,
-      BEStructuringBreakdownMetricBlockWithSubPortfolios
+      BEStructuringBreakdownMetricBlockWithSubPortfolios,
+      BEStructuringOverrideBaseBlock,
+      BEStructuringOverrideBaseBlockWithSubPortfolios
     } from 'BEModels/backend-models.interface';
     import {
       PayloadGetPortfolioOverride,
@@ -375,22 +377,20 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
       } else {
-        const now = moment();
         const payload: PayloadGetPortfolioOverride = {
           portfolioOverride: {
-            date: now.format('YYYY-MM-DD'),
             portfolioId: this.state.targetFund.data.portfolioId,
             simpleBucket: simpleBucket
           }
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringOverrideBlockWithSubPortfolios) => {
+          tap((serverReturn: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
             const {
               breakdown: breakdownWithSubPortfolio,
               ...inheritValues
             } = serverReturn;
-            const overrideData: BEStructuringOverrideBlock = {
+            const overrideData: BEStructuringOverrideBaseBlock = {
               breakdown: {
                 view: breakdownWithSubPortfolio.view,
                 metricBreakdowns: breakdownWithSubPortfolio.metricBreakdowns[this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter)]
@@ -981,7 +981,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         updatePayload.forEach((eachPayload) => {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
             first(),
-            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
+            tap((serverReturn: boolean) => {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
                 if (necessaryDeleteNumOfCalls > 0) {
@@ -997,7 +997,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
                       )]
                     )
                   );
-                  this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+                  serverReturn && this.store$.dispatch(new StructureUpdateMainPanelEvent());
                 }
               }
             }),
@@ -1044,7 +1044,6 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): Array<PayloadUpdateBreakdown> {
-    const now = moment();
     let payloads: Array<PayloadUpdateBreakdown> = []
     if (this.state.targetBreakdown.state.isBICs) {
       const sortedListByLevel = this.state.targetBreakdown.data.displayCategoryList.sort((categoryA: StructurePortfolioBreakdownRowDTO, categoryB: StructurePortfolioBreakdownRowDTO) => categoryA.data.bicsLevel - categoryB.data.bicsLevel);
@@ -1053,7 +1052,6 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         const rawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, i);
         const payload: PayloadUpdateBreakdown = {
           portfolioBreakdown: {
-            date: moment(rawBreakdown.date).format('YYYY-MM-DD'),
             groupOption: rawBreakdown.groupOption,
             portfolioId: rawBreakdown.portfolioId,
             breakdown: {}
@@ -1064,7 +1062,6 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     } else {
       const payload: PayloadUpdateBreakdown = {
         portfolioBreakdown: {
-          date: now.format('YYYY-MM-DD'),
           groupOption: this.state.targetBreakdownRawData.groupOption,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           breakdown: {}
@@ -1154,7 +1151,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
       }
-      if (isTargetChanged || isTitleChanged) {
+      if (isTargetChanged || isTitleChanged || !eachRow.existInServer) {
         payload.push(eachPayload);
       }
     });
@@ -1163,11 +1160,9 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
 
   private traverseRemovalListToFormDeleteOverridePayload(): Array<PayloadDeleteOverride> {
     const payload: Array<PayloadDeleteOverride> = [];
-    const now = moment();
     this.state.removalList.forEach((eachRow) => {
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
-          date: now.format('YYYY-MM-DD'),
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
@@ -1189,7 +1184,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
       let rawDataObject;
       if (this.state.targetBreakdown.state.isOverrideVariant) {
-        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+        const rawOverrides = this.utilityService.getRawOverridesFromFund(this.state.targetFund.data.originalBEData.overrides);
+        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(rawOverrides);
         rawDataObject = resultPack.list;
         this.state.targetBreakdownRawDataDisplayLabelMap = resultPack.displayLabelMap;
       } else {

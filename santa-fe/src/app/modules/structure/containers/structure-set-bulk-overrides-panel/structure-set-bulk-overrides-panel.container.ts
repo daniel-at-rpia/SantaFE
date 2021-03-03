@@ -23,7 +23,7 @@
     import { ModalService } from 'Form/services/ModalService';
     import { CoreSendNewAlerts } from 'Core/actions/core.actions';
     import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
-    import { StructureSendSetBulkOverridesTransferEvent } from 'Structure/actions/structure.actions';
+    import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
     import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
   //
 @Component({
@@ -200,11 +200,51 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
 
   private submitOverrideChanges(): boolean {
     const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = this.traverseEditRowsToFormUpdateOverridePayload();
-    const updatePayloadTransferPack: AdhocPacks.StructureSetBulkOverridesTransferPack = {
-      overrides: updatePayload
-    };
-    if (updatePayloadTransferPack.overrides.length > 0) {
-      this.store$.dispatch(new StructureSendSetBulkOverridesTransferEvent(updatePayloadTransferPack));
+    if (updatePayload.length > 0) {
+      const necessaryUpdateNumOfCalls = updatePayload.length;
+      let callCount = 0;
+      updatePayload.forEach((eachPayload: PayloadUpdatePortfolioOverridesForAllPortfolios, index: number) => {
+        if (index === 0) {
+          // inform users that data is being processed as this API call can take a while, especially if there are multiple overrides added
+          // this is temp solution until a spinner can be implemented for better usability and to prevent users from making any other changes on the screen
+          this.store$.dispatch(
+            new CoreSendNewAlerts([
+              this.dtoService.formSystemAlertObject(
+                'Processing',
+                'Add Overrides',
+                `Processing Overrides To Be Added To All Funds`,
+                null
+              )]
+            )
+          );
+        }
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
+          first(),
+          tap((serverReturn: boolean) => {
+            callCount++;
+            if (callCount === necessaryUpdateNumOfCalls) {
+              if (serverReturn) {
+                this.store$.dispatch(
+                  new CoreSendNewAlerts([
+                    this.dtoService.formSystemAlertObject(
+                      'Success',
+                      'Add Overrides',
+                      `Successfully Added New Overrides to All Funds`,
+                      null
+                    )]
+                  )
+                );
+                this.store$.dispatch(new StructureUpdateMainPanelEvent());
+              }
+            }
+          }),
+          catchError(err => {
+            console.error('update portfolio overrides for all portfolios failed', err);
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
+            return of('error');
+          })
+        ).subscribe();
+      });
       this.state.editRowList = [];
       return true;
     } else {
