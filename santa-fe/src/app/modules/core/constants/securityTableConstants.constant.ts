@@ -383,6 +383,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'alertTraceBenchmarkName',
+    content: {
+      label: 'Benchmark Name',
+      attrName: 'alertTraceBenchmarkName',
+      underlineAttrName: 'alertTraceBenchmarkName',
+      blockAttrName: 'alert',
+      isDataTypeText: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
     key: 'alertTraceVolumeEstimated',
     content: {
       label: 'Vol (Estimated)',
@@ -410,28 +432,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       attrName: 'alertTraceVolumeReported',
       underlineAttrName: 'alertTraceVolumeReported',
       blockAttrName: 'alert',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: true,
-          disabled: false,
-          groupShow: true
-        }
-      }
-    }
-  },{
-    key: 'alertTraceBenchmarkName',
-    content: {
-      label: 'Benchmark Name',
-      attrName: 'alertTraceBenchmarkName',
-      underlineAttrName: 'alertTraceBenchmarkName',
-      blockAttrName: 'alert',
-      isDataTypeText: true,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       groupBelongs: SecurityTableHeaderConfigGroups.alert,
       tableSpecifics: {
