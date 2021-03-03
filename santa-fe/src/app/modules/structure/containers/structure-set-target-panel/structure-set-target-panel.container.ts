@@ -1158,7 +1158,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
       }
-      if (isTargetChanged || isTitleChanged) {
+      if (isTargetChanged || isTitleChanged || !eachRow.existInServer) {
         payload.push(eachPayload);
       }
     });
