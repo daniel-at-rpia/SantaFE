@@ -29,14 +29,17 @@
       AlertSubTypes,
       TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
-    import { StrategyExcludedFiltersMapping } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
       SubPortfolioFilter,
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
     } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
-    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      SecurityDefinitionMap,
+      StrategyExcludedFiltersMapping,
+      FilterOptionsTenorRange
+    } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       traceTradeFilterAmounts,
       traceTradeNumericalFilterSymbols
@@ -1294,11 +1297,16 @@ export class UtilityService {
         });
         let categoryKey = '';
         list.forEach((eachIdentifier) => {
-          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName ) {
+          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName) {
             const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
               return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
             categoryKey = categoryKey === '' ? `${valueArray}` : `${categoryKey} ~ ${valueArray}`;
+          } else if (eachIdentifier === SecurityDefinitionMap.TENOR.backendDtoAttrName) {
+            const displayTenorArray = rawData.simpleBucket[eachIdentifier].map((eachBucketValue)=> {
+              return FilterOptionsTenorRange[eachBucketValue].displayLabel;
+            });
+            categoryKey = categoryKey === '' ? `${displayTenorArray}` : `${categoryKey} ~ ${displayTenorArray}`;
           } else {
             categoryKey = categoryKey === '' ? `${rawData.simpleBucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.simpleBucket[eachIdentifier]}`;
           }
