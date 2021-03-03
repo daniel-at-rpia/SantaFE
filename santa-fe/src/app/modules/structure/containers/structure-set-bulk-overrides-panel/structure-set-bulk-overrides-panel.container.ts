@@ -205,6 +205,7 @@ export class StructureSetBulkOverrides implements OnInit {
       updatePayload.forEach((eachPayload: PayloadUpdatePortfolioOverridesForAllPortfolios, index: number) => {
         if (index === 0) {
           // inform users that data is being processed as this API call can take a while, especially if there are multiple overrides added
+          // this is temp solution until a spinner can be implemented for better usability and to prevent users from making any other changes on the screen
           this.store$.dispatch(
             new CoreSendNewAlerts([
               this.dtoService.formSystemAlertObject(
