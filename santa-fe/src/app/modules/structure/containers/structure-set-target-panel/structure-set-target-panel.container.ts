@@ -382,7 +382,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
       } else {
-        const now = moment();
         const payload: PayloadGetPortfolioOverride = {
           portfolioOverride: {
             portfolioId: this.state.targetFund.data.portfolioId,
@@ -1050,7 +1049,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): Array<PayloadUpdateBreakdown> {
-    const now = moment();
     let payloads: Array<PayloadUpdateBreakdown> = []
     if (this.state.targetBreakdown.state.isBICs) {
       const sortedListByLevel = this.state.targetBreakdown.data.displayCategoryList.sort((categoryA: StructurePortfolioBreakdownRowDTO, categoryB: StructurePortfolioBreakdownRowDTO) => categoryA.data.bicsLevel - categoryB.data.bicsLevel);
@@ -1167,7 +1165,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private traverseRemovalListToFormDeleteOverridePayload(): Array<PayloadDeleteOverride> {
     const payload: Array<PayloadDeleteOverride> = [];
-    const now = moment();
     this.state.removalList.forEach((eachRow) => {
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
