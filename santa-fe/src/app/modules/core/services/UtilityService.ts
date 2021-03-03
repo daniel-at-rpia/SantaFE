@@ -29,6 +29,7 @@
       AlertSubTypes,
       TRACE_VOLUME_REPORTED_THRESHOLD
     } from 'Core/constants/coreConstants.constant';
+    import { StrategyExcludedFiltersMapping } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
       SubPortfolioFilter,
@@ -36,7 +37,10 @@
     } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-    import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
+    import {
+      traceTradeFilterAmounts,
+      traceTradeNumericalFilterSymbols
+    } from '../constants/securityTableConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
     import { NavigationEnd } from '@angular/router';
   // dependencies
@@ -1585,6 +1589,17 @@ export class UtilityService {
         }
       }
       return rawOverridesList;
+    }
+
+    public filterOutExcludedStrategiesForSeeBond(definition: DTOs.SecurityDefinitionDTO, activeSubPortfolio: SubPortfolioFilter) {
+        definition.data.displayOptionList.forEach((eachOption) => {
+        const subPortfolioMapping = StrategyExcludedFiltersMapping[activeSubPortfolio];
+        const isExcluded = subPortfolioMapping.excluded.find(strategy => strategy === eachOption.displayLabel);
+        if (!isExcluded) {
+          eachOption.isSelected = true;
+          definition.data.highlightSelectedOptionList.push(eachOption);
+        }
+      })
     }
   // structuring specific end
 }
