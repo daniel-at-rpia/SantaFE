@@ -155,7 +155,7 @@ $alert_type_size: $iconButton_size_regular;
       &-mask {
         @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_alive('light');
-        top: 50%;
+        top: 60%;
         left: -25%;
         width: 150%;
         height: 100%;
