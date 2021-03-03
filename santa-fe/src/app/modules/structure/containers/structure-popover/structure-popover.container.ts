@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, OnInit, OnDestroy, ViewEncapsulation} from '@angular/core';
 import { Store, select } from '@ngrx/store';
-
-
+import { Subscription } from 'rxjs';
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import {
   PortfolioMetricValues,
@@ -81,6 +80,15 @@ export class StructurePopover implements OnInit, OnChanges {
         this.createPopover(this.cs01MainRow);
       } else {
         this.createPopover(this.creditLeverageMainRow);
+      }
+    }
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
       }
     }
   }
