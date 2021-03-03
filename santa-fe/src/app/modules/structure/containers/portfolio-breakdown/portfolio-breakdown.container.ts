@@ -22,8 +22,7 @@ import { selectUserInitials } from 'Core/selectors/core.selectors';
 import {
   editingViewAvailableUsers,
   StructuringTeamPMList,
-  SecurityDefinitionMap,
-  StrategyExcludedFiltersMapping
+  SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
@@ -58,8 +57,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     bicsBreakdownId: BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
     globalWorkflowTypes: GlobalWorkflowTypes,
     metrics: PortfolioMetricValues,
-    subPortfolioFilter: SubPortfolioFilter,
-    subPortfolioExcludedMap: StrategyExcludedFiltersMapping
+    subPortfolioFilter: SubPortfolioFilter
   }
 
   constructor(
@@ -256,14 +254,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     });
     filterList.push(fundDefinition);
     const subPortfolioDefinition: DTOs.SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.STRATEGY);
-    subPortfolioDefinition.data.displayOptionList.forEach((eachOption) => {
-      const subPortfolioMapping = this.constants.subPortfolioExcludedMap[this.activeSubPortfolioFilter];
-      const isExcluded = subPortfolioMapping.excluded.find(strategy => strategy === eachOption.displayLabel);
-      if (!isExcluded) {
-        eachOption.isSelected = true;
-        subPortfolioDefinition.data.highlightSelectedOptionList.push(eachOption);
-      }
-    })
+    this.utilityService.filterOutExcludedStrategiesForSeeBond(subPortfolioDefinition, this.activeSubPortfolioFilter);
     filterList.push(subPortfolioDefinition);
     newWorkflowState.data.stateInfo.filterList = filterList;
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
