@@ -1302,11 +1302,6 @@ export class UtilityService {
               return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
             categoryKey = categoryKey === '' ? `${valueArray}` : `${categoryKey} ~ ${valueArray}`;
-          } else if (eachIdentifier === SecurityDefinitionMap.TENOR.backendDtoAttrName) {
-            const displayTenorArray = rawData.simpleBucket[eachIdentifier].map((eachBucketValue)=> {
-              return FilterOptionsTenorRange[eachBucketValue].displayLabel;
-            });
-            categoryKey = categoryKey === '' ? `${displayTenorArray}` : `${categoryKey} ~ ${displayTenorArray}`;
           } else {
             categoryKey = categoryKey === '' ? `${rawData.simpleBucket[eachIdentifier]}` : `${categoryKey} ~ ${rawData.simpleBucket[eachIdentifier]}`;
           }
