@@ -695,11 +695,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private inheritEditRowStates(oldRows: Array<StructureSetTargetPanelEditRowBlock>) {
     this.state.editRowList = this.state.editRowList.map((eachNewRow) => {
+      const newRowEvenState = eachNewRow.isEven;
       const matchedOldRow = oldRows.find((eachOldRow) => {
         return eachOldRow.rowIdentifier === eachNewRow.rowIdentifier;
       });
       if (matchedOldRow) {
         eachNewRow = matchedOldRow;
+        eachNewRow.isEven = newRowEvenState;
       };
       return eachNewRow;
     });
