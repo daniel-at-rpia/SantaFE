@@ -27,7 +27,8 @@
       AGGRID_ALERT_MESSAGE_COLUMN_WIDTH,
       AGGRID_ALERT_STATUS_COLUMN_WIDTH,
       traceTradeNumericalFilterSymbols,
-      AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH
+      AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH,
+      AGGRID_TRACE_BENCHMARK_NAME_COLUMN
     } from 'Core/constants/securityTableConstants.constant';
     import {
       TriCoreDriverConfig,
@@ -325,6 +326,12 @@ export class AgGridMiddleLayerService {
     }
     if (targetHeader.data.key === 'alertIsBenchmarkHedged') {
       newAgColumn.width = AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH;
+    }
+    if (targetHeader.data.key === 'alertIsBenchmarkHedged') {
+      newAgColumn.width = AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH;
+    }
+    if (targetHeader.data.key === 'alertTraceBenchmarkName') {
+      newAgColumn.width = AGGRID_TRACE_BENCHMARK_NAME_COLUMN;
     }
   }
 
