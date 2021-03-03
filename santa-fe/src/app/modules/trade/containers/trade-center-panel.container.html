@@ -1,7 +1,7 @@
 <article
   [ngClass]="{
     'sat-tradeCenterPanel': true,
-    'sat-tradeCenterPanel--keywordSearchActiveState': !!state.filters.quickFilters.keyword && state.filters.quickFilters.keyword.length >= 2,
+    'sat-tradeCenterPanel--keywordSearchActiveState': !!state.filters.keyword.actualValue && state.filters.keyword.actualValue.length >= 2,
     'sat-tradeCenterPanel--presetReadyState': state.presets.presetsReady,
     'sat-tradeCenterPanel--presetCategorySelectedState': state.presets.selectedList,
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
@@ -120,7 +120,7 @@
             [ngClass]="{
               'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === constants.defaultMetricIdentifier
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === constants.defaultMetricIdentifier
             }">
             <span>Combined</span>
           </button>
@@ -129,7 +129,7 @@
             [ngClass]="{
               'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === 'Spread'
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Spread'
             }">
             <span>Spread</span>
           </button>
@@ -138,7 +138,7 @@
             [ngClass]="{
               'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === 'Yield'
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Yield'
             }">
             <span>Yield</span>
           </button>
@@ -147,7 +147,7 @@
             [ngClass]="{
               'sat-tradeCenterPanel__result-utilities-driver-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.quickFilters.driverType === 'Price'
+              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Price'
             }">
             <span>Price</span>
           </button>
@@ -174,7 +174,7 @@
         [receivedContentStage]="state.fetchResult.mainTable.currentContentStage"
         [receivedSecurityTableHeaderConfigsUpdate]="state.table.metrics"
         [liveUpdatedRows]="state.fetchResult.mainTable.liveUpdatedRowList"
-        [activeTriCoreDriver]="state.filters.quickFilters.driverType"
+        [activeTriCoreDriver]="state.filters.driverType"
         [removeRows]="state.fetchResult.mainTable.removalRowList"
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>

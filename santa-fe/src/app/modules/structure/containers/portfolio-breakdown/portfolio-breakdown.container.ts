@@ -238,9 +238,16 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       // other regular breakdowns will come here (ccy, rating, tenor);
       const targetDefinition: DTOs.SecurityDefinitionDTO = this.utilityService.deepCopy(this.breakdownData.data.definition);
       targetDefinition.data.displayOptionList.forEach((eachOption) => {
-        if (eachOption.shortKey === targetRow.data.displayCategory) {
-          eachOption.isSelected = true;
-          targetDefinition.data.highlightSelectedOptionList.push(eachOption);
+        if (targetDefinition.data.key === this.constants.securityDefinitionMap.TENOR.key) {
+          if (eachOption.shortKey === targetRow.data.category) {
+            eachOption.isSelected = true;
+            targetDefinition.data.highlightSelectedOptionList.push(eachOption);
+          }
+        } else {
+          if (eachOption.shortKey === targetRow.data.displayCategory) {
+            eachOption.isSelected = true;
+            targetDefinition.data.highlightSelectedOptionList.push(eachOption);
+          }
         }
       });
       filterList.push(targetDefinition);
