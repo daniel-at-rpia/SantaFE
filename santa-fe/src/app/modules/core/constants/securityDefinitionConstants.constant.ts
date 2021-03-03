@@ -296,6 +296,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'LC',
     'LP',
     'PD',
+    'RV',
     'TW'
   ];
 
@@ -311,6 +312,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'IL',
     'PD',
     'PM',
+    'RV',
     'SP',
     'TW'
   ];
@@ -668,6 +670,37 @@ export const RatingValueToLevelMapping = [
     values: ['NR']
   }
 ];
+
+// using the values from SubPortfolioFilter enum
+// however importing it to be used here creates a circular dependency, which is why it had to be written manually
+export const StrategyExcludedFiltersMapping = {
+  'Short Carry': {
+    excluded: [
+      'STOV',
+      'Relative Value',
+      'Portfolio Shorts',
+      'LTOV - Yield',
+      'LTOV - Spread',
+      'LTOV - Special Situations',
+      'HEDGE',
+      'Basis'
+    ]
+  },
+  'Non-Short Carry': {
+    excluded: [
+      'Short Carry'
+    ]
+  },
+  'Non-Hedging': {
+    excluded: [
+      'Portfolio Shorts',
+      'HEDGE',
+    ]
+  },
+  'All': {
+    excluded: [...FullStrategyList]
+  }
+}
 
 export const FilterTraceTradesOptions = [
   TraceTradeParty.Dealer,

@@ -214,6 +214,15 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
+    displayTitle: 'Ryan',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['RV']
+      }
+    ]
+  },{
     displayTitle: 'Sarah',
     includedDefinitions: [
       {

@@ -597,7 +597,7 @@ export interface BEStructuringFundBlockWithSubPortfolios extends Omit<BEStructur
     RatingNoNotch?: BEStructuringBreakdownBlockWithSubPortfolios;
     Tenor?: BEStructuringBreakdownBlockWithSubPortfolios;
   }
-  overrides?: Array<BEStructuringOverrideBlockWithSubPortfolios>;
+  overrides?: BEStructuringOverrideBlockWithSubPortfolios;
 }
 
 export interface BEStructuringFundBlock {
@@ -628,7 +628,7 @@ export interface BEStructuringFundBlock {
     RatingNoNotch?: BEStructuringBreakdownBlock;
     Tenor?: BEStructuringBreakdownBlock;
   }
-  overrides?: Array<BEStructuringOverrideBlock>;
+  overrides?: BEStructuringOverrideBlock;
   isIndexValid: boolean;
 }
 
@@ -652,23 +652,21 @@ export interface BEStructuringBreakdownBlockWithSubPortfolios extends Omit<BEStr
 }
 
 export interface BEStructuringBreakdownBlock {
-  date: string;
-  groupOption: string;
-  indexId: number
   portfolioBreakdownId?: string;
   portfolioId: number;
+  indexId: number
+  groupOption: string;
   breakdown: {
     [property: string]: BEStructuringBreakdownMetricBlock;
   }
 }
 
-export interface BEStructuringOverrideBlockWithSubPortfolios extends Omit<BEStructuringOverrideBlock, 'breakdown'>{
+export interface BEStructuringOverrideBaseBlockWithSubPortfolios extends Omit<BEStructuringOverrideBaseBlock, 'breakdown'>{
   breakdown?: BEStructuringBreakdownMetricBlockWithSubPortfolios;
 }
 
-export interface BEStructuringOverrideBlock {
+export interface BEStructuringOverrideBaseBlock {
   portfolioOverrideId?: string;
-  date: string;
   portfolioId: number;
   indexId?: number;
   bucket?: {  // this is optional because in some API calls where FE passes this to BE, we just pass with "simple bucket" only and BE will form "bucket" itself
@@ -677,8 +675,22 @@ export interface BEStructuringOverrideBlock {
   simpleBucket: {
     [property: string]: Array<string>;
   }
-  breakdown?: BEStructuringBreakdownMetricBlock;
+  simpleBucketOptions?: string;
+  simpleBucketValues?: string;
   title?: string;
+  breakdown?: BEStructuringBreakdownMetricBlock;
+}
+
+export interface BEStructuringOverrideBlock {
+  [bucket: string]: {
+    [property: string]: BEStructuringOverrideBaseBlock;
+  }
+}
+
+export interface BEStructuringOverrideBlockWithSubPortfolios {
+  [bucket: string]: {
+    [property: string]: BEStructuringOverrideBaseBlockWithSubPortfolios
+  }
 }
 
 export interface BEStructuringBreakdownMetricBlockWithSubPortfolios extends Omit<BEStructuringBreakdownMetricBlock, 'metricBreakdowns'>{
@@ -752,7 +764,6 @@ export interface BETraceTradesBlock {
   actionFlag: string;
   benchmarkGlobalIdentifier: string;
   benchmarkGlobalIdentifierType: string;
-  benchmarkName: string;
   benchmarkSecurityID: number;
   contraParty: TraceTradeParty;
   reportingParty: TraceTradeParty;

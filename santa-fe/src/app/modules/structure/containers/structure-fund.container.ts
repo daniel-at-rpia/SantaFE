@@ -5,7 +5,11 @@ import { Store, select } from '@ngrx/store';
 import * as moment from 'moment';
 
 import { PortfolioFundDTO } from 'Core/models/frontend/frontend-models.interface';
-import { PortfolioMetricValues, STRUCTURE_EDIT_MODAL_ID } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioMetricValues,
+  STRUCTURE_EDIT_MODAL_ID,
+  STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
+} from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { UtilityService } from 'Core/services/UtilityService';
 import { ModalService } from 'Form/services/ModalService';
@@ -24,7 +28,10 @@ import {
 } from 'BEModels/backend-payloads.interface';
 import { BEStructuringFundBlockWithSubPortfolios, BEStructuringBreakdownMetricBlock } from 'BEModels/backend-models.interface';
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import { StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent } from 'Structure/actions/structure.actions';
+import {
+  StructureSendSetTargetTransferEvent, StructureReloadFundDataPostEditEvent,
+  StructureSetBulkOverridesEvent
+} from 'Structure/actions/structure.actions';
 import { BEPortfolioTargetMetricValues, SubPortfolioFilter } from 'Core/constants/structureConstants.constants';
 import { StructuringTeamPMList } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
@@ -52,6 +59,7 @@ export class StructureFund implements OnInit, OnDestroy {
     BECreditDuration: BEPortfolioTargetMetricValues.CreditDuration,
     BECs01: BEPortfolioTargetMetricValues.Cs01,
     editModalId: STRUCTURE_EDIT_MODAL_ID,
+    setBulkOverridesModalId: STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
     structuringTeamPMList: StructuringTeamPMList,
     navigationModule: NavigationModule,
   }
@@ -132,6 +140,11 @@ export class StructureFund implements OnInit, OnDestroy {
     if (this.fund.state.autoScalingAvailable) {
       this.fund.state.autoScalingActive = !this.fund.state.autoScalingActive;
     }
+  }
+
+  public onClickedAddBulkOverrides() {
+    this.store$.dispatch(new StructureSetBulkOverridesEvent());
+    this.modalService.triggerModalOpen(this.constants.setBulkOverridesModalId);
   }
 
   private validateInput(value: number | string) {

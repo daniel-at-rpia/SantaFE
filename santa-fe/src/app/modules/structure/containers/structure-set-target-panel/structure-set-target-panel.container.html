@@ -66,7 +66,6 @@
     </div>
     <div class="sat-structureSetTargetPanel__main-edit">
       <div class="sat-structureSetTargetPanel__main-edit-content">
-        <div class="sat-structureSetTargetPanel__main-edit-content-border"></div>
         <div *ngIf="state.targetFund" class="sat-structureSetTargetPanel__main-edit-content-header">
           <div class="sat-structureSetTargetPanel__main-edit-content-header-rating">
             <div
@@ -152,7 +151,6 @@
               'sat-structureSetTargetEditRow--evenState': eachCategory.isEven,
               'sat-structureSetTargetEditRow--lockedState': eachCategory.isLocked,
               'sat-structureSetTargetEditRow--overrideVariant': state.targetBreakdownIsOverride,
-              'sat-structureSetTargetEditRow--willBeRemovedState': eachCategory.willBeRemoved,
               'sat-structureSetTargetEditRow--bicsBreakdownVariant': state.targetBreakdown?.state.isBICs,
               'sat-structureSetTargetEditRow--bicsLevel2Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 2,
               'sat-structureSetTargetEditRow--bicsLevel3Row': state.targetBreakdown?.state.isBICs && eachCategory.rowDTO.data.bicsLevel === 3,
@@ -229,8 +227,9 @@
                   [inputValue]="eachCategory.targetCreditLeverage.level.savedDisplayValue"
                   [placeholder]="''"
                   [isNumeric]="true"
-                  [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
-                  [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
+                  [isGrayedOut]="true"
+                  [isDisabled]="true"
+                  [isNonEditable]="true"
                   (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.level)"
                   (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.level)">
                 </santa-input>
@@ -244,8 +243,9 @@
                   [inputValue]="eachCategory.targetCreditLeverage.percent.savedDisplayValue"
                   [placeholder]="''"
                   [isNumeric]="true"
-                  [isGrayedOut]="state.activeMetric !== constants.metric.creditLeverage"
-                  [isDisabled]="state.activeMetric !== constants.metric.creditLeverage"
+                  [isGrayedOut]="true"
+                  [isDisabled]="true"
+                  [isNonEditable]="true"
                   (onInputChange)="onValueChange($event, eachCategory.targetCreditLeverage.percent)"
                   (onEnterKeyPressed)="onPressedEnterKeyInInput(eachCategory, eachCategory.targetCreditLeverage.percent)">
                 </santa-input>

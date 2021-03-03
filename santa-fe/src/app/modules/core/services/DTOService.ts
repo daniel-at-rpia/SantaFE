@@ -68,14 +68,17 @@
       BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
       BICS_OVERRIDES_IDENTIFIER,
       BICS_OVERRIDES_TITLE,
-      DeltaScope
+      DeltaScope,
+      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
     } from 'Core/constants/structureConstants.constants';
+    import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
 
 @Injectable()
 export class DTOService {
   constructor(
-    private utility: UtilityService
+    private utility: UtilityService,
+    private securityMap: SecurityMapService
   ){}
 
   public formSecurityCardObject(
@@ -1695,14 +1698,14 @@ export class DTOService {
         }
       }
       if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
-        const { contraParty, reportingParty, volumeEstimated, volumeReported, price, spread, benchmarkName } = rawData.trade;
+        const { contraParty, reportingParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
         alertDTO.data.traceContraParty = contraParty;
         alertDTO.data.traceReportingParty = reportingParty;
         alertDTO.data.traceVolumeEstimated = volumeEstimated;
         alertDTO.data.traceVolumeReported = volumeReported;
         alertDTO.data.tracePrice = price;
         alertDTO.data.traceSpread = spread;
-        alertDTO.data.traceBenchmarkName = benchmarkName;
+        alertDTO.data.traceBenchmarkName = rawData.trade.benchmarkSecurityID ? this.securityMap.getSecurityName(`${rawData.trade.benchmarkSecurityID}`) : null;
       }
     }
     // check for isBenchmarkHedged
@@ -2148,12 +2151,12 @@ export class DTOService {
       object.data.currentTotalDeltaCreditDurationDisplayText = !!object.data.currentTotalDeltaCreditDuration ? `${object.data.currentTotalDeltaCreditDuration}` : '-';
       object.data.currentTotalDeltaCreditLeverageDisplayText = !!object.data.currentTotalDeltaCreditLeverage ? `${object.data.currentTotalDeltaCreditLeverage}` : '-';
       if (!!object.data.currentTotalDeltaCreditDuration && !!comparedDeltaRawData) {
-        object.data.currentTotalDeltaCreditDurationSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditDuration,comparedDeltaRawData.currentTotals.CreditDuration);
-        object.data.currentTotalDeltaCreditDurationSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditDuration,comparedDeltaRawData.currentTotals.CreditDuration);
+        object.data.currentTotalDeltaCreditDurationSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditDuration)
+        object.data.currentTotalDeltaCreditDurationSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditDuration)
       }
       if (!!object.data.currentTotalDeltaCreditLeverage && !!comparedDeltaRawData) {
-        object.data.currentTotalDeltaCreditLeverageSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditLeverage, comparedDeltaRawData.currentTotals.CreditLeverage)
-        object.data.currentTotalDeltaCreditLeverageSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditLeverage, comparedDeltaRawData.currentTotals.CreditLeverage)
+        object.data.currentTotalDeltaCreditLeverageSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditLeverage);
+        object.data.currentTotalDeltaCreditLeverageSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditLeverage);
       }
       object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue, null, null);
       object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue, null, null);
@@ -2433,8 +2436,8 @@ export class DTOService {
       // If the row is within the regular BICS breakdown, then reformat the category and display category as the identifier 'BICsSubLevel.' was only used in a custom BICS BE breakdown to prevent overwriting values where categories in different levels had the same name
       // The reformatting ensures the popover works
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
-        category: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
-        displayCategory: categoryName.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX) ? categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim() : categoryName,
+        category: categoryName,
+        displayCategory:  this.utility.getFormattedRowDisplayCategory(categoryName, isOverride),
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2474,7 +2477,8 @@ export class DTOService {
   }
 
   public formSantaModal(
-    elementRef: ElementRef
+    elementRef: ElementRef,
+    modalId: string
   ): DTOs.SantaModalDTO{
     const object: DTOs.SantaModalDTO = {
       data: {
@@ -2483,7 +2487,8 @@ export class DTOService {
         title: 'Edit'
       },
       state: {
-        isPresenting: false
+        isPresenting: false,
+        isSetBulkOverridesVariant: modalId === STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
       },
       api: {
         openModal: null,
@@ -2516,7 +2521,7 @@ export class DTOService {
     const contraParty = !!rawData.contraParty ? rawData.contraParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.contraParty] : null;
     const reportingParty = !!rawData.reportingParty ? rawData.reportingParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.reportingParty] : null;
     const object: Blocks.TraceTradeBlock = {
-      benchmarkName: rawData.benchmarkName,
+      benchmarkName: rawData.benchmarkSecurityID ? this.securityMap.getSecurityName(`${rawData.benchmarkSecurityID}`) : null,
       traceTradeId: rawData.traceTradeID,
       tradeTime: rawData.eventTime,
       displayTradeTime: moment(rawData.eventTime).format(`MMM DD - HH:mm`),
@@ -2702,7 +2707,7 @@ export class DTOService {
       object.data.children.push(tenorBreakdown);
       tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
       tenorBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
-        const targetRange = FilterOptionsTenorRange[eachCategory.data.category];
+        const targetRange = FilterOptionsTenorRange[eachCategory.data.displayCategory];
         eachCategory.data.displayCategory = targetRange.displayLabel;
       });
     }
@@ -2720,9 +2725,11 @@ export class DTOService {
         displayLabelMap: {}
       };
       if (!!comparedDeltaRawData && comparedDeltaRawData.overrides) {
-        deltaReturnPack.list = this.utility.convertRawOverrideToRawBreakdown(comparedDeltaRawData.overrides).list;
+        const deltaRawOverrides = this.utility.getRawOverridesFromFund(comparedDeltaRawData.overrides)
+        deltaReturnPack.list = this.utility.convertRawOverrideToRawBreakdown(deltaRawOverrides).list;
       }
-      const returnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawData.overrides);
+      const rawOverrides = this.utility.getRawOverridesFromFund(rawData.overrides);
+      const returnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = this.utility.convertRawOverrideToRawBreakdown(rawOverrides);
       const overrideList: Array<BEModels.BEStructuringBreakdownBlock> = returnPack.list;
       overrideList.sort((overrideA, overrideB) =>{
         if (overrideA.groupOption > overrideB.groupOption) {

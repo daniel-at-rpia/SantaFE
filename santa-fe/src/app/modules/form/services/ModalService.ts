@@ -61,4 +61,16 @@ export class ModalService {
       exist.data.title = title;
     }
   }
+
+  public bindModalCloseCallback(
+    targetModalId: string,
+    callback: () => boolean
+  ) {
+    const exist = this.registeredModals.find((eachModal) => {
+      return eachModal.data.id === targetModalId;
+    });
+    if (!!exist) {
+      exist.api.closeModal = callback;
+    }
+  }
 }

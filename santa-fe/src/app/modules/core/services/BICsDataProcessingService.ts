@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
+import { DTOs, Blocks, AdhocPacks, PageStates } from '../models/frontend';
 import {
   BEBICsHierarchyBlock,
   BEStructuringFundBlock,
@@ -104,8 +104,8 @@ export class BICsDataProcessingService {
           const parentLevel = !!row.data.bicsLevel ? row.data.bicsLevel - 1: null;
           if (!!parentLevel) {
             const parentRow = hierarchyList.find(parentRow => parentRow.bicsLevel === parentLevel);
-            row.data.parentRow = primaryRowList.find(targetRow => targetRow.data.category === parentRow.name && targetRow.data.bicsLevel === parentRow.bicsLevel);
-            const parentIndex = primaryRowList.findIndex(primaryRow => primaryRow.data.category === parentRow.name && primaryRow.data.bicsLevel === parentRow.bicsLevel);
+            row.data.parentRow = primaryRowList.find(targetRow => targetRow.data.code === parentRow.code);
+            const parentIndex = primaryRowList.findIndex(primaryRow => primaryRow.data.code === parentRow.code);
             const subRowIndex = parentIndex + 1;
             primaryRowList.splice(subRowIndex, 0, row);
           }
@@ -229,7 +229,6 @@ export class BICsDataProcessingService {
     if (!!rawData) {
       const targetedRawBreakdown: BEStructuringBreakdownBlock = rawData[`${BICS_BREAKDOWN_FRONTEND_KEY}${level}`];
       const breakdown: BEStructuringBreakdownBlock = {
-        date: targetedRawBreakdown.date,
         groupOption: targetedRawBreakdown.groupOption,
         indexId: targetedRawBreakdown.indexId,
         portfolioBreakdownId: targetedRawBreakdown.portfolioBreakdownId,
@@ -266,7 +265,7 @@ export class BICsDataProcessingService {
     const categoryPortfolioID = breakdownRow.data.portfolioID;
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
     const deltaRawData = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(rawData => rawData.portfolioID === categoryPortfolioID) : null;
-    const subTierList = this.getSubLevelList(breakdownRow.data.category, breakdownRow.data.bicsLevel);
+    const subTierList = this.getSubLevelList(breakdownRow.data.displayCategory, breakdownRow.data.bicsLevel);
     const targetCodeList = [];
     subTierList.forEach(subTier => {
       const categoryCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
@@ -298,7 +297,7 @@ export class BICsDataProcessingService {
     this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
     this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
     breakdown.data.displayCategoryList = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
-    breakdown.data.title = breakdownRow.data.category;
+    breakdown.data.title = breakdownRow.data.displayCategory;
     return breakdown;
   }
 
@@ -382,6 +381,16 @@ export class BICsDataProcessingService {
     targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
+  public loadBICSOptionsIntoConfigurator(configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO) {
+    this.dtoService.loadBICSOptionsIntoConfigurator(
+      configuratorDTO,
+      this.returnAllBICSBasedOnHierarchyDepth(1),
+      this.returnAllBICSBasedOnHierarchyDepth(2),
+      this.returnAllBICSBasedOnHierarchyDepth(3),
+      this.returnAllBICSBasedOnHierarchyDepth(4)
+    )
+  }
+
   public seeBondPackageBICSBreakdownDataTransfer(
     configurator: DTOs.SecurityDefinitionConfiguratorDTO,
     targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
@@ -391,7 +400,7 @@ export class BICsDataProcessingService {
       eachBundle.data.list.forEach((eachDefinition) => {
         if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
           const selectedOptionList = [];
-          selectedOptionList.push(targetRow.data.category);
+          selectedOptionList.push(targetRow.data.displayCategory);
           eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
             eachDefinition.data.key,
             selectedOptionList,
@@ -607,9 +616,8 @@ export class BICsDataProcessingService {
     const bicsLevel = BICsLevels[level];
     if (!!rawData && !!rawData[bicsLevel]) {
       const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
-      const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
+      const { groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
       const customRawBreakdown: BEStructuringBreakdownBlock = {
-        date,
         groupOption,
         indexId,
         portfolioBreakdownId,

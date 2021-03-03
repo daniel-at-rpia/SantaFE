@@ -422,14 +422,23 @@ export interface BICSMainRowDataBlock {
 export interface TradeCenterPanelStateFilterBlock {
   keyword: {
     defaultValueForUI: string;
+    actualValue: string;
   }
+  driverType: string;
   quickFilters: {
-    driverType: string;
     portfolios: Array<string>;
-    keyword: string;
     owner: Array<string>;
     strategy: Array<string>;
     tenor: Array<string>;
   }
   securityFilters: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>;
+}
+
+export interface StructureSetBulkOverridesEditRow {
+  displayRowTitle: string;
+  modifiedDisplayRowTitle: string;
+  rowIdentifier: string;
+  displayBucket: string;
+  simpleBucket: StructureBucketDataBlock;
+  isEven: boolean;
 }

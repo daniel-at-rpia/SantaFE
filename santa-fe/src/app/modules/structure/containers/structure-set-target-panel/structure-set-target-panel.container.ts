@@ -50,7 +50,9 @@ import {
   BEStructuringOverrideBlock,
   BEStructuringOverrideBlockWithSubPortfolios,
   BEStructuringBreakdownMetricSingleEntryBlock,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios
+  BEStructuringBreakdownMetricBlockWithSubPortfolios,
+  BEStructuringOverrideBaseBlock,
+  BEStructuringOverrideBaseBlockWithSubPortfolios
 } from 'BEModels/backend-models.interface';
 import {
   PayloadGetPortfolioOverride,
@@ -190,7 +192,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.loadEditRows();
         this.calculateAllocation();
         this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
-        this.loadBICSOptionsIntoConfigurator();
+        this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
         if (!!this.state.clearAllTargetSelected) {
           this.state.clearAllTargetSelected = false;
         }
@@ -199,6 +201,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       }
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
+    this.modalService.bindModalCloseCallback(STRUCTURE_EDIT_MODAL_ID, this.closeModal.bind(this));
   }
 
   public ngOnDestroy() {
@@ -368,7 +371,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       params.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
-          simpleBucket[property] = eachItem.filterBy;
+          if (eachItem.key === this.constants.definitionMap.TENOR.key) {
+            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock) => {
+              return eachBlock.shortKey;
+            });
+          } else {
+            simpleBucket[property] = eachItem.filterBy;
+          }
         }
         eachItem.filterBy.forEach((eachValue) => {
           bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
@@ -379,22 +388,20 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Already Exist', `${bucketToString} bucket already exist`, null);
         this.store$.dispatch(new CoreSendNewAlerts([alert]));
       } else {
-        const now = moment();
         const payload: PayloadGetPortfolioOverride = {
           portfolioOverride: {
-            date: now.format('YYYY-MM-DD'),
             portfolioId: this.state.targetFund.data.portfolioId,
             simpleBucket: simpleBucket
           }
         };
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.getPortfolioOverride, {req: 'POST'}, payload).pipe(
           first(),
-          tap((serverReturn: BEStructuringOverrideBlockWithSubPortfolios) => {
+          tap((serverReturn: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
             const {
               breakdown: breakdownWithSubPortfolio,
               ...inheritValues
             } = serverReturn;
-            const overrideData: BEStructuringOverrideBlock = {
+            const overrideData: BEStructuringOverrideBaseBlock = {
               breakdown: {
                 view: breakdownWithSubPortfolio.view,
                 metricBreakdowns: breakdownWithSubPortfolio.metricBreakdowns[this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter)]
@@ -404,7 +411,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
             const returnPack = this.utilityService.convertRawOverrideToRawBreakdown([overrideData]);
             const rawBreakdownList = returnPack.list;
             this.state.targetBreakdownRawDataDisplayLabelMap = this.utilityService.deepObjectMerge(returnPack.displayLabelMap, this.state.targetBreakdownRawDataDisplayLabelMap);
-            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(overrideData);
+            const newBreakdownBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(overrideData.simpleBucket);
             const newCategoryKey = this.utilityService.formCategoryKeyForOverride(overrideData);
             if (!!this.state.targetBreakdown && this.state.targetBreakdown.data.backendGroupOptionIdentifier === newBreakdownBucketIdentifier) {
               const newDataBlock = rawBreakdownList[0].breakdown[newCategoryKey];
@@ -440,7 +447,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     this.state.configurator.display = false;
     this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
-    this.loadBICSOptionsIntoConfigurator();
+    this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
   }
 
   public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
@@ -694,11 +701,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private inheritEditRowStates(oldRows: Array<StructureSetTargetPanelEditRowBlock>) {
     this.state.editRowList = this.state.editRowList.map((eachNewRow) => {
+      const newRowEvenState = eachNewRow.isEven;
       const matchedOldRow = oldRows.find((eachOldRow) => {
         return eachOldRow.rowIdentifier === eachNewRow.rowIdentifier;
       });
       if (matchedOldRow) {
         eachNewRow = matchedOldRow;
+        eachNewRow.isEven = newRowEvenState;
       };
       return eachNewRow;
     });
@@ -985,7 +994,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         updatePayload.forEach((eachPayload) => {
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
             first(),
-            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
+            tap((serverReturn: boolean) => {
               callCount++;
               if (callCount === necessaryUpdateNumOfCalls) {
                 if (necessaryDeleteNumOfCalls > 0) {
@@ -1001,7 +1010,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
                       )]
                     )
                   );
-                  this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+                  serverReturn && this.store$.dispatch(new StructureUpdateMainPanelEvent());
                 }
               }
             }),
@@ -1048,7 +1057,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): Array<PayloadUpdateBreakdown> {
-    const now = moment();
     let payloads: Array<PayloadUpdateBreakdown> = []
     if (this.state.targetBreakdown.state.isBICs) {
       const sortedListByLevel = this.state.targetBreakdown.data.displayCategoryList.sort((categoryA: StructurePortfolioBreakdownRowDTO, categoryB: StructurePortfolioBreakdownRowDTO) => categoryA.data.bicsLevel - categoryB.data.bicsLevel);
@@ -1057,7 +1065,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         const rawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, i);
         const payload: PayloadUpdateBreakdown = {
           portfolioBreakdown: {
-            date: moment(rawBreakdown.date).format('YYYY-MM-DD'),
             groupOption: rawBreakdown.groupOption,
             portfolioId: rawBreakdown.portfolioId,
             breakdown: {}
@@ -1068,7 +1075,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       const payload: PayloadUpdateBreakdown = {
         portfolioBreakdown: {
-          date: now.format('YYYY-MM-DD'),
           groupOption: this.state.targetBreakdownRawData.groupOption,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           breakdown: {}
@@ -1120,21 +1126,22 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
-    const now = moment();
     const payload: Array<PayloadUpdateOverride> = [];
     this.state.editRowList.forEach((eachRow) => {
+      let isTitleChanged = false;
+      let isTargetChanged = false;
       const eachPayload: PayloadUpdateOverride = {
         portfolioOverride: {
-          date: now.format('YYYY-MM-DD'),
-          indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
       };
-      if (eachRow.modifiedDisplayRowTitle !== eachRow.rowIdentifier) {
+      if (eachRow.modifiedDisplayRowTitle !== eachRow.displayRowTitle) {
+        isTitleChanged = true;
         eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
+        isTargetChanged = true;
         const modifiedMetricBreakdowns: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
           metricBreakdowns: {}
         };
@@ -1157,19 +1164,18 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
         eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
       }
-      payload.push(eachPayload);
+      if (isTargetChanged || isTitleChanged || !eachRow.existInServer) {
+        payload.push(eachPayload);
+      }
     });
     return payload;
   }
 
   private traverseRemovalListToFormDeleteOverridePayload(): Array<PayloadDeleteOverride> {
     const payload: Array<PayloadDeleteOverride> = [];
-    const now = moment();
     this.state.removalList.forEach((eachRow) => {
       const eachPayload: PayloadDeleteOverride = {
         portfolioOverride: {
-          date: now.format('YYYY-MM-DD'),
-          indexId: this.state.targetBreakdownRawData.indexId,
           portfolioId: this.state.targetBreakdownRawData.portfolioId,
           simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
         }
@@ -1191,7 +1197,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!this.state.targetFund && !!this.state.targetBreakdown) {
       let rawDataObject;
       if (this.state.targetBreakdown.state.isOverrideVariant) {
-        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(this.state.targetFund.data.originalBEData.overrides);
+        const rawOverrides = this.utilityService.getRawOverridesFromFund(this.state.targetFund.data.originalBEData.overrides);
+        const resultPack = this.utilityService.convertRawOverrideToRawBreakdown(rawOverrides);
         rawDataObject = resultPack.list;
         this.state.targetBreakdownRawDataDisplayLabelMap = resultPack.displayLabelMap;
       } else {
@@ -1220,16 +1227,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     } else {
       return false;
     }
-  }
-
-  private loadBICSOptionsIntoConfigurator() {
-    this.dtoService.loadBICSOptionsIntoConfigurator(
-      this.state.configurator.dto,
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(1),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(2),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(3),
-      this.bicsService.returnAllBICSBasedOnHierarchyDepth(4)
-    )
   }
 
   private earMarkNewRow(targetTitle: string) {
@@ -1630,5 +1627,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         return false;
       }
     }
+  }
+
+  private closeModal(): boolean {
+    return true;
   }
 }

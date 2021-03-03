@@ -56,3 +56,8 @@ export const selectUtilityPanelLoadState = createSelector(
   getStructureState,
   (state: StructureState) => state.utilityPanelLoadState
 );
+
+export const selectSetBulkOverridesEvent = createSelector(
+  getStructureState,
+  (state: StructureState) => state.setBulkOverrides
+)

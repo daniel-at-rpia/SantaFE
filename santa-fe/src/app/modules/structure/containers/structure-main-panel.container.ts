@@ -45,8 +45,9 @@ import {
   BEStructuringBreakdownBlockWithSubPortfolios,
   BEStructuringBreakdownMetricBlock,
   BEStructuringFundBlockWithSubPortfolios,
-  BEStructuringOverrideBlockWithSubPortfolios,
-  BEStructuringOverrideBlock
+  BEStructuringOverrideBaseBlockWithSubPortfolios,
+  BEStructuringOverrideBlock,
+  BEStructuringOverrideBaseBlock
 } from 'App/modules/core/models/backend/backend-models.interface';
 import {
   CoreSendNewAlerts,
@@ -55,7 +56,8 @@ import {
 } from 'Core/actions/core.actions';
 import {
   PayloadGetPortfolioStructures,
-  PayloadSetView
+  PayloadSetView,
+  PayloadUpdatePortfolioOverridesForAllPortfolios
 } from 'App/modules/core/models/backend/backend-payloads.interface';
 import {
   StructureSetViewTransferPack,
@@ -65,6 +67,7 @@ import {
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
+import { AdhocPacks } from 'App/modules/core/models/frontend';
 
 @Component({
     selector: 'structure-main-panel',
@@ -613,7 +616,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       },
       currentTotals: currentTotalsWithSub[subPortfolio],
       breakdowns: {},
-      overrides: [],
+      overrides: {},
       ...inheritFundValues
     };
     for (const eachBreakdownKey in breakdownsWithSub) {
@@ -636,20 +639,27 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
       eachFundWithoutSub.breakdowns[eachBreakdownKey] = eachBreakdownWithoutSub;
     }
-    overridesWithSub.forEach((eachOverrideWithSub:BEStructuringOverrideBlockWithSubPortfolios) => {
-      const {
-        breakdown: overrideCategoriesWithSub,
-        ...inheritOverrideValues
-      } = eachOverrideWithSub;
-      const eachOverrideWithoutSub: BEStructuringOverrideBlock = {
-        breakdown: {
-          metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
-          view: overrideCategoriesWithSub.view
-        },
-        ...inheritOverrideValues
-      };
-      eachFundWithoutSub.overrides.push(eachOverrideWithoutSub);
-    });
+    for (let bucket in overridesWithSub) {
+      if (overridesWithSub[bucket]) {
+        eachFundWithoutSub.overrides[bucket] = {};
+        for (let category in overridesWithSub[bucket]) {
+          if (overridesWithSub[bucket][category]) {
+            const {
+              breakdown: overrideCategoriesWithSub,
+              ...inheritOverrideValues
+            } = overridesWithSub[bucket][category];
+            const eachOverrideWithoutSub: BEStructuringOverrideBaseBlock = {
+              breakdown: {
+                metricBreakdowns: overrideCategoriesWithSub.metricBreakdowns[subPortfolio],
+                view: overrideCategoriesWithSub.view
+              },
+              ...inheritOverrideValues
+            };
+            eachFundWithoutSub.overrides[bucket][category] = eachOverrideWithoutSub;
+          }
+        }
+      }
+    }
     return eachFundWithoutSub;
   }
 
@@ -661,5 +671,4 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     });
   }
-
 }

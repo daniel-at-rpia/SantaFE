@@ -102,4 +102,11 @@ $modal_animation_duration: $animation_duration_normal;
       }
     }
   }
+  &--setBulkOverridesVariant {
+    #{$blockName} {
+      &__foreground {
+        max-width: 68rem;
+      }
+    }
+  }
 }

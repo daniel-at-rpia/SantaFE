@@ -149,16 +149,17 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
           prinstineRowList: [],
           liveUpdatedRowList: [],
           removalRowList: []
-        }
+        },
+        initialDataLoadedInternalSyncFlag: false
       },
       filters: {
         keyword: {
-          defaultValueForUI: ''
+          defaultValueForUI: '',
+          actualValue: ''
         },
+        driverType: this.constants.defaultMetricIdentifier,
         quickFilters: {
-          driverType: this.constants.defaultMetricIdentifier,
           portfolios: [],
-          keyword: '',
           owner: [],
           strategy: [],
           tenor: []
@@ -216,10 +217,10 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     ).subscribe((keyword) => {
       const targetTable = this.state.fetchResult.mainTable;
       if (!!keyword && keyword.length >= 2) {
-        this.state.filters.quickFilters.keyword = keyword;
+        this.state.filters.keyword.actualValue = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
       } else if (!keyword || keyword.length < 2) {
-        this.state.filters.quickFilters.keyword = keyword;
+        this.state.filters.keyword.actualValue = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
       }
     });
@@ -312,8 +313,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
-    this.state.filters.quickFilters = newState.filters.quickFilters;
-    this.state.filters.keyword.defaultValueForUI = null;
+    this.state.filters = newState.filters;
     this.state.fetchResult = newState.fetchResult;
     this.store$.dispatch(new TradeTogglePresetEvent);
     if (!!captureNewState) {
@@ -331,14 +331,14 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   public onSwitchDriver(targetDriver) {
-    if (this.state.filters.quickFilters.driverType !== targetDriver) {
+    if (this.state.filters.driverType !== targetDriver) {
       this.restfulCommService.logEngagement(
         EngagementActionList.switchDriver,
         'n/a',
         targetDriver,
         'Trade - Center Panel'
       );
-      this.state.filters.quickFilters.driverType = targetDriver;
+      this.state.filters.driverType = targetDriver;
       // driver update needs to be to both tables
       const newMetrics: Array<Stubs.SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
@@ -358,9 +358,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
 
   public onApplyFilter(params: AdhocPacks.DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
     this.state.filters.securityFilters = params.filterList;
-    this.state.filters.quickFilters.portfolios = [];
-    this.state.filters.quickFilters.owner = [];
-    this.state.filters.quickFilters.strategy = [];
+    this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
@@ -501,7 +499,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
       stencilMainTableHeaderBuffer.forEach((eachHeader) => {
         if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isBestQuoteVariant) {
-            const bestQuoteStencil = this.dtoService.formBestQuoteComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
+            const bestQuoteStencil = this.dtoService.formBestQuoteComparerObject(true, this.state.filters.driverType, null, null, false);
             newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, bestQuoteStencil, null));
           } else {
             newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, null, null));
@@ -559,7 +557,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.state.fetchResult.mainTable.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.mainTable.prinstineRowList = this.processingService.loadFinalStageData(
       this.state.table.dto.data.headers,
-      this.state.filters.quickFilters.driverType,
+      this.state.filters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
       this.onSelectSecurityForAlertConfig.bind(this),
@@ -584,11 +582,12 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         ),
         first(),
         tap(([isInitialDataLoaded, processingRawData]) => {
-          if (isInitialDataLoaded) {
+          if (isInitialDataLoaded && this.state.fetchResult.initialDataLoadedInternalSyncFlag) {
             const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
             targetTableBlock.liveUpdatedRowList = this.processingService.returnDiff(targetTableDTO, newFilteredList).newRowList;
           } else {
             targetTableBlock.rowList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+            this.state.fetchResult.initialDataLoadedInternalSyncFlag = true;
           }
           // only dispatch the action when both tables are done
           if (!!this.state.fetchResult.mainTable.fetchComplete) {

@@ -44,7 +44,7 @@
     <div class="sat-popover__levels-firstDiveIn">
       <p class="sat-popover__levels-firstDiveIn-message">No further BICs data is available<p>
       <div class="sat-popover__levels-firstDiveIn-category">
-        <span class="sat-popover__levels-firstDiveIn-category-text"> Level {{ popover.data.mainRow.data.bicsLevel + 1 }} - {{ popover.data.mainRow.data.category }}</span>
+        <span class="sat-popover__levels-firstDiveIn-category-text"> Level {{ popover.data.mainRow.data.bicsLevel + 1 }} - {{ popover.data.mainRow.data.displayCategory }}</span>
       </div>
       <ul class="sat-popover__levels-firstDiveIn-list" *ngIf="!!popover.data.mainRow.data.children">
         <li
@@ -63,7 +63,7 @@
             'sat-popover__levels-secondDiveIn--active': secondLevel.state.isDoveIn
           }">
             <div class="sat-popover__levels-secondDiveIn-category">
-              <span class="sat-popover__levels-secondDiveIn-category-text"> Level {{secondLevel.data.bicsLevel + 1 }} - {{ secondLevel.data.category }}</span>
+              <span class="sat-popover__levels-secondDiveIn-category-text"> Level {{secondLevel.data.bicsLevel + 1 }} - {{ secondLevel.data.displayCategory }}</span>
             </div>
             <ul class="sat-popover__levels-secondDiveIn-list"
             *ngIf="secondLevel.data.children">

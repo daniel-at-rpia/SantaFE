@@ -27,7 +27,7 @@ export class SantaModal implements OnInit, OnDestroy {
   public ngOnInit() {
     const exist = this.modalService.modalIsRegistered(this.modalId);
     if (!exist) {
-      this.modalData = this.dtoService.formSantaModal(this.elementRef);
+      this.modalData = this.dtoService.formSantaModal(this.elementRef, this.modalId);
       this.modalData.data.id = this.modalId;
       this.modalData.api.openModal = this.openModal.bind(this);
       this.modalData.api.closeModal = this.closeModal.bind(this);
@@ -48,7 +48,14 @@ export class SantaModal implements OnInit, OnDestroy {
   }
 
   public closeModal() {
-    this.modalData.state.isPresenting = false;
+    if (!!this.modalData.api.closeModal) {
+      const canClose = this.modalData.api.closeModal();
+      if (canClose) {
+        this.modalData.state.isPresenting = false;
+      }
+    } else {
+      this.modalData.state.isPresenting = false;
+    }
   }
 
   public saveModal() {
