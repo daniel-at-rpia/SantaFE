@@ -698,7 +698,7 @@ export const StrategyExcludedFiltersMapping = {
     ]
   },
   'All': {
-    excluded: []
+    excluded: [...FullStrategyList]
   }
 }
 

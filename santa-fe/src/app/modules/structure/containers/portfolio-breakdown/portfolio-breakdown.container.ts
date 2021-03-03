@@ -253,9 +253,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       }
     });
     filterList.push(fundDefinition);
-    const subPortfolioDefinition: DTOs.SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.STRATEGY);
-    this.utilityService.filterOutExcludedStrategiesForSeeBond(subPortfolioDefinition, this.activeSubPortfolioFilter);
-    filterList.push(subPortfolioDefinition);
+    if (this.activeSubPortfolioFilter !== this.constants.subPortfolioFilter.all) {
+      const subPortfolioDefinition: DTOs.SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.STRATEGY);
+      this.utilityService.filterOutExcludedStrategiesForSeeBond(subPortfolioDefinition, this.activeSubPortfolioFilter);
+      filterList.push(subPortfolioDefinition);
+    }
     newWorkflowState.data.stateInfo.filterList = filterList;
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
