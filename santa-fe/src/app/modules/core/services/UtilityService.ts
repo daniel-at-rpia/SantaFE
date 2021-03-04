@@ -35,8 +35,15 @@
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
     } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
-    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-    import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
+    import {
+      SecurityDefinitionMap,
+      StrategyExcludedFiltersMapping,
+      FilterOptionsTenorRange
+    } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      traceTradeFilterAmounts,
+      traceTradeNumericalFilterSymbols
+    } from '../constants/securityTableConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
     import { NavigationEnd } from '@angular/router';
   // dependencies
@@ -1300,7 +1307,7 @@ export class UtilityService {
         });
         let categoryKey = '';
         list.forEach((eachIdentifier) => {
-          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName ) {
+          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName) {
             const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
               return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
@@ -1595,6 +1602,17 @@ export class UtilityService {
         }
       }
       return rawOverridesList;
+    }
+
+    public filterOutExcludedStrategiesForSeeBond(definition: DTOs.SecurityDefinitionDTO, activeSubPortfolio: SubPortfolioFilter) {
+        definition.data.displayOptionList.forEach((eachOption) => {
+        const subPortfolioMapping = StrategyExcludedFiltersMapping[activeSubPortfolio];
+        const isExcluded = subPortfolioMapping.excluded.find(strategy => strategy === eachOption.displayLabel);
+        if (!isExcluded) {
+          eachOption.isSelected = true;
+          definition.data.highlightSelectedOptionList.push(eachOption);
+        }
+      })
     }
   // structuring specific end
 }

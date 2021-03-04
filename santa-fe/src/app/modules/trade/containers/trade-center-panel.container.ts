@@ -156,12 +156,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       },
       filters: {
         keyword: {
-          defaultValueForUI: ''
+          defaultValueForUI: '',
+          actualValue: ''
         },
+        driverType: this.constants.defaultMetricIdentifier,
         quickFilters: {
-          driverType: this.constants.defaultMetricIdentifier,
           portfolios: [],
-          keyword: '',
           owner: [],
           strategy: [],
           tenor: []
@@ -234,10 +234,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     ).subscribe((keyword) => {
       const targetTable = this.state.fetchResult.mainTable;
       if (!!keyword && keyword.length >= 2) {
-        this.state.filters.quickFilters.keyword = keyword;
+        this.state.filters.keyword.actualValue = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
       } else if (!keyword || keyword.length < 2) {
-        this.state.filters.quickFilters.keyword = keyword;
+        this.state.filters.keyword.actualValue = keyword;
         targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
       }
     });
@@ -340,14 +340,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   public onSwitchDriver(targetDriver) {
-    if (this.state.filters.quickFilters.driverType !== targetDriver) {
+    if (this.state.filters.driverType !== targetDriver) {
       this.restfulCommService.logEngagement(
         EngagementActionList.switchDriver,
         'n/a',
         targetDriver,
         'Trade - Center Panel'
       );
-      this.state.filters.quickFilters.driverType = targetDriver;
+      this.state.filters.driverType = targetDriver;
       // driver update needs to be to both tables
       const newMetrics: Array<Stubs.SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
@@ -367,9 +367,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public onApplyFilter(params: AdhocPacks.DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
     this.state.filters.securityFilters = params.filterList;
-    this.state.filters.quickFilters.portfolios = [];
-    this.state.filters.quickFilters.owner = [];
-    this.state.filters.quickFilters.strategy = [];
+    this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     params.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
@@ -510,7 +508,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       stencilMainTableHeaderBuffer.forEach((eachHeader) => {
         if (!eachHeader.state.isSecurityCardVariant) {
           if (eachHeader.state.isBestQuoteVariant) {
-            const bestQuoteStencil = this.dtoService.formBestQuoteComparerObject(true, this.state.filters.quickFilters.driverType, null, null, false);
+            const bestQuoteStencil = this.dtoService.formBestQuoteComparerObject(true, this.state.filters.driverType, null, null, false);
             newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, bestQuoteStencil, null));
           } else {
             newMainTableRow.data.cells.push(this.dtoService.formSecurityTableCellObject(true, null, eachHeader, null, null));
@@ -568,7 +566,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.fetchResult.mainTable.prinstineRowList = [];  // flush out the stencils
     this.state.fetchResult.mainTable.prinstineRowList = this.processingService.loadFinalStageData(
       this.state.table.dto.data.headers,
-      this.state.filters.quickFilters.driverType,
+      this.state.filters.driverType,
       serverReturn,
       this.onSelectSecurityForAnalysis.bind(this),
       this.onSelectSecurityForAlertConfig.bind(this),

@@ -104,10 +104,23 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
       params.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
-          simpleBucket[property] = eachItem.filterBy;
+          if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
+            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock) => {
+              return eachBlock.shortKey;
+            });
+          } else {
+            simpleBucket[property] = eachItem.filterBy;
+          }
         }
-        eachItem.filterBy.forEach((eachValue) => {
-          const displayTitle = eachItem.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key ? this.bicsLookUpService.BICSCodeToBICSName(eachValue) : eachValue;
+        eachItem.filterBy.forEach((eachValue, index) => {
+          let displayTitle;
+          if (eachItem.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+            displayTitle = this.bicsLookUpService.BICSCodeToBICSName(eachValue);
+          } else if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
+            displayTitle = eachItem.filterByBlocks[index].shortKey;
+          } else {
+            displayTitle = eachValue;
+          }
           bucketToString = bucketToString === '' ? `${displayTitle}` : `${bucketToString}, ${displayTitle}`;
         });
       });
