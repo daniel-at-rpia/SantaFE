@@ -167,7 +167,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
   }
 }
 
-export const FrontendKayToBackendKeyDictionary = {
+export const FrontendKeyToBackendKeyDictionary = {
   // definitions
   'SECURITY_TYPE': 'SecurityType',
   'SECURITY_SUB_TYPE': 'SecuritySubType',

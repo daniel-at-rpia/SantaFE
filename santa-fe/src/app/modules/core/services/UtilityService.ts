@@ -21,7 +21,7 @@
     import {
       QUANT_COMPARER_PERCENTILE,
       SecurityMetricOptions,
-      FrontendKayToBackendKeyDictionary,
+      FrontendKeyToBackendKeyDictionary,
       BackendKeyToDisplayLabelDictionary,
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
@@ -53,7 +53,7 @@ export class UtilityService {
   // Any code about naming stuff goes into this service
   groupGroupMetricOptions = GroupMetricOptions;
   securityMetricOptions = SecurityMetricOptions;
-  keyDictionary = FrontendKayToBackendKeyDictionary;
+  keyDictionary = FrontendKeyToBackendKeyDictionary;
   labelDictionary = BackendKeyToDisplayLabelDictionary;
   triCoreDriverConfig = TriCoreDriverConfig;
   definitionMap = SecurityDefinitionMap;

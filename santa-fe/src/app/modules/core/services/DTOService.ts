@@ -19,7 +19,8 @@
       ALERT_STATUS_SORTINGVALUE_UNIT,
       TRACE_VOLUME_REPORTED_THRESHOLD,
       NavigationModule,
-      GlobalWorkflowTypes
+      GlobalWorkflowTypes,
+      FrontendKeyToBackendKeyDictionary
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
