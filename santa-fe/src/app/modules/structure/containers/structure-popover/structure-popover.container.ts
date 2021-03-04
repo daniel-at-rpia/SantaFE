@@ -13,7 +13,7 @@
       PORTFOLIO_ID_TO_SHORTNAMES,
       SubPortfolioFilter
     } from 'App/modules/core/constants/structureConstants.constants';
-    import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+    import { selectMetricLevel, selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.selectors';
     import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
     import { StructureSetView } from 'Structure/actions/structure.actions';
@@ -105,15 +105,6 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
         this.createPopover(this.cs01MainRow);
       } else {
         this.createPopover(this.creditLeverageMainRow);
-      }
-    }
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
       }
     }
   }
