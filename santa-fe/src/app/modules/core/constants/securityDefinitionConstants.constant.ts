@@ -68,6 +68,22 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     '30Y',
   ];
 
+  export const FilterOptionSecuritySubType = [
+    'AmortizingBond',
+    'BA',
+    'GovtBond',
+    'Corp',
+    'FRN',
+    'Loan',
+    'AT1',
+    'Hybrid',
+    'Preferred',
+    'SPAC',
+    'Stock',
+    'CDS',
+    'CDSIndex'
+  ];
+
   export const FilterOptionsTenorRange: SecurityDefinitionFilterOptionTenorRange  = {
     '2Y': {
       displayLabel: '2Y (<= 2.5)',
@@ -146,22 +162,6 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'GovtBond',
     'Loan',
     'Preferred',
-    'Stock',
-    'CDS',
-    'CDSIndex'
-  ];
-
-  const FilterOptionSecuritySubType = [
-    'AmortizingBond',
-    'BA',
-    'GovtBond',
-    'Corp',
-    'FRN',
-    'Loan',
-    'AT1',
-    'Hybrid',
-    'Preferred',
-    'SPAC',
     'Stock',
     'CDS',
     'CDSIndex'
