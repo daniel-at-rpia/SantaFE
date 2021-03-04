@@ -14,6 +14,7 @@ export enum PortfolioBreakdownGroupOptions {
   Ccy = 'Currency',
   Tenor = 'Tenor',
   RatingNoNotch = 'Rating',
+  SecuritySubType = 'SecuritySubType',
   BICs = 'BICS'
 }
 
