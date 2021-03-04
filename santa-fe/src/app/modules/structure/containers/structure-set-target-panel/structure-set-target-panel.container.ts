@@ -371,7 +371,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       params.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
-          simpleBucket[property] = eachItem.filterBy;
+          if (eachItem.key === this.constants.definitionMap.TENOR.key) {
+            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock) => {
+              return eachBlock.shortKey;
+            });
+          } else {
+            simpleBucket[property] = eachItem.filterBy;
+          }
         }
         eachItem.filterBy.forEach((eachValue) => {
           bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
@@ -695,11 +701,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private inheritEditRowStates(oldRows: Array<StructureSetTargetPanelEditRowBlock>) {
     this.state.editRowList = this.state.editRowList.map((eachNewRow) => {
+      const newRowEvenState = eachNewRow.isEven;
       const matchedOldRow = oldRows.find((eachOldRow) => {
         return eachOldRow.rowIdentifier === eachNewRow.rowIdentifier;
       });
       if (matchedOldRow) {
         eachNewRow = matchedOldRow;
+        eachNewRow.isEven = newRowEvenState;
       };
       return eachNewRow;
     });
