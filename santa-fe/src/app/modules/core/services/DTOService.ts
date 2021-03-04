@@ -2766,6 +2766,7 @@ export class DTOService {
   public formGlobalWorkflow(
     targetModule: NavigationModule,
     isRedirect: boolean,
+    isUpdateCurrentState: boolean,
     workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
   ): DTOs.GlobalWorkflowStateDTO {
     const uuid = this.utility.generateUUID();
@@ -2781,7 +2782,8 @@ export class DTOService {
         routeHandler: null
       },
       state: {
-        triggersRedirect: !!isRedirect
+        triggersRedirect: !!isRedirect,
+        updateCurrentState: !!isUpdateCurrentState
       }
     };
     return object;

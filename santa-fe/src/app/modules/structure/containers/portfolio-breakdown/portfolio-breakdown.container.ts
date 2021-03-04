@@ -1,36 +1,33 @@
-import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import * as moment from 'moment';
+  // dependencies
+    import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+    import { Router } from '@angular/router';
+    import { Subscription } from 'rxjs';
+    import { filter } from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
+    import * as moment from 'moment';
 
-import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import {
-  UtilityService,
-  DTOService,
-  BICsDataProcessingService,
-  BICSDictionaryLookupService
-} from 'Core/services';
-import {
-  PortfolioMetricValues,
-  STRUCTURE_EDIT_MODAL_ID,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  PortfolioView,
-  SubPortfolioFilter
-} from 'Core/constants/structureConstants.constants';
-import { ModalService } from 'Form/services/ModalService';
-import { selectUserInitials } from 'Core/selectors/core.selectors';
-import {
-  editingViewAvailableUsers,
-  StructuringTeamPMList,
-  SecurityDefinitionMap
-} from 'Core/constants/securityDefinitionConstants.constant';
-import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
-import {
-  selectDataDatestamp,
-  selectActiveSubPortfolioFilter
-} from 'Structure/selectors/structure.selectors';
-import { StructureSetView } from 'Structure/actions/structure.actions';
+    import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+    import { UtilityService, DTOService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import {
+      PortfolioMetricValues,
+      STRUCTURE_EDIT_MODAL_ID,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      PortfolioView,
+      SubPortfolioFilter
+    } from 'Core/constants/structureConstants.constants';
+    import { ModalService } from 'Form/services/ModalService';
+    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import {
+      editingViewAvailableUsers,
+      StructuringTeamPMList,
+      SecurityDefinitionMap
+    } from 'Core/constants/securityDefinitionConstants.constant';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { selectDataDatestamp, selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.selectors';
+    import { StructureSetView } from 'Structure/actions/structure.actions';
+  //
 
 @Component({
   selector: 'portfolio-breakdown',
@@ -39,7 +36,7 @@ import { StructureSetView } from 'Structure/actions/structure.actions';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
+export class PortfolioBreakdown extends SantaContainerComponentBase implements OnInit, OnChanges {
   @Input() breakdownData: DTOs.PortfolioBreakdownDTO;
   @Input() dataIsReady: boolean;
   @Output() clickedEdit = new EventEmitter<DTOs.PortfolioBreakdownDTO>();
@@ -61,22 +58,32 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private modalService: ModalService,
-    private utilityService: UtilityService,
     private store$: Store<any>,
     private bicsDataProcessingService: BICsDataProcessingService,
     private dtoService: DTOService,
     private bicsDictionaryLookupService: BICSDictionaryLookupService
-  ) { }
+  ) {
+    super(utilityService, globalWorkflowIOService, router);
+  }
 
   public ngOnInit() {
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((initials) => {
       this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
       this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
     });
     this.subscriptions.dataDatestampSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectDataDatestamp)
     ).subscribe((datestampInUnix) => {
       this.breakdownData.state.isViewingHistoricalData = !moment.unix(datestampInUnix).isSame(moment(), 'day');
@@ -88,10 +95,15 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       });
     });
     this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectActiveSubPortfolioFilter)
     ).subscribe((activeFilter: SubPortfolioFilter) => {
       this.activeSubPortfolioFilter = activeFilter;
     })
+
+    return super.ngOnInit();
   }
 
   public ngOnChanges() {
@@ -99,15 +111,6 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       this.loadData();
       if (this.breakdownData.data.displayCategoryList.length > 1 && this.breakdownData.state.isOverrideVariant) {
         this.utilityService.sortOverrideRows(this.breakdownData);
-      }
-    }
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
       }
     }
   }
@@ -218,7 +221,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   }
 
   public onClickSeeBond(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
-    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, false, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
     newWorkflowState.data.stateInfo.activeMetric = !!this.breakdownData.state.isDisplayingCs01 ? this.constants.metrics.cs01 : this.constants.metrics.creditLeverage;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<DTOs.SecurityDefinitionDTO> = [];

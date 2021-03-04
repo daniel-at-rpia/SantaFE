@@ -121,11 +121,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       alertList.length > 0 && this.getAlertsForUrgentAlertList(alertList);
     });
-    this.subscriptions.tradeAlertTableReadyToReceiveAdditionalAlerts = this.store$.pipe(
-      select(selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts),
-    ).subscribe((state: boolean) => {
-      this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = state;
-    })
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
@@ -137,6 +132,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
             this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = true;
             this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(true))
           }
+        } else {
+          this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = false;
         }
       }
     });
