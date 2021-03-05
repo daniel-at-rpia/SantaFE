@@ -365,7 +365,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
             display: flex;
             flex-direction: column;
             margin-top: $spacing_small;
-            padding: $spacing_small $spacing_small $spacing_large $spacing_small;
+            padding: $spacing_small $spacing_small $spacing_large 0;
           }
         }
       }
