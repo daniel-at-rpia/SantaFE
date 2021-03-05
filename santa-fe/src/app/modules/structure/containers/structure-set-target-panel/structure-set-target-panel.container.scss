@@ -30,7 +30,6 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &__utilities {
     @include mix_border_generator(0 0 $typical_border_width 0);
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-top: -$spacing_small;
     padding-bottom: $spacing_medium;
@@ -79,7 +78,6 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     }
     &-clearAll {
       display: flex;
-      padding-right: $spacing_large;
       &-btn {
         flex-direction: row;
         &-icon {
@@ -90,7 +88,6 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     &-setView {
       display: none;
       justify-content: space-between;
-      padding-left: $spacing_large;
       &-btn {
         display: flex;
         flex-direction: row;
