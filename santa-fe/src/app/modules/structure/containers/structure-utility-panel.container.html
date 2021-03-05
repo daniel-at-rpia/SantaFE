@@ -116,11 +116,12 @@
     </div>
     <div class="sat-structureUtilityPanel__deltaSelect-bottom">
       <div class="sat-structureUtilityPanel__deltaSelect-bottom-ctas santaBtnGroup">
-        <button (click)="onClickDeltaScope(constants.deltaScope.dod, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-dod">{{constants.deltaScope.dod}}</button>
-        <button (click)="onClickDeltaScope(constants.deltaScope.wow, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-wow">{{constants.deltaScope.wow}}</button>
-        <button (click)="onClickDeltaScope(constants.deltaScope.mom, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-mom">{{constants.deltaScope.mom}}</button>
-        <button (click)="onClickDeltaScope(constants.deltaScope.ytd, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-ytd">{{constants.deltaScope.ytd}}</button>
-        <button (click)="onClickDeltaScope(null, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas-index">Index</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.dod, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas sat-structureUtilityPanel__deltaSelect-bottom-ctas--dod">{{constants.deltaScopeFEMapping[constants.deltaScope.dod]}}</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.tMinusTwo, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas sat-structureUtilityPanel__deltaSelect-bottom-ctas--TMinusTwo">{{constants.deltaScopeFEMapping[constants.deltaScope.tMinusTwo]}}</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.wow, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas sat-structureUtilityPanel__deltaSelect-bottom-ctas--wow">{{constants.deltaScopeFEMapping[constants.deltaScope.wow]}}</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.mom, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas sat-structureUtilityPanel__deltaSelect-bottom-ctas--mom">{{constants.deltaScopeFEMapping[constants.deltaScope.mom]}}</button>
+        <button (click)="onClickDeltaScope(constants.deltaScope.ytd, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas sat-structureUtilityPanel__deltaSelect-bottom-ctas--ytd">{{constants.deltaScopeFEMapping[constants.deltaScope.ytd]}}</button>
+        <button (click)="onClickDeltaScope(null, true)" class="sat-structureUtilityPanel__deltaSelect-bottom-ctas sat-structureUtilityPanel__deltaSelect-bottom-ctas--index">Index</button>
       </div>
     </div>
   </section>
