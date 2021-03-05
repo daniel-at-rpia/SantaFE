@@ -6,7 +6,10 @@ import {
   IFloatingFilterParams,
   SerializedNumberFilter
 } from 'ag-grid-community';
-import { PortfolioView } from 'Core/constants/structureConstants.constants';
+import {
+  PortfolioView,
+  SubPortfolioFilter
+} from 'Core/constants/structureConstants.constants';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from './frontend-models.interface';
 import * as Blocks from './frontend-blocks.interface';
@@ -190,10 +193,6 @@ export interface BICSGroupingByCodeBlock {
 export interface StructureRowSetViewData  {
   row: DTOs.StructurePortfolioBreakdownRowDTO;
   view: PortfolioView;
-}
-
-export interface StructureSetBulkOverridesTransferPack {
-  overrides: Array<PayloadUpdatePortfolioOverridesForAllPortfolios>
 }
 
 interface SecurityDefinitionFilterOptionTenorRangeItem {

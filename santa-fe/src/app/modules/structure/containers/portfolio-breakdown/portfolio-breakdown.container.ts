@@ -14,7 +14,8 @@ import {
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  PortfolioView
+  PortfolioView,
+  SubPortfolioFilter
 } from 'Core/constants/structureConstants.constants';
 import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
@@ -25,7 +26,10 @@ import {
 } from 'Core/constants/securityDefinitionConstants.constant';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
-import { selectDataDatestamp } from 'Structure/selectors/structure.selectors';
+import {
+  selectDataDatestamp,
+  selectActiveSubPortfolioFilter
+} from 'Structure/selectors/structure.selectors';
 import { StructureSetView } from 'Structure/actions/structure.actions';
 
 @Component({
@@ -39,9 +43,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
   @Input() breakdownData: DTOs.PortfolioBreakdownDTO;
   @Input() dataIsReady: boolean;
   @Output() clickedEdit = new EventEmitter<DTOs.PortfolioBreakdownDTO>();
+  activeSubPortfolioFilter: SubPortfolioFilter;
   subscriptions = {
     ownerInitialsSub: null,
-    dataDatestampSub: null
+    dataDatestampSub: null,
+    activeSubPortfolioViewFilterSub: null
   };
   constants = {
     editModalId: STRUCTURE_EDIT_MODAL_ID,
@@ -50,7 +56,8 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
     securityDefinitionMap: SecurityDefinitionMap,
     bicsBreakdownId: BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
     globalWorkflowTypes: GlobalWorkflowTypes,
-    metrics: PortfolioMetricValues
+    metrics: PortfolioMetricValues,
+    subPortfolioFilter: SubPortfolioFilter
   }
 
   constructor(
@@ -80,6 +87,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
         eachRow.state.isViewingHistoricalData = this.breakdownData.state.isViewingHistoricalData;
       });
     });
+    this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      select(selectActiveSubPortfolioFilter)
+    ).subscribe((activeFilter: SubPortfolioFilter) => {
+      this.activeSubPortfolioFilter = activeFilter;
+    })
   }
 
   public ngOnChanges() {
@@ -226,9 +238,16 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       // other regular breakdowns will come here (ccy, rating, tenor);
       const targetDefinition: DTOs.SecurityDefinitionDTO = this.utilityService.deepCopy(this.breakdownData.data.definition);
       targetDefinition.data.displayOptionList.forEach((eachOption) => {
-        if (eachOption.shortKey === targetRow.data.displayCategory) {
-          eachOption.isSelected = true;
-          targetDefinition.data.highlightSelectedOptionList.push(eachOption);
+        if (targetDefinition.data.key === this.constants.securityDefinitionMap.TENOR.key) {
+          if (eachOption.shortKey === targetRow.data.category) {
+            eachOption.isSelected = true;
+            targetDefinition.data.highlightSelectedOptionList.push(eachOption);
+          }
+        } else {
+          if (eachOption.shortKey === targetRow.data.displayCategory) {
+            eachOption.isSelected = true;
+            targetDefinition.data.highlightSelectedOptionList.push(eachOption);
+          }
         }
       });
       filterList.push(targetDefinition);
@@ -241,6 +260,11 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       }
     });
     filterList.push(fundDefinition);
+    if (this.activeSubPortfolioFilter !== this.constants.subPortfolioFilter.all) {
+      const subPortfolioDefinition: DTOs.SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.STRATEGY);
+      this.utilityService.filterOutExcludedStrategiesForSeeBond(subPortfolioDefinition, this.activeSubPortfolioFilter);
+      filterList.push(subPortfolioDefinition);
+    }
     newWorkflowState.data.stateInfo.filterList = filterList;
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }

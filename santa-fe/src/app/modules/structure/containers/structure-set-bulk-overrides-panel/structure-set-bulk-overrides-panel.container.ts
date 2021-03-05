@@ -23,7 +23,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService'
 import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
-import { StructureSendSetBulkOverridesTransferEvent } from 'Structure/actions/structure.actions';
+import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
 import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
 @Component({
   selector: 'structure-set-bulk-overrides-panel',
@@ -103,10 +103,23 @@ export class StructureSetBulkOverrides implements OnInit {
       params.filterList.forEach((eachItem) => {
         const property = this.utilityService.convertFEKey(eachItem.key);
         if (!!property) {
-          simpleBucket[property] = eachItem.filterBy;
+          if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
+            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock) => {
+              return eachBlock.shortKey;
+            });
+          } else {
+            simpleBucket[property] = eachItem.filterBy;
+          }
         }
-        eachItem.filterBy.forEach((eachValue) => {
-          const displayTitle = eachItem.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key ? this.bicsLookUpService.BICSCodeToBICSName(eachValue) : eachValue;
+        eachItem.filterBy.forEach((eachValue, index) => {
+          let displayTitle;
+          if (eachItem.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+            displayTitle = this.bicsLookUpService.BICSCodeToBICSName(eachValue);
+          } else if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
+            displayTitle = eachItem.filterByBlocks[index].shortKey;
+          } else {
+            displayTitle = eachValue;
+          }
           bucketToString = bucketToString === '' ? `${displayTitle}` : `${bucketToString}, ${displayTitle}`;
         });
       });
@@ -199,11 +212,51 @@ export class StructureSetBulkOverrides implements OnInit {
 
   private submitOverrideChanges(): boolean {
     const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = this.traverseEditRowsToFormUpdateOverridePayload();
-    const updatePayloadTransferPack: AdhocPacks.StructureSetBulkOverridesTransferPack = {
-      overrides: updatePayload
-    };
-    if (updatePayloadTransferPack.overrides.length > 0) {
-      this.store$.dispatch(new StructureSendSetBulkOverridesTransferEvent(updatePayloadTransferPack));
+    if (updatePayload.length > 0) {
+      const necessaryUpdateNumOfCalls = updatePayload.length;
+      let callCount = 0;
+      updatePayload.forEach((eachPayload: PayloadUpdatePortfolioOverridesForAllPortfolios, index: number) => {
+        if (index === 0) {
+          // inform users that data is being processed as this API call can take a while, especially if there are multiple overrides added
+          // this is temp solution until a spinner can be implemented for better usability and to prevent users from making any other changes on the screen
+          this.store$.dispatch(
+            new CoreSendNewAlerts([
+              this.dtoService.formSystemAlertObject(
+                'Processing',
+                'Add Overrides',
+                `Processing Overrides To Be Added To All Funds`,
+                null
+              )]
+            )
+          );
+        }
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
+          first(),
+          tap((serverReturn: boolean) => {
+            callCount++;
+            if (callCount === necessaryUpdateNumOfCalls) {
+              if (serverReturn) {
+                this.store$.dispatch(
+                  new CoreSendNewAlerts([
+                    this.dtoService.formSystemAlertObject(
+                      'Success',
+                      'Add Overrides',
+                      `Successfully Added New Overrides to All Funds`,
+                      null
+                    )]
+                  )
+                );
+                this.store$.dispatch(new StructureUpdateMainPanelEvent());
+              }
+            }
+          }),
+          catchError(err => {
+            console.error('update portfolio overrides for all portfolios failed', err);
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
+            return of('error');
+          })
+        ).subscribe();
+      });
       this.state.editRowList = [];
       return true;
     } else {

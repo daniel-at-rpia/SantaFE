@@ -132,6 +132,7 @@ export interface TradeCenterPanelState {
     fetchTableDataFailed: boolean;
     fetchTableDataFailedError: string;
     mainTable: Blocks.TableFetchResultBlock;
+    initialDataLoadedInternalSyncFlag: boolean;
   }
   filters: Blocks.TradeCenterPanelStateFilterBlock;
 }

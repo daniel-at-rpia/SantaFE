@@ -1,14 +1,17 @@
-import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, OnInit, OnDestroy, ViewEncapsulation} from '@angular/core';
 import { Store, select } from '@ngrx/store';
-
-
+import { Subscription } from 'rxjs';
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import {
   PortfolioMetricValues,
   DeltaScope,
-  PORTFOLIO_ID_TO_SHORTNAMES
+  PORTFOLIO_ID_TO_SHORTNAMES,
+  SubPortfolioFilter
 } from 'App/modules/core/constants/structureConstants.constants';
-import { selectMetricLevel } from 'Structure/selectors/structure.selectors';
+import {
+  selectMetricLevel,
+  selectActiveSubPortfolioFilter
+} from 'Structure/selectors/structure.selectors';
 import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 import { DTOService, BICsDataProcessingService } from 'Core/services';
 import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
@@ -32,15 +35,18 @@ export class StructurePopover implements OnInit, OnChanges {
   cs01MainRow: DTOs.StructurePortfolioBreakdownRowDTO;
   creditLeverageMainRow: DTOs.StructurePortfolioBreakdownRowDTO;
   activeMetric: PortfolioMetricValues;
+  activeSubPortfolioFilter: SubPortfolioFilter;
   constants = {
     navigationModule: NavigationModule,
     mainRowMetricKeys: ['targetLevel', 'targetPct', 'diffToTarget', 'diffToTargetDisplay', 'currentLevel', 'currentPct', 'currentPctDisplay', 'indexPct', 'indexPctDisplay', 'moveVisualizer'],
     securityDefinitionMap: SecurityDefinitionMap,
     globalWorkflowTypes: GlobalWorkflowTypes,
-    portfolioIdToShortnames: PORTFOLIO_ID_TO_SHORTNAMES
+    portfolioIdToShortnames: PORTFOLIO_ID_TO_SHORTNAMES,
+    subPortfolioFilter: SubPortfolioFilter
   }
   subscriptions = {
-    selectedMetricLevelSub: null
+    selectedMetricLevelSub: null,
+    activeSubPortfolioViewFilterSub: null
   }
 
   constructor(
@@ -68,6 +74,11 @@ export class StructurePopover implements OnInit, OnChanges {
         }
       }
     });
+    this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      select(selectActiveSubPortfolioFilter)
+    ).subscribe((activeFilter: SubPortfolioFilter) => {
+      this.activeSubPortfolioFilter = activeFilter;
+    })
   };
 
   public ngOnChanges() {
@@ -81,6 +92,15 @@ export class StructurePopover implements OnInit, OnChanges {
         this.createPopover(this.cs01MainRow);
       } else {
         this.createPopover(this.creditLeverageMainRow);
+      }
+    }
+  }
+
+  public ngOnDestroy() {
+    for (const eachItem in this.subscriptions) {
+      if (this.subscriptions.hasOwnProperty(eachItem)) {
+        const eachSub = this.subscriptions[eachItem] as Subscription;
+        eachSub.unsubscribe();
       }
     }
   }
@@ -129,6 +149,11 @@ export class StructurePopover implements OnInit, OnChanges {
       }
     });
     filterList.push(fundDefinition);
+    if (this.activeSubPortfolioFilter !== this.constants.subPortfolioFilter.all) {
+      const subPortfolioDefinition: DTOs.SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityDefinitionMap.STRATEGY);
+      this.utilityService.filterOutExcludedStrategiesForSeeBond(subPortfolioDefinition, this.activeSubPortfolioFilter);
+      filterList.push(subPortfolioDefinition);
+    }
     newWorkflowState.data.stateInfo.filterList = filterList;
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }

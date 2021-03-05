@@ -27,7 +27,7 @@ export const AGGRID_ALERT_STATUS_COLUMN_WIDTH = 155;  // can not use simple text
 export const AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH = 155;
 export const AGGRID_SIMPLE_NUM_COLUMN_WIDTH = 140;
 export const AGGRID_SIMPLE_TEXT_COLUMN_WIDTH = 135;
-export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 240;
+export const AGGRID_ALERT_MESSAGE_COLUMN_WIDTH = 300;
 export const AGGRID_ROW_HEIGHT = 40;
 export const AGGRID_ROW_HEIGHT_SLIM = 34;
 export const AGGRID_DETAIL_ROW_HEIGHT_PER_ROW = 37;
@@ -36,6 +36,7 @@ export const AGGRID_DETAIL_ROW_HEIGHT_OFFSET_OFFTHERUNCDS = 185;
 export const AGGRID_DETAIL_ROW_DEFAULT_COUNT = 9;
 export const AGGRID_DETAIL_ROW_HEIGHT_MAX = AGGRID_DETAIL_ROW_HEIGHT_OFFSET + AGGRID_DETAIL_ROW_HEIGHT_PER_ROW * AGGRID_DETAIL_ROW_DEFAULT_COUNT;
 export const AGGRID_DETAIL_ROW_HEIGHT_MINIMUM = 400;
+export const AGGRID_TRACE_BENCHMARK_NAME_COLUMN = 175;
 export const AGGRID_HEADER_CLASS = 'santaTable__agGridTable-agGrid-header';
 export const AGGRID_ROW_CLASS = 'santaTable__agGridTable-agGrid-row';
 export const AGGRID_CELL_CLASS = 'santaTable__agGridTable-agGrid-cell';
@@ -383,6 +384,28 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'alertTraceBenchmarkName',
+    content: {
+      label: 'Benchmark Name',
+      attrName: 'alertTraceBenchmarkName',
+      underlineAttrName: 'alertTraceBenchmarkName',
+      blockAttrName: 'alert',
+      isDataTypeText: true,
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      groupBelongs: SecurityTableHeaderConfigGroups.alert,
+      tableSpecifics: {
+        default: {
+          active: false,
+          disabled: true
+        },
+        tradeAlert: {
+          active: true,
+          disabled: false,
+          groupShow: true
+        }
+      }
+    }
+  },{
     key: 'alertTraceVolumeEstimated',
     content: {
       label: 'Vol (Estimated)',
@@ -420,28 +443,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
         tradeAlert: {
           active: true,
           disabled: false,
-          groupShow: true
-        }
-      }
-    }
-  },{
-    key: 'alertTraceBenchmarkName',
-    content: {
-      label: 'Benchmark Name',
-      attrName: 'alertTraceBenchmarkName',
-      underlineAttrName: 'alertTraceBenchmarkName',
-      blockAttrName: 'alert',
-      isDataTypeText: true,
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      groupBelongs: SecurityTableHeaderConfigGroups.alert,
-      tableSpecifics: {
-        default: {
-          active: false,
-          disabled: true
-        },
-        tradeAlert: {
-          active: false,
-          disabled: true,
           groupShow: true
         }
       }
@@ -2085,13 +2086,12 @@ export const TradeTraceHeaderConfigList: Array<TradeTraceHeaderConfigStub> = [
     attrName: 'displayVolumeReported',
     size: 7
   },
-  // Temporarily disable benchmark name until feed becomes available in MA
-  //{
-  //   headerKey: 'displayBenchMarkName',
-  //   headerDisplayLabel: 'Benchmark Name',
-  //   attrName: 'displayBenchMarkName',
-  //   size: 8
-  // },
+  {
+    headerKey: 'benchmarkName',
+    headerDisplayLabel: 'Benchmark Name',
+    attrName: 'benchmarkName',
+    size: 11
+  },
   {
     headerKey: 'price',
     headerDisplayLabel: 'Px',

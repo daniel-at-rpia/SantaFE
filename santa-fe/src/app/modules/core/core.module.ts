@@ -17,7 +17,8 @@ import {
   AgGridMiddleLayerService,
   BICsDataProcessingService,
   GlobalWorkflowIOService,
-  BICSDictionaryLookupService
+  BICSDictionaryLookupService,
+  SecurityMapService
 } from 'Core/services';
 import { CoreEffect } from 'Core/effects/core.effects';
 import { EffectsModule } from '@ngrx/effects';
@@ -111,6 +112,7 @@ import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
     BICsDataProcessingService,
     GlobalWorkflowIOService,
     BICSDictionaryLookupService,
+    SecurityMapService,
     {
       provide: RouteReuseStrategy,
       useClass: SantaRouteReuseStrategy

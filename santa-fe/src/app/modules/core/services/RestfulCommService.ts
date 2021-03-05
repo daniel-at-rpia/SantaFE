@@ -8,13 +8,10 @@ import {APIUrlMap, EngagementActionList} from 'Core/constants/coreConstants.cons
 @Injectable()
 export class RestfulCommService {
 
-  // private endpoint = 'https://rpiadev01.rpia.ca:1225';
-  // private endpoint = 'https://rpiadev01.ad.rpia:1225';
-  private endpoint = 'https://rpia-quant-dt.ad.rpia:51225';
-  // private endpoint = 'https://localhost:51225';
-  //private endpoint = 'https://rpia-solutions:51225';
-  //private endpoint = 'https://rpia-msmith-dt:51225';
-  // private endpoint = 'https://rpia-rcao-dt:51225';
+  // private endpoint = 'https://rpiadev01.rpia.ca:1225';  // prod
+  // private endpoint = 'https://rpia-staging.rpia.ca:51225'  // QA / staging
+  private endpoint = 'https://rpia-quant-dt.rpia.ca:51225';  // dev
+
   private user = 'anonymous';
   public apiMap = {
     ...APIUrlMap

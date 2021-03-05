@@ -229,7 +229,6 @@ export class BICsDataProcessingService {
     if (!!rawData) {
       const targetedRawBreakdown: BEStructuringBreakdownBlock = rawData[`${BICS_BREAKDOWN_FRONTEND_KEY}${level}`];
       const breakdown: BEStructuringBreakdownBlock = {
-        date: targetedRawBreakdown.date,
         groupOption: targetedRawBreakdown.groupOption,
         indexId: targetedRawBreakdown.indexId,
         portfolioBreakdownId: targetedRawBreakdown.portfolioBreakdownId,
@@ -617,9 +616,8 @@ export class BICsDataProcessingService {
     const bicsLevel = BICsLevels[level];
     if (!!rawData && !!rawData[bicsLevel]) {
       const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
-      const { date, groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
+      const { groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
       const customRawBreakdown: BEStructuringBreakdownBlock = {
-        date,
         groupOption,
         indexId,
         portfolioBreakdownId,

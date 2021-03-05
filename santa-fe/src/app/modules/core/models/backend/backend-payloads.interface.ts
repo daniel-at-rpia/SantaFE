@@ -8,7 +8,7 @@ import {
 } from 'Core/constants/structureConstants.constants'
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
-  BEStructuringOverrideBlockWithSubPortfolios,
+  BEStructuringOverrideBaseBlockWithSubPortfolios,
   BEStructuringBreakdownMetricBlockWithSubPortfolios,
   BESubPortfolioFilter
 } from './backend-models.interface';
@@ -120,7 +120,6 @@ export interface PayloadGetPortfolioStructures {
 
 export interface PayloadUpdatePortfolioStructuresTargets {
   portfolioTarget: {
-    date?: string,
     portfolioId: number,
     target: {
       [subPortfolio in SubPortfolioFilter]?: {
@@ -133,7 +132,6 @@ export interface PayloadUpdatePortfolioStructuresTargets {
 
 export interface PayloadUpdateBreakdown {
   portfolioBreakdown: {
-    date: string;
     groupOption: string;
     portfolioId: number;
     breakdown: {
@@ -143,15 +141,15 @@ export interface PayloadUpdateBreakdown {
 }
 
 export interface PayloadUpdateOverride {
-  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
+  portfolioOverride: BEStructuringOverrideBaseBlockWithSubPortfolios;
 }
 
 export interface PayloadDeleteOverride {
-  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
+  portfolioOverride: BEStructuringOverrideBaseBlockWithSubPortfolios;
 }
 
 export interface PayloadGetPortfolioOverride {
-  portfolioOverride: BEStructuringOverrideBlockWithSubPortfolios;
+  portfolioOverride: BEStructuringOverrideBaseBlockWithSubPortfolios;
 }
 
 export interface PayloadSetView {
@@ -165,16 +163,14 @@ export interface PayloadGetAllTraceTrades {
 
 export interface PayloadClearPortfolioBreakdown {
   portfolioBreakdown: {
-    date?: string;
-    portfolioId: number;
     groupOption: string;
+    portfolioId: number;
   }
   subPortfolioType: BESubPortfolioFilter;
 }
 
 export interface PayloadUpdatePortfolioOverridesForAllPortfolios {
   portfolioOverride: {
-    date?: string;
     simpleBucket: StructureBucketDataBlock;
     title: string;
   }

@@ -73,7 +73,7 @@
       KEYWORDSEARCH_DEBOUNCE_TIME,
       TriCoreDriverConfig
     } from 'Core/constants/coreConstants.constant';
-    import { AlertSample } from 'Trade/stubs/tradeAlert.stub';
+    import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
 
 @Component({
@@ -125,7 +125,8 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
     private dtoService: DTOService,
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private processingService: LiveDataProcessingService
+    private processingService: LiveDataProcessingService,
+    private securityMapService: SecurityMapService
   ){
     window['moment'] = moment;
     this.state = this.initializePageState();
@@ -208,6 +209,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         )
       ).subscribe(([mapContent, isValid]) => {
         if (!!isValid) {
+          this.securityMapService.storeSecurityMap(mapContent);
           this.state.securityMap = mapContent;
           this.state.isAlertPaused = false;
           this.store$.dispatch(new CoreFlushSecurityMap());

@@ -11,7 +11,8 @@
       BESecurityDeltaMetricDTO,
       BESecurityGroupDTO,
       BEStructuringOverrideBlock,
-      BEStructuringBreakdownBlock
+      BEStructuringBreakdownBlock,
+      BEStructuringOverrideBaseBlock
     } from 'BEModels/backend-models.interface';
     import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
     import {
@@ -34,8 +35,15 @@
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
     } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
-    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-    import { traceTradeFilterAmounts, traceTradeNumericalFilterSymbols } from '../constants/securityTableConstants.constant';
+    import {
+      SecurityDefinitionMap,
+      StrategyExcludedFiltersMapping,
+      FilterOptionsTenorRange
+    } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      traceTradeFilterAmounts,
+      traceTradeNumericalFilterSymbols
+    } from '../constants/securityTableConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
     import { NavigationEnd } from '@angular/router';
   // dependencies
@@ -1272,7 +1280,7 @@ export class UtilityService {
       }
     }
 
-    public formCategoryKeyForOverride(rawData: BEStructuringOverrideBlock): string {
+    public formCategoryKeyForOverride(rawData: BEStructuringOverrideBaseBlock): string {
       if (!!rawData.simpleBucket) {
         const list = [];
         for (let eachIdentifier in rawData.simpleBucket) {
@@ -1289,7 +1297,7 @@ export class UtilityService {
         });
         let categoryKey = '';
         list.forEach((eachIdentifier) => {
-          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName ) {
+          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName) {
             const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
               return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
@@ -1327,11 +1335,11 @@ export class UtilityService {
     }
 
     public convertRawOverrideToRawBreakdown(
-      overrideRawDataList: Array<BEStructuringOverrideBlock>
+      overrideRawDataList: Array<BEStructuringOverrideBaseBlock>
     ): AdhocPacks.StructureOverrideToBreakdownConversionReturnPack {
       const displayLabelToCategoryPerBreakdownMap = {};
       const breakdownList: Array<BEStructuringBreakdownBlock> = [];
-      overrideRawDataList.forEach((eachRawOverride) => {
+      overrideRawDataList.forEach((eachRawOverride: BEStructuringOverrideBaseBlock) => {
         const overrideBucketIdentifier = this.formBucketIdentifierForOverride(eachRawOverride.simpleBucket);
         const matchExistBreakdown = breakdownList.find((eachBEDTO) => {
           return eachBEDTO.groupOption === overrideBucketIdentifier;
@@ -1346,7 +1354,6 @@ export class UtilityService {
           matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
-            date: eachRawOverride.date,
             groupOption: overrideBucketIdentifier,
             indexId: eachRawOverride.indexId,
             portfolioId: eachRawOverride.portfolioId,
@@ -1551,16 +1558,6 @@ export class UtilityService {
       }
     }
 
-    public checkIfFundDeltaIsSignificantPositive(delta: number, previousValue): boolean {
-      const isSignificantPositive = delta > 0 && Math.abs(delta)/previousValue > 0.05 ? true : false;
-      return isSignificantPositive;
-    }
-
-    public checkIfFundDeltaIsSignificantNegative(delta: number, previousValue): boolean {
-      const isSignificantNegative = delta < 0 && Math.abs(delta)/previousValue > 0.05 ? true : false;
-      return isSignificantNegative;
-    }
-
     public getFormattedRowDisplayCategory(
       category: string,
       isOverride: boolean
@@ -1573,6 +1570,39 @@ export class UtilityService {
         displayCategory = category;
       }
       return displayCategory;
+    }
+
+    public checkIfFundDeltaIsSignificantPositive(delta: number): boolean {
+      const isSignificantPositive = delta > 0 && delta >= 0.1 ? true : false;
+      return isSignificantPositive;
+    }
+
+    public checkIfFundDeltaIsSignificantNegative(delta: number): boolean {
+      const isSignificantNegative = delta < 0 && delta <= -0.1 ? true : false;
+      return isSignificantNegative;
+    }
+
+    public getRawOverridesFromFund(rawOverrides: BEStructuringOverrideBlock): Array<BEStructuringOverrideBaseBlock> {
+      let rawOverridesList: Array<BEStructuringOverrideBaseBlock> = [];
+      for (let bucket in rawOverrides) {
+        if (rawOverrides[bucket]) {
+          for (let category in rawOverrides[bucket]) {
+            rawOverridesList = [...rawOverridesList, rawOverrides[bucket][category]];
+          }
+        }
+      }
+      return rawOverridesList;
+    }
+
+    public filterOutExcludedStrategiesForSeeBond(definition: DTOs.SecurityDefinitionDTO, activeSubPortfolio: SubPortfolioFilter) {
+        definition.data.displayOptionList.forEach((eachOption) => {
+        const subPortfolioMapping = StrategyExcludedFiltersMapping[activeSubPortfolio];
+        const isExcluded = subPortfolioMapping.excluded.find(strategy => strategy === eachOption.displayLabel);
+        if (!isExcluded) {
+          eachOption.isSelected = true;
+          definition.data.highlightSelectedOptionList.push(eachOption);
+        }
+      })
     }
   // structuring specific end
 }
