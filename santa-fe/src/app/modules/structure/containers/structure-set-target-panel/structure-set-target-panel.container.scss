@@ -301,7 +301,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
               flex: 0 0 $structureSetTargetPanel_edit_column_size;
               display: flex;
               flex-direction: column;
-              padding: 0 $spacing_medium;
+              padding: 0 $spacing_large;
               &-btn {
                 align-self: center;
                 margin-top: $spacing_small;
@@ -319,6 +319,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
               }
               &:first-of-type {
                 margin-right: $typical_border_width;
+              }
+              &:last-child {
+                margin-right: $spacing_small;
               }
             }
             &-createRow {
