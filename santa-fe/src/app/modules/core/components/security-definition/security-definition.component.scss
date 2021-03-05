@@ -436,4 +436,25 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
       }
     }
   }
+  &--portfolioBreakdownVariant {
+    #{$blockName} {
+     &__icon {
+       &-securityType--subType {
+         #{$blockName} {
+          &__icon-securityType-box {
+            flex-direction: column;
+            background-color: $color_gray_3;
+            &-text {
+              text-align: center;
+              margin-left: 0;
+              &:first-of-type {
+                color : $color_gray_3;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
