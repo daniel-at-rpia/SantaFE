@@ -150,3 +150,11 @@ export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
   Mom: 0.3,
   Ytd: 0.4
 }
+
+export const DeltaScopeBEToFEMapping = {
+  Dod: 'DoD',
+  TMinusTwo: 'T-2',
+  Wow: 'WoW',
+  Mom: 'MoM',
+  Ytd: 'YtD'
+}
