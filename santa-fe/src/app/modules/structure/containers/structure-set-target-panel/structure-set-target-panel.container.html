@@ -109,21 +109,23 @@
               <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-index">
                 <span class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-index-text">{{state.targetBreakdown?.data.indexName}}</span>
               </div>
-              <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell">
-                <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-icon fas fa-flag-checkered"></i>
-                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-tooltip">Target</div>
-              </div>
-              <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell">
-                <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-icon fas fa-chart-pie"></i>
-                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-tooltip">Current %</div>
-              </div>
-              <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell--delta">
-                <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-icon fal fa-triangle"></i>
-                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-tooltip">Delta %</div>
-              </div>
-              <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell--index">
-                <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-icon fas fa-analytics"></i>
-                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cell-tooltip">Index %</div>
+              <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer">
+                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell">
+                  <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-icon fas fa-flag-checkered"></i>
+                  <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-tooltip">Target</div>
+                </div>
+                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell">
+                  <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-icon fas fa-chart-pie"></i>
+                  <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-tooltip">Current %</div>
+                </div>
+                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell--delta">
+                  <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-icon fal fa-triangle"></i>
+                  <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-tooltip">Delta %</div>
+                </div>
+                <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell--index">
+                  <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-icon fas fa-analytics"></i>
+                  <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell-tooltip">Index %</div>
+                </div>
               </div>
             </div>
             <button (click)="onClickNewOverrideRow()" class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-createRow santaBtn--labelled santaBtn--inverseLabelled">
