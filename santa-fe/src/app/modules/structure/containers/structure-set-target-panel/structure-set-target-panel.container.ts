@@ -486,6 +486,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onClickClearAllTargets() {
     this.state.isViewingClearTargets = !this.state.isViewingClearTargets;
+    if (!this.state.isViewingClearTargets) {
+      if (this.state.clearTargetsOptionsList.length > 0) {
+        this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => {
+          option.isSelected = false;
+        })
+      }
+    }
   }
 
   public onClickEditCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
