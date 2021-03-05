@@ -554,8 +554,17 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
       &__main {
         min-height: 44rem;
-        &-setTargets-edit-content-header-createRow {
-          display: flex;
+        &-setTargets {
+          &-edit {
+            &-content {
+              padding-left: $spacing_medium;
+              &-header {
+                &-createRow {
+                  display: flex;
+                }
+              }
+            }
+          }
         }
       }
     }
