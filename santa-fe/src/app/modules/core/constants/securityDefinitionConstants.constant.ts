@@ -329,6 +329,11 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'PM'
   ];
 
+  export const StructuringEditingViewAvilableList = [
+    ...FilterOptionsPortfolioResearchList,
+    ...StructuringAllFunctionalityAvailableList
+  ];
+
   export const BICsLevel1DefinitionList = [
     'Communications',
     'Consumer Discretionary',
@@ -357,8 +362,6 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'HEDGE',
     'Basis'
   ];
-
-export const editingViewAvailableUsers = [...FilterOptionsPortfolioResearchList, 'DM'];
 
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECURITY_TYPE: {
