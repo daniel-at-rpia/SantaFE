@@ -73,6 +73,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     }
     &-clearAll {
       display: flex;
+      padding-right: $spacing_large;
       &-btn {
         flex-direction: row;
         &-icon {
