@@ -539,6 +539,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       matchedOption.isSelected = !matchedOption.isSelected
     }
   }
+
+  public onClearRowTarget(targetRow: Blocks.StructureSetTargetPanelEditRowBlock) {
+    targetRow.targetCs01.level.modifiedDisplayValue = '';
+    targetRow.targetCs01.level.modifiedUnderlineValue = null;
+    targetRow.targetCs01.level.isActive = true;
+    targetRow.targetCreditLeverage.level.modifiedDisplayValue = '';
+    targetRow.targetCreditLeverage.level.modifiedUnderlineValue = null;
+    targetRow.targetCreditLeverage.level.isImplied = true;
+    this.onClickSaveEdit(targetRow, targetRow.targetCs01.level);
+  }
+
   private checkIfEvenRow(editRow: Blocks.StructureSetTargetPanelEditRowBlock): boolean {
     const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
     if (!!this.state.targetBreakdown.state.isBICs) {
@@ -654,14 +665,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
     newRow.isEven = this.checkIfEvenRow(newRow);
     return newRow;
-  }
-
-  private resetRowTargets(row: Blocks.StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
-    const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
-    row[rowTargetMetric].level.modifiedDisplayValue = '';
-    row[rowTargetMetric].level.modifiedUnderlineValue = null;
-    row[rowTargetMetric].level.isActive = true;
-    this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
   }
 
   private loadEditRows() {

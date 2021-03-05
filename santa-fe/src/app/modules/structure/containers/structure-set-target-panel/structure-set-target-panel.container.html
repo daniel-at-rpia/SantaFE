@@ -241,6 +241,12 @@
                   }">
                 </button>
               </section>
+              <section class="sat-structureSetTargetEditRow__clearTarget">
+                <button
+                (click)="onClearRowTarget(eachCategory)"
+                class="sat-structureSetTargetEditRow__clearTarget-btn santaBtn--iconOnly fal fa-eraser">
+              </button>
+              </section>
               <section class="sat-structureSetTargetEditRow__label">
                 <span class="sat-structureSetTargetEditRow__label-text">{{eachCategory.displayRowTitle}}</span>
                 <santa-textarea

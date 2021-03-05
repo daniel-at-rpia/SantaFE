@@ -6,14 +6,20 @@ $structureSetTargetPanel_configurator_container_leftPadding: $spacing_large;
 $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $structureSetTargetPanel_configurator_container_leftPadding;
 $structureSetTargetPanel_highlight_color: $color_blue_gray_1;
 $structureSetTargetPanel_highlight_border: 2px solid $color_active;
-$structureSetTargetPanel_bics_variant_edit_section_width: 2 * ($structureSetTargetPanel_edit_column_size + ($spacing_large + ($spacing_large / 2)));
-$structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetTargetPanel_bics_variant_edit_section_width});
+$structureSetTargetPanel_bics_variant_edit_section_width: 2 * ($structureSetTargetPanel_edit_column_size + $spacing_large);
+$structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetTargetPanel_bics_variant_edit_section_width} - (2 * #{$iconButton_size_small}));
 $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
 $structureSetTargetPanel_rating_width: 12rem;
 $structureSetTargetPanel_rating_thickness: 1.75rem;
 $structureSetTargetPanel_borderWidth: $typical_border_width*2;
 $structureSetTargetPanel_bics_variant_column_width_half: calc((100% - #{$structureSetTargetPanel_bics_variant_edit_section_width}) /2);
 $structureSetTargetPanel_rating_top_offset: 4.25rem;
+
+@mixin mix_editRow_btn {
+  @include mix_fixed_div(relative, $z_index_base_item); // for some reason I need this position relative so the shadow won't be clipped by the next row's background color, weird
+  flex: 0 0 auto;
+  margin: $spacing_small $spacing_x_small $spacing_small $spacing_small;
+}
 
 .sat-structureSetTargetPanel {
   $blockName: &;
@@ -570,7 +576,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
               &-categories {
                 flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
                 display: flex;
-                margin-right: $spacing_x_large;
+                margin-right: 2 * $iconButton_size_regular;
               }
             }
           }
@@ -639,25 +645,25 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     align-items: center;
   }
   &__remove {
-    @include mix_fixed_div(relative, $z_index_base_item);
-    flex: 0 0 auto;
+    @include mix_editRow_btn();
     display: none;
-    margin: $spacing_small;
     &-btn {
       background-color: $color_kill;
       color: $font_color_inverse;
     }
   }
   &__lock {
-    @include mix_fixed_div(relative, $z_index_base_item); // for some reason I need this position relative so the shadow won't be clipped by the next row's background color, weird
-    flex: 0 0 auto;
-    margin: $spacing_small $spacing_medium;
+    @include mix_editRow_btn();
+  }
+  &__clearTarget {
+    @include mix_editRow_btn();
   }
   &__label {
     flex: 1 1 auto;
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin-left: $spacing_small;
     &-text {
       font-size: $font_size_normal;
       color: $font_color_major;
@@ -717,6 +723,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
       &__label {
         display: none;
+      }
+      &__lock {
+        margin-left: $spacing_x_small;
       }
     }
   }
