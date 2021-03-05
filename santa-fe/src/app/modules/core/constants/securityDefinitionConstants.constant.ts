@@ -323,8 +323,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ]
 
   export const StructuringTeamPMList = [
-    'AY',
-    'DM',
+    ...StructuringAllFunctionalityAvailableList,
     'LP',
     'PM'
   ];
