@@ -317,6 +317,11 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'TW'
   ];
 
+  export const StructuringAllFunctionalityAvailableList = [
+    'AY',
+    'DM'
+  ]
+
   export const StructuringTeamPMList = [
     'AY',
     'DM',
