@@ -10,7 +10,7 @@ $securityDefinition_configuratorVariant_img_size: 1rem;
 $securityDefinition_configuratorVariant_img_size_secondary: 0.5rem;
 $securityDefinition_configuratorVariant_filter_size: 1.5rem;
 .sat-securityDefinition {
-  $securityDefinitionBlockName: &;
+  $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
   @include mix_shadow($material_regular_southMarkup, $material_lowHover_degree, $material_regular_intensity);
   @include mix_alive('custom', $animation_duration_light box-shadow, $animation_duration_light background-color);
@@ -128,14 +128,14 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
   }
   &:hover {
     @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__filterMask {
         @include mix_shadow($material_regularHover_southMarkup, $material_regularHover_degree, $material_regularHover_intensity);
       }
     }
   }
   &--isRatingBucket {
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg {
           display: none;
@@ -147,7 +147,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     }
   }
   &--isSecurityType {
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg {
           display: none;
@@ -162,7 +162,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     }
   }
   &--isSecuritySubType {
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg {
           display: none;
@@ -174,7 +174,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     }
   }
   &--isBackendTenor {
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg {
           display: none;
@@ -187,7 +187,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
   }
   &--groupByActiveState {
     background-color: $color_white;
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg {
           color: $font_color_major;
@@ -201,7 +201,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     }
   }
   &--filterActiveState {
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__filter {
         display: flex;
       }
@@ -213,7 +213,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
   &--selectedState {
     @include material('none');
     background-color: $color_active;
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg {
           color: $font_color_inverse;
@@ -242,16 +242,16 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
       }
     }
   }
-  &--selectedState#{$securityDefinitionBlockName}--configuratorListVariant {
+  &--selectedState#{$blockName}--configuratorListVariant {
     @include mix_border_radius(5px, 'left');
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__selectedGap {
         display: flex;
       }
     }
   }
   &--selectedState:hover {
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__filterMask {
         @include material('none');
       }
@@ -261,7 +261,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     @include mix_border_generator;
     @include material('none');
     background-color: inherit;
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg {
           color: $font_color_minor;
@@ -280,7 +280,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     flex: 1 1 auto;
     height: inherit;
     width: inherit;
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg, &-securityType-box-text:first-of-type {
           color: $font_color_inverse;
@@ -305,7 +305,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     background-color: inherit;
     flex: 1 1 auto;
     height: $securityDefinition_backgroundVariant_img_size;
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg, &-ratingBucket-primaryImg, &-backendTenor-primaryImg, &-backendTenor-secondaryImg, &-securityType-box-text:first-of-type {
           color: $color_gray_2;
@@ -342,7 +342,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     align-items: center;
     height: $securityDefinition_configuratorVariant_height;
     width: $securityDefinition_configuratorVariant_width;
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         flex: 0 0 $securityDefinition_configuratorVariant_height;
         &-regularImg, &-ratingBucket, &-ratingBucket-primaryImg, &-backendTenor, &-backendTenor-primaryImg {
@@ -392,11 +392,11 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
       }
     }
   }
-  &--miniPillVariant#{$securityDefinitionBlockName}--lockedState {
+  &--miniPillVariant#{$blockName}--lockedState {
     @include material('none');
     @include mix_border_generator($typical_border_width, $font_color_major);
     background: none;
-    #{$securityDefinitionBlockName} {
+    #{$blockName} {
       &__icon {
         &-regularImg {
           color: $font_color_minor;
