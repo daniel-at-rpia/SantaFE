@@ -41,8 +41,7 @@
     import {
       CoreFlushSecurityMap,
       CoreSendNewAlerts,
-      CoreGlobalAlertsClearAllTradeAlertTableAlerts,
-      CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts
+      CoreGlobalAlertsClearAllTradeAlertTableAlerts
     } from 'Core/actions/core.actions';
     import {
       TradeAlertTableReceiveNewAlertsEvent,
@@ -101,10 +100,11 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     keywordSearchSub: null,
     newAlertSubscription: null,
     globalAlertLiveInternalCountEventSub: null,
-    marketListAlertCountdownSub: null
+    marketListAlertCountdownSub: null,
+    fetchAlertFromGlobalSub: null
   }
   keywordChanged$: Subject<string> = new Subject<string>();
-  autoUpdateCount$: Observable<any>;
+  fetchAlertFromGlobal$: Observable<any>;
   constants = {
     // alertTypes: AlertTypes,
     alertTypes: AlertTypes,
@@ -205,6 +205,15 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
 
     public ngOnInit() {
       this.state = this.initializePageState();
+      this.fetchAlertFromGlobal$ = interval(15000);  // 15 seconds
+
+      this.subscriptions.fetchAlertFromGlobalSub = this.fetchAlertFromGlobal$.pipe(
+        filter((internalCount) => {
+          return this.stateActive;
+        })
+      ).subscribe((internalCount) => {
+        
+      });
       this.subscriptions.securityMapSub = this.store$.pipe(
         filter((tick) => {
           return this.stateActive;

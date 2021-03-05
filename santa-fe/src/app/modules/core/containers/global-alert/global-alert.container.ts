@@ -134,6 +134,8 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           }
         } else {
           this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = false;
+          // TradeAlertPanel will take care of clearing the store as long as it is active, but when it is no longer active, then global alert will clear it out
+          this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
         }
       }
     });
