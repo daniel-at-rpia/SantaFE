@@ -140,7 +140,8 @@ export enum DeltaScope {
   dod = 'Dod',
   wow = 'Wow',
   mom = 'Mom',
-  ytd = 'Ytd'
+  ytd = 'Ytd',
+  tMinusTwo = 'TMinusTwo'
 }
 
 export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
