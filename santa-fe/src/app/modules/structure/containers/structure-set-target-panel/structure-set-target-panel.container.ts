@@ -289,7 +289,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onClickDistributeEvenly() {
-    if (!this.state.isViewingClearTargets) {
+    if (!this.state.isViewingClearTargets || this.state.activeMetric !== this.constants.metric.creditLeverage) {
       const unlockedList = this.state.editRowList.filter((eachRow) => {
         return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel)
       });
@@ -318,7 +318,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onClickDistributeProportionally() {
-    if (!this.state.isViewingClearTargets) {
+    if (!this.state.isViewingClearTargets || this.state.activeMetric !== this.constants.metric.creditLeverage) {
       const unlockedList = this.state.editRowList.filter((eachRow) => {
         return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel);
       });
@@ -535,7 +535,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onToggleSetViewMode() {
-    if (!this.state.isViewingClearTargets) {
+    if (!this.state.isViewingClearTargets || this.state.activeMetric !== this.constants.metric.creditLeverage) {
       this.state.editViewMode = !this.state.editViewMode;
     }
   }

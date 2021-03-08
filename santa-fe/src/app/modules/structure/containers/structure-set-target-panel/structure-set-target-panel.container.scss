@@ -436,18 +436,6 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
     }
   }
-  &--creditLeverageActiveState {
-    #{$blockName} {
-      &__utilities-distribution-label {
-        &--cs01 {
-          display: none;
-        }
-        &--creditLeverage {
-          display: flex;
-        }
-      }
-    }
-  }
   &--distributeAvailableState {
     #{$blockName} {
       &__utilities-distribution {
@@ -460,6 +448,42 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         }
         &-ctas {
           display: flex;
+        }
+      }
+    }
+  }
+  &--creditLeverageActiveState {
+    #{$blockName} {
+      &__utilities {
+        &-distribution {
+          background: $color_disabled;
+          &-ctas {
+            &-evenly,
+            &-proportionally {
+              @include material('none');
+              @include mix_border_generator(1px,$font_color_inverse);
+              background-color: $color_disabled;
+              color: $font_color_inverse;
+              pointer-events: none;
+
+            }
+          }
+          &-label {
+            &--cs01 {
+              display: none;
+            }
+            &--creditLeverage {
+              display: flex;
+            }
+          }
+        }
+        &-setView {
+          &-btn {
+            @include material('none');
+            background-color: $color_disabled;
+            color: $font_color_inverse;
+            pointer-events: none;
+          }
         }
       }
     }
