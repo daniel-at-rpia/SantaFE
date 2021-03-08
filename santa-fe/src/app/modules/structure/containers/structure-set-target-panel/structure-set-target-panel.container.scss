@@ -4,8 +4,6 @@
 $structureSetTargetPanel_edit_column_size: 14rem;
 $structureSetTargetPanel_configurator_container_leftPadding: $spacing_large;
 $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $structureSetTargetPanel_configurator_container_leftPadding;
-$structureSetTargetPanel_highlight_color: $color_blue_gray_1;
-$structureSetTargetPanel_highlight_border: 2px solid $color_active;
 $structureSetTargetPanel_bics_variant_edit_section_width: 2 * ($structureSetTargetPanel_edit_column_size + $spacing_large);
 $structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetTargetPanel_bics_variant_edit_section_width} - (2 * #{$iconButton_size_small}));
 $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
