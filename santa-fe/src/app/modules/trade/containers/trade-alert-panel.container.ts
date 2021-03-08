@@ -25,8 +25,6 @@
     } from 'BEModels/backend-payloads.interface';
     import {
       selectAlertCounts,
-      selectSecurityMapContent,
-      selectSecurityMapValidStatus,
       selectUserInitials,
       selectNewAlerts,
       selectGlobalAlertSendNewAlertsToTradePanel,
@@ -40,7 +38,6 @@
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      CoreFlushSecurityMap,
       CoreSendNewAlerts,
       CoreGlobalAlertsClearAllTradeAlertTableAlerts,
       CoreGlobalAlertsTradeAlertFetch

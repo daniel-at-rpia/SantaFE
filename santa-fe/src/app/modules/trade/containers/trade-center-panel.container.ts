@@ -31,7 +31,6 @@
     } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
-      CoreLoadSecurityMap,
       CoreUserLoggedIn,
       CoreGlobalWorkflowSendNewState
     } from 'Core/actions/core.actions';
@@ -702,8 +701,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       tap((serverReturn: BESecurityMap) => {
         if (!!serverReturn) {
           this.securityMapService.storeSecurityMap(serverReturn);
-          const map = this.securityMapService.getSecurityMap();
-          this.store$.dispatch(new CoreLoadSecurityMap(map));
         } else {
           this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
         }

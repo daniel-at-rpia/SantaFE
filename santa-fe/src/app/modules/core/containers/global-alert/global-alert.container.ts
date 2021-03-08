@@ -20,7 +20,6 @@
     } from 'Core/constants/coreConstants.constant';
     import { ALERT_UPDATE_COUNTDOWN } from 'Core/constants/tradeConstants.constant';
     import {
-      CoreLoadSecurityMap,
       CoreSendAlertCountsByType,
       CoreToggleAlertThumbnailDisplay,
       CoreSendNewAlerts,

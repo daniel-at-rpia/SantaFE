@@ -25,7 +25,6 @@
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { EngagementActionList } from 'Core/constants/coreConstants.constant';
     import { PageStates, AdhocPacks } from 'Core/models/frontend';
-    import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { FAILED_USER_INITIALS_FALLBACK, DevWhitelist } from 'Core/constants/coreConstants.constant';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
     import { BESecurityMap } from 'Core/models/backend/backend-models.interface';
@@ -87,8 +86,6 @@ export class AppRoot implements OnInit, OnDestroy {
       tap((serverReturn: BESecurityMap) => {
         if (!!serverReturn) {
           this.securityMapService.storeSecurityMap(serverReturn);
-          const map = this.securityMapService.getSecurityMap();
-          this.store$.dispatch(new CoreLoadSecurityMap(map));
         } else {
           this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
         }
