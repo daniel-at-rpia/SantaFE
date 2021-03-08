@@ -16,7 +16,7 @@
       UTILITY_PANEL_HISTORICAL_TIME_LABEL,
       SubPortfolioFilter,
       DeltaScope,
-      deltaScopeFEMapping
+      DeltaScopeBEToFEMapping
     } from 'Core/constants/structureConstants.constants';
     import {
       selectMetricLevel,

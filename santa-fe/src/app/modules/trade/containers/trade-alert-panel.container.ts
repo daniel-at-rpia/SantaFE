@@ -29,7 +29,8 @@
       selectSecurityMapValidStatus,
       selectUserInitials,
       selectNewAlerts,
-      selectGlobalAlertSendNewAlertsToTradePanel
+      selectGlobalAlertSendNewAlertsToTradePanel,
+      selectGlobalAlertTradeTableFetchAlertTick
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -42,7 +43,7 @@
       CoreFlushSecurityMap,
       CoreSendNewAlerts,
       CoreGlobalAlertsClearAllTradeAlertTableAlerts,
-      CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts
+      CoreGlobalAlertsTradeAlertFetch
     } from 'Core/actions/core.actions';
     import {
       TradeAlertTableReceiveNewAlertsEvent,
@@ -101,10 +102,11 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     keywordSearchSub: null,
     newAlertSubscription: null,
     globalAlertLiveInternalCountEventSub: null,
-    marketListAlertCountdownSub: null
+    marketListAlertCountdownSub: null,
+    fetchAlertFromGlobalSub: null
   }
   keywordChanged$: Subject<string> = new Subject<string>();
-  autoUpdateCount$: Observable<any>;
+  fetchAlertFromGlobal$: Observable<any>;
   constants = {
     // alertTypes: AlertTypes,
     alertTypes: AlertTypes,
@@ -145,6 +147,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         isUserPM: false,
         configureAlert: false,
         isAlertPaused: true,
+        lastReceiveAlertUnitTimestamp: 0,
         securityMap: [],
         // focusMode: false,
         configuration: {
@@ -205,6 +208,19 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
 
     public ngOnInit() {
       this.state = this.initializePageState();
+      this.fetchAlertFromGlobal$ = interval(15000);  // 15 seconds
+
+      this.subscriptions.fetchAlertFromGlobalSub = this.fetchAlertFromGlobal$.pipe(
+        filter((internalCount) => {
+          return this.stateActive;
+        })
+      ).subscribe((internalCount) => {
+        // TODO: enable the condition on isAlertPaused when securityMap issue is properly addressed
+        // if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+        if (!this.state.alertUpdateInProgress) {
+          this.store$.dispatch(new CoreGlobalAlertsTradeAlertFetch(this.state.lastReceiveAlertUnitTimestamp));
+        }
+      });
       this.subscriptions.securityMapSub = this.store$.pipe(
         filter((tick) => {
           return this.stateActive;
@@ -307,8 +323,10 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           return this.stateActive;
         }),
         select(selectGlobalAlertSendNewAlertsToTradePanel)
-      ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
+      ).subscribe((alertList) => {
         if (alertList.length > 0) {
+          // is okay to omit the timestamp update during the window that we have not received any new alerts, because well... there is no new alert
+          this.state.lastReceiveAlertUnitTimestamp = moment().unix();
           if (!this.state.alert.initialAlertListReceived) {
             this.state.alert.initialAlertListReceived = true;
           }
@@ -348,11 +366,6 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       if (!!this.collapseConfiguration) {
         this.state.configureAlert = false;
       }
-    }
-
-    public ngOnDestroy() {
-      this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(false));
-      return super.ngOnDestroy();
     }
 
     private marketListAlertsCountdownUpdate(): number {
