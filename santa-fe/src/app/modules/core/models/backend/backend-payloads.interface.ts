@@ -9,7 +9,8 @@ import {
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
   BEStructuringOverrideBaseBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios
+  BEStructuringBreakdownMetricBlockWithSubPortfolios,
+  BESubPortfolioFilter
 } from './backend-models.interface';
 
 export interface PayloadGetSantaGroups {
@@ -165,7 +166,7 @@ export interface PayloadClearPortfolioBreakdown {
     groupOption: string;
     portfolioId: number;
   }
-  subPortfolioType?: string;
+  subPortfolioType: BESubPortfolioFilter;
 }
 
 export interface PayloadUpdatePortfolioOverridesForAllPortfolios {

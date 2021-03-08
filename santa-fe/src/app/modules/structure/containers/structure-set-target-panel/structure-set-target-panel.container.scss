@@ -4,16 +4,20 @@
 $structureSetTargetPanel_edit_column_size: 14rem;
 $structureSetTargetPanel_configurator_container_leftPadding: $spacing_large;
 $structureSetTargetPanel_configurator_container_width: $securityDefinitionConfigurator_width + $structureSetTargetPanel_configurator_container_leftPadding;
-$structureSetTargetPanel_highlight_color: $color_blue_gray_1;
-$structureSetTargetPanel_highlight_border: 2px solid $color_active;
-$structureSetTargetPanel_bics_variant_edit_section_width: 2 * ($structureSetTargetPanel_edit_column_size + ($spacing_large + ($spacing_large / 2)));
-$structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetTargetPanel_bics_variant_edit_section_width});
+$structureSetTargetPanel_bics_variant_edit_section_width: 2 * ($structureSetTargetPanel_edit_column_size + $spacing_large);
+$structureSetTargetPanel_bics_variant_column_width: calc(100% - #{$structureSetTargetPanel_bics_variant_edit_section_width} - (2 * #{$iconButton_size_small}));
 $structureSetTargetPanel_categoryList_cell_width: 3.5rem;
 $structureSetTargetPanel_rating_width: 12rem;
 $structureSetTargetPanel_rating_thickness: 1.75rem;
 $structureSetTargetPanel_borderWidth: $typical_border_width*2;
 $structureSetTargetPanel_bics_variant_column_width_half: calc((100% - #{$structureSetTargetPanel_bics_variant_edit_section_width}) /2);
 $structureSetTargetPanel_rating_top_offset: 4.25rem;
+
+@mixin mix_editRow_btn {
+  @include mix_fixed_div(relative, $z_index_base_item); // for some reason I need this position relative so the shadow won't be clipped by the next row's background color, weird
+  flex: 0 0 auto;
+  margin: $spacing_small $spacing_x_small $spacing_small $spacing_small;
+}
 
 .sat-structureSetTargetPanel {
   $blockName: &;
@@ -24,7 +28,6 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &__utilities {
     @include mix_border_generator(0 0 $typical_border_width 0);
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-top: -$spacing_small;
     padding-bottom: $spacing_medium;
@@ -71,13 +74,18 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
         }
       }
     }
-    &-clearTargets {
+    &-clearAll {
       display: flex;
+      &-btn {
+        flex-direction: row;
+        &-icon {
+          padding-right: $spacing_x_small;
+        }
+      }
     }
     &-setView {
       display: none;
       justify-content: space-between;
-      padding-left: $spacing_large;
       &-btn {
         display: flex;
         flex-direction: row;
@@ -102,164 +110,252 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     flex: 1 1 auto;
     display: flex;
     overflow: hidden;
-    &-preview {
-      @include mix_alive('custom', margin-right $animation_duration_light);
-      @include mix_enable_scrollbar();
-      flex: 0 1 50%;
-      flex-wrap: wrap;
-      display: flex;
-      padding-right: $spacing_large;
-      margin: 5rem 0 0 0;
-      &>portfolio-breakdown {
-        flex: 1 1 auto;
-      }
-    }
-    &-configurator {
-      @include mix_fixed_div(absolute, $z_index_base_item);
-      @include mix_border_generator(0 0 0 $typical_border_width);
+    &-clearTargets {
       @include mix_alive('light');
-      overflow: hidden;
-      height: 100%;
-      width: 0rem;
-      right: 50%;
-      padding-left: 0;
-      &-content { 
-        display: none;
-        height: 100%;
-        background-color: $color_gray_2;
-        security-definition-configurator {
-          height: 100%;
-          display: flex;
+      display: none;
+      flex: 1 1 auto;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      &-cta {
+        display: flex;
+        justify-content: space-between;
+        &-btn {
+          &--cancel {
+            margin-right: $spacing_medium;
+            color: $font_color_inverse;
+            background-color: $color_negative;
+          }
+          &--confirm {
+            background-color: $color_positive;
+            color: $font_color_inverse;
+          }
         }
       }
-    }
-    &-edit {
-      flex: 0 0 50%;
-      display: flex;
-      flex-direction: column;
-      &-content {
-        @include mix_fixed_div(relative, $z_index_base_item);
+      &-header {
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-        padding-left: $spacing_large;
-        &-header {
-          flex: 0 0 auto;
+        align-items: center;
+        margin-bottom: $spacing_medium;
+        &-icon {
+          font-size: $font_size_hero;
+          color: $color_warning;
+          margin-bottom: $spacing_small;
+
+        }
+        &-text {
+          font-size: $font_size_xxxx_large;
+          color: $color_active;
+        }
+      }
+      &-options {
+        margin-bottom: $spacing_x_large;
+        &-text {
+          text-align: center;
+          margin-bottom: $spacing_medium;
+          font-size: $font_size_large;
+        }
+        &-list {
           display: flex;
-          justify-content: flex-end;
-          margin-right: $scroll_bar_width;
-          &-categories {
-            display: none;
-            justify-content: flex-end;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            flex: 0 0 100%;
-            margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
-            &-index {
-              display: none;
-              flex: 0 0 100%;
-              text-align: right;
-              &-text {
-                display: inline-block;
-                width: 6rem;
-                color: $font_color_minor;
-              }
-            }
-            &-cell {
-              @include mix_fixed_div(relative, $z_index_base_item);
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              width: $structureSetTargetPanel_categoryList_cell_width;
-              &-icon {
-                color: $font_color_minor;
-                font-size: $font_size_large;
-              }
-              &-tooltip {
-                @include mix_fixed_div(absolute, $z_index_hovering_item);
-                @include mix_border_radius(3px);
-                display: none;
-                top: -100%;
-                color: $font_color_inverse;
-                line-height: $line_height_small;
-                width: 4.25rem;
-                background-color: $color_active;
-                text-align: center;
-              }
-              &:hover>&-tooltip {
-                display: block;
-              }
-              &--index {
-                display: none;
-              }
-            }
-          }
           &-item {
-            flex: 0 0 $structureSetTargetPanel_edit_column_size;
-            display: flex;
-            flex-direction: column;
-            padding: 0 $spacing_medium;
+            margin-right: $spacing_medium;
             &-btn {
-              align-self: center;
-              margin-top: $spacing_small;
-              margin-bottom: $spacing_x_small;
-              min-width: 10rem;
-              justify-content: center;
-              &>i {
-                font-size: $font_size_large;
-              }
               &--selected {
-                @include material('none');
-                @extend .santaBtn--inverseLabelled;
-                background-color: $color_active;
+                @include mix_cta_active;
               }
-            }
-            &:first-of-type {
-              margin-right: $typical_border_width;
-            }
-          }
-          &-createRow {
-            display: none;
-            align-self: flex-start;
-            background-color: $color_create;
-            margin-top: $spacing_small;
-            margin-right: auto;
-          }
-          &-rating {
-            @include mix_fixed_div(absolute, $z_index_hovering_item);
-            @include mix_border_generator($structureSetTargetPanel_borderWidth, $color_active);
-            @include mix_border_radius(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            top: $structureSetTargetPanel_rating_top_offset;
-            left: $structureSetTargetPanel_bics_variant_column_width_half;
-            transform: translateX(-50%);
-            width: $structureSetTargetPanel_rating_width;
-            height: $structureSetTargetPanel_rating_thickness;
-            overflow: hidden;
-            background-color: $color_white;
-            visibility: hidden;
-            &-fill {
-              @include mix_fixed_div(absolute, $z_index_base_item_solid);
-              @include mix_border_radius(3px, 'left');
-              height: 100%;
-              background-color: $color_red_5;
-              left: 0;
-            }
-            &-hoverText {
-              @include mix_fixed_div(absolute, $z_index_hovering_item);
-              color: $font_color_minor;
-              font-size: $font_size_normal;
             }
           }
         }
-        &-rowList {
-          @include mix_enable_scrollbar('vertical');
+      }
+      &-text {
+        &-description {
+          text-align: center;
+          margin-bottom: $spacing_medium;
+          font-size: $font_size_large;
+        }
+        &-warning {
+          text-align: center;
+          margin-bottom: $spacing_medium;
+          font-size: $font_size_large;
+          &-keyTerm {
+            font-size: $font_size_large;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    &-setTargets {
+      @include mix_alive('light');
+      @include mix_enable_scrollbar();
+      display: flex;
+      flex: 1 1 auto;
+      height: 100%;
+      &-preview {
+        @include mix_alive('custom', margin-right $animation_duration_light);
+        flex: 0 1 50%;
+        flex-wrap: wrap;
+        display: flex;
+        padding-right: $spacing_large;
+        margin: 5rem 0 0 0;
+        overflow: hidden;
+        &>portfolio-breakdown {
+          flex: 1 1 auto;
+        }
+      }
+      &-configurator {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_border_generator(0 0 0 $typical_border_width);
+        @include mix_alive('light');
+        overflow: hidden;
+        height: 100%;
+        width: 0rem;
+        right: 50%;
+        padding-left: 0;
+        &-content {
+          display: none;
+          height: 100%;
+          background-color: $color_gray_2;
+          security-definition-configurator {
+            height: 100%;
+            display: flex;
+          }
+        }
+      }
+      &-edit {
+        flex: 0 0 50%;
+        display: flex;
+        flex-direction: column;
+        &-content {
+          @include mix_fixed_div(relative, $z_index_base_item);
           display: flex;
           flex-direction: column;
-          margin-top: $spacing_small;
-          padding: $spacing_small $spacing_small $spacing_large $spacing_small;
+          overflow: hidden;
+          padding-left: $spacing_large;
+          &-header {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            margin-right: $scroll_bar_width;
+            &-categories {
+              display: none;
+              justify-content: flex-end;
+              align-items: flex-end;
+              flex-wrap: wrap;
+              flex: 0 0 100%;
+              margin: $spacing_medium $scroll_bar_width $spacing_medium 0;
+              &-index {
+                display: none;
+                flex: 0 0 100%;
+                text-align: right;
+                &-text {
+                  display: inline-block;
+                  width: 6rem;
+                  color: $font_color_minor;
+                }
+              }
+              &-cellsContainer {
+                display: flex;
+                &-cell {
+                  @include mix_fixed_div(relative, $z_index_base_item);
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  margin-right: .3rem;
+                  width: $structureSetTargetPanel_categoryList_cell_width;
+                  &-icon {
+                    color: $font_color_minor;
+                    font-size: $font_size_large;
+                  }
+                  &-tooltip {
+                    @include mix_fixed_div(absolute, $z_index_hovering_item);
+                    @include mix_border_radius(3px);
+                    display: none;
+                    top: -100%;
+                    color: $font_color_inverse;
+                    line-height: $line_height_small;
+                    width: 4.25rem;
+                    background-color: $color_active;
+                    text-align: center;
+                  }
+                  &:hover>&-tooltip {
+                    display: block;
+                  }
+                  &--index {
+                    display: none;
+                  }
+                }
+              }
+            }
+            &-item {
+              flex: 0 0 $structureSetTargetPanel_edit_column_size;
+              display: flex;
+              flex-direction: column;
+              padding: 0 $spacing_large;
+              &-btn {
+                align-self: center;
+                margin-top: $spacing_small;
+                margin-bottom: $spacing_x_small;
+                min-width: 10rem;
+                justify-content: center;
+                &>i {
+                  font-size: $font_size_large;
+                }
+                &--selected {
+                  @include material('none');
+                  @extend .santaBtn--inverseLabelled;
+                  background-color: $color_active;
+                }
+              }
+              &:first-of-type {
+                margin-right: $typical_border_width;
+              }
+              &:last-child {
+                margin-right: $spacing_small;
+              }
+            }
+            &-createRow {
+              display: none;
+              align-self: flex-start;
+              background-color: $color_create;
+              margin-top: $spacing_small;
+              margin-right: auto;
+            }
+            &-rating {
+              @include mix_fixed_div(absolute, $z_index_hovering_item);
+              @include mix_border_generator($structureSetTargetPanel_borderWidth, $color_active);
+              @include mix_border_radius(5px);
+              display: none;
+              justify-content: center;
+              align-items: center;
+              top: $structureSetTargetPanel_rating_top_offset;
+              left: $structureSetTargetPanel_bics_variant_column_width_half;
+              transform: translateX(-50%);
+              width: $structureSetTargetPanel_rating_width;
+              height: $structureSetTargetPanel_rating_thickness;
+              overflow: hidden;
+              background-color: $color_white;
+              visibility: hidden;
+              &-fill {
+                @include mix_fixed_div(absolute, $z_index_base_item_solid);
+                @include mix_border_radius(3px, 'left');
+                height: 100%;
+                background-color: $color_red_5;
+                left: 0;
+              }
+              &-hoverText {
+                @include mix_fixed_div(absolute, $z_index_hovering_item);
+                color: $font_color_minor;
+                font-size: $font_size_normal;
+              }
+            }
+          }
+          &-rowList {
+            @include mix_enable_scrollbar('vertical');
+            display: flex;
+            flex-direction: column;
+            margin-top: $spacing_small;
+            padding: $spacing_small $spacing_small $spacing_large 0;
+          }
         }
       }
     }
@@ -267,16 +363,18 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--viewingIndexOnBICSState {
     #{$blockName} {
       &__main {
-        &-edit-content-header-categories {
+        &-setTargets-edit-content-header-categories {
           &-index {
             display: block;
           }
-          &-cell {
-            &--index {
-              display: flex;
-            }
-            &--delta {
-              display: none;
+          &-cellsContainer {
+            &-cell {
+              &--index {
+                display: flex;
+              }
+              &--delta {
+                display: none;
+              }
             }
           }
         }
@@ -285,7 +383,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--ratingAvailableState {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         display: flex;
         visibility: visible;
         &-fill {
@@ -296,7 +394,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--goodRating {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_green_5;
@@ -306,7 +404,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--averageRating {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_orange_5;
@@ -316,7 +414,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--badRating {
     #{$blockName} {
-      &__main-edit-content-header-rating {
+      &__main-setTargets-edit-content-header-rating {
         background: $color_active;
         &-fill {
           background-color: $color_red_5;
@@ -326,42 +424,12 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--cs01ActiveState {
     #{$blockName} {
-      &__main {
-        &-edit {
-          &-content {
-            &-border {
-              right: 0;
-            }
-          }
-        }
-      }
       &__utilities-distribution-label {
         &--cs01 {
           display: flex;
         }
         &--creditLeverage {
           display: none;
-        }
-      }
-    }
-  }
-  &--creditLeverageActiveState {
-    #{$blockName} {
-      &__main {
-        &-edit {
-          &-content {
-            &-border {
-              right: $structureSetTargetPanel_edit_column_size + $spacing_small;
-            }
-          }
-        }
-      }
-      &__utilities-distribution-label {
-        &--cs01 {
-          display: none;
-        }
-        &--creditLeverage {
-          display: flex;
         }
       }
     }
@@ -382,24 +450,62 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
     }
   }
+  &--creditLeverageActiveState {
+    #{$blockName} {
+      &__utilities {
+        &-distribution {
+          background: $color_disabled;
+          &-ctas {
+            &-evenly,
+            &-proportionally {
+              @include material('none');
+              @include mix_border_generator(1px,$font_color_inverse);
+              background-color: $color_disabled;
+              color: $font_color_inverse;
+              pointer-events: none;
+
+            }
+          }
+          &-label {
+            &--cs01 {
+              display: none;
+            }
+            &--creditLeverage {
+              display: flex;
+            }
+          }
+        }
+        &-setView {
+          &-btn {
+            @include material('none');
+            background-color: $color_disabled;
+            color: $font_color_inverse;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+  }
   &--displayConfiguratorState {
     #{$blockName} {
       &__main {
-        &-preview {
-          margin-right: $structureSetTargetPanel_configurator_container_width;
-        }
-        &-configurator {
-          width: $structureSetTargetPanel_configurator_container_width;
-          padding-left: $structureSetTargetPanel_configurator_container_leftPadding;
-          &-content {
-            display: flex;
+        &-setTargets {
+          &-preview {
+            margin-right: $structureSetTargetPanel_configurator_container_width;
           }
-        }
-        &-edit {
-          &-content {
-            &-header-createRow {
-              @include material('none');
-              background-color: $color_active;
+          &-configurator {
+            width: $structureSetTargetPanel_configurator_container_width;
+            padding-left: $structureSetTargetPanel_configurator_container_leftPadding;
+            &-content {
+              display: flex;
+            }
+          }
+          &-edit {
+            &-content {
+              &-header-createRow {
+                @include material('none');
+                background-color: $color_active;
+              }
             }
           }
         }
@@ -413,8 +519,17 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
       &__main {
         min-height: 44rem;
-        &-edit-content-header-createRow {
-          display: flex;
+        &-setTargets {
+          &-edit {
+            &-content {
+              padding-left: $spacing_medium;
+              &-header {
+                &-createRow {
+                  display: flex;
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -422,30 +537,57 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--bicsBreakdownVariant {
     #{$blockName} {
       &__main {
-        &-preview,
-        &-configurator {
-          display: none;
-        }
+        &-setTargets {
+          &-preview,
+          &-configurator {
+            display: none;
+          }
         &-edit {
           flex: 1 1 auto;
           &-content {
-            &-header {
-              justify-content: space-between;
-              &-categories {
-                flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
-                display: flex;
-                margin-right: $spacing_x_large;
+              &-header {
+                justify-content: space-between;
+                &-categories {
+                  flex: 0 0 $structureSetTargetPanel_bics_variant_column_width;
+                  display: flex;
+                  margin-right: 2 * $iconButton_size_regular;
+                }
               }
             }
           }
         }
       }
-      &__utilities { //disable for now due to sub levels
-        &-clearTargets {
-          display: none;
-        }
+      &__utilities {
         &-setView {
           display: flex;
+        }
+      }
+    }
+  }
+  &--viewingClearTargetsState {
+    #{$blockName} {
+      &__main {
+        background-color: $color_orange_1;
+      }
+      &__utilities {
+        &-clearAll {
+          margin-left: auto;
+          &-btn {
+            @include mix_cta_active();
+          }
+        }
+        &-distribution,
+        &-setView {
+          display: none;
+        }
+      }
+      &__main {
+        &-clearTargets {
+          display: flex;
+          padding: $spacing_x_large 0;
+        }
+        &-setTargets {
+          display: none;
         }
       }
     }
@@ -502,25 +644,25 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
     align-items: center;
   }
   &__remove {
-    @include mix_fixed_div(relative, $z_index_base_item);
-    flex: 0 0 auto;
+    @include mix_editRow_btn();
     display: none;
-    margin: $spacing_small;
     &-btn {
       background-color: $color_kill;
       color: $font_color_inverse;
     }
   }
   &__lock {
-    @include mix_fixed_div(relative, $z_index_base_item); // for some reason I need this position relative so the shadow won't be clipped by the next row's background color, weird
-    flex: 0 0 auto;
-    margin: $spacing_small $spacing_medium;
+    @include mix_editRow_btn();
+  }
+  &__clearTarget {
+    @include mix_editRow_btn();
   }
   &__label {
     flex: 1 1 auto;
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin-left: $spacing_small;
     &-text {
       font-size: $font_size_normal;
       color: $font_color_major;
@@ -580,6 +722,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
       }
       &__label {
         display: none;
+      }
+      &__lock {
+        margin-left: $spacing_x_small;
       }
     }
   }
