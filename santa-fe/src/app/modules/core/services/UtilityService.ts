@@ -1231,6 +1231,16 @@ export class UtilityService {
       return modulePortion;
     }
 
+    public getStateUUIDFromNavigation(event: NavigationEnd): string {
+      const removeForwardSlash = event.urlAfterRedirects.slice(1);
+      const slicedUrl = removeForwardSlash.split('/');
+      if (slicedUrl.length > 1) {
+        return slicedUrl[1];
+      } else {
+        return 'n/a';
+      }
+    }
+
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;
