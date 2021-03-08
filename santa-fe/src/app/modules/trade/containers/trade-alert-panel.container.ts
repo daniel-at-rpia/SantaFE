@@ -95,7 +95,6 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
   state: PageStates.TradeAlertPanelState;
   subscriptions = {
     userInitialsSub: null,
-    // securityMapSub: null,
     selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     startNewUpdateSub: null,
