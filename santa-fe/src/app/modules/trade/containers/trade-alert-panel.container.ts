@@ -311,6 +311,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       })
+
+      if (this.state.securityMap.length === 0) {
+        const map = this.securityMapService.getSecurityMap();
+        if (!!map && map.length > 0) {
+          this.state.securityMap = map;
+        }
+      }
     }
 
     public ngOnChanges() {
