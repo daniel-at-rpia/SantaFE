@@ -15,7 +15,7 @@
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
-    import { CoreUserLoggedIn, CoreLoadSecurityMap } from 'Core/actions/core.actions';
+    import { CoreUserLoggedIn } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
       TradeStoreResetEvent,

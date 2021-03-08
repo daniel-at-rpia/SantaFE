@@ -15,7 +15,8 @@
       BESecurityDTO,
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn,
-      BEBICsHierarchyBlock
+      BEBICsHierarchyBlock,
+      BESecurityMap
     } from 'BEModels/backend-models.interface';
     import {
       TriCoreDriverConfig,
@@ -30,7 +31,6 @@
     } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
-      CoreLoadSecurityMap,
       CoreUserLoggedIn,
       CoreGlobalWorkflowSendNewState
     } from 'Core/actions/core.actions';
@@ -73,6 +73,7 @@
       TradeBICSDataLoadedEvent
     } from 'Trade/actions/trade.actions';
     import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+    import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
 
 @Component({
@@ -181,7 +182,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private securityMapService: SecurityMapService
   ) {
     super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
@@ -696,16 +698,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     // this first call happens in app.root.ts, this function is only called when the first call fails due to BE server being unavail
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityIdMap, {req: 'GET'}).pipe(
       first(),
-      tap((serverReturn: Object) => {
+      tap((serverReturn: BESecurityMap) => {
         if (!!serverReturn) {
-          const map:Array<AdhocPacks.SecurityMapEntry> = [];
-          for (const eachSecurityId in serverReturn) {
-            map.push({
-              keywords: serverReturn[eachSecurityId],
-              secruityId: eachSecurityId
-            });
-          }
-          this.store$.dispatch(new CoreLoadSecurityMap(map));
+          this.securityMapService.storeSecurityMap(serverReturn);
         } else {
           this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
         }

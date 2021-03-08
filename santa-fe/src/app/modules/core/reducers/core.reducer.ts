@@ -11,10 +11,6 @@ export interface CoreState {
   user: {
     initials: string;
   };
-  securityMap: {
-    valid: boolean;
-    mapContent: Array<AdhocPacks.SecurityMapEntry>;
-  };
   globalWorkflow: {
     newState: DTOs.GlobalWorkflowStateDTO;
     currentStateInStructure: string;
@@ -39,10 +35,6 @@ export interface CoreState {
 const initialState: CoreState = {
   user: {
     initials: null
-  },
-  securityMap: {
-    valid: false,
-    mapContent: []
   },
   globalWorkflow: {
     newState: null,
@@ -85,22 +77,6 @@ export function coreReducer(
            displayThumbnail: action.value
          }
        };
-    case CoreActions.LoadSecurityMap:
-      return {
-        ...state,
-        securityMap: {
-          valid: true,
-          mapContent: action.map
-        }
-      };
-    case CoreActions.FlushSecurityMap:
-      return {
-        ...state,
-        securityMap: {
-          valid: false,
-          mapContent: []
-        }
-      };
     case CoreActions.SendNewAlerts:
       return {
         ...state,

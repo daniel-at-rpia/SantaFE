@@ -14,16 +14,6 @@ export const selectDislayAlertThumbnail = createSelector(
   (state: CoreState) => state.globalAlert.displayThumbnail
 );
 
-export const selectSecurityMapContent = createSelector(
-  getCoreState,
-  (state:CoreState) => state.securityMap.mapContent
-);
-
-export const selectSecurityMapValidStatus = createSelector(
-  getCoreState,
-  (state:CoreState) => state.securityMap.valid
-);
-
 export const selectNewAlerts = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.newUrgentAlerts
