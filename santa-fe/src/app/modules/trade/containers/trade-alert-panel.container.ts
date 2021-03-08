@@ -141,7 +141,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       const state: PageStates.TradeAlertPanelState = {
         isUserPM: false,
         configureAlert: false,
-        isAlertPaused: true,
+        isAlertPaused: false,
         securityMap: [],
         // focusMode: false,
         configuration: {
@@ -684,7 +684,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         tap((serverReturn: BEAlertConfigurationReturn) => {
           if (!!serverReturn) {
             this.state.configuration.axe.securityList = [];
-            this.state.isAlertPaused = false;
             this.populateConfigurationFromEachGroup(serverReturn.Axe);
           } else {
             this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);
