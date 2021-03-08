@@ -209,7 +209,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         )
       ).subscribe(([mapContent, isValid]) => {
         if (!!isValid) {
-          this.securityMapService.storeSecurityMap(mapContent);
           this.state.securityMap = mapContent;
           this.state.isAlertPaused = false;
           this.store$.dispatch(new CoreFlushSecurityMap());

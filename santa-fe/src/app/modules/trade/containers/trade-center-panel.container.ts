@@ -13,7 +13,8 @@
       BESecurityDTO,
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn,
-      BEBICsHierarchyBlock
+      BEBICsHierarchyBlock,
+      BESecurityMap
     } from 'BEModels/backend-models.interface';
     import {
       TriCoreDriverConfig,
@@ -71,6 +72,7 @@
       TradeBICSDataLoadedEvent
     } from 'Trade/actions/trade.actions';
     import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+    import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
 
 @Component({
@@ -177,7 +179,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICsDataProcessingService,
+    private securityMapService: SecurityMapService
   ) {
     this.state = this.initializePageState();
   }
@@ -687,15 +690,10 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     // this first call happens in app.root.ts, this function is only called when the first call fails due to BE server being unavail
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityIdMap, {req: 'GET'}).pipe(
       first(),
-      tap((serverReturn: Object) => {
+      tap((serverReturn: BESecurityMap) => {
         if (!!serverReturn) {
-          const map:Array<AdhocPacks.SecurityMapEntry> = [];
-          for (const eachSecurityId in serverReturn) {
-            map.push({
-              keywords: serverReturn[eachSecurityId],
-              secruityId: eachSecurityId
-            });
-          }
+          this.securityMapService.storeSecurityMap(serverReturn);
+          const map = this.securityMapService.getSecurityMap();
           this.store$.dispatch(new CoreLoadSecurityMap(map));
         } else {
           this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');

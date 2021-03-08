@@ -27,6 +27,8 @@
     import { PageStates, AdhocPacks } from 'Core/models/frontend';
     import { CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { FAILED_USER_INITIALS_FALLBACK, DevWhitelist } from 'Core/constants/coreConstants.constant';
+    import { SecurityMapService } from 'Core/services/SecurityMapService';
+    import { BESecurityMap } from 'Core/models/backend/backend-models.interface';
   //
 
 declare const VERSION: string;
@@ -50,7 +52,8 @@ export class AppRoot implements OnInit, OnDestroy {
   constructor(
     private titleService: Title,
     private store$: Store<any>,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private securityMapService: SecurityMapService
   ) {
     LicenseManager.setLicenseKey("CompanyName=RPIA LP,LicensedGroup=RPIA Risk Reporting,LicenseType=MultipleApplications,LicensedConcurrentDeveloperCount=2,LicensedProductionInstancesCount=0,AssetReference=AG-009115,ExpiryDate=27_July_2021_[v2]_MTYyNzM0MDQwMDAwMA==d6f3ed228387383c08504da9e3fe52e6");
     this.titleService.setTitle(this.title);
@@ -81,15 +84,10 @@ export class AppRoot implements OnInit, OnDestroy {
     });
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityIdMap, {req: 'GET'}).pipe(
       first(),
-      tap((serverReturn: Object) => {
+      tap((serverReturn: BESecurityMap) => {
         if (!!serverReturn) {
-          const map: Array<AdhocPacks.SecurityMapEntry> = [];
-          for (const eachSecurityId in serverReturn) {
-            map.push({
-              keywords: serverReturn[eachSecurityId],
-              secruityId: eachSecurityId
-            });
-          }
+          this.securityMapService.storeSecurityMap(serverReturn);
+          const map = this.securityMapService.getSecurityMap();
           this.store$.dispatch(new CoreLoadSecurityMap(map));
         } else {
           this.restfulCommService.logError('Failed to load SecurityId map, can not populate alert configuration');
