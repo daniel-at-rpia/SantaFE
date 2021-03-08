@@ -228,6 +228,7 @@ export interface TradeAlertPanelState {
   configureAlert: boolean;
   // focusMode: boolean;
   isAlertPaused: boolean;
+  lastReceiveAlertUnitTimestamp: number;
   securityMap: Array<AdhocPacks.SecurityMapEntry>;
   configuration: {
     axe: {

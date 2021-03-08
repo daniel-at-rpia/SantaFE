@@ -1,9 +1,10 @@
-// dependencies
+  // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { interval, Observable, of, Subscription } from 'rxjs';
-    import { catchError, filter, first, tap } from 'rxjs/operators';
+    import { catchError, filter, first, tap, withLatestFrom } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
     import { Router, NavigationEnd } from '@angular/router';
+
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
@@ -29,20 +30,19 @@
       CoreGlobalAlertsSendNewAlertsToTradeAlertPanel,
       CoreGlobalAlertFailedToMakeAlertAPICall,
       CoreGlobalAlertClearAllUrgentAlerts,
-      CoreGlobalAlertsClearAllTradeAlertTableAlerts,
-      CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts
+      CoreGlobalAlertsClearAllTradeAlertTableAlerts
     } from 'Core/actions/core.actions';
     import {
       selectNewAlerts,
       selectGlobalAlertProcessingAlertState,
       selectGlobalAlertMakeAPICall,
-      selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts
+      selectGlobalAlertTradeTableFetchAlertTick,
+      selectGlobalAlertTradeTableFetchAlertTimestamp
     } from 'Core/selectors/core.selectors';
     import { NavigationModule } from 'Core/constants/coreConstants.constant';
     import { favAlertBase64, favLogoBase64 } from "src/assets/icons";
     import * as moment from 'moment';
-
-//
+  //
 
 @Component({
   selector: 'global-alert',
@@ -59,7 +59,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     autoCountForRawAlertsSub: null,
     makeAlertAPICallSub: null,
     navigationStartSub: null,
-    tradeAlertTableReadyToReceiveAdditionalAlerts: null
+    receiveTradeAlertTableFetchRequestSub: null
   }
   browserTabNotificationCount$: Observable<any>;
   autoCountForRawAlerts$: Observable<any>;
@@ -121,17 +121,23 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
       alertList.length > 0 && this.getAlertsForUrgentAlertList(alertList);
     });
+    this.subscriptions.receiveTradeAlertTableFetchRequestSub = this.store$.pipe(
+      select(selectGlobalAlertTradeTableFetchAlertTick),
+      withLatestFrom(
+        this.store$.pipe(select(selectGlobalAlertTradeTableFetchAlertTimestamp))
+      )
+    ).subscribe(([tick, lastReceiveTimestamp]) => {
+      if (tick > 0) {
+        // filter out initial state
+        const sendList = this.findTradeAlertPanelMissingAlerts(lastReceiveTimestamp);
+        this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(sendList));
+      }
+    });
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
         if (this.constants.moduleUrl.trade === modulePortion) {
-          if (!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
-            if (this.state.allAlertsList.length > 0) {
-              this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(this.state.allAlertsList));
-            }
-            this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = true;
-            this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(true))
-          }
+          this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = true;
         } else {
           this.state.tradeAlertTableReadyToReceiveAdditionalAlerts = false;
           // TradeAlertPanel will take care of clearing the store as long as it is active, but when it is no longer active, then global alert will clear it out
@@ -439,9 +445,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
         urgentAlertUpdateList.length > 0 && this.getAlertsForUrgentAlertList(urgentAlertUpdateList);
         if (allAlertsUpdateList.length > 0) {
           this.state.allAlertsList = [...this.state.allAlertsList, ...allAlertsUpdateList];
-          if (!!this.state.tradeAlertTableReadyToReceiveAdditionalAlerts) {
-            this.store$.dispatch(new CoreGlobalAlertsSendNewAlertsToTradeAlertPanel(allAlertsUpdateList));
-          }
         }
         this.state.alertUpdateInProgress = false;
       }),
@@ -529,5 +532,18 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
     });
     return [urgentAlertUpdateList, allAlertsUpdateList];
+  }
+
+  private findTradeAlertPanelMissingAlerts(lastReceiveTimestamp: number): Array<DTOs.AlertDTO> {
+    const lastReceiveTime = moment.unix(lastReceiveTimestamp);
+    if (!!lastReceiveTime) {
+      const missingAlerts = this.state.allAlertsList.filter((eachAlert) => {
+        return !moment.unix(eachAlert.data.unixTimestamp).isBefore(lastReceiveTime);
+      });
+      console.log('test, 123, find missing alerts for ', lastReceiveTimestamp, missingAlerts, this.state.allAlertsList);
+      return missingAlerts;
+    } else {
+      return [];
+    }
   }
 }

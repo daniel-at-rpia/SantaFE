@@ -29,7 +29,8 @@
       selectSecurityMapValidStatus,
       selectUserInitials,
       selectNewAlerts,
-      selectGlobalAlertSendNewAlertsToTradePanel
+      selectGlobalAlertSendNewAlertsToTradePanel,
+      selectGlobalAlertTradeTableFetchAlertTick
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -41,7 +42,8 @@
     import {
       CoreFlushSecurityMap,
       CoreSendNewAlerts,
-      CoreGlobalAlertsClearAllTradeAlertTableAlerts
+      CoreGlobalAlertsClearAllTradeAlertTableAlerts,
+      CoreGlobalAlertsTradeAlertFetch
     } from 'Core/actions/core.actions';
     import {
       TradeAlertTableReceiveNewAlertsEvent,
@@ -145,6 +147,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         isUserPM: false,
         configureAlert: false,
         isAlertPaused: true,
+        lastReceiveAlertUnitTimestamp: 0,
         securityMap: [],
         // focusMode: false,
         configuration: {
@@ -212,7 +215,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           return this.stateActive;
         })
       ).subscribe((internalCount) => {
-        
+        if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+          this.store$.dispatch(new CoreGlobalAlertsTradeAlertFetch(this.state.lastReceiveAlertUnitTimestamp));
+        }
       });
       this.subscriptions.securityMapSub = this.store$.pipe(
         filter((tick) => {
@@ -315,22 +320,29 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         filter((tick) => {
           return this.stateActive;
         }),
-        select(selectGlobalAlertSendNewAlertsToTradePanel)
-      ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
-        if (alertList.length > 0) {
-          if (!this.state.alert.initialAlertListReceived) {
-            this.state.alert.initialAlertListReceived = true;
-          }
-          if (!this.state.fetchResult.alertTable.fetchComplete) {
-            this.state.fetchResult.alertTable.fetchComplete = true;
-          }
-          try {
-            const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
-            this.updateAlertTable(alertListCopy);
-            this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
-          } catch {
-            this.restfulCommService.logError('received new alerts but failed to generate');
-            console.error('received new alerts but failed to generate');
+        select(selectGlobalAlertSendNewAlertsToTradePanel),
+        withLatestFrom(
+          this.store$.pipe(select(selectGlobalAlertTradeTableFetchAlertTick))
+        )
+      ).subscribe(([alertList, tick]) => {
+        if (tick > 0) {
+          // skip initial state
+          this.state.lastReceiveAlertUnitTimestamp = moment().unix();
+          if (alertList.length > 0) {
+            if (!this.state.alert.initialAlertListReceived) {
+              this.state.alert.initialAlertListReceived = true;
+            }
+            if (!this.state.fetchResult.alertTable.fetchComplete) {
+              this.state.fetchResult.alertTable.fetchComplete = true;
+            }
+            try {
+              const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+              this.updateAlertTable(alertListCopy);
+              this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
+            } catch {
+              this.restfulCommService.logError('received new alerts but failed to generate');
+              console.error('received new alerts but failed to generate');
+            }
           }
         }
       });
@@ -357,11 +369,6 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       if (!!this.collapseConfiguration) {
         this.state.configureAlert = false;
       }
-    }
-
-    public ngOnDestroy() {
-      this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(false));
-      return super.ngOnDestroy();
     }
 
     private marketListAlertsCountdownUpdate(): number {
