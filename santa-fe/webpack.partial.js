@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "2.1.67-RouteReuseAlpha";
+const version = "2.1.71";
 module.exports = {
   output: {
     filename: `[name].${version}.min.js`

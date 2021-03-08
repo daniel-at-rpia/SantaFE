@@ -69,7 +69,9 @@
       BICS_OVERRIDES_IDENTIFIER,
       BICS_OVERRIDES_TITLE,
       DeltaScope,
-      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
+      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
+      DeltaScopeDisplayText,
+      DeltaScopeBEToFEMapping
     } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
@@ -2138,6 +2140,7 @@ export class DTOService {
         creditDurationIndexBar: null,
         creditLeverageIndexBar: null,
         activeDelta: activeDelta,
+        activeDeltaDisplayText: DeltaScopeBEToFEMapping[activeDelta],
         originalBEData: rawData,
         currentTotalDeltaCreditDuration: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditDuration - comparedDeltaRawData.currentTotals.CreditDuration), 2) : null,
         currentTotalDeltaCreditLeverage: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditLeverage - comparedDeltaRawData.currentTotals.CreditLeverage), 2) : null,
