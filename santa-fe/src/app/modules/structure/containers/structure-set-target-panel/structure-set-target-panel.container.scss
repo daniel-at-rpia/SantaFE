@@ -481,6 +481,9 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   }
   &--viewingClearTargetsState {
     #{$blockName} {
+      &__main {
+        background-color: $color_orange_1;
+      }
       &__utilities {
         &-clearAll {
           &-btn {
