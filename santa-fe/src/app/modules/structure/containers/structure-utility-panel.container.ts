@@ -11,7 +11,8 @@ import {
   PortfolioShortNames,
   UTILITY_PANEL_HISTORICAL_TIME_LABEL,
   SubPortfolioFilter,
-  DeltaScope
+  DeltaScope,
+  DeltaScopeBEToFEMapping
 } from 'Core/constants/structureConstants.constants';
 import {
   selectMetricLevel,
@@ -66,7 +67,8 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     subPortfolioFilter: SubPortfolioFilter,
     deltaScope: DeltaScope,
     modules: NavigationModule,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    deltaScopeFEMapping: DeltaScopeBEToFEMapping
   }
 
   constructor(
