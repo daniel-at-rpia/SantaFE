@@ -11,9 +11,7 @@ import {
   ColumnApi,
   ValueFormatterParams
 } from 'ag-grid-community';
-
-import * as DTOs from './frontend-models.interface';
-import * as AdhocPacks from './frontend-adhoc-packages.interface';
+import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
@@ -441,4 +439,14 @@ export interface StructureSetBulkOverridesEditRow {
   displayBucket: string;
   simpleBucket: StructureBucketDataBlock;
   isEven: boolean;
+}
+
+export interface StructureClearTargetsOptionBlock {
+  key: string;
+  backendIdentifier: string;
+  isSelected: boolean
+}
+
+export interface StructureClearTargetsOptionMapBlock {
+  [property: string]: Array<StructureClearTargetsOptionBlock>
 }
