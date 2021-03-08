@@ -78,14 +78,17 @@ export const selectGlobalAlertSendNewAlertsToTradePanel = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.newTradeAlertTableAlerts
 )
-
 export const selectGlobalAlertFailedToMakeAlertAPICall = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.apiCallForAlertFailed
 )
 
-export const selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts = createSelector(
+export const selectGlobalAlertTradeTableFetchAlertTick = createSelector(
   getCoreState,
-  (state: CoreState) => state.globalAlert.tradeTableReadyToReceiveAdditionalAlerts
+  (state: CoreState) => state.globalAlert.tradeTableFetchAlertTick
 )
 
+export const selectGlobalAlertTradeTableFetchAlertTimestamp = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.tradeTableFetchAlertLastReceiveTimestamp
+)

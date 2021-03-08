@@ -1,11 +1,13 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+    import { Router } from '@angular/router';
     import { of, Subscription, Subject } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
-    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService } from 'Core/services';
+    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
@@ -80,7 +82,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeCenterPanel implements OnInit, OnDestroy {
+export class TradeCenterPanel extends SantaContainerComponentBase implements OnInit {
   state: PageStates.TradeCenterPanelState;
   subscriptions = {
     userInitialsSub: null,
@@ -172,19 +174,25 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
     private bicsDataProcessingService: BICsDataProcessingService
   ) {
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
 
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectLiveUpdateTick),
       withLatestFrom(
         this.store$.pipe(select(selectInitialDataLoadedInMainTable))
@@ -200,18 +208,27 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.securityIDListFromAnalysisSub = this.store$.pipe(
+      filter((data) => {
+        return this.stateActive;
+      }),
       select(selectSecurityIDsFromAnalysis)
     ).subscribe((data) => {
       this.processSecurityIDsFromAnalysis(data)
     });
 
     this.subscriptions.validWindowSub = this.store$.pipe(
+      filter((window) => {
+        return this.stateActive;
+      }),
       select(selectBestQuoteValidWindow)
     ).subscribe((window) => {
       this.state.bestQuoteValidWindow = window;
     });
 
     this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+      filter((keyword) => {
+        return this.stateActive;
+      }),
       debounceTime(this.constants.keywordSearchDebounceTime),
       distinctUntilChanged()
     ).subscribe((keyword) => {
@@ -226,6 +243,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.receiveKeywordSearchInMainTable = this.store$.pipe(
+      filter((keyword) => {
+        return this.stateActive;
+      }),
       select(selectKeywordSearchInMainTable)
     ).subscribe((keyword) => {
       this.state.filters.keyword.defaultValueForUI = keyword;
@@ -233,6 +253,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.userInitialsSub = this.store$.pipe(
+      filter((userInitials) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((userInitials) => {
       if (userInitials) {
@@ -251,6 +274,9 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.selectCenterPanelFilterListForTableLoadSub = this.store$.pipe(
+      filter((pack) => {
+        return this.stateActive;
+      }),
       select(selectCenterPanelFilterListForTableLoad),
       combineLatest(
         this.store$.pipe(select(selectBICSDataLoaded))
@@ -264,13 +290,8 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
         }
       }
     });
-  }
 
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      const eachSub = this.subscriptions[eachItem] as Subscription;
-      eachSub.unsubscribe();
-    }
+    return super.ngOnInit();
   }
 
   public onSelectPresetCategory(targetCategory: Array<DTOs.SearchShortcutDTO>) {
@@ -304,22 +325,10 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
-  public onUnselectPreset(captureNewState: boolean) {
-    const newState = this.initializePageState();
-    this.state.presets.selectedPreset.state.isSelected = false;
-    this.state.presets.selectedPreset = null;
-    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
-    this.state.table.metrics = this.utilityService.deepCopy(this.constants.defaultMetrics).filter((eachStub) => {
-      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
-      return !targetSpecifics.disabled;
-    });
-    this.state.filters = newState.filters;
-    this.state.fetchResult = newState.fetchResult;
-    this.store$.dispatch(new TradeTogglePresetEvent);
-    if (!!captureNewState) {
-      const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, this.constants.globalWorkflowTypes.unselectPreset);
-      this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
-    }
+  public onUnselectPreset() {
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, false, this.constants.globalWorkflowTypes.unselectPreset);
+    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
+    // unselect preset would just need to trigger the reuse strategy to inintialize a new state now
   }
 
   public buryConfigurator() {
@@ -709,7 +718,7 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     portfolioMetric: PortfolioMetricValues
   ) {
     if (!!this.state.presets.selectedPreset) {
-      this.onUnselectPreset(false);
+      this.performUnselectPresetInBackground();
       const delayToLoad = 1;  // the actual load needs to be executed on a delay because we need to give time for agGrid to react on santaTable's "activated" flag being set to false, this way when the autoLoadTable actually set it to "true" again, it will rebuild the header, otherwise the headers won't be rebuild. The time it takes for agGrid to react is trivial, we just need to wait for a single frame
       setTimeout(
         function(){
@@ -846,5 +855,20 @@ export class TradeCenterPanel implements OnInit, OnDestroy {
     }
     // trigger the ngOnChanges in santa table, normally would be already triggered by modifyWeightColumnHeadersUpdateFundName(), so this is just defensive programming
     this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
+  }
+
+  private performUnselectPresetInBackground() {
+    const newState = this.initializePageState();
+    this.state.presets.selectedPreset.state.isSelected = false;
+    this.state.presets.selectedPreset = null;
+    this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
+    this.state.table.metrics = this.utilityService.deepCopy(this.constants.defaultMetrics).filter((eachStub) => {
+      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
+      return !targetSpecifics.disabled;
+    });
+    this.state.filters.quickFilters = newState.filters.quickFilters;
+    this.state.filters.keyword.defaultValueForUI = null;
+    this.state.fetchResult = newState.fetchResult;
+    this.store$.dispatch(new TradeTogglePresetEvent);
   }
 }

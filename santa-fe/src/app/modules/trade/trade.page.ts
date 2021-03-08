@@ -1,6 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-    import { ActivatedRoute } from '@angular/router';
+    import { ActivatedRoute, Router } from '@angular/router';
     import { Observable, Subscription, interval, of } from 'rxjs';
     import { tap, first, withLatestFrom, switchMap, catchError, combineLatest, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
@@ -11,9 +11,10 @@
       RestfulCommService,
       GlobalWorkflowIOService
     } from 'Core/services';
-    import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
+    import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { CoreUserLoggedIn, CoreLoadSecurityMap } from 'Core/actions/core.actions';
     import { selectDislayAlertThumbnail, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
@@ -30,7 +31,7 @@
   styleUrls: ['./trade.page.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class TradePage implements OnInit, OnDestroy {
+export class TradePage extends SantaContainerComponentBase implements OnInit {
   state: PageStates.TradeState;
   subscriptions = {
     routeChange: null,
@@ -54,13 +55,15 @@ export class TradePage implements OnInit, OnDestroy {
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private route: ActivatedRoute,
-    private globalWorkflowIOService: GlobalWorkflowIOService 
+    private route: ActivatedRoute
   ) {
+    super(utilityService, globalWorkflowIOService, router);
     this.initializePageState();
   }
 
@@ -68,6 +71,9 @@ export class TradePage implements OnInit, OnDestroy {
     this.initializePageState();
     this.store$.dispatch(new TradeStoreResetEvent());
     this.subscriptions.routeChange = this.route.paramMap.pipe(
+      filter((params) => {
+        return this.stateActive;
+      }),
       combineLatest(
         this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))
       ),
@@ -82,30 +88,31 @@ export class TradePage implements OnInit, OnDestroy {
     });
 
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
+      filter((targetSecurity) => {
+        return this.stateActive;
+      }),
       select(selectSelectedSecurityForAnalysis)
     ).subscribe((targetSecurity) => {
       this.state.sidePanelsCollapsed = !targetSecurity;
       this.state.lilMarketMaximized = false;
     });
     this.subscriptions.displayAlertThumbnailSub = this.store$.pipe(
+      filter((value) => {
+        return this.stateActive;
+      }),
       select(selectDislayAlertThumbnail)
     ).subscribe((value) => {
       this.state.displayAlertThumbnail = !!value;
     });
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      filter((value) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((value) => {
       this.state.ownerInitial = value;
     });
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (!!this.subscriptions[eachItem]) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   public onToggleCollapseGraphs() {

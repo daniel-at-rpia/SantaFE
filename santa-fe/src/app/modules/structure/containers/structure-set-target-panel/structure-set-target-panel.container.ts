@@ -1,66 +1,68 @@
-import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { catchError, first, tap, withLatestFrom } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
-import { DTOService } from 'Core/services/DTOService';
-import { RestfulCommService } from 'Core/services/RestfulCommService';
-import { UtilityService } from 'Core/services/UtilityService';
-import { ModalService } from 'Form/services/ModalService';
-import {
-  selectSetTargetTransferPack,
-  selectActiveSubPortfolioFilter
-} from 'Structure/selectors/structure.selectors';
-import { selectUserInitials } from 'Core/selectors/core.selectors';
-import {
-  PortfolioMetricValues,
-  STRUCTURE_EDIT_MODAL_ID,
-  PortfolioView,
-  BICS_CODE_DELIMITER_AMOUNT
-} from 'Core/constants/structureConstants.constants';
-import {
-  FilterOptionsCurrency,
-  FilterOptionsRating,
-  FilterOptionsTenor,
-  SecurityDefinitionMap
-} from 'Core/constants/securityDefinitionConstants.constant';
-import {
-  PayloadUpdateBreakdown,
-  PayloadUpdateOverride,
-  PayloadDeleteOverride,
-  PayloadSetView
-} from 'BEModels/backend-payloads.interface';
-import {
-  BEStructuringBreakdownBlock,
-  BEStructuringFundBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlock,
-  BEStructuringOverrideBlock,
-  BEStructuringOverrideBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricSingleEntryBlock,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios,
-  BESubPortfolioFilter,
-  BEStructuringOverrideBaseBlock,
-  BEStructuringOverrideBaseBlockWithSubPortfolios
-} from 'BEModels/backend-models.interface';
-import {
-  PayloadGetPortfolioOverride,
-  PayloadClearPortfolioBreakdown
-} from 'BEModels/backend-payloads.interface';
-import {
-  StructureReloadFundDataPostEditEvent,
-  StructureUpdateMainPanelEvent,
-  StructureSetView
-} from 'Structure/actions/structure.actions';
-import { CoreSendNewAlerts } from 'Core/actions/core.actions';
-import {
-  CustomeBreakdownConfiguratorDefinitionLayout,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  SubPortfolioFilter,
-  SET_TARGET_CLEAR_ALL_OPTIONS_MAP
-} from 'Core/constants/structureConstants.constants';
-import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
-import { BICSDictionaryLookupService} from 'Core/services/BICSDictionaryLookupService';
-import * as moment from 'moment';
+  // dependencies
+    import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+    import { Router } from '@angular/router';
+    import { of, Subscription } from 'rxjs';
+    import { catchError, first, tap, withLatestFrom, filter } from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
+    import * as moment from 'moment';
+
+    import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
+    import { DTOService, RestfulCommService, UtilityService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import { StructureSetTargetPanelState } from 'FEModels/frontend-page-states.interface';
+    import { ModalService } from 'Form/services/ModalService';
+    import {
+      selectSetTargetTransferPack,
+      selectActiveSubPortfolioFilter
+    } from 'Structure/selectors/structure.selectors';
+    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import {
+      PortfolioMetricValues,
+      STRUCTURE_EDIT_MODAL_ID,
+      PortfolioView,
+      BICS_CODE_DELIMITER_AMOUNT
+    } from 'Core/constants/structureConstants.constants';
+    import {
+      FilterOptionsCurrency,
+      FilterOptionsRating,
+      FilterOptionsTenor,
+      SecurityDefinitionMap
+    } from 'Core/constants/securityDefinitionConstants.constant';
+    import {
+      PayloadUpdateBreakdown,
+      PayloadUpdateOverride,
+      PayloadDeleteOverride,
+      PayloadSetView
+    } from 'BEModels/backend-payloads.interface';
+    import {
+      BEStructuringBreakdownBlock,
+      BEStructuringFundBlockWithSubPortfolios,
+      BEStructuringBreakdownMetricBlock,
+      BEStructuringOverrideBlock,
+      BEStructuringOverrideBlockWithSubPortfolios,
+      BEStructuringBreakdownMetricSingleEntryBlock,
+      BEStructuringBreakdownMetricBlockWithSubPortfolios,
+      BESubPortfolioFilter,
+      BEStructuringOverrideBaseBlock,
+      BEStructuringOverrideBaseBlockWithSubPortfolios
+    } from 'BEModels/backend-models.interface';
+    import {
+      PayloadGetPortfolioOverride,
+      PayloadClearPortfolioBreakdown
+    } from 'BEModels/backend-payloads.interface';
+    import {
+      StructureReloadFundDataPostEditEvent,
+      StructureUpdateMainPanelEvent,
+      StructureSetView
+    } from 'Structure/actions/structure.actions';
+    import { CoreSendNewAlerts } from 'Core/actions/core.actions';
+    import {
+      CustomeBreakdownConfiguratorDefinitionLayout,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      SubPortfolioFilter,
+      SET_TARGET_CLEAR_ALL_OPTIONS_MAP
+    } from 'Core/constants/structureConstants.constants';
+  //
 
 @Component({
   selector: 'structure-set-target-panel',
@@ -69,7 +71,7 @@ import * as moment from 'moment';
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureSetTargetPanel implements OnInit, OnDestroy {
+export class StructureSetTargetPanel extends SantaContainerComponentBase implements OnInit {
   state: PageStates.StructureSetTargetPanelState;
   subscriptions = {
     setTargetTransferPackSub: null,
@@ -86,14 +88,17 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   };
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
-    private utilityService: UtilityService,
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private modalService: ModalService,
     private bicsService: BICsDataProcessingService,
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
 
@@ -191,15 +196,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     });
     this.modalService.bindModalSaveCallback(STRUCTURE_EDIT_MODAL_ID, this.submitTargetChanges.bind(this));
     this.modalService.bindModalCloseCallback(STRUCTURE_EDIT_MODAL_ID, this.closeModal.bind(this));
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   public onValueChange(

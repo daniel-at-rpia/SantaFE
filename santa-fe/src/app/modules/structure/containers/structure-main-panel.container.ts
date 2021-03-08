@@ -1,73 +1,71 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { catchError, first, tap} from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import * as moment from 'moment';
+  // dependencies
+    import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+    import { Router } from '@angular/router';
+    import { of, Subscription } from 'rxjs';
+    import { catchError, first, tap, filter } from 'rxjs/operators';
+    import { Store, select } from '@ngrx/store';
+    import * as moment from 'moment';
 
-import { DTOService } from 'Core/services/DTOService';
-import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
-import { selectUserInitials } from 'Core/selectors/core.selectors';
-import {
-  selectReloadFundDataPostEdit,
-  selectMainPanelUpdateTick,
-  selectActiveBreakdownViewFilter,
-  selectActivePortfolioViewFilter,
-  selectDataDatestamp,
-  selectActiveSubPortfolioFilter,
-  selectActiveDeltaScope
-} from 'Structure/selectors/structure.selectors';
-import {
-  RestfulCommService,
-  UtilityService,
-  BICsDataProcessingService,
-  BICSDictionaryLookupService
-} from 'Core/services';
-import {
-  PortfolioMetricValues,
-  SUPPORTED_PORTFOLIO_LIST,
-  BEPortfolioTargetMetricValues,
-  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  BreakdownViewFilter,
-  DeltaScope
-} from 'Core/constants/structureConstants.constants';
-import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
-import {
-  PortfolioBreakdownDTO,
-  PortfolioFundDTO,
-  TargetBarDTO
-} from 'Core/models/frontend/frontend-models.interface';
-import {
-  BEStructuringFundBlock,
-  BEStructuringBreakdownBlock,
-  BEGetPortfolioStructureServerReturn,
-  BEStructuringBreakdownBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlock,
-  BEStructuringFundBlockWithSubPortfolios,
-  BEStructuringOverrideBaseBlockWithSubPortfolios,
-  BEStructuringOverrideBlock,
-  BEStructuringOverrideBaseBlock
-} from 'App/modules/core/models/backend/backend-models.interface';
-import {
-  CoreSendNewAlerts,
-  CoreMainThreadOccupiedState,
-  CoreMainThreadUnoccupiedState
-} from 'Core/actions/core.actions';
-import {
-  PayloadGetPortfolioStructures,
-  PayloadSetView,
-  PayloadUpdatePortfolioOverridesForAllPortfolios
-} from 'App/modules/core/models/backend/backend-payloads.interface';
-import {
-  StructureSetViewTransferPack,
-  AdhocExtensionBEStructuringBreakdownMetricBlock
-} from 'FEModels/frontend-adhoc-packages.interface';
-import {
-  SecurityDefinitionMap
-} from 'Core/constants/securityDefinitionConstants.constant';
-import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import { AdhocPacks } from 'App/modules/core/models/frontend';
+    import { DTOService, RestfulCommService, UtilityService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
+    import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
+    import { selectUserInitials } from 'Core/selectors/core.selectors';
+    import {
+      selectReloadFundDataPostEdit,
+      selectMainPanelUpdateTick,
+      selectActiveBreakdownViewFilter,
+      selectActivePortfolioViewFilter,
+      selectDataDatestamp,
+      selectActiveSubPortfolioFilter,
+      selectActiveDeltaScope
+    } from 'Structure/selectors/structure.selectors';
+    import {
+      PortfolioMetricValues,
+      SUPPORTED_PORTFOLIO_LIST,
+      BEPortfolioTargetMetricValues,
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
+      BreakdownViewFilter,
+      DeltaScope
+    } from 'Core/constants/structureConstants.constants';
+    import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
+    import {
+      PortfolioBreakdownDTO,
+      PortfolioFundDTO,
+      TargetBarDTO
+    } from 'Core/models/frontend/frontend-models.interface';
+    import {
+      BEStructuringFundBlock,
+      BEStructuringBreakdownBlock,
+      BEGetPortfolioStructureServerReturn,
+      BEStructuringBreakdownMetricBlock,
+      BEStructuringFundBlockWithSubPortfolios,
+      BEStructuringBreakdownBlockWithSubPortfolios,
+      BEStructuringOverrideBlockWithSubPortfolios,
+      BEStructuringOverrideBlock,
+      BEStructuringOverrideBaseBlock
+    } from 'App/modules/core/models/backend/backend-models.interface';
+    import {
+      CoreSendNewAlerts,
+      CoreMainThreadOccupiedState,
+      CoreMainThreadUnoccupiedState
+    } from 'Core/actions/core.actions';
+    import {
+      PayloadGetPortfolioStructures,
+      PayloadSetView,
+      PayloadUpdatePortfolioOverridesForAllPortfolios
+    } from 'App/modules/core/models/backend/backend-payloads.interface';
+    import {
+      StructureSetViewTransferPack,
+      AdhocExtensionBEStructuringBreakdownMetricBlock
+    } from 'FEModels/frontend-adhoc-packages.interface';
+    import {
+      SecurityDefinitionMap
+    } from 'Core/constants/securityDefinitionConstants.constant';
+    import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
+    import { AdhocPacks } from 'App/modules/core/models/frontend';
+  //
 
 @Component({
     selector: 'structure-main-panel',
@@ -76,7 +74,7 @@ import { AdhocPacks } from 'App/modules/core/models/frontend';
     encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureMainPanel implements OnInit, OnDestroy {
+export class StructureMainPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
   state: StructureMainPanelState; 
   subscriptions = {
     receiveNewDateSub: null,
@@ -99,13 +97,16 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   };
   
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private dtoService: DTOService,
     private store$: Store<any>,
     private restfulCommService: RestfulCommService,
-    private utilityService: UtilityService,
     private bicsDataProcessingService: BICsDataProcessingService,
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {
+    super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
   }
   
@@ -132,17 +133,26 @@ export class StructureMainPanel implements OnInit, OnDestroy {
   public ngOnInit() {
     this.state = this.initializePageState();
     this.subscriptions.receiveNewDateSub = this.store$.pipe(
+      filter((datestampInUnix) => {
+        return this.stateActive;
+      }),
       select(selectDataDatestamp)
     ).subscribe((datestampInUnix) => {
       this.state.currentDataDatestamp = moment.unix(datestampInUnix);
       this.fullUpdate();
     });
     this.subscriptions.ownerInitialsSub = this.store$.pipe(
+      filter((value) => {
+        return this.stateActive;
+      }),
       select(selectUserInitials)
     ).subscribe((value) => {
         this.state.ownerInitial = value;
     });
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      filter((value) => {
+        return this.stateActive;
+      }),
       select(selectMetricLevel)
     ).subscribe((value) => {
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
@@ -168,12 +178,20 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         }, 500)
       })
     });
-    this.subscriptions.viewData = this.store$.pipe(select(selectSetViewData)).subscribe((value: StructureSetViewTransferPack) => {
+    this.subscriptions.viewData = this.store$.pipe(
+      filter((value) => {
+        return this.stateActive;
+      }),
+      select(selectSetViewData)
+    ).subscribe((value: StructureSetViewTransferPack) => {
       if (!!value) {
         this.updateViewData(value);
       }
     })
     this.subscriptions.reloadFundUponEditSub = this.store$.pipe(
+      filter((targetFund) => {
+        return this.stateActive;
+      }),
       select(selectReloadFundDataPostEdit)
     ).subscribe((targetFund: BEStructuringFundBlockWithSubPortfolios) => {
       if (!!targetFund) {
@@ -192,6 +210,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.updateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectMainPanelUpdateTick)
     ).subscribe((tick) => {
       if (tick > 0) {  // ignore the initial page load
@@ -199,6 +220,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.activeBreakdownViewFilterSub = this.store$.pipe(
+      filter((activeFilter) => {
+        return this.stateActive;
+      }),
       select(selectActiveBreakdownViewFilter)
     ).subscribe((activeFilter) => {
       this.state.activeBreakdownViewFilter = activeFilter;
@@ -207,11 +231,17 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       });
     });
     this.subscriptions.activePortfolioViewFilterSub = this.store$.pipe(
+      filter((activeFilter) => {
+        return this.stateActive;
+      }),
       select(selectActivePortfolioViewFilter)
     ).subscribe((activeFilter) => {
       this.state.activePortfolioViewFilter = activeFilter;
     });
     this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      filter((activeFilter) => {
+        return this.stateActive;
+      }),
       select(selectActiveSubPortfolioFilter)
     ).subscribe((activeFilter) => {
       this.state.activeSubPortfolioFilter = activeFilter;
@@ -223,6 +253,9 @@ export class StructureMainPanel implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.activeDeltaScopeSub = this.store$.pipe(
+      filter((activeScope) => {
+        return this.stateActive;
+      }),
       select(selectActiveDeltaScope)
     ).subscribe((activeScope) => {
       this.state.activeDeltaScope = activeScope;
@@ -233,15 +266,7 @@ export class StructureMainPanel implements OnInit, OnDestroy {
         );
       }
     });
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   private fullUpdate() {

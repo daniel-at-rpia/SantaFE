@@ -31,7 +31,8 @@ export interface CoreState {
     processingAlerts: boolean;
     makeAPICall: boolean;
     apiCallForAlertFailed: boolean;
-    tradeTableReadyToReceiveAdditionalAlerts: boolean;
+    tradeTableFetchAlertTick: number;
+    tradeTableFetchAlertLastReceiveTimestamp: number;
   }
 }
 
@@ -59,7 +60,8 @@ const initialState: CoreState = {
     processingAlerts: false,
     makeAPICall: false,
     apiCallForAlertFailed: false,
-    tradeTableReadyToReceiveAdditionalAlerts: false
+    tradeTableFetchAlertTick: 0,
+    tradeTableFetchAlertLastReceiveTimestamp: 0
   }
 };
 
@@ -241,14 +243,15 @@ export function coreReducer(
           newTradeAlertTableAlerts: []
         }
       }
-      case CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts:
-        return {
-          ...state,
-          globalAlert: {
-            ...state.globalAlert,
-            tradeTableReadyToReceiveAdditionalAlerts: action.newState
-          }
+    case CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          tradeTableFetchAlertTick: state.globalAlert.tradeTableFetchAlertTick + 1,
+          tradeTableFetchAlertLastReceiveTimestamp: action.lastReceivedTimestamp
         }
+      }
     case CoreActions.GlobalWorkflowIndexedDBReady:
       return {
         ...state,
