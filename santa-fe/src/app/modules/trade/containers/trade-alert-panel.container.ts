@@ -94,7 +94,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   state: PageStates.TradeAlertPanelState;
   subscriptions = {
     userInitialsSub: null,
-    securityMapSub: null,
+    // securityMapSub: null,
     selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     startNewUpdateSub: null,
@@ -202,18 +202,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
       this.state = this.initializePageState();
-      this.subscriptions.securityMapSub = this.store$.pipe(
-        select(selectSecurityMapContent),
-        withLatestFrom(
-          this.store$.pipe(select(selectSecurityMapValidStatus))
-        )
-      ).subscribe(([mapContent, isValid]) => {
-        if (!!isValid) {
-          this.state.securityMap = mapContent;
-          this.state.isAlertPaused = false;
-          this.store$.dispatch(new CoreFlushSecurityMap());
-        }
-      });
       this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
           select(selectSelectedSecurityForAlertConfig)
         ).subscribe((targetSecurity) => {
@@ -311,13 +299,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       })
-
-      if (this.state.securityMap.length === 0) {
-        const map = this.securityMapService.getSecurityMap();
-        if (!!map && map.length > 0) {
-          this.state.securityMap = map;
-        }
-      }
     }
 
     public ngOnChanges() {
@@ -490,22 +471,25 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       config.securitySearchKeyword = keyword;
       if (keyword.length >= 2) {
         const result = [];
-        for (let i = 0; i < this.state.securityMap.length; ++i) {
-          const eachEntry = this.state.securityMap[i];
-          for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
-            if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
-              result.push(this.state.securityMap[i]);
-              break;
+        const map = this.securityMapService.getSecurityMap();
+        if (map.length > 0) {
+          for (let i = 0; i < map.length; ++i) {
+            const eachEntry = map[i];
+            for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
+              if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
+                result.push(map[i]);
+                break;
+              }
             }
           }
-        }
-        config.matchedResultCount = result.length;
-        config.searchIsValid = true;
-        if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+          config.matchedResultCount = result.length;
           config.searchIsValid = true;
-          this.fetchSecurities(result);
-        } else {
-          config.searchIsValid = false;
+          if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+            config.searchIsValid = true;
+            this.fetchSecurities(result);
+          } else {
+            config.searchIsValid = false;
+          }
         }
       } else {
         config.searchIsValid = false;
