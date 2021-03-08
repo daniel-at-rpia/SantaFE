@@ -2,8 +2,7 @@ import { Component, OnInit, OnChanges, OnDestroy, ViewEncapsulation, Input, Outp
 import { of, Subscription } from 'rxjs';
 import { catchError, first, tap, withLatestFrom } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
-import { StructureSetTargetPanelState } from 'FEModels/frontend-page-states.interface';
+import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
 import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { UtilityService } from 'Core/services/UtilityService';
@@ -13,18 +12,6 @@ import {
   selectActiveSubPortfolioFilter
 } from 'Structure/selectors/structure.selectors';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
-import {
-  StructureSetTargetOverlayTransferPack,
-  DefinitionConfiguratorEmitterParams,
-  StructureSetViewTransferPack,
-  AdhocExtensionBEStructuringBreakdownMetricBlock
-} from 'FEModels/frontend-adhoc-packages.interface';
-import { PortfolioBreakdownDTO, StructurePortfolioBreakdownRowDTO } from 'Core/models/frontend/frontend-models.interface';
-import {
-  BICsHierarchyBlock,
-  StructureSetTargetPanelEditRowBlock,
-  StructureSetTargetPanelEditRowItemBlock
-} from 'FEModels/frontend-blocks.interface';
 import {
   PortfolioMetricValues,
   STRUCTURE_EDIT_MODAL_ID,
@@ -51,6 +38,7 @@ import {
   BEStructuringOverrideBlockWithSubPortfolios,
   BEStructuringBreakdownMetricSingleEntryBlock,
   BEStructuringBreakdownMetricBlockWithSubPortfolios,
+  BESubPortfolioFilter,
   BEStructuringOverrideBaseBlock,
   BEStructuringOverrideBaseBlockWithSubPortfolios
 } from 'BEModels/backend-models.interface';
@@ -67,7 +55,8 @@ import { CoreSendNewAlerts } from 'Core/actions/core.actions';
 import {
   CustomeBreakdownConfiguratorDefinitionLayout,
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  SubPortfolioFilter
+  SubPortfolioFilter,
+  SET_TARGET_CLEAR_ALL_OPTIONS_MAP
 } from 'Core/constants/structureConstants.constants';
 import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
 import { BICSDictionaryLookupService} from 'Core/services/BICSDictionaryLookupService';
@@ -81,7 +70,7 @@ import * as moment from 'moment';
 })
 
 export class StructureSetTargetPanel implements OnInit, OnDestroy {
-  state: StructureSetTargetPanelState;
+  state: PageStates.StructureSetTargetPanelState;
   subscriptions = {
     setTargetTransferPackSub: null,
     ownerInitialsSub: null
@@ -92,7 +81,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     configuratorLayout: CustomeBreakdownConfiguratorDefinitionLayout,
     definitionMap: SecurityDefinitionMap,
     view: PortfolioView,
-    subPortfolio: SubPortfolioFilter
+    subPortfolio: SubPortfolioFilter,
+    clearAllOptionsMap: SET_TARGET_CLEAR_ALL_OPTIONS_MAP
   };
 
   constructor(
@@ -107,9 +97,9 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state = this.initializePageState();
   }
 
-  private initializePageState(): StructureSetTargetPanelState {
+  private initializePageState(): PageStates.StructureSetTargetPanelState {
     const inheritConfigurator = this.state && this.state.configurator ? this.state.configurator.dto : this.dtoService.createSecurityDefinitionConfigurator(true, false, false, this.constants.configuratorLayout);
-    const state: StructureSetTargetPanelState = {
+    const state: PageStates.StructureSetTargetPanelState = {
       targetBreakdown: null,
       targetFund: null,
       targetBreakdownRawData: null,
@@ -133,11 +123,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         newOverrideNameCache: null
       },
       removalList: [],
-      clearAllTargetSelected: false,
       editViewMode: false,
       ownerInitial: null,
       activeSubPortfolioFilter: null,
-      isViewingIndexOnBICS: false
+      isViewingIndexOnBICS: false,
+      isViewingClearTargets: false,
+      clearTargetsOptionsList: []
     };
     return state;
   }
@@ -154,7 +145,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
       withLatestFrom(
         this.store$.pipe(select(selectActiveSubPortfolioFilter))
       )
-    ).subscribe(([pack, activeSubPortfolioFilter]: [StructureSetTargetOverlayTransferPack, SubPortfolioFilter]) => {
+    ).subscribe(([pack, activeSubPortfolioFilter]: [AdhocPacks.StructureSetTargetOverlayTransferPack, SubPortfolioFilter]) => {
       if (!!pack && !!activeSubPortfolioFilter) {
         this.state = this.initializePageState();
         this.state.activeSubPortfolioFilter = activeSubPortfolioFilter;
@@ -184,6 +175,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         if (!!this.state.targetBreakdown) {
           if (this.state.targetBreakdown.state.isBICs) {
             this.setModifiedRowListsForBICSVariant(this.state.targetBreakdown.data.rawCs01CategoryList, this.state.targetBreakdown.data.rawLeverageCategoryList, this.state.targetBreakdown);
+            this.state.clearTargetsOptionsList = [...this.constants.clearAllOptionsMap.BICS];
           } else {
             this.state.targetBreakdown.data.rawCs01CategoryList.forEach(rawCs01 => rawCs01.state.isWithinSetTargetPreview = true);
             this.state.targetBreakdown.data.rawLeverageCategoryList.forEach(rawLeverage => rawLeverage.state.isWithinSetTargetPreview = true);
@@ -193,9 +185,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         this.calculateAllocation();
         this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto, this.constants.configuratorLayout);
         this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
-        if (!!this.state.clearAllTargetSelected) {
-          this.state.clearAllTargetSelected = false;
-        }
         const modalTitle = !!this.state.targetBreakdownIsOverride ? `${this.state.targetFund.data.portfolioShortName} - Edit Override Targets` : `${this.state.targetFund.data.portfolioShortName} - Edit Breakdown Targets`;
         this.modalService.setModalTitle(STRUCTURE_EDIT_MODAL_ID, modalTitle);
       }
@@ -215,7 +204,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onValueChange(
     newValue: string,
-    targetItem: StructureSetTargetPanelEditRowItemBlock
+    targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock
   ) {
     if (newValue !== targetItem.modifiedDisplayValue) {
       targetItem.isSaved = false;
@@ -228,8 +217,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onClickSaveEdit(
-    targetCategory: StructureSetTargetPanelEditRowBlock,
-    targetItem: StructureSetTargetPanelEditRowItemBlock,
+    targetCategory: Blocks.StructureSetTargetPanelEditRowBlock,
+    targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock,
     notOneOffEdit?: boolean
   ) {
     targetItem.isSaved = true;
@@ -286,73 +275,77 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onToggleLock(targetRow: StructureSetTargetPanelEditRowBlock) {
+  public onToggleLock(targetRow: Blocks.StructureSetTargetPanelEditRowBlock) {
     if (!!targetRow) {
       targetRow.isLocked = !targetRow.isLocked;
     }
   }
 
   public onPressedEnterKeyInInput(
-    targetCategory: StructureSetTargetPanelEditRowBlock,
-    targetItem: StructureSetTargetPanelEditRowItemBlock
+    targetCategory: Blocks.StructureSetTargetPanelEditRowBlock,
+    targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock
   ) {
     this.onClickSaveEdit(targetCategory, targetItem);
   }
 
   public onClickDistributeEvenly() {
-    const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel)
-    });
-    if (unlockedList.length > 0) {
-      const totalNumberOfRows = unlockedList.length;
-      const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
-      this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
-      const totalValue = isCs01 ? this.state.remainingUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage;
-      unlockedList.forEach((eachUnlockedRow) => {
-        const targetItem = isCs01 ? eachUnlockedRow.targetCs01.level : eachUnlockedRow.targetCreditLeverage.level;
-        const distributedValue = totalValue/totalNumberOfRows;
-        const parsedValue = isCs01 ? this.utilityService.round(distributedValue/1000, 3) : this.utilityService.round(distributedValue, 3);
-        this.setTarget(
-          `${parsedValue}`,
-          targetItem
-        );
-        this.onClickSaveEdit(
-          eachUnlockedRow,
-          targetItem,
-          true
-        );
+    if (!this.state.isViewingClearTargets || this.state.activeMetric !== this.constants.metric.creditLeverage) {
+      const unlockedList = this.state.editRowList.filter((eachRow) => {
+        return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel)
       });
-      this.calculateAllocation();
+      if (unlockedList.length > 0) {
+        const totalNumberOfRows = unlockedList.length;
+        const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+        this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
+        const totalValue = isCs01 ? this.state.remainingUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage;
+        unlockedList.forEach((eachUnlockedRow) => {
+          const targetItem = isCs01 ? eachUnlockedRow.targetCs01.level : eachUnlockedRow.targetCreditLeverage.level;
+          const distributedValue = totalValue/totalNumberOfRows;
+          const parsedValue = isCs01 ? this.utilityService.round(distributedValue/1000, 3) : this.utilityService.round(distributedValue, 3);
+          this.setTarget(
+            `${parsedValue}`,
+            targetItem
+          );
+          this.onClickSaveEdit(
+            eachUnlockedRow,
+            targetItem,
+            true
+          );
+        });
+        this.calculateAllocation();
+      }
     }
   }
 
   public onClickDistributeProportionally() {
-    const unlockedList = this.state.editRowList.filter((eachRow) => {
-      return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel);
-    });
-    if (unlockedList.length > 0) {
-      const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
-      this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
-      let totalValue = 0;
-      const totalRemainingPercent = isCs01 ? this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage;
-      unlockedList.forEach((eachUnlockedRow) => {
-        totalValue = totalValue + eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel;
+    if (!this.state.isViewingClearTargets || this.state.activeMetric !== this.constants.metric.creditLeverage) {
+      const unlockedList = this.state.editRowList.filter((eachRow) => {
+        return !eachRow.isLocked && (eachRow.targetBlockFromBreakdown.bicsLevel === 1 || !eachRow.targetBlockFromBreakdown.bicsLevel);
       });
-      unlockedList.forEach((eachUnlockedRow) => {
-        const distributedValue = eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel/totalValue * 100 * totalRemainingPercent;
-        const parsedValue = this.utilityService.round(distributedValue, 3);
-        const targetItem = isCs01 ? eachUnlockedRow.targetCs01.percent : eachUnlockedRow.targetCreditLeverage.percent;
-        this.setTarget(
-          `${parsedValue}`,
-          targetItem
-        );
-        this.onClickSaveEdit(
-          eachUnlockedRow,
-          targetItem,
-          true
-        );
-      });
-      this.calculateAllocation();
+      if (unlockedList.length > 0) {
+        const isCs01 = this.state.activeMetric === this.constants.metric.cs01;
+        this.clearUnlockRowsBeforeDistribution(unlockedList, isCs01);
+        let totalValue = 0;
+        const totalRemainingPercent = isCs01 ? this.state.remainingUnallocatedCS01/this.state.totalUnallocatedCS01 : this.state.remainingUnallocatedCreditLeverage/this.state.totalUnallocatedCreditLeverage;
+        unlockedList.forEach((eachUnlockedRow) => {
+          totalValue = totalValue + eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel;
+        });
+        unlockedList.forEach((eachUnlockedRow) => {
+          const distributedValue = eachUnlockedRow.targetBlockFromBreakdown.raw.currentLevel/totalValue * 100 * totalRemainingPercent;
+          const parsedValue = this.utilityService.round(distributedValue, 3);
+          const targetItem = isCs01 ? eachUnlockedRow.targetCs01.percent : eachUnlockedRow.targetCreditLeverage.percent;
+          this.setTarget(
+            `${parsedValue}`,
+            targetItem
+          );
+          this.onClickSaveEdit(
+            eachUnlockedRow,
+            targetItem,
+            true
+          );
+        });
+        this.calculateAllocation();
+      }
     }
   }
 
@@ -360,7 +353,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.state.configurator.display = !this.state.configurator.display;
   }
 
-  public onApplyConfiguratorFilter(params: DefinitionConfiguratorEmitterParams) {
+  public onApplyConfiguratorFilter(params: AdhocPacks.DefinitionConfiguratorEmitterParams) {
     if (params.filterList.length === 0) {
       const alert = this.dtoService.formSystemAlertObject('Apply Blocked', 'Empty Bucket', `Define the bucket with value before apply`, null);
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
@@ -450,7 +443,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.bicsService.loadBICSOptionsIntoConfigurator(this.state.configurator.dto);
   }
 
-  public onSelectForRemoval(targetRow: StructureSetTargetPanelEditRowBlock) {
+  public onSelectForRemoval(targetRow: Blocks.StructureSetTargetPanelEditRowBlock) {
     if (targetRow) {
       const newList = this.utilityService.deepCopy(this.state.editRowList.filter((eachRow) => {
         return eachRow.rowIdentifier !== targetRow.rowIdentifier;
@@ -486,23 +479,23 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   public onEditRowRenamed(
     targetName: string,
-    targetRow: StructureSetTargetPanelEditRowBlock
+    targetRow: Blocks.StructureSetTargetPanelEditRowBlock
   ) {
     targetRow.modifiedDisplayRowTitle = targetName;
   }
 
-  public clearAllRowTargets() {
-    this.state.editRowList.forEach(row => {
-      this.resetRowTargets(row, this.constants.metric.cs01);
-      this.resetRowTargets(row, this.constants.metric.creditLeverage);
-    })
-    this.state.clearAllTargetSelected = true;
-    this.calculateAllocation();
-    this.setBtnText();
-    this.refresh()
+  public onClickClearAllTargets() {
+    this.state.isViewingClearTargets = !this.state.isViewingClearTargets;
+    if (!this.state.isViewingClearTargets) {
+      if (this.state.clearTargetsOptionsList.length > 0) {
+        this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => {
+          option.isSelected = false;
+        })
+      }
+    }
   }
 
-  public onClickEditCategory(targetRow: StructurePortfolioBreakdownRowDTO) {
+  public onClickEditCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isSelected = !targetRow.state.isSelected;
   }
 
@@ -516,7 +509,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     this.utilityService.calculateAlignmentRating(this.state.targetBreakdown);
   }
 
-  public getSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
+  public getSubLevelEditRows(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     if (!!targetRow) {
       if (targetRow.data.displayedSubLevelRows.length <= 0) {
         this.createSubLevelEditRows(targetRow);
@@ -531,7 +524,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  public onClickSetView(editRow: StructureSetTargetPanelEditRowBlock, view: PortfolioView) {
+  public onClickSetView(editRow: Blocks.StructureSetTargetPanelEditRowBlock, view: PortfolioView) {
     if (!!editRow.view) {
       // user intends to remove view option
       editRow.view = editRow.view === view ? null : view;
@@ -542,10 +535,29 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   public onToggleSetViewMode() {
-    this.state.editViewMode = !this.state.editViewMode;
+    if (!this.state.isViewingClearTargets || this.state.activeMetric !== this.constants.metric.creditLeverage) {
+      this.state.editViewMode = !this.state.editViewMode;
+    }
   }
 
-  private checkIfEvenRow(editRow: StructureSetTargetPanelEditRowBlock): boolean {
+  public onSelectClearAllOptions(identifier: string) {
+    const matchedOption = this.state.clearTargetsOptionsList.find((option: Blocks.StructureClearTargetsOptionBlock) => option.backendIdentifier === identifier);
+    if (!!matchedOption) {
+      matchedOption.isSelected = !matchedOption.isSelected
+    }
+  }
+
+  public onClearRowTarget(targetRow: Blocks.StructureSetTargetPanelEditRowBlock) {
+    targetRow.targetCs01.level.modifiedDisplayValue = '';
+    targetRow.targetCs01.level.modifiedUnderlineValue = null;
+    targetRow.targetCs01.level.isActive = true;
+    targetRow.targetCreditLeverage.level.modifiedDisplayValue = '';
+    targetRow.targetCreditLeverage.level.modifiedUnderlineValue = null;
+    targetRow.targetCreditLeverage.level.isImplied = true;
+    this.onClickSaveEdit(targetRow, targetRow.targetCs01.level);
+  }
+
+  private checkIfEvenRow(editRow: Blocks.StructureSetTargetPanelEditRowBlock): boolean {
     const selectedList = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
     if (!!this.state.targetBreakdown.state.isBICs) {
       const levelOneList = selectedList.filter(row => row.data.bicsLevel === 1);
@@ -580,8 +592,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
 
-  private loadEditRowsReturnNewRow(row: StructurePortfolioBreakdownRowDTO): StructureSetTargetPanelEditRowBlock {
-    const newRow: StructureSetTargetPanelEditRowBlock = {
+  private loadEditRowsReturnNewRow(row: DTOs.StructurePortfolioBreakdownRowDTO): Blocks.StructureSetTargetPanelEditRowBlock {
+    const newRow: Blocks.StructureSetTargetPanelEditRowBlock = {
       targetBlockFromBreakdown: row.data,
       rowIdentifier: row.data.category,
       displayRowTitle: row.data.displayCategory,
@@ -662,14 +674,6 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return newRow;
   }
 
-  private resetRowTargets(row: StructureSetTargetPanelEditRowBlock, targetMetric: PortfolioMetricValues) {
-    const rowTargetMetric = targetMetric === this.constants.metric.cs01 ? 'targetCs01' : 'targetCreditLeverage';
-    row[rowTargetMetric].level.modifiedDisplayValue = '';
-    row[rowTargetMetric].level.modifiedUnderlineValue = null;
-    row[rowTargetMetric].level.isActive = true;
-    this.onClickSaveEdit(row, row[rowTargetMetric].level, true);
-  }
-
   private loadEditRows() {
     this.state.editRowList = [];
     if (!!this.state.targetBreakdown) {
@@ -699,7 +703,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private inheritEditRowStates(oldRows: Array<StructureSetTargetPanelEditRowBlock>) {
+  private inheritEditRowStates(oldRows: Array<Blocks.StructureSetTargetPanelEditRowBlock>) {
     this.state.editRowList = this.state.editRowList.map((eachNewRow) => {
       const newRowEvenState = eachNewRow.isEven;
       const matchedOldRow = oldRows.find((eachOldRow) => {
@@ -756,7 +760,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private setTarget(
     displayValue: string,
-    targetItem: StructureSetTargetPanelEditRowItemBlock
+    targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock
   ) {
     if (displayValue === '') {
       displayValue = '';
@@ -775,8 +779,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private implyCounterParty(
-    targetItem: StructureSetTargetPanelEditRowItemBlock,
-    counterPartyItem: StructureSetTargetPanelEditRowItemBlock
+    targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock,
+    counterPartyItem: Blocks.StructureSetTargetPanelEditRowItemBlock
   ) {
     const targetIsPercent: boolean = targetItem.isPercent;
     const targetUnderlineValue: number = targetItem.savedUnderlineValue;
@@ -830,7 +834,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   // for preview rows and portfolio breakdown rows within edit row list (BICS)
   // updates only the visualizers and diffToTargets only
   // this is because the BE data isn't dynamic, and technically only these two properties change visually 
-  private updateTargetBreakdownLists(list: Array<StructurePortfolioBreakdownRowDTO>, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean = false) {
+  private updateTargetBreakdownLists(list: Array<DTOs.StructurePortfolioBreakdownRowDTO>, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean = false) {
     const [minValue, maxValue] = this.utilityService.getMetricSpecificMinAndMaxForVisualizer(rawBreakdownData, isCs01);
     list.forEach(row => {
       const editRowListEquivalent = !!isBICS ? this.state.editRowList.find(editRowList => editRowList.rowDTO.data.code === row.data.code) : this.state.editRowList.find(editRowList => editRowList.rowIdentifier === row.data.category);
@@ -878,7 +882,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private clearUnlockRowsBeforeDistribution(
-    unlockedRowList: Array<StructureSetTargetPanelEditRowBlock>,
+    unlockedRowList: Array<Blocks.StructureSetTargetPanelEditRowBlock>,
     isCs01: boolean
   ) {
     unlockedRowList.forEach((eachRow) => {
@@ -891,7 +895,10 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private submitTargetChanges(): boolean {
     if (!this.state.targetBreakdownIsOverride) {
-      if (this.state.targetBreakdown.state.isBICs) {
+      if (this.state.isViewingClearTargets) {
+        // BE needs to implement the same functionality for overrides
+        return this.submitClearAllTargetChanges();
+      } else if (this.state.targetBreakdown.state.isBICs) {
         return this.submitRegularBICSBreakdownChanges();
       } else {
         return this.submitRegularBreakdownChanges()
@@ -941,46 +948,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private submitRegularBreakdownChanges(): boolean {
-    //checks if resetting all targets
-    if (!!this.state.clearAllTargetSelected) {
-      const allTargetsReset = this.state.editRowList.every(row => !row.targetCreditLeverage.level.savedUnderlineValue && !row.targetCreditLeverage.percent.savedUnderlineValue && !row.targetCs01.level.savedUnderlineValue && !row.targetCs01.percent.savedUnderlineValue);
-      if (!!allTargetsReset) {
-        const payload: PayloadClearPortfolioBreakdown = {
-          portfolioBreakdown: {
-            portfolioId: this.state.targetFund.data.portfolioId,
-            groupOption: this.state.targetBreakdownRawData.groupOption
-          }
-        }
-        if (!!payload) {
-          this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
-            first(),
-            tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
-              this.store$.dispatch(
-                new CoreSendNewAlerts([
-                  this.dtoService.formSystemAlertObject(
-                    'Structuring',
-                    'Updated',
-                    `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
-                    null
-                  )]
-                )
-              );
-              this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
-            }),
-            catchError(err => {
-              console.error('clear portfolio breakdown failed');
-              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'clear portfolio breakdown failed', null)]));
-              return of('error');
-            })
-          ).subscribe();
-          return true;
-        }
-      } else {
-        return this.submitRegularBreakdownChangesUpdate();
-      }
-    } else {
-      return this.submitRegularBreakdownChangesUpdate();
-    }
+    return this.submitRegularBreakdownChangesUpdate();
   }
 
   private submitOverrideChanges(): boolean {
@@ -1059,7 +1027,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   private traverseEditRowsToFormUpdateBreakdownPayload(): Array<PayloadUpdateBreakdown> {
     let payloads: Array<PayloadUpdateBreakdown> = []
     if (this.state.targetBreakdown.state.isBICs) {
-      const sortedListByLevel = this.state.targetBreakdown.data.displayCategoryList.sort((categoryA: StructurePortfolioBreakdownRowDTO, categoryB: StructurePortfolioBreakdownRowDTO) => categoryA.data.bicsLevel - categoryB.data.bicsLevel);
+      const sortedListByLevel = this.state.targetBreakdown.data.displayCategoryList.sort((categoryA: DTOs.StructurePortfolioBreakdownRowDTO, categoryB: DTOs.StructurePortfolioBreakdownRowDTO) => categoryA.data.bicsLevel - categoryB.data.bicsLevel);
       const highestLevel = sortedListByLevel[sortedListByLevel.length-1].data.bicsLevel;
       for (let i = 1; i < highestLevel + 1; i++) {
         const rawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, i);
@@ -1185,11 +1153,11 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return payload;
   }
 
-  private cs01ModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
+  private cs01ModifiedInEditRow(targetRow: Blocks.StructureSetTargetPanelEditRowBlock): boolean {
     return (targetRow.targetCs01.level.isActive || targetRow.targetCs01.level.isImplied) && (targetRow.targetCs01.level.isSaved || targetRow.targetCs01.percent.isSaved);
   }
 
-  private creditLeverageModifiedInEditRow(targetRow: StructureSetTargetPanelEditRowBlock): boolean {
+  private creditLeverageModifiedInEditRow(targetRow: Blocks.StructureSetTargetPanelEditRowBlock): boolean {
     return (targetRow.targetCreditLeverage.level.isActive || targetRow.targetCreditLeverage.level.isImplied) && (targetRow.targetCreditLeverage.level.isSaved || targetRow.targetCreditLeverage.percent.isSaved);
   }
 
@@ -1238,7 +1206,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private setModifiedRowListsForBICSVariant(rawCs01List: Array<StructurePortfolioBreakdownRowDTO>, rawCreditLeverageList: Array<StructurePortfolioBreakdownRowDTO>, targetBreakdown: PortfolioBreakdownDTO) {
+  private setModifiedRowListsForBICSVariant(rawCs01List: Array<DTOs.StructurePortfolioBreakdownRowDTO>, rawCreditLeverageList: Array<DTOs.StructurePortfolioBreakdownRowDTO>, targetBreakdown: DTOs.PortfolioBreakdownDTO) {
     const cs01LevelOneList = rawCs01List.filter(row => row.data.bicsLevel === 1);
     const leverageLevelOneList = rawCreditLeverageList.filter(row => row.data.bicsLevel === 1);
     cs01LevelOneList.forEach(cs01Row => {
@@ -1267,7 +1235,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private updateEditRowDTOReferenceBasedOnMetric(list: Array<StructurePortfolioBreakdownRowDTO>) {
+  private updateEditRowDTOReferenceBasedOnMetric(list: Array<DTOs.StructurePortfolioBreakdownRowDTO>) {
     this.utilityService.calculateAlignmentRating(this.state.targetBreakdown);
     this.state.editRowList.forEach(editRow => {
       const selectedRow = list.find(row => row.data.code === editRow.rowDTO.data.code);
@@ -1277,7 +1245,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     })
   }
 
-  private updateBICSpecificPropertiesForSubLevels(rawList:  Array<StructurePortfolioBreakdownRowDTO>, isCs01: boolean) {
+  private updateBICSpecificPropertiesForSubLevels(rawList:  Array<DTOs.StructurePortfolioBreakdownRowDTO>, isCs01: boolean) {
     const targetList = !!isCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
     rawList.forEach(selectedListRow => {
       selectedListRow.state.isVisibleSubLevel = true;
@@ -1295,12 +1263,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private updateDisplayedSubLevelsLists(
-    row: StructurePortfolioBreakdownRowDTO,
-    targetRawList: Array<StructurePortfolioBreakdownRowDTO>,
+    row: DTOs.StructurePortfolioBreakdownRowDTO,
+    targetRawList: Array<DTOs.StructurePortfolioBreakdownRowDTO>,
     isDisplayList: boolean) {
-    const hierarchyList: Array<BICsHierarchyBlock> = this.bicsService.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
+    const hierarchyList: Array<Blocks.BICsHierarchyBlock> = this.bicsService.getTargetSpecificHierarchyList(row.data.code, row.data.bicsLevel);
     if (hierarchyList.length > 0) {
-      hierarchyList.forEach((category: BICsHierarchyBlock) => {
+      hierarchyList.forEach((category: Blocks.BICsHierarchyBlock) => {
         if (targetRawList.length > 0) {
           const targetListEquivalent = targetRawList.find(targetRow => targetRow.data.code === category.code);
           if (!!targetListEquivalent) {
@@ -1325,7 +1293,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private updateDisplayedSubLevelsListWithTargets(row: StructurePortfolioBreakdownRowDTO, isCs01List: boolean, isDisplayCs01: boolean) {
+  private updateDisplayedSubLevelsListWithTargets(row: DTOs.StructurePortfolioBreakdownRowDTO, isCs01List: boolean, isDisplayCs01: boolean) {
     const subCategoryCodes = this.bicsDictionaryLookupService.getBICSSubLevelByCodeGrouping(row.data.code);
     const customRawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, 1);
     if (!!customRawBreakdown) {
@@ -1338,12 +1306,12 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
           if (!!displayCategory) {
             customRawBreakdown.breakdown[displayCategory] = rawDataByCode;
             definitionList.push(displayCategory);
-            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
-            (customRawBreakdown.breakdown[displayCategory] as AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
+            (customRawBreakdown.breakdown[displayCategory] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
+            (customRawBreakdown.breakdown[displayCategory] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
           }
         }
       })
-      const customBreakdown: PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, definitionList, isDisplayCs01, false);
+      const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, definitionList, isDisplayCs01, false);
       if (!!customBreakdown) {
         const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
         const listWithTargets = list.filter(newRow => newRow.data.targetLevel !== null);
@@ -1359,13 +1327,13 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private setNewDiffToTargetsForRows(row: StructurePortfolioBreakdownRowDTO, amount: number, displayText: string) {
+  private setNewDiffToTargetsForRows(row: DTOs.StructurePortfolioBreakdownRowDTO, amount: number, displayText: string) {
     row.data.diffToTarget = amount;
     row.data.diffToTargetDisplay = displayText;
   }
 
   private toggleEditRowDTODiveInState(
-    row: StructurePortfolioBreakdownRowDTO,
+    row: DTOs.StructurePortfolioBreakdownRowDTO,
     diveInState: boolean,
     isDisplayCs01: boolean,
     level: number = null) {
@@ -1375,7 +1343,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     if (!!oppositeListEquivalent) {
       this.resetSubLevelStatesToShowFurtherLevels(oppositeListEquivalent, diveInState);
     }
-    const parsedDisplayList: Array<StructurePortfolioBreakdownRowDTO> = !!level ? row.data.displayedSubLevelRows.filter(displayListRow => displayListRow.data.bicsLevel === level) : row.data.displayedSubLevelRows;
+    const parsedDisplayList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = !!level ? row.data.displayedSubLevelRows.filter(displayListRow => displayListRow.data.bicsLevel === level) : row.data.displayedSubLevelRows;
     parsedDisplayList.forEach(parsedDisplayRow => {
       parsedDisplayRow.state.isDoveIn = false;
       const editRowListIndex = this.state.editRowList.findIndex(editRow => editRow.rowDTO.data.code === parsedDisplayRow.data.code);
@@ -1394,7 +1362,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     })
   }
 
-  private createSubLevelEditRows(targetRow: StructurePortfolioBreakdownRowDTO) {
+  private createSubLevelEditRows(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
     targetRow.state.isDoveIn = true;
     const rawCs01Row = this.state.targetBreakdown.data.rawCs01CategoryList.find(rawCs01 => rawCs01.data.code === targetRow.data.code);
     if (!!rawCs01Row) {
@@ -1442,19 +1410,19 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     });
   }
 
-  private resetSubLevelStatesToShowFurtherLevels(row: StructurePortfolioBreakdownRowDTO, state: boolean) {
+  private resetSubLevelStatesToShowFurtherLevels(row: DTOs.StructurePortfolioBreakdownRowDTO, state: boolean) {
     row.state.isDoveIn = state;
     row.state.isShowingSubLevels = state;
   }
 
-  private getRowRawDataByMetric(row: StructurePortfolioBreakdownRowDTO, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean): BEStructuringBreakdownMetricSingleEntryBlock {
+  private getRowRawDataByMetric(row: DTOs.StructurePortfolioBreakdownRowDTO, rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean, isBICS: boolean): BEStructuringBreakdownMetricSingleEntryBlock {
     const { breakdown } = rawBreakdownData;
     const rowRawBreakdownData = !!isBICS ? breakdown[row.data.code] : breakdown[row.data.category];
     const rowRawBreakdownDataByMetric= !!isCs01 ? {...rowRawBreakdownData.metricBreakdowns.Cs01} : {...rowRawBreakdownData.metricBreakdowns.CreditLeverage};
     return rowRawBreakdownDataByMetric;
   }
 
-  private updateRowVisualizer(row: StructurePortfolioBreakdownRowDTO, rawBreakdownData: BEStructuringBreakdownBlock, minValue: number, maxValue: number, isCs01: boolean, isBICS: boolean) {
+  private updateRowVisualizer(row: DTOs.StructurePortfolioBreakdownRowDTO, rawBreakdownData: BEStructuringBreakdownBlock, minValue: number, maxValue: number, isCs01: boolean, isBICS: boolean) {
     const rowRawBreakdownDataByMetric= this.getRowRawDataByMetric(row, rawBreakdownData, isCs01, isBICS);
     const { diveInLevel } = this.state.targetBreakdown.data;
     const { isOverrideVariant} = this.state.targetBreakdown.state;
@@ -1467,7 +1435,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     row.data.moveVisualizer.state.isStencil = false;
   }
 
-  private resetMultipleVisualizers(rowList: Array<StructurePortfolioBreakdownRowDTO>, isCs01: boolean, isBICS: boolean, isInitialLoad: boolean = false) {
+  private resetMultipleVisualizers(rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>, isCs01: boolean, isBICS: boolean, isInitialLoad: boolean = false) {
     const [minValue, maxValue] = this.utilityService.getMetricSpecificMinAndMaxForVisualizer(this.state.targetBreakdownRawData, isCs01);
     const rawBreakdownCopy = this.utilityService.deepCopy(this.state.targetBreakdownRawData);
     if (!!isInitialLoad) {
@@ -1477,16 +1445,16 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
         }
       }
     }
-    rowList.forEach((row: StructurePortfolioBreakdownRowDTO) => {
+    rowList.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO) => {
       this.updateRowVisualizer(row, rawBreakdownCopy, minValue, maxValue,isCs01, isBICS);
     })
   }
 
-  private setNumberOfSubLevelRowEdits(targetCategory: StructureSetTargetPanelEditRowBlock) {
+  private setNumberOfSubLevelRowEdits(targetCategory: Blocks.StructureSetTargetPanelEditRowBlock) {
     const hierarchyList = this.bicsService.getTargetSpecificHierarchyList(targetCategory.rowDTO.data.code, targetCategory.rowDTO.data.bicsLevel);
     if (hierarchyList.length > 0) {
-      const selectedBreakdownList: Array<StructurePortfolioBreakdownRowDTO> = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
-      hierarchyList.forEach((listItem: BICsHierarchyBlock) => {
+      const selectedBreakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = this.state.activeMetric === this.constants.metric.cs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
+      hierarchyList.forEach((listItem: Blocks.BICsHierarchyBlock) => {
         const rawListEquivalent = selectedBreakdownList.find(selectedRow => selectedRow.data.code === listItem.code);
         if (!!rawListEquivalent) {
           const ifExists = rawListEquivalent.data.editedSubLevelRowsWithTargets.find(displayedRow => displayedRow.data.code === targetCategory.rowDTO.data.code);
@@ -1496,7 +1464,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private updateRowTargetValues(targetCategory: StructureSetTargetPanelEditRowBlock, isCs01: boolean, isBICS: boolean) {
+  private updateRowTargetValues(targetCategory: Blocks.StructureSetTargetPanelEditRowBlock, isCs01: boolean, isBICS: boolean) {
     const selectedRowList = !!isCs01 ? this.state.targetBreakdown.data.rawCs01CategoryList : this.state.targetBreakdown.data.rawLeverageCategoryList;
     const rowListEquivalent = selectedRowList.find(row => !!isBICS ? row.data.code === targetCategory.targetBlockFromBreakdown.code : row.data.displayCategory === targetCategory.targetBlockFromBreakdown.displayCategory);
     if (!!rowListEquivalent) {
@@ -1506,7 +1474,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private updateRowRawBreakdownData(targetCategory: StructureSetTargetPanelEditRowBlock, targetItem: StructureSetTargetPanelEditRowItemBlock) {
+  private updateRowRawBreakdownData(targetCategory: Blocks.StructureSetTargetPanelEditRowBlock, targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock) {
     const identifier = this.state.targetBreakdown.state.isBICs ? targetCategory.rowDTO.data.code : targetCategory.rowIdentifier;
     if (targetItem.metric === this.constants.metric.cs01) {
       this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
@@ -1517,8 +1485,8 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     }
   }
 
-  private traverseEditRowListForUpdatedView(): StructureSetViewTransferPack {
-    const viewPayload: StructureSetViewTransferPack = {
+  private traverseEditRowListForUpdatedView(): AdhocPacks.StructureSetViewTransferPack {
+    const viewPayload: AdhocPacks.StructureSetViewTransferPack = {
       bucket: [],
       view: [],
       displayCategory: ''
@@ -1537,7 +1505,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
     return !!isViewPayloadValid ? viewPayload : null;
   }
 
-  private submitBulkEditViewChanges(data: StructureSetViewTransferPack, fundWithUpdatedTargets: BEStructuringFundBlockWithSubPortfolios = null): boolean {
+  private submitBulkEditViewChanges(data: AdhocPacks.StructureSetViewTransferPack, fundWithUpdatedTargets: BEStructuringFundBlockWithSubPortfolios = null): boolean {
     const endpoint = this.restfulCommService.apiMap.setView;
     const { bucket, view } = data;
     const payload: PayloadSetView = {
@@ -1580,7 +1548,7 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
 
   private submitRegularBICSBreakdownChanges(): boolean {
     const payloads: Array<PayloadUpdateBreakdown> = this.traverseEditRowsToFormUpdateBreakdownPayload();
-    const viewPayload: StructureSetViewTransferPack = this.traverseEditRowListForUpdatedView();
+    const viewPayload: AdhocPacks.StructureSetViewTransferPack = this.traverseEditRowListForUpdatedView();
     if (!!payloads && payloads.length > 0) {
       const necessaryUpdateNumOfCalls = payloads.length;
       let callCount = 0;
@@ -1630,6 +1598,79 @@ export class StructureSetTargetPanel implements OnInit, OnDestroy {
   }
 
   private closeModal(): boolean {
+    this.state.clearTargetsOptionsList.length > 0 && this.resetTargetOptionsListSelectedState();
     return true;
   }
+
+  private submitClearAllTargetChanges():boolean {
+    const updatePayload: Array<PayloadClearPortfolioBreakdown> = this.traverseOptionsForClearAllPayload();
+    if (updatePayload.length > 0) {
+      const necessaryUpdateNumOfCalls = updatePayload.length;
+      let callCount = 0;
+      updatePayload.forEach((payload: PayloadClearPortfolioBreakdown) => {
+        this.restfulCommService.callAPI(this.restfulCommService.apiMap.clearPortfolioBreakdown, {req: 'POST'}, payload).pipe(
+          first(),
+          tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
+            callCount++;
+            if (callCount === necessaryUpdateNumOfCalls) {
+              const alertMessage = `Successfully cleared targets for ${this.state.targetBreakdown.data.title} ${updatePayload.length > 1 ? 'breakdowns' : 'breakdown'} in ${this.state.targetFund.data.portfolioShortName} (Sub-Portfolio: ${this.state.activeSubPortfolioFilter})`;
+              this.store$.dispatch(
+                new CoreSendNewAlerts([
+                  this.dtoService.formSystemAlertObject(
+                    'Success',
+                    'Clear Targets',
+                    alertMessage,
+                    null
+                  )]
+                )
+              );
+              this.store$.dispatch(new StructureReloadFundDataPostEditEvent(serverReturn));
+              this.state.clearTargetsOptionsList.length > 0 && this.resetTargetOptionsListSelectedState();
+            }
+          }),
+          catchError(err => {
+            console.error('clear portfolio breakdown failed', err);
+            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Clear Targets', 'Clear portfolio breakdown failed', null)]));
+            return of('error');
+          })
+        ).subscribe()
+      })
+      return true;
+    } else {
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Clear Targets', 'Can not clear breakdown as options are not selected', null)]));
+      return false;
+    }
+  }
+
+  private traverseOptionsForClearAllPayload(): Array<PayloadClearPortfolioBreakdown> {
+    const payload: Array<PayloadClearPortfolioBreakdown> = [];
+    if (this.state.clearTargetsOptionsList.length > 0) {
+      this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => {
+        if (option.isSelected) {
+          const object = this.getClearAllPayloadObject(option.backendIdentifier);
+          payload.push(object);
+        }
+      })
+    } else {
+      const object = this.getClearAllPayloadObject(this.state.targetBreakdown.data.backendGroupOptionIdentifier);
+      payload.push(object);
+    }
+    return payload
+  }
+
+  private resetTargetOptionsListSelectedState() {
+    this.state.clearTargetsOptionsList.forEach((option: Blocks.StructureClearTargetsOptionBlock) => option.isSelected = false)
+  }
+
+  private getClearAllPayloadObject(groupOption: string): PayloadClearPortfolioBreakdown {
+    const object: PayloadClearPortfolioBreakdown = {
+      portfolioBreakdown: {
+        portfolioId: this.state.targetBreakdown.data.portfolioId,
+        groupOption: groupOption
+      },
+      subPortfolioType: this.utilityService.convertFESubPortfolioTextToBEKey(this.state.activeSubPortfolioFilter) as BESubPortfolioFilter
+    }
+    return object;
+  }
+
 }
