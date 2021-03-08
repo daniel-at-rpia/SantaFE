@@ -139,7 +139,24 @@ export enum DeltaScope {
   dod = 'Dod',
   wow = 'Wow',
   mom = 'Mom',
-  ytd = 'Ytd'
+  ytd = 'Ytd',
+  tMinusTwo = 'TMinusTwo'
+}
+
+export enum DeltaScopeDisplayText {
+  DoD = 'DoD',
+  TMinusTwo = 'T-2',
+  WoW = 'WoW',
+  MoM = 'MoM',
+  YtD = 'YtD'
+}
+
+export const DeltaScopeBEToFEMapping = {
+  [DeltaScope.dod]: DeltaScopeDisplayText.DoD,
+  [DeltaScope.tMinusTwo]: DeltaScopeDisplayText.TMinusTwo,
+  [DeltaScope.wow]: DeltaScopeDisplayText.WoW,
+  [DeltaScope.mom]: DeltaScopeDisplayText.MoM,
+  [DeltaScope.ytd]: DeltaScopeDisplayText.YtD
 }
 
 export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
