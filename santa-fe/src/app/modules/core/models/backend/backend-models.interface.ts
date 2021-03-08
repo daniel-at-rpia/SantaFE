@@ -793,3 +793,7 @@ export interface BETraceTradesBlock {
   volumeEstimated: number;
   yield: number;
 }
+
+export interface BESecurityMap {
+  [id: string]: Array<string>;
+}
