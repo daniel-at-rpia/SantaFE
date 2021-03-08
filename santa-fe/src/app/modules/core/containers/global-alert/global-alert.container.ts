@@ -540,7 +540,6 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       const missingAlerts = this.state.allAlertsList.filter((eachAlert) => {
         return !moment.unix(eachAlert.data.unixTimestamp).isBefore(lastReceiveTime);
       });
-      console.log('test, 123, find missing alerts for ', lastReceiveTimestamp, missingAlerts, this.state.allAlertsList);
       return missingAlerts;
     } else {
       return [];

@@ -215,7 +215,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           return this.stateActive;
         })
       ).subscribe((internalCount) => {
-        if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+        // TODO: enable the condition on isAlertPaused when securityMap issue is properly addressed
+        // if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+        if (!this.state.alertUpdateInProgress) {
           this.store$.dispatch(new CoreGlobalAlertsTradeAlertFetch(this.state.lastReceiveAlertUnitTimestamp));
         }
       });
@@ -320,29 +322,24 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         filter((tick) => {
           return this.stateActive;
         }),
-        select(selectGlobalAlertSendNewAlertsToTradePanel),
-        withLatestFrom(
-          this.store$.pipe(select(selectGlobalAlertTradeTableFetchAlertTick))
-        )
-      ).subscribe(([alertList, tick]) => {
-        if (tick > 0) {
-          // skip initial state
+        select(selectGlobalAlertSendNewAlertsToTradePanel)
+      ).subscribe((alertList) => {
+        if (alertList.length > 0) {
+          // is okay to omit the timestamp update during the window that we have not received any new alerts, because well... there is no new alert
           this.state.lastReceiveAlertUnitTimestamp = moment().unix();
-          if (alertList.length > 0) {
-            if (!this.state.alert.initialAlertListReceived) {
-              this.state.alert.initialAlertListReceived = true;
-            }
-            if (!this.state.fetchResult.alertTable.fetchComplete) {
-              this.state.fetchResult.alertTable.fetchComplete = true;
-            }
-            try {
-              const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
-              this.updateAlertTable(alertListCopy);
-              this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
-            } catch {
-              this.restfulCommService.logError('received new alerts but failed to generate');
-              console.error('received new alerts but failed to generate');
-            }
+          if (!this.state.alert.initialAlertListReceived) {
+            this.state.alert.initialAlertListReceived = true;
+          }
+          if (!this.state.fetchResult.alertTable.fetchComplete) {
+            this.state.fetchResult.alertTable.fetchComplete = true;
+          }
+          try {
+            const alertListCopy: Array<DTOs.AlertDTO> = this.utilityService.deepCopy(alertList).reverse();
+            this.updateAlertTable(alertListCopy);
+            this.store$.dispatch(new CoreGlobalAlertsClearAllTradeAlertTableAlerts());
+          } catch {
+            this.restfulCommService.logError('received new alerts but failed to generate');
+            console.error('received new alerts but failed to generate');
           }
         }
       });
