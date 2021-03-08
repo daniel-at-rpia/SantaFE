@@ -5,7 +5,7 @@ import {
   SecurityMetricOptionStub,
   SearchShortcutStub
 } from 'FEModels/frontend-stub-models.interface';
-import { FrontendKayToBackendKeyDictionary } from 'Core/constants/coreConstants.constant';
+import { FrontendKeyToBackendKeyDictionary } from 'Core/constants/coreConstants.constant';
 import {
   TraceTradeParty,
   traceTradeNumericalFilters
@@ -66,6 +66,22 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     '10Y',
     '20Y',
     '30Y',
+  ];
+
+  export const FilterOptionSecuritySubType = [
+    'AmortizingBond',
+    'BA',
+    'GovtBond',
+    'Corp',
+    'FRN',
+    'Loan',
+    'AT1',
+    'Hybrid',
+    'Preferred',
+    'SPAC',
+    'Stock',
+    'CDS',
+    'CDSIndex'
   ];
 
   export const FilterOptionsTenorRange: SecurityDefinitionFilterOptionTenorRange  = {
@@ -146,22 +162,6 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'GovtBond',
     'Loan',
     'Preferred',
-    'Stock',
-    'CDS',
-    'CDSIndex'
-  ];
-
-  const FilterOptionSecuritySubType = [
-    'AmortizingBond',
-    'BA',
-    'GovtBond',
-    'Corp',
-    'FRN',
-    'Loan',
-    'AT1',
-    'Hybrid',
-    'Preferred',
-    'SPAC',
     'Stock',
     'CDS',
     'CDSIndex'
@@ -370,7 +370,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsSecurityType,
     locked: true,
     securityDTOAttr: 'securityType',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['SECURITY_TYPE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SECURITY_TYPE']
   },
   SECURITY_SUB_TYPE: {
     key: 'SECURITY_SUB_TYPE',
@@ -378,7 +378,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-slash',
     optionList: FilterOptionSecuritySubType,
     securityDTOAttr: 'securitySubType',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['SECURITY_SUB_TYPE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SECURITY_SUB_TYPE']
   },
   BACKEND_TENOR: {
     key: 'BACKEND_TENOR',
@@ -392,7 +392,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Bail-in Status',
     icon: 'fas fa-shield-alt',
     optionList: FilterOptionsBailInStatus,
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['BAIL_IN_STATUS']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['BAIL_IN_STATUS']
   },
   COUPON_TYPE: {
     key: 'COUPON_TYPE',
@@ -401,7 +401,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsCouponType,
     locked: true,
     securityDTOAttr: 'couponType',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['COUPON_TYPE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUPON_TYPE']
   },
   CURRENCY: {
     key: 'CURRENCY',
@@ -410,7 +410,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsCurrency,
     securityDTOAttr: 'currency',
     locked: true,
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['CURRENCY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['CURRENCY']
   },
   INDUSTRY: {
     key: 'INDUSTRY',
@@ -424,21 +424,21 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     displayName: 'Maturity Type',
     icon: 'fal fa-seedling',
     optionList: FilterOptionsMaturityType,
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['MATURITY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['MATURITY']
   },
   IS_NEWISSUE: {
     key: 'IS_NEWISSUE',
     displayName: 'New Issue',
     icon: 'far fa-sparkles',
     optionList: FilterOptionsBoolean,
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['IS_NEWISSUE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['IS_NEWISSUE']
   },
   IS_ONTHERUN: {
     key: 'IS_ONTHERUN',
     displayName: 'On-the-Run',
     icon: 'fal fa-handshake',
     optionList: FilterOptionsBoolean,
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['IS_ONTHERUN']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['IS_ONTHERUN']
   },
   RATING: {
     key: 'RATING',
@@ -446,7 +446,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-award',
     optionList: FilterOptionsRating,
     securityDTOAttr: 'ratingValue',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['RATING']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['RATING']
   },
   RATING_BUCKET: {
     key: 'RATING_BUCKET',
@@ -455,7 +455,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsRatingBucket,
     secondaryIcon: 'fas fa-award',
     securityDTOAttr: 'ratingBucket',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['RATING_BUCKET']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['RATING_BUCKET']
   },
   SECTOR: {
     key: 'SECTOR',
@@ -470,7 +470,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-gavel',
     optionList: FilterOptionsSeniorityType,
     securityDTOAttr: 'seniority',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['SENIORITY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SENIORITY']
   },
   TENOR: {
     key: 'TENOR',
@@ -478,7 +478,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor,
     securityDTOAttr: 'tenor',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['TENOR']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['TENOR']
   },
   PORTFOLIO: {
     key: 'PORTFOLIO',
@@ -528,14 +528,14 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-globe-americas',
     optionList: [],
     securityDTOAttr: 'country',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['COUNTRY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY']
   },
   QUOTED_TODAY: {
     key: 'QUOTED_TODAY',
     displayName: 'Quoted Today',
     icon: 'far fa-calendar-day',
     optionList: FilterOptionsBoolean,
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['QUOTED_TODAY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['QUOTED_TODAY']
   },
   OVERRIDE: {
     key: 'OVERRIDE',
@@ -590,7 +590,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-user-tie',
     optionList: [],
     securityDTOAttr: 'ticker',
-    backendDtoAttrName: FrontendKayToBackendKeyDictionary['TICKER']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['TICKER']
   },
 };
 

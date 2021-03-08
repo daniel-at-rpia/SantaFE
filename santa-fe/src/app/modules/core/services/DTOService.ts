@@ -19,7 +19,8 @@
       ALERT_STATUS_SORTINGVALUE_UNIT,
       TRACE_VOLUME_REPORTED_THRESHOLD,
       NavigationModule,
-      GlobalWorkflowTypes
+      GlobalWorkflowTypes,
+      FrontendKeyToBackendKeyDictionary
     } from 'Core/constants/coreConstants.constant';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
@@ -47,7 +48,8 @@
       FilterTraceTradesOptions,
       DEFINITION_LONG_THRESHOLD,
       FilterOptionsCouponType,
-      FilterOptionsTenorRange
+      FilterOptionsTenorRange,
+      FilterOptionSecuritySubType
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
@@ -62,7 +64,6 @@
       PortfolioShortNames,
       PortfolioMetricValues,
       PortfolioView,
-      PortfolioBreakdownGroupOptions,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
       BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
@@ -2661,6 +2662,58 @@ export class DTOService {
     };
   }
 
+  public formGlobalWorkflow(
+    targetModule: NavigationModule,
+    isRedirect: boolean,
+    isUpdateCurrentState: boolean,
+    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
+  ): DTOs.GlobalWorkflowStateDTO {
+    const uuid = this.utility.generateUUID();
+    const object: DTOs.GlobalWorkflowStateDTO = {
+      uuid: uuid,
+      data: {
+        uuid: uuid,
+        module: targetModule,
+        workflowType: workflowType,
+        stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
+      },
+      api: {
+        routeHandler: null
+      },
+      state: {
+        triggersRedirect: !!isRedirect,
+        updateCurrentState: !!isUpdateCurrentState
+      }
+    };
+    return object;
+  }
+
+  public formSantaDatepicker(
+    inputLabelEmpty: string,
+    inputLabelFilled: string,
+    minDate?: moment.Moment,
+    maxDate?: moment.Moment
+  ): SantaDatePicker {
+    const object: SantaDatePicker = {
+      data: {
+        inputLabelDisplay: inputLabelEmpty,
+        inputLabelEmpty: inputLabelEmpty,
+        inputLabelFilled: inputLabelFilled,
+        minDate: minDate || moment('2020-11-13'),
+        maxDate: maxDate || moment(),
+        receivedExternalChangeDate: null
+      },
+      api: {
+        datepicker: null
+      },
+      state: {
+        noInputVariant: false,
+        opened: false
+      }
+    };
+    return object;
+  }
+
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEStructuringFundBlock,
@@ -2669,51 +2722,19 @@ export class DTOService {
     selectedMetricValue: PortfolioMetricValues
   ){
     const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const currencyBreakdown = this.formPortfolioBreakdown(
-      isStencil,
-      rawData.breakdowns.Ccy,
-      !!comparedDeltaRawData ? comparedDeltaRawData.breakdowns.Ccy : null,
-      FilterOptionsCurrency,
-      isDisplayCs01
-    );
-    currencyBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.CURRENCY);
-    currencyBreakdown.data.title = currencyBreakdown.data.definition.data.displayName;
-    currencyBreakdown.data.indexName = rawData.indexShortName;
-    currencyBreakdown.data.portfolioName = rawData.portfolioShortName;
-    object.data.children.push(currencyBreakdown);
-    currencyBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    if (!isStencil) {
-      const ratingBreakdown = this.formPortfolioBreakdown(
-        isStencil,
-        rawData.breakdowns.RatingNoNotch,
-        !!comparedDeltaRawData ? comparedDeltaRawData.breakdowns.RatingNoNotch : null,
-        FilterOptionsRating,
-        isDisplayCs01
-      );
-      ratingBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.RATING);
-      ratingBreakdown.data.title = ratingBreakdown.data.definition.data.displayName;
-      ratingBreakdown.data.indexName = rawData.indexShortName;
-      ratingBreakdown.data.portfolioName = rawData.portfolioShortName;
-      object.data.children.push(ratingBreakdown);
-      ratingBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-      const tenorBreakdown = this.formPortfolioBreakdown(
-        isStencil,
-        rawData.breakdowns.Tenor,
-        !!comparedDeltaRawData ? comparedDeltaRawData.breakdowns.Tenor : null,
-        FilterOptionsTenor,
-        isDisplayCs01
-      );
-      tenorBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.TENOR);
-      tenorBreakdown.data.title = tenorBreakdown.data.definition.data.displayName;
-      tenorBreakdown.data.indexName = rawData.indexShortName;
-      tenorBreakdown.data.portfolioName = rawData.portfolioShortName;
-      object.data.children.push(tenorBreakdown);
-      tenorBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-      tenorBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
-        const targetRange = FilterOptionsTenorRange[eachCategory.data.displayCategory];
-        eachCategory.data.displayCategory = targetRange.displayLabel;
-      });
-    }
+    const stencilBreakdownList = [SecurityDefinitionMap.CURRENCY];
+    const nonStencilBreakdownList = [SecurityDefinitionMap.TENOR, SecurityDefinitionMap.RATING, SecurityDefinitionMap.SECURITY_SUB_TYPE];
+    const breakdownList = !!isStencil ? stencilBreakdownList : nonStencilBreakdownList;
+    breakdownList.forEach((definition: Stubs.SecurityDefinitionStub) => {
+      const newBreakdown = this.formRegularBreakdowns(rawData, comparedDeltaRawData, definition.key, isDisplayCs01, isStencil, selectedMetricValue);
+      if (definition.key === SecurityDefinitionMap.TENOR.key) {
+        newBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
+          const targetRange = FilterOptionsTenorRange[eachCategory.data.displayCategory];
+          eachCategory.data.displayCategory = targetRange.displayLabel;
+        });
+      }
+      newBreakdown && object.data.children.push(newBreakdown);
+    })
   }
 
   private processOverrideDataForStructureFund(
@@ -2766,55 +2787,29 @@ export class DTOService {
     }
   }
 
-  public formGlobalWorkflow(
-    targetModule: NavigationModule,
-    isRedirect: boolean,
-    isUpdateCurrentState: boolean,
-    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
-  ): DTOs.GlobalWorkflowStateDTO {
-    const uuid = this.utility.generateUUID();
-    const object: DTOs.GlobalWorkflowStateDTO = {
-      uuid: uuid,
-      data: {
-        uuid: uuid,
-        module: targetModule,
-        workflowType: workflowType,
-        stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
-      },
-      api: {
-        routeHandler: null
-      },
-      state: {
-        triggersRedirect: !!isRedirect,
-        updateCurrentState: !!isUpdateCurrentState
-      }
-    };
-    return object;
-  }
-
-  public formSantaDatepicker(
-    inputLabelEmpty: string,
-    inputLabelFilled: string,
-    minDate?: moment.Moment,
-    maxDate?: moment.Moment
-  ): SantaDatePicker {
-    const object: SantaDatePicker = {
-      data: {
-        inputLabelDisplay: inputLabelEmpty,
-        inputLabelEmpty: inputLabelEmpty,
-        inputLabelFilled: inputLabelFilled,
-        minDate: minDate || moment('2020-11-13'),
-        maxDate: maxDate || moment(),
-        receivedExternalChangeDate: null
-      },
-      api: {
-        datepicker: null
-      },
-      state: {
-        noInputVariant: false,
-        opened: false
-      }
-    };
-    return object;
+  // For breakdowns excluding BICS
+  private formRegularBreakdowns(
+    rawData: BEModels.BEStructuringFundBlock,
+    comparedDeltaRawData: BEModels.BEStructuringFundBlock,
+    groupOption: string,
+    isDisplayCs01: boolean,
+    isStencil: boolean,
+    selectedMetricValue: PortfolioMetricValues
+    ): DTOs.PortfolioBreakdownDTO {
+    const BEGroupOptionKey = FrontendKeyToBackendKeyDictionary[groupOption];
+    const filterOptions = SecurityDefinitionMap[groupOption].optionList;
+    const newBreakdown = this.formPortfolioBreakdown(
+      isStencil,
+      rawData.breakdowns[BEGroupOptionKey],
+      !!comparedDeltaRawData ? comparedDeltaRawData.breakdowns[BEGroupOptionKey] : null,
+      filterOptions,
+      isDisplayCs01
+    )
+    newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap[groupOption]);
+    newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
+    newBreakdown.data.indexName = rawData.indexShortName;
+    newBreakdown.data.portfolioName = rawData.portfolioShortName;
+    newBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    return newBreakdown;
   }
 }
