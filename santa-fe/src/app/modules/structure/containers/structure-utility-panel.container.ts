@@ -15,7 +15,8 @@
       PortfolioShortNames,
       UTILITY_PANEL_HISTORICAL_TIME_LABEL,
       SubPortfolioFilter,
-      DeltaScope
+      DeltaScope,
+      deltaScopeFEMapping
     } from 'Core/constants/structureConstants.constants';
     import {
       selectMetricLevel,
@@ -70,7 +71,8 @@ export class StructureUtilityPanel extends SantaContainerComponentBase implement
     subPortfolioFilter: SubPortfolioFilter,
     deltaScope: DeltaScope,
     modules: NavigationModule,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    deltaScopeFEMapping: DeltaScopeBEToFEMapping
   }
 
   constructor(
