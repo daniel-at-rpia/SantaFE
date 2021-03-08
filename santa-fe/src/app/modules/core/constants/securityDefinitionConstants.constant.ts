@@ -317,11 +317,20 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'TW'
   ];
 
-  export const StructuringTeamPMList = [
+  export const StructuringAllFunctionalityAvailableList = [
     'AY',
-    'DM',
+    'DM'
+  ]
+
+  export const StructuringTeamPMList = [
+    ...StructuringAllFunctionalityAvailableList,
     'LP',
     'PM'
+  ];
+
+  export const StructuringEditingViewAvilableList = [
+    ...FilterOptionsPortfolioResearchList,
+    ...StructuringAllFunctionalityAvailableList
   ];
 
   export const BICsLevel1DefinitionList = [
@@ -352,8 +361,6 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'HEDGE',
     'Basis'
   ];
-
-export const editingViewAvailableUsers = [...FilterOptionsPortfolioResearchList, 'DM'];
 
 export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   SECURITY_TYPE: {

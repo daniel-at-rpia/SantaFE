@@ -20,7 +20,7 @@ import {
 import { ModalService } from 'Form/services/ModalService';
 import { selectUserInitials } from 'Core/selectors/core.selectors';
 import {
-  editingViewAvailableUsers,
+  StructuringEditingViewAvilableList,
   StructuringTeamPMList,
   SecurityDefinitionMap
 } from 'Core/constants/securityDefinitionConstants.constant';
@@ -74,7 +74,7 @@ export class PortfolioBreakdown implements OnInit, OnChanges, OnDestroy {
       select(selectUserInitials)
     ).subscribe((initials) => {
       this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
-      this.breakdownData.state.isEditingViewAvail = editingViewAvailableUsers.includes(initials);
+      this.breakdownData.state.isEditingViewAvail = StructuringEditingViewAvilableList.includes(initials);
     });
     this.subscriptions.dataDatestampSub = this.store$.pipe(
       select(selectDataDatestamp)
