@@ -294,6 +294,21 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
           // margin-top: -$spacing_large - $spacing_x_small;
           //font-size: $securityDefinition_backgroundVariant_img_size_secondary;
         }
+        &-securityType--subType {
+          #{$blockName} {
+            &__icon-securityType-box {
+              flex-direction: column;
+              background-color: $color_gray_3;
+              &-text {
+                text-align: center;
+                margin-left: 0;
+                &:first-of-type {
+                  color : $color_gray_3;
+                  }
+                }
+              }
+            }
+        }
       }
       &__label, &__filter, &__filterMask, &__selectedGap {
         display: none;

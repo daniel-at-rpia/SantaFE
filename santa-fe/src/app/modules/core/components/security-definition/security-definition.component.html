@@ -14,8 +14,7 @@
     'sat-securityDefinition--heroVariant': !!heroVariant,
     'sat-securityDefinition--miniPillVariant': definitionData?.state.isMiniPillVariant && !heroVariant,
     'sat-securityDefinition--configuratorListVariant': !!isPartOfConfiguratorList,
-    'sat-securityDefinition--lockedState': definitionData?.state.isLocked && !isPartOfConfiguratorList,
-    'sat-securityDefinition--portfolioBreakdownVariant': isWithinPortfolioBreakdown
+    'sat-securityDefinition--lockedState': definitionData?.state.isLocked && !isPartOfConfiguratorList
   }">
   <section class="sat-securityDefinition__icon" title="{{definitionData?.data.name}}">
     <i [ngClass]="

@@ -24,7 +24,6 @@ export class SecurityDefinition implements OnInit {
   @Input() heroVariant: boolean;
   @Input() interactionDisabled: boolean;
   @Input() groupByDisabled: boolean;
-  @Input() isWithinPortfolioBreakdown: boolean;
   @Output() onClick = new EventEmitter<SecurityDefinitionDTO>();
   constructor(
   ) {
