@@ -25,8 +25,6 @@
     } from 'BEModels/backend-payloads.interface';
     import {
       selectAlertCounts,
-      selectSecurityMapContent,
-      selectSecurityMapValidStatus,
       selectUserInitials,
       selectNewAlerts,
       selectGlobalAlertSendNewAlertsToTradePanel,
@@ -40,7 +38,6 @@
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      CoreFlushSecurityMap,
       CoreSendNewAlerts,
       CoreGlobalAlertsClearAllTradeAlertTableAlerts,
       CoreGlobalAlertsTradeAlertFetch
@@ -95,7 +92,6 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
   state: PageStates.TradeAlertPanelState;
   subscriptions = {
     userInitialsSub: null,
-    securityMapSub: null,
     selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     startNewUpdateSub: null,
@@ -219,22 +215,6 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         // if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
         if (!this.state.alertUpdateInProgress) {
           this.store$.dispatch(new CoreGlobalAlertsTradeAlertFetch(this.state.lastReceiveAlertUnitTimestamp));
-        }
-      });
-      this.subscriptions.securityMapSub = this.store$.pipe(
-        filter((tick) => {
-          return this.stateActive;
-        }),
-        select(selectSecurityMapContent),
-        withLatestFrom(
-          this.store$.pipe(select(selectSecurityMapValidStatus))
-        )
-      ).subscribe(([mapContent, isValid]) => {
-        if (!!isValid) {
-          this.securityMapService.storeSecurityMap(mapContent);
-          this.state.securityMap = mapContent;
-          this.state.isAlertPaused = false;
-          this.store$.dispatch(new CoreFlushSecurityMap());
         }
       });
       this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
@@ -522,22 +502,25 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       config.securitySearchKeyword = keyword;
       if (keyword.length >= 2) {
         const result = [];
-        for (let i = 0; i < this.state.securityMap.length; ++i) {
-          const eachEntry = this.state.securityMap[i];
-          for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
-            if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
-              result.push(this.state.securityMap[i]);
-              break;
+        const map = this.securityMapService.getSecurityMap();
+        if (map.length > 0) {
+          for (let i = 0; i < map.length; ++i) {
+            const eachEntry = map[i];
+            for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
+              if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
+                result.push(map[i]);
+                break;
+              }
             }
           }
-        }
-        config.matchedResultCount = result.length;
-        config.searchIsValid = true;
-        if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+          config.matchedResultCount = result.length;
           config.searchIsValid = true;
-          this.fetchSecurities(result);
-        } else {
-          config.searchIsValid = false;
+          if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+            config.searchIsValid = true;
+            this.fetchSecurities(result);
+          } else {
+            config.searchIsValid = false;
+          }
         }
       } else {
         config.searchIsValid = false;
@@ -732,7 +715,6 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         tap((serverReturn: BEAlertConfigurationReturn) => {
           if (!!serverReturn) {
             this.state.configuration.axe.securityList = [];
-            this.state.isAlertPaused = false;
             this.populateConfigurationFromEachGroup(serverReturn.Axe);
           } else {
             this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);

@@ -794,6 +794,10 @@ export interface BETraceTradesBlock {
   yield: number;
 }
 
+export interface BESecurityMap {
+  [id: string]: Array<string>;
+}
+
 export enum BESubPortfolioFilter {
   all = 'All',
   nonHedging = 'NonHedging',
