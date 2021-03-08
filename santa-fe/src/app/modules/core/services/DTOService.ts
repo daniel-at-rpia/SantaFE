@@ -2659,6 +2659,56 @@ export class DTOService {
     };
   }
 
+  public formGlobalWorkflow(
+    targetModule: NavigationModule,
+    isRedirect: boolean,
+    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
+  ): DTOs.GlobalWorkflowStateDTO {
+    const uuid = this.utility.generateUUID();
+    const object: DTOs.GlobalWorkflowStateDTO = {
+      uuid: uuid,
+      data: {
+        uuid: uuid,
+        module: targetModule,
+        workflowType: workflowType,
+        stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
+      },
+      api: {
+        routeHandler: null
+      },
+      state: {
+        triggersRedirect: !!isRedirect
+      }
+    };
+    return object;
+  }
+
+  public formSantaDatepicker(
+    inputLabelEmpty: string,
+    inputLabelFilled: string,
+    minDate?: moment.Moment,
+    maxDate?: moment.Moment
+  ): SantaDatePicker {
+    const object: SantaDatePicker = {
+      data: {
+        inputLabelDisplay: inputLabelEmpty,
+        inputLabelEmpty: inputLabelEmpty,
+        inputLabelFilled: inputLabelFilled,
+        minDate: minDate || moment('2020-11-13'),
+        maxDate: maxDate || moment(),
+        receivedExternalChangeDate: null
+      },
+      api: {
+        datepicker: null
+      },
+      state: {
+        noInputVariant: false,
+        opened: false
+      }
+    };
+    return object;
+  }
+
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEStructuringFundBlock,
@@ -2732,58 +2782,8 @@ export class DTOService {
     }
   }
 
-  public formGlobalWorkflow(
-    targetModule: NavigationModule,
-    isRedirect: boolean,
-    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
-  ): DTOs.GlobalWorkflowStateDTO {
-    const uuid = this.utility.generateUUID();
-    const object: DTOs.GlobalWorkflowStateDTO = {
-      uuid: uuid,
-      data: {
-        uuid: uuid,
-        module: targetModule,
-        workflowType: workflowType,
-        stateInfo: {}  // don't pass in the state info, always set in outside since the logic will be different on a case-by-case basis
-      },
-      api: {
-        routeHandler: null
-      },
-      state: {
-        triggersRedirect: !!isRedirect
-      }
-    };
-    return object;
-  }
-
-  public formSantaDatepicker(
-    inputLabelEmpty: string,
-    inputLabelFilled: string,
-    minDate?: moment.Moment,
-    maxDate?: moment.Moment
-  ): SantaDatePicker {
-    const object: SantaDatePicker = {
-      data: {
-        inputLabelDisplay: inputLabelEmpty,
-        inputLabelEmpty: inputLabelEmpty,
-        inputLabelFilled: inputLabelFilled,
-        minDate: minDate || moment('2020-11-13'),
-        maxDate: maxDate || moment(),
-        receivedExternalChangeDate: null
-      },
-      api: {
-        datepicker: null
-      },
-      state: {
-        noInputVariant: false,
-        opened: false
-      }
-    };
-    return object;
-  }
-
   // For breakdowns excluding BICS
-  public formRegularBreakdowns(
+  private formRegularBreakdowns(
     rawData: BEModels.BEStructuringFundBlock,
     comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     groupOption: string,
