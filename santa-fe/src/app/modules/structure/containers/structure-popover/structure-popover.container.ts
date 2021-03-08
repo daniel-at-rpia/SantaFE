@@ -1,24 +1,25 @@
-import { Component, EventEmitter, Input, OnChanges, Output, OnInit, OnDestroy, ViewEncapsulation} from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import {
-  PortfolioMetricValues,
-  DeltaScope,
-  PORTFOLIO_ID_TO_SHORTNAMES,
-  SubPortfolioFilter
-} from 'App/modules/core/constants/structureConstants.constants';
-import {
-  selectMetricLevel,
-  selectActiveSubPortfolioFilter
-} from 'Structure/selectors/structure.selectors';
-import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
-import { DTOService, BICsDataProcessingService } from 'Core/services';
-import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import { StructureSetView } from 'Structure/actions/structure.actions';
-import { UtilityService } from 'Core/services/UtilityService';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+  // dependencies
+    import { Component, EventEmitter, Input, OnChanges, Output, OnInit, ViewEncapsulation} from '@angular/core';
+    import { Router } from '@angular/router';
+    import { Store, select } from '@ngrx/store';
+    import { filter } from 'rxjs/operators';
 
+    import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+    import { DTOService, BICsDataProcessingService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import {
+      PortfolioMetricValues,
+      DeltaScope,
+      PORTFOLIO_ID_TO_SHORTNAMES,
+      SubPortfolioFilter
+    } from 'App/modules/core/constants/structureConstants.constants';
+    import { selectMetricLevel, selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.selectors';
+    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+    import { StructureSetView } from 'Structure/actions/structure.actions';
+    import { UtilityService } from 'Core/services/UtilityService';
+    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+  //
 
 @Component({
   selector: 'structure-popover',
@@ -27,7 +28,7 @@ import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstant
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructurePopover implements OnInit, OnChanges {
+export class StructurePopover extends SantaContainerComponentBase implements OnInit, OnChanges {
   @Input() mainRowData: Blocks.BICSMainRowDataBlock;
   @Input() breakdownDisplayPopover: boolean;
   @Output() resetPopover = new EventEmitter();
@@ -50,14 +51,21 @@ export class StructurePopover implements OnInit, OnChanges {
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private bicsDataProcessingService: BICsDataProcessingService,
-    private utilityService: UtilityService
-  ) {}
+    private bicsDataProcessingService: BICsDataProcessingService
+  ) {
+    super(utilityService, globalWorkflowIOService, router);
+  }
 
   public ngOnInit() {
     this.subscriptions.selectedMetricLevelSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectMetricLevel)
     ).subscribe((value) => {
       if (!!value) {
@@ -75,10 +83,15 @@ export class StructurePopover implements OnInit, OnChanges {
       }
     });
     this.subscriptions.activeSubPortfolioViewFilterSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectActiveSubPortfolioFilter)
     ).subscribe((activeFilter: SubPortfolioFilter) => {
       this.activeSubPortfolioFilter = activeFilter;
     })
+
+    return super.ngOnInit();
   };
 
   public ngOnChanges() {
@@ -92,15 +105,6 @@ export class StructurePopover implements OnInit, OnChanges {
         this.createPopover(this.cs01MainRow);
       } else {
         this.createPopover(this.creditLeverageMainRow);
-      }
-    }
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
       }
     }
   }
@@ -131,7 +135,7 @@ export class StructurePopover implements OnInit, OnChanges {
   }
 
   public onClickSeeBond(targetRow: DTOs.StructurePortfolioBreakdownRowDTO) {
-    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
+    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, true, false, this.constants.globalWorkflowTypes.launchTradeToSeeBonds);
     newWorkflowState.data.stateInfo.activeMetric = this.activeMetric;
     const configurator = this.dtoService.createSecurityDefinitionConfigurator(true, false, true);
     const filterList: Array<DTOs.SecurityDefinitionDTO> = [];

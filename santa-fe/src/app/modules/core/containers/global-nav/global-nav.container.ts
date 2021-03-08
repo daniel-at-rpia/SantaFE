@@ -8,6 +8,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
+    import { GlobalWorkflowIOService } from 'Core/services/GlobalWorkflowIOService';
     import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
     import {
       selectUserInitials,
@@ -71,7 +72,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     private store$: Store<any>,
     private dtoService: DTOService,
     private utilityService: UtilityService,
-    private restfulCommService: RestfulCommService
+    private restfulCommService: RestfulCommService,
+    private globalWorkflowIOService: GlobalWorkflowIOService
   ) {
     this.state = this.initializePageState();
   }
@@ -86,7 +88,9 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     });
     this.subscriptions.navigationStartSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        const modulePortion = this.utilityService.getModulePortionFromNavigation(event);
+        const modulePortion = this.utilityService.getModulePortionFromNavigation(event) as NavigationModule;
+        const stateId = this.utilityService.getStateUUIDFromNavigation(event);
+        stateId !== 'n/a' && this.globalWorkflowIOService.updateCurrentState(modulePortion, stateId);
         switch (modulePortion) {
           case this.constants.moduleUrl.trade:
             this.state.currentModule = this.constants.moduleUrl.trade;
@@ -159,7 +163,6 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     if (this.state.currentModule !== this.constants.moduleUrl.structuring) {
       this.state.menuIsActive = false;
       const navigateToStructuring = () => {
-        const newState = this.dtoService.formGlobalWorkflow(this.constants.moduleUrl.structuring, true);
         this.router.navigateByUrl(`/${this.constants.moduleUrl.structuring}/${this.state.currentState.structure}`);
         // no need to record this state, since it's meant as going to a diff module with a fresh state, recording it causs problem in history
       };

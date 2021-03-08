@@ -27,7 +27,7 @@ export enum CoreActions {
   GlobalAlertsAPIAlertCallFailed = '[Core] Global Alerts Failed to Make API Call For Alerts',
   GlobalAlertsClearAllUrgentAlerts = '[Core] Global Alerts Clear All Urgent Alerts In Store',
   GlobalAlertsClearAllTradeAlertTableAlerts = '[Core] Global Alerts Clear All Alerts For Trade Alert Panel In Store',
-  GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Ready To Receive Additional Alerts',
+  GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Fetch For Alerts',
   GlobalWorkflowUpdateCurrentTradeState = '[Core] Global Workflow Update Current Trade State',
   GlobalWorkflowUpdateCurrentStructureState = '[Core] Global Workflow Update Current Structure State',
   GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready'
@@ -187,11 +187,11 @@ export class CoreGlobalAlertsClearAllTradeAlertTableAlerts implements Action {
   constructor() {};
 }
 
-export class CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts {
+export class CoreGlobalAlertsTradeAlertFetch {
   readonly type = CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts;
-  readonly newState: boolean;
-  constructor(newState: boolean) {
-    this.newState = newState;
+  readonly lastReceivedTimestamp: number;
+  constructor(lastReceivedTimestamp: number) {
+    this.lastReceivedTimestamp = lastReceivedTimestamp;
   }
 }
 export class CoreGlobalWorkflowUpdateCurrentStructureState implements Action {
