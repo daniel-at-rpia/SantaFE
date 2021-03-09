@@ -14,7 +14,8 @@ import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
 import {
   INDEXEDDB_VERSION,
   INDEXEDDB_WORKFLOW_DATABASE_NAME,
-  INDEXEDDB_WORKFLOW_STORE_NAME,
+  INDEXEDDB_WORKFLOW_TABLE_NAME,
+  INDEXEDDB_LAST_STATE_TABLE_NAME,
   ROUTE_REUSE_HANDLER_STORE_SIZE_CAP
 } from 'Core/constants/globalWorkflowConstants.constants';
 
@@ -28,7 +29,8 @@ export class GlobalWorkflowIOService {
   constants = {
     idbVersion: INDEXEDDB_VERSION,
     idbWorkflowDbName: INDEXEDDB_WORKFLOW_DATABASE_NAME,
-    idbWorkflowStoreName: INDEXEDDB_WORKFLOW_STORE_NAME
+    idbWorkflowAllStateTableName: INDEXEDDB_WORKFLOW_TABLE_NAME,
+    idbWorkflowLastStateTableName: INDEXEDDB_LAST_STATE_TABLE_NAME
   }
 
   private currentState: string = 'initialState';
@@ -65,8 +67,8 @@ export class GlobalWorkflowIOService {
       const writableCopy = this.utilityService.deepCopy(targetState);
       writableCopy.data.stateInfo = JSON.stringify(writableCopy.data.stateInfo);
       writableCopy.api = null;
-      this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowStoreName], "readwrite");
-      this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowStoreName);
+      this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
+      this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowAllStateTableName);
       this.workflowIO.onerror = (event) => {
         console.error('Global Workflow, store state error', event);
       }
@@ -76,8 +78,8 @@ export class GlobalWorkflowIOService {
     public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
       return new Observable(subscriber => {
         if (!!targetUUID) {
-          this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowStoreName], "readwrite");
-          this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowStoreName);
+          this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
+          this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowAllStateTableName);
           const request = this.workflowStore.get(targetUUID);
           this.workflowIO.oncomplete = ((event) => {
             if (!!request.result && !!request.result.data) {
@@ -125,21 +127,39 @@ export class GlobalWorkflowIOService {
         console.log('IDB open request upgrade needed.', newVersionDetectedEvent);
         // reconstruct the database upon version change
         this.workflowIndexedDBAPI = openRequest.result;
-        switch(newVersionDetectedEvent.oldVersion) {
-          case 0:
-            // version 0 means that the client had no database
-            // perform initialization
-            this.upgradeIndexedDB(newVersionDetectedEvent);
-            break;
-          default:
-            window.indexedDB.deleteDatabase(this.constants.idbWorkflowDbName);
-            break;
+
+        if (newVersionDetectedEvent.oldVersion === 0) {
+          // version 0 means that the client had no database
+          // perform initialization
+          this.initializeWorkflowTable(newVersionDetectedEvent);
+          this.initializeLastStateTable(newVersionDetectedEvent);
+        } else {
+          // for all other versions, simply destory the database and reload, which will trigger the "version === 0" condition that rebuilds the database
+          // this is not the most efficient way to handle upgrade but it is error-proof
+          const deleteRequest = window.indexedDB.deleteDatabase(this.constants.idbWorkflowDbName);
+          deleteRequest.onsuccess = (event) => {
+            window.location.reload(true);
+          }
         }
+        this.workflowIndexedDBAPI.onversionchange = (event) => {
+          // versionchange event will trigger on other instances of the application that did not trigger the delete of the database
+          // this is to handle scenarios where users have multiple tabs of the Santa open. What will happen is, one of the tabs triggers the delete, the other tabs will refresh themselves as the delete is completed.
+          this.workflowIndexedDBAPI.close();
+          setTimeout(()=>{
+            // delayed to reload in order to make sure when reload database is already deleted
+            window.location.reload(true);
+          }, 1000);
+        };
+
       }
     }
 
-    private upgradeIndexedDB(newVersionDetectedEvent: IDBVersionChangeEvent) {
-      this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowStoreName, { keyPath: "uuid" });  // this key field has to be the "id" field 
+    private initializeWorkflowTable(newVersionDetectedEvent: IDBVersionChangeEvent) {
+      this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowAllStateTableName, { keyPath: "uuid" });  // this key field has to be the "id" field 
+    }
+
+    private initializeLastStateTable(newVersionDetectedEvent: IDBVersionChangeEvent) {
+      this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowLastStateTableName, { keyPath: "module" });
     }
 
   // Global Workflow States End
