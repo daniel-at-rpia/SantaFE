@@ -156,6 +156,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         this.state = this.initializePageState();
         this.state.activeSubPortfolioFilter = activeSubPortfolioFilter;
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
+        this.state.distributeUtilityText = this.state.targetFund ? this.getDistributeFunctionHelperText(this.state.targetFund) : '';
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
@@ -1671,4 +1672,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     return object;
   }
 
+  private getDistributeFunctionHelperText(fund: DTOs.PortfolioFundDTO): string {
+    const referenceType = fund.data.target.target.cs01 ? 'target' : 'current';
+    return `(Based on ${this.state.targetFund.data.portfolioShortName} ${referenceType} ${this.constants.metric.cs01})`;
+  }
 }

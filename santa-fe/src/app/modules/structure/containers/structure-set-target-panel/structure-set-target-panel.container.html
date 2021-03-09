@@ -41,8 +41,11 @@
         Rows :
       </div>
       <div class="sat-structureSetTargetPanel__utilities-distribution-ctas">
-        <button (click)="onClickDistributeEvenly()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-evenly">Evenly</button>
-        <button (click)="onClickDistributeProportionally()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-proportionally">Proportionally</button>
+        <div class="sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer">
+          <button (click)="onClickDistributeEvenly()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn--evenly">Evenly</button>
+          <button (click)="onClickDistributeProportionally()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn--proportionally">Proportionally</button>
+        </div>
+        <span class="sat-structureSetTargetPanel__utilities-distribution-ctas-text">{{ state.distributeUtilityText }}</span>
       </div>
     </div>
     <div class="sat-structureSetTargetPanel__utilities-clearAll">
