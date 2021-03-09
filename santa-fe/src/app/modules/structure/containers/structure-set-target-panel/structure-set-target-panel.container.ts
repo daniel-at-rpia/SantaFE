@@ -761,11 +761,6 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     displayValue: string,
     targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock
   ) {
-    if (displayValue === '') {
-      displayValue = '';
-    } else if (displayValue === '0') {
-      displayValue = '0';
-    }
     targetItem.modifiedDisplayValue = displayValue;
     targetItem.isActive = true;
     if (targetItem.metric === this.constants.metric.cs01 && !targetItem.isPercent) {
