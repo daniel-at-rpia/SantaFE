@@ -45,7 +45,7 @@ $portfolioBreakdown_rating_height: 1rem;
       &-subPortfolio {
         @include mix_border_generator(1px, $color_gray_3);
         @include mix_border_radius(3px);
-        background-color:  $color_gray_3;
+        background-color: $color_gray_3;
         color: $font_color_inverse;
         padding: $spacing_x_small;
         &-icon {
