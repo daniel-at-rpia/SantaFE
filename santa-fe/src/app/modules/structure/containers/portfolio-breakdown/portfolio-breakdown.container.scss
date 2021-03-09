@@ -33,8 +33,25 @@ $portfolioBreakdown_rating_height: 1rem;
       margin-right: $spacing_medium;
     }
     &-text {
-      color: $font_color_trivial;
-      font-size: $font_size_large;
+      display: flex;
+      flex-wrap: wrap;
+      &-bucket {
+        flex: 0 0 100%;
+        display: inline-block;
+        margin-bottom: $spacing_x_small;
+        color: $font_color_trivial;
+        font-size: $font_size_large;
+      }
+      &-subPortfolio {
+        @include mix_border_generator(1px, $color_gray_3);
+        @include mix_border_radius(3px);
+        background-color:  $color_gray_3;
+        color: $font_color_inverse;
+        padding: $spacing_x_small;
+        &-icon {
+          margin-right: $spacing_x_small;
+        }
+      }
     }
   }
   &__rating {
@@ -84,7 +101,7 @@ $portfolioBreakdown_rating_height: 1rem;
   &__categoryHeader {
     display: flex;
     justify-content: flex-end;
-    margin: $portfolioBreakdown_rating_thickness 0 $portfolioBreakdown_rating_thickness/2;
+    margin: $portfolioBreakdown_rating_thickness 0 1.5rem;
     &-cell {
       @include mix_fixed_div(relative, $z_index_base_item);
       display: flex;
@@ -224,7 +241,13 @@ $portfolioBreakdown_rating_height: 1rem;
           padding-bottom: $spacing_minimum; // for some weird reason the icon was not centered perfectly
         }
         &-text {
-          color: $font_color_major;
+          &-bucket {
+            color: $font_color_major;
+          }
+          &-subPortfolio {
+            @include mix_border_generator(1px, $color_active);
+            background-color: $color_active;
+          }
         }
       }
     }
