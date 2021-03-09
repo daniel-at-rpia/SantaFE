@@ -333,6 +333,7 @@ export interface StructureSetTargetPanelState {
   isViewingIndexOnBICS: boolean;
   isViewingClearTargets: boolean;
   clearTargetsOptionsList: Array<Blocks.StructureClearTargetsOptionBlock>;
+  distributeUtilityText: string;
 }
 
 export interface StructureSetBulkOverridesPanelState {

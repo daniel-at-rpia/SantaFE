@@ -133,7 +133,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
       activeSubPortfolioFilter: null,
       isViewingIndexOnBICS: false,
       isViewingClearTargets: false,
-      clearTargetsOptionsList: []
+      clearTargetsOptionsList: [],
+      distributeUtilityText: ''
     };
     return state;
   }
