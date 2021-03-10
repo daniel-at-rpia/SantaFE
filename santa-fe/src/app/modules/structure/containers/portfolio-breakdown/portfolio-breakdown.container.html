@@ -22,7 +22,13 @@
         [interactionDisabled]="true">
       </security-definition>
     </div>
-    <span class="sat-portfolioBreakdown__title-text">{{breakdownData.data.title}}</span>
+    <div class="sat-portfolioBreakdown__title-text">
+      <span class="sat-portfolioBreakdown__title-text-bucket">{{breakdownData.data.title}}</span>
+      <div class="sat-portfolioBreakdown__title-text-subPortfolio">
+        <i class="sat-portfolioBreakdown__title-text-subPortfolio-icon fal fa-chess"></i>
+        <span class="sat-portfolioBreakdown__title-text-subPortfolio-text">{{activeSubPortfolioFilter}}</span>
+      </div>
+    </div>
   </section>
   <section class="sat-portfolioBreakdown__rating">
     <div
