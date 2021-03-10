@@ -52,20 +52,25 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
     ).subscribe(
       (newState: GlobalWorkflowStateDTO) => {
         if (!!newState && !!newState.data.uuid && !!newState.data.module) {
-          // the states that triggers redirect don't need to be manually pushed into document history
-          if (!newState.state.triggersRedirect) {
-            this.router.navigate([newState.data.module, newState.data.uuid]);
-          }
-          if (!this.state.currentState || this.state.currentState.data.uuid !== newState.data.uuid) {
-            this.storeState(newState);
-            // need to deepCopy because the one in ngrx store is readonly
-            this.state.currentState = this.utilityService.deepCopy(newState);
-            if (newState.data.module === this.constants.moduleUrl.structuring) {
-              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentStructureState(newState.data.uuid));
-            } else if (newState.data.module === this.constants.moduleUrl.trade) {
-              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentTradeState(newState.data.uuid));
+          // need to deepCopy because the one in ngrx store is readonly
+          const mutableNewState = this.utilityService.deepCopy(newState);
+          if (mutableNewState.state.updateCurrentState && !!this.state.currentState) {
+            mutableNewState.uuid = this.state.currentState.uuid;
+            mutableNewState.data.uuid = this.state.currentState.uuid;
+          } else {
+            if (!mutableNewState.state.triggersRedirect) {
+              // the states that triggers redirect don't need to be manually pushed into document history
+              this.router.navigate([mutableNewState.data.module, mutableNewState.data.uuid]);
+              // this.angularLocation.go(`/${mutableNewState.data.module}/${mutableNewState.data.uuid}`);
+            }
+            if (mutableNewState.data.module === this.constants.moduleUrl.structuring) {
+              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentStructureState(mutableNewState.data.uuid));
+            } else if (mutableNewState.data.module === this.constants.moduleUrl.trade) {
+              this.store$.dispatch(new CoreGlobalWorkflowUpdateCurrentTradeState(mutableNewState.data.uuid));
             }
           }
+          this.storeState(mutableNewState);
+          this.state.currentState = mutableNewState;
         }
       }
     );
@@ -74,6 +79,18 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
       select(selectGlobalWorkflowIndexedDBReadyState)
     ).subscribe((isReady) => {
       this.state.isIndexedDBReady = !!isReady;
+      if (isReady && !this.state.currentState) {
+        // fetch initial state from indexedDB
+        const currentStateUUID = this.extractStateUUIDFromWindowLocation();
+        if (!!currentStateUUID) {
+          this.GlobalWorkflowIOService.fetchState(currentStateUUID).pipe(
+            first()
+          ).subscribe((state) => {
+            // need to deepCopy because the one in ngrx store is readonly
+            this.state.currentState = this.utilityService.deepCopy(state);
+          });
+        }
+      }
     });
   }
 
@@ -89,6 +106,15 @@ export class GlobalWorkflow implements OnInit, OnDestroy {
   private storeState(targetState: GlobalWorkflowStateDTO) {
     if (!!targetState && this.state.isIndexedDBReady) {
       this.GlobalWorkflowIOService.storeState(targetState);
+    }
+  }
+
+  private extractStateUUIDFromWindowLocation(): string {
+    const slicedUrl = window.location.pathname.split('/');
+    if (slicedUrl.length > 2) {
+      return slicedUrl[2];
+    } else {
+      return null;
     }
   }
 

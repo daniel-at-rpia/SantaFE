@@ -14,16 +14,6 @@ export const selectDislayAlertThumbnail = createSelector(
   (state: CoreState) => state.globalAlert.displayThumbnail
 );
 
-export const selectSecurityMapContent = createSelector(
-  getCoreState,
-  (state:CoreState) => state.securityMap.mapContent
-);
-
-export const selectSecurityMapValidStatus = createSelector(
-  getCoreState,
-  (state:CoreState) => state.securityMap.valid
-);
-
 export const selectNewAlerts = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.newUrgentAlerts
@@ -78,14 +68,17 @@ export const selectGlobalAlertSendNewAlertsToTradePanel = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.newTradeAlertTableAlerts
 )
-
 export const selectGlobalAlertFailedToMakeAlertAPICall = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.apiCallForAlertFailed
 )
 
-export const selectGlobalAlertTradeAlertTableIsReadyToReceiveAdditionalAlerts = createSelector(
+export const selectGlobalAlertTradeTableFetchAlertTick = createSelector(
   getCoreState,
-  (state: CoreState) => state.globalAlert.tradeTableReadyToReceiveAdditionalAlerts
+  (state: CoreState) => state.globalAlert.tradeTableFetchAlertTick
 )
 
+export const selectGlobalAlertTradeTableFetchAlertTimestamp = createSelector(
+  getCoreState,
+  (state: CoreState) => state.globalAlert.tradeTableFetchAlertLastReceiveTimestamp
+)

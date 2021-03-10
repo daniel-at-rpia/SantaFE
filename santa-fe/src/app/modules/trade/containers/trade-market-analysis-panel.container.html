@@ -144,7 +144,11 @@
       </ul>
       <div class="sat-tradeMarketAnalysisPanel__table-content-separator"></div>
       <div class="sat-tradeMarketAnalysisPanel__table-content-basisColumn">
-        <historical-summary *ngIf="state.table.basisSummary" [summaryData]="state.table.basisSummary"></historical-summary>
+        <historical-summary
+          *ngIf="state.table.basisSummary"
+          [stateActive]="stateActive"
+          [summaryData]="state.table.basisSummary">
+        </historical-summary>
       </div>
     </div>
   </section>

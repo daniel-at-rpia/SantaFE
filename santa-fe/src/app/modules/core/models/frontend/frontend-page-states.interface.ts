@@ -228,6 +228,7 @@ export interface TradeAlertPanelState {
   configureAlert: boolean;
   // focusMode: boolean;
   isAlertPaused: boolean;
+  lastReceiveAlertUnitTimestamp: number;
   securityMap: Array<AdhocPacks.SecurityMapEntry>;
   configuration: {
     axe: {
@@ -326,11 +327,13 @@ export interface StructureSetTargetPanelState {
     newOverrideNameCache: string;
   }
   removalList: Array<Blocks.StructureSetTargetPanelEditRowBlock>;
-  clearAllTargetSelected: boolean;
   editViewMode: boolean;
   ownerInitial: string;
   activeSubPortfolioFilter: SubPortfolioFilter;
   isViewingIndexOnBICS: boolean;
+  isViewingClearTargets: boolean;
+  clearTargetsOptionsList: Array<Blocks.StructureClearTargetsOptionBlock>;
+  distributeUtilityText: string;
 }
 
 export interface StructureSetBulkOverridesPanelState {

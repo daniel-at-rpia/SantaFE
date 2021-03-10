@@ -1,41 +1,46 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
-import * as moment from 'moment';
+  // dependencies
+    import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
+    import { Router } from '@angular/router';
+    import { select, Store } from '@ngrx/store';
+    import { Subscription } from 'rxjs';
+    import { first, filter } from 'rxjs/operators';
+    import * as moment from 'moment';
 
-import {
-  PortfolioMetricValues,
-  BreakdownViewFilter,
-  SUPPORTED_PORTFOLIO_LIST,
-  PortfolioShortNames,
-  UTILITY_PANEL_HISTORICAL_TIME_LABEL,
-  SubPortfolioFilter,
-  DeltaScope
-} from 'Core/constants/structureConstants.constants';
-import {
-  selectMetricLevel,
-  selectMainPanelUpdateTick,
-  selectActiveBreakdownViewFilter,
-  selectActivePortfolioViewFilter,
-  selectDataDatestamp,
-  selectActiveSubPortfolioFilter,
-  selectActiveDeltaScope,
-  selectUtilityPanelLoadState
-} from 'Structure/selectors/structure.selectors';
-import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
-import {
-  StructureUpdateMainPanelEvent,
-  StructureMetricSelect,
-  StructureChangeBreakdownViewFilterEvent,
-  StructureChangePortfolioViewFilterEvent,
-  StructureSwitchDataDatestampEvent,
-  StructureChangeSubPortfolioViewFilterEvent,
-  StructureChangeDeltaScopeEvent
-} from 'Structure/actions/structure.actions';
-import { UtilityService, DTOService } from 'Core/services';
-import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { UtilityService, DTOService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import {
+      PortfolioMetricValues,
+      BreakdownViewFilter,
+      SUPPORTED_PORTFOLIO_LIST,
+      PortfolioShortNames,
+      UTILITY_PANEL_HISTORICAL_TIME_LABEL,
+      SubPortfolioFilter,
+      DeltaScope,
+      DeltaScopeBEToFEMapping
+    } from 'Core/constants/structureConstants.constants';
+    import {
+      selectMetricLevel,
+      selectMainPanelUpdateTick,
+      selectActiveBreakdownViewFilter,
+      selectActivePortfolioViewFilter,
+      selectDataDatestamp,
+      selectActiveSubPortfolioFilter,
+      selectActiveDeltaScope,
+      selectUtilityPanelLoadState
+    } from 'Structure/selectors/structure.selectors';
+    import { StructureUtilityPanelState } from 'Core/models/frontend/frontend-page-states.interface';
+    import {
+      StructureUpdateMainPanelEvent,
+      StructureMetricSelect,
+      StructureChangeBreakdownViewFilterEvent,
+      StructureChangePortfolioViewFilterEvent,
+      StructureSwitchDataDatestampEvent,
+      StructureChangeSubPortfolioViewFilterEvent,
+      StructureChangeDeltaScopeEvent
+    } from 'Structure/actions/structure.actions';
+    import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
+    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+  //
 
 @Component({
   selector: 'structure-utility-panel',
@@ -44,7 +49,7 @@ import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConsta
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class StructureUtilityPanel implements OnInit, OnDestroy {
+export class StructureUtilityPanel extends SantaContainerComponentBase implements OnInit, OnDestroy {
   state: StructureUtilityPanelState;
   subscriptions = {
     selectedMetricLevelSub: null,
@@ -66,14 +71,19 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     subPortfolioFilter: SubPortfolioFilter,
     deltaScope: DeltaScope,
     modules: NavigationModule,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    deltaScopeFEMapping: DeltaScopeBEToFEMapping
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>,
-    private utilityService: UtilityService,
     private dtoService: DTOService
-  ) {}
+  ) {
+    super(utilityService, globalWorkflowIOService, router);
+  }
 
   private initializePageState(): StructureUtilityPanelState {
     return {
@@ -104,6 +114,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.lastUpdateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectMainPanelUpdateTick)
     ).subscribe((tick) => {
       this.state.lastUpdateTime = moment().format('hh:mm:ss a');
@@ -145,6 +158,9 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.utilityPanelLoadStateSub = this.store$.pipe(
+      filter((tick) => {
+        return this.stateActive;
+      }),
       select(selectUtilityPanelLoadState)
     ).subscribe((newState) => {
       if (!!newState) {
@@ -157,15 +173,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
         this.onClickSubPortfolioChange(newState.activeSubPortfolioFilter);
       }
     });
-  }
-
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(eachItem)) {
-        const eachSub = this.subscriptions[eachItem] as Subscription;
-        eachSub.unsubscribe();
-      }
-    }
+    return super.ngOnInit();
   }
 
   public setMetricLevel(
@@ -268,7 +276,7 @@ export class StructureUtilityPanel implements OnInit, OnDestroy {
   }
 
   private pushStateSnapshotToGlobalState() {
-    const newState = this.dtoService.formGlobalWorkflow(this.constants.modules.structuring, false, this.constants.globalWorkflowTypes.changedStructureUtilityConfig);
+    const newState = this.dtoService.formGlobalWorkflow(this.constants.modules.structuring, false, true, this.constants.globalWorkflowTypes.changedStructureUtilityConfig);
     newState.data.stateInfo.structureUtilityPanelSnapshot = this.utilityService.deepCopy(this.state);
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newState));
   }

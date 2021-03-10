@@ -1,13 +1,14 @@
   // dependencies
-    import { Component, ViewEncapsulation, OnInit, OnDestroy, Input } from '@angular/core';
+    import { Component, ViewEncapsulation, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
+    import { Router } from '@angular/router';
     import { Observable, Subscription, interval, of } from 'rxjs';
-    import { tap, first, withLatestFrom, switchMap } from 'rxjs/operators';
+    import { tap, first, withLatestFrom, switchMap, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
 
     import { TradeState } from 'Trade/reducers/trade.reducer';
     import { PageStates } from 'Core/models/frontend';
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
+    import { DTOService, UtilityService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import {
       TradeLiveUpdateStartEvent,
       TradeLiveUpdateUtilityInternalCountEvent,
@@ -36,7 +37,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeUtilityPanel implements OnInit, OnDestroy {
+export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit {
   @Input() sidePanelsDisplayed: boolean;
   state: PageStates.TradeUtilityPanelState;
   constants = {
@@ -73,8 +74,12 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
   }
 
   constructor(
+    protected utilityService: UtilityService,
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected router: Router,
     private store$: Store<any>
   ){
+    super(utilityService, globalWorkflowIOService, router);
     this.initializePageState();
   }
 
@@ -82,8 +87,12 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     this.initializePageState();
     this.internalCount$ = interval(1000);
 
-    this.subscriptions.internalCountSub = this.internalCount$.subscribe(internalCount => {
-      if (internalCount > 0) {  // skip the first beat to sync both counts
+    this.subscriptions.internalCountSub = this.internalCount$.pipe(
+      filter((internalCount) => {
+        return this.stateActive;
+      })
+    ).subscribe(internalCount => {
+      if (internalCount > 0 && this.stateActive) {  // skip the first beat to sync both counts
         if (this.state.isPresetSelected && !this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
           const newCountdown = parseInt(this.state.updateCountdown) - 1;
           this.state.updateCountdown = newCountdown < 10 ? `0${newCountdown}` : `${newCountdown}`;
@@ -93,6 +102,9 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.externalCountSub = this.store$.pipe(
+      filter((count) => {
+        return this.stateActive;
+      }),
       select(selectLiveUpdateCount),
       withLatestFrom(
         this.store$.pipe(select(selectPresetSelected)),
@@ -105,6 +117,9 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.processingRawDataSub = this.store$.pipe(
+      filter((flag) => {
+        return this.stateActive;
+      }),
       select(selectLiveUpdateProcessingRawDataToMainTable)
     ).subscribe(flag => {
       if (!!flag) {
@@ -118,6 +133,9 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.presetSelectedSub = this.store$.pipe(
+      filter((flag) => {
+        return this.stateActive;
+      }),
       select(selectPresetSelected)
     ).subscribe(flag => {
       this.state.isPresetSelected = flag;
@@ -125,18 +143,16 @@ export class TradeUtilityPanel implements OnInit, OnDestroy {
     });
 
     this.subscriptions.initialDataLoadedSub = this.store$.pipe(
+      filter((flag) => {
+        return this.stateActive;
+      }),
       select(selectInitialDataLoadedInMainTable)
     ).subscribe(flag => {
       this.state.isInitialDataLoaded = flag;
       this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
     });
-  }
 
-  public ngOnDestroy() {
-    for (const eachItem in this.subscriptions) {
-      const eachSub = this.subscriptions[eachItem] as Subscription;
-      eachSub.unsubscribe();
-    }
+    return super.ngOnInit();
   }
 
   // disabled temporarily

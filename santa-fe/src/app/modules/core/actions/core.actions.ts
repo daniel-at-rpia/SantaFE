@@ -9,8 +9,6 @@ import {
 export enum CoreActions {
   UserLoggedIn = '[Core] User Logged In',
   ToggleAlertThumbnailDisplay = '[Core] Toggle Thumbnail Display',
-  LoadSecurityMap = '[Core] Load Security Map',
-  FlushSecurityMap = '[Core] Fluahs Security Map',
   SendNewAlerts = '[Core] Send New Alerts',
   SendAlertCountsByType = '[Core] Send Alert Counts',
   ReceivedNewAlerts = '[Core] Received New Alerts',
@@ -27,7 +25,7 @@ export enum CoreActions {
   GlobalAlertsAPIAlertCallFailed = '[Core] Global Alerts Failed to Make API Call For Alerts',
   GlobalAlertsClearAllUrgentAlerts = '[Core] Global Alerts Clear All Urgent Alerts In Store',
   GlobalAlertsClearAllTradeAlertTableAlerts = '[Core] Global Alerts Clear All Alerts For Trade Alert Panel In Store',
-  GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Ready To Receive Additional Alerts',
+  GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Fetch For Alerts',
   GlobalWorkflowUpdateCurrentTradeState = '[Core] Global Workflow Update Current Trade State',
   GlobalWorkflowUpdateCurrentStructureState = '[Core] Global Workflow Update Current Structure State',
   GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready'
@@ -51,21 +49,6 @@ export class CoreToggleAlertThumbnailDisplay implements Action {
   ){
     this.value = value;
   }
-}
-
-export class CoreLoadSecurityMap implements Action {
-  readonly type = CoreActions.LoadSecurityMap;
-  readonly map: Array<SecurityMapEntry>;
-  constructor(
-    map: Array<SecurityMapEntry>
-  ){
-    this.map = map;
-  }
-}
-
-export class CoreFlushSecurityMap implements Action {
-  readonly type = CoreActions.FlushSecurityMap;
-  constructor(){}
 }
 
 export class CoreSendNewAlerts implements Action {
@@ -187,11 +170,11 @@ export class CoreGlobalAlertsClearAllTradeAlertTableAlerts implements Action {
   constructor() {};
 }
 
-export class CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts {
+export class CoreGlobalAlertsTradeAlertFetch {
   readonly type = CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts;
-  readonly newState: boolean;
-  constructor(newState: boolean) {
-    this.newState = newState;
+  readonly lastReceivedTimestamp: number;
+  constructor(lastReceivedTimestamp: number) {
+    this.lastReceivedTimestamp = lastReceivedTimestamp;
   }
 }
 export class CoreGlobalWorkflowUpdateCurrentStructureState implements Action {

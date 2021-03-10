@@ -11,10 +11,6 @@ export interface CoreState {
   user: {
     initials: string;
   };
-  securityMap: {
-    valid: boolean;
-    mapContent: Array<AdhocPacks.SecurityMapEntry>;
-  };
   globalWorkflow: {
     newState: DTOs.GlobalWorkflowStateDTO;
     currentStateInStructure: string;
@@ -31,17 +27,14 @@ export interface CoreState {
     processingAlerts: boolean;
     makeAPICall: boolean;
     apiCallForAlertFailed: boolean;
-    tradeTableReadyToReceiveAdditionalAlerts: boolean;
+    tradeTableFetchAlertTick: number;
+    tradeTableFetchAlertLastReceiveTimestamp: number;
   }
 }
 
 const initialState: CoreState = {
   user: {
     initials: null
-  },
-  securityMap: {
-    valid: false,
-    mapContent: []
   },
   globalWorkflow: {
     newState: null,
@@ -59,7 +52,8 @@ const initialState: CoreState = {
     processingAlerts: false,
     makeAPICall: false,
     apiCallForAlertFailed: false,
-    tradeTableReadyToReceiveAdditionalAlerts: false
+    tradeTableFetchAlertTick: 0,
+    tradeTableFetchAlertLastReceiveTimestamp: 0
   }
 };
 
@@ -83,22 +77,6 @@ export function coreReducer(
            displayThumbnail: action.value
          }
        };
-    case CoreActions.LoadSecurityMap:
-      return {
-        ...state,
-        securityMap: {
-          valid: true,
-          mapContent: action.map
-        }
-      };
-    case CoreActions.FlushSecurityMap:
-      return {
-        ...state,
-        securityMap: {
-          valid: false,
-          mapContent: []
-        }
-      };
     case CoreActions.SendNewAlerts:
       return {
         ...state,
@@ -241,14 +219,15 @@ export function coreReducer(
           newTradeAlertTableAlerts: []
         }
       }
-      case CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts:
-        return {
-          ...state,
-          globalAlert: {
-            ...state.globalAlert,
-            tradeTableReadyToReceiveAdditionalAlerts: action.newState
-          }
+    case CoreActions.GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts:
+      return {
+        ...state,
+        globalAlert: {
+          ...state.globalAlert,
+          tradeTableFetchAlertTick: state.globalAlert.tradeTableFetchAlertTick + 1,
+          tradeTableFetchAlertLastReceiveTimestamp: action.lastReceivedTimestamp
         }
+      }
     case CoreActions.GlobalWorkflowIndexedDBReady:
       return {
         ...state,

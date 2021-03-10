@@ -793,3 +793,14 @@ export interface BETraceTradesBlock {
   volumeEstimated: number;
   yield: number;
 }
+
+export interface BESecurityMap {
+  [id: string]: Array<string>;
+}
+
+export enum BESubPortfolioFilter {
+  all = 'All',
+  nonHedging = 'NonHedging',
+  nonShortCarry = 'NonShortCarry',
+  shortCarry = 'ShortCarry'
+}

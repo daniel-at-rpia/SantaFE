@@ -52,8 +52,8 @@ import { AppRoutingModule } from 'App/app-routing.module';
 import { TraceTradeVisualizer } from 'Core/containers/trace-trade-visualizer/trace-trade-visualizer.container';
 import { MoveVisualizer } from 'Core/components/move-visualizer/move-visualizer.component';
 import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.container';
-
 import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
+import { SantaContainerComponentBase } from './containers/santa-container-component-base';
 
 @NgModule({
   declarations: [

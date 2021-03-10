@@ -17,7 +17,8 @@ import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.const
 import {
   PortfolioShortNames,
   PortfolioMetricValues,
-  DeltaScope
+  DeltaScope,
+  DeltaScopeDisplayText
 } from 'Core/constants/structureConstants.constants';
 import { BEStructuringFundBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
@@ -795,6 +796,7 @@ export interface PortfolioFundDTO extends BasicDTOStructure {
     creditDurationIndexBar: TargetBarDTO;
     creditLeverageIndexBar: TargetBarDTO;
     activeDelta: DeltaScope;
+    activeDeltaDisplayText: DeltaScopeDisplayText;
     originalBEData: BEStructuringFundBlock; // used when updating portfolios for portfolio structuring,
     currentTotalDeltaCreditLeverage: number;
     currentTotalDeltaCreditDuration: number;
@@ -949,5 +951,6 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   }
   state: {
     triggersRedirect: boolean;
+    updateCurrentState: boolean;
   }
 }

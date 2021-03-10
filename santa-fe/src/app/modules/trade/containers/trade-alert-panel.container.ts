@@ -1,15 +1,15 @@
   // dependencies
     import { Component, EventEmitter, Input, isDevMode, OnChanges, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+    import { Router } from '@angular/router';
     import { select, Store } from '@ngrx/store';
     import { interval, Observable, of, Subscription, Subject } from 'rxjs';
-    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+    import { catchError, first, tap, withLatestFrom, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
     import * as moment from 'moment';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
+    import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
+    import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import {
       BESecurityDTO,
       BEAlertConfigurationReturn,
@@ -25,11 +25,10 @@
     } from 'BEModels/backend-payloads.interface';
     import {
       selectAlertCounts,
-      selectSecurityMapContent,
-      selectSecurityMapValidStatus,
       selectUserInitials,
       selectNewAlerts,
-      selectGlobalAlertSendNewAlertsToTradePanel
+      selectGlobalAlertSendNewAlertsToTradePanel,
+      selectGlobalAlertTradeTableFetchAlertTick
     } from 'Core/selectors/core.selectors';
     import {
       ALERT_MAX_SECURITY_SEARCH_COUNT,
@@ -39,10 +38,9 @@
     } from 'Core/constants/tradeConstants.constant';
     import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
     import {
-      CoreFlushSecurityMap,
       CoreSendNewAlerts,
       CoreGlobalAlertsClearAllTradeAlertTableAlerts,
-      CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts
+      CoreGlobalAlertsTradeAlertFetch
     } from 'Core/actions/core.actions';
     import {
       TradeAlertTableReceiveNewAlertsEvent,
@@ -83,7 +81,7 @@
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
+export class TradeAlertPanel extends SantaContainerComponentBase implements OnInit, OnChanges, OnDestroy {
   @Input() sidePanelsDisplayed: boolean;
   @Input() collapseConfiguration: boolean;
   @Output() configureAlert = new EventEmitter();
@@ -94,17 +92,17 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   state: PageStates.TradeAlertPanelState;
   subscriptions = {
     userInitialsSub: null,
-    securityMapSub: null,
     selectedSecurityForAlertConfigSub: null,
     centerPanelPresetSelectedSub: null,
     startNewUpdateSub: null,
     keywordSearchSub: null,
     newAlertSubscription: null,
     globalAlertLiveInternalCountEventSub: null,
-    marketListAlertCountdownSub: null
+    marketListAlertCountdownSub: null,
+    fetchAlertFromGlobalSub: null
   }
   keywordChanged$: Subject<string> = new Subject<string>();
-  autoUpdateCount$: Observable<any>;
+  fetchAlertFromGlobal$: Observable<any>;
   constants = {
     // alertTypes: AlertTypes,
     alertTypes: AlertTypes,
@@ -121,13 +119,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
   }
 
   constructor(
+    protected globalWorkflowIOService: GlobalWorkflowIOService,
+    protected utilityService: UtilityService,
+    protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
     private securityMapService: SecurityMapService
   ){
+    super(utilityService, globalWorkflowIOService, router);
     window['moment'] = moment;
     this.state = this.initializePageState();
   }
@@ -142,6 +143,7 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         isUserPM: false,
         configureAlert: false,
         isAlertPaused: true,
+        lastReceiveAlertUnitTimestamp: 0,
         securityMap: [],
         // focusMode: false,
         configuration: {
@@ -202,20 +204,23 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
       this.state = this.initializePageState();
-      this.subscriptions.securityMapSub = this.store$.pipe(
-        select(selectSecurityMapContent),
-        withLatestFrom(
-          this.store$.pipe(select(selectSecurityMapValidStatus))
-        )
-      ).subscribe(([mapContent, isValid]) => {
-        if (!!isValid) {
-          this.securityMapService.storeSecurityMap(mapContent);
-          this.state.securityMap = mapContent;
-          this.state.isAlertPaused = false;
-          this.store$.dispatch(new CoreFlushSecurityMap());
+      this.fetchAlertFromGlobal$ = interval(15000);  // 15 seconds
+
+      this.subscriptions.fetchAlertFromGlobalSub = this.fetchAlertFromGlobal$.pipe(
+        filter((internalCount) => {
+          return this.stateActive;
+        })
+      ).subscribe((internalCount) => {
+        // TODO: enable the condition on isAlertPaused when securityMap issue is properly addressed
+        // if (!this.state.isAlertPaused && !this.state.alertUpdateInProgress) {
+        if (!this.state.alertUpdateInProgress) {
+          this.store$.dispatch(new CoreGlobalAlertsTradeAlertFetch(this.state.lastReceiveAlertUnitTimestamp));
         }
       });
       this.subscriptions.selectedSecurityForAlertConfigSub = this.store$.pipe(
+          filter((tick) => {
+            return this.stateActive;
+          }),
           select(selectSelectedSecurityForAlertConfig)
         ).subscribe((targetSecurity) => {
           if (!!targetSecurity) {
@@ -233,12 +238,18 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         select(selectPresetSelected)
       ).subscribe(flag => {
         this.state.isCenterPanelPresetSelected = flag;
       });
 
       this.subscriptions.startNewUpdateSub = this.store$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         select(selectLiveUpdateTick),
         withLatestFrom(
           this.store$.pipe(select(selectInitialDataLoadedInAlertTable))
@@ -254,6 +265,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.keywordSearchSub = this.keywordChanged$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         debounceTime(this.constants.keywordSearchDebounceTime),
         distinctUntilChanged()
       ).subscribe((keyword) => {
@@ -274,6 +288,9 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.userInitialsSub = this.store$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        }),
         select(selectUserInitials)
       ).subscribe((userInitials) => {
         if (userInitials) {
@@ -282,9 +299,14 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       });
 
       this.subscriptions.newAlertSubscription = this.store$.pipe(
-        select(selectGlobalAlertSendNewAlertsToTradePanel),
-      ).subscribe((alertList: Array<DTOs.AlertDTO>) => {
+        filter((tick) => {
+          return this.stateActive;
+        }),
+        select(selectGlobalAlertSendNewAlertsToTradePanel)
+      ).subscribe((alertList) => {
         if (alertList.length > 0) {
+          // is okay to omit the timestamp update during the window that we have not received any new alerts, because well... there is no new alert
+          this.state.lastReceiveAlertUnitTimestamp = this.findLatestTimestamp(alertList);
           if (!this.state.alert.initialAlertListReceived) {
             this.state.alert.initialAlertListReceived = true;
           }
@@ -302,7 +324,11 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       });
       this.marketListAlertCountdown$ = interval(1000);
-      this.subscriptions.marketListAlertCountdownSub = this.marketListAlertCountdown$.subscribe((count: Observable<number>) => {
+      this.subscriptions.marketListAlertCountdownSub = this.marketListAlertCountdown$.pipe(
+        filter((tick) => {
+          return this.stateActive;
+        })
+      ).subscribe((count: Observable<number>) => {
         if (this.state.alert.initialAlertListReceived && this.state.fetchResult.alertTable.fetchComplete) {
           const numOfUpdate = this.marketListAlertsCountdownUpdate();
           if (numOfUpdate > 0){
@@ -312,21 +338,13 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
           }
         }
       })
+
+      return super.ngOnInit();
     }
 
     public ngOnChanges() {
       if (!!this.collapseConfiguration) {
         this.state.configureAlert = false;
-      }
-    }
-
-    public ngOnDestroy() {
-      this.store$.dispatch(new CoreGlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts(false));
-      for (const eachItem in this.subscriptions) {
-        if (this.subscriptions[eachItem]) {
-          const eachSub = this.subscriptions[eachItem] as Subscription;
-          eachSub.unsubscribe();
-        }
       }
     }
 
@@ -358,6 +376,16 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         }
       });
       return numOfUpdate;
+    }
+
+    private findLatestTimestamp(updateAlertList: Array<DTOs.AlertDTO>): number {
+      let timestamp = 0;
+      updateAlertList.forEach((eachAlert) => {
+        if (eachAlert.data.unixTimestamp > timestamp) {
+          timestamp = eachAlert.data.unixTimestamp;
+        }
+      });
+      return timestamp;
     }
   // general end
 
@@ -484,22 +512,25 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
       config.securitySearchKeyword = keyword;
       if (keyword.length >= 2) {
         const result = [];
-        for (let i = 0; i < this.state.securityMap.length; ++i) {
-          const eachEntry = this.state.securityMap[i];
-          for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
-            if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
-              result.push(this.state.securityMap[i]);
-              break;
+        const map = this.securityMapService.getSecurityMap();
+        if (map.length > 0) {
+          for (let i = 0; i < map.length; ++i) {
+            const eachEntry = map[i];
+            for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
+              if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
+                result.push(map[i]);
+                break;
+              }
             }
           }
-        }
-        config.matchedResultCount = result.length;
-        config.searchIsValid = true;
-        if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+          config.matchedResultCount = result.length;
           config.searchIsValid = true;
-          this.fetchSecurities(result);
-        } else {
-          config.searchIsValid = false;
+          if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+            config.searchIsValid = true;
+            this.fetchSecurities(result);
+          } else {
+            config.searchIsValid = false;
+          }
         }
       } else {
         config.searchIsValid = false;
@@ -694,7 +725,6 @@ export class TradeAlertPanel implements OnInit, OnChanges, OnDestroy {
         tap((serverReturn: BEAlertConfigurationReturn) => {
           if (!!serverReturn) {
             this.state.configuration.axe.securityList = [];
-            this.state.isAlertPaused = false;
             this.populateConfigurationFromEachGroup(serverReturn.Axe);
           } else {
             this.restfulCommService.logError(`'Alert/get-alert-configs' API returned an empty result`);

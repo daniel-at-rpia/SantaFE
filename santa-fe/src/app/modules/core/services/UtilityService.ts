@@ -21,7 +21,7 @@
     import {
       QUANT_COMPARER_PERCENTILE,
       SecurityMetricOptions,
-      FrontendKayToBackendKeyDictionary,
+      FrontendKeyToBackendKeyDictionary,
       BackendKeyToDisplayLabelDictionary,
       TriCoreDriverConfig,
       DEFAULT_DRIVER_IDENTIFIER,
@@ -53,7 +53,7 @@ export class UtilityService {
   // Any code about naming stuff goes into this service
   groupGroupMetricOptions = GroupMetricOptions;
   securityMetricOptions = SecurityMetricOptions;
-  keyDictionary = FrontendKayToBackendKeyDictionary;
+  keyDictionary = FrontendKeyToBackendKeyDictionary;
   labelDictionary = BackendKeyToDisplayLabelDictionary;
   triCoreDriverConfig = TriCoreDriverConfig;
   definitionMap = SecurityDefinitionMap;
@@ -1229,6 +1229,16 @@ export class UtilityService {
       const removeForwardSlash = event.urlAfterRedirects.slice(1);
       const modulePortion = removeForwardSlash.split('/').length > 0 ? removeForwardSlash.split('/')[0] : '';
       return modulePortion;
+    }
+
+    public getStateUUIDFromNavigation(event: NavigationEnd): string {
+      const removeForwardSlash = event.urlAfterRedirects.slice(1);
+      const slicedUrl = removeForwardSlash.split('/');
+      if (slicedUrl.length > 1) {
+        return slicedUrl[1];
+      } else {
+        return 'n/a';
+      }
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {

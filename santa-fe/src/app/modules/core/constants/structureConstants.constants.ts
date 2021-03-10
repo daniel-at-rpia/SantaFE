@@ -1,5 +1,4 @@
-import { PortfolioFundDTO } from 'FEModels/frontend-models.interface';
-import { SecurityDefinitionBundleStub } from 'FEModels/frontend-stub-models.interface';
+import { DTOs, Blocks, AdhocPacks, Stubs } from 'Core/models/frontend';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 
 export enum PortfolioView {
@@ -14,6 +13,7 @@ export enum PortfolioBreakdownGroupOptions {
   Ccy = 'Currency',
   Tenor = 'Tenor',
   RatingNoNotch = 'Rating',
+  SecuritySubType = 'SecuritySubType',
   BICs = 'BICS'
 }
 
@@ -88,7 +88,7 @@ export const STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID = 'Set Bulk Overrides'
 
 export const BICS_DICTIONARY_KEY_PREFIX = 'item';
 
-export const CustomeBreakdownConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
+export const CustomeBreakdownConfiguratorDefinitionLayout: Array<Stubs.SecurityDefinitionBundleStub> = [
   {
     label: 'Common',
     list: [
@@ -140,7 +140,24 @@ export enum DeltaScope {
   dod = 'Dod',
   wow = 'Wow',
   mom = 'Mom',
-  ytd = 'Ytd'
+  ytd = 'Ytd',
+  tMinusTwo = 'TMinusTwo'
+}
+
+export enum DeltaScopeDisplayText {
+  DoD = 'DoD',
+  TMinusTwo = 'T-2',
+  WoW = 'WoW',
+  MoM = 'MoM',
+  YtD = 'YtD'
+}
+
+export const DeltaScopeBEToFEMapping = {
+  [DeltaScope.dod]: DeltaScopeDisplayText.DoD,
+  [DeltaScope.tMinusTwo]: DeltaScopeDisplayText.TMinusTwo,
+  [DeltaScope.wow]: DeltaScopeDisplayText.WoW,
+  [DeltaScope.mom]: DeltaScopeDisplayText.MoM,
+  [DeltaScope.ytd]: DeltaScopeDisplayText.YtD
 }
 
 export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
@@ -148,4 +165,30 @@ export const DELTA_SCOPE_SIGNIFICANT_THRESHOLD_COEFFICIENT = {
   Wow: 0.2,
   Mom: 0.3,
   Ytd: 0.4
+}
+
+
+export const SET_TARGET_CLEAR_ALL_OPTIONS_MAP: Blocks.StructureClearTargetsOptionMapBlock = {
+  BICS: [
+    {
+      key: 'Level 1',
+      backendIdentifier: 'BicsCodeLevel1',
+      isSelected: false
+    },
+    {
+      key: 'Level 2',
+      backendIdentifier: 'BicsCodeLevel2',
+      isSelected: false
+    },
+    {
+      key: 'Level 3',
+      backendIdentifier: 'BicsCodeLevel3',
+      isSelected: false
+    },
+    {
+      key: 'Level 4',
+      backendIdentifier: 'BicsCodeLevel4',
+      isSelected: false
+    }
+  ]
 }
