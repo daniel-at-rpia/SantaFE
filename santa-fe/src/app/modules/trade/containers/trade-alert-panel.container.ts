@@ -306,7 +306,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       ).subscribe((alertList) => {
         if (alertList.length > 0) {
           // is okay to omit the timestamp update during the window that we have not received any new alerts, because well... there is no new alert
-          this.state.lastReceiveAlertUnitTimestamp = moment().unix();
+          this.state.lastReceiveAlertUnitTimestamp = this.findLatestTimestamp(alertList);
           if (!this.state.alert.initialAlertListReceived) {
             this.state.alert.initialAlertListReceived = true;
           }
@@ -376,6 +376,16 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         }
       });
       return numOfUpdate;
+    }
+
+    private findLatestTimestamp(updateAlertList: Array<DTOs.AlertDTO>): number {
+      let timestamp = 0;
+      updateAlertList.forEach((eachAlert) => {
+        if (eachAlert.data.unixTimestamp > timestamp) {
+          timestamp = eachAlert.data.unixTimestamp;
+        }
+      });
+      return timestamp;
     }
   // general end
 
