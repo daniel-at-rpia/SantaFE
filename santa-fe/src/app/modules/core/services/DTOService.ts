@@ -2059,7 +2059,7 @@ export class DTOService {
     if (!object.state.isIndexVariant) {
       convertValuesForDisplay(object);
       getDisplayedValues(object);
-      if (!targetValue) {
+      if (targetValue === null) {
         object.state.isEmpty = true;
         object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
       }
