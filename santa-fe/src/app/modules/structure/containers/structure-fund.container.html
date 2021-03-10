@@ -52,9 +52,6 @@
   </header>
   <section *ngIf="fund.data" class="sat-fundStructuring__editFund">
     <i class="sat-fundStructuring__editFund-backgroundIcon fal fa-pencil"></i>
-    <div class="sat-fundStructuring__editFund-message">
-      <p class="sat-fundStructuring__editFund-message-text">{{ fund.state.hasErrors.errorMessage }}</p>
-    </div>
     <div class="sat-fundStructuring__editFund-addOverrides">
       <button (click)="onClickedAddCustomBreakdown()" class="sat-fundStructuring__editFund-addOverrides-overrideCta santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-plus"></i>
@@ -65,6 +62,7 @@
         <span>Add Overrides To All Funds</span>
       </button>
     </div>
+    <span class="sat-fundStructuring__editFund-message">{{ fund.state.hasErrors.errorMessage }}</span>
     <div class="sat-fundStructuring__editFund-group">
       <label for="creditDurationTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Duration:</label>
       <santa-input
