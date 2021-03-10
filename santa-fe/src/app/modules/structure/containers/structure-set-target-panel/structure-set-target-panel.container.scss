@@ -267,6 +267,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
                 }
               }
               &-subPortfolio {
+                display: none;
                 flex: 0 0 100%;
                 text-align: right;
                 &-icon {
@@ -383,6 +384,16 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
             margin-top: $spacing_small;
             padding: $spacing_small $spacing_small $spacing_large 0;
           }
+        }
+      }
+    }
+  }
+  &--showSubPortfolioHighlightState {
+    #{$blockName} {
+      &__main {
+        &-setTargets-edit-content-header-categories-subPortfolio {
+          display: flex;
+          justify-content: flex-end;
         }
       }
     }
