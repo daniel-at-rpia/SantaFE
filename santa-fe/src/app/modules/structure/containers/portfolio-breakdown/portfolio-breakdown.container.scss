@@ -28,9 +28,9 @@ $portfolioBreakdown_rating_height: 1rem;
       justify-content: center;
       align-items: center;
       background-color: $color_gray_3;
-      width: 3rem;
-      height: 3rem;
-      margin-right: $spacing_medium;
+      width: 3.5rem;
+      height: 3.5rem;
+      margin-right: $spacing_small;
     }
     &-text {
       display: flex;
@@ -44,7 +44,7 @@ $portfolioBreakdown_rating_height: 1rem;
       }
       &-subPortfolio {
         @include mix_border_generator(1px, $color_gray_3);
-        @include mix_border_radius(3px);
+        @include mix_border_radius(5px);
         background-color: $color_gray_3;
         color: $font_color_inverse;
         padding: $spacing_x_small;
@@ -101,7 +101,7 @@ $portfolioBreakdown_rating_height: 1rem;
   &__categoryHeader {
     display: flex;
     justify-content: flex-end;
-    margin: $portfolioBreakdown_rating_thickness 0 1.5rem;
+    margin: $portfolioBreakdown_rating_thickness 0;
     &-cell {
       @include mix_fixed_div(relative, $z_index_base_item);
       display: flex;
