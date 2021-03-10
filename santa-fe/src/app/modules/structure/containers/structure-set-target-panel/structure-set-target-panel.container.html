@@ -12,7 +12,8 @@
     'sat-structureSetTargetPanel--averageRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth >= 60 && state.targetBreakdown?.style.ratingFillWidth < 80 && state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--badRating': state.targetBreakdown?.state.isTargetAlignmentRatingAvail && state.targetBreakdown?.style.ratingFillWidth < 60 && state.targetBreakdown?.state.isBICs,
     'sat-structureSetTargetPanel--viewingIndexOnBICSState': state.isViewingIndexOnBICS,
-    'sat-structureSetTargetPanel--viewingClearTargetsState': state.isViewingClearTargets
+    'sat-structureSetTargetPanel--viewingClearTargetsState': state.isViewingClearTargets,
+    'sat-structureSetTargetPanel--showSubPortfolioHighlightState': state.activeSubPortfolioFilter !== constants.subPortfolio.all
   }">
   <section class="sat-structureSetTargetPanel__utilities">
     <div class="sat-structureSetTargetPanel__utilities-setView">
@@ -41,8 +42,11 @@
         Rows :
       </div>
       <div class="sat-structureSetTargetPanel__utilities-distribution-ctas">
-        <button (click)="onClickDistributeEvenly()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-evenly">Evenly</button>
-        <button (click)="onClickDistributeProportionally()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-proportionally">Proportionally</button>
+        <div class="sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer">
+          <button (click)="onClickDistributeEvenly()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn--evenly">Evenly</button>
+          <button (click)="onClickDistributeProportionally()" class="sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn sat-structureSetTargetPanel__utilities-distribution-ctas-btnContainer-btn--proportionally">Proportionally</button>
+        </div>
+        <span class="sat-structureSetTargetPanel__utilities-distribution-ctas-text">{{ state.distributeUtilityText }}</span>
       </div>
     </div>
     <div class="sat-structureSetTargetPanel__utilities-clearAll">
@@ -108,6 +112,12 @@
             <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories">
               <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-index">
                 <span class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-index-text">{{state.targetBreakdown?.data.indexName}}</span>
+              </div>
+              <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-subPortfolio">
+                <span class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-subPortfolio-text">
+                  <i class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-subPortfolio-icon fal fa-chess"></i>
+                  {{state.activeSubPortfolioFilter ? state.activeSubPortfolioFilter : '' }}
+                </span>
               </div>
               <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer">
                 <div class="sat-structureSetTargetPanel__main-setTargets-edit-content-header-categories-cellsContainer-cell">
