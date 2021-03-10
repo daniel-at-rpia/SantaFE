@@ -2168,8 +2168,8 @@ export class DTOService {
       object.data.creditDurationIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditDuration, object.data.indexShortName);
       object.data.creditLeverageIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditLeverage, object.data.indexShortName);
       if (!!object.data.creditDurationTargetBar) {
-        const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
-        const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
+        const parsedCs01CurrentTotal = rawData.currentTotals.Cs01 !== null ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
+        const parsedCs01TargetTotal = rawData.target.target.Cs01 !== null ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
         object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
           metric: PortfolioMetricValues.cs01,
           current: parsedCs01CurrentTotal,
