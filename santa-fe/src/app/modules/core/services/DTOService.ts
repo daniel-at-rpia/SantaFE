@@ -2094,8 +2094,8 @@ export class DTOService {
           errorMessage: ''
         },
         modifiedFundTargets: {
-          creditLeverage: rawData.target.target.CreditLeverage || null,
-          creditDuration: rawData.target.target.CreditDuration || null
+          creditLeverage: rawData.target.target.CreditLeverage,
+          creditDuration: rawData.target.target.CreditDuration
         },
         autoScalingAvailable: !isStencil 
           ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
