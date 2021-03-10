@@ -69,8 +69,7 @@
       <label for="creditDurationTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Duration:</label>
       <santa-input
         [inputValue]="fund.data.target.target.creditDuration"
-        [placeholder]="'0'"
-        [isNumeric]="fund.state.isNumeric"
+        [placeholder]="''"
         (onInputChange)="onChangeValue($event, constants.creditDuration)"
         [hasError]="fund.state.hasErrors.updatedCreditDuration"
         [ngClass]="{
@@ -82,8 +81,7 @@
       <label for="leverageTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Leverage:</label>
       <santa-input
         [inputValue]="fund.data.target.target.creditLeverage"
-        [placeholder]="'0'"
-        [isNumeric]="fund.state.isNumeric"
+        [placeholder]="''"
         (onInputChange)="onChangeValue($event, constants.creditLeverage)"
         [hasError]="fund.state.hasErrors.updatedCreditLeverage"
         [ngClass]="{
