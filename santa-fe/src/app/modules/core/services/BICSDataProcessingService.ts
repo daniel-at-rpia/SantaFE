@@ -241,14 +241,6 @@ export class BICSDataProcessingService {
     }
   }
 
-  public getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
-    const definitionList = [];
-    for (const category in rawData.breakdown) {
-      definitionList.push(category);
-    }
-    return definitionList;
-  }
-
   public getSubLevelList(category: string, bicsLevel: number = 1): Array<string> {
     if(!!this.formattedBICsHierarchyData) {
       const BICSDataList = this.formattedBICsHierarchyData.children.map(category => category); 
@@ -331,16 +323,6 @@ export class BICSDataProcessingService {
     }
   }
 
-  public getShallowestLevel(category: string): number {
-    // traverse the bics and return the level of the earliest encounter of a given bics, useful to find the true level of a bics since now that same category would nest over and over
-    // not used in anywhere but might be useful
-    return this.getLevelRecursion(
-      category,
-      1,
-      this.formattedBICsHierarchyData.children
-    );
-  }
-
   public getDisplayedSubLevelsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>){
     if (targetRow.data.displayedSubLevelRows.length > 0) {
       targetRow.data.displayedSubLevelRows.forEach(subLevel => {
@@ -374,11 +356,6 @@ export class BICSDataProcessingService {
         });
       }
     })
-  }
-
-  public getDisplayedSubLevelsWithTargetsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> ) {
-    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && row.data.targetLevel !== null);
-    targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
   public loadBICSOptionsIntoConfigurator(configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO) {
@@ -639,4 +616,26 @@ export class BICSDataProcessingService {
     }
   }
 
+  private getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
+    const definitionList = [];
+    for (const category in rawData.breakdown) {
+      definitionList.push(category);
+    }
+    return definitionList;
+  }
+
+  private getShallowestLevel(category: string): number {
+    // traverse the bics and return the level of the earliest encounter of a given bics, useful to find the true level of a bics since now that same category would nest over and over
+    // not used in anywhere but might be useful
+    return this.getLevelRecursion(
+      category,
+      1,
+      this.formattedBICsHierarchyData.children
+    );
+  }
+
+  private getDisplayedSubLevelsWithTargetsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> ) {
+    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && row.data.targetLevel !== null);
+    targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
+  }
 }
