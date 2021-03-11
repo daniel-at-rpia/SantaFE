@@ -191,7 +191,7 @@ export class BICSDataProcessingService {
     }
   }
 
-  public getBICSCategoryRawData(portfolioId: number, level: number, code: string): BEStructuringBreakdownMetricBlock {
+  public getBICSCategoryRawData(portfolioId: number, level: number, code: string): BEStructuringBreakdownMetricBlock | null {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
     if (!!rawData) {
       const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
@@ -299,7 +299,7 @@ export class BICSDataProcessingService {
     }
   }
 
-  public getDisplayedSubLevelsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>){
+  public getDisplayedSubLevelsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>) {
     if (targetRow.data.displayedSubLevelRows.length > 0) {
       targetRow.data.displayedSubLevelRows.forEach(subLevel => {
         subLevel.state.isVisibleSubLevel = !!targetRow.state.isShowingSubLevels;
@@ -565,7 +565,7 @@ export class BICSDataProcessingService {
     rawData: Blocks.BICSCategorizationBlock,
     level: number,
     targetCodeList: Array<string>
-  ): BEStructuringBreakdownBlock {
+  ): BEStructuringBreakdownBlock | null {
     const bicsLevel = BICsLevels[level];
     if (!!rawData && !!rawData[bicsLevel]) {
       const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
@@ -615,7 +615,7 @@ export class BICSDataProcessingService {
     targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
-  private formUIBranchForSubLevels(rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>) {
+  private formUIBranchForSubLevels(rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>): Array<DTOs.StructurePortfolioBreakdownRowDTO> {
     const rowListCopy = this.utilityService.deepCopy(rowList);
     rowListCopy.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO, i) => {
       if (row.data.bicsLevel >= 2) {
