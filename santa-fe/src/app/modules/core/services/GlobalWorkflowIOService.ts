@@ -3,7 +3,7 @@ import { DetachedRouteHandle } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { DTOs } from '../models/frontend';
+import { DTOs, AdhocPacks } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import {
@@ -161,18 +161,22 @@ export class GlobalWorkflowIOService {
     }
 
     private storeLastState(targetModule: NavigationModule, targetUUID: string) {
-      const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowLastStateTableName], "readwrite");
-      const IOService = IOTransaction.objectStore(this.constants.idbWorkflowLastStateTableName);
-      IOTransaction.onerror = (event) => {
-        console.error('Global Workflow, store last state error', event);
+      if (!!this.workflowIndexedDBAPI) {
+        // this if condition serves both as a null-check and a guard for not recording the initial state on app load, because it is unnecessary to store it
+        const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowLastStateTableName], "readwrite");
+        const IOService = IOTransaction.objectStore(this.constants.idbWorkflowLastStateTableName);
+        IOTransaction.onerror = (event) => {
+          console.error('Global Workflow, store last state error', event);
+        }
+        const newEntry: AdhocPacks.GlobalWorkflowLastState = {
+          module: targetModule,
+          stateUUID: targetUUID
+        };
+        IOService.put(newEntry);
       }
-      IOService.put({
-        module: targetModule,
-        stateUUID: targetUUID
-      });
     }
 
-    public loadLastStates(): Observable<Array<any>> {
+    public loadLastStates(): Observable<Array<AdhocPacks.GlobalWorkflowLastState>> {
       return new Observable(subscriber => {
         const results = [];
         let expectedNumOfResults = 0;
