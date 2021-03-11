@@ -133,7 +133,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
       activeSubPortfolioFilter: null,
       isViewingIndexOnBICS: false,
       isViewingClearTargets: false,
-      clearTargetsOptionsList: []
+      clearTargetsOptionsList: [],
+      distributeUtilityText: ''
     };
     return state;
   }
@@ -155,6 +156,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         this.state = this.initializePageState();
         this.state.activeSubPortfolioFilter = activeSubPortfolioFilter;
         this.state.targetFund = this.utilityService.deepCopy(pack.targetFund);
+        this.state.distributeUtilityText = this.state.targetFund ? this.getDistributeFunctionHelperText(this.state.targetFund) : '';
         this.state.targetBreakdown = this.utilityService.deepCopy(pack.targetBreakdown);
         this.state.configurator.display = false;
         if (!!this.state.targetBreakdown) {
@@ -759,11 +761,6 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     displayValue: string,
     targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock
   ) {
-    if (displayValue === '') {
-      displayValue = '';
-    } else if (displayValue === '0') {
-      displayValue = '0';
-    }
     targetItem.modifiedDisplayValue = displayValue;
     targetItem.isActive = true;
     if (targetItem.metric === this.constants.metric.cs01 && !targetItem.isPercent) {
@@ -1670,4 +1667,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     return object;
   }
 
+  private getDistributeFunctionHelperText(fund: DTOs.PortfolioFundDTO): string {
+    const referenceType = fund.data.target.target.cs01 ? 'target' : 'current';
+    return `(Based on ${this.state.targetFund.data.portfolioShortName} ${referenceType} ${this.constants.metric.cs01})`;
+  }
 }

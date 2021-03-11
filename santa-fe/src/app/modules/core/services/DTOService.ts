@@ -2723,7 +2723,7 @@ export class DTOService {
   ){
     const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     const stencilBreakdownList = [SecurityDefinitionMap.CURRENCY];
-    const nonStencilBreakdownList = [SecurityDefinitionMap.TENOR, SecurityDefinitionMap.RATING, SecurityDefinitionMap.SECURITY_SUB_TYPE];
+    const nonStencilBreakdownList = [SecurityDefinitionMap.CURRENCY,SecurityDefinitionMap.TENOR, SecurityDefinitionMap.RATING, SecurityDefinitionMap.SECURITY_SUB_TYPE];
     const breakdownList = !!isStencil ? stencilBreakdownList : nonStencilBreakdownList;
     breakdownList.forEach((definition: Stubs.SecurityDefinitionStub) => {
       const newBreakdown = this.formRegularBreakdowns(rawData, comparedDeltaRawData, definition.key, isDisplayCs01, isStencil, selectedMetricValue);
