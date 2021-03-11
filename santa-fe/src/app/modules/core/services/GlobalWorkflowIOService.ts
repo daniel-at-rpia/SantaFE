@@ -24,8 +24,6 @@ import {
 export class GlobalWorkflowIOService {
   // given that storing workflow state is the only application of indexedDB in Santa at the moment, there is no need to over-engineer the indexedDB layer in santa, just put it in IOService for now
   private workflowIndexedDBAPI: IDBDatabase;
-  private workflowStore: IDBObjectStore;
-  private workflowIO: IDBTransaction;
   constants = {
     idbVersion: INDEXEDDB_VERSION,
     idbWorkflowDbName: INDEXEDDB_WORKFLOW_DATABASE_NAME,
@@ -67,21 +65,21 @@ export class GlobalWorkflowIOService {
       const writableCopy = this.utilityService.deepCopy(targetState);
       writableCopy.data.stateInfo = JSON.stringify(writableCopy.data.stateInfo);
       writableCopy.api = null;
-      this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
-      this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowAllStateTableName);
-      this.workflowIO.onerror = (event) => {
+      const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
+      const IOService = IOTransaction.objectStore(this.constants.idbWorkflowAllStateTableName);
+      IOTransaction.onerror = (event) => {
         console.error('Global Workflow, store state error', event);
       }
-      this.workflowStore.put(writableCopy);
+      IOService.put(writableCopy);
     }
 
     public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
       return new Observable(subscriber => {
         if (!!targetUUID) {
-          this.workflowIO = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
-          this.workflowStore = this.workflowIO.objectStore(this.constants.idbWorkflowAllStateTableName);
-          const request = this.workflowStore.get(targetUUID);
-          this.workflowIO.oncomplete = ((event) => {
+          const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
+          const IOService = IOTransaction.objectStore(this.constants.idbWorkflowAllStateTableName);
+          const request = IOService.get(targetUUID);
+          IOTransaction.oncomplete = ((event) => {
             if (!!request.result && !!request.result.data) {
               const workflowDTO: DTOs.GlobalWorkflowStateDTO = {
                 uuid: request.result.uuid,
@@ -102,7 +100,7 @@ export class GlobalWorkflowIOService {
               subscriber.next(null);
             }
           });
-          this.workflowIO.onerror = ((event) => {
+          IOTransaction.onerror = ((event) => {
             console.error('Global Workflow, retrieve state failure', event, targetUUID);
           });
         } else {
@@ -155,11 +153,23 @@ export class GlobalWorkflowIOService {
     }
 
     private initializeWorkflowTable(newVersionDetectedEvent: IDBVersionChangeEvent) {
-      this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowAllStateTableName, { keyPath: "uuid" });  // this key field has to be the "id" field 
+      this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowAllStateTableName, { keyPath: "uuid" });  // this key field has to be the "id" field 
     }
 
     private initializeLastStateTable(newVersionDetectedEvent: IDBVersionChangeEvent) {
-      this.workflowStore = this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowLastStateTableName, { keyPath: "module" });
+      this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowLastStateTableName, { keyPath: "module" });
+    }
+
+    private storeLastState(targetModule: NavigationModule, targetUUID: string) {
+      const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowLastStateTableName], "readwrite");
+      const IOService = IOTransaction.objectStore(this.constants.idbWorkflowLastStateTableName);
+      IOTransaction.onerror = (event) => {
+        console.error('Global Workflow, store last state error', event);
+      }
+      IOService.put({
+        module: targetModule,
+        stateUUID: targetUUID
+      });
     }
 
   // Global Workflow States End
@@ -169,6 +179,9 @@ export class GlobalWorkflowIOService {
     public updateCurrentState(newModule: NavigationModule ,newStateId: string) {
       this.currentModule = newModule;
       this.currentState = newStateId;
+      setTimeout(function(){
+        this.storeLastState(newModule, newStateId)
+      }.bind(this), 300);
     }
 
     public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
