@@ -124,30 +124,6 @@ export class BICSDataProcessingService {
     }
   }
 
-  public formUIBranchForSubLevels(rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>) {
-    const rowListCopy = this.utilityService.deepCopy(rowList);
-    rowListCopy.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO, i) => {
-      if (row.data.bicsLevel >= 2) {
-        const previousRow: DTOs.StructurePortfolioBreakdownRowDTO = rowListCopy[i-1];
-        const branchHeight = previousRow.data.displayCategory.length >= BICS_BRANCH_CHARACTER_LIMIT ? BICS_BRANCH_DEFAULT_HEIGHT_LARGE : BICS_BRANCH_DEFAULT_HEIGHT;
-        if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
-          // previous row is a parent or sibling element, so the branch needs to only extend to the button before it
-          row.style.branchHeight = `${branchHeight}px`;
-          row.style.top = `-${branchHeight/2}px`;
-        } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
-        // needs to find the closest sibling element as the previous row is a child of a sibling element
-        const modifiedList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
-        const findSiblingRows: Array<DTOs.StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.code === row.data.parentRow.data.code);
-        const nearestSiblingRow: DTOs.StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
-        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.code === nearestSiblingRow.data.code);
-        const indexDifference = i - sibilingRowIndex;
-        row.style.branchHeight = `${indexDifference * branchHeight}px`;
-        row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
-        }
-      }
-    })
-    return rowListCopy;
-  }
   public returnAllBICSBasedOnHierarchyDepth(depth: number): Array<string> {
     const allBICSList = [];
     this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
@@ -637,5 +613,30 @@ export class BICSDataProcessingService {
   private getDisplayedSubLevelsWithTargetsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> ) {
     const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && row.data.targetLevel !== null);
     targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
+  }
+
+  private formUIBranchForSubLevels(rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>) {
+    const rowListCopy = this.utilityService.deepCopy(rowList);
+    rowListCopy.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO, i) => {
+      if (row.data.bicsLevel >= 2) {
+        const previousRow: DTOs.StructurePortfolioBreakdownRowDTO = rowListCopy[i-1];
+        const branchHeight = previousRow.data.displayCategory.length >= BICS_BRANCH_CHARACTER_LIMIT ? BICS_BRANCH_DEFAULT_HEIGHT_LARGE : BICS_BRANCH_DEFAULT_HEIGHT;
+        if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
+          // previous row is a parent or sibling element, so the branch needs to only extend to the button before it
+          row.style.branchHeight = `${branchHeight}px`;
+          row.style.top = `-${branchHeight/2}px`;
+        } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
+        // needs to find the closest sibling element as the previous row is a child of a sibling element
+        const modifiedList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
+        const findSiblingRows: Array<DTOs.StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.code === row.data.parentRow.data.code);
+        const nearestSiblingRow: DTOs.StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
+        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.code === nearestSiblingRow.data.code);
+        const indexDifference = i - sibilingRowIndex;
+        row.style.branchHeight = `${indexDifference * branchHeight}px`;
+        row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
+        }
+      }
+    })
+    return rowListCopy;
   }
 }
