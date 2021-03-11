@@ -172,6 +172,31 @@ export class GlobalWorkflowIOService {
       });
     }
 
+    public loadLastStates(): Observable<Array<any>> {
+      return new Observable(subscriber => {
+        const results = [];
+        let expectedNumOfResults = 0;
+        for (let eachModule in NavigationModule) {
+          expectedNumOfResults++;
+        }
+        for (let eachModule in NavigationModule) {
+          const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowLastStateTableName], "readwrite");
+          const IOService = IOTransaction.objectStore(this.constants.idbWorkflowLastStateTableName);
+          const request = IOService.get(eachModule);
+          IOTransaction.oncomplete = ((event) => {
+            results.push(request.result);
+            if (results.length >= expectedNumOfResults) {
+              console.log('Global Workflow, Retrieved State', results);
+              subscriber.next(results);
+            }
+          });
+          IOTransaction.onerror = ((event) => {
+            console.error('Global Workflow, retrieve state failure', event, eachModule);
+          });
+        }
+      });
+    }
+
   // Global Workflow States End
 
   // Work with RouteReuseStrategy

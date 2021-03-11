@@ -14,7 +14,8 @@
       selectUserInitials,
       selectGlobalWorkflowNewState,
       selectGlobalWorkflowUpdateTradeState,
-      selectGlobalWorkflowUpdateStructureState
+      selectGlobalWorkflowUpdateStructureState,
+      selectGlobalWorkflowIndexedDBReadyState
     } from 'Core/selectors/core.selectors';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
     import { SeniorityLegendList, RatingLegendList } from 'Core/stubs/securities.stub';
@@ -41,7 +42,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     navigationStartSub: null,
     newGlobalWorkflowStateSub: null,
     currentTradeStateChangeSub: null,
-    currentStructureStateChangeSub: null
+    currentStructureStateChangeSub: null,
+    indexedDBReadySub: null
   };
   constants = {
     seniorityMapping: SeniorityValueToLevelMapping,
@@ -141,6 +143,17 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     ).subscribe((newStateId: string) => {
       if (!!newStateId) {
         this.state.currentState.structure = newStateId;
+      }
+    });
+    this.subscriptions.indexedDBReadySub = this.store$.pipe(
+      select(selectGlobalWorkflowIndexedDBReadyState)
+    ).subscribe((isReady) => {
+      if (isReady) {
+        this.globalWorkflowIOService.loadLastStates().pipe(
+          first()
+        ).subscribe((results: Array<any>) => {
+          console.log('test, receive results', results);
+        });
       }
     });
   }
