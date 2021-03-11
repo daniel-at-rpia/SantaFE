@@ -190,7 +190,6 @@ export class GlobalWorkflowIOService {
           IOTransaction.oncomplete = ((event) => {
             results.push(request.result);
             if (results.length >= expectedNumOfResults) {
-              console.log('Global Workflow, Retrieved State', results);
               subscriber.next(results);
             }
           });
@@ -208,9 +207,7 @@ export class GlobalWorkflowIOService {
     public updateCurrentState(newModule: NavigationModule ,newStateId: string) {
       this.currentModule = newModule;
       this.currentState = newStateId;
-      setTimeout(function(){
-        this.storeLastState(newModule, newStateId)
-      }.bind(this), 300);
+      this.storeLastState(newModule, newStateId)
     }
 
     public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {
