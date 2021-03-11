@@ -25,7 +25,7 @@ import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupS
 
 @Injectable()
 
-export class BICsDataProcessingService {
+export class BICSDataProcessingService {
   private bicsRawData: Array<Blocks.BICSCategorizationBlock> = [];
   private bicsComparedDeltaRawData: Array<Blocks.BICSCategorizationBlock> = [];
   private formattedBICsHierarchyData: Blocks.BICsHierarchyAllDataBlock;

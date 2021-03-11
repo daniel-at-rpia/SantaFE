@@ -15,7 +15,7 @@
       STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
     } from 'Core/constants/structureConstants.constants';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
-    import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+    import { BICSDataProcessingService } from 'App/modules/core/services/BICSDataProcessingService';
     import { GLOBAL_WORKFLOW_STATE_ID_KEY, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
 
   //
@@ -61,7 +61,7 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
     private store$: Store<any>,
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
-    private bicsDataProcessingService: BICsDataProcessingService,
+    private bicsDataProcessingService: BICSDataProcessingService,
     private route: ActivatedRoute
   ) {
     super(utilityService, globalWorkflowIOService, router);
