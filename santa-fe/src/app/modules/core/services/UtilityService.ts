@@ -1614,5 +1614,22 @@ export class UtilityService {
         }
       })
     }
+
+    public getSimpleBucketForConfigurator(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
+      const simpleBucket = {};
+      params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+        const property = this.convertFEKey(eachItem.key);
+        if (!!property) {
+          if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
+            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
+              return eachBlock.shortKey;
+            });
+          } else {
+            simpleBucket[property] = eachItem.filterBy;
+          }
+        }
+      })
+      return simpleBucket;
+    }
   // structuring specific end
 }

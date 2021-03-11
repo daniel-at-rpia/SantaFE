@@ -195,6 +195,10 @@ export interface StructureRowSetViewData  {
   view: PortfolioView;
 }
 
+export interface GenericKeyWithStringArrayBlock {
+  [key: string]: Array<string>;
+}
+
 interface SecurityDefinitionFilterOptionTenorRangeItem {
   displayLabel: string;
   min: number;
