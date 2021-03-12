@@ -95,7 +95,9 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<Stubs.SecurityD
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.COUNTRY
+      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.SECURITY_TYPE,
+      SecurityDefinitionMap.SECURITY_SUB_TYPE
     ]
   },{
     label: 'BICS',
