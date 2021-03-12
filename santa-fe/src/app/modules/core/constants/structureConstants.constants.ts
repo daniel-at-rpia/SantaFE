@@ -55,7 +55,11 @@ export const BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX = 'BicsSubLevel.';
 
 export const BICS_OVERRIDES_IDENTIFIER = 'BicsCode';
 
-export const BICS_OVERRIDES_TITLE = 'BICS Override'
+export const BICS_OVERRIDES_TITLE = 'BICS Override';
+
+export const SECURITY_SUB_TYPE_IDENTIFIER = 'SecuritySubType';
+
+export const SECURITY_SUB_TYPE_TITLE = 'Security Sub-Type';
 
 export const BICS_BRANCH_DEFAULT_HEIGHT = 50;
 
@@ -194,3 +198,14 @@ export const SET_TARGET_CLEAR_ALL_OPTIONS_MAP: Blocks.StructureClearTargetsOptio
     }
   ]
 }
+
+export const BEIdentifierToFEDisplayMapping: Array<AdhocPacks.BEIdentifierToFEMappingBlock> = [
+  {
+    identifier: BICS_OVERRIDES_IDENTIFIER,
+    display: BICS_OVERRIDES_TITLE
+  },
+  {
+    identifier: SECURITY_SUB_TYPE_IDENTIFIER,
+    display: SECURITY_SUB_TYPE_TITLE
+  }
+]
