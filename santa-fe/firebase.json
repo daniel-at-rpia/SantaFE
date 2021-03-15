@@ -97,6 +97,38 @@
       ]
     },
     {
+      "target": "release-local",
+      "site": "release-local-santa-rpia",
+      "public": "dist/santa-fe",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "release",
+      "site": "release-santa-rpia",
+      "public": "dist/santa-fe",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
       "target": "prod",
       "site": "santa-rpia",
       "public": "dist/santa-fe",
