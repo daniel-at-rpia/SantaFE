@@ -534,10 +534,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private fetchDataForMainTable(isInitialFetch: boolean) {
     const payload: PayloadGetTradeFullData = {
-      maxNumberOfSecurities: 2000,
+      maxNumberOfSecurities: 5000,
       groupIdentifier: {},
       groupFilters: {
-        PortfolioShortName: ["DOF","SOF","STIP","FIP","CIP","AGB","BBB"]
         // SecurityIdentifier: ['17163', '338|5Y']
       }
     };

@@ -414,7 +414,7 @@ export class LiveDataProcessingService {
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): boolean {
     const targetSecurity = targetRow.data.security;
-    let includeFlag = false;
+    let includeFlag = panelStateFilterBlock.quickFilters.portfolios.length === 0;  // if no portfolio filter is specified, then the user is look at external securities, therefore the includeFlag will default to true
     targetSecurity.data.weight.fundCS01Pct = null;
     targetSecurity.data.weight.fundCS01PctDisplay = null;
     targetSecurity.data.weight.fundBEVPct = null;
