@@ -6,10 +6,6 @@ import {
   IFloatingFilterParams,
   SerializedNumberFilter
 } from 'ag-grid-community';
-import {
-  PortfolioView,
-  SubPortfolioFilter
-} from 'Core/constants/structureConstants.constants';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import * as DTOs from './frontend-models.interface';
 import * as Blocks from './frontend-blocks.interface';
@@ -18,8 +14,13 @@ import {
   BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';
 import { PayloadUpdatePortfolioOverridesForAllPortfolios } from 'Core/models/backend/backend-payloads.interface';
-import { BEPortfolioTargetMetricValues } from 'Core/constants/structureConstants.constants';
+import { 
+  PortfolioView,
+  SubPortfolioFilter,
+  BEPortfolioTargetMetricValues
+} from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -208,4 +209,9 @@ interface SecurityDefinitionFilterOptionTenorRangeItem {
   displayLabel: string;
   min: number;
   max: number;
+}
+
+export interface GlobalWorkflowLastState {
+  module: NavigationModule;
+  stateUUID: string;
 }
