@@ -196,6 +196,10 @@ export interface StructureRowSetViewData  {
   view: PortfolioView;
 }
 
+export interface GenericKeyWithStringArrayBlock {
+  [key: string]: Array<string>;
+
+}
 export interface BEIdentifierToFEMappingBlock {
   identifier: string;
   display: string;
