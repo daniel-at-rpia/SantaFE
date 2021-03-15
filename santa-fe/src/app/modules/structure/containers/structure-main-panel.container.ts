@@ -6,7 +6,14 @@
     import { Store, select } from '@ngrx/store';
     import * as moment from 'moment';
 
-    import { DTOService, RestfulCommService, UtilityService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      DTOService,
+      RestfulCommService,
+      UtilityService,
+      BICSDataProcessingService,
+      BICSDictionaryLookupService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
     import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
@@ -103,7 +110,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     private dtoService: DTOService,
     private store$: Store<any>,
     private restfulCommService: RestfulCommService,
-    private bicsDataProcessingService: BICsDataProcessingService,
+    private bicsDataProcessingService: BICSDataProcessingService,
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {
     super(utilityService, globalWorkflowIOService, router);

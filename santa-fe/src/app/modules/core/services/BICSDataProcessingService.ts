@@ -25,7 +25,7 @@ import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupS
 
 @Injectable()
 
-export class BICsDataProcessingService {
+export class BICSDataProcessingService {
   private bicsRawData: Array<Blocks.BICSCategorizationBlock> = [];
   private bicsComparedDeltaRawData: Array<Blocks.BICSCategorizationBlock> = [];
   private formattedBICsHierarchyData: Blocks.BICsHierarchyAllDataBlock;
@@ -37,14 +37,20 @@ export class BICsDataProcessingService {
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {}
 
-  public loadBICSData(data: BEBICsHierarchyBlock, parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock) {
+  public loadBICSData(
+    data: BEBICsHierarchyBlock,
+    parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock
+  ) {
     this.bicsDictionaryLookupService.loadBICSData(data);
     this.setBICsLevelOneCategories(data, parent);
     this.iterateBICsData(data, parent);
     this.formattedBICsHierarchyData = parent;
   }
 
-  public getTargetSpecificHierarchyList(childCode: string, childBicsLevel: number): Array<Blocks.BICsHierarchyBlock> {
+  public getTargetSpecificHierarchyList(
+    childCode: string,
+    childBicsLevel: number
+  ): Array<Blocks.BICsHierarchyBlock> {
     const data = this.bicsDictionaryLookupService.returnDictionary()[childCode];
     const hierarchyDataList: Array<Blocks.BICsHierarchyBlock> = [];
     for (let item in data) {
@@ -124,30 +130,6 @@ export class BICsDataProcessingService {
     }
   }
 
-  public formUIBranchForSubLevels(rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>) {
-    const rowListCopy = this.utilityService.deepCopy(rowList);
-    rowListCopy.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO, i) => {
-      if (row.data.bicsLevel >= 2) {
-        const previousRow: DTOs.StructurePortfolioBreakdownRowDTO = rowListCopy[i-1];
-        const branchHeight = previousRow.data.displayCategory.length >= BICS_BRANCH_CHARACTER_LIMIT ? BICS_BRANCH_DEFAULT_HEIGHT_LARGE : BICS_BRANCH_DEFAULT_HEIGHT;
-        if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
-          // previous row is a parent or sibling element, so the branch needs to only extend to the button before it
-          row.style.branchHeight = `${branchHeight}px`;
-          row.style.top = `-${branchHeight/2}px`;
-        } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
-        // needs to find the closest sibling element as the previous row is a child of a sibling element
-        const modifiedList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
-        const findSiblingRows: Array<DTOs.StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.code === row.data.parentRow.data.code);
-        const nearestSiblingRow: DTOs.StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
-        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.code === nearestSiblingRow.data.code);
-        const indexDifference = i - sibilingRowIndex;
-        row.style.branchHeight = `${indexDifference * branchHeight}px`;
-        row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
-        }
-      }
-    })
-    return rowListCopy;
-  }
   public returnAllBICSBasedOnHierarchyDepth(depth: number): Array<string> {
     const allBICSList = [];
     this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
@@ -215,7 +197,11 @@ export class BICsDataProcessingService {
     }
   }
 
-  public getBICSCategoryRawData(portfolioId: number, level: number, code: string): BEStructuringBreakdownMetricBlock {
+  public getBICSCategoryRawData(
+    portfolioId: number,
+    level: number,
+    code: string
+  ): BEStructuringBreakdownMetricBlock | null {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
     if (!!rawData) {
       const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
@@ -224,7 +210,10 @@ export class BICsDataProcessingService {
     }
   }
 
-  public formRawBreakdownDetailsObject(portfolioID: number, level: number): BEStructuringBreakdownBlock {
+  public formRawBreakdownDetailsObject(
+    portfolioID: number,
+    level: number
+  ): BEStructuringBreakdownBlock {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioID);
     if (!!rawData) {
       const targetedRawBreakdown: BEStructuringBreakdownBlock = rawData[`${BICS_BREAKDOWN_FRONTEND_KEY}${level}`];
@@ -241,15 +230,10 @@ export class BICsDataProcessingService {
     }
   }
 
-  public getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
-    const definitionList = [];
-    for (const category in rawData.breakdown) {
-      definitionList.push(category);
-    }
-    return definitionList;
-  }
-
-  public getSubLevelList(category: string, bicsLevel: number = 1): Array<string> {
+  public getSubLevelList(
+    category: string,
+    bicsLevel: number = 1
+  ): Array<string> {
     if(!!this.formattedBICsHierarchyData) {
       const BICSDataList = this.formattedBICsHierarchyData.children.map(category => category); 
       this.getSubLevels(category, bicsLevel, BICSDataList);
@@ -331,17 +315,10 @@ export class BICsDataProcessingService {
     }
   }
 
-  public getShallowestLevel(category: string): number {
-    // traverse the bics and return the level of the earliest encounter of a given bics, useful to find the true level of a bics since now that same category would nest over and over
-    // not used in anywhere but might be useful
-    return this.getLevelRecursion(
-      category,
-      1,
-      this.formattedBICsHierarchyData.children
-    );
-  }
-
-  public getDisplayedSubLevelsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>){
+  public getDisplayedSubLevelsForCategory(
+    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
+    rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>
+  ) {
     if (targetRow.data.displayedSubLevelRows.length > 0) {
       targetRow.data.displayedSubLevelRows.forEach(subLevel => {
         subLevel.state.isVisibleSubLevel = !!targetRow.state.isShowingSubLevels;
@@ -374,11 +351,6 @@ export class BICsDataProcessingService {
         });
       }
     })
-  }
-
-  public getDisplayedSubLevelsWithTargetsForCategory(targetRow: DTOs.StructurePortfolioBreakdownRowDTO, rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO> ) {
-    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && row.data.targetLevel !== null);
-    targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
   }
 
   public loadBICSOptionsIntoConfigurator(configuratorDTO: DTOs.SecurityDefinitionConfiguratorDTO) {
@@ -449,7 +421,10 @@ export class BICsDataProcessingService {
     }
   }
 
-  private setBICsLevelOneCategories(data: BEBICsHierarchyBlock, parent: Blocks.BICsHierarchyAllDataBlock) {
+  private setBICsLevelOneCategories(
+    data: BEBICsHierarchyBlock,
+    parent: Blocks.BICsHierarchyAllDataBlock
+  ) {
     for (let code in data) {
       if (!!data[code]) {
         const intiialLevel = 1;
@@ -468,7 +443,11 @@ export class BICsDataProcessingService {
     }
   }
 
-  private formCompleteHierarchyWithSubLevels(rawData: BEBICsHierarchyBlock, parent: Blocks.BICsHierarchyBlock | Array<Blocks.BICsHierarchyBlock> , counter: number) {
+  private formCompleteHierarchyWithSubLevels(
+    rawData: BEBICsHierarchyBlock,
+    parent: Blocks.BICsHierarchyBlock | Array<Blocks.BICsHierarchyBlock>,
+    counter: number
+  ) {
     counter += 1;
     const parentKey = `item${counter - 1}`;
     const targetKey = `item${counter}`;
@@ -511,14 +490,21 @@ export class BICsDataProcessingService {
     }
   }
 
-  private iterateBICsData(rawData: BEBICsHierarchyBlock, parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock) {
+  private iterateBICsData(
+    rawData: BEBICsHierarchyBlock,
+    parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock
+  ) {
     parent.children.forEach(category => {
       let counter = 1;
       this.formCompleteHierarchyWithSubLevels(rawData, category, counter)
     })
   }
 
-  private getSubLevels(category: string, bicsLevel: number, data: Array<Blocks.BICsHierarchyBlock>): Array<string> {
+  private getSubLevels(
+    category: string,
+    bicsLevel: number,
+    data: Array<Blocks.BICsHierarchyBlock>
+  ): Array<string> {
     if (!data || data.length <= 0) return;
     data.forEach(block => {
       for (let key in block) {
@@ -612,7 +598,7 @@ export class BICsDataProcessingService {
     rawData: Blocks.BICSCategorizationBlock,
     level: number,
     targetCodeList: Array<string>
-  ): BEStructuringBreakdownBlock {
+  ): BEStructuringBreakdownBlock | null {
     const bicsLevel = BICsLevels[level];
     if (!!rawData && !!rawData[bicsLevel]) {
       const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
@@ -639,4 +625,54 @@ export class BICsDataProcessingService {
     }
   }
 
+  private getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
+    const definitionList = [];
+    for (const category in rawData.breakdown) {
+      definitionList.push(category);
+    }
+    return definitionList;
+  }
+
+  private getShallowestLevel(category: string): number {
+    // traverse the bics and return the level of the earliest encounter of a given bics, useful to find the true level of a bics since now that same category would nest over and over
+    // not used in anywhere but might be useful
+    return this.getLevelRecursion(
+      category,
+      1,
+      this.formattedBICsHierarchyData.children
+    );
+  }
+
+  private getDisplayedSubLevelsWithTargetsForCategory(
+    targetRow: DTOs.StructurePortfolioBreakdownRowDTO,
+    rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>
+  ) {
+    const displayedSubLevelListWithTargets = rowList.filter(row => row.data.code.indexOf(targetRow.data.code) === 0 && row.data.bicsLevel > targetRow.data.bicsLevel && row.data.targetLevel !== null);
+    targetRow.data.displayedSubLevelRowsWithTargets = displayedSubLevelListWithTargets;
+  }
+
+  private formUIBranchForSubLevels(rowList: Array<DTOs.StructurePortfolioBreakdownRowDTO>): Array<DTOs.StructurePortfolioBreakdownRowDTO> {
+    const rowListCopy = this.utilityService.deepCopy(rowList);
+    rowListCopy.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO, i) => {
+      if (row.data.bicsLevel >= 2) {
+        const previousRow: DTOs.StructurePortfolioBreakdownRowDTO = rowListCopy[i-1];
+        const branchHeight = previousRow.data.displayCategory.length >= BICS_BRANCH_CHARACTER_LIMIT ? BICS_BRANCH_DEFAULT_HEIGHT_LARGE : BICS_BRANCH_DEFAULT_HEIGHT;
+        if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
+          // previous row is a parent or sibling element, so the branch needs to only extend to the button before it
+          row.style.branchHeight = `${branchHeight}px`;
+          row.style.top = `-${branchHeight/2}px`;
+        } else if (row.data.bicsLevel < previousRow.data.bicsLevel) {
+        // needs to find the closest sibling element as the previous row is a child of a sibling element
+        const modifiedList: Array<DTOs.StructurePortfolioBreakdownRowDTO> = rowListCopy.slice(0, i);
+        const findSiblingRows: Array<DTOs.StructurePortfolioBreakdownRowDTO> = modifiedList.filter(sibilingRow => !!sibilingRow.data.parentRow && sibilingRow.data.parentRow.data.code === row.data.parentRow.data.code);
+        const nearestSiblingRow: DTOs.StructurePortfolioBreakdownRowDTO = findSiblingRows[findSiblingRows.length - 1];
+        const sibilingRowIndex = rowListCopy.findIndex(eachRow => eachRow.data.code === nearestSiblingRow.data.code);
+        const indexDifference = i - sibilingRowIndex;
+        row.style.branchHeight = `${indexDifference * branchHeight}px`;
+        row.style.top = `-${(indexDifference * branchHeight) - (branchHeight / 2)}px`;
+        }
+      }
+    })
+    return rowListCopy;
+  }
 }

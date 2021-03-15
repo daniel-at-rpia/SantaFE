@@ -6,7 +6,13 @@
     import { select, Store } from '@ngrx/store';
 
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
-    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      DTOService,
+      UtilityService,
+      RestfulCommService,
+      BICSDataProcessingService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
@@ -182,7 +188,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
-    private bicsDataProcessingService: BICsDataProcessingService,
+    private bicsDataProcessingService: BICSDataProcessingService,
     private securityMapService: SecurityMapService
   ) {
     super(utilityService, globalWorkflowIOService, router);

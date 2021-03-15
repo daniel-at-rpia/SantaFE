@@ -15,7 +15,7 @@ import {
   GraphService,
   RestfulCommService,
   AgGridMiddleLayerService,
-  BICsDataProcessingService,
+  BICSDataProcessingService,
   GlobalWorkflowIOService,
   BICSDictionaryLookupService,
   SecurityMapService
@@ -109,7 +109,7 @@ import { SantaContainerComponentBase } from './containers/santa-container-compon
     RestfulCommService,
     AgGridMiddleLayerService,
     CountdownPipe,
-    BICsDataProcessingService,
+    BICSDataProcessingService,
     GlobalWorkflowIOService,
     BICSDictionaryLookupService,
     SecurityMapService,

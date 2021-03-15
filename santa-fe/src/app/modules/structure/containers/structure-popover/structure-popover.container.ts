@@ -5,7 +5,11 @@
     import { filter } from 'rxjs/operators';
 
     import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-    import { DTOService, BICsDataProcessingService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      DTOService,
+      BICSDataProcessingService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import {
       PortfolioMetricValues,
@@ -56,7 +60,7 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
     protected router: Router,
     private store$: Store<any>,
     private dtoService: DTOService,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICSDataProcessingService
   ) {
     super(utilityService, globalWorkflowIOService, router);
   }

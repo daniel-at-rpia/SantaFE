@@ -5,7 +5,7 @@
     import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
-    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, GlobalWorkflowIOService } from '../services';
+    import { DTOService, UtilityService, RestfulCommService, BICSDataProcessingService, GlobalWorkflowIOService } from '../services';
   //
 
 type componentKey = 'SANTA_CONTAINER_COMPONENT';
