@@ -7,7 +7,14 @@
     import * as moment from 'moment';
 
     import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
-    import { DTOService, RestfulCommService, UtilityService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      DTOService,
+      RestfulCommService,
+      UtilityService,
+      BICSDataProcessingService,
+      BICSDictionaryLookupService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureSetTargetPanelState } from 'FEModels/frontend-page-states.interface';
     import { ModalService } from 'Form/services/ModalService';
@@ -95,7 +102,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private modalService: ModalService,
-    private bicsService: BICsDataProcessingService,
+    private bicsService: BICSDataProcessingService,
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){
     super(utilityService, globalWorkflowIOService, router);

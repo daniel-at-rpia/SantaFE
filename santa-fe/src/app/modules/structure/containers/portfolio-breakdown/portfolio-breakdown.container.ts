@@ -7,7 +7,13 @@
     import * as moment from 'moment';
 
     import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-    import { UtilityService, DTOService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      UtilityService,
+      DTOService,
+      BICSDataProcessingService,
+      BICSDictionaryLookupService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import {
       PortfolioMetricValues,
@@ -63,7 +69,7 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
     protected router: Router,
     private modalService: ModalService,
     private store$: Store<any>,
-    private bicsDataProcessingService: BICsDataProcessingService,
+    private bicsDataProcessingService: BICSDataProcessingService,
     private dtoService: DTOService,
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {

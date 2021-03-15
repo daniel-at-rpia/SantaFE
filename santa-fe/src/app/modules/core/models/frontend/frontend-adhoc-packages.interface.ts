@@ -197,6 +197,11 @@ export interface StructureRowSetViewData  {
 
 export interface GenericKeyWithStringArrayBlock {
   [key: string]: Array<string>;
+
+}
+export interface BEIdentifierToFEMappingBlock {
+  identifier: string;
+  display: string;
 }
 
 interface SecurityDefinitionFilterOptionTenorRangeItem {
