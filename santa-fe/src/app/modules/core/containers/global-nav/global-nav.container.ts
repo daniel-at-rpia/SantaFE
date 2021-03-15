@@ -5,24 +5,20 @@
     import { catchError, filter, first, tap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
-    import { DTOService } from 'Core/services/DTOService';
-    import { UtilityService } from 'Core/services/UtilityService';
-    import { RestfulCommService } from 'Core/services/RestfulCommService';
-    import { GlobalWorkflowIOService } from 'Core/services/GlobalWorkflowIOService';
-    import { GlobalNavState } from 'FEModels/frontend-page-states.interface';
+    import { PageStates, DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+    import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
     import {
       selectUserInitials,
       selectGlobalWorkflowNewState,
       selectGlobalWorkflowUpdateTradeState,
-      selectGlobalWorkflowUpdateStructureState
+      selectGlobalWorkflowUpdateStructureState,
+      selectGlobalWorkflowIndexedDBReadyState
     } from 'Core/selectors/core.selectors';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
     import { SeniorityLegendList, RatingLegendList } from 'Core/stubs/securities.stub';
     import { SeniorityValueToLevelMapping, RatingValueToLevelMapping } from 'Core/constants/securityDefinitionConstants.constant';
     import { BESecurityDTO } from 'Core/models/backend/backend-models.interface';
-    import { GlobalNavLegendBlock } from 'Core/models/frontend/frontend-blocks.interface';
     import { NavigationModule } from 'Core/constants/coreConstants.constant';
-    import { GlobalWorkflowStateDTO } from 'FEModels/frontend-models.interface';
 //
 
 declare const VERSION: string;
@@ -35,13 +31,14 @@ declare const VERSION: string;
 })
 
 export class GlobalNav implements OnInit, OnChanges, OnDestroy {
-  state: GlobalNavState;
+  state: PageStates.GlobalNavState;
   subscriptions = {
     userInitialsSub: null,
     navigationStartSub: null,
     newGlobalWorkflowStateSub: null,
     currentTradeStateChangeSub: null,
-    currentStructureStateChangeSub: null
+    currentStructureStateChangeSub: null,
+    indexedDBReadySub: null
   };
   constants = {
     seniorityMapping: SeniorityValueToLevelMapping,
@@ -49,8 +46,8 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     moduleUrl: NavigationModule
   }
 
-  private initializePageState(): GlobalNavState {
-    const state: GlobalNavState = {
+  private initializePageState(): PageStates.GlobalNavState {
+    const state: PageStates.GlobalNavState = {
       menuIsActive: false,
       version: VERSION,
       user: 'Anonymous User',
@@ -111,7 +108,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.newGlobalWorkflowStateSub = this.store$.pipe(
       select(selectGlobalWorkflowNewState)
     ).subscribe(
-      (newState: GlobalWorkflowStateDTO) => {
+      (newState: DTOs.GlobalWorkflowStateDTO) => {
         if (!!newState && !!newState.data.uuid && !!newState.data.module) {
           // automatically navigate to new module as long as the new state is not in the same module as the currentModule
           if (this.state.currentModule !== newState.data.module) {
@@ -143,6 +140,30 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
         this.state.currentState.structure = newStateId;
       }
     });
+    this.subscriptions.indexedDBReadySub = this.store$.pipe(
+      select(selectGlobalWorkflowIndexedDBReadyState)
+    ).subscribe((isReady) => {
+      if (isReady) {
+        this.globalWorkflowIOService.loadLastStates().pipe(
+          first()
+        ).subscribe((results: Array<AdhocPacks.GlobalWorkflowLastState>) => {
+          results.forEach((eachResult) => {
+            if (!!eachResult) {
+              switch (eachResult.module) {
+                case this.constants.moduleUrl.trade:
+                  this.state.currentState.trade = eachResult.stateUUID;
+                  break;
+                case this.constants.moduleUrl.structuring:
+                  this.state.currentState.structure = eachResult.stateUUID;
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+        });
+      }
+    });
   }
 
   public ngOnChanges() {
@@ -169,7 +190,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       setTimeout(navigateToStructuring.bind(this), 500);
     }
   }
-
+ 
   public onClickNavigateToTradeModule() {
     if (this.state.currentModule !== this.constants.moduleUrl.trade) {
       this.state.menuIsActive = false;
@@ -181,7 +202,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
     };
   }
 
-  private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<GlobalNavLegendBlock> {
+  private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<Blocks.GlobalNavLegendBlock> {
     let level = 0;
     const legendBlockList = stubList.map((eachStub)=>{
       const card = this.dtoService.formSecurityCardObject(null, eachStub, false, false);
