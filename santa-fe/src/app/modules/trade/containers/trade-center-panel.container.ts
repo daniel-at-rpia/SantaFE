@@ -540,6 +540,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         // SecurityIdentifier: ['17163', '338|5Y']
       }
     };
+    const packedGroupFilters = this.utilityService.getSimpleBucketFromConfigurator({filterList: this.state.filters.securityFilters});
+    payload.groupFilters = packedGroupFilters;
     if (!!this.state.bestQuoteValidWindow) {
       payload.lookbackHrs = this.state.bestQuoteValidWindow;
     }
