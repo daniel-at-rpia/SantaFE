@@ -6,7 +6,14 @@
     import { Store, select } from '@ngrx/store';
 
     import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      DTOService,
+      UtilityService,
+      RestfulCommService,
+      BICSDictionaryLookupService,
+      GlobalWorkflowIOService,
+      BICSDataProcessingService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureSetBulkOverridesPanelState } from 'Core/models/frontend/frontend-page-states.interface';
     import {
@@ -49,7 +56,7 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
     protected globalWorkflowIOService: GlobalWorkflowIOService,
     protected router: Router,
     private store$: Store<any>,
-    private bicsService: BICsDataProcessingService,
+    private bicsService: BICSDataProcessingService,
     private bicsLookUpService: BICSDictionaryLookupService,
     private dtoService: DTOService,
     private modalService: ModalService,

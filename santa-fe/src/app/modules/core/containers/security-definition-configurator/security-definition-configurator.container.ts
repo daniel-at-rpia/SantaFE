@@ -6,7 +6,7 @@
     import { DTOService } from 'Core/services/DTOService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { UtilityService } from 'Core/services/UtilityService';
-    import { BICsDataProcessingService } from 'Core/services/BICsDataProcessingService';
+    import { BICSDataProcessingService } from 'App/modules/core/services/BICSDataProcessingService';
     import {
       ConfiguratorDefinitionLayout,
       DEFINITION_CAPPED_THRESHOLD,
@@ -40,7 +40,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private utilityService: UtilityService,
-    private bicsDataProcessingService: BICsDataProcessingService
+    private bicsDataProcessingService: BICSDataProcessingService
   ) {
   }
 
