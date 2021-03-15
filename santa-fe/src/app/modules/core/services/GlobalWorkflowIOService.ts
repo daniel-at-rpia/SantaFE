@@ -129,8 +129,8 @@ export class GlobalWorkflowIOService {
         if (newVersionDetectedEvent.oldVersion === 0) {
           // version 0 means that the client had no database
           // perform initialization
-          this.initializeWorkflowTable(newVersionDetectedEvent);
-          this.initializeLastStateTable(newVersionDetectedEvent);
+          this.initializeWorkflowTable();
+          this.initializeLastStateTable();
         } else {
           // for all other versions, simply destory the database and reload, which will trigger the "version === 0" condition that rebuilds the database
           // this is not the most efficient way to handle upgrade but it is error-proof
@@ -152,11 +152,11 @@ export class GlobalWorkflowIOService {
       }
     }
 
-    private initializeWorkflowTable(newVersionDetectedEvent: IDBVersionChangeEvent) {
+    private initializeWorkflowTable() {
       this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowAllStateTableName, { keyPath: "uuid" });  // this key field has to be the "id" field 
     }
 
-    private initializeLastStateTable(newVersionDetectedEvent: IDBVersionChangeEvent) {
+    private initializeLastStateTable() {
       this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowLastStateTableName, { keyPath: "module" });
     }
 
