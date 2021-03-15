@@ -195,6 +195,11 @@ export interface StructureRowSetViewData  {
   view: PortfolioView;
 }
 
+export interface BEIdentifierToFEMappingBlock {
+  identifier: string;
+  display: string;
+}
+
 interface SecurityDefinitionFilterOptionTenorRangeItem {
   displayLabel: string;
   min: number;

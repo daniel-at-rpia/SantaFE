@@ -72,7 +72,8 @@
       DeltaScope,
       STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
       DeltaScopeDisplayText,
-      DeltaScopeBEToFEMapping
+      DeltaScopeBEToFEMapping,
+      BEIdentifierToFEDisplayMapping
     } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
@@ -2289,8 +2290,7 @@ export class DTOService {
     const newBreakdown = this.formPortfolioBreakdown(false, rawData, comparedDeltaRawData, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
-    newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
-    newBreakdown.data.title = newBreakdown.data.title.replace(BICS_OVERRIDES_IDENTIFIER, BICS_OVERRIDES_TITLE);
+    newBreakdown.data.title = this.formOverrideTitle(newBreakdown.data.backendGroupOptionIdentifier);
     if (deltaEnabled && !comparedDeltaRawData) {
       newBreakdown.state.isViewingIndex = false;
       newBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
@@ -2811,5 +2811,17 @@ export class DTOService {
     newBreakdown.data.portfolioName = rawData.portfolioShortName;
     newBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return newBreakdown;
+  }
+
+  private formOverrideTitle(backendGroupOptionIdentifier: string): string {
+    const identifiers = backendGroupOptionIdentifier.split(' ~ ');
+    identifiers.forEach((identifier: string, index: number) => {
+      const identifierBlock = BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
+      if (identifierBlock) {
+        identifiers[index] = identifierBlock.display;
+      }
+    })
+    const title = identifiers.join(' ~ ');
+    return title;
   }
 }
