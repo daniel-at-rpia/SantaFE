@@ -1,5 +1,5 @@
 export { AgGridMiddleLayerService } from './AgGridMiddleLayerService';
-export { BICsDataProcessingService } from './BICsDataProcessingService';
+export { BICSDataProcessingService } from './BICSDataProcessingService';
 export { DTOService } from './DTOService';
 export { GlobalWorkflowIOService } from './GlobalWorkflowIOService';
 export { GraphService } from './GraphService';
