@@ -1508,9 +1508,11 @@ export class UtilityService {
 
     public getMetricSpecificMinAndMaxForVisualizer(rawBreakdownData: BEStructuringBreakdownBlock, isCs01: boolean): Array<number> {
       const [cs01Min, cs01Max, creditLeverageMin, creditLeverageMax] = this.getCompareValuesForStructuringVisualizer(rawBreakdownData);
-      const minValue = !!isCs01 ? cs01Min/1000 : creditLeverageMin;
-      const maxValue = !!isCs01 ? cs01Max/1000 : creditLeverageMax;
-      return [minValue, maxValue];
+      const minValue = !!isCs01 ? cs01Min : creditLeverageMin;
+      const maxValue = !!isCs01 ? cs01Max : creditLeverageMax;
+      const parsedMinValue = this.getParsedValueForVisualizerCompare(minValue, isCs01);
+      const parsedMaxValue = this.getParsedValueForVisualizerCompare(maxValue, isCs01);
+      return [parsedMinValue, parsedMaxValue];
     }
 
     public getParsedValueForVisualizerCompare(value: number, isCs01: boolean): number | null {

@@ -2424,12 +2424,12 @@ export class DTOService {
       if (parsedRawData.indexPct != null) {
         parsedRawData.indexPct = this.utility.round(parsedRawData.indexPct*100, 1);
       }
-      maxValue = !!isCs01 ? maxValue/1000 : maxValue;
-      minValue = !!isCs01 ? minValue/1000 : minValue;
+      const parsedMinValue = this.utility.getParsedValueForVisualizerCompare(minValue, isCs01);
+      const parsedMaxValue = this.utility.getParsedValueForVisualizerCompare(maxValue, isCs01);
       const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(
         parsedRawData,
-        maxValue,
-        minValue,
+        parsedMaxValue,
+        parsedMinValue,
         !!isStencil,
         isOverride,
         diveInLevel,
