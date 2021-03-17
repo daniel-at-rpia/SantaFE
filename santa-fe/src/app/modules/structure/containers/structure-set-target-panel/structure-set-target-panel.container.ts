@@ -7,7 +7,14 @@
     import * as moment from 'moment';
 
     import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
-    import { DTOService, RestfulCommService, UtilityService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      DTOService,
+      RestfulCommService,
+      UtilityService,
+      BICSDataProcessingService,
+      BICSDictionaryLookupService,
+      GlobalWorkflowIOService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureSetTargetPanelState } from 'FEModels/frontend-page-states.interface';
     import { ModalService } from 'Form/services/ModalService';
@@ -95,7 +102,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private modalService: ModalService,
-    private bicsService: BICsDataProcessingService,
+    private bicsService: BICSDataProcessingService,
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){
     super(utilityService, globalWorkflowIOService, router);
@@ -358,19 +365,9 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
       this.state.configurator.newOverrideNameCache = null;
-      const simpleBucket = {}
+      const simpleBucket = this.utilityService.getSimpleBucketFromConfigurator(params);
       let bucketToString = '';
       params.filterList.forEach((eachItem) => {
-        const property = this.utilityService.convertFEKey(eachItem.key);
-        if (!!property) {
-          if (eachItem.key === this.constants.definitionMap.TENOR.key) {
-            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock) => {
-              return eachBlock.shortKey;
-            });
-          } else {
-            simpleBucket[property] = eachItem.filterBy;
-          }
-        }
         eachItem.filterBy.forEach((eachValue) => {
           bucketToString = bucketToString === '' ? `${eachValue}` : `${bucketToString} ~ ${eachValue}`;
         });

@@ -72,7 +72,8 @@
       DeltaScope,
       STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
       DeltaScopeDisplayText,
-      DeltaScopeBEToFEMapping
+      DeltaScopeBEToFEMapping,
+      BEIdentifierToFEDisplayMapping
     } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
@@ -2059,7 +2060,7 @@ export class DTOService {
     if (!object.state.isIndexVariant) {
       convertValuesForDisplay(object);
       getDisplayedValues(object);
-      if (!targetValue) {
+      if (targetValue === null) {
         object.state.isEmpty = true;
         object.data.displayedResults = `${object.data.displayedCurrentValue} / -`;
       }
@@ -2094,8 +2095,8 @@ export class DTOService {
           errorMessage: ''
         },
         modifiedFundTargets: {
-          creditLeverage: rawData.target.target.CreditLeverage || 0,
-          creditDuration: rawData.target.target.CreditDuration || 0
+          creditLeverage: rawData.target.target.CreditLeverage,
+          creditDuration: rawData.target.target.CreditDuration
         },
         autoScalingAvailable: !isStencil 
           ? !!rawData.target.target.CreditLeverage || !!rawData.target.target.CreditDuration
@@ -2168,8 +2169,8 @@ export class DTOService {
       object.data.creditDurationIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditDuration, object.data.indexShortName);
       object.data.creditLeverageIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditLeverage, object.data.indexShortName);
       if (!!object.data.creditDurationTargetBar) {
-        const parsedCs01CurrentTotal = !!rawData.currentTotals.Cs01 ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
-        const parsedCs01TargetTotal = !!rawData.target.target.Cs01 ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
+        const parsedCs01CurrentTotal = rawData.currentTotals.Cs01 !== null ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
+        const parsedCs01TargetTotal = rawData.target.target.Cs01 !== null ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
         object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
           metric: PortfolioMetricValues.cs01,
           current: parsedCs01CurrentTotal,
@@ -2289,8 +2290,7 @@ export class DTOService {
     const newBreakdown = this.formPortfolioBreakdown(false, rawData, comparedDeltaRawData, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
-    newBreakdown.data.title = newBreakdown.data.backendGroupOptionIdentifier;
-    newBreakdown.data.title = newBreakdown.data.title.replace(BICS_OVERRIDES_IDENTIFIER, BICS_OVERRIDES_TITLE);
+    newBreakdown.data.title = this.formOverrideTitle(newBreakdown.data.backendGroupOptionIdentifier);
     if (deltaEnabled && !comparedDeltaRawData) {
       newBreakdown.state.isViewingIndex = false;
       newBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
@@ -2811,5 +2811,17 @@ export class DTOService {
     newBreakdown.data.portfolioName = rawData.portfolioShortName;
     newBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return newBreakdown;
+  }
+
+  private formOverrideTitle(backendGroupOptionIdentifier: string): string {
+    const identifiers = backendGroupOptionIdentifier.split(' ~ ');
+    identifiers.forEach((identifier: string, index: number) => {
+      const identifierBlock = BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
+      if (identifierBlock) {
+        identifiers[index] = identifierBlock.display;
+      }
+    })
+    const title = identifiers.join(' ~ ');
+    return title;
   }
 }

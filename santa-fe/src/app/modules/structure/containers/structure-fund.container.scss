@@ -2,6 +2,7 @@
 @import "modules/structure/structure.scss";
 
 $fundStructuring_setTarget_height: 13rem;
+$fundStructuring_setTarget_height_extended: 15rem;
 $funtStructuring_setTarget_backgroundIcon_size: $font_size_hero;
 $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_height - $funtStructuring_setTarget_backgroundIcon_size)/2;
 .sat-fundStructuring {
@@ -123,16 +124,12 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       }
     }
     &-message {
-      flex: 0 0 auto;
-      visibility: hidden;
-      &-text {
-        @include mix_border_radius(5px);
-        text-align: center;
-        color: $color_negative;
-        background-color: $color_red_1;
-        margin: $spacing_x_small 0;
-        padding: $spacing_x_small;
-      }
+      @include mix_border_radius(5px);
+      display: none;
+      background-color: $color_red_1;
+      padding: $spacing_x_small;
+      color: $color_negative;
+      margin: 0 $spacing_small  $spacing_small 0;
     }
     &-backgroundIcon {
       @include mix_fixed_div(absolute, $z_index_base_item);
@@ -238,7 +235,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
         background-color: $color_active;
         color: $font_color_inverse;
         height: $fundStructuring_setTarget_height;
-        padding-bottom: $spacing_medium;
+        padding: $spacing_medium 0;
         margin-bottom: 0;
         transform: translate(0, 0);
         &-backgroundIcon {
@@ -278,10 +275,10 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
   }
   &--invalidInput {
     #{$blockName} {
-      &__setTarget {
+      &__editFund {
+        height: $fundStructuring_setTarget_height_extended;
         &-message {
-          visibility: visible; 
-          flex: 0 0 auto;
+          display: flex;
         }
       }
     }

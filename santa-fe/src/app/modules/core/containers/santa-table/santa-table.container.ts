@@ -188,7 +188,7 @@ export class SantaTable implements OnInit, OnChanges {
         this.loadTableRows(this.newRows);
       } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
         this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
-        console.log(`[${this.tableName}] - rows updated from live update`, this.liveUpdatedRows);
+        // console.log(`[${this.tableName}] - rows updated from live update`, this.liveUpdatedRows);
         if (this.liveUpdateRowsCache.length > 0) {
           this.liveUpdateRows(this.liveUpdateRowsCache);
         }

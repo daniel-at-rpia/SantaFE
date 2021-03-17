@@ -6,7 +6,14 @@
     import { Store, select } from '@ngrx/store';
 
     import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-    import { DTOService, UtilityService, RestfulCommService, BICsDataProcessingService, BICSDictionaryLookupService, GlobalWorkflowIOService } from 'Core/services';
+    import {
+      DTOService,
+      UtilityService,
+      RestfulCommService,
+      BICSDictionaryLookupService,
+      GlobalWorkflowIOService,
+      BICSDataProcessingService
+    } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureSetBulkOverridesPanelState } from 'Core/models/frontend/frontend-page-states.interface';
     import {
@@ -49,7 +56,7 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
     protected globalWorkflowIOService: GlobalWorkflowIOService,
     protected router: Router,
     private store$: Store<any>,
-    private bicsService: BICsDataProcessingService,
+    private bicsService: BICSDataProcessingService,
     private bicsLookUpService: BICSDictionaryLookupService,
     private dtoService: DTOService,
     private modalService: ModalService,
@@ -99,20 +106,10 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
       this.state.configurator.newOverrideNameCache = null;
-      const simpleBucket = {}
+      const simpleBucket: AdhocPacks.GenericKeyWithStringArrayBlock = this.utilityService.getSimpleBucketFromConfigurator(params);
       let bucketToString = '';
-      params.filterList.forEach((eachItem) => {
-        const property = this.utilityService.convertFEKey(eachItem.key);
-        if (!!property) {
-          if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
-            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock) => {
-              return eachBlock.shortKey;
-            });
-          } else {
-            simpleBucket[property] = eachItem.filterBy;
-          }
-        }
-        eachItem.filterBy.forEach((eachValue, index) => {
+      params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+        eachItem.filterBy.forEach((eachValue: string, index: number) => {
           let displayTitle;
           if (eachItem.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
             displayTitle = this.bicsLookUpService.BICSCodeToBICSName(eachValue);

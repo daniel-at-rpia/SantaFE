@@ -121,7 +121,7 @@ export class StructureFund extends SantaContainerComponentBase implements OnInit
   }
 
   public onChangeValue(amount: string, type: PortfolioMetricValues) {
-    const value = !parseFloat(amount) ? 0 : parseFloat(amount);
+    const value = amount !== '' ? +amount : null;
     if (type === PortfolioMetricValues.creditDuration) {
       this.fund.state.modifiedFundTargets.creditDuration = value;
     } else {
@@ -153,9 +153,8 @@ export class StructureFund extends SantaContainerComponentBase implements OnInit
     this.modalService.triggerModalOpen(this.constants.setBulkOverridesModalId);
   }
 
-  private validateInput(value: number | string) {
-     const result = value || value === 0 ? false : true;
-     return result;
+  private validateInput(value: number | null) {
+     return isNaN(value);
   }
 
   private resetEditForm() {
@@ -168,43 +167,25 @@ export class StructureFund extends SantaContainerComponentBase implements OnInit
   private saveEditDetails(targetCreditDuration: number, targetLeverage: number) {
     const isTargetCreditDurationInvalid = this.validateInput(targetCreditDuration);
     const isTargetLeverageInvalid = this.validateInput(targetLeverage);
-    this.fund.data.creditDurationTargetBar.state.isEmpty = targetCreditDuration === 0;
-    this.fund.data.creditLeverageTargetBar.state.isEmpty = targetLeverage === 0;
+    this.fund.data.creditDurationTargetBar.state.isEmpty = targetCreditDuration === null || this.fund.data.target.target.creditDuration === null;
+    this.fund.data.creditLeverageTargetBar.state.isEmpty = targetLeverage === null || this.fund.data.target.target.creditLeverage === null;
     if (isTargetCreditDurationInvalid || isTargetLeverageInvalid ) {
       const invalidTarget = isTargetCreditDurationInvalid ? this.constants.creditDuration : this.constants.creditLeverage;
       const invalidInputErrorRef = `updated${invalidTarget.split(' ').join('')}`;
       this.fund.state.hasErrors[invalidInputErrorRef] = true;
       this.fund.state.hasErrors.errorMessage = `*Please enter a valid target level for ${invalidTarget}`;
+      return;
     } else {
-      let updatedTargetData = [];
-      const checkTargetUpdates = (currentTarget: number, previousTarget: number, BEMetricType: BEPortfolioTargetMetricValues) => {
-        if (currentTarget !== previousTarget) {
-          const parsedTarget = currentTarget === 0 ? null : currentTarget;
-          const targetUpdateBlock: UpdateTargetBlock = {
-            metric: BEMetricType,
-            target: parsedTarget
-          }
-          if (BEMetricType === this.constants.BECreditDuration && !parsedTarget) {
-            // have to set Cs01 as well if credit duration is null
-            const cs01Target: UpdateTargetBlock = {
-              metric: this.constants.BECs01,
-              target: parsedTarget
-            }
-            updatedTargetData = [...updatedTargetData, targetUpdateBlock, cs01Target];
-          } else {
-            updatedTargetData.push(targetUpdateBlock);
-          }
-        }
-      }
-      checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);
-      checkTargetUpdates(targetLeverage, this.fund.data.target.target.creditLeverage, this.constants.BECreditLeverage);
-      if (updatedTargetData.length > 0) {
+      const creditDurationTargets = this.checkTargetUpdates(targetCreditDuration, this.fund.data.target.target.creditDuration, this.constants.BECreditDuration);
+      const creditLeverageTargets = this.checkTargetUpdates(targetLeverage, this.fund.data.target.target.creditLeverage, this.constants.BECreditLeverage);
+      const combinedUpdatedTargetData = [...creditDurationTargets, ...creditLeverageTargets];
+      if (combinedUpdatedTargetData.length > 0) {
         this.store$.pipe(
           first(),
           select(selectActiveSubPortfolioFilter)
         ).subscribe((activeSubPortfolioFilter) => {
           this.fund.state.isEditingFund = false;
-          this.updateFundTarget(updatedTargetData, activeSubPortfolioFilter);
+          this.updateFundTarget(combinedUpdatedTargetData, activeSubPortfolioFilter);
         });
       }
     }
@@ -272,5 +253,29 @@ export class StructureFund extends SantaContainerComponentBase implements OnInit
         return of('error');
       })
     ).subscribe()
+  }
+
+  private checkTargetUpdates (
+    currentTarget: number,
+    previousTarget: number,
+    BEMetricType: BEPortfolioTargetMetricValues): Array<UpdateTargetBlock> {
+    let updatedTargetData: Array<UpdateTargetBlock> = [];
+    if (currentTarget !== previousTarget) {
+      const targetUpdateBlock: UpdateTargetBlock = {
+        metric: BEMetricType,
+        target: currentTarget
+      }
+      if (BEMetricType === this.constants.BECreditDuration && currentTarget === null) {
+        // have to set Cs01 as well if credit duration is null
+        const cs01Target: UpdateTargetBlock = {
+          metric: this.constants.BECs01,
+          target: currentTarget
+        }
+        updatedTargetData = [...updatedTargetData, targetUpdateBlock, cs01Target];
+      } else {
+        updatedTargetData.push(targetUpdateBlock);
+      }
+    }
+    return updatedTargetData;
   }
 }
