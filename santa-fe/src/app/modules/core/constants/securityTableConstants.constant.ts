@@ -1765,15 +1765,15 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
-    key: 'yoyDelta',
+    key: 'tMinusTwoDelta',
     content: {
-      label: 'YoY Δ',
+      label: 'T-2 Δ',
       attrName: DEFAULT_DRIVER_IDENTIFIER,
       underlineAttrName: DEFAULT_DRIVER_IDENTIFIER,
       blockAttrName: 'metricPack',
       isAttrChangable: true,
       readyStage: SECURITY_TABLE_FINAL_STAGE,
-      metricPackDeltaScope: 'Yoy',
+      metricPackDeltaScope: 'TMinusTwo',
       isDriverDependent: true,
       columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.delta,

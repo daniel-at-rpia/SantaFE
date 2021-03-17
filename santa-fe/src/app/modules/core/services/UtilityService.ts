@@ -352,7 +352,7 @@ export class UtilityService {
           Wow: {},
           Mom: {},
           Ytd: {},
-          Yoy: {}
+          TMinusTwo: {}
         }
       };
       if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {

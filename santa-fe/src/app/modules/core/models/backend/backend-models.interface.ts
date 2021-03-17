@@ -2,12 +2,8 @@ import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
 import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
-export interface BEFetchAllTradeDataReturn {
-  numberOfSecurities: number;
-  securityDtos: BEFullSecurityCollection;
-}
 
-export interface BEFullSecurityCollection {
+export interface BEFetchAllTradeDataReturn {
   groupIdentifier: {
     source: string;
     date: string;
@@ -25,6 +21,7 @@ export interface BEFullSecurityCollection {
   securityDtos: {
     [property: string]: BEFullSecurityDTO;
   }
+  totalNumberOfSecurities: number;
 }
 
 export interface BEFullSecurityDTO {
@@ -83,9 +80,8 @@ export interface BESecurityDTO {
     Dod: BESecurityDeltaMetricDTO;
     Wow: BESecurityDeltaMetricDTO;
     Mom: BESecurityDeltaMetricDTO;
-    Mtd: BESecurityDeltaMetricDTO;
     Ytd: BESecurityDeltaMetricDTO;
-    Yoy: BESecurityDeltaMetricDTO;
+    TMinusTwo: BESecurityDeltaMetricDTO;
   };
   paymentRank: string;
   isSingleSecurity?: boolean;
@@ -158,10 +154,9 @@ export interface BESecurityGroupDTO {
   deltaMetrics: {
     Dod?: BEGroupMetricDTO;
     Wow?: BEGroupMetricDTO;
-    Mtd?: BEGroupMetricDTO;
     Mom?: BEGroupMetricDTO;
     Ytd?: BEGroupMetricDTO;
-    Yoy?: BEGroupMetricDTO
+    TMinusTwo?: BEGroupMetricDTO;
   }
 }
 
@@ -169,7 +164,7 @@ interface BEGroupMetricDTO {
   tenor?: string;
   backendTenor?: string;
   propertyToNumSecurities: {
-    WorkoutTerm: number;
+    WorkoutTerm?: number;
     BackendWorkoutTerm?: number;
     AmtOutstanding?: number;
     RatingDouble?: number;
@@ -324,10 +319,8 @@ export interface BEQuoteDTO {
 }
 
 export interface BEHistoricalSummaryOverviewDTO {
-  Yoy?: BEHistoricalSummaryDTO;
   Ytd?: BEHistoricalSummaryDTO;
   Mom?: BEHistoricalSummaryDTO;
-  Mtd?: BEHistoricalSummaryDTO;
   GroupIdentifierWithInclusiveOptions: {
     source: string;
     date: string;

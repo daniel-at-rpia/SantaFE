@@ -35,7 +35,7 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachKey in rawSecurityDTOMap){
@@ -81,7 +81,7 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
     searchCallback: (card: DTOs.SecurityDTO) => void
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachAlertId in alertDTOMap) {

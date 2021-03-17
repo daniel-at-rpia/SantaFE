@@ -405,7 +405,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     // }
     if (!!userTriggered) {
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
-      this.fetchAllData(true);
+      this.loadFreshData();
       let filterValue = '';
       params.filterList.forEach((eachFilter) => {
         filterValue = `${filterValue} | ${eachFilter.targetAttribute}: ${eachFilter.filterBy.toString()}`; 
@@ -597,6 +597,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.onSelectSecurityForAlertConfig.bind(this),
       this.state.filters
     );
+    this.state.fetchResult.totalCount = serverReturn.totalNumberOfSecurities;
     this.calculateBestQuoteComparerWidthAndHeight();
     this.state.fetchResult.mainTable.fetchComplete = true;
     this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);

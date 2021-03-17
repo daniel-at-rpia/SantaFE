@@ -57,7 +57,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -68,7 +68,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -79,7 +79,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -90,7 +90,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -101,7 +101,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -112,7 +112,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -123,7 +123,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -134,7 +134,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   }
 ];
