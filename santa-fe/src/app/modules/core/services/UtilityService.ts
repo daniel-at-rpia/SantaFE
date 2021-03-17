@@ -1513,7 +1513,7 @@ export class UtilityService {
       return [minValue, maxValue];
     }
 
-    public getRoundedValuesForVisualizer(value: number, isCs01: boolean): number | null {
+    public getParsedValueForVisualizerCompare(value: number, isCs01: boolean): number | null {
       let parsedValue: number | null;
       // the check for >= 1000 is to make sure to equalize small number that would be be scaled out by the rounding and causing it to be larger than the max, which then throw the moveVisualizer's bar off the chart
       if (!!value || value === 0) {

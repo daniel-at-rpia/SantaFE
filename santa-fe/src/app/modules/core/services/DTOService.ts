@@ -2411,9 +2411,9 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      parsedRawData.currentLevel = this.utility.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01);
+      parsedRawData.currentLevel = this.utility.getParsedValueForVisualizerCompare(rawCurrentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        parsedRawData.targetLevel = this.utility.getRoundedValuesForVisualizer(rawTargetLevel, isCs01);
+        parsedRawData.targetLevel = this.utility.getParsedValueForVisualizerCompare(rawTargetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
