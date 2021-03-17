@@ -197,14 +197,12 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
     &-utilities {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       margin-bottom: $spacing_small;
       &-keywordSearch {
         @include mix_border_radius(5px);
         flex: 0 1 25rem;
         display: flex;
         align-items: center;
-        margin-right: $spacing_medium;
         &-activeIcon {
           font-size: $font_size_x_large;
           color: $font_color_major;
@@ -215,12 +213,58 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
           margin: $spacing_small $spacing_small $spacing_small 0;
         }
       }
+      &-tableRowCount {
+        @include mix_border_radius(5px);
+        display: none;
+        margin-right: $spacing_small;
+        &-icon {
+          flex: 0 0 auto;
+          display: none;
+          align-items: center;
+          margin: $spacing_x_small;
+          padding: 0 $spacing_x_small;
+          &-img {
+            color: $color_warning;
+            font-size: $font_size_xx_large;
+          }
+        }
+        &-content {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+          padding: $spacing_x_small;
+          &-mainRow {
+            display: flex;
+            &-label {
+              color: $font_color_minor;
+            }
+            &-highlightValue {
+              @include mix_border_radius(3px);
+              background-color: $color_active;
+              padding: 0 $spacing_x_small;
+              color: $font_color_inverse;
+              margin: 0 $spacing_x_small;
+            }
+            &-value {
+              color: $font_color_major;
+              margin: 0 $spacing_x_small;
+            }
+          }
+          &-incompleteRow {
+            display: none;
+            &-label {
+              color: $color_warning;
+            }
+          }
+        }
+      }
       &-driver {
         @include mix_fixed_div(relative, $z_index_base_item);
         @include mix_alive('custom', padding-right $animation_duration_light);
         flex: 0 0 auto;
         display: flex;
         align-items: center;
+        margin-left: auto; // pushes driver to the far right
         padding-right: 2.25rem;
         &-label {
           flex: 0 0 auto;
@@ -296,6 +340,29 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
       }
     }
   }
+  &--viewingIncompleteResultState {
+    #{$blockName} {
+      &__result {
+        &-utilities-tableRowCount {
+          background-color: $color_orange_1;
+          &-icon {
+            display: flex;
+          }
+          &-content {
+            &-mainRow {
+              margin-bottom: $spacing_x_small;
+              &-label {
+                color: $color_warning;
+              }
+            }
+            &-incompleteRow {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
   &--editingDriverState {
     #{$blockName} {
       &__result {
@@ -327,6 +394,15 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
     #{$blockName} {
       &__presetsAndFilters {
         @include mix_fixed_div(relative, $z_index_tooltip);
+      }
+    }
+  }
+  &--initialDataLoaded {
+    #{$blockName} {
+      &__result {
+        &-utilities-tableRowCount {
+          display: flex;
+        }
       }
     }
   }

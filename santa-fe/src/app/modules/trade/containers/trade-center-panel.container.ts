@@ -162,7 +162,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           liveUpdatedRowList: [],
           removalRowList: []
         },
-        initialDataLoadedInternalSyncFlag: false
+        initialDataLoadedInternalSyncFlag: false,
+        totalCount: 0
       },
       filters: {
         keyword: {
