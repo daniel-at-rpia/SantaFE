@@ -409,3 +409,11 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
+
+export const DISPLAY_DRIVER_MAP  = {
+  'DEFAULT': 'Combined',
+  'Combined': 'Combined',
+  'Spread': 'Spread',
+  'Yield': 'Yield',
+  'Price': 'Price'
+};

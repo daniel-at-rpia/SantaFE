@@ -7,7 +7,7 @@ $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_list_margin_left: $sp
 $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
 $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
 .sat-tradeCenterPanel {
-  $tradeCenterPanelBlockName: &;
+  $blockName: &;
   @include mix_border_generator;
   @include mix_border_radius(10px);
   flex: 1 1 auto;
@@ -216,22 +216,42 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
         }
       }
       &-driver {
+        @include mix_fixed_div(relative, $z_index_base_item);
+        @include mix_alive('custom', padding-right $animation_duration_light);
         flex: 0 0 auto;
         display: flex;
         align-items: center;
+        padding-right: 2.25rem;
         &-label {
           flex: 0 0 auto;
           color: $font_color_minor;
           font-size: $font_size_large;
           margin-right: $spacing_small;
         }
-        &-btn {
+        &-value {
           @include mix_border_radius(5px);
-          &--active {
-            @include material('none');
-            @extend .santaBtn--inverseLabelled;
-            background-color: $color_active;
+          flex: 0 0 auto;
+          color: $font_color_inverse;
+          margin-right: $spacing_small;
+          padding: $spacing_x_small $spacing_small;
+          background-color: $color_active;
+        }
+        &-btnGroup {
+          @include mix_fixed_div(absolute, $z_index_base_item_lift);
+          @include mix_alive('custom', right $animation_duration_light);
+          right: -18rem;
+          &-btn {
+            @include mix_border_radius(5px);
+            &--active {
+              @include material('none');
+              @extend .santaBtn--inverseLabelled;
+              background-color: $color_active;
+            }
           }
+        }
+        &-editCta {
+          @include mix_fixed_div(absolute, $z_index_base_item_solid);
+          right: 0;
         }
       }
     }
@@ -276,8 +296,23 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
       }
     }
   }
+  &--editingDriverState {
+    #{$blockName} {
+      &__result {
+        &-utilities-driver {
+          padding-right: 15.5rem;
+          &-btnGroup {
+            right: 0;
+          }
+          &-editCta {
+            right: -4rem;
+          }
+        }
+      }
+    }
+  }
   &--keywordSearchActiveState {
-    #{$tradeCenterPanelBlockName} {
+    #{$blockName} {
       &__result {
         &-utilities-keywordSearch {
           background-color: $color_filter;
@@ -289,14 +324,14 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
     }
   }
   &--boostConfiguratorState {
-    #{$tradeCenterPanelBlockName} {
+    #{$blockName} {
       &__presetsAndFilters {
         @include mix_fixed_div(relative, $z_index_tooltip);
       }
     }
   }
   &--fetchDataFailedState {
-    #{$tradeCenterPanelBlockName} {
+    #{$blockName} {
       &__result {
         &-errorPrompt {
           display: flex;
@@ -305,7 +340,7 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
     }
   }
   &--presetCategorySelectedState {
-    #{$tradeCenterPanelBlockName} {
+    #{$blockName} {
       &__presetsAndFilters {
         &-presets-content-shortcutCanvas-list {
           opacity: 1;
@@ -316,7 +351,7 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
     }
   }
   &--presetSelectedState {
-    #{$tradeCenterPanelBlockName} {
+    #{$blockName} {
       &__presetsAndFilters {
         flex: 0 0 10rem;
         overflow: visible;
@@ -334,7 +369,7 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
     }
   }
   &--presetReadyState {
-    #{$tradeCenterPanelBlockName} {
+    #{$blockName} {
       &__presetsAndFilters {
         &-presets-content-categoryCanvas {
           transform: translate(0, 0);

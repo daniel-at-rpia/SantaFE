@@ -55,7 +55,8 @@
     import {
       PortfolioShortcuts,
       OwnershipShortcuts,
-      StrategyShortcuts
+      StrategyShortcuts,
+      DISPLAY_DRIVER_MAP
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectLiveUpdateTick,
@@ -121,7 +122,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     sortOption: AggridSortOptions,
     defaultMetrics: SecurityTableHeaderConfigs,
     navigationModule: NavigationModule,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    displayDriverMap: DISPLAY_DRIVER_MAP
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -175,7 +177,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           tenor: []
         },
         securityFilters: []
-      }
+      },
+      editingDriver: false
     };
 
     return state;
@@ -371,6 +374,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       });
       this.state.table.metrics = newMetrics;
+      this.state.editingDriver = false;
     }
   }
 
@@ -438,6 +442,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public onSearchKeywordChange(newKeyword: string) {
     this.keywordChanged$.next(newKeyword);
+  }
+
+  public onEditDriver() {
+    this.state.editingDriver = true;
   }
 
   private fetchBICsHierarchy() {

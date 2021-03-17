@@ -135,6 +135,7 @@ export interface TradeCenterPanelState {
     initialDataLoadedInternalSyncFlag: boolean;
   }
   filters: Blocks.TradeCenterPanelStateFilterBlock;
+  editingDriver: boolean;
 }
 
 export interface StructureMainPanelState {
