@@ -76,7 +76,8 @@
       TradeSelectedSecurityForAlertConfigEvent,
       TradeTogglePresetEvent,
       TradeAlertTableReceiveNewAlertsEvent,
-      TradeBICSDataLoadedEvent
+      TradeBICSDataLoadedEvent,
+      TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent
     } from 'Trade/actions/trade.actions';
     import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
@@ -373,7 +374,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
   }
 
-  public onApplyFilter(params: AdhocPacks.DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
+  public onApplyFilter(
+    params: AdhocPacks.DefinitionConfiguratorEmitterParams,
+    userTriggered: boolean
+  ) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     params.filterList.forEach((eachFilter) => {
@@ -389,11 +393,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
       }
     });
-    this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-    if (this.state.filters.quickFilters.portfolios.length === 1) {
-      this.modifyWeightColumnHeadersUpdateFundName();
-    }
-    if (!!logEngagement) {
+    // just comment it out because we will bring it back in some way in a later task
+    // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+    // if (this.state.filters.quickFilters.portfolios.length === 1) {
+      // this.modifyWeightColumnHeadersUpdateFundName();
+    // }
+    if (!!userTriggered) {
+      this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
+      this.fetchAllData(true);
       let filterValue = '';
       params.filterList.forEach((eachFilter) => {
         filterValue = `${filterValue} | ${eachFilter.targetAttribute}: ${eachFilter.filterBy.toString()}`; 
