@@ -12,7 +12,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: []
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ],
     isHero: true

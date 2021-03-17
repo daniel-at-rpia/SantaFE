@@ -194,6 +194,7 @@ export const FrontendKeyToBackendKeyDictionary = {
   'BICS_LEVEL_3': 'BicsLevel3',
   'BICS_LEVEL_4': 'BicsLevel4',
   'BICS_CONSOLIDATED': 'BicsCode',
+  'PORTFOLIO': 'PortfolioShortName',
 
   // metrics
   'SPREAD': 'oasSpread',
