@@ -315,25 +315,30 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
   }
 
-  public onSelectPreset(targetPreset: DTOs.SearchShortcutDTO) {
+  public onSelectPreset(
+    targetPreset: DTOs.SearchShortcutDTO,
+    userTriggered: boolean
+  ) {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
       this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
     } else {
-      this.checkInitialPageLoadData();
-      this.restfulCommService.logEngagement(
-        EngagementActionList.selectPreset,
-        'n/a',
-        targetPreset.data.displayTitle,
-        'Trade - Center Panel'
-      );
       targetPreset.state.isSelected = true;
       this.state.presets.selectedPreset = targetPreset;
       this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
-      const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
-      this.onApplyFilter(params, false);
-      this.loadFreshData();
+      this.checkInitialPageLoadData();
+      if (userTriggered) {
+        this.restfulCommService.logEngagement(
+          EngagementActionList.selectPreset,
+          'n/a',
+          targetPreset.data.displayTitle,
+          'Trade - Center Panel'
+        );
+        const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+        this.onApplyFilter(params, false);
+        this.loadFreshData();
+      }
     }
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
@@ -400,9 +405,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
     // just comment it out because we will bring it back in some way in a later task
     // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-    // if (this.state.filters.quickFilters.portfolios.length === 1) {
-      // this.modifyWeightColumnHeadersUpdateFundName();
-    // }
+    if (this.state.filters.quickFilters.portfolios.length === 1) {
+      this.modifyWeightColumnHeadersUpdateFundName();
+    }
     if (!!userTriggered) {
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
@@ -494,6 +499,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
             if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
               eachFilterOption.isSelected = true;
+              definitionDTO.data.highlightSelectedOptionList.push(eachFilterOption);
             }
           });
         }
@@ -755,32 +761,55 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     filterList: Array<DTOs.SecurityDefinitionDTO>,
     portfolioMetric: PortfolioMetricValues
   ){
-    this.onSelectPreset(this.state.presets.portfolioShortcutList[0]);
-    filterList.forEach((eachFilterDefinition) => {
-      this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
-        eachBundle.data.list.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === eachFilterDefinition.data.key) {
-            // deepCopy is necessary because the array was already set to readonly because it's from the store
-            eachDefinition.data.highlightSelectedOptionList = this.utilityService.deepCopy(eachFilterDefinition.data.highlightSelectedOptionList);
-            eachDefinition.data.highlightSelectedOptionList.forEach((eachHighlightedFilterOption) => {
-              const findMatchInFilterOptionList = eachDefinition.data.displayOptionList.find((eachFilterOption) => {
-                return eachFilterOption.shortKey === eachHighlightedFilterOption.shortKey;
-              });
-              if (!!findMatchInFilterOptionList) {
-                findMatchInFilterOptionList.isSelected = true;
-              } else {
-                // it's common for BICS to not find the selected option from the entire option list, because the option list only contain level.1 on default. This is already handled at the convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode() level
-              }
-            });
-            eachDefinition.state.filterActive = true;
-          }
-        });
-      })
+    const targetPortfolioDefinition = filterList.find((eachDefinition) => {
+      return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
     });
-    const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
-    this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-    this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
-    this.onApplyFilter(params, false);
+    if (!!targetPortfolioDefinition) {
+      const targetPreset = this.state.presets.portfolioShortcutList.find((eachShortcut) => {
+        const portfolioDefinitionInThisShortcut = eachShortcut.data.configuration.find((eachDefinition) => {
+          return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
+        });
+        if (portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList.length === 1) {
+          // always use the individual-fund presets, since "see bond" is always on a singular fund
+          return portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList[0].shortKey === targetPortfolioDefinition.data.highlightSelectedOptionList[0].shortKey;
+        }
+      });
+      if (!!targetPreset) {
+        this.onSelectPreset(targetPreset, false);
+      } else {
+        this.onSelectPreset(this.state.presets.portfolioShortcutList[0], false);
+      }
+      filterList.forEach((eachFilterDefinition) => {
+        this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
+          eachBundle.data.list.forEach((eachDefinition) => {
+            if (eachDefinition.data.key === eachFilterDefinition.data.key) {
+              // deepCopy is necessary because the array was already set to readonly because it's from the store
+              eachDefinition.data.highlightSelectedOptionList = this.utilityService.deepCopy(eachFilterDefinition.data.highlightSelectedOptionList);
+              eachDefinition.data.highlightSelectedOptionList.forEach((eachHighlightedFilterOption) => {
+                const findMatchInFilterOptionList = eachDefinition.data.displayOptionList.find((eachFilterOption) => {
+                  return eachFilterOption.shortKey === eachHighlightedFilterOption.shortKey;
+                });
+                if (!!findMatchInFilterOptionList) {
+                  findMatchInFilterOptionList.isSelected = true;
+                } else {
+                  // it's common for BICS to not find the selected option from the entire option list, because the option list only contain level.1 on default. This is already handled at the convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode() level
+                }
+              });
+              eachDefinition.state.filterActive = true;
+            }
+          });
+        })
+      });
+      const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+      this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
+      this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
+      this.onApplyFilter(params, false);
+      this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
+      this.loadFreshData();
+    } else {
+      console.warn('see bond does not have a portfolio definition', filterList);
+      this.restfulCommService.logError('see bond does not have a portfolio definition');
+    }
   }
 
   private modifyWeightColumnHeadersUpdateFundName() {
