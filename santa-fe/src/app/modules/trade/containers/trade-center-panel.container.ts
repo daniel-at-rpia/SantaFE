@@ -512,6 +512,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private loadFreshData() {
     this.state.fetchResult.mainTable.prinstineRowList = [];
+    this.state.fetchResult.initialDataLoadedInternalSyncFlag = false;
     this.loadInitialStencilTable();
     this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
     this.fetchAllData(true);
