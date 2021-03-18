@@ -2411,9 +2411,9 @@ export class DTOService {
       const rawCurrentPct = parsedRawData.currentPct;
       const rawTargetLevel = parsedRawData.targetLevel;
       const rawTargetPct = parsedRawData.targetPct;
-      parsedRawData.currentLevel = this.utility.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01);
+      parsedRawData.currentLevel = this.utility.getParsedValueForVisualizerCompare(rawCurrentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        parsedRawData.targetLevel = this.utility.getRoundedValuesForVisualizer(rawTargetLevel, isCs01);
+        parsedRawData.targetLevel = this.utility.getParsedValueForVisualizerCompare(rawTargetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
@@ -2424,12 +2424,12 @@ export class DTOService {
       if (parsedRawData.indexPct != null) {
         parsedRawData.indexPct = this.utility.round(parsedRawData.indexPct*100, 1);
       }
-      maxValue = !!isCs01 ? maxValue/1000 : maxValue;
-      minValue = !!isCs01 ? minValue/1000 : minValue;
+      const parsedMinValue = this.utility.getParsedValueForVisualizerCompare(minValue, isCs01);
+      const parsedMaxValue = this.utility.getParsedValueForVisualizerCompare(maxValue, isCs01);
       const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(
         parsedRawData,
-        maxValue,
-        minValue,
+        parsedMaxValue,
+        parsedMinValue,
         !!isStencil,
         isOverride,
         diveInLevel,
