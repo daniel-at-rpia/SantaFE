@@ -475,8 +475,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           this.generateNewAlert(eachAlert, alertListSorted);
         }
       });
+      const nonCancelledAlertsLength = alertList.filter((alert: DTOs.AlertDTO) => !alert.state.isCancelled).length;
       this.state.presentList.forEach((alert: DTOs.AlertDTO, index: number) => {
-        const displayCutOff = alertList.length < this.constants.sizeCap ? alertList.length : this.constants.sizeCap;
+        const displayCutOff = nonCancelledAlertsLength < this.constants.sizeCap ? nonCancelledAlertsLength : this.constants.sizeCap;
         if (index < displayCutOff) {
           this.initiateStateProgressionForNewAlert(alert);
         }
