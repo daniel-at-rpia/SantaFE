@@ -506,7 +506,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
             }
           } else {
             this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
-            urgentAlertUpdateList.push(newAlert);
+            eachRawAlert.isUrgent && urgentAlertUpdateList.push(newAlert);
             if (newAlert.data.security && newAlert.data.security.data.securityID) {
               allAlertsUpdateList.push(newAlert);
             }
