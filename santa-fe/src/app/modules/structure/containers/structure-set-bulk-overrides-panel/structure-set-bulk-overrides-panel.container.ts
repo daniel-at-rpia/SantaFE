@@ -143,13 +143,12 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
   }
 
   private createEditRow(title: string, simpleBucket: Blocks.StructureBucketDataBlock): Blocks.StructureSetBulkOverridesEditRow {
-    const originalBucketIdentifier = this.utilityService.formBucketIdentifierForOverride(simpleBucket);
-    const parsedDisplayBucket = originalBucketIdentifier.replace(this.constants.BICSOverrideIdentifier, this.constants.BICSOverrideTitle);
+    const formattedBucketIdentifiers = this.utilityService.formBucketIdentifierForOverride(simpleBucket);
     const editRow: Blocks.StructureSetBulkOverridesEditRow = {
       displayRowTitle: title,
       modifiedDisplayRowTitle: title,
       rowIdentifier: title,
-      displayBucket: parsedDisplayBucket,
+      displayBucket: this.utilityService.formOverrideTitle(formattedBucketIdentifiers),
       simpleBucket: simpleBucket,
       isEven: false
     }
