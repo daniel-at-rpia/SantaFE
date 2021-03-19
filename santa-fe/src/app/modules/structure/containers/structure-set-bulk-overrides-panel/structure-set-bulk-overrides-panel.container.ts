@@ -118,7 +118,7 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
           } else {
             displayTitle = eachValue;
           }
-          bucketToString = bucketToString === '' ? `${displayTitle}` : `${bucketToString}, ${displayTitle}`;
+          bucketToString = bucketToString === '' ? `${displayTitle}` : `${bucketToString} ~ ${displayTitle}`;
         });
       });
       const newEditRow = this.createEditRow(bucketToString, simpleBucket)
