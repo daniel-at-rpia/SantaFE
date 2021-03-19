@@ -2406,14 +2406,11 @@ export class DTOService {
     code: string = null
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
-      const parsedRawData = this.utility.deepCopy(rawCategoryData);
-      const rawCurrentLevel = parsedRawData.currentLevel;
-      const rawCurrentPct = parsedRawData.currentPct;
-      const rawTargetLevel = parsedRawData.targetLevel;
-      const rawTargetPct = parsedRawData.targetPct;
-      parsedRawData.currentLevel = this.utility.getParsedValueForVisualizerCompare(rawCurrentLevel, isCs01);
+      const { currentLevel, targetLevel, currentPct, targetPct, indexPct } = rawCategoryData;
+      const parsedRawData = { currentLevel, targetLevel, currentPct, targetPct, indexPct };
+      parsedRawData.currentLevel = this.utility.getParsedValueForVisualizerCompare(parsedRawData.currentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        parsedRawData.targetLevel = this.utility.getParsedValueForVisualizerCompare(rawTargetLevel, isCs01);
+        parsedRawData.targetLevel = this.utility.getParsedValueForVisualizerCompare(parsedRawData.targetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
@@ -2459,10 +2456,10 @@ export class DTOService {
         portfolioID: portfolioID,
         diveInLevel: diveInLevel,
         raw: {
-          currentLevel: rawCurrentLevel,
-          currentPct: rawCurrentPct,
-          targetLevel: rawTargetLevel,
-          targetPct: rawTargetPct
+          currentLevel: parsedRawData.currentLevel,
+          currentPct: parsedRawData.currentPct,
+          targetLevel: parsedRawData.targetLevel,
+          targetPct: parsedRawData.targetPct
         },
         view: view,
         bucket: bucket,
