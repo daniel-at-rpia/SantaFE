@@ -1596,7 +1596,7 @@ export class DTOService {
     rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
-    const momentTime = !!rawData.trade ? moment(rawData.trade.eventTime): moment(rawData.timeStamp);
+    const momentTime = moment(rawData.timeStamp);
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
