@@ -6,7 +6,10 @@
     'sat-tradeCenterPanel--presetCategorySelectedState': state.presets.selectedList,
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
-    'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted
+    'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted,
+    'sat-tradeCenterPanel--editingDriverState': state.editingDriver,
+    'sat-tradeCenterPanel--initialDataLoaded': state.fetchResult.initialDataLoadedInternalSyncFlag,
+    'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount
   }">
   <section class="sat-tradeCenterPanel__presetsAndFilters">
     <div class="sat-tradeCenterPanel__presetsAndFilters-presets">
@@ -81,7 +84,7 @@
               }">
               <search-shortcut
                 [shortcutData]="eachShortcut"
-                (onClickShortcutCallback)="onSelectPreset($event)"
+                (onClickShortcutCallback)="onSelectPreset($event, true)"
               ></search-shortcut>
             </li>
           </ul>
@@ -112,46 +115,65 @@
           (onInputChange)="onSearchKeywordChange($event)">
         </santa-input>
       </div>
+      <div class="sat-tradeCenterPanel__result-utilities-tableRowCount">
+        <div class="sat-tradeCenterPanel__result-utilities-tableRowCount-icon">
+          <i class="sat-tradeCenterPanel__result-utilities-tableRowCount-icon-img fal fa-exclamation-square"></i>
+        </div>
+        <div class="sat-tradeCenterPanel__result-utilities-tableRowCount-content">
+          <div class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-mainRow">
+            <span class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-mainRow-label">Showing</span>
+            <span class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-mainRow-highlightValue">{{state.fetchResult.mainTable.rowList.length}}</span>
+            <span class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-mainRow-label">/</span>
+            <span class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-mainRow-value">{{state.fetchResult.totalCount}}</span>
+            <span class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-mainRow-label">Securities</span>
+          </div>
+          <div class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-incompleteRow">
+            <span class="sat-tradeCenterPanel__result-utilities-tableRowCount-content-incompleteRow-label">Capped at 5000, try to use more filters</span>
+          </div>
+        </div>
+      </div>
       <div class="sat-tradeCenterPanel__result-utilities-driver">
         <span class="sat-tradeCenterPanel__result-utilities-driver-label">Driver :</span>
-        <div class="santaBtnGroup">
+        <span class="sat-tradeCenterPanel__result-utilities-driver-value">{{constants.displayDriverMap[state.filters.driverType]}}</span>
+        <div class="santaBtnGroup sat-tradeCenterPanel__result-utilities-driver-btnGroup">
           <button
             (click)="onSwitchDriver(constants.defaultMetricIdentifier)"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === constants.defaultMetricIdentifier
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn--active': state.filters.driverType === constants.defaultMetricIdentifier
             }">
             <span>Combined</span>
           </button>
           <button
             (click)="onSwitchDriver('Spread')"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Spread'
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn--active': state.filters.driverType === 'Spread'
             }">
             <span>Spread</span>
           </button>
           <button
             (click)="onSwitchDriver('Yield')"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Yield'
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn--active': state.filters.driverType === 'Yield'
             }">
             <span>Yield</span>
           </button>
           <button
             (click)="onSwitchDriver('Price')"
             [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn': true,
               'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Price'
+              'sat-tradeCenterPanel__result-utilities-driver-btnGroup-btn--active': state.filters.driverType === 'Price'
             }">
             <span>Price</span>
           </button>
         </div>
+        <button (click)="onEditDriver()" class="sat-tradeCenterPanel__result-utilities-driver-editCta santaBtn--iconOnly fal fa-pencil"></button>
       </div>
     </div>
     <div class="sat-tradeCenterPanel__result-errorPrompt">

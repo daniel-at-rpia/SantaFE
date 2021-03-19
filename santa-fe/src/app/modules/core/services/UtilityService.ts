@@ -352,7 +352,7 @@ export class UtilityService {
           Wow: {},
           Mom: {},
           Ytd: {},
-          Yoy: {}
+          TMinusTwo: {}
         }
       };
       if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {
@@ -1625,7 +1625,9 @@ export class UtilityService {
               return eachBlock.shortKey;
             });
           } else {
-            simpleBucket[property] = eachItem.filterBy;
+            if (property !== 'n/a') {
+              simpleBucket[property] = eachItem.filterBy;
+            }
           }
         }
       })

@@ -12,7 +12,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: []
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ],
     isHero: true
@@ -409,3 +409,11 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
+
+export const DISPLAY_DRIVER_MAP  = {
+  'DEFAULT': 'Combined',
+  'Combined': 'Combined',
+  'Spread': 'Spread',
+  'Yield': 'Yield',
+  'Price': 'Price'
+};

@@ -35,7 +35,7 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachKey in rawSecurityDTOMap){
@@ -81,7 +81,7 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
     searchCallback: (card: DTOs.SecurityDTO) => void
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachAlertId in alertDTOMap) {
@@ -414,7 +414,7 @@ export class LiveDataProcessingService {
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): boolean {
     const targetSecurity = targetRow.data.security;
-    let includeFlag = false;
+    let includeFlag = panelStateFilterBlock.quickFilters.portfolios.length === 0;  // if no portfolio filter is specified, then the user is look at external securities, therefore the includeFlag will default to true
     targetSecurity.data.weight.fundCS01Pct = null;
     targetSecurity.data.weight.fundCS01PctDisplay = null;
     targetSecurity.data.weight.fundBEVPct = null;
