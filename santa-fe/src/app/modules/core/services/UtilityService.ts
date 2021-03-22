@@ -32,7 +32,8 @@
     import {
       BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
       SubPortfolioFilter,
-      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX
+      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
+      BEIdentifierToFEDisplayMapping
     } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
     import {
@@ -1632,6 +1633,18 @@ export class UtilityService {
         }
       })
       return simpleBucket;
+    }
+
+    public formOverrideTitle(backendGroupOptionIdentifier: string): string {
+      const identifiers = backendGroupOptionIdentifier.split(' ~ ');
+      identifiers.forEach((identifier: string, index: number) => {
+        const identifierBlock = BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
+        if (identifierBlock) {
+          identifiers[index] = identifierBlock.display;
+        }
+      })
+      const title = identifiers.join(' ~ ');
+      return title;
     }
   // structuring specific end
 }
