@@ -189,8 +189,8 @@ export class LiveDataProcessingService {
           markDiffCount: markDiffCount,
           quantDiffCount: quantDiffCount
         };
-      } catch {
-        console.error('Cannot complete diffing logic for updated rows')
+      } catch (err) {
+        console.error('Cannot complete diffing logic for updated rows', err, table, newList);
         return {
           newRowList: [],
           markDiffCount: 0,
