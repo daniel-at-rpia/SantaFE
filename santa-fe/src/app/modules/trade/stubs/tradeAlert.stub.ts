@@ -1,3 +1,4 @@
+import { TraceTradeParty } from 'App/modules/core/constants/securityTableConstants.constant';
 import { BEAlertConfigurationReturn, BEAlertDTO } from 'BEModels/backend-models.interface';
 import { CompactSecuritySample } from 'Core/stubs/securities.stub';
 
@@ -221,5 +222,53 @@ export const AlertSample: Array<BEAlertDTO> = [
     "isDeleted":false,
     "isCancelled":false,
     "sendEmail":false
+  },
+  {
+    "alertId": "b5858f00-2682-48a4-b770-47059541df22",
+    "alertConfigId": "a70eef37-9ca6-4c4e-a44d-ba09876a377z",
+    "isActive": true,
+    "isUrgent": true,
+    "isCancelled": false,
+    "isDeleted": false,
+    "keyWord": "BA 20s|3MM 150",
+    "message": "Dealer bought from client 3MM, at price 100, spread: 148",
+    "security": CompactSecuritySample,
+    "sendEmail": false,
+    "subType": "Buy",
+    "timeStamp": "2021-03-18T15:45:00-04:00",
+    "trade": {
+      "actionFlag": "N",
+      "benchmarkGlobalIdentifier": null,
+      "benchmarkGlobalIdentifierType": "ISIN",
+      "benchmarkSecurityID": 96505,
+      "contraParty": TraceTradeParty.Client,
+      "creationTime": "2021-03-18T15:00:22.3373766-04:00",
+      "discriminator": "TraceTrade",
+      "eventDate": "2021-03-18T00:00:00-04:00",
+      "eventTime": "2021-03-18T15:45:00-04:00",
+      "gSpread": 180,
+      "globalIdentifier": null,
+      "globalIdentifierType": "ISIN",
+      "iSpread": 205,
+      "isAtsTrade": false,
+      "lastModifiedTime": "2021-03-18T15:45:56",
+      "oasSpread": 214,
+      "parSpread": 189,
+      "price": 100,
+      "publishingTime": "2021-03-18T15:45:00-04:00",
+      "reportingParty": TraceTradeParty.Dealer,
+      "securityID": 17163,
+      "sequenceNumber": null,
+      "settleDate": "2020-03-18T00:00:00Z",
+      "side": "Bid",
+      "spread": 148,
+      "traceTradeID": "BTDS4634120210319",
+      "traceTradeRefID": null,
+      "type": "BTDS",
+      "volumeEstimated": null,
+      "volumeReported": 1540000,
+      "yield": 4.119
+    },
+    "type": "TraceTrade"
   }
 ]

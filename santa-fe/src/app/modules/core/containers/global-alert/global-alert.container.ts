@@ -475,8 +475,9 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
           this.generateNewAlert(eachAlert, alertListSorted);
         }
       });
+      const nonCancelledAlertsLength = alertList.filter((alert: DTOs.AlertDTO) => !alert.state.isCancelled).length;
       this.state.presentList.forEach((alert: DTOs.AlertDTO, index: number) => {
-        const displayCutOff = alertList.length < this.constants.sizeCap ? alertList.length : this.constants.sizeCap;
+        const displayCutOff = nonCancelledAlertsLength < this.constants.sizeCap ? nonCancelledAlertsLength : this.constants.sizeCap;
         if (index < displayCutOff) {
           this.initiateStateProgressionForNewAlert(alert);
         }
@@ -494,7 +495,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     const allAlertsUpdateList: Array<DTOs.AlertDTO> = [];
     serverReturn.forEach((eachRawAlert: BEAlertDTO) => {
       if (!!eachRawAlert) {
-          const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
+        const newAlert = this.dtoService.formAlertObjectFromRawData(eachRawAlert);
         // Inquiry alerts are handled differently since BE passes the same inquiry alerts regardless of the timestamp FE provides
         if (!!eachRawAlert.marketListAlert) {
           if (this.state.receivedActiveAlertsMap[eachRawAlert.alertId]) {
@@ -506,7 +507,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
             }
           } else {
             this.state.receivedActiveAlertsMap[eachRawAlert.alertId] = eachRawAlert.keyWord;
-            urgentAlertUpdateList.push(newAlert);
+            eachRawAlert.isUrgent && urgentAlertUpdateList.push(newAlert);
             if (newAlert.data.security && newAlert.data.security.data.securityID) {
               allAlertsUpdateList.push(newAlert);
             }
