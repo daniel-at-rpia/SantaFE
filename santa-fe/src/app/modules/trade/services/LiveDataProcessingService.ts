@@ -568,6 +568,6 @@ export class LiveDataProcessingService {
   }
 
   private isAlertDiff(oldRow: DTOs.AlertDTO, newRow: DTOs.AlertDTO): boolean {
-    return oldRow.data.unixTimestamp !== newRow.data.unixTimestamp && oldRow.data.id === newRow.data.id ? true : false;
+    return oldRow.data.unixTimestamp !== newRow.data.unixTimestamp && oldRow.data.id === newRow.data.id;
   }
 }
