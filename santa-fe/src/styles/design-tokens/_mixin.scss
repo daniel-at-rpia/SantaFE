@@ -2,61 +2,30 @@
 /***********
   Mixins
 ***********/
-
   @mixin mix_border_radius($radius, $partial:'none'){
-    @if $partial == 'none'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+    @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50% {
+      @if $partial == 'none'{
         border-radius: $radius;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'top'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+      }@else if $partial == 'top' {
         border-radius: $radius $radius 0 0;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'bottom'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+      }@else if $partial == 'bottom' {
         border-radius: 0 0 $radius $radius;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'top-left'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
-        border-radius: $radius 0 0 0;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'top-right'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
-        border-radius: 0 $radius 0 0;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'left'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+      }@else if $partial == 'left' {
         border-radius: $radius 0 0 $radius;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'right'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+      }@else if $partial == 'right' {
         border-radius: 0 $radius $radius 0;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'all-but-bottom-right'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+      }@else if $partial == 'top-left' {
+        border-radius: $radius 0 0 0;
+      }@else if $partial == 'top-right' {
+        border-radius: 0 $radius 0 0;
+      }@else if $partial == 'bottom-left' {
+        border-radius: 0 0 $radius 0;
+      }@else if $partial == 'bottom-right' {
+        border-radius: 0 0 0 $radius;
+      }@else if $partial == 'all-but-bottom-right' {
         border-radius: $radius $radius 0 $radius;
-      }@else{
-        border-radius: 0px;
-      }
-    }@else if $partial == 'all-but-top-left'{
-      @if $radius == 3px or $radius == 5px or $radius == 10px or $radius == 15px or $radius == 25px or $radius == 50%{
+      }@else if $partial == 'all-but-top-left' {
         border-radius: 0 $radius $radius $radius;
-      }@else{
-        border-radius: 0px;
       }
     }@else{
       border-radius: 0px;
