@@ -150,9 +150,10 @@ export class LiveDataProcessingService {
           return eachOldRow.data.rowId === eachNewRow.data.rowId;
         });
         if (!!oldRow) {
+          const isAlertDiff = this.isAlertDiff(oldRow.data.alert, eachNewRow.data.alert);
           const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
           const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
-          if ( isSecurityDiff > 0 || isBestQuoteDiff > 0) {
+          if (isAlertDiff || isSecurityDiff > 0 || isBestQuoteDiff > 0) {
             this.carryOverOldRowStates(eachNewRow, oldRow);
             updateList.push(eachNewRow);
           }
@@ -564,5 +565,9 @@ export class LiveDataProcessingService {
         eachRow.data.security.data.weight.groupBEVPctDisplay = !!eachRow.data.security.data.weight.groupBEVPct ? `${eachRow.data.security.data.weight.groupBEVPct} %` : null;
       }
     });
+  }
+
+  private isAlertDiff(oldRow: DTOs.AlertDTO, newRow: DTOs.AlertDTO): boolean {
+    return oldRow.data.unixTimestamp !== newRow.data.unixTimestamp && oldRow.data.id === newRow.data.id;
   }
 }
