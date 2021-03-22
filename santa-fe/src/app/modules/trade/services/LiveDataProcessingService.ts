@@ -150,7 +150,7 @@ export class LiveDataProcessingService {
           return eachOldRow.data.rowId === eachNewRow.data.rowId;
         });
         if (!!oldRow) {
-          const isAlertDiff = this.isAlertDiff(oldRow.data.alert, eachNewRow.data.alert);
+          const isAlertDiff = oldRow.data.alert && eachNewRow.data.alert ? this.isAlertDiff(oldRow.data.alert, eachNewRow.data.alert) : false;
           const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
           const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
           if (isAlertDiff || isSecurityDiff > 0 || isBestQuoteDiff > 0) {
