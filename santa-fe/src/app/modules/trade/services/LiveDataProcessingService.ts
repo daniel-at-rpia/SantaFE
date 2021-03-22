@@ -191,6 +191,11 @@ export class LiveDataProcessingService {
         };
       } catch {
         console.error('Cannot complete diffing logic for updated rows')
+        return {
+          newRowList: [],
+          markDiffCount: 0,
+          quantDiffCount: 0
+        }
       }
     }
   }
