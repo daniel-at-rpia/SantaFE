@@ -72,8 +72,7 @@
       DeltaScope,
       STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
       DeltaScopeDisplayText,
-      DeltaScopeBEToFEMapping,
-      BEIdentifierToFEDisplayMapping
+      DeltaScopeBEToFEMapping
     } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
