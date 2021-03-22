@@ -18,9 +18,9 @@
         border-radius: $radius 0 0 0;
       }@else if $partial == 'top-right' {
         border-radius: 0 $radius 0 0;
-      }@else if $partial == 'bottom-left' {
-        border-radius: 0 0 $radius 0;
       }@else if $partial == 'bottom-right' {
+        border-radius: 0 0 $radius 0;
+      }@else if $partial == 'bottom-left' {
         border-radius: 0 0 0 $radius;
       }@else if $partial == 'all-but-bottom-right' {
         border-radius: $radius $radius 0 $radius;

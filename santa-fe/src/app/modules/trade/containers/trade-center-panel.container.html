@@ -2,7 +2,6 @@
   [ngClass]="{
     'sat-tradeCenterPanel': true,
     'sat-tradeCenterPanel--keywordSearchActiveState': !!state.filters.keyword.actualValue && state.filters.keyword.actualValue.length >= 2,
-    'sat-tradeCenterPanel--presetReadyState': state.presets.presetsReady,
     'sat-tradeCenterPanel--presetCategorySelectedState': state.presets.selectedList,
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
@@ -17,16 +16,21 @@
         <span class="sat-tradeCenterPanel__presetsAndFilters-presets-title-text">Select Preset</span>
       </div>
       <div class="sat-tradeCenterPanel__presetsAndFilters-presets-content">
-        <aside class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas">
-          <div class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-ribbon"></div>
-          <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list">
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
+        <article
+          [ngClass]="{
+            'sat-tradeCenterPresetCategoryCanvas': true,
+            'sat-tradeCenterPresetCategoryCanvas--top': true,
+            'sat-tradeCenterPresetCategoryCanvas--readyState': state.presets.presetsReady
+          }">
+          <section class="sat-tradeCenterPresetCategoryCanvas__ribbon"></section>
+          <ul class="sat-tradeCenterPresetCategoryCanvas__list">
+            <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
               <button
                 (click)="onSelectPresetCategory(state.presets.portfolioShortcutList)"
                 [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--first': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.portfolioShortcutList,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--first': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.portfolioShortcutList,
                   'santaBtn--labelled': true,
                   'santaBtn--inverseLabelled': true
                 }">
@@ -34,13 +38,13 @@
                 <span>Portfolio</span>
               </button>
             </li>
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
+            <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
               <button
                 (click)="onSelectPresetCategory(state.presets.ownershipShortcutList)"
                 [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--second': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.ownershipShortcutList,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--second': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.ownershipShortcutList,
                   'santaBtn--labelled': true,
                   'santaBtn--inverseLabelled': true
                 }">
@@ -48,13 +52,13 @@
                 <span>Ownership</span>
               </button>
             </li>
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
+            <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
               <button
                 (click)="onSelectPresetCategory(state.presets.strategyShortcutList)"
                 [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--third': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.strategyShortcutList,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--third': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.strategyShortcutList,
                   'santaBtn--labelled': true,
                   'santaBtn--inverseLabelled': true
                 }">
@@ -63,7 +67,7 @@
               </button>
             </li>
           </ul>
-        </aside>
+        </article>
         <div class="sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas">
           <ul
             [ngClass]="{
@@ -89,6 +93,58 @@
             </li>
           </ul>
         </div>
+        <article
+          [ngClass]="{
+            'sat-tradeCenterPresetCategoryCanvas': true,
+            'sat-tradeCenterPresetCategoryCanvas--bottom': true,
+            'sat-tradeCenterPresetCategoryCanvas--readyState': state.presets.presetsReady
+          }">
+          <div class="sat-tradeCenterPresetCategoryCanvas__ribbon"></div>
+          <ul class="sat-tradeCenterPresetCategoryCanvas__list">
+            <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+              <button
+                (click)="onSelectPresetCategory(state.presets.portfolioShortcutList)"
+                [ngClass]="{
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--first': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.portfolioShortcutList,
+                  'santaBtn--labelled': true,
+                  'santaBtn--inverseLabelled': true
+                }">
+                <i class="fal fa-file-invoice-dollar"></i>
+                <span>Portfolio</span>
+              </button>
+            </li>
+            <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+              <button
+                (click)="onSelectPresetCategory(state.presets.ownershipShortcutList)"
+                [ngClass]="{
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--second': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.ownershipShortcutList,
+                  'santaBtn--labelled': true,
+                  'santaBtn--inverseLabelled': true
+                }">
+                <i class="fad fa-users"></i>
+                <span>Ownership</span>
+              </button>
+            </li>
+            <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+              <button
+                (click)="onSelectPresetCategory(state.presets.strategyShortcutList)"
+                [ngClass]="{
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--third': true,
+                  'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.strategyShortcutList,
+                  'santaBtn--labelled': true,
+                  'santaBtn--inverseLabelled': true
+                }">
+                <i class="fal fa-chess"></i>
+                <span>Strategy</span>
+              </button>
+            </li>
+          </ul>
+        </article>
       </div>
     </div>
     <div class="sat-tradeCenterPanel__presetsAndFilters-configurator">

@@ -1,12 +1,8 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width: 6rem;
 $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
 $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
-$tradeCenterPanel_presetsAndFilters_presets_category_first_color: $color_blue_5;
-$tradeCenterPanel_presetsAndFilters_presets_category_second_color: $color_yellow_7;
-$tradeCenterPanel_presetsAndFilters_presets_category_third_color: $color_deeppurple_1_A;
 .sat-tradeCenterPanel {
   $blockName: &;
   @include mix_border_generator;
@@ -46,70 +42,14 @@ $tradeCenterPanel_presetsAndFilters_presets_category_third_color: $color_deeppur
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
         &-categoryCanvas {
-          @include mix_fixed_div(relative, $z_index_base_item_solid);
-          @include mix_alive('custom', transform $animation_duration_normal);
-          flex: 0 0 auto;
-          display: flex;
-          height: $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width;
-          margin-right: 25%;
-          transform: translate(-100%, 0%);
-          &-ribbon {
-            @include mix_fixed_div(absolute, $z_index_base_item);
-            @include mix_border_radius(25px, 'bottom-left');
-            top: 0;
-            height: $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width;
-            width: 100%;
-            background-color: $color_gray_85;
-          }
-          &-list {
-            @include mix_fixed_div(relative, $z_index_base_item_solid);
-            @include mix_calculate(top, $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width, 50%, '-');
-            @include mix_alive('light');
-            flex: 1 1 auto;;
-            display: flex;
-            justify-content: space-evenly;
-            transform: translate(0, -100%);
-            opacity: 0;
-            transition-delay: $animation_duration_normal;
-            &-item {
-              @include mix_alive('light');
-              display: flex;
-              &-btn {
-                @include mix_border_radius(15px);
-                flex: 1 1 auto;
-                padding: $spacing_medium;
-                margin-bottom: $spacing_large;
-                &>i {
-                  font-size: $font_size_xx_large;
-                }
-                &>span {
-                  font-size: $font_size_x_large;
-                }
-                &:hover {
-                  transform: translate(0, $spacing_medium);
-                }
-                &--first {
-                  background-color: $color_blue_5;
-                }
-                &--second {
-                  background-color: $tradeCenterPanel_presetsAndFilters_presets_category_second_color;
-                }
-                &--third {
-                  background-color: $tradeCenterPanel_presetsAndFilters_presets_category_third_color;
-                }
-                &--selected {
-                  @include material('none');
-                  background-color: $color_active;
-                }
-              }
-            }
-          }
         }
         &-shortcutCanvas {
           flex: 1 1 auto;
           display: flex;
-          margin: $spacing_medium 0;
+          margin: $spacing_medium $spacing_xx_large;
+          overflow: hidden;
           &-list {
             @include mix_fixed_div(relative, $z_index_base_item);
             @include mix_alive('light');
@@ -120,11 +60,12 @@ $tradeCenterPanel_presetsAndFilters_presets_category_third_color: $color_deeppur
             visibility: hidden;
             flex-wrap: wrap;
             background-color: $color_active;
-            padding: $spacing_medium;
+            padding: $spacing_large $spacing_medium;
             opacity: 0;
+            // max-width: 72rem;
             &-item {
               @include mix_alive('light');
-              flex: 0 1 33.33%;
+              flex: 0 1 25%;
               display: flex;
               padding: $spacing_x_small $spacing_medium $spacing_medium 0;
               search-shortcut {
@@ -421,17 +362,101 @@ $tradeCenterPanel_presetsAndFilters_presets_category_third_color: $color_deeppur
       }
     }
   }
-  &--presetReadyState {
-    #{$blockName} {
-      &__presetsAndFilters {
-        &-presets-content-categoryCanvas {
-          transform: translate(0, 0);
-          &-list {
-            transform: translate(0, 0);
-            opacity: 1;
-          }
+}
+
+$tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
+.sat-tradeCenterPresetCategoryCanvas {
+  $blockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item_solid);
+  @include mix_alive('custom', transform $animation_duration_normal);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: $tradeCenterPresetCategoryCanvas_ribbon_width;
+  &__ribbon {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    top: 0;
+    height: $tradeCenterPresetCategoryCanvas_ribbon_width;
+    width: 100%;
+    background-color: $color_gray_85;
+  }
+  &__list {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    @include mix_alive('light');
+    flex: 1 1 auto;;
+    display: flex;
+    justify-content: space-evenly;
+    opacity: 0;
+    transition-delay: $animation_duration_normal;
+    &-item {
+      @include mix_alive('light');
+      display: flex;
+      &-btn {
+        @include mix_border_radius(15px);
+        flex: 1 1 auto;
+        padding: $spacing_medium;
+        &>i {
+          font-size: $font_size_xx_large;
+        }
+        &>span {
+          font-size: $font_size_x_large;
+        }
+        &:hover {
+          transform: translate(0, $spacing_small);
+        }
+        &--first {
+          background-color: $color_blue_5;
+        }
+        &--second {
+          background-color: $color_yellow_7;
+        }
+        &--third {
+          background-color: $color_deeppurple_1_A;
+        }
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
         }
       }
     }
   }
+  &--top {
+    margin-right: 25%;
+    transform: translate(-100%, 0%);
+    #{$blockName} {
+      &__ribbon {
+        @include mix_border_radius(25px, 'bottom-right');
+      }
+      &__list {
+        @include mix_calculate(top, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
+        transform: translate(0, -100%);
+      }
+    }
+  }
+  &--bottom {
+    margin-left: 25%;
+    transform: translate(100%, 0%);
+    #{$blockName} {
+      &__ribbon {
+        @include mix_border_radius(25px, 'top-left');
+      }
+      &__list {
+        @include mix_calculate(bottom, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
+        transform: translate(0, 100%);
+      }
+    }
+  }
+  &--readyState {
+    transform: translate(0, 0);
+    #{$blockName} {
+      &__list {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.sat-tradeCenterPresetShortcutCanvas {
+
 }
