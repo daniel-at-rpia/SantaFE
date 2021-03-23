@@ -137,11 +137,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         presetsReady: false,
         selectedPreset: null,
         selectedList: null,
-        recentShortcutList: [],
+        selectedCategoryFromTop: false,
+        selectedCategoryFromBottom: false,
         portfolioShortcutList: [],
         ownershipShortcutList: [],
         strategyShortcutList: [],
-        individualShortcutList: []
+        recentWatchlistShortcutList: [],
+        savedWatchlistShortcutList: [],
+        trendingWatchlistShortcutList: []
       },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, true),
@@ -307,11 +310,26 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     return super.ngOnInit();
   }
 
-  public onSelectPresetCategory(targetCategory: Array<DTOs.SearchShortcutDTO>) {
+  public onSelectPresetCategory(
+    targetCategory: Array<DTOs.SearchShortcutDTO>,
+    fromTop: boolean
+  ) {
     if (this.state.presets.selectedList === targetCategory) {
       this.state.presets.selectedList = null;
+      if (fromTop) {
+        this.state.presets.selectedCategoryFromTop = false;
+      } else {
+        this.state.presets.selectedCategoryFromBottom = false
+      }
     } else {
       this.state.presets.selectedList = targetCategory;
+      if (fromTop) {
+        this.state.presets.selectedCategoryFromTop = true;
+        this.state.presets.selectedCategoryFromBottom = false;
+      } else {
+        this.state.presets.selectedCategoryFromBottom = true;
+        this.state.presets.selectedCategoryFromTop = false;
+      }
     }
   }
 
