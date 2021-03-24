@@ -61,3 +61,8 @@ export const selectSetBulkOverridesEvent = createSelector(
   getStructureState,
   (state: StructureState) => state.setBulkOverrides
 )
+
+export const selectFullDataLoadedEvent = createSelector(
+  getStructureState,
+  (state: StructureState) => state.fullStructureDataLoaded
+)
