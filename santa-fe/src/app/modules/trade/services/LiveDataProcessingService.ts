@@ -197,6 +197,12 @@ export class LiveDataProcessingService {
           quantDiffCount: 0
         }
       }
+    } else {
+      return {
+        newRowList: [],
+        markDiffCount: 0,
+        quantDiffCount: 0
+      }
     }
   }
 
