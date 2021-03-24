@@ -286,7 +286,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       return eachAlert.data.id === newAlert.data.id;
     });
     if (existIndexInPresent > -1) {
-      console.log('Global Alert - new alert is an update, the old one is in the sidebar', newAlert.data.id);
+      // console.log('Global Alert - new alert is an update, the old one is in the sidebar', newAlert.data.id);
 
       const targetAlert = this.state.presentList[existIndexInPresent];
       targetAlert.state.willBeRemoved = true;
@@ -311,7 +311,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
       }
       setTimeout(removeTarget.bind(this), 300);
     } else if (existIndexInStore >= 0) {
-      console.log('Global Alert - new alert is an update, the old one is not in the sidebar, buried in the queue', newAlert.data.id);
+     // console.log('Global Alert - new alert is an update, the old one is not in the sidebar, buried in the queue', newAlert.data.id);
       this.state.storeList.splice(existIndexInStore, 1);
     }
     this.state.presentList.unshift(newAlert);
