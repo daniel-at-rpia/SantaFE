@@ -465,12 +465,13 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
   }
 }
 
+$tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $spacing_medium;
 .sat-tradeCenterPresetShortcutCanvas {
   $blockName: &;
   @include mix_alive('light');
   flex: 1 1 auto;
   display: flex;
-  margin: $spacing_xx_large;
+  margin: $spacing_xx_large 0;
   overflow: hidden;
   &__list {
     @include mix_fixed_div(relative, $z_index_base_item);
@@ -512,9 +513,18 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
     }
   }
   &--topCategorySelectedState {
-    margin-top: $spacing_medium;
+    transform: translate(0, -$tradeCenterPresetShortcutCanvas_selected_movement_length);
   }
   &--bottomCategorySelectedState {
-    margin-bottom: $spacing_medium;
+    transform: translate(0, $tradeCenterPresetShortcutCanvas_selected_movement_length);
+  }
+  @include mq-large-min {
+    margin: $spacing_xx_large;
+  }
+  @include mq-x-large-min {
+    margin: $spacing_xx_large 18%;
+  }
+  @include mq-xx-large-min {
+    margin: $spacing_xx_large 25%;
   }
 }
