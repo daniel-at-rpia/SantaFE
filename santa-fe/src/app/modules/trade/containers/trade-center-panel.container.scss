@@ -368,13 +368,19 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
       }
     }
   }
+  &__title {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    &-text {
+      font-size: $font_size_large;
+      color: $color_gray_5;
+    }
+  }
   &--top {
-    margin-right: 25%;
     transform: translate(-100%, 0%);
     #{$blockName} {
-      &__ribbon {
-        @include mix_border_radius(25px, 'bottom-right');
-      }
       &__list {
         @include mix_calculate(top, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
         transform: translate(0, -100%);
@@ -382,25 +388,27 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
           transform: translate(0, $spacing_small);
         }
       }
+      &__title {
+        margin-right: $spacing_x_large;
+      }
     }
   }
   &--bottom {
-    margin-left: 25%;
     transform: translate(100%, 0%);
+    direction: rtl;
     #{$blockName} {
-      &__ribbon {
-        @include mix_border_radius(25px, 'top-left');
-      }
       &__list {
         @include mix_calculate(bottom, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
         transform: translate(0, 100%);
-        direction: rtl;
         &-item {
           direction: ltr;
           &:hover {
             transform: translate(0, -$spacing_small);
           }
         }
+      }
+      &__title {
+        margin-left: $spacing_x_large;
       }
     }
   }
@@ -410,6 +418,32 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
       &__list {
         transform: translate(0, 0);
         opacity: 1;
+      }
+    }
+  }
+  @include mq-large-min {
+    width: 75%;
+    #{$blockName} {
+      &__title {
+        &-text {
+          font-size: $font_size_xx_large;
+        }
+      }
+    }
+    &--top {
+      margin-right: 25%;
+      #{$blockName} {
+        &__ribbon {
+          @include mix_border_radius(25px, 'bottom-right');
+        }
+      }
+    }
+    &--bottom {
+      margin-left: 25%;
+      #{$blockName} {
+        &__ribbon {
+          @include mix_border_radius(25px, 'top-left');
+        }
       }
     }
   }
