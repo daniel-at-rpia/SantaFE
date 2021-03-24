@@ -447,6 +447,22 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
       }
     }
   }
+  @include mq-x-large-min {
+    &--top {
+      #{$blockName} {
+        &__list {
+          margin-left: 25%;
+        }
+      }
+    }
+    &--bottom {
+      #{$blockName} {
+        &__list {
+          margin-right: 25%;
+        }
+      }
+    }
+  }
 }
 
 .sat-tradeCenterPresetShortcutCanvas {

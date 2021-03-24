@@ -424,7 +424,7 @@ $structureUtilityPanel_side_btn_size: 2.25rem;
       }
     }
   }
-  @include mq-x-large-min {
+  @include mq-xx-large-min {
     &__metricSelect {
       flex-direction: row;
       justify-content: center;
