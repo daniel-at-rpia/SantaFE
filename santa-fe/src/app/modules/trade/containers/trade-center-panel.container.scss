@@ -1,214 +1,58 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
-$tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
+$tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVariant_width + $securityDefinitionConfigurator_gapBetweenDefAndFilter + $spacing_medium;
 .sat-tradeCenterPanel {
   $blockName: &;
   @include mix_border_generator;
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
-  &__presetsAndFilters {
-    @include mix_fixed_div(relative, $z_index_base_item);
-    flex: 1 1 auto;
+  &__presets {
+    flex: 0 0 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    &-presets {
+    &-title {
       @include mix_fixed_div(absolute, $z_index_base_item);
-      @include mix_alive('custom', transform $animation_duration_light);
       display: flex;
-      flex-direction: column;
-      height: 100%;
+      justify-content: center;
+      align-items: center;
       width: 100%;
-      transform: translate(0, 0);
-      overflow: hidden;
-      &-title {
-        @include mix_fixed_div(absolute, $z_index_base_item);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        &-text {
-          text-align: center;
-          font-size: $font_size_x_large;
-          color: $font_color_minor;
-        }
-      }
-      &-content {
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
+      height: 100%;
+      &-text {
+        text-align: center;
+        font-size: $font_size_x_large;
+        color: $font_color_minor;
       }
     }
-    &-configurator {
-      @include mix_fixed_div(absolute, $z_index_base_item);
-      @include mix_alive('custom', opacity $animation_duration_light, transform $animation_duration_light);
+    &-content {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      width: 100%;
-      transform: translate(100%, 0);
-      &-backBtn {
-        margin: $spacing_x_large $spacing_medium $spacing_large $spacing_medium;
-        &>i {
-          margin-left: $spacing_small;
-          margin-right: 0;
-        }
-      }
-      security-definition-configurator {
-        @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
-        display: flex;
-      }
+      overflow: hidden;
     }
   }
-  &__result {
+  &__main {
     flex: 1 1 auto;
     display: none;
-    flex-direction: column;
     overflow: hidden;
     padding: $spacing_medium;
-    &-utilities {
+    &-configurator {
+      flex: 0 0 auto;
       display: flex;
-      align-items: center;
-      margin-bottom: $spacing_small;
-      &-keywordSearch {
-        @include mix_border_radius(5px);
-        flex: 0 1 25rem;
-        display: flex;
-        align-items: center;
-        &-activeIcon {
-          font-size: $font_size_x_large;
-          color: $font_color_major;
-          margin: 0 $spacing_small;
-        }
-        santa-input {
-          flex: 1 1 auto;
-          margin: $spacing_small $spacing_small $spacing_small 0;
-        }
-      }
-      &-tableRowCount {
-        @include mix_border_radius(5px);
-        display: none;
-        margin-right: $spacing_small;
-        &-icon {
-          flex: 0 0 auto;
-          display: none;
-          align-items: center;
-          margin: $spacing_x_small;
-          padding: 0 $spacing_x_small;
-          &-img {
-            color: $color_warning;
-            font-size: $font_size_xx_large;
-          }
-        }
-        &-content {
-          flex: 1 1 auto;
-          display: flex;
-          flex-direction: column;
-          padding: $spacing_x_small;
-          &-mainRow {
-            display: flex;
-            align-items: center;
-            &-label {
-              color: $font_color_minor;
-            }
-            &-highlightValue {
-              @include mix_border_radius(3px);
-              background-color: $color_active;
-              padding: 0 $spacing_x_small;
-              color: $font_color_inverse;
-              margin: 0 $spacing_x_small;
-              line-height: $line_height_small;
-            }
-            &-value {
-              color: $font_color_major;
-              margin: 0 $spacing_x_small;
-            }
-          }
-          &-incompleteRow {
-            display: none;
-            &-label {
-              color: $color_warning;
-            }
-          }
-        }
-      }
-      &-driver {
-        @include mix_fixed_div(relative, $z_index_base_item);
-        @include mix_alive('custom', padding-right $animation_duration_light);
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        margin-left: auto; // pushes driver to the far right
-        padding-right: 2.25rem;
-        &-label {
-          flex: 0 0 auto;
-          color: $font_color_minor;
-          font-size: $font_size_large;
-          margin-right: $spacing_small;
-        }
-        &-value {
-          @include mix_border_radius(5px);
-          flex: 0 0 auto;
-          color: $font_color_inverse;
-          margin-right: $spacing_small;
-          padding: $spacing_x_small $spacing_small;
-          background-color: $color_active;
-        }
-        &-btnGroup {
-          @include mix_fixed_div(absolute, $z_index_base_item_lift);
-          @include mix_alive('custom', right $animation_duration_light);
-          right: -18rem;
-          &-btn {
-            @include mix_border_radius(5px);
-            &--active {
-              @include material('none');
-              @extend .santaBtn--inverseLabelled;
-              background-color: $color_active;
-            }
-          }
-        }
-        &-editCta {
-          @include mix_fixed_div(absolute, $z_index_base_item_solid);
-          right: 0;
-        }
-      }
-    }
-    &-errorPrompt {
-      @include mix_border_radius(10px);
-      flex: 0 1 auto;
-      display: none;
       flex-direction: column;
-      align-items: center;
-      background-color: $color_red_1;
-      padding: $spacing_large;
-      margin: $spacing_small 0;
-      &-icon {
-        font-size: $font_size_xxxx_large;
-        color: $color_kill;
-      }
-      &-title {
-        text-align: center;
-        font-size: $font_size_xx_large;
-        color: $color_kill;
-        margin: $spacing_large 0;
-      }
-      &-errorText {
-        text-align: center;
-        font-size: $font_size_large;
-        color: $font_color_major;
-        margin-bottom: $spacing_medium;
-      }
-      &-btn {
-        margin-top: $spacing_medium;
+      width: $tradeCenterPanel_main_configurator_width;
+      margin-right: $spacing_large;
+      security-definition-configurator {
+        height: 100%;
+        display: flex;
       }
     }
     &-table {
+      @include mix_fixed_div(relative, $z_index_hovering_item); // need to be above the configurator's internal $z_index_base_item_lift
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
@@ -220,24 +64,158 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
       }
     }
   }
+  &__utilities {
+    display: none;
+    align-items: center;
+    padding: 0 $spacing_medium;
+    &-keywordSearch {
+      @include mix_border_radius(5px);
+      flex: 0 1 25rem;
+      display: flex;
+      align-items: center;
+      margin-left: auto; // pushes keyword search and everything after it to the far right
+      &-activeIcon {
+        font-size: $font_size_x_large;
+        color: $font_color_major;
+        margin: 0 $spacing_small;
+      }
+      santa-input {
+        flex: 1 1 auto;
+        margin: $spacing_small $spacing_small $spacing_small 0;
+      }
+    }
+    &-tableRowCount {
+      @include mix_border_radius(5px);
+      display: none;
+      margin-right: $spacing_small;
+      &-icon {
+        flex: 0 0 auto;
+        display: none;
+        align-items: center;
+        margin: $spacing_x_small;
+        padding: 0 $spacing_x_small;
+        &-img {
+          color: $color_warning;
+          font-size: $font_size_xx_large;
+        }
+      }
+      &-content {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        padding: $spacing_x_small;
+        &-mainRow {
+          display: flex;
+          align-items: center;
+          &-label {
+            color: $font_color_minor;
+          }
+          &-highlightValue {
+            @include mix_border_radius(3px);
+            background-color: $color_active;
+            padding: 0 $spacing_x_small;
+            color: $font_color_inverse;
+            margin: 0 $spacing_x_small;
+            line-height: $line_height_small;
+          }
+          &-value {
+            color: $font_color_major;
+            margin: 0 $spacing_x_small;
+          }
+        }
+        &-incompleteRow {
+          display: none;
+          &-label {
+            color: $color_warning;
+          }
+        }
+      }
+    }
+    &-driver {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      @include mix_alive('custom', padding-right $animation_duration_light);
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      padding-right: 2.25rem;
+      &-label {
+        flex: 0 0 auto;
+        color: $font_color_minor;
+        font-size: $font_size_large;
+        margin-right: $spacing_small;
+      }
+      &-value {
+        @include mix_border_radius(5px);
+        flex: 0 0 auto;
+        color: $font_color_inverse;
+        margin-right: $spacing_small;
+        padding: $spacing_x_small $spacing_small;
+        background-color: $color_active;
+      }
+      &-btnGroup {
+        @include mix_fixed_div(absolute, $z_index_base_item_lift);
+        @include mix_alive('custom', right $animation_duration_light);
+        right: -18rem;
+        &-btn {
+          @include mix_border_radius(5px);
+          &--active {
+            @include material('none');
+            @extend .santaBtn--inverseLabelled;
+            background-color: $color_active;
+          }
+        }
+      }
+      &-editCta {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        right: 0;
+      }
+    }
+  }
+  &__errorPrompt {
+    @include mix_border_radius(10px);
+    flex: 0 1 auto;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color_red_1;
+    padding: $spacing_large;
+    margin: $spacing_small;
+    &-icon {
+      font-size: $font_size_xxxx_large;
+      color: $color_kill;
+    }
+    &-title {
+      text-align: center;
+      font-size: $font_size_xx_large;
+      color: $color_kill;
+      margin: $spacing_large 0;
+    }
+    &-errorText {
+      text-align: center;
+      font-size: $font_size_large;
+      color: $font_color_major;
+      margin-bottom: $spacing_medium;
+    }
+    &-btn {
+      margin-top: $spacing_medium;
+    }
+  }
   &--viewingIncompleteResultState {
     #{$blockName} {
-      &__result {
-        &-utilities-tableRowCount {
-          background-color: $color_orange_1;
-          &-icon {
-            display: flex;
+      &__utilities-tableRowCount {
+        background-color: $color_orange_1;
+        &-icon {
+          display: flex;
+        }
+        &-content {
+          &-mainRow {
+            margin-bottom: $spacing_x_small;
+            &-label {
+              color: $color_warning;
+            }
           }
-          &-content {
-            &-mainRow {
-              margin-bottom: $spacing_x_small;
-              &-label {
-                color: $color_warning;
-              }
-            }
-            &-incompleteRow {
-              display: flex;
-            }
+          &-incompleteRow {
+            display: flex;
           }
         }
       }
@@ -245,70 +223,68 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
   }
   &--editingDriverState {
     #{$blockName} {
-      &__result {
-        &-utilities-driver {
-          padding-right: 15.5rem;
-          &-btnGroup {
-            right: 0;
-          }
-          &-editCta {
-            right: -4rem;
-          }
+      &__utilities-driver {
+        padding-right: 15.5rem;
+        &-btnGroup {
+          right: 0;
+        }
+        &-editCta {
+          right: -4rem;
         }
       }
     }
   }
   &--keywordSearchActiveState {
     #{$blockName} {
-      &__result {
-        &-utilities-keywordSearch {
-          background-color: $color_filter;
-          &-activeIcon {
-            color: $font_color_inverse;
-          }
+      &__utilities-keywordSearch {
+        background-color: $color_filter;
+        &-activeIcon {
+          color: $font_color_inverse;
         }
       }
     }
   }
   &--boostConfiguratorState {
     #{$blockName} {
-      &__presetsAndFilters {
-        @include mix_fixed_div(relative, $z_index_tooltip);
+      &__main {
+        &-configurator {
+          @include mix_fixed_div(relative, $z_index_tooltip);
+        }
       }
     }
   }
   &--initialDataLoaded {
     #{$blockName} {
-      &__result {
-        &-utilities-tableRowCount {
-          display: flex;
-        }
-      }
-    }
-  }
-  &--fetchDataFailedState {
-    #{$blockName} {
-      &__result {
-        &-errorPrompt {
-          display: flex;
-        }
+      &__utilities-tableRowCount {
+        display: flex;
       }
     }
   }
   &--presetSelectedState {
     #{$blockName} {
-      &__presetsAndFilters {
-        flex: 0 0 10rem;
-        overflow: visible;
-        &-presets {
-          transform: translate(-100%, 0);
-        }
-        &-configurator {
-          opacity: 1;
-          transform: translate(0, 0);
-        }
+      &__presets {
+        display: none;
       }
-      &__result {
+      &__utilities {
+        display: flex;
+      }
+      &__main {
+        display: flex;
+      }
+    }
+  }
+  &--fetchDataFailedState {
+    #{$blockName} {
+      &__presets {
+        display: none;
+      }
+      &__utilities {
+        display: none;
+      }
+      &__main {
+        display: none;
+      }
+      &__errorPrompt {
         display: flex;
       }
     }
