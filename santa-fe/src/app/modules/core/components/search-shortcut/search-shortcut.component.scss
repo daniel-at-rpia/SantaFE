@@ -2,7 +2,7 @@
 @import "modules/market/market.scss";
 
 .sat-searchShortcut {
-  $searchShortcutBlockName: &;
+  $blockName: &;
   @include material();
   @include mix_alive('material');
   @include mix_border_radius(15px);
@@ -70,7 +70,7 @@
           background-color: $color_active;
         }
         &--filterActive {
-          #{$searchShortcutBlockName} {
+          #{$blockName} {
             &__configOverview {
               &-slotList-item-filterActive {
                 display: flex;
@@ -88,7 +88,7 @@
   &--selectedState {
     @include material('none');
     background-color: $color_active;
-    #{$searchShortcutBlockName} {
+    #{$blockName} {
       &__title {
         &-text {
           color: $font_color_inverse;
@@ -98,6 +98,22 @@
         &-slotList-item {
           background-color: inherit;
         }
+      }
+    }
+  }
+  &--previewVariant {
+    @include material('none');
+    @include mix_border_generator;
+    background-color: $color_white;
+    min-height: 4.5rem;
+    flex-direction: row;
+    #{$blockName} {
+      &__title {
+        flex: 0 0 auto;
+      }
+      &__configOverview {
+        flex: 1 1 auto;
+        margin-top: $spacing_small;
       }
     }
   }

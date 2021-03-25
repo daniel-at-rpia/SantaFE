@@ -796,7 +796,8 @@ export class DTOService {
         isSelected: false,
         isUserInputBlocked: false,
         isMajorShortcut: !!isMajor,
-        isHeroShortcut: !!isHero
+        isHeroShortcut: !!isHero,
+        isPreviewVariant: false
       }
     };
     definitionList.forEach((eachDefinition, index) => {

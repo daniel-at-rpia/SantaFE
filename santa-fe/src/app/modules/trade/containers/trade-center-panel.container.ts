@@ -182,7 +182,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         },
         securityFilters: []
       },
-      editingDriver: false
+      editingDriver: false,
+      currentSearch: {
+        previewShortcut: null
+      }
     };
 
     return state;
@@ -340,10 +343,16 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
+      this.state.currentSearch.previewShortcut = null;
       this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
     } else {
       targetPreset.state.isSelected = true;
       this.state.presets.selectedPreset = targetPreset;
+      const previewCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(targetPreset);
+      previewCopy.state.isPreviewVariant = true;
+      previewCopy.state.isSelected = false;
+      previewCopy.state.isUserInputBlocked = true;
+      this.state.currentSearch.previewShortcut = previewCopy;
       this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
       this.checkInitialPageLoadData();
       if (userTriggered) {

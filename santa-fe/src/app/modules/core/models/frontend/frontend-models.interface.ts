@@ -310,6 +310,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
     isUserInputBlocked: boolean;
     isMajorShortcut: boolean;
     isHeroShortcut: boolean;
+    isPreviewVariant: boolean;
   }
 }
 

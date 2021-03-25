@@ -82,8 +82,7 @@
             [ngClass]="{
               'sat-tradeCenterPresetShortcutCanvas__list-item': true,
               'sat-tradeCenterPresetShortcutCanvas__list-item--major': eachShortcut.state.isMajorShortcut,
-              'sat-tradeCenterPresetShortcutCanvas__list-item--hero': eachShortcut.state.isHeroShortcut,
-              'sat-tradeCenterPresetShortcutCanvas__list-item--selected': state.presets.selectedPreset === eachShortcut
+              'sat-tradeCenterPresetShortcutCanvas__list-item--hero': eachShortcut.state.isHeroShortcut
             }">
             <search-shortcut
               [shortcutData]="eachShortcut"
@@ -150,6 +149,14 @@
     </div>
   </section>
   <section class="sat-tradeCenterPanel__utilities">
+    <div class="sat-tradeCenterPanel__utilities-selectedPreset">
+      <span class="sat-tradeCenterPanel__utilities-selectedPreset-label">Selected Preset: </span>
+      <search-shortcut
+        *ngIf="state.currentSearch.previewShortcut"
+        [shortcutData]="state.currentSearch.previewShortcut"
+      ></search-shortcut>
+      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--iconOnly fal fa-times"></button>
+    </div>
     <div class="sat-tradeCenterPanel__utilities-keywordSearch">
       <i class="sat-tradeCenterPanel__utilities-keywordSearch-activeIcon fal fa-search"></i>
       <santa-input

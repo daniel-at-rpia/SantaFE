@@ -35,39 +35,28 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       overflow: hidden;
     }
   }
-  &__main {
-    flex: 1 1 auto;
-    display: none;
-    overflow: hidden;
-    padding: $spacing_medium;
-    &-configurator {
-      flex: 0 0 auto;
-      display: flex;
-      flex-direction: column;
-      width: $tradeCenterPanel_main_configurator_width;
-      margin-right: $spacing_large;
-      security-definition-configurator {
-        height: 100%;
-        display: flex;
-      }
-    }
-    &-table {
-      @include mix_fixed_div(relative, $z_index_hovering_item); // need to be above the configurator's internal $z_index_base_item_lift
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      santa-table {
-        flex: 1 1 auto;
-        display: flex;
-        overflow: hidden;
-      }
-    }
-  }
   &__utilities {
     display: none;
     align-items: center;
     padding: 0 $spacing_medium;
+    &-selectedPreset {
+      display: flex;
+      align-items: center;
+      margin: $spacing_small $spacing_medium $spacing_small $page_gutter_width_for_navTrigger;
+      &-label {
+        font-size: $font_size_large;
+        color: $font_color_minor;
+        margin-right: $spacing_small;
+      }
+      &>search-shortcut {
+        margin-right: $spacing_small;
+        width: 30rem;
+      }
+      &-back {
+        background-color: $color_kill;
+        color: $font_color_inverse;
+      }
+    }
     &-keywordSearch {
       @include mix_border_radius(5px);
       flex: 0 1 25rem;
@@ -170,6 +159,35 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       &-editCta {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
         right: 0;
+      }
+    }
+  }
+  &__main {
+    flex: 1 1 auto;
+    display: none;
+    overflow: hidden;
+    padding: 0 $spacing_medium $spacing_medium $spacing_medium;
+    &-configurator {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      width: $tradeCenterPanel_main_configurator_width;
+      margin-right: $spacing_large;
+      security-definition-configurator {
+        height: 100%;
+        display: flex;
+      }
+    }
+    &-table {
+      @include mix_fixed_div(relative, $z_index_hovering_item); // need to be above the configurator's internal $z_index_base_item_lift
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      santa-table {
+        flex: 1 1 auto;
+        display: flex;
+        overflow: hidden;
       }
     }
   }
