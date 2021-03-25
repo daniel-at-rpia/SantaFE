@@ -157,6 +157,14 @@ export function tradeReducer(
           }
         }
       };
+    case TradeActions.TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent:
+      return {
+        ...state,
+        tradeMainTable: {
+          ...state.tradeMainTable,
+          initialDataLoaded: false
+        }
+      }
     case TradeActions.LiveUpdateProcessingDataCompleteInAlertTableEvent:
       if (state.tradeAlertTable.initialDataLoaded) {
         return {

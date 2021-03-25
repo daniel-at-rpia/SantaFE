@@ -86,7 +86,7 @@ export interface SecurityGroupMetricPackBlock {
     Wow: object;
     Mom: object;
     Ytd: object;
-    Yoy: object;
+    TMinusTwo: object;
   }
 }
 

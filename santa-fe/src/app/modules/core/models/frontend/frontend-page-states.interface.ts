@@ -133,8 +133,10 @@ export interface TradeCenterPanelState {
     fetchTableDataFailedError: string;
     mainTable: Blocks.TableFetchResultBlock;
     initialDataLoadedInternalSyncFlag: boolean;
+    totalCount: number;
   }
   filters: Blocks.TradeCenterPanelStateFilterBlock;
+  editingDriver: boolean;
 }
 
 export interface StructureMainPanelState {

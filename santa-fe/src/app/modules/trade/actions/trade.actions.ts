@@ -9,6 +9,7 @@ export enum TradeActions {
   LiveUpdateInProgressEvent = '[Trade] Live Update Processing',
   LiveUpdatePassRawDataToMainTableEvent = '[Trade] Live Update Pass Raw Data to Main Table',
   LiveUpdateProcessingDataCompleteInMainTableEvent = '[Trade] Live Update Processing Data Complete in Main Table',
+  TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent = '[Trade] Live Update Initiate New Data Fetch From Backend In Main Table',
   LiveUpdatePassRawDataToAlertTableEvent = '[Trade] Live Update Pass Raw Data to Alert Table',
   LiveUpdateProcessingDataCompleteInAlertTableEvent = '[Trade] Live Update Processing Data Complete in Alert Table',
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
@@ -53,6 +54,11 @@ export class TradeLiveUpdatePassRawDataToMainTableEvent implements Action {
 
 export class TradeLiveUpdateProcessDataCompleteInMainTableEvent implements Action {
   readonly type = TradeActions.LiveUpdateProcessingDataCompleteInMainTableEvent;
+  constructor(){}
+}
+
+export class TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent implements Action {
+  readonly type = TradeActions.TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent;
   constructor(){}
 }
 
