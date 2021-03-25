@@ -1054,8 +1054,19 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     private fetchUpdate(newAlertList: Array<DTOs.AlertDTO>) {
       if (this.state.alert.initialAlertListReceived) {
         if (newAlertList.length > 0) {
-          this.alertCountIncrement(newAlertList);
-          newAlertList.forEach((eachAlert) => {
+          let nonUpdateAlertList: Array<DTOs.AlertDTO> = [];
+          newAlertList.forEach((eachAlert: DTOs.AlertDTO) => {
+            if (nonUpdateAlertList.length > 0) {
+              const isExists = nonUpdateAlertList.find((nonUpdateAlert: DTOs.AlertDTO) => nonUpdateAlert.data.id === eachAlert.data.id);
+              if (!isExists) {
+                nonUpdateAlertList = [...nonUpdateAlertList, eachAlert]
+              }
+            } else {
+              nonUpdateAlertList = [...nonUpdateAlertList, eachAlert];
+            }
+          });
+          this.alertCountIncrement(nonUpdateAlertList);
+          newAlertList.forEach((eachAlert: DTOs.AlertDTO) => {
             this.state.alert.alertTableAlertList[eachAlert.data.id] = eachAlert;
           });
         }

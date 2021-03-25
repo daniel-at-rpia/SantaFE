@@ -121,7 +121,7 @@
           [ngClass]="{
             'sat-tradeMarketAnalysisPanel__table-content-levelDistance-item': true,
             'sat-tradeMarketAnalysisPanel__table-content-levelDistance-item--even': rowIndex%2 === 0,
-            'sat-tradeMarketAnalysisPanel__table-content-levelDistance-item--positive': eachDistance > 0
+            'sat-tradeMarketAnalysisPanel__table-content-levelDistance-item--positive': toFloat(eachDistance) > 0
           }">
           <span class="sat-tradeMarketAnalysisPanel__table-content-levelDistance-item-text">{{eachDistance}}</span>
         </li>
@@ -137,7 +137,7 @@
           [ngClass]="{
             'sat-tradeMarketAnalysisPanel__table-content-basisDistance-item': true,
             'sat-tradeMarketAnalysisPanel__table-content-basisDistance-item--even': rowIndex%2 === 0,
-            'sat-tradeMarketAnalysisPanel__table-content-basisDistance-item--positive': eachDistance > 0
+            'sat-tradeMarketAnalysisPanel__table-content-basisDistance-item--positive': toFloat(eachDistance) > 0
           }">
           <span class="sat-tradeMarketAnalysisPanel__table-content-basisDistance-item-text">{{eachDistance}}</span>
         </li>

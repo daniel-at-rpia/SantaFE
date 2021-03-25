@@ -125,67 +125,85 @@ export class LiveDataProcessingService {
     newList: Array<DTOs.SecurityTableRowDTO>,
     diffOverwriteRowList?: Array<string>
   ): AdhocPacks.LiveDataDiffingResult {
-    const updateList: Array<DTOs.SecurityTableRowDTO> = [];
-    const oldRowList: Array<DTOs.SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
-    let markDiffCount = 0;
-    let quantDiffCount = 0;
-
-    // those lists are only used for logging purposes
-    const newRowList: Array<DTOs.SecurityTableRowDTO> = [];
-    const positionUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
-    const markUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
-    const newBestQuoteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
-    const betterBidUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
-    const betterAskUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
-    const validityUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
-    const overwriteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
-
-    newList.forEach((eachNewRow) => {
-      // if this row is specified in the overwrite list, then there is no need to do diffing, just add it to the list of rows to be updated
-      if (!!diffOverwriteRowList && diffOverwriteRowList.length > 0 && diffOverwriteRowList.includes(eachNewRow.data.rowId)) {
-        overwriteUpdateList.push(eachNewRow);
-        updateList.push(eachNewRow);
-      } else {
-        const oldRow = oldRowList.find((eachOldRow) => {
-          return eachOldRow.data.rowId === eachNewRow.data.rowId;
-        });
-        if (!!oldRow) {
-          const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
-          const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
-          if ( isSecurityDiff > 0 || isBestQuoteDiff > 0) {
-            this.carryOverOldRowStates(eachNewRow, oldRow);
+    if (table && newList && newList.length > 0) {
+      try {
+        const updateList: Array<DTOs.SecurityTableRowDTO> = [];
+        const oldRowList: Array<DTOs.SecurityTableRowDTO> = this.utilityService.deepCopy(table.data.rows);
+        let markDiffCount = 0;
+        let quantDiffCount = 0;
+    
+        // those lists are only used for logging purposes
+        const newRowList: Array<DTOs.SecurityTableRowDTO> = [];
+        const positionUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+        const markUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+        const newBestQuoteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+        const betterBidUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+        const betterAskUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+        const validityUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+        const overwriteUpdateList: Array<DTOs.SecurityTableRowDTO> = [];
+    
+        newList.forEach((eachNewRow) => {
+          // if this row is specified in the overwrite list, then there is no need to do diffing, just add it to the list of rows to be updated
+          if (!!diffOverwriteRowList && diffOverwriteRowList.length > 0 && diffOverwriteRowList.includes(eachNewRow.data.rowId)) {
+            overwriteUpdateList.push(eachNewRow);
             updateList.push(eachNewRow);
+          } else {
+            const oldRow = oldRowList.find((eachOldRow) => {
+              return eachOldRow.data.rowId === eachNewRow.data.rowId;
+            });
+            if (!!oldRow) {
+              const isAlertDiff = oldRow.data.alert && eachNewRow.data.alert ? this.isAlertDiff(oldRow.data.alert, eachNewRow.data.alert) : false;
+              const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
+              const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
+              if (isAlertDiff || isSecurityDiff > 0 || isBestQuoteDiff > 0) {
+                this.carryOverOldRowStates(eachNewRow, oldRow);
+                updateList.push(eachNewRow);
+              }
+              isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
+              isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
+              if (isBestQuoteDiff === 1 || isBestQuoteDiff === 2) {
+                newBestQuoteUpdateList.push(eachNewRow);
+              }
+              isBestQuoteDiff === 3 && betterBidUpdateList.push(eachNewRow);
+              isBestQuoteDiff === 4 && betterAskUpdateList.push(eachNewRow);
+              isBestQuoteDiff === 5 && validityUpdateList.push(eachNewRow);
+            } else {
+              updateList.push(eachNewRow);
+              newRowList.push(eachNewRow);
+            }
           }
-          isSecurityDiff === 1 && positionUpdateList.push(eachNewRow);
-          isSecurityDiff === 2 && markUpdateList.push(eachNewRow);
-          if (isBestQuoteDiff === 1 || isBestQuoteDiff === 2) {
-            newBestQuoteUpdateList.push(eachNewRow);
-          }
-          isBestQuoteDiff === 3 && betterBidUpdateList.push(eachNewRow);
-          isBestQuoteDiff === 4 && betterAskUpdateList.push(eachNewRow);
-          isBestQuoteDiff === 5 && validityUpdateList.push(eachNewRow);
-        } else {
-          updateList.push(eachNewRow);
-          newRowList.push(eachNewRow);
+        });
+        // if (updateList.length > 0) {
+        //   console.log('=== new update ===');
+        //   newRowList.length > 0 && console.log('new rows', newRowList);
+        //   positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
+        //   markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
+        //   newBestQuoteUpdateList.length > 0 && console.log('Best Quote overwrite: ', newBestQuoteUpdateList);
+        //   betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
+        //   betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
+        //   validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
+        //   overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
+        // }
+        return {
+          newRowList: updateList,
+          markDiffCount: markDiffCount,
+          quantDiffCount: quantDiffCount
+        };
+      } catch (err) {
+        console.error('Cannot complete diffing logic for updated rows', err, table, newList);
+        return {
+          newRowList: [],
+          markDiffCount: 0,
+          quantDiffCount: 0
         }
       }
-    });
-    // if (updateList.length > 0) {
-    //   console.log('=== new update ===');
-    //   newRowList.length > 0 && console.log('new rows', newRowList);
-    //   positionUpdateList.length > 0 && console.log('Position change: ', positionUpdateList);
-    //   markUpdateList.length > 0 && console.log('Mark change: ', markUpdateList);
-    //   newBestQuoteUpdateList.length > 0 && console.log('Best Quote overwrite: ', newBestQuoteUpdateList);
-    //   betterBidUpdateList.length > 0 && console.log('Best Bid change: ', betterBidUpdateList);
-    //   betterAskUpdateList.length > 0 && console.log('Best Ask change: ', betterAskUpdateList);
-    //   validityUpdateList.length > 0 && console.log('Validity change: ', validityUpdateList);
-    //   overwriteUpdateList.length > 0 && console.log('Overwrite update: ', overwriteUpdateList);
-    // }
-    return {
-      newRowList: updateList,
-      markDiffCount: markDiffCount,
-      quantDiffCount: quantDiffCount
-    };
+    } else {
+      return {
+        newRowList: [],
+        markDiffCount: 0,
+        quantDiffCount: 0
+      }
+    }
   }
 
   public filterPrinstineRowList(
@@ -564,5 +582,9 @@ export class LiveDataProcessingService {
         eachRow.data.security.data.weight.groupBEVPctDisplay = !!eachRow.data.security.data.weight.groupBEVPct ? `${eachRow.data.security.data.weight.groupBEVPct} %` : null;
       }
     });
+  }
+
+  private isAlertDiff(oldRow: DTOs.AlertDTO, newRow: DTOs.AlertDTO): boolean {
+    return oldRow.data.unixTimestamp !== newRow.data.unixTimestamp && oldRow.data.id === newRow.data.id;
   }
 }

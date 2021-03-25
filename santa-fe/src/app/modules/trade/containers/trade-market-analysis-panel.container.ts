@@ -224,6 +224,10 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
     this.store$.dispatch(new TradeSelectedSecurityForAlertConfigEvent(this.utilityService.deepCopy(targetSecurity)));
   }
 
+  public toFloat(value: string): number {
+    return parseFloat(value);
+  }
+
   private onSecuritySelected(targetSecurity: DTOs.SecurityDTO) {
     this.state = this.initializePageState();
     this.state.receivedSecurity = true;
