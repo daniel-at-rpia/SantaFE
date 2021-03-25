@@ -24,6 +24,7 @@ export interface StructureState {
   dataDatestamp: number;
   utilityPanelLoadState: PageStates.StructureUtilityPanelState;
   setBulkOverrides: boolean;
+  fullStructureDataLoaded: boolean;
 }
 
 const initialState: StructureState = {
@@ -46,7 +47,8 @@ const initialState: StructureState = {
   activeDeltaScope: DeltaScope.dod,
   dataDatestamp: moment().unix(),
   utilityPanelLoadState: null,
-  setBulkOverrides: false
+  setBulkOverrides: false,
+  fullStructureDataLoaded: false
 }
 
 export function structureReducer(
@@ -115,6 +117,11 @@ export function structureReducer(
       return {
         ...state,
         setBulkOverrides: true
+      };
+    case StructureActions.FullStructureDataLoaded:
+      return {
+        ...state,
+        fullStructureDataLoaded: action.fullDataLoaded
       };
     default:
       return state;
