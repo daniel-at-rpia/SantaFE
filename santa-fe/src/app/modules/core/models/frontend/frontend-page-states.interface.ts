@@ -114,11 +114,14 @@ export interface TradeCenterPanelState {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
     selectedList: Array<DTOs.SearchShortcutDTO>;
-    recentShortcutList: Array<DTOs.SearchShortcutDTO>;
+    selectedCategoryFromTop: boolean;
+    selectedCategoryFromBottom: boolean;  // the reason we want to do two flags instead of one is so that we can have the default set to be "neither" which is more correct in the UI
     portfolioShortcutList: Array<DTOs.SearchShortcutDTO>;
     ownershipShortcutList: Array<DTOs.SearchShortcutDTO>;
     strategyShortcutList: Array<DTOs.SearchShortcutDTO>;
-    individualShortcutList: Array<DTOs.SearchShortcutDTO>;
+    recentWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
   }
   configurator: {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;
