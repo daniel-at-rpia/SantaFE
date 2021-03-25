@@ -86,7 +86,9 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
     }
     &-tableRowCount {
       @include mix_border_radius(5px);
-      display: none;
+      display: flex;
+      visibility: hidden;
+      width: 20rem;
       margin-right: $spacing_small;
       &-icon {
         flex: 0 0 auto;
@@ -256,7 +258,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
   &--initialDataLoaded {
     #{$blockName} {
       &__utilities-tableRowCount {
-        display: flex;
+        visibility: visible;
       }
     }
   }
