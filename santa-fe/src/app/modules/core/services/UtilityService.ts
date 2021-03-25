@@ -432,7 +432,7 @@ export class UtilityService {
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
       const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
-      shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
+      shortcutCopy.data.searchFilters.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {

@@ -299,8 +299,20 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
+    uuid: string;
     displayTitle: string;
-    configuration: Array<SecurityDefinitionDTO>;
+    headerOverwrites: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite>;
+    searchFilters: Array<SecurityDefinitionDTO>;
+    metadata: {
+      createTime: number;  // unixTimestamp
+      dbStoredTime: number;  // unixTimestamp
+      lastUseTime: number;  // unixTimestamp
+      size: number;
+    };
+    structurModuleLink: {
+      portfolio: PortfolioShortNames;
+      backendGroupOptionIdentifier: string;
+    }
   },
   style: {
     slotList: Array<SecurityDefinitionDTO>
