@@ -25,7 +25,8 @@ export enum StructureActions {
   SwitchDataDatestamp = '[Structure] Switch Data Datestamp',
   UtilityPanelLoadState = '[Structure] Utility Panel Load State',
   SetBulkOverridesEvent = '[Structure] Set Bulk Overrides Event',
-  SendSetBulkOverridesTransfer = '[Structure] Send Set Bulk Overrides Transfer'
+  SendSetBulkOverridesTransfer = '[Structure] Send Set Bulk Overrides Transfer',
+  FullStructureDataLoaded = '[Structure] Initial Structure Data Loaded'
 }
 
 export class StructureStoreResetEvent implements Action {
@@ -121,4 +122,12 @@ export class StructureUtilityPanelLoadStateEvent implements Action {
 export class StructureSetBulkOverridesEvent implements Action {
   readonly type = StructureActions.SetBulkOverridesEvent;
   constructor() {}
+}
+
+export class StructureFullDataLoadedEvent implements Action {
+  readonly type = StructureActions.FullStructureDataLoaded;
+  readonly fullDataLoaded: boolean;
+  constructor(fullDataLoaded: boolean) {
+    this.fullDataLoaded = fullDataLoaded;
+  }
 }

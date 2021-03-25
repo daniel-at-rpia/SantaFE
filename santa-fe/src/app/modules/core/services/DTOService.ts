@@ -72,8 +72,7 @@
       DeltaScope,
       STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
       DeltaScopeDisplayText,
-      DeltaScopeBEToFEMapping,
-      BEIdentifierToFEDisplayMapping
+      DeltaScopeBEToFEMapping
     } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
@@ -1596,7 +1595,7 @@ export class DTOService {
     rawData: BEModels.BEAlertDTO
   ): DTOs.AlertDTO {
     const parsedTitleList = rawData.keyWord.split('|');
-    const momentTime = !!rawData.trade ? moment(rawData.trade.eventTime): moment(rawData.timeStamp);
+    const momentTime = moment(rawData.timeStamp);
     const object: DTOs.AlertDTO = {
       data: {
         id: rawData.alertId,
@@ -2290,7 +2289,7 @@ export class DTOService {
     const newBreakdown = this.formPortfolioBreakdown(false, rawData, comparedDeltaRawData, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
     newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
-    newBreakdown.data.title = this.formOverrideTitle(newBreakdown.data.backendGroupOptionIdentifier);
+    newBreakdown.data.title = this.utility.formOverrideTitle(newBreakdown.data.backendGroupOptionIdentifier);
     if (deltaEnabled && !comparedDeltaRawData) {
       newBreakdown.state.isViewingIndex = false;
       newBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
@@ -2406,14 +2405,11 @@ export class DTOService {
     code: string = null
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
-      const parsedRawData = this.utility.deepCopy(rawCategoryData);
-      const rawCurrentLevel = parsedRawData.currentLevel;
-      const rawCurrentPct = parsedRawData.currentPct;
-      const rawTargetLevel = parsedRawData.targetLevel;
-      const rawTargetPct = parsedRawData.targetPct;
-      parsedRawData.currentLevel = this.utility.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01);
+      const { currentLevel, targetLevel, currentPct, targetPct, indexPct } = rawCategoryData;
+      const parsedRawData = { currentLevel, targetLevel, currentPct, targetPct, indexPct };
+      parsedRawData.currentLevel = this.utility.getParsedValueForVisualizerCompare(parsedRawData.currentLevel, isCs01);
       if (parsedRawData.targetLevel != null) {
-        parsedRawData.targetLevel = this.utility.getRoundedValuesForVisualizer(rawTargetLevel, isCs01);
+        parsedRawData.targetLevel = this.utility.getParsedValueForVisualizerCompare(parsedRawData.targetLevel, isCs01);
       }
       if (parsedRawData.targetPct != null) {
         parsedRawData.targetPct = this.utility.round(parsedRawData.targetPct*100, 1);
@@ -2424,12 +2420,12 @@ export class DTOService {
       if (parsedRawData.indexPct != null) {
         parsedRawData.indexPct = this.utility.round(parsedRawData.indexPct*100, 1);
       }
-      maxValue = !!isCs01 ? maxValue/1000 : maxValue;
-      minValue = !!isCs01 ? minValue/1000 : minValue;
+      const parsedMinValue = this.utility.getParsedValueForVisualizerCompare(minValue, isCs01);
+      const parsedMaxValue = this.utility.getParsedValueForVisualizerCompare(maxValue, isCs01);
       const eachMoveVisualizer = this.formMoveVisualizerObjectForStructuring(
         parsedRawData,
-        maxValue,
-        minValue,
+        parsedMaxValue,
+        parsedMinValue,
         !!isStencil,
         isOverride,
         diveInLevel,
@@ -2459,10 +2455,10 @@ export class DTOService {
         portfolioID: portfolioID,
         diveInLevel: diveInLevel,
         raw: {
-          currentLevel: rawCurrentLevel,
-          currentPct: rawCurrentPct,
-          targetLevel: rawTargetLevel,
-          targetPct: rawTargetPct
+          currentLevel: parsedRawData.currentLevel,
+          currentPct: parsedRawData.currentPct,
+          targetLevel: parsedRawData.targetLevel,
+          targetPct: parsedRawData.targetPct
         },
         view: view,
         bucket: bucket,
@@ -2811,17 +2807,5 @@ export class DTOService {
     newBreakdown.data.portfolioName = rawData.portfolioShortName;
     newBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return newBreakdown;
-  }
-
-  private formOverrideTitle(backendGroupOptionIdentifier: string): string {
-    const identifiers = backendGroupOptionIdentifier.split(' ~ ');
-    identifiers.forEach((identifier: string, index: number) => {
-      const identifierBlock = BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
-      if (identifierBlock) {
-        identifiers[index] = identifierBlock.display;
-      }
-    })
-    const title = identifiers.join(' ~ ');
-    return title;
   }
 }

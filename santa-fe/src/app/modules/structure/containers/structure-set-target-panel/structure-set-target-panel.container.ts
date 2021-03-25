@@ -835,8 +835,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
         const editRowEquivalentDataByMetric = !!isCs01 ? editRowListEquivalent.targetCs01 : editRowListEquivalent.targetCreditLeverage;
         const isEditedRow = editRowEquivalentDataByMetric.level.isActive || editRowEquivalentDataByMetric.level.isImplied;
         if (!!isEditedRow) {
-          const parsedCurrentLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.currentLevel, isCs01);
-          const parsedTargetLevel = this.utilityService.getRoundedValuesForVisualizer(rowRawBreakdownDataByMetric.targetLevel, isCs01);
+          const parsedCurrentLevel = this.utilityService.getParsedValueForVisualizerCompare(rowRawBreakdownDataByMetric.currentLevel, isCs01);
+          const parsedTargetLevel = this.utilityService.getParsedValueForVisualizerCompare(rowRawBreakdownDataByMetric.targetLevel, isCs01);
           const newDiffToTarget = this.utilityService.getRowDiffToTarget(parsedCurrentLevel, parsedTargetLevel, isCs01);
           const newDiffToTargetDisplay = this.utilityService.getBreakdownRowDiffText(newDiffToTarget, isCs01);
           this.setNewDiffToTargetsForRows(row, newDiffToTarget, newDiffToTargetDisplay);
@@ -1419,8 +1419,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     const { isOverrideVariant} = this.state.targetBreakdown.state;
     const rawCurrentLevel = rowRawBreakdownDataByMetric.currentLevel;
     const rawTargetLevel = rowRawBreakdownDataByMetric.targetLevel;
-    rowRawBreakdownDataByMetric.currentLevel = !!rawCurrentLevel ? this.utilityService.getRoundedValuesForVisualizer(rawCurrentLevel, isCs01) : rawCurrentLevel;
-    rowRawBreakdownDataByMetric.targetLevel = rawTargetLevel ? this.utilityService.getRoundedValuesForVisualizer(rawTargetLevel, isCs01) : rawTargetLevel;
+    rowRawBreakdownDataByMetric.currentLevel = !!rawCurrentLevel ? this.utilityService.getParsedValueForVisualizerCompare(rawCurrentLevel, isCs01) : rawCurrentLevel;
+    rowRawBreakdownDataByMetric.targetLevel = rawTargetLevel ? this.utilityService.getParsedValueForVisualizerCompare(rawTargetLevel, isCs01) : rawTargetLevel;
     const newVisualizer = this.dtoService.formMoveVisualizerObjectForStructuring(rowRawBreakdownDataByMetric, maxValue, minValue, false, isOverrideVariant,diveInLevel, isCs01);
     row.data.moveVisualizer = newVisualizer;
     row.data.moveVisualizer.state.isStencil = false;

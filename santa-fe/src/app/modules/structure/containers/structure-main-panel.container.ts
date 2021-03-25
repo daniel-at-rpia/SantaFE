@@ -2,7 +2,7 @@
     import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
     import { Router } from '@angular/router';
     import { of, Subscription } from 'rxjs';
-    import { catchError, first, tap, filter } from 'rxjs/operators';
+    import { catchError, first, tap, filter, withLatestFrom } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
     import * as moment from 'moment';
 
@@ -16,7 +16,7 @@
     } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-    import { selectMetricLevel, selectSetViewData } from 'Structure/selectors/structure.selectors';
+    import { StructureFullDataLoadedEvent } from 'Structure/actions/structure.actions';
     import { selectUserInitials } from 'Core/selectors/core.selectors';
     import {
       selectReloadFundDataPostEdit,
@@ -25,7 +25,10 @@
       selectActivePortfolioViewFilter,
       selectDataDatestamp,
       selectActiveSubPortfolioFilter,
-      selectActiveDeltaScope
+      selectActiveDeltaScope,
+      selectMetricLevel,
+      selectSetViewData,
+      selectFullDataLoadedEvent
     } from 'Structure/selectors/structure.selectors';
     import {
       PortfolioMetricValues,
@@ -160,30 +163,34 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       filter((value) => {
         return this.stateActive;
       }),
-      select(selectMetricLevel)
-    ).subscribe((value) => {
+      select(selectMetricLevel),
+      withLatestFrom(this.store$.pipe(select(selectFullDataLoadedEvent)))
+    ).subscribe(([value, fullDataLoaded]) => {
+      // check for the initial data loaded from fullUpdate() which conflicts with the code in switching metric
       const metric = value === this.constants.cs01 ? this.constants.cs01 : this.constants.creditLeverage
       this.state.selectedMetricValue = metric;
-      this.state.fetchResult.fundList.forEach(fund => {
-        fund.state.isStencil = true; 
-        //Switch active and inactive target bars
-        fund.data.creditLeverageTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.cs01;
-        fund.data.cs01TargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
-        fund.data.creditDurationTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
-        //Switch values to be displayed in breakdowns
-        fund.data.children.forEach(breakdown => {
-          breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
-          breakdown.state.isStencil = true;
-          const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
-          targetList.forEach(target => {
-            target.data.moveVisualizer.state.isStencil = true;
-            target.state.isStencil = true;
+      if (fullDataLoaded) {
+        this.state.fetchResult.fundList.forEach(fund => {
+          fund.state.isStencil = true; 
+          //Switch active and inactive target bars
+          fund.data.creditLeverageTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.cs01;
+          fund.data.cs01TargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
+          fund.data.creditDurationTargetBar.state.isInactiveMetric = this.state.selectedMetricValue === this.constants.creditLeverage;
+          //Switch values to be displayed in breakdowns
+          fund.data.children.forEach(breakdown => {
+            breakdown.state.isDisplayingCs01 = this.state.selectedMetricValue === this.constants.cs01;
+            breakdown.state.isStencil = true;
+            const targetList  = breakdown.state.isDisplayingCs01 ? breakdown.data.rawCs01CategoryList : breakdown.data.rawLeverageCategoryList;
+            targetList.forEach(target => {
+              target.data.moveVisualizer.state.isStencil = true;
+              target.state.isStencil = true;
+            })
           })
+          setTimeout(() => {
+            fund.state.isStencil = false;
+          }, 500)
         })
-        setTimeout(() => {
-          fund.state.isStencil = false;
-        }, 500)
-      })
+      }
     });
     this.subscriptions.viewData = this.store$.pipe(
       filter((value) => {
@@ -340,6 +347,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
         });
         this.store$.dispatch(new CoreMainThreadUnoccupiedState(false));
+        this.store$.dispatch(new StructureFullDataLoadedEvent(true));
       }),
       catchError(err => {
         setTimeout(() => {
