@@ -463,7 +463,6 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
     background-color: $color_active;
     padding: $spacing_large $spacing_medium;
     opacity: 0;
-    // max-width: 72rem;
     &-item {
       @include mix_alive('light');
       flex: 0 1 25%;
