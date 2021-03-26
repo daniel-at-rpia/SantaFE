@@ -1529,7 +1529,7 @@ export class UtilityService {
 
     public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
       const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
-      const isDiveInAvailable = !isNonDiveInCategory && row.data.bicsLevel < 4 ? true : false;
+      const isDiveInAvailable = !isNonDiveInCategory && row.data.bicsLevel < 7 ? true : false;
       return isDiveInAvailable;
     }
 

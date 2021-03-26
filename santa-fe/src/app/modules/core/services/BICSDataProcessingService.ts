@@ -158,14 +158,20 @@ export class BICSDataProcessingService {
       BicsCodeLevel1,
       BicsCodeLevel2,
       BicsCodeLevel3,
-      BicsCodeLevel4
+      BicsCodeLevel4,
+      BicsCodeLevel5,
+      BicsCodeLevel6,
+      BicsCodeLevel7
     } = rawData.breakdowns;
     const block: Blocks.BICSCategorizationBlock = {
       portfolioID: rawData.portfolioId,
       bicsLevel1: BicsCodeLevel1,
       bicsLevel2: BicsCodeLevel2,
       bicsLevel3: BicsCodeLevel3,
-      bicsLevel4: BicsCodeLevel4
+      bicsLevel4: BicsCodeLevel4,
+      bicsLevel5: BicsCodeLevel5,
+      bicsLevel6: BicsCodeLevel6,
+      bicsLevel7: BicsCodeLevel7
     }
     const existingPortfolioIndex = this.bicsRawData.findIndex(portfolio => portfolio.portfolioID === block.portfolioID);
     if (existingPortfolioIndex > -1) {
@@ -178,14 +184,20 @@ export class BICSDataProcessingService {
         BicsCodeLevel1: deltaBicsCodeLevel1,
         BicsCodeLevel2: deltaBicsCodeLevel2,
         BicsCodeLevel3: deltaBicsCodeLevel3,
-        BicsCodeLevel4: deltaBicsCodeLevel4
+        BicsCodeLevel4: deltaBicsCodeLevel4,
+        BicsCodeLevel5: deltaBicsCodeLevel5,
+        BicsCodeLevel6: deltaBicsCodeLevel6,
+        BicsCodeLevel7: deltaBicsCodeLevel7
       } = comparedDeltaRawData.breakdowns;
       const deltaBlock: Blocks.BICSCategorizationBlock = {
         portfolioID: rawData.portfolioId,
         bicsLevel1: deltaBicsCodeLevel1,
         bicsLevel2: deltaBicsCodeLevel2,
         bicsLevel3: deltaBicsCodeLevel3,
-        bicsLevel4: deltaBicsCodeLevel4
+        bicsLevel4: deltaBicsCodeLevel4,
+        bicsLevel5: deltaBicsCodeLevel5,
+        bicsLevel6: deltaBicsCodeLevel6,
+        bicsLevel7: deltaBicsCodeLevel7
       }
       if (existingPortfolioIndex > -1) {
         this.bicsComparedDeltaRawData[existingPortfolioIndex] = deltaBlock;
@@ -359,7 +371,10 @@ export class BICSDataProcessingService {
       this.returnAllBICSBasedOnHierarchyDepth(1),
       this.returnAllBICSBasedOnHierarchyDepth(2),
       this.returnAllBICSBasedOnHierarchyDepth(3),
-      this.returnAllBICSBasedOnHierarchyDepth(4)
+      this.returnAllBICSBasedOnHierarchyDepth(4),
+      this.returnAllBICSBasedOnHierarchyDepth(5),
+      this.returnAllBICSBasedOnHierarchyDepth(6),
+      this.returnAllBICSBasedOnHierarchyDepth(7)
     )
   }
 
@@ -399,7 +414,7 @@ export class BICSDataProcessingService {
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
       breakdown.state.isWithinPopover = true;
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
-      if (breakdown.data.bicsLevel >= 4) {
+      if (breakdown.data.bicsLevel >= 7) {
         breakdown.state.isBtnDiveIn = false;
       }
     })

@@ -83,7 +83,10 @@ export enum BICsLevels {
   bicsLevel1 = 1,
   bicsLevel2,
   bicsLevel3,
-  bicsLevel4
+  bicsLevel4,
+  bicsLevel5,
+  bicsLevel6,
+  bicsLevel7
 }
 
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
