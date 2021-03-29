@@ -1,4 +1,7 @@
-import { BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
+import {
+  BEGetPortfolioStructureServerReturn,
+  BEStructuringBreakdownMetricBlock
+} from 'BEModels/backend-models.interface';
 import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 
 // always remove bics lv 2+ to save space
@@ -669,4 +672,31 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
       }
     }
   ]
+}
+
+export const PortfolioStructureBreakdownRowEmptySample: BEStructuringBreakdownMetricBlock = {
+  "metricBreakdowns": {
+    "CreditLeverage": {
+      "targetPct": null,
+      "targetLevel": null,
+      "currentLevel": null,
+      "currentPct": null,
+      "indexPct": null
+    },
+    "CreditDuration" : {
+      "targetPct": null,
+      "targetLevel": null,
+      "currentLevel": null,
+      "currentPct": null,
+      "indexPct": null
+    },
+    "Cs01": {
+      "targetPct": null,
+      "targetLevel": null,
+      "currentLevel": null,
+      "currentPct": null,
+      "indexPct": null
+    }
+  },
+  "view": null
 }
