@@ -741,7 +741,6 @@ export interface BEStructuringBreakdownMetricSingleEntryBlock {
   targetPct: number;
   currentLevel?: number;
   currentPct?: number;
-  indexLevel?: number;
   indexPct?: number;
 }
 
