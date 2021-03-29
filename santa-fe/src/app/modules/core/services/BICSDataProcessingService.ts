@@ -175,6 +175,7 @@ export class BICSDataProcessingService {
       bicsLevel6: BicsCodeLevel6,
       bicsLevel7: BicsCodeLevel7
     }
+    this.populateRemainingRawDataRows(block);
     const existingPortfolioIndex = this.bicsRawData.findIndex(portfolio => portfolio.portfolioID === block.portfolioID);
     if (existingPortfolioIndex > -1) {
       this.bicsRawData[existingPortfolioIndex] = block;
@@ -201,6 +202,7 @@ export class BICSDataProcessingService {
         bicsLevel6: deltaBicsCodeLevel6,
         bicsLevel7: deltaBicsCodeLevel7
       }
+      this.populateRemainingRawDataRows(deltaBlock);
       if (existingPortfolioIndex > -1) {
         this.bicsComparedDeltaRawData[existingPortfolioIndex] = deltaBlock;
       } else {
@@ -680,7 +682,24 @@ export class BICSDataProcessingService {
     })
     return rowListCopy;
   }
-  
+
+  private populateRemainingRawDataRows(block: Blocks.BICSCategorizationBlock) {
+    const { portfolioID, ...bicsData } = block;
+    for (let groupOption in bicsData) {
+      if (bicsData[groupOption] && Object.keys(bicsData[groupOption].breakdown).length > 0) {
+        const level = +(groupOption.split(BICS_BREAKDOWN_FRONTEND_KEY)[1]);
+        const categoryCodes = this.getCategoryCodesBasedOnLevel(level);
+        if (categoryCodes.length > 0) {
+          categoryCodes.forEach(code => {
+            if (!bicsData[groupOption].breakdown[code]) {
+              bicsData[groupOption].breakdown[code] = PortfolioStructureBreakdownRowEmptySample;
+            }
+          })
+        }
+      }
+    }
+  }
+
   private getCategoryCodesBasedOnLevel(level: number): Array<string> {
     const categoryCodes = this.bicsRawCategoryCodes.length > 0 ? this.bicsRawCategoryCodes.filter(code => code.length === level * 2) : [];
     return categoryCodes
