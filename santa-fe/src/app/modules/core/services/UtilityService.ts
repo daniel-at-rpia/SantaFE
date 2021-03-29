@@ -432,7 +432,9 @@ export class UtilityService {
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
       const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
-      shortcutCopy.data.searchFilters.forEach((eachShortcutDef) => {
+      // currently the configurator does not support multiple groups of filters chained together, we will change that when we need to utilize this feature
+      const primaryFilterGroup = shortcutCopy.data.searchFilters[0];
+      primaryFilterGroup.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {

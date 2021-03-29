@@ -793,7 +793,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
     if (!!targetPortfolioDefinition) {
       const targetPreset = this.state.presets.portfolioShortcutList.find((eachShortcut) => {
-        const portfolioDefinitionInThisShortcut = eachShortcut.data.searchFilters.find((eachDefinition) => {
+        const primaryFilterGroupInShortcut = eachShortcut.data.searchFilters[0];
+        const portfolioDefinitionInThisShortcut = primaryFilterGroupInShortcut.find((eachDefinition) => {
           return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
         });
         if (portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList.length === 1) {
