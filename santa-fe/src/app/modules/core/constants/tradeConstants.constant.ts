@@ -347,6 +347,19 @@ export const StrategyShortcuts: Array<SearchShortcutStub> = [
   }
 ];
 
+export const TrendingShortcuts: Array<SearchShortcutStub> = [
+  {
+    displayTitle: 'COVID Sensitive',
+    includedDefinitions: [
+      {
+        definitionKey: 'BICS_CONSOLIDATED',
+        groupByActive: false,
+        selectedOptions: ['101011','101012','101013','111011','111012','11101310','11101311','11101410','11111010','11111011','11111013','111111','11121110','11121112','11121113','11121114','11121116','1310','14111110','14111111','15','171011','17101410','17101411','17101510','17111010','17111110','17111111','17111113','17111114','17111115','17111116','171112','171113','18101010','18101012','18101013','181011','181012','18101311','181014','181015']
+      }
+    ]
+  }
+];
+
 
 export const LIVE_UPDATE_COUNTDOWN = 30;  // seconds
 export const ALERT_UPDATE_COUNTDOWN = 5;  // seconds

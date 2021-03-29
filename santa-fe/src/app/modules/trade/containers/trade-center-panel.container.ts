@@ -11,7 +11,8 @@
       UtilityService,
       RestfulCommService,
       BICSDataProcessingService,
-      GlobalWorkflowIOService
+      GlobalWorkflowIOService,
+      BICSDictionaryLookupService
     } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
@@ -56,7 +57,8 @@
       PortfolioShortcuts,
       OwnershipShortcuts,
       StrategyShortcuts,
-      DISPLAY_DRIVER_MAP
+      DISPLAY_DRIVER_MAP,
+      TrendingShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectLiveUpdateTick,
@@ -108,6 +110,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     portfolioShortcuts: PortfolioShortcuts,
     ownershipShortcuts: OwnershipShortcuts,
     strategyShortcuts: StrategyShortcuts,
+    trendingShortcuts: TrendingShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     fullOwnerList: FullOwnerList,
@@ -200,7 +203,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
     private bicsDataProcessingService: BICSDataProcessingService,
-    private securityMapService: SecurityMapService
+    private securityMapService: SecurityMapService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {
     super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
@@ -363,6 +367,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           'Trade - Center Panel'
         );
         const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+        this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
         this.onApplyFilter(params, false);
         this.loadFreshData();
       }
@@ -510,6 +515,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.portfolioShortcuts);
     this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.ownershipShortcuts);
     this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.strategyShortcuts);
+    this.state.presets.trendingWatchlistShortcutList = this.populateSingleShortcutList(this.constants.trendingShortcuts);
     this.state.presets.presetsReady = true;
   }
 
@@ -523,12 +529,25 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
-          definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
-            if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
-              eachFilterOption.isSelected = true;
-              definitionDTO.data.highlightSelectedOptionList.push(eachFilterOption);
-            }
-          });
+          if (eachIncludedDef.definitionKey === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
+            definitionDTO.data.highlightSelectedOptionList = eachIncludedDef.selectedOptions.map((eachOption) => {
+                const bicsLevel = Math.floor(eachOption.length/2);
+                const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+                  eachIncludedDef.definitionKey,
+                  this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption),
+                  bicsLevel
+                );
+                selectedOption.isSelected = true;
+                return selectedOption;
+            });
+          } else {
+            definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
+              if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
+                eachFilterOption.isSelected = true;
+                definitionDTO.data.highlightSelectedOptionList.push(eachFilterOption);
+              }
+            });
+          }
         }
         return definitionDTO;
       });
