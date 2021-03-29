@@ -46,15 +46,11 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       &-label {
         font-size: $font_size_large;
         color: $font_color_minor;
-        margin-right: $spacing_small;
+        margin: 0 $spacing_small;
       }
       &>search-shortcut {
         margin-right: $spacing_small;
         width: 30rem;
-      }
-      &-back {
-        background-color: $color_kill;
-        color: $font_color_inverse;
       }
     }
     &-keywordSearch {
@@ -465,22 +461,21 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
 .sat-tradeCenterPresetShortcutCanvas {
   $blockName: &;
   @include mix_alive('light');
+  @include mix_border_radius(15px);
   flex: 1 1 auto;
   display: flex;
   margin: $spacing_xx_large 0;
+  background-color: $color_active;
   overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
   &__list {
     @include mix_fixed_div(relative, $z_index_base_item);
-    @include mix_alive('light');
     @include mix_enable_scrollbar('both');
-    @include mix_border_radius(15px);
     flex: 1 1 auto;
     display: flex;
-    visibility: hidden;
     flex-wrap: wrap;
-    background-color: $color_active;
     padding: $spacing_large $spacing_medium;
-    opacity: 0;
     &-item {
       @include mix_alive('light');
       flex: 0 1 25%;
@@ -499,19 +494,17 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
     }
   }
   &--categorySelectedState {
-    #{$blockName} {
-      &__list {
-        opacity: 1;
-        visibility: visible;
-        transform: translate(0, 0);
-      }
-    }
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
   }
   &--topCategorySelectedState {
     transform: translate(0, -$tradeCenterPresetShortcutCanvas_selected_movement_length);
+    align-items: flex-start;;
   }
   &--bottomCategorySelectedState {
     transform: translate(0, $tradeCenterPresetShortcutCanvas_selected_movement_length);
+    align-items: flex-end;
   }
   @include mq-large-min {
     margin: $spacing_xx_large;

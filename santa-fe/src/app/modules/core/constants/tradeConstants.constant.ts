@@ -357,6 +357,54 @@ export const TrendingShortcuts: Array<SearchShortcutStub> = [
         selectedOptions: ['101011','101012','101013','111011','111012','11101310','11101311','11101410','11111010','11111011','11111013','111111','11121110','11121112','11121113','11121114','11121116','1310','14111110','14111111','15','171011','17101410','17101411','17101510','17111010','17111110','17111111','17111113','17111114','17111115','17111116','171112','171113','18101010','18101012','18101013','181011','181012','18101311','181014','181015']
       }
     ]
+  },{
+    displayTitle: 'Targeted COVID',
+    includedDefinitions: [
+      {
+        definitionKey: 'BICS_CONSOLIDATED',
+        groupByActive: false,
+        selectedOptions: ["111011","111111","14111110","15","171011"]
+      }
+    ]
+  },{
+    displayTitle: 'USD FRNs Beyond Libor Cessation',
+    includedDefinitions: [
+      {
+        definitionKey: 'CURRENCY',
+        groupByActive: false,
+        selectedOptions: ['USD']
+      },{
+        definitionKey: 'TENOR',
+        groupByActive: false,
+        selectedOptions: ["10Y","20Y","30Y","3Y","5Y","7Y"]
+      },{
+        definitionKey: 'COUPON_TYPE',
+        groupByActive: false,
+        selectedOptions: ["Float"]
+      }
+    ]
+  },{
+    displayTitle: 'Airlines Secured Notes',
+    includedDefinitions: [
+      {
+        definitionKey: 'BICS_CONSOLIDATED',
+        groupByActive: false,
+        selectedOptions: ["17111210"]
+      },{
+        definitionKey: 'SENIORITY',
+        groupByActive: false,
+        selectedOptions: ["SECURED"]
+      }
+    ]
+  },{
+    displayTitle: 'Biden Tax Increases',
+    includedDefinitions: [
+      {
+        definitionKey: 'TICKER',
+        groupByActive: false,
+        selectedOptions: ["A","ABMD","AJG","AMGN","ATVI","AVGO","CB","CCL","CDNS","COO","CTXS","DXC","ETN","GE","GM","GOOGL","HIG","INFO","IPG","JCI","KO","LNT","LRCX","LVS","MCHP","MDLZ","MET","MOS","NCLH","NFLX","NVDA","OKE","PFG","PKI","RE","SLB","SNPS","SRE","STX","STZ","TAP","TMO","UAL","VTRS","VZ","WDC","WLTW","WU","WYNN","XLNX"]
+      }
+    ]
   }
 ];
 

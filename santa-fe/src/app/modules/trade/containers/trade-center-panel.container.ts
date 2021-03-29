@@ -529,12 +529,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
-          if (eachIncludedDef.definitionKey === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key) {
+          if (this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey].optionList.length === 0) {
             definitionDTO.data.highlightSelectedOptionList = eachIncludedDef.selectedOptions.map((eachOption) => {
-                const bicsLevel = Math.floor(eachOption.length/2);
+                const bicsLevel = eachIncludedDef.definitionKey === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key ? Math.floor(eachOption.length/2) : null;
+                const optionValue = this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey].securityDTOAttrBlock === 'bics' ? this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption) : eachOption;
                 const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
                   eachIncludedDef.definitionKey,
-                  this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption),
+                  optionValue,
                   bicsLevel
                 );
                 selectedOption.isSelected = true;

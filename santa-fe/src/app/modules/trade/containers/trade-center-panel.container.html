@@ -150,12 +150,12 @@
   </section>
   <section class="sat-tradeCenterPanel__utilities">
     <div class="sat-tradeCenterPanel__utilities-selectedPreset">
-      <span class="sat-tradeCenterPanel__utilities-selectedPreset-label">Selected Preset: </span>
+      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--iconOnly fal fa-arrow-left"></button>
+      <span class="sat-tradeCenterPanel__utilities-selectedPreset-label">Preset: </span>
       <search-shortcut
         *ngIf="state.currentSearch.previewShortcut"
         [shortcutData]="state.currentSearch.previewShortcut"
       ></search-shortcut>
-      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--iconOnly fal fa-times"></button>
     </div>
     <div class="sat-tradeCenterPanel__utilities-keywordSearch">
       <i class="sat-tradeCenterPanel__utilities-keywordSearch-activeIcon fal fa-search"></i>

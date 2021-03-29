@@ -440,7 +440,6 @@ export class UtilityService {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
               if (eachShortcutDef.data.displayOptionList.length === 0) {
                 // sometimes the display options are loaded async in API, in those cases the shortcut which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
-                eachDefinition.data.displayOptionList = [];
                 eachDefinition.data.highlightSelectedOptionList = eachShortcutDef.data.highlightSelectedOptionList;
               } else {
                 eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
