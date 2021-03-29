@@ -471,7 +471,7 @@ export class BICSDataProcessingService {
     const keyAfterTarget = `item${counter + 1}`;
     if (counter < 8) {
       const parentData = Array.isArray(parent) ? parent : Object.keys(parent).length > 0 ? [parent] : null;
-      const directSubLevelCategoryCodes = this.bicsRawCategoryCodes.length > 0 ? this.bicsRawCategoryCodes.filter(code => code.length === counter * 2) : null;
+      const directSubLevelCategoryCodes = this.getCategoryCodesBasedOnLevel(counter);
       if (parentData && directSubLevelCategoryCodes.length > 0) {
         parentData.forEach((category: Blocks.BICsHierarchyBlock) => {
           directSubLevelCategoryCodes.forEach(code => {
@@ -679,5 +679,10 @@ export class BICSDataProcessingService {
       }
     })
     return rowListCopy;
+  }
+  
+  private getCategoryCodesBasedOnLevel(level: number): Array<string> {
+    const categoryCodes = this.bicsRawCategoryCodes.length > 0 ? this.bicsRawCategoryCodes.filter(code => code.length === level * 2) : [];
+    return categoryCodes
   }
 }
