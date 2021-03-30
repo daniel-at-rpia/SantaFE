@@ -36,6 +36,15 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
       "BicsCodeLevel4": [
         "14111110"
       ],
+      "BicsCodeLevel5": [
+        "1411111010"
+      ],
+      "BicsCodeLevel6": [
+        "141111101010"
+      ],
+      "BicsCodeLevel7": [
+        ""
+      ],
       "BicsLevel1": [
         "Financials"
       ],
@@ -47,6 +56,15 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
       ],
       "BicsLevel4": [
         "Commercial Finance"
+      ],
+      "BicsLevel5": [
+        "Comml Equip Finance & Leasing"
+      ],
+      "BicsLevel6": [
+        "General Equip Finance & Leasing"
+      ],
+      "BicsLevel7": [
+        ""
       ],
       "Country": [
         "Ireland"
@@ -242,6 +260,9 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "bicsLevel2": "Financial Services",
         "bicsLevel3": "Specialty Finance",
         "bicsLevel4": "Commercial Finance",
+        "bicsLevel5": "Comml Equip Finance & Leasing",
+        "bicsLevel6": "General Equip Finance & Leasing",
+        "bicsLevel7": "",
         "name": "AVOL 5.5 01/15/2023 USD 144A SENIOR_UNSECURED",
         "genericSeniority": "SR",
         "globalIdentifier": "US05401AAA97",
@@ -640,6 +661,9 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "bicsLevel2": "Financial Services",
           "bicsLevel3": "Specialty Finance",
           "bicsLevel4": "Commercial Finance",
+          "bicsLevel5": "Comml Equip Finance & Leasing",
+          "bicsLevel6": "General Equip Finance & Leasing",
+          "bicsLevel7": "",
           "name": "AYR 5 04/01/2023 USD SENIOR_UNSECURED",
           "genericSeniority": "SR",
           "globalIdentifier": "US00928QAP63",
@@ -810,6 +834,9 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "bicsLevel2": "Financial Services",
           "bicsLevel3": "Asset Management",
           "bicsLevel4": "Investment Companies",
+          "bicsLevel5": "Investment Holding Companies",
+          "bicsLevel6": "",
+          "bicsLevel7": "",
           "name": "BJHAIG 4.3 10/08/22",
           "genericSeniority": "SR",
           "globalIdentifier": "XS2017302527",

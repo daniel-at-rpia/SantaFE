@@ -127,6 +127,9 @@ export interface BESecurityDTO {
   bicsLevel2: string;
   bicsLevel3: string;
   bicsLevel4: string;
+  bicsLevel5: string;
+  bicsLevel6: string;
+  bicsLevel7: string;
 }
 
 export interface BEBestQuoteDTO {

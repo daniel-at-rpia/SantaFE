@@ -550,7 +550,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
-  &--parallelLevel4Row {
+  &--parallelLevel4PlusRow {
     display: none;
     #{$blockName} {
       &__branch {
@@ -582,7 +582,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
     &#{$blockName} {
       &--parallelLevel2Row,
       &--parallelLevel3Row,
-      &--parallelLevel4Row {
+      &--parallelLevel4PlusRow {
         display: flex;
       }
     }
@@ -626,7 +626,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
           }
         }
       }
-      &--parallelLevel4Row {
+      &--parallelLevel4PlusRow {
         #{$blockName} {
           &__subLevelTargetGauge {
             margin-left: $portfolioBreakdownRowLevel4LeftOffset;

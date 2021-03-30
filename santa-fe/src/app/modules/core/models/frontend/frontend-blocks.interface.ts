@@ -375,7 +375,10 @@ export interface BICSCategorizationBlock {
   bicsLevel1: BEStructuringBreakdownBlock,
   bicsLevel2?: BEStructuringBreakdownBlock,
   bicsLevel3?: BEStructuringBreakdownBlock,
-  bicsLevel4?: BEStructuringBreakdownBlock
+  bicsLevel4?: BEStructuringBreakdownBlock,
+  bicsLevel5?: BEStructuringBreakdownBlock,
+  bicsLevel6?: BEStructuringBreakdownBlock,
+  bicsLevel7?: BEStructuringBreakdownBlock
 }
 
 export interface StructureBucketDataBlock {

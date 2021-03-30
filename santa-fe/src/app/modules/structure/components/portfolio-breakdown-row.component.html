@@ -17,7 +17,7 @@
     'sat-portfolioBreakdownRow--parallelLevel1Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 1,
     'sat-portfolioBreakdownRow--parallelLevel2Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2,
     'sat-portfolioBreakdownRow--parallelLevel3Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3,
-    'sat-portfolioBreakdownRow--parallelLevel4Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4,
+    'sat-portfolioBreakdownRow--parallelLevel4PlusRow': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel >= 4,
     'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover,
     'sat-portfolioBreakdownRow--isWithinEditRow': !!breakdownRow.state.isWithinEditRow,
     'sat-portfolioBreakdownRow--isWithinSetTargetPreview': !!breakdownRow.state.isWithinSetTargetPreview,

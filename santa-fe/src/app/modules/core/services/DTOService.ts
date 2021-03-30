@@ -284,7 +284,10 @@ export class DTOService {
           bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
           bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
           bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
-          bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
+          bicsLevel4: !isStencil ? rawData.bicsLevel4 : null,
+          bicsLevel5: !isStencil ? rawData.bicsLevel5 : null,
+          bicsLevel6: !isStencil ? rawData.bicsLevel6 : null,
+          bicsLevel7: !isStencil ? rawData.bicsLevel7 : null
         },
         lastTrace: {
           lastTracePrice: null,
@@ -719,7 +722,10 @@ export class DTOService {
     sortedLevel1List: Array<string>,
     sortedLevel2List: Array<string>,
     sortedLevel3List: Array<string>,
-    sortedLevel4List: Array<string>
+    sortedLevel4List: Array<string>,
+    sortedLevel5List: Array<string>,
+    sortedLevel6List: Array<string>,
+    sortedLevel7List: Array<string>
   ) {
     configuratorDTO.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
@@ -734,6 +740,12 @@ export class DTOService {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel3List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel4List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_5.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel5List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_6.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel6List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_7.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel7List);
         }
       });
     });

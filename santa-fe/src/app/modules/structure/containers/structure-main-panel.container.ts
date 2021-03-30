@@ -37,7 +37,8 @@
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
       BreakdownViewFilter,
-      DeltaScope
+      DeltaScope,
+      BICSBEBreakdownIdentifiers
     } from 'Core/constants/structureConstants.constants';
     import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
     import {
@@ -103,7 +104,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     creditLeverage: PortfolioMetricValues.creditLeverage,
     supportedFundList: SUPPORTED_PORTFOLIO_LIST,
     breakdownViewFilter: BreakdownViewFilter,
-    deltaScope: DeltaScope
+    deltaScope: DeltaScope,
+    bicsBEIdentifiers: BICSBEBreakdownIdentifiers
   };
   
   constructor(
@@ -433,8 +435,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       customDefinitionList: customBICSDefinitionList
     } = this.dtoService.formCustomRawBreakdownData(
       rawData,
-      rawData.breakdowns['BicsCodeLevel1'],
-      ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+      rawData.breakdowns[this.constants.bicsBEIdentifiers.bicsCodeLevel1],
+      [this.constants.bicsBEIdentifiers.bicsCodeLevel2, this.constants.bicsBEIdentifiers.bicsCodeLevel3, this.constants.bicsBEIdentifiers.bicsCodeLevel4, this.constants.bicsBEIdentifiers.bicsCodeLevel5, this.constants.bicsBEIdentifiers.bicsCodeLevel6, this.constants.bicsBEIdentifiers.bicsCodeLevel7]
     );
     this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
       rawData,
@@ -449,7 +451,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       ? this.dtoService.formCustomRawBreakdownData(
           deltaRawData,
           deltaRawData.breakdowns.BicsCodeLevel1,
-          ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+          [this.constants.bicsBEIdentifiers.bicsCodeLevel2, this.constants.bicsBEIdentifiers.bicsCodeLevel3, this.constants.bicsBEIdentifiers.bicsCodeLevel4, this.constants.bicsBEIdentifiers.bicsCodeLevel5, this.constants.bicsBEIdentifiers.bicsCodeLevel6, this.constants.bicsBEIdentifiers.bicsCodeLevel7]
         ).customBreakdown
       : null;
     if (!!customDeltaBICSBreakdown) {

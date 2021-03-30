@@ -30,6 +30,7 @@ export class BICSDataProcessingService {
   private bicsComparedDeltaRawData: Array<Blocks.BICSCategorizationBlock> = [];
   private formattedBICsHierarchyData: Blocks.BICsHierarchyAllDataBlock;
   private subBicsLevelList: Array<string> = [];
+  private bicsRawCategoryCodes: Array<string> = [];
 
   constructor(
     private dtoService: DTOService,
@@ -41,6 +42,7 @@ export class BICSDataProcessingService {
     data: BEBICsHierarchyBlock,
     parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock
   ) {
+    this.bicsRawCategoryCodes = [...Object.keys(data)];
     this.bicsDictionaryLookupService.loadBICSData(data);
     this.setBICsLevelOneCategories(data, parent);
     this.iterateBICsData(data, parent);
@@ -158,14 +160,20 @@ export class BICSDataProcessingService {
       BicsCodeLevel1,
       BicsCodeLevel2,
       BicsCodeLevel3,
-      BicsCodeLevel4
+      BicsCodeLevel4,
+      BicsCodeLevel5,
+      BicsCodeLevel6,
+      BicsCodeLevel7
     } = rawData.breakdowns;
     const block: Blocks.BICSCategorizationBlock = {
       portfolioID: rawData.portfolioId,
       bicsLevel1: BicsCodeLevel1,
       bicsLevel2: BicsCodeLevel2,
       bicsLevel3: BicsCodeLevel3,
-      bicsLevel4: BicsCodeLevel4
+      bicsLevel4: BicsCodeLevel4,
+      bicsLevel5: BicsCodeLevel5,
+      bicsLevel6: BicsCodeLevel6,
+      bicsLevel7: BicsCodeLevel7
     }
     const existingPortfolioIndex = this.bicsRawData.findIndex(portfolio => portfolio.portfolioID === block.portfolioID);
     if (existingPortfolioIndex > -1) {
@@ -178,14 +186,20 @@ export class BICSDataProcessingService {
         BicsCodeLevel1: deltaBicsCodeLevel1,
         BicsCodeLevel2: deltaBicsCodeLevel2,
         BicsCodeLevel3: deltaBicsCodeLevel3,
-        BicsCodeLevel4: deltaBicsCodeLevel4
+        BicsCodeLevel4: deltaBicsCodeLevel4,
+        BicsCodeLevel5: deltaBicsCodeLevel5,
+        BicsCodeLevel6: deltaBicsCodeLevel6,
+        BicsCodeLevel7: deltaBicsCodeLevel7
       } = comparedDeltaRawData.breakdowns;
       const deltaBlock: Blocks.BICSCategorizationBlock = {
         portfolioID: rawData.portfolioId,
         bicsLevel1: deltaBicsCodeLevel1,
         bicsLevel2: deltaBicsCodeLevel2,
         bicsLevel3: deltaBicsCodeLevel3,
-        bicsLevel4: deltaBicsCodeLevel4
+        bicsLevel4: deltaBicsCodeLevel4,
+        bicsLevel5: deltaBicsCodeLevel5,
+        bicsLevel6: deltaBicsCodeLevel6,
+        bicsLevel7: deltaBicsCodeLevel7
       }
       if (existingPortfolioIndex > -1) {
         this.bicsComparedDeltaRawData[existingPortfolioIndex] = deltaBlock;
@@ -359,7 +373,10 @@ export class BICSDataProcessingService {
       this.returnAllBICSBasedOnHierarchyDepth(1),
       this.returnAllBICSBasedOnHierarchyDepth(2),
       this.returnAllBICSBasedOnHierarchyDepth(3),
-      this.returnAllBICSBasedOnHierarchyDepth(4)
+      this.returnAllBICSBasedOnHierarchyDepth(4),
+      this.returnAllBICSBasedOnHierarchyDepth(5),
+      this.returnAllBICSBasedOnHierarchyDepth(6),
+      this.returnAllBICSBasedOnHierarchyDepth(7)
     )
   }
 
@@ -399,7 +416,7 @@ export class BICSDataProcessingService {
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
       breakdown.state.isWithinPopover = true;
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
-      if (breakdown.data.bicsLevel >= 4) {
+      if (breakdown.data.bicsLevel >= 7) {
         breakdown.state.isBtnDiveIn = false;
       }
     })
@@ -452,40 +469,28 @@ export class BICSDataProcessingService {
     const parentKey = `item${counter - 1}`;
     const targetKey = `item${counter}`;
     const keyAfterTarget = `item${counter + 1}`;
-    if (counter < 5) {
-      if (Array.isArray(parent)) {
-        parent.forEach(category => {
-          for (let code in rawData) {
-            if (!!rawData[code] && !!rawData[code][targetKey] && rawData[code][parentKey] === category.name && (!rawData[code][keyAfterTarget] === null || !rawData[code][keyAfterTarget])) {
+    if (counter < 8) {
+      const parentData = Array.isArray(parent) ? parent : Object.keys(parent).length > 0 ? [parent] : null;
+      const directSubLevelCategoryCodes = this.bicsRawCategoryCodes.length > 0 ? this.bicsRawCategoryCodes.filter(code => code.length === counter * 2) : null;
+      if (parentData && directSubLevelCategoryCodes.length > 0) {
+        parentData.forEach((category: Blocks.BICsHierarchyBlock) => {
+          directSubLevelCategoryCodes.forEach(code => {
+            const data = rawData[code]
+            if (data && data[targetKey] && data[parentKey] === category.name && !data[keyAfterTarget]) {
               const BICSData: Blocks.BICsHierarchyBlock = {
-                name: rawData[code][targetKey],
+                name: data[targetKey],
                 bicsLevel: counter,
                 code: code,
                 children: []
               }
-              const isExists = category.children.find(existingCategory => existingCategory.name === rawData[code][targetKey]);
+              const isExists = category.children.find(existingCategory => existingCategory.name === data[targetKey]);
               if (!isExists) {
                 category.children.push(BICSData);
               }
               this.formCompleteHierarchyWithSubLevels(rawData, category.children, counter);
             }
-          }
+          })
         })
-      } else {
-        for (let code in rawData) {
-          if (!!rawData[code] && !!rawData[code][targetKey] && rawData[code][keyAfterTarget] === null) {
-            if (rawData[code][parentKey] === parent.name) {
-              const BICSData: Blocks.BICsHierarchyBlock = {
-                name: rawData[code][targetKey],
-                bicsLevel: counter,
-                code: code,
-                children: []
-              }
-              parent.children.push(BICSData);
-              this.formCompleteHierarchyWithSubLevels(rawData, parent.children, counter)
-            }
-          }
-        }
       }
     }
   }
