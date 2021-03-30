@@ -619,23 +619,23 @@ export const PortfolioStructureBreakdownRowEmptySample: BEStructuringBreakdownMe
     "CreditLeverage": {
       "targetPct": null,
       "targetLevel": null,
-      "currentLevel": null,
-      "currentPct": null,
-      "indexPct": null
+      "currentLevel": 0.0,
+      "currentPct": 0.0,
+      "indexPct": 0.0
     },
     "CreditDuration" : {
       "targetPct": null,
       "targetLevel": null,
-      "currentLevel": null,
-      "currentPct": null,
-      "indexPct": null
+      "currentLevel": 0.0,
+      "currentPct": 0.0,
+      "indexPct": 0.0
     },
     "Cs01": {
       "targetPct": null,
       "targetLevel": null,
-      "currentLevel": null,
-      "currentPct": null,
-      "indexPct": null
+      "currentLevel": 0.0,
+      "currentPct": 0.0,
+      "indexPct": 0.0
     }
   },
   "view": null
