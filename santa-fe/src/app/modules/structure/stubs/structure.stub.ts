@@ -1,6 +1,6 @@
 import {
   BEGetPortfolioStructureServerReturn,
-  BEStructuringBreakdownMetricBlock
+  BEStructuringBreakdownMetricBlockWithSubPortfolios
 } from 'BEModels/backend-models.interface';
 import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 
@@ -614,28 +614,99 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
   ]
 }
 
-export const PortfolioStructureBreakdownRowEmptySample: BEStructuringBreakdownMetricBlock = {
+export const PortfolioStructureBreakdownRowEmptySample: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
   "metricBreakdowns": {
-    "CreditLeverage": {
-      "targetPct": null,
-      "targetLevel": null,
-      "currentLevel": 0.0,
-      "currentPct": 0.0,
-      "indexPct": 0.0
+    "All": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
     },
-    "CreditDuration" : {
-      "targetPct": null,
-      "targetLevel": null,
-      "currentLevel": 0.0,
-      "currentPct": 0.0,
-      "indexPct": 0.0
+    "NonHedging": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
     },
-    "Cs01": {
-      "targetPct": null,
-      "targetLevel": null,
-      "currentLevel": 0.0,
-      "currentPct": 0.0,
-      "indexPct": 0.0
+    "NonShortCarry": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
+    },
+    "ShortCarry": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
     }
   },
   "view": null

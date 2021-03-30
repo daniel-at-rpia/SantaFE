@@ -212,6 +212,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe((targetFund: BEStructuringFundBlockWithSubPortfolios) => {
       if (!!targetFund) {
         const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
+        const bicsBreakdownList = this.extractBICSBreakdownFromRawFundData(targetFundCopy);
+        bicsBreakdownList.forEach((bicsBreakdown: BEStructuringBreakdownBlockWithSubPortfolios) => {
+          this.bicsDataProcessingService.populateRemainingRawDataRows(bicsBreakdown);
+        })
         this.updateRawServerReturnCache(targetFundCopy);
         let deltaRawDataFromCache: BEStructuringFundBlockWithSubPortfolios = null;
         if (!!this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope] && this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].length > 0) {
@@ -339,6 +343,11 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
+        for (let delta in serverReturn) {
+          if (serverReturn[delta]) {
+            this.updateRawServerReturnWithRawDataForAllRows(serverReturn[delta]);
+          }
+        }
         this.state.fetchResult.rawServerReturnCache = serverReturn;
         this.processStructureData(
           this.extractSubPortfolioFromFullServerReturn(serverReturn.Now),
@@ -392,6 +401,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
+        this.updateRawServerReturnWithRawDataForAllRows(serverReturn);
         this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
         this.processStructureData(
           this.extractSubPortfolioFromFullServerReturn(serverReturn),
@@ -712,5 +722,19 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         this.state.fetchResult.rawServerReturnCache.Now[index] = newFundData;
       }
     });
+  }
+
+  private updateRawServerReturnWithRawDataForAllRows(rawFunds: Array<BEStructuringFundBlockWithSubPortfolios>) {
+    rawFunds.forEach((fund: BEStructuringFundBlockWithSubPortfolios) => {
+      const bicsBreakdownList = this.extractBICSBreakdownFromRawFundData(fund);
+      bicsBreakdownList.forEach((bicsBreakdown: BEStructuringBreakdownBlockWithSubPortfolios) => {
+        this.bicsDataProcessingService.populateRemainingRawDataRows(bicsBreakdown);
+      })
+    })
+  }
+
+  private extractBICSBreakdownFromRawFundData(fund: BEStructuringFundBlockWithSubPortfolios): Array<BEStructuringBreakdownBlockWithSubPortfolios> {
+    const breakdownList = Object.keys(fund.breakdowns).filter(category => category.includes(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)).map(category => fund.breakdowns[category]);
+    return breakdownList;
   }
 }
