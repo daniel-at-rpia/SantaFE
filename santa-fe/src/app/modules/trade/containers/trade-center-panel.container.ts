@@ -982,11 +982,31 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   private existFetchResultContainsNewSearchFilters(newSearchFilters): boolean {
-    if (!!this.state.fetchResult.lastFetchBucket) {
-      let allContained = false;
-      for (const eachBucket in this.state.fetchResult.lastFetchBucket) {
-
+    const lastFetchBucket = this.state.fetchResult.lastFetchBucket;
+    if (!!lastFetchBucket) {
+      let allContained = true;
+      for (const eachDefinition in lastFetchBucket) {
+        if (!!newSearchFilters[eachDefinition]) {
+          // TODO: this logic may or may not need to be modified once we introduce the feature to exclude options via the "!" symbol. 
+          let containAllOptions = true;
+          const lastFetchOptionsParsed = lastFetchBucket[eachDefinition].toString();
+          const newSearchOptionsParsed = newSearchFilters[eachDefinition].toString();
+          if (lastFetchOptionsParsed != newSearchOptionsParsed) {
+            containAllOptions = false;
+          }
+          // lastFetchBucket[eachDefinition].forEach((eachOption) => {
+          //   if (newSearchFilters[eachDefinition].indexOf(eachOption) < 0){
+          //     containAllOptions = false;
+          //   };
+          // });
+          if (!containAllOptions) {
+            allContained = false;
+          }
+        } else {
+          allContained = false;
+        }
       }
+      return allContained;
     } else {
       return false;
     }
