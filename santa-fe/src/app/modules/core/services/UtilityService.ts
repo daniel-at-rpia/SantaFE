@@ -1530,8 +1530,7 @@ export class UtilityService {
     public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
       const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
       if (!isNonDiveInCategory && row.data.code) {
-        const mainCategoryCode = row.data.code.substring(0,2);
-        const subLevelCategories = this.bicsDictionaryLookupService.getBICSSubLevelByCodeGrouping(mainCategoryCode).filter(subLevelCodes => subLevelCodes.length === row.data.code.length + 2 && subLevelCodes.indexOf(row.data.code) === 0);
+        const subLevelCategories = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(row.data.code);
         return subLevelCategories.length > 0;
       } else {
         return false;

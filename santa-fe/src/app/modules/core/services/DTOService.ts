@@ -75,13 +75,15 @@
       DeltaScopeBEToFEMapping
     } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
+    import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService'
   //
 
 @Injectable()
 export class DTOService {
   constructor(
     private utility: UtilityService,
-    private securityMap: SecurityMapService
+    private securityMap: SecurityMapService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){}
 
   public formSecurityCardObject(
@@ -583,7 +585,8 @@ export class DTOService {
       displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
       bicsLevel: bicsLevel || null,
       shortKey: normalizedOption,
-      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`
+      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`,
+      isDeepestLevel: !!bicsLevel ? this.checkBICSConfiguratorOptionAsDeepestLevel(option, bicsLevel) : false
     }
     if (definitionKey === SecurityDefinitionMap.TENOR.key) {
       newFilterDTO.displayLabel = FilterOptionsTenorRange[newFilterDTO.shortKey].displayLabel;
@@ -2819,5 +2822,14 @@ export class DTOService {
     newBreakdown.data.portfolioName = rawData.portfolioShortName;
     newBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return newBreakdown;
+  }
+
+  private checkBICSConfiguratorOptionAsDeepestLevel(
+    option: string,
+    bicsLevel: number
+  ): boolean {
+    const code = this.bicsDictionaryLookupService.BICSNameToBICSCode(option, bicsLevel);
+    const subCodes = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(code);
+    return subCodes.length === 0;
   }
 }
