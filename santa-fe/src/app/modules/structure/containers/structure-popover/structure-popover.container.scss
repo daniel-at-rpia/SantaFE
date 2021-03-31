@@ -142,16 +142,21 @@ $portfolioBreakdownRow_categoryList_cell_width: 3.5rem;
         margin-top: $spacing_small;
       }
     }
-    &-thirdDiveIn {
+    &-thirdDive {
+      padding: $spacing_small 0;
+    }
+    &-thirdDiveIn,
+    &-fourthDiveIn,
+    &-fifthDiveIn,
+    &-sixthDiveIn {
       display: none;
       flex: 1 1 auto;
       background-color: $color_gray_3;
-      padding: $spacing_small 0;
       &-list {
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;
-        padding-left: $spacing_small;
+        padding-left: 0.4125rem;
       }
       &--active {
         display: flex;

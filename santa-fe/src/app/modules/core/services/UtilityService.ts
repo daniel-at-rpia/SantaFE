@@ -1529,8 +1529,13 @@ export class UtilityService {
 
     public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
       const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
-      const isDiveInAvailable = !isNonDiveInCategory && row.data.bicsLevel < 7 ? true : false;
-      return isDiveInAvailable;
+      if (!isNonDiveInCategory && row.data.code) {
+        const mainCategoryCode = row.data.code.substring(0,2);
+        const subLevelCategories = this.bicsDictionaryLookupService.getBICSSubLevelByCodeGrouping(mainCategoryCode).filter(subLevelCodes => subLevelCodes.length === row.data.code.length + 2 && subLevelCodes.indexOf(row.data.code) === 0);
+        return subLevelCategories.length > 0;
+      } else {
+        return false;
+      }
     }
 
     public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {

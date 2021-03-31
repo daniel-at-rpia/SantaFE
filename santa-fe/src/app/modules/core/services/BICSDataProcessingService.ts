@@ -5,7 +5,8 @@ import {
   BEBICsHierarchyBlock,
   BEStructuringFundBlock,
   BEStructuringBreakdownBlock,
-  BEStructuringBreakdownMetricBlock
+  BEStructuringBreakdownMetricBlock,
+  BEStructuringBreakdownBlockWithSubPortfolios
 } from 'Core/models/backend/backend-models.interface';
 import {
   BICS_BRANCH_DEFAULT_HEIGHT,
@@ -22,7 +23,7 @@ import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
-
+import { PortfolioStructureBreakdownRowEmptySample } from 'Structure/stubs/structure.stub';
 @Injectable()
 
 export class BICSDataProcessingService {
@@ -404,6 +405,21 @@ export class BICSDataProcessingService {
     });
   }
 
+  public populateServerReturnBICSBreakdownWithRemainingEmptyRows(rawData: BEStructuringBreakdownBlockWithSubPortfolios) {
+    // this is to allow FE to populate all rows that are not sent by the BE due to performance-related reasons
+    const level = rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER).length === 2 ? +(rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1]) : null;
+    if (level) {
+      const categoryCodes = this.getCategoryCodesBasedOnLevel(level);
+      if (categoryCodes.length > 0) {
+        categoryCodes.forEach(code => {
+          if (!rawData.breakdown[code]) {
+            rawData.breakdown[code] = PortfolioStructureBreakdownRowEmptySample;
+          }
+        })
+      }
+    }
+  }
+
   private setBreakdownListProperties(
     breakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO>,
     parentRow: DTOs.StructurePortfolioBreakdownRowDTO
@@ -471,7 +487,7 @@ export class BICSDataProcessingService {
     const keyAfterTarget = `item${counter + 1}`;
     if (counter < 8) {
       const parentData = Array.isArray(parent) ? parent : Object.keys(parent).length > 0 ? [parent] : null;
-      const directSubLevelCategoryCodes = this.bicsRawCategoryCodes.length > 0 ? this.bicsRawCategoryCodes.filter(code => code.length === counter * 2) : null;
+      const directSubLevelCategoryCodes = this.getCategoryCodesBasedOnLevel(counter);
       if (parentData && directSubLevelCategoryCodes.length > 0) {
         parentData.forEach((category: Blocks.BICsHierarchyBlock) => {
           directSubLevelCategoryCodes.forEach(code => {
@@ -679,5 +695,10 @@ export class BICSDataProcessingService {
       }
     })
     return rowListCopy;
+  }
+
+  private getCategoryCodesBasedOnLevel(level: number): Array<string> {
+    const categoryCodes = this.bicsRawCategoryCodes.length > 0 ? this.bicsRawCategoryCodes.filter(code => code.length === level * 2) : [];
+    return categoryCodes
   }
 }
