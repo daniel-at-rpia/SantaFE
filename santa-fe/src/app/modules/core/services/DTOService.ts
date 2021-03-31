@@ -2438,6 +2438,7 @@ export class DTOService {
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: categoryName,
         displayCategory:  this.utility.getFormattedRowDisplayCategory(categoryName, isOverride),
+        tooltipText: categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'),
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,

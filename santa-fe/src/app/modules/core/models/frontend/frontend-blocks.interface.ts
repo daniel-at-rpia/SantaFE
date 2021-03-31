@@ -287,6 +287,7 @@ export interface PortfolioMetricTotals {
 export interface PortfolioBreakdownCategoryBlock {
   category: string;
   displayCategory: string;
+  tooltipText: string;
   targetLevel: number;
   targetPct: number;
   diffToTarget: number;
