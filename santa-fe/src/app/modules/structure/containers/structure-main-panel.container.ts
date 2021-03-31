@@ -214,7 +214,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
         const bicsBreakdownList = this.extractBICSBreakdownFromRawFundData(targetFundCopy);
         bicsBreakdownList.forEach((bicsBreakdown: BEStructuringBreakdownBlockWithSubPortfolios) => {
-          this.bicsDataProcessingService.populateRemainingRawDataRows(bicsBreakdown);
+          this.bicsDataProcessingService.populateServerReturnBICSBreakdownWithRemainingEmptyRows(bicsBreakdown);
         })
         this.updateRawServerReturnCache(targetFundCopy);
         let deltaRawDataFromCache: BEStructuringFundBlockWithSubPortfolios = null;
@@ -728,7 +728,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     rawFunds.forEach((fund: BEStructuringFundBlockWithSubPortfolios) => {
       const bicsBreakdownList = this.extractBICSBreakdownFromRawFundData(fund);
       bicsBreakdownList.forEach((bicsBreakdown: BEStructuringBreakdownBlockWithSubPortfolios) => {
-        this.bicsDataProcessingService.populateRemainingRawDataRows(bicsBreakdown);
+        this.bicsDataProcessingService.populateServerReturnBICSBreakdownWithRemainingEmptyRows(bicsBreakdown);
       })
     })
   }
