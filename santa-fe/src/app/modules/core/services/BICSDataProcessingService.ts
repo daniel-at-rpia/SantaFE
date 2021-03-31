@@ -264,12 +264,12 @@ export class BICSDataProcessingService {
     const categoryPortfolioID = breakdownRow.data.portfolioID;
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
     const deltaRawData = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(rawData => rawData.portfolioID === categoryPortfolioID) : null;
-    const subTierList = this.getSubLevelList(breakdownRow.data.displayCategory, breakdownRow.data.bicsLevel);
-    const targetCodeList = [];
-    subTierList.forEach(subTier => {
-      const categoryCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(subTier, breakdownRow.data.bicsLevel + 1);
-      targetCodeList.push(categoryCode);
-    });
+    const targetCodeList = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(breakdownRow.data.code);
+    let subTierList: Array<string> = [];
+    targetCodeList.forEach(subLevelCode => {
+      const name = this.bicsDictionaryLookupService.BICSCodeToBICSName(subLevelCode);
+      subTierList = [...subTierList, name];
+    })
     const customRawBreakdown: BEStructuringBreakdownBlock = this.formBEBreakdownRawDataFromCategorizationBlock(
       selectedSubRawBICsData,
       breakdownRow.data.bicsLevel + 1,
