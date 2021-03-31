@@ -73,10 +73,15 @@ export class BICSDictionaryLookupService {
     }
   }
 
-  public getBICSSubLevelByCodeGrouping(code: string): Array<string> {
+  public getAllBICSSubLevelCodesPerCategory(code: string): Array<string> {
     const mainCategoryCode = code.substring(0,2);
-    const subCodes = this.bicsGroupingByCode[mainCategoryCode].filter(subCode => subCode.length > code.length && subCode.indexOf(code) === 0);
-    return subCodes;
+    const allSubCodes = this.bicsGroupingByCode[mainCategoryCode].filter(subCode => subCode.length > code.length && subCode.indexOf(code) === 0);
+    return allSubCodes;
+  }
+
+  public getNextBICSSubLevelCodesByPerCategory(code: string): Array<string> {
+    const subLevelCodes = this.getAllBICSSubLevelCodesPerCategory(code).filter(subLevelCodes => subLevelCodes.length === code.length + 2);
+    return subLevelCodes;
   }
 
   private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
