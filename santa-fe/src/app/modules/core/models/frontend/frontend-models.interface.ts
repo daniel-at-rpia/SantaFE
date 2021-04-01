@@ -299,8 +299,22 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
+    uuid: string;
     displayTitle: string;
-    configuration: Array<SecurityDefinitionDTO>;
+    headerOverwrites: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite>;
+    searchFilters: Array<Array<SecurityDefinitionDTO>>;  // allowing multiple sets of filters, chained in an "OR" relation, to enable a more complex grouping logic;
+    securityExclusionList: Array<string>;  // array of individual securityIds to be excluded on top of "searchFilters"
+    securityInclusionList: Array<string>;  // array of individual securityIds to be included on top of "searchFilters"
+    metadata: {
+      createTime: number;  // unixTimestamp
+      dbStoredTime: number;  // unixTimestamp
+      lastUseTime: number;  // unixTimestamp
+      size: number;
+    };
+    structurModuleLink: {
+      portfolio: PortfolioShortNames;
+      backendGroupOptionIdentifier: string;
+    }
   },
   style: {
     slotList: Array<SecurityDefinitionDTO>
@@ -310,6 +324,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
     isUserInputBlocked: boolean;
     isMajorShortcut: boolean;
     isHeroShortcut: boolean;
+    isPreviewVariant: boolean;
   }
 }
 
