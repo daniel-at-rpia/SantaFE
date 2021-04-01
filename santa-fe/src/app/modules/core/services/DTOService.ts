@@ -1156,6 +1156,8 @@ export class DTOService {
           } else if (alertDTO.data.subType === AlertSubTypes.bid) {
             object.data.alertSideDTO.data.side = 'OWIC';
             object.data.alertSideDTO.state.bidSided = true;
+          } else if (alertDTO.data.subType === AlertSubTypes.mid) {
+            object.data.alertSideDTO.data.side = 'MID';
           }
         } else if (alertDTO.data.subType === AlertSubTypes.bid) {
           object.data.alertSideDTO.data.side = 'Bid';
