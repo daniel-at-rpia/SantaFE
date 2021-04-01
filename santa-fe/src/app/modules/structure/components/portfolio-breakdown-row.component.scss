@@ -314,9 +314,21 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
+  &--isBics {
+    #{$blockName} {
+      &__cta-btn {
+        background-color: $color_gray_7;
+        color: $font_color_inverse;
+      }
+    }
+  }
   &--isBicsDiveIn {
     #{$blockName} {
       &__cta {
+        &-btn {
+          background-color: $color_white;
+          color: $font_color_major;
+        }
         &-actionMenu-bottom-diveInBtn {
           visibility: visible;
         }
@@ -599,8 +611,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         flex: 0 0 12rem;
         &-btn {
           @include material('none');
-          @include mix_border_generator($typical_border_width, $color_gray_9);
+          @include mix_border_generator($typical_border_width, $color_white);
           pointer-events: none;
+          background-color: $color_gray_7;
+          color: $font_color_inverse;
         }
         &-actionMenu {
           top: 0;
@@ -642,8 +656,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         #{$blockName} {
           &__cta-btn {
             @include material;
+            background-color: $color_white;
             border-width: 0;
             pointer-events: auto;
+            color: $font_color_major;
           }
         }
       }
@@ -653,6 +669,7 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
             &-btn {
               @include material('none');
               background-color: $color_active;
+              color: $font_color_inverse;
             }
           }
         }
