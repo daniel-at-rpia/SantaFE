@@ -1146,7 +1146,8 @@ export class DTOService {
           state: {
             isStencil: false,
             askSided: false,
-            bidSided: false
+            bidSided: false,
+            midSided: false
           }
         };
         if (alertDTO.state.isMarketListVariant) {
@@ -1158,6 +1159,7 @@ export class DTOService {
             object.data.alertSideDTO.state.bidSided = true;
           } else if (alertDTO.data.subType === AlertSubTypes.mid) {
             object.data.alertSideDTO.data.side = 'MID';
+            object.data.alertSideDTO.state.midSided = true;
           }
         } else if (alertDTO.data.subType === AlertSubTypes.bid) {
           object.data.alertSideDTO.data.side = 'Bid';
