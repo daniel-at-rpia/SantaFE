@@ -597,6 +597,11 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
       &__cta {
         flex: 0 0 12rem;
+        &-btn {
+          @include material('none');
+          @include mix_border_generator($typical_border_width, $color_gray_9);
+          pointer-events: none;
+        }
         &-actionMenu {
           top: 0;
           &-top {
@@ -630,6 +635,25 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
         #{$blockName} {
           &__subLevelTargetGauge {
             margin-left: $portfolioBreakdownRowLevel4LeftOffset;
+          }
+        }
+      }
+      &--isBicsDiveIn {
+        #{$blockName} {
+          &__cta-btn {
+            @include material;
+            border-width: 0;
+            pointer-events: auto;
+          }
+        }
+      }
+      &--selected {
+        #{$blockName} {
+          &__cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_active;
+            }
           }
         }
       }

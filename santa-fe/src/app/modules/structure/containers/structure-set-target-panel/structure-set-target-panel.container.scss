@@ -943,6 +943,15 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--bicsLevel4PlusRow {
     background-color: $color_gray_5;
   }
+  &--bicsLevel5Row {
+    padding-left: $spacing_large;
+  }
+  &--bicsLevel6Row {
+    padding-left: $spacing_large * 2;
+  }
+  &--bicsLevel7Row {
+    padding-left: $spacing_large * 3;
+  }
   &--lockedState {
     background-color: $color_green_1;
     #{$blockName} {
