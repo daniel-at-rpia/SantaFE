@@ -471,6 +471,7 @@ interface BEAlertMarketListBlock {
   isActive: boolean;
   isDeleted: boolean;
   isCancelled: boolean;
+  sendEmail: boolean;
 }
 
 interface BEQuoteBaseBlock {
