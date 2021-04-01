@@ -285,8 +285,8 @@ export interface BESingleBestQuoteDTO {
   askAxeIsOld: boolean;
   isOffTheRunCds: boolean;
   globalIdentifier: string;
-  bestBidQuoteCondition: string;
-  bestAskQuoteCondition: string;
+  isBestAskExecutable: boolean;
+  isBestBidExecutable: boolean;
 }
 
 export interface BEQuoteDTO {
@@ -308,7 +308,6 @@ export interface BEQuoteDTO {
   bidQuantity: number; // null;
   bidIsNatural: boolean; // false;
   bidQualifier: string; // null;
-  bidQuoteCondition: string;  // 'A'
   askQuoteId: string;
   askQuoteStatus: number;  // 0; -1; -2
   askTime: string;
@@ -320,7 +319,8 @@ export interface BEQuoteDTO {
   askQuantity: number; // null;
   askIsNatural: boolean; // null;
   askQualifier: string; // null
-  askQuoteCondition: string;  // 'A'
+  isAskExecutable: boolean;
+  isBidExecutable: boolean;
 }
 
 export interface BEHistoricalSummaryOverviewDTO {
