@@ -992,13 +992,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           const lastFetchOptionsParsed = lastFetchBucket[eachDefinition].toString();
           const newSearchOptionsParsed = newSearchFilters[eachDefinition].toString();
           if (lastFetchOptionsParsed != newSearchOptionsParsed) {
-            containAllOptions = false;
+            newSearchFilters[eachDefinition].forEach((eachOption) => {
+              if (lastFetchBucket[eachDefinition].indexOf(eachOption) < 0){
+                containAllOptions = false;
+              };
+            });
           }
-          // lastFetchBucket[eachDefinition].forEach((eachOption) => {
-          //   if (newSearchFilters[eachDefinition].indexOf(eachOption) < 0){
-          //     containAllOptions = false;
-          //   };
-          // });
           if (!containAllOptions) {
             allContained = false;
           }
