@@ -1247,12 +1247,17 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         });
         return updateList;
       } else {
-        const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
-        return this.processingService.returnDiff(
-          this.state.table.alertDto,
-          newFilteredList,
-          this.state.alert.recentUpdatedAlertList
-        ).newRowList;
+        // only actually update if the table is active
+        if (this.state.table.alertDto.state.isActivated) {
+          const newFilteredList = this.filterPrinstineRowList(targetTableBlock.prinstineRowList);
+          return this.processingService.returnDiff(
+            this.state.table.alertDto,
+            newFilteredList,
+            this.state.alert.recentUpdatedAlertList
+          ).newRowList;
+        } else {
+          return [];
+        }
       }
     }
 
