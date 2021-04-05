@@ -96,7 +96,6 @@ export interface BESecurityDTO {
   isCds?: boolean;
   unitPosition?: {
     mark: {
-      driver: string;
       enteredTime: string;
       user: string;
       value: number;
@@ -127,6 +126,7 @@ export interface BESecurityDTO {
   bicsLevel2: string;
   bicsLevel3: string;
   bicsLevel4: string;
+  driver: string;
 }
 
 export interface BEBestQuoteDTO {
