@@ -153,10 +153,9 @@ export class LiveDataProcessingService {
             });
             if (!!oldRow) {
               const isAlertDiff = oldRow.data.alert && eachNewRow.data.alert ? this.isAlertDiff(oldRow.data.alert, eachNewRow.data.alert) : false;
-              const isAlertValidUntilTimeDiff = oldRow.data.alert && eachNewRow.data.alert ? this.isAlertValidUntilTimeDiff(oldRow.data.alert, eachNewRow.data.alert) : false;
               const isSecurityDiff = this.isThereDiffInSecurity(oldRow.data.security, eachNewRow.data.security);
               const isBestQuoteDiff = this.isThereDiffInBestQuoteComparer(oldRow.data.cells[0].data.bestQuoteComparerDTO, eachNewRow.data.cells[0].data.bestQuoteComparerDTO);
-              if (isAlertDiff || isAlertValidUntilTimeDiff ||  isSecurityDiff > 0 || isBestQuoteDiff > 0) {
+              if (isAlertDiff ||  isSecurityDiff > 0 || isBestQuoteDiff > 0) {
                 this.carryOverOldRowStates(eachNewRow, oldRow);
                 updateList.push(eachNewRow);
               }
@@ -589,13 +588,6 @@ export class LiveDataProcessingService {
     oldRow: DTOs.AlertDTO,
     newRow: DTOs.AlertDTO
   ): boolean {
-    return oldRow.data.unixTimestamp !== newRow.data.unixTimestamp && oldRow.data.id === newRow.data.id;
-  }
-
-  private isAlertValidUntilTimeDiff(
-    oldRow: DTOs.AlertDTO,
-    newRow: DTOs.AlertDTO
-  ): boolean {
-    return oldRow.data.validUntilTime !== newRow.data.validUntilTime && oldRow.data.id === newRow.data.id;
+    return (oldRow.data.unixTimestamp !== newRow.data.unixTimestamp || oldRow.data.validUntilTime !== newRow.data.validUntilTime) && oldRow.data.id === newRow.data.id;
   }
 }
