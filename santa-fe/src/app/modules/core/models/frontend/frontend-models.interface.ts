@@ -301,6 +301,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
     uuid: string;
     displayTitle: string;
+    highlightTitle: string;
     headerOverwrites: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite>;
     searchFilters: Array<Array<SecurityDefinitionDTO>>;  // allowing multiple sets of filters, chained in an "OR" relation, to enable a more complex grouping logic;
     securityExclusionList: Array<string>;  // array of individual securityIds to be excluded on top of "searchFilters"

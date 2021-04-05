@@ -142,6 +142,7 @@ export interface TradeCenterPanelState {
   editingDriver: boolean;
   currentSearch: {
     previewShortcut: DTOs.SearchShortcutDTO;
+    redirectedFromStrurturing: boolean;
   }
 }
 

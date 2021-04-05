@@ -187,7 +187,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       },
       editingDriver: false,
       currentSearch: {
-        previewShortcut: null
+        previewShortcut: null,
+        redirectedFromStrurturing: false
       }
     };
 
@@ -854,6 +855,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.onApplyFilter(params, false);
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
+      this.state.currentSearch.redirectedFromStrurturing = true;
+      this.state.currentSearch.previewShortcut.data.highlightTitle = 'override';
     } else {
       console.warn('see bond does not have a portfolio definition', filterList);
       this.restfulCommService.logError('see bond does not have a portfolio definition');

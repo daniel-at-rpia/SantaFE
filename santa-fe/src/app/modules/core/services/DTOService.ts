@@ -788,6 +788,7 @@ export class DTOService {
       data: {
         uuid: this.utility.generateUUID(),
         displayTitle: title,
+        highlightTitle: '',
         headerOverwrites: [],
         searchFilters: [definitionList],
         securityExclusionList: [],

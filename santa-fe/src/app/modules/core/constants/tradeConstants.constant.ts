@@ -111,6 +111,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'OWNER',
         groupByActive: false,
         selectedOptions: ['PLACEHOLDER']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ],
     isHero: true
@@ -121,6 +126,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['AG']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -130,6 +140,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['AY']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -139,6 +154,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['BT']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -148,6 +168,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DA']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -157,6 +182,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DJ']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -166,6 +196,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DM']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -175,6 +210,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['LC']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -184,6 +224,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['LP']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -193,6 +238,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['IL']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -202,6 +252,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['PD']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -211,6 +266,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['PM']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -220,6 +280,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['RV']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -229,6 +294,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['SP']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   },{
@@ -238,6 +308,11 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['TW']
+      },
+      {
+        definitionKey: 'PORTFOLIO',
+        groupByActive: false,
+        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
       }
     ]
   }
