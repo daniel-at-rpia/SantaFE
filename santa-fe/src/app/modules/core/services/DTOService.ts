@@ -939,14 +939,14 @@ export class DTOService {
             displayNumber: bidNumber,  // not been used right now but could come in handy
             broker: bidDealer,
             size: bidSize,
-            isExecutable: rawData.bestBidQuoteCondition === 'A'
+            isExecutable: !!rawData.isBestBidExecutable
           },
           offer: {
             number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
             broker: askDealer,
             size: offerSize,
-            isExecutable: rawData.bestAskQuoteCondition === 'A'
+            isExecutable: !!rawData.isBestAskExecutable
           }
         },
         style: {
@@ -970,7 +970,7 @@ export class DTOService {
           longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4),
           bidIsStale: bidIsStale,
           askIsStale: askIsStale,
-          hasExecutableQuote: rawData.bestAskQuoteCondition === 'A' || rawData.bestBidQuoteCondition === 'A'
+          hasExecutableQuote: !!rawData.isBestAskExecutable || !!rawData.isBestBidExecutable
         }
       };
       return object;
@@ -1146,7 +1146,8 @@ export class DTOService {
           state: {
             isStencil: false,
             askSided: false,
-            bidSided: false
+            bidSided: false,
+            midSided: false
           }
         };
         if (alertDTO.state.isMarketListVariant) {
@@ -1156,6 +1157,9 @@ export class DTOService {
           } else if (alertDTO.data.subType === AlertSubTypes.bid) {
             object.data.alertSideDTO.data.side = 'OWIC';
             object.data.alertSideDTO.state.bidSided = true;
+          } else if (alertDTO.data.subType === AlertSubTypes.mid) {
+            object.data.alertSideDTO.data.side = 'MID';
+            object.data.alertSideDTO.state.midSided = true;
           }
         } else if (alertDTO.data.subType === AlertSubTypes.bid) {
           object.data.alertSideDTO.data.side = 'Bid';
@@ -1267,7 +1271,7 @@ export class DTOService {
         benchmark: bidBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? moment(rawData.bidTime).format('HH:mm') : '',
         rawTime: rawData.bidTime.slice(0, 19),  // remove timezone,
-        isExecutable: rawData.bidQuoteCondition === 'A'
+        isExecutable: !!rawData.isBidExecutable
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -1278,7 +1282,7 @@ export class DTOService {
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? moment(rawData.askTime).format('HH:mm') : '',
         rawTime: rawData.askTime.slice(0, 19),  // remove timezone
-        isExecutable: rawData.askQuoteCondition === 'A'
+        isExecutable: !!rawData.isAskExecutable
       };
       this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
