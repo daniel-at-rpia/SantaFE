@@ -1666,13 +1666,13 @@ export class DTOService {
         alertDTO.data.dealer = rawData.quote.dealer;
         switch (targetDriver) {
           case TriCoreDriverConfig.Spread.label:
-            alertDTO.data.level = rawData.quote.spread;
+            alertDTO.data.level = rawData.quote.spread !== null ? rawData.quote.spread : rawData.quote.price;
             break;
           case TriCoreDriverConfig.Price.label:
-            alertDTO.data.level = rawData.quote.price;
+            alertDTO.data.level = rawData.quote.price !== null ? rawData.quote.price : rawData.quote.spread;
             break;
           case TriCoreDriverConfig.Yield.label:
-            alertDTO.data.level = rawData.quote.yield;
+            alertDTO.data.level = rawData.quote.yield !== null ? rawData.quote.yield : rawData.quote.price;
             break;
           default:
             break;
