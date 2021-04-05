@@ -957,6 +957,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     module: NavigationModule;
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
+      associatedDisplayTitle?: string;
       filterList?: Array<SecurityDefinitionDTO>;
       activeMetric?: PortfolioMetricValues;
       structureUtilityPanelSnapshot?: StructureUtilityPanelState;

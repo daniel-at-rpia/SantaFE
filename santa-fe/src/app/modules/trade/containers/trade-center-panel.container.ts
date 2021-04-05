@@ -310,7 +310,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         const filterList = pack.filterList;
         const metric = pack.metric;
         if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric) {
-          this.autoLoadTable(filterList, metric);
+          this.autoLoadTable(filterList, metric, pack.presetDisplayTitle);
         }
       }
     });
@@ -789,25 +789,27 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private autoLoadTable(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues
+    portfolioMetric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ) {
     if (!!this.state.presets.selectedPreset) {
       this.performUnselectPresetInBackground();
       const delayToLoad = 1;  // the actual load needs to be executed on a delay because we need to give time for agGrid to react on santaTable's "activated" flag being set to false, this way when the autoLoadTable actually set it to "true" again, it will rebuild the header, otherwise the headers won't be rebuild. The time it takes for agGrid to react is trivial, we just need to wait for a single frame
       setTimeout(
         function(){
-          this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+          this.autoLoadTablePerformLoad(filterList, portfolioMetric, presetDisplayTitle);
         }.bind(this),
         delayToLoad
       );
     } else {
-      this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+      this.autoLoadTablePerformLoad(filterList, portfolioMetric, presetDisplayTitle);
     }
   }
 
   private autoLoadTablePerformLoad(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues
+    portfolioMetric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ){
     const targetPortfolioDefinition = filterList.find((eachDefinition) => {
       return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
@@ -856,7 +858,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
       this.state.currentSearch.redirectedFromStrurturing = true;
-      this.state.currentSearch.previewShortcut.data.highlightTitle = 'override';
+      this.state.currentSearch.previewShortcut.data.highlightTitle = 'From Structuring';
+      if (!!presetDisplayTitle && presetDisplayTitle.length > 0) {
+        this.state.currentSearch.previewShortcut.data.displayTitle = ` ${this.state.currentSearch.previewShortcut.data.displayTitle} - ${presetDisplayTitle}`;
+      }
     } else {
       console.warn('see bond does not have a portfolio definition', filterList);
       this.restfulCommService.logError('see bond does not have a portfolio definition');
