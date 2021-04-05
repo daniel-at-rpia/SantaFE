@@ -1751,7 +1751,7 @@ export class DTOService {
       if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
         alertDTO.state.isExpired = true;
       }
-      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
+      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded && alertDTO.data.level !== null) {
         alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else if (alertDTO.state.isCancelled) {
         alertDTO.data.status = `Cancelled at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
