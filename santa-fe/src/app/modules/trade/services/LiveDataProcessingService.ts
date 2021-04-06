@@ -113,7 +113,7 @@ export class LiveDataProcessingService {
             eachAlertDTO
           );
         } else {
-          console.error('security not found for alert', eachAlertDTO);
+          console.error(`security (ID: ${targetSecurityId}) not found for alert`, eachAlertDTO);
         }
       }
     };
