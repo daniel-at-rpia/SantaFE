@@ -158,7 +158,7 @@ export class DTOService {
           mark: null,
           markRaw: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.value : null,
           markBackend: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.value : null,
-          markDriver: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.driver : null,
+          markDriver: !isStencil && !!rawData.driver ? rawData.driver : null,
           markChangedBy: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.user : null,
           markChangedTime: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.enteredTime : null,
           markDisBid: null,
@@ -1666,13 +1666,13 @@ export class DTOService {
         alertDTO.data.dealer = rawData.quote.dealer;
         switch (targetDriver) {
           case TriCoreDriverConfig.Spread.label:
-            alertDTO.data.level = rawData.quote.spread;
+            alertDTO.data.level = rawData.quote.spread !== null ? rawData.quote.spread : rawData.quote.price;
             break;
           case TriCoreDriverConfig.Price.label:
-            alertDTO.data.level = rawData.quote.price;
+            alertDTO.data.level = rawData.quote.price !== null ? rawData.quote.price : rawData.quote.spread;
             break;
           case TriCoreDriverConfig.Yield.label:
-            alertDTO.data.level = rawData.quote.yield;
+            alertDTO.data.level = rawData.quote.yield !== null ? rawData.quote.yield : rawData.quote.price;
             break;
           default:
             break;
@@ -1751,7 +1751,7 @@ export class DTOService {
       if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
         alertDTO.state.isExpired = true;
       }
-      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
+      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded && alertDTO.data.level !== null) {
         alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else if (alertDTO.state.isCancelled) {
         alertDTO.data.status = `Cancelled at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;

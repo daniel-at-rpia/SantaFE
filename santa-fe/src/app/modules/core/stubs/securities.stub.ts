@@ -112,7 +112,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         },
                         "strategyAsOfDate": "2021-01-12T00:00:00",
                         "mark": {
-                            "driver": "Spread",
                             "enteredTime": "2021-01-13T00:00:00-05:00",
                             "user": null,
                             "value": 56.3,
@@ -134,7 +133,8 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "researchName": "LP"
                     },
                     "securityType": "Bond",
-                    "maturityType": "Bullet"
+                    "maturityType": "Bullet",
+                    "driver": "Spread"
                 },
                 "bestQuotes": {
                     "bestPriceQuote": {
@@ -368,7 +368,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         },
                         "strategyAsOfDate": "2021-01-12T00:00:00",
                         "mark": {
-                            "driver": "Spread",
                             "enteredTime": "2021-01-13T00:00:00-05:00",
                             "user": null,
                             "value": 60.06,
@@ -390,7 +389,8 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "researchName": "TW"
                     },
                     "securityType": "Cds",
-                    "maturityType": "Bullet"
+                    "maturityType": "Bullet",
+                    "driver": "Spread"
                 },
                 "bestQuotes": null,
                 "positions": [
@@ -558,7 +558,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -643,7 +644,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -728,7 +730,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -813,7 +816,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   }
 ];
 
@@ -901,7 +905,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -986,7 +991,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1071,7 +1077,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1156,7 +1163,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1241,7 +1249,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1326,6 +1335,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel1": null,
     "bicsLevel2": null,
     "bicsLevel3": null,
-    "bicsLevel4": null
+    "bicsLevel4": null,
+    "driver": "Spread"
   }
 ]
