@@ -9,10 +9,9 @@ import {
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
   BEStructuringOverrideBaseBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios,
-  BESubPortfolioFilter
+  BEStructuringBreakdownMetricBlockWithSubPortfolios
 } from './backend-models.interface';
-
+import { BESubPortfolioFilter } from 'Core/constants/structureConstants.constants';
 export interface PayloadGetSantaGroups {
   source: string;
   yyyyMMdd?: number;

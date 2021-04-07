@@ -49,7 +49,6 @@
       BEStructuringOverrideBlockWithSubPortfolios,
       BEStructuringBreakdownMetricSingleEntryBlock,
       BEStructuringBreakdownMetricBlockWithSubPortfolios,
-      BESubPortfolioFilter,
       BEStructuringOverrideBaseBlock,
       BEStructuringOverrideBaseBlockWithSubPortfolios
     } from 'BEModels/backend-models.interface';
@@ -60,14 +59,16 @@
     import {
       StructureReloadFundDataPostEditEvent,
       StructureUpdateMainPanelEvent,
-      StructureSetView
+      StructureSetView,
+      StructureOverrideDataTransferEvent
     } from 'Structure/actions/structure.actions';
     import { CoreSendNewAlerts } from 'Core/actions/core.actions';
     import {
       CustomeBreakdownConfiguratorDefinitionLayout,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
       SubPortfolioFilter,
-      SET_TARGET_CLEAR_ALL_OPTIONS_MAP
+      SET_TARGET_CLEAR_ALL_OPTIONS_MAP,
+      BESubPortfolioFilter
     } from 'Core/constants/structureConstants.constants';
   //
 
