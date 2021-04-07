@@ -13,7 +13,9 @@ import {
   BEStructuringBreakdownBlock,
   BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';
-import { PayloadUpdatePortfolioOverridesForAllPortfolios } from 'Core/models/backend/backend-payloads.interface';
+import {
+  PayloadModifyOverrides
+} from 'Core/models/backend/backend-payloads.interface';
 import { 
   PortfolioView,
   SubPortfolioFilter,

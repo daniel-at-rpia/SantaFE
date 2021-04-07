@@ -37,9 +37,8 @@
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PayloadUpdateBreakdown,
-      PayloadUpdateOverride,
-      PayloadDeleteOverride,
-      PayloadSetView
+      PayloadSetView,
+      PayloadModifyOverrides
     } from 'BEModels/backend-payloads.interface';
     import {
       BEStructuringBreakdownBlock,
@@ -1085,20 +1084,24 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     return hasModification ? payloads : null;
   }
 
-  private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
-    const payload: Array<PayloadUpdateOverride> = [];
+  private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadModifyOverrides> {
+    // finds both newly-created and updated override rows
+    let updateOverridePayloads: PayloadModifyOverrides = {
+      portfolioOverrides: []
+    }
+    let createOverridePayloads: PayloadModifyOverrides = {
+      portfolioOverrides: []
+    }
     this.state.editRowList.forEach((eachRow) => {
       let isTitleChanged = false;
       let isTargetChanged = false;
-      const eachPayload: PayloadUpdateOverride = {
-        portfolioOverride: {
-          portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
-        }
+      const eachPayload: BEStructuringOverrideBaseBlockWithSubPortfolios = {
+        portfolioId: this.state.targetBreakdownRawData.portfolioId,
+        simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket,
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.displayRowTitle) {
         isTitleChanged = true;
-        eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
+        eachPayload.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         isTargetChanged = true;
@@ -1122,25 +1125,29 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
             targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }
-        eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
+        eachPayload.breakdown = modifiedMetricBreakdowns;
       }
-      if (isTargetChanged || isTitleChanged || !eachRow.existInServer) {
-        payload.push(eachPayload);
+      if (isTargetChanged || isTitleChanged) {
+        if (!eachRow.existInServer) {
+          createOverridePayloads.portfolioOverrides = [...createOverridePayloads.portfolioOverrides, eachPayload]
+        } else {
+          updateOverridePayloads.portfolioOverrides = [...updateOverridePayloads.portfolioOverrides, eachPayload]
+        }
       }
     });
-    return payload;
+    return [updateOverridePayloads, createOverridePayloads];
   }
 
-  private traverseRemovalListToFormDeleteOverridePayload(): Array<PayloadDeleteOverride> {
-    const payload: Array<PayloadDeleteOverride> = [];
+  private traverseRemovalListToFormDeleteOverridePayload(): PayloadModifyOverrides {
+    const payload: PayloadModifyOverrides = {
+      portfolioOverrides: []
+    };
     this.state.removalList.forEach((eachRow) => {
-      const eachPayload: PayloadDeleteOverride = {
-        portfolioOverride: {
-          portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
-        }
+      const eachPayload: BEStructuringOverrideBaseBlockWithSubPortfolios = {
+        portfolioId: this.state.targetBreakdownRawData.portfolioId,
+        simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
       };
-      payload.push(eachPayload);
+      payload.portfolioOverrides.push(eachPayload);
     });
     return payload;
   }

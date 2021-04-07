@@ -138,13 +138,9 @@ export interface PayloadUpdateBreakdown {
     }
   };
 }
-
-export interface PayloadUpdateOverride {
-  portfolioOverride: BEStructuringOverrideBaseBlockWithSubPortfolios;
-}
-
-export interface PayloadDeleteOverride {
-  portfolioOverride: BEStructuringOverrideBaseBlockWithSubPortfolios;
+export interface PayloadModifyOverrides {
+  // used for create, update, and delete Structuring overrides
+  portfolioOverrides: Array<BEStructuringOverrideBaseBlockWithSubPortfolios>;
 }
 
 export interface PayloadGetPortfolioOverride {

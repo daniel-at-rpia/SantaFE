@@ -65,6 +65,7 @@
     import {
       PayloadGetPortfolioStructures,
       PayloadSetView,
+      PayloadModifyOverrides,
       PayloadUpdatePortfolioOverridesForAllPortfolios
     } from 'App/modules/core/models/backend/backend-payloads.interface';
     import {
