@@ -7,10 +7,16 @@ $portfolioBreakdownRowBranchLeftIncrement: 1.5rem;
 $portfolioBreakdownRowBranchLevel2Base: .5rem;
 $portfolioBreakdownRowBranchLevel3Base: $portfolioBreakdownRowBranchLevel2Base + $portfolioBreakdownRowBranchLeftIncrement;
 $portfolioBreakdownRowBranchLevel4Base: $portfolioBreakdownRowBranchLevel3Base + $portfolioBreakdownRowBranchLeftIncrement;
-$portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
+$portfolioBreakdownRowBranchLevel5Base: $portfolioBreakdownRowBranchLevel4Base + $portfolioBreakdownRowBranchLeftIncrement;
+$portfolioBreakdownRowBranchLevel6Base: $portfolioBreakdownRowBranchLevel5Base + $portfolioBreakdownRowBranchLeftIncrement;
+$portfolioBreakdownRowBranchLevel7Base: $portfolioBreakdownRowBranchLevel6Base + $portfolioBreakdownRowBranchLeftIncrement;
 $portfolioBreakdownRowLevel2LeftOffset: $portfolioBreakdownRowBranchLevel2Base + $spacing_small;
 $portfolioBreakdownRowLevel3LeftOffset: $portfolioBreakdownRowBranchLevel3Base + $spacing_small;
 $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base + $spacing_small;
+$portfolioBreakdownRowLevel5LeftOffset: $portfolioBreakdownRowBranchLevel5Base + $spacing_small;
+$portfolioBreakdownRowLevel6LeftOffset: $portfolioBreakdownRowBranchLevel6Base + $spacing_small;
+$portfolioBreakdownRowLevel7LeftOffset: $portfolioBreakdownRowBranchLevel7Base + $spacing_small;
+$portfolioBreakdownRow_cta_actionMenu_top: -1.5rem;
 .sat-portfolioBreakdownRow {
   $blockName: &;
   flex: 1 1 auto;
@@ -314,9 +320,21 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
+  &--isBics {
+    #{$blockName} {
+      &__cta-btn {
+        background-color: $color_gray_7;
+        color: $font_color_inverse;
+      }
+    }
+  }
   &--isBicsDiveIn {
     #{$blockName} {
       &__cta {
+        &-btn {
+          background-color: $color_white;
+          color: $font_color_major;
+        }
         &-actionMenu-bottom-diveInBtn {
           visibility: visible;
         }
@@ -528,6 +546,9 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__branch {
         left: $portfolioBreakdownRowBranchLevel2Base;
       }
+      &__subLevelTargetGauge {
+        margin-left: $portfolioBreakdownRowLevel2LeftOffset;
+      }
       &__cta {
         margin-left: $portfolioBreakdownRowLevel2LeftOffset;
         &-btn {
@@ -542,6 +563,9 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       &__branch {
         left: $portfolioBreakdownRowBranchLevel3Base;
       }
+      &__subLevelTargetGauge {
+        margin-left: $portfolioBreakdownRowLevel3LeftOffset;
+      }
       &__cta {
         margin-left: $portfolioBreakdownRowLevel3LeftOffset;
         &-btn {
@@ -550,14 +574,68 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
   }
-  &--parallelLevel4PlusRow {
+  &--parallelLevel4Row {
     display: none;
     #{$blockName} {
       &__branch {
         left: $portfolioBreakdownRowBranchLevel4Base;
       }
+      &__subLevelTargetGauge {
+        margin-left: $portfolioBreakdownRowLevel4LeftOffset;
+      }
       &__cta {
         margin-left: $portfolioBreakdownRowLevel4LeftOffset;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
+  }
+  &--parallelLevel5Row {
+    display: none;
+    #{$blockName} {
+      &__branch {
+        left: $portfolioBreakdownRowBranchLevel5Base;
+      }
+      &__subLevelTargetGauge {
+        margin-left: $portfolioBreakdownRowLevel5LeftOffset;
+      }
+      &__cta {
+        margin-left: $portfolioBreakdownRowLevel5LeftOffset;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
+  }
+  &--parallelLevel6Row {
+    display: none;
+    #{$blockName} {
+      &__branch {
+        left: $portfolioBreakdownRowBranchLevel6Base;
+      }
+      &__subLevelTargetGauge {
+        margin-left: $portfolioBreakdownRowLevel6LeftOffset;
+      }
+      &__cta {
+        margin-left: $portfolioBreakdownRowLevel6LeftOffset;
+        &-btn {
+          margin-left: $spacing_x_small;
+        }
+      }
+    }
+  }
+  &--parallelLevel7Row {
+    display: none;
+    #{$blockName} {
+      &__branch {
+        left: $portfolioBreakdownRowBranchLevel7Base;
+      }
+      &__subLevelTargetGauge {
+        margin-left: $portfolioBreakdownRowLevel7LeftOffset;
+      }
+      &__cta {
+        margin-left: $portfolioBreakdownRowLevel7LeftOffset;
         &-btn {
           margin-left: $spacing_x_small;
         }
@@ -582,7 +660,10 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
     &#{$blockName} {
       &--parallelLevel2Row,
       &--parallelLevel3Row,
-      &--parallelLevel4PlusRow {
+      &--parallelLevel4Row,
+      &--parallelLevel5Row,
+      &--parallelLevel6Row,
+      &--parallelLevel7Row {
         display: flex;
       }
     }
@@ -597,6 +678,13 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
       &__cta {
         flex: 0 0 12rem;
+        &-btn {
+          @include material('none');
+          @include mix_border_generator($typical_border_width, $color_white);
+          pointer-events: none;
+          background-color: $color_gray_7;
+          color: $font_color_inverse;
+        }
         &-actionMenu {
           top: 0;
           &-top {
@@ -612,24 +700,25 @@ $portfolioBreakdownRowLevel4LeftOffset: $portfolioBreakdownRowBranchLevel4Base +
       }
     }
     &#{$blockName} {
-      &--parallelLevel2Row {
+      &--isBicsDiveIn {
         #{$blockName} {
-          &__subLevelTargetGauge {
-            margin-left: $portfolioBreakdownRowLevel2LeftOffset;
+          &__cta-btn {
+            @include material;
+            background-color: $color_white;
+            border-width: 0;
+            pointer-events: auto;
+            color: $font_color_major;
           }
         }
       }
-      &--parallelLevel3Row {
+      &--selected {
         #{$blockName} {
-          &__subLevelTargetGauge {
-            margin-left: $portfolioBreakdownRowLevel3LeftOffset;
-          }
-        }
-      }
-      &--parallelLevel4PlusRow {
-        #{$blockName} {
-          &__subLevelTargetGauge {
-            margin-left: $portfolioBreakdownRowLevel4LeftOffset;
+          &__cta {
+            &-btn {
+              @include material('none');
+              background-color: $color_active;
+              color: $font_color_inverse;
+            }
           }
         }
       }
