@@ -859,6 +859,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.loadFreshData();
       this.state.currentSearch.redirectedFromStrurturing = true;
       this.state.currentSearch.previewShortcut.data.highlightTitle = 'From Structuring';
+      this.autoLoadTableFillCurrentSearchPresetSlotlist(filterList);
       if (!!presetDisplayTitle && presetDisplayTitle.length > 0) {
         this.state.currentSearch.previewShortcut.data.displayTitle = ` ${this.state.currentSearch.previewShortcut.data.displayTitle} - ${presetDisplayTitle}`;
       }
@@ -975,5 +976,18 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.filters.keyword.defaultValueForUI = null;
     this.state.fetchResult = newState.fetchResult;
     this.store$.dispatch(new TradeTogglePresetEvent);
+  }
+
+  private autoLoadTableFillCurrentSearchPresetSlotlist(filterList: Array<DTOs.SecurityDefinitionDTO>) {
+    if (!!this.state.currentSearch.previewShortcut && filterList.length > 0) {
+      filterList.forEach((eachFilterDefinition) => {
+        const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
+          return eachSlot === null;
+        });
+        if (indexToEmptySlot < 4) {
+          this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = eachFilterDefinition;
+        }
+      });
+    }
   }
 }
