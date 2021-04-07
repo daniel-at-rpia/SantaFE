@@ -806,3 +806,16 @@ export enum BESubPortfolioFilter {
   nonShortCarry = 'NonShortCarry',
   shortCarry = 'ShortCarry'
 }
+
+export interface BEStructuringSetViewReturn {
+  [property: string]: any;
+}
+
+export interface BEStructuringSetViewReturnEntry {
+  portfolioBreakdown?: {
+    [porperty: string]: BEStructuringBreakdownBlock;
+  }
+  portfolioOverride?: {
+    [porperty: string]: BEStructuringBreakdownBlock;
+  }
+}
