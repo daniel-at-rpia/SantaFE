@@ -318,6 +318,7 @@ export interface PortfolioBreakdownCategoryBlock {
   displayedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used to indicate which sub levels have targets
   editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
+  portfolioOverrideId: string;
 }
 
 export interface GlobalNavLegendBlock {

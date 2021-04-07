@@ -734,6 +734,7 @@ export interface BEStructuringBreakdownMetricBlock {
   bucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
     [property: string]: Array<string>;
   }
+  portfolioOverrideId?: string;
 }
 
 export interface BEStructuringBreakdownMetricSingleEntryBlock {
