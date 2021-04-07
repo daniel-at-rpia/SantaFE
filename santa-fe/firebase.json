@@ -97,8 +97,8 @@
       ]
     },
     {
-      "target": "release-local",
-      "site": "release-local-santa-rpia",
+      "target": "staging-local",
+      "site": "staging-local-santa-rpia",
       "public": "dist/santa-fe",
       "ignore": [
         "firebase.json",
@@ -113,8 +113,8 @@
       ]
     },
     {
-      "target": "release",
-      "site": "release-santa-rpia",
+      "target": "staging",
+      "site": "staging-santa-rpia",
       "public": "dist/santa-fe",
       "ignore": [
         "firebase.json",
