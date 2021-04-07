@@ -23,11 +23,11 @@
         "local4": [
           "local4-santa-rpia"
         ],
-        "release": [
-          "release-santa-rpia"
+        "staging": [
+          "staging-santa-rpia"
         ],
-        "release-local": [
-          "release-local-santa-rpia"
+        "staging-local": [
+          "staging-local-santa-rpia"
         ],
         "prod": [
           "santa-rpia"
