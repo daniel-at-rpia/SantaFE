@@ -801,9 +801,14 @@ export interface BESecurityMap {
   [id: string]: Array<string>;
 }
 
-export enum BESubPortfolioFilter {
-  all = 'All',
-  nonHedging = 'NonHedging',
-  nonShortCarry = 'NonShortCarry',
-  shortCarry = 'ShortCarry'
+export interface BECreateOverrideBlock {
+  [delta: string]: {
+    [portfolioId: string]: {
+      [bucketOptions: string] : {
+        [bucketOptionsValues: string]: BEStructuringOverrideBaseBlockWithSubPortfolios;
+      }
+    };
+  }
 }
+
+export type BEUpdateOverrideBlock = Array<BEStructuringOverrideBaseBlockWithSubPortfolios>;

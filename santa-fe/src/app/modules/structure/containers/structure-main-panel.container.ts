@@ -56,7 +56,12 @@
       BEStructuringBreakdownBlockWithSubPortfolios,
       BEStructuringOverrideBlockWithSubPortfolios,
       BEStructuringOverrideBlock,
-      BEStructuringOverrideBaseBlock
+      BEStructuringOverrideBaseBlock,
+      BECreateOverrideBlock,
+      BEStructuringOverrideBaseBlockWithSubPortfolios,
+      BEPortfolioDTO,
+      BEUpdateOverrideBlock,
+      BEStructuringBreakdownMetricBlockWithSubPortfolios
     } from 'App/modules/core/models/backend/backend-models.interface';
     import {
       CoreSendNewAlerts,
@@ -77,7 +82,7 @@
       SecurityDefinitionMap
     } from 'Core/constants/securityDefinitionConstants.constant';
     import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
-    import { AdhocPacks } from 'App/modules/core/models/frontend';
+    import { AdhocPacks, DTOs } from 'App/modules/core/models/frontend';
   //
 
 @Component({
