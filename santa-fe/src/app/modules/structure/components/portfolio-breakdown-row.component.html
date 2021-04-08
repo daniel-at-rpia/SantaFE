@@ -2,6 +2,7 @@
   [ngClass]="{
     'sat-portfolioBreakdownRow': true,
     'sat-portfolioBreakdownRow--stencilState': breakdownRow.state.isStencil,
+    'sat-portfolioBreakdownRow--isBics': breakdownRow.data.bicsLevel > 0,
     'sat-portfolioBreakdownRow--isBicsDiveIn': breakdownRow.state.isBtnDiveIn,
     'sat-portfolioBreakdownRow--selected': breakdownRow.state.isSelected,
     'sat-portfolioBreakdownRow--noSignificantDiff': breakdownRow.data.diffToTarget === 0,
@@ -18,6 +19,9 @@
     'sat-portfolioBreakdownRow--parallelLevel2Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 2,
     'sat-portfolioBreakdownRow--parallelLevel3Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 3,
     'sat-portfolioBreakdownRow--parallelLevel4Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 4,
+    'sat-portfolioBreakdownRow--parallelLevel5Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 5,
+    'sat-portfolioBreakdownRow--parallelLevel6Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 6,
+    'sat-portfolioBreakdownRow--parallelLevel7Row': !breakdownRow.state.isWithinPopover && breakdownRow.data.bicsLevel === 7,
     'sat-portfolioBreakdownRow--visibleSubLevel': !!breakdownRow.state.isVisibleSubLevel &&  breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover,
     'sat-portfolioBreakdownRow--isWithinEditRow': !!breakdownRow.state.isWithinEditRow,
     'sat-portfolioBreakdownRow--isWithinSetTargetPreview': !!breakdownRow.state.isWithinSetTargetPreview,

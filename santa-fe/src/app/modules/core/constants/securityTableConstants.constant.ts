@@ -869,6 +869,63 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'bicsLevel5',
+    content: {
+      label: 'BICS Lv.5',
+      attrName: 'bicsLevel5',
+      underlineAttrName: 'bicsLevel5',
+      blockAttrName: 'bics',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'bicsLevel6',
+    content: {
+      label: 'BICS Lv.6',
+      attrName: 'bicsLevel6',
+      underlineAttrName: 'bicsLevel6',
+      blockAttrName: 'bics',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'bicsLevel7',
+    content: {
+      label: 'BICS Lv.7',
+      attrName: 'bicsLevel7',
+      underlineAttrName: 'bicsLevel7',
+      blockAttrName: 'bics',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
     key: 'issuer',
     content: {
       label: 'Issuer',

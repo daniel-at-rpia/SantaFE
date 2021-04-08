@@ -1536,8 +1536,12 @@ export class UtilityService {
 
     public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
       const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
-      const isDiveInAvailable = !isNonDiveInCategory && row.data.bicsLevel < 4 ? true : false;
-      return isDiveInAvailable;
+      if (!isNonDiveInCategory && row.data.code) {
+        const subLevelCategories = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(row.data.code);
+        return subLevelCategories.length > 0;
+      } else {
+        return false;
+      }
     }
 
     public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {
