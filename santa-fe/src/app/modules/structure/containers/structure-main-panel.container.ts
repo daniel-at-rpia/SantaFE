@@ -107,6 +107,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     supportedFundList: SUPPORTED_PORTFOLIO_LIST,
     breakdownViewFilter: BreakdownViewFilter,
     deltaScope: DeltaScope,
+    currentDeltaScope: 'Now',
     bicsBEIdentifiers: BICSBEBreakdownIdentifiers
   };
   
