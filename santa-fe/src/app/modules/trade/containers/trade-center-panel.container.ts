@@ -169,7 +169,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           removalRowList: []
         },
         initialDataLoadedInternalSyncFlag: false,
-        totalCount: 0
+        totalCount: 0,
+        lastFetchBucket: null,
+        lastFetchServerReturn: null
       },
       filters: {
         keyword: {
@@ -602,10 +604,16 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   private fetchAllData(isInitialFetch: boolean) {
-    this.fetchDataForMainTable(isInitialFetch);
+    const packedGroupFilters = this.utilityService.getSimpleBucketFromConfigurator({filterList: this.state.filters.securityFilters});
+    if (isInitialFetch && this.existFetchResultContainsNewSearchFilters(packedGroupFilters)) {
+      this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
+      this.loadDataForMainTable(this.state.fetchResult.lastFetchServerReturn);
+    } else {
+      this.fetchDataForMainTable(isInitialFetch, packedGroupFilters);
+    }
   }
 
-  private fetchDataForMainTable(isInitialFetch: boolean) {
+  private fetchDataForMainTable(isInitialFetch: boolean, packedGroupFilters: object) {
     const payload: PayloadGetTradeFullData = {
       maxNumberOfSecurities: 5000,
       groupIdentifier: {},
@@ -613,7 +621,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         // SecurityIdentifier: ['17163', '338|5Y']
       }
     };
-    const packedGroupFilters = this.utilityService.getSimpleBucketFromConfigurator({filterList: this.state.filters.securityFilters});
     payload.groupFilters = packedGroupFilters;
     if (!!this.state.bestQuoteValidWindow) {
       payload.lookbackHrs = this.state.bestQuoteValidWindow;
@@ -626,6 +633,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           this.store$.dispatch(new TradeLiveUpdatePassRawDataToMainTableEvent());
         } else {
           this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
+          // only capture the lastFetch data if the API returned and the return was the entire payload (not truncated due to the 5000 cap)
+          if (serverReturn.totalNumberOfSecurities <= 5000) {
+            this.state.fetchResult.lastFetchServerReturn = serverReturn;
+            this.state.fetchResult.lastFetchBucket = packedGroupFilters;
+          }
         }
         this.loadDataForMainTable(serverReturn);
       }),
@@ -970,5 +982,35 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.filters.keyword.defaultValueForUI = null;
     this.state.fetchResult = newState.fetchResult;
     this.store$.dispatch(new TradeTogglePresetEvent);
+  }
+
+  private existFetchResultContainsNewSearchFilters(newSearchFilters): boolean {
+    const lastFetchBucket = this.state.fetchResult.lastFetchBucket;
+    if (!!lastFetchBucket) {
+      let allContained = true;
+      for (const eachDefinition in lastFetchBucket) {
+        if (!!newSearchFilters[eachDefinition]) {
+          // TODO: this logic may or may not need to be modified once we introduce the feature to exclude options via the "!" symbol. 
+          let containAllOptions = true;
+          const lastFetchOptionsParsed = lastFetchBucket[eachDefinition].toString();
+          const newSearchOptionsParsed = newSearchFilters[eachDefinition].toString();
+          if (lastFetchOptionsParsed != newSearchOptionsParsed) {
+            newSearchFilters[eachDefinition].forEach((eachOption) => {
+              if (lastFetchBucket[eachDefinition].indexOf(eachOption) < 0){
+                containAllOptions = false;
+              };
+            });
+          }
+          if (!containAllOptions) {
+            allContained = false;
+          }
+        } else {
+          allContained = false;
+        }
+      }
+      return allContained;
+    } else {
+      return false;
+    }
   }
 }
