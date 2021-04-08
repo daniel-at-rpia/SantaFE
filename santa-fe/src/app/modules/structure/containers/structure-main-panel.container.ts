@@ -799,6 +799,16 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               const { breakdown, title, portfolioOverrideId } = updatedOverride;
               this.updateDataInRawServerReturnCache(breakdown, title, this.constants.currentDeltaScope, true, portfolioOverrideId, portfolioID, null, null, null, null);
             })
+            this.store$.dispatch(
+              new CoreSendNewAlerts([
+                this.dtoService.formSystemAlertObject(
+                  'Structuring',
+                  'Success',
+                  `Successfully updated overrides`,
+                  null
+                )]
+              )
+            );
             if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
               this.processStructureData(
                 this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
@@ -834,6 +844,16 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           this.state.overrideModifications.callCount++;
           if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
             this.iterateDeltaServerReturnToUpdateRawCache(serverReturn);
+            this.store$.dispatch(
+              new CoreSendNewAlerts([
+                this.dtoService.formSystemAlertObject(
+                  'Structuring',
+                  'Success',
+                  `Successfully created new overrides`,
+                  null
+                )]
+              )
+            );
             if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
               this.processStructureData(
                 this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
@@ -879,7 +899,17 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 deltas.forEach(delta => {
                   this.updateDataInRawServerReturnCache(null, null, delta, true, portfolioOverrideId, portfolioId, null, null, null, null);
                 })
-              })
+              });
+              this.store$.dispatch(
+                new CoreSendNewAlerts([
+                  this.dtoService.formSystemAlertObject(
+                    'Structuring',
+                    'Success',
+                    `Successfully deleted overrides`,
+                    null
+                  )]
+                )
+              );
               if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
                 this.processStructureData(
                   this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
@@ -980,6 +1010,16 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       tap((serverReturn: BECreateOverrideBlock) => {
         if(serverReturn) {
           this.iterateDeltaServerReturnToUpdateRawCache(serverReturn);
+          this.store$.dispatch(
+            new CoreSendNewAlerts([
+              this.dtoService.formSystemAlertObject(
+                'Structuring',
+                'Success',
+                `Successfully created overrides across all portfolios`,
+                null
+              )]
+            )
+          );
           this.processStructureData(
             this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
             this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
