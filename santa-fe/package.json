@@ -8,7 +8,7 @@
     "deployProd": "ng build --prod --aot --extra-webpack-config webpack.partial.js -o && firebase deploy --only hosting:prod",
     "deployDev3": "ng build --extra-webpack-config webpack.partial.js -o && firebase deploy --only hosting:dev3,hosting:local3",
     "deployDev4": "ng build --extra-webpack-config webpack.partial.js -o && firebase deploy --only hosting:dev4,hosting:local4",
-    "deployRelease": "ng build --prod --aot --extra-webpack-config webpack.partial.js -o && firebase deploy --only hosting:release,hosting:release-local",
+    "deployStaging": "ng build --prod --aot --extra-webpack-config webpack.partial.js -o && firebase deploy --only hosting:staging,hosting:staging-local",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
