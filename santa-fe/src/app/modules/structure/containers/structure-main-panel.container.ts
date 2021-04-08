@@ -765,4 +765,103 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     const breakdownList = Object.keys(fund.breakdowns).filter(category => category.includes(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)).map(category => fund.breakdowns[category]);
     return breakdownList;
   }
+
+  private getDeltaSpecificFundFromRawServerReturnCache(
+    portfolioID: number,
+    delta: string
+  ): BEStructuringFundBlockWithSubPortfolios{
+    const fund: BEStructuringFundBlockWithSubPortfolios = this.state.fetchResult.rawServerReturnCache[delta].find((fund: BEStructuringFundBlockWithSubPortfolios) => fund.portfolioId === +(portfolioID));
+    return fund;
+  }
+
+  private updateOverrides(
+    payload: PayloadModifyOverrides,
+    portfolioID: number
+  ) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverrides, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: BEUpdateOverrideBlock) => {
+        if (!!serverReturn && serverReturn.length > 0) {
+          this.state.overrideModifications.callCount++;
+          if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+            serverReturn.forEach((updatedOverride: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
+              const { breakdown, title, portfolioOverrideId } = updatedOverride;
+              this.updateDataInRawServerReturnCache(breakdown, title, this.constants.currentDeltaScope, true, portfolioOverrideId, portfolioID, null, null);
+            })
+            if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+              this.processStructureData(
+                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+              );
+            }
+          }
+        }
+      }),
+      catchError(err => {
+        this.store$.dispatch(
+          new CoreSendNewAlerts([
+            this.dtoService.formSystemAlertObject(
+              'Structuring',
+              'Error',
+              `Unable to update new overrides`,
+              null
+            )]
+          )
+        );
+        this.restfulCommService.logError('Update Override API failed, unable to create new overrides')
+        console.error(`${this.restfulCommService.apiMap.updatePortfolioOverrides} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
+  }
+
+  private updateDataInRawServerReturnCache(
+    breakdownRawData: BEStructuringBreakdownMetricBlockWithSubPortfolios,
+    title: string,
+    delta: string,
+    isOverride: boolean,
+    rowID: string,
+    portfolioID: number,
+    bucketOptions: string,
+    bucketOptionsValues: string
+  ) {
+    const existingFundDeltaData: BEStructuringFundBlockWithSubPortfolios = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
+    if (!!existingFundDeltaData) {
+      if (isOverride) {
+        if (existingFundDeltaData.overrides) {
+          if (!bucketOptions && !bucketOptionsValues) {
+            for (let existingBucketOption in existingFundDeltaData.overrides) {
+              if (existingFundDeltaData.overrides[existingBucketOption]) {
+                // check if it was previously created and this is an update
+                for (let existingBucketOptionValues in existingFundDeltaData.overrides[existingBucketOption]) {
+                  if (existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues]) {
+                    if (existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].portfolioOverrideId === rowID) {
+                      if (!breakdownRawData) {
+                        delete existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues];
+                      } else {
+                        existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].breakdown = breakdownRawData;
+                        if (title) {
+                          existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].title = title;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } else {
+            existingFundDeltaData.overrides[bucketOptions][bucketOptionsValues].breakdown = breakdownRawData;
+          }
+        }
+      }
+    }
+  }
+
+  private makeOverrideAPICalls(overridesData: AdhocPacks.StructureSetTargetOverrideTransferPack) {
+    const { updatePayload, createPayload, portfolioID, deletePayload } = overridesData;
+    const selectedFund = this.state.fetchResult.fundList.find((fund: DTOs.PortfolioFundDTO) => fund.data.portfolioId === portfolioID);
+    if (!!selectedFund) {
+      updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
+    }
+  }
 }
