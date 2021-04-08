@@ -968,12 +968,9 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
 
   private makeOverrideAPICalls(overridesData: AdhocPacks.StructureSetTargetOverrideTransferPack) {
     const { updatePayload, createPayload, portfolioID, deletePayload } = overridesData;
-    const selectedFund = this.state.fetchResult.fundList.find((fund: DTOs.PortfolioFundDTO) => fund.data.portfolioId === portfolioID);
-    if (!!selectedFund) {
-      updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
-      createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
-      deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
-    }
+    updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
+    createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
+    deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
   }
 
   private makeCreateBulkOverrideAPICall(bulkOverrideData: AdhocPacks.StructureSetBulkOverrideTransferPack) {
