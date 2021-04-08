@@ -815,6 +815,53 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe()
   }
 
+  private deleteOverrides(payload: PayloadModifyOverrides) {
+    const formattedPayloadList = payload.portfolioOverrides.map((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => ({portfolioId: override.portfolioId, simpleBucket: override.simpleBucket}));
+    const modifiedPayloadFull: PayloadModifyOverrides = {
+      portfolioOverrides: formattedPayloadList
+    }
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverrides, {req: 'POST'}, modifiedPayloadFull).pipe(
+      first(),
+      tap((serverReturn: boolean) => {
+        this.state.overrideModifications.callCount++;
+        if (serverReturn) {
+          if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+            if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+              const deltas = [this.constants.currentDeltaScope, this.constants.deltaScope.dod, this.constants.deltaScope.wow, this.constants.deltaScope.mom, this.constants.deltaScope.ytd, this.constants.deltaScope.tMinusTwo];
+              payload.portfolioOverrides.forEach((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
+                const { portfolioOverrideId, portfolioId } = override;
+                deltas.forEach(delta => {
+                  this.updateDataInRawServerReturnCache(null, null, delta, true, portfolioOverrideId, portfolioId, null, null);
+                })
+              })
+              if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+                this.processStructureData(
+                  this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+                  this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+                );
+              }
+            }
+          }
+        }
+      }),
+      catchError(err => {
+        this.store$.dispatch(
+          new CoreSendNewAlerts([
+            this.dtoService.formSystemAlertObject(
+              'Structuring',
+              'Error',
+              `Unable to delete new overrides`,
+              null
+            )]
+          )
+        );
+        this.restfulCommService.logError('Delete Override API failed, unable to create new overrides')
+        console.error(`${this.restfulCommService.apiMap.deletePortfolioOverrides} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
+  }
+
   private updateDataInRawServerReturnCache(
     breakdownRawData: BEStructuringBreakdownMetricBlockWithSubPortfolios,
     title: string,
@@ -862,6 +909,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     const selectedFund = this.state.fetchResult.fundList.find((fund: DTOs.PortfolioFundDTO) => fund.data.portfolioId === portfolioID);
     if (!!selectedFund) {
       updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
+      deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
     }
   }
 }

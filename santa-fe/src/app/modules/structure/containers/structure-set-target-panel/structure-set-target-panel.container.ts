@@ -1145,7 +1145,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     this.state.removalList.forEach((eachRow) => {
       const eachPayload: BEStructuringOverrideBaseBlockWithSubPortfolios = {
         portfolioId: this.state.targetBreakdownRawData.portfolioId,
-        simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
+        simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket,
+        portfolioOverrideId: eachRow.targetBlockFromBreakdown.portfolioOverrideId
       };
       payload.portfolioOverrides.push(eachPayload);
     });
