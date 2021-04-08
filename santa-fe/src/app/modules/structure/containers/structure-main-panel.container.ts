@@ -99,7 +99,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     activeBreakdownViewFilterSub: null,
     activePortfolioViewFilterSub: null,
     activeSubPortfolioViewFilterSub: null,
-    activeDeltaScopeSub: null
+    activeDeltaScopeSub: null,
+    overrideDataTransferSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -293,6 +294,21 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         );
       }
     });
+    this.subscriptions.overrideDataTransferSub = this.store$.pipe(
+      filter((overrideData) => {
+        return this.stateActive
+      }),
+      select(selectOverrideDataTransferEvent)
+    ).subscribe((overrideData: AdhocPacks.StructureSetTargetOverrideTransferPack) => {
+      if (!!overrideData) {
+        for (let payload in overrideData) {
+          if (overrideData[payload] && overrideData[payload].portfolioOverrides && overrideData[payload].portfolioOverrides.length > 0) {
+            this.state.overrideModifications.totalNumberOfNecessaryCalls++;
+          }
+        }
+        this.makeOverrideAPICalls(overrideData);
+      }
+    })
     return super.ngOnInit();
   }
 
