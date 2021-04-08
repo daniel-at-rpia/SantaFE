@@ -943,76 +943,22 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   }
 
   private submitOverrideChanges(): boolean {
-    const updatePayload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
-    const deletePayload: Array<PayloadDeleteOverride> = this.traverseRemovalListToFormDeleteOverridePayload();
-    const necessaryUpdateNumOfCalls = updatePayload.length;
-    const necessaryDeleteNumOfCalls = deletePayload.length;
-    if (necessaryUpdateNumOfCalls + necessaryDeleteNumOfCalls > 0) {
-      if (updatePayload.length > 0) {
-        let callCount = 0;
-        updatePayload.forEach((eachPayload) => {
-          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-            first(),
-            tap((serverReturn: boolean) => {
-              callCount++;
-              if (callCount === necessaryUpdateNumOfCalls) {
-                if (necessaryDeleteNumOfCalls > 0) {
-                  this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
-                } else {
-                  this.store$.dispatch(
-                    new CoreSendNewAlerts([
-                      this.dtoService.formSystemAlertObject(
-                        'Structuring',
-                        'Updated',
-                        `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
-                        null
-                      )]
-                    )
-                  );
-                  serverReturn && this.store$.dispatch(new StructureUpdateMainPanelEvent());
-                }
-              }
-            }),
-            catchError(err => {
-              console.error('update breakdown failed');
-              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-              return of('error');
-            })
-          ).subscribe();
-        });
-      } else {
-        this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
+    const [updatePayload, createPayload] = this.traverseEditRowsToFormUpdateOverridePayload();
+    const deletePayload = this.traverseRemovalListToFormDeleteOverridePayload();
+
+    if (updatePayload.portfolioOverrides.length > 0 || createPayload.portfolioOverrides.length > 0 || deletePayload.portfolioOverrides.length > 0) {
+      const transferPack: AdhocPacks.StructureSetTargetOverrideTransferPack = {
+        portfolioID: this.state.targetBreakdown.data.portfolioId,
+        updatePayload: updatePayload,
+        createPayload: createPayload,
+        deletePayload: deletePayload
       }
+      this.store$.dispatch(new StructureOverrideDataTransferEvent(transferPack));
       return true;
     } else {
-      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit override changes because no change were detected', null)]));
       return false;
     }
-  }
-
-  private submitOverrideChangesForDelete(
-    deletePayload: Array<PayloadDeleteOverride>,
-    necessaryDeleteNumOfCalls: number
-  ) {
-    let callCount = 0;
-    deletePayload.forEach((eachPayload, index) => {
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-        first(),
-        tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
-          callCount++;
-          if (callCount === necessaryDeleteNumOfCalls) {
-            this.store$.dispatch(new StructureUpdateMainPanelEvent());
-            const alert = this.dtoService.formSystemAlertObject('Structuring', 'Deleted', `Deleted Override Successfully`, null);
-            this.store$.dispatch(new CoreSendNewAlerts([alert]));
-          }
-        }),
-        catchError(err => {
-          console.error('delete breakdown failed');
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', `Delete Override Failed`, null)]));
-          return of('error');
-        })
-      ).subscribe();
-    });
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): Array<PayloadUpdateBreakdown> {
