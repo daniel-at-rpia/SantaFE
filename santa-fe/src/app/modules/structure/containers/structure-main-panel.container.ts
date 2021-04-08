@@ -952,7 +952,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               }
             }
           } else {
-            const newCachedOverride: BEStructuringOverrideBaseBlockWithSubPortfolios = {
+            const newCachedOverrideBreakdown: BEStructuringOverrideBaseBlockWithSubPortfolios = {
               portfolioOverrideId: rowID,
               portfolioId: portfolioID,
               bucket: bucket,
@@ -960,7 +960,13 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               title: title,
               breakdown: breakdownRawData
             }
-            existingFundDeltaData.overrides[bucketOptions][bucketOptionsValues] = newCachedOverride;
+            if (existingFundDeltaData.overrides[bucketOptions]) {
+              existingFundDeltaData.overrides[bucketOptions][bucketOptionsValues] = newCachedOverrideBreakdown;
+            } else {
+              existingFundDeltaData.overrides[bucketOptions] = {
+                [bucketOptionsValues]: newCachedOverrideBreakdown
+              }
+            }
           }
         }
       }
