@@ -139,6 +139,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         fetchFundDataFailed: false,
         fetchFundDataFailedError: '',
         rawServerReturnCache: null
+      },
+      overrideModifications: {
+        totalNumberOfNecessaryCalls: 0,
+        callCount: 0
       }
     }
     return state; 
