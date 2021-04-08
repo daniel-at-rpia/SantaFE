@@ -935,11 +935,15 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     bucketOptions: string,
     bucketOptionsValues: string
   ) {
+    // This function serves to update data in the raw server cache
+    // Used to update data in both breakdowns and overrides
+    // Can be used to delete, update, or create overrides or breakdowns in the cache
     const existingFundDeltaData: BEStructuringFundBlockWithSubPortfolios = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
     if (!!existingFundDeltaData) {
       if (isOverride) {
         if (existingFundDeltaData.overrides) {
           if (!bucketOptions && !bucketOptionsValues) {
+            // Update an override
             for (let existingBucketOption in existingFundDeltaData.overrides) {
               if (existingFundDeltaData.overrides[existingBucketOption]) {
                 // check if it was previously created and this is an update
@@ -947,6 +951,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                   if (existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues]) {
                     if (existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].portfolioOverrideId === rowID) {
                       if (!breakdownRawData) {
+                        // Deleting an override
                         delete existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues];
                       } else {
                         existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].breakdown = breakdownRawData;
@@ -960,6 +965,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               }
             }
           } else {
+            // Create an override (either an override with a complete new bucket option (ex. BicsCode|Ccy) or bucket option values (ex. 10|USD))
             const newCachedOverrideBreakdown: BEStructuringOverrideBaseBlockWithSubPortfolios = {
               portfolioOverrideId: rowID,
               portfolioId: portfolioID,
