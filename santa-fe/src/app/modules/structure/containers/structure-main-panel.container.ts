@@ -82,7 +82,7 @@
       SecurityDefinitionMap
     } from 'Core/constants/securityDefinitionConstants.constant';
     import { BICsHierarchyBlock } from 'Core/models/frontend/frontend-blocks.interface';
-    import { AdhocPacks, DTOs } from 'App/modules/core/models/frontend';
+    import { AdhocPacks, Blocks, DTOs } from 'App/modules/core/models/frontend';
   //
 
 @Component({
@@ -786,7 +786,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
             serverReturn.forEach((updatedOverride: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
               const { breakdown, title, portfolioOverrideId } = updatedOverride;
-              this.updateDataInRawServerReturnCache(breakdown, title, this.constants.currentDeltaScope, true, portfolioOverrideId, portfolioID, null, null);
+              this.updateDataInRawServerReturnCache(breakdown, title, this.constants.currentDeltaScope, true, portfolioOverrideId, portfolioID, null, null, null, null);
             })
             if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
               this.processStructureData(
@@ -815,6 +815,59 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe()
   }
 
+  private createOverrides(payload: PayloadModifyOverrides) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.createPortfolioOverrides, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: BECreateOverrideBlock) => {
+        if (!!serverReturn) {
+          this.state.overrideModifications.callCount++;
+          if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+            for (let delta in serverReturn) {
+              if (serverReturn[delta]) {
+                for (let portfolioID in serverReturn[delta]) {
+                  if (serverReturn[delta][portfolioID]) {
+                    for (let bucketOptions in serverReturn[delta][portfolioID]) {
+                      if (serverReturn[delta][portfolioID][bucketOptions]) {
+                        for (let bucketOptionsValues in serverReturn[delta][portfolioID][bucketOptions]) {
+                          if (serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues]) {
+                            const updatedDeltaData = serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues];
+                            const { breakdown, title, portfolioOverrideId, bucket, simpleBucket } = updatedDeltaData;
+                            this.updateDataInRawServerReturnCache(breakdown, title, delta, true, portfolioOverrideId, +portfolioID, bucket, simpleBucket, bucketOptions, bucketOptionsValues);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+              this.processStructureData(
+                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+              );
+            }
+          }
+        }
+      }),
+      catchError(err => {
+        this.store$.dispatch(
+          new CoreSendNewAlerts([
+            this.dtoService.formSystemAlertObject(
+              'Structuring',
+              'Error',
+              `Unable to create new overrides`,
+              null
+            )]
+          )
+        );
+        this.restfulCommService.logError('Create Override API failed, unable to create new overrides')
+        console.error(`${this.restfulCommService.apiMap.createPortfolioOverrides} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
+  }
+
   private deleteOverrides(payload: PayloadModifyOverrides) {
     const formattedPayloadList = payload.portfolioOverrides.map((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => ({portfolioId: override.portfolioId, simpleBucket: override.simpleBucket}));
     const modifiedPayloadFull: PayloadModifyOverrides = {
@@ -831,7 +884,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               payload.portfolioOverrides.forEach((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
                 const { portfolioOverrideId, portfolioId } = override;
                 deltas.forEach(delta => {
-                  this.updateDataInRawServerReturnCache(null, null, delta, true, portfolioOverrideId, portfolioId, null, null);
+                  this.updateDataInRawServerReturnCache(null, null, delta, true, portfolioOverrideId, portfolioId, null, null, null, null);
                 })
               })
               if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
@@ -869,6 +922,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     isOverride: boolean,
     rowID: string,
     portfolioID: number,
+    bucket: Blocks.StructureBucketDataBlock,
+    simpleBucket: Blocks.StructureBucketDataBlock,
     bucketOptions: string,
     bucketOptionsValues: string
   ) {
@@ -897,7 +952,15 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               }
             }
           } else {
-            existingFundDeltaData.overrides[bucketOptions][bucketOptionsValues].breakdown = breakdownRawData;
+            const newCachedOverride: BEStructuringOverrideBaseBlockWithSubPortfolios = {
+              portfolioOverrideId: rowID,
+              portfolioId: portfolioID,
+              bucket: bucket,
+              simpleBucket: simpleBucket,
+              title: title,
+              breakdown: breakdownRawData
+            }
+            existingFundDeltaData.overrides[bucketOptions][bucketOptionsValues] = newCachedOverride;
           }
         }
       }
@@ -909,6 +972,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     const selectedFund = this.state.fetchResult.fundList.find((fund: DTOs.PortfolioFundDTO) => fund.data.portfolioId === portfolioID);
     if (!!selectedFund) {
       updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
+      createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
       deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
     }
   }
