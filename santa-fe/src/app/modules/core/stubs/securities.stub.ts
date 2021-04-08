@@ -115,7 +115,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         },
                         "strategyAsOfDate": "2021-01-12T00:00:00",
                         "mark": {
-                            "driver": "Spread",
                             "enteredTime": "2021-01-13T00:00:00-05:00",
                             "user": null,
                             "value": 56.3,
@@ -137,7 +136,8 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "researchName": "LP"
                     },
                     "securityType": "Bond",
-                    "maturityType": "Bullet"
+                    "maturityType": "Bullet",
+                    "driver": "Spread"
                 },
                 "bestQuotes": {
                     "bestPriceQuote": {
@@ -149,13 +149,13 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "totalActiveAskQuantity": 0.0,
                         "axeSkew": null,
                         "totalSkew": null,
-                        "bestBidQuoteCondition": null,
+                        "isBestBidExecutable": null,
                         "bidQuoteType": "Run",
                         "bidDealer": "BAML",
                         "bidQuoteValue": 101.8219985961914,
                         "bidTime": "2021-01-13T09:16:56-05:00",
                         "bidIsOld": true,
-                        "bestAskQuoteCondition": null,
+                        "isBestAskExecutable": null,
                         "askQuoteType": "Run",
                         "askDealer": "BAML",
                         "askQuoteValue": 100.93800354003906,
@@ -180,13 +180,13 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "totalActiveAskQuantity": 0.0,
                         "axeSkew": null,
                         "totalSkew": null,
-                        "bestBidQuoteCondition": null,
+                        "isBestBidExecutable": null,
                         "bidQuoteType": "Run",
                         "bidDealer": "SUMI",
                         "bidQuoteValue": 80.86060333251953,
                         "bidTime": "2021-01-13T02:26:00-05:00",
                         "bidIsOld": true,
-                        "bestAskQuoteCondition": null,
+                        "isBestAskExecutable": null,
                         "askQuoteType": "Run",
                         "askDealer": "MS",
                         "askQuoteValue": 114.58000183105469,
@@ -211,13 +211,13 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "totalActiveAskQuantity": 0.0,
                         "axeSkew": null,
                         "totalSkew": null,
-                        "bestBidQuoteCondition": null,
+                        "isBestBidExecutable": null,
                         "bidQuoteType": "Run",
                         "bidDealer": "BAML",
                         "bidQuoteValue": -0.8999999761581421,
                         "bidTime": "2021-01-13T09:16:56-05:00",
                         "bidIsOld": true,
-                        "bestAskQuoteCondition": null,
+                        "isBestAskExecutable": null,
                         "askQuoteType": "Run",
                         "askDealer": "BAML",
                         "askQuoteValue": 2.4000000953674316,
@@ -374,7 +374,6 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         },
                         "strategyAsOfDate": "2021-01-12T00:00:00",
                         "mark": {
-                            "driver": "Spread",
                             "enteredTime": "2021-01-13T00:00:00-05:00",
                             "user": null,
                             "value": 60.06,
@@ -396,7 +395,8 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                         "researchName": "TW"
                     },
                     "securityType": "Cds",
-                    "maturityType": "Bullet"
+                    "maturityType": "Bullet",
+                    "driver": "Spread"
                 },
                 "bestQuotes": null,
                 "positions": [
@@ -567,7 +567,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -655,7 +656,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -743,7 +745,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -831,7 +834,8 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   }
 ];
 
@@ -922,7 +926,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1010,7 +1015,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1098,7 +1104,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1186,7 +1193,8 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1275,6 +1283,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1362,6 +1371,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel4": null,
     "bicsLevel5": null,
     "bicsLevel6": null,
-    "bicsLevel7": null
+    "bicsLevel7": null,
+    "driver": "Spread"
   }
 ]
