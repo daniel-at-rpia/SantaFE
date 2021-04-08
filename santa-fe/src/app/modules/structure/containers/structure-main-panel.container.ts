@@ -809,12 +809,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 )]
               )
             );
-            if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
-              this.processStructureData(
-                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
-              );
-            }
+            this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
           }
         }
       }),
@@ -854,12 +849,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 )]
               )
             );
-            if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
-              this.processStructureData(
-                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-                this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
-              );
-            }
+            this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
           }
         }
       }),
@@ -910,12 +900,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                   )]
                 )
               );
-              if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
-                this.processStructureData(
-                  this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-                  this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
-                );
-              }
+              this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
             }
           }
         }
@@ -1063,6 +1048,15 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           }
         }
       }
+    }
+  }
+
+  private refreshMainPanelUIWithNewDataForOverrideAPICalls() {
+    if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+      this.processStructureData(
+        this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+        this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+      );
     }
   }
 }
