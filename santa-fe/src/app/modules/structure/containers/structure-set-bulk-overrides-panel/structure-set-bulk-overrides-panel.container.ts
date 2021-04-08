@@ -214,6 +214,18 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
       const transferPack: AdhocPacks.StructureSetBulkOverrideTransferPack = {
         pack: updatePayload
       }
+      // There's a delay that occurs with this API, especially if users are adding multiple categories across all funds
+      // This alert serves as a temp solution until a spinner, loader, etc can be implemented
+      this.store$.dispatch(
+        new CoreSendNewAlerts([
+          this.dtoService.formSystemAlertObject(
+            'Structuring',
+            'Processing',
+            `Processing overrides to be added across all portfolios`,
+            null
+          )]
+        )
+      );
       this.store$.dispatch(new StructureSetBulkOverridesTransferEvent(transferPack));
       this.state.editRowList = [];
       return true;
