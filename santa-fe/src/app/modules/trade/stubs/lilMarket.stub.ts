@@ -264,7 +264,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           },
           "strategyAsOfDate": "2020-12-18T00:00:00",
           "mark": {
-            "driver": "Spread",
             "enteredTime": "2020-12-21T00:00:00-05:00",
             "user": null,
             "value": 200.0,
@@ -286,7 +285,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "researchName": "LP"
         },
         "securityType": "Bond",
-        "maturityType": "Callable"
+        "maturityType": "Callable",
+        "driver": "Spread"
       },
       "rank": 0,
       "name": "AVOL 5.5 01/15/2023 USD 144A SENIOR_UNSECURED",
@@ -660,7 +660,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             },
             "strategyAsOfDate": "2020-12-18T00:00:00",
             "mark": {
-              "driver": "Spread",
               "enteredTime": "2020-12-21T00:00:00-05:00",
               "user": null,
               "value": 185.0,
@@ -682,7 +681,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "researchName": "LP"
           },
           "securityType": "Bond",
-          "maturityType": "Bullet"
+          "maturityType": "Bullet",
+          "driver": "Spread"
         },
         "rank": 1,
         "name": "AYR 5 04/01/2023 USD SENIOR_UNSECURED",
@@ -818,7 +818,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "ticker": "BJHAIG",
           "unitPosition": null,
           "securityType": "Bond",
-          "maturityType": "Bullet"
+          "maturityType": "Bullet",
+          "driver": "Spread"
         },
         "rank": 1,
         "name": "BJHAIG 4.3 10/08/22",
