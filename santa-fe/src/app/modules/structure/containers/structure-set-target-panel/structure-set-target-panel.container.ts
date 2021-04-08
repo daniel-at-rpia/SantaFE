@@ -1285,7 +1285,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   }
 
   private updateDisplayedSubLevelsListWithTargets(row: DTOs.StructurePortfolioBreakdownRowDTO, isCs01List: boolean, isDisplayCs01: boolean) {
-    const subCategoryCodes = this.bicsDictionaryLookupService.getBICSSubLevelByCodeGrouping(row.data.code);
+    const subCategoryCodes = this.bicsDictionaryLookupService.getAllBICSSubLevelCodesPerCategory(row.data.code);
     const customRawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, 1);
     if (!!customRawBreakdown) {
       const definitionList: Array<string> = [];

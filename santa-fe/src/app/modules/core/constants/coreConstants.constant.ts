@@ -193,6 +193,9 @@ export const FrontendKeyToBackendKeyDictionary = {
   'BICS_LEVEL_2': 'BicsLevel2',
   'BICS_LEVEL_3': 'BicsLevel3',
   'BICS_LEVEL_4': 'BicsLevel4',
+  'BICS_LEVEL_5': 'BicsLevel5',
+  'BICS_LEVEL_6': 'BicsLevel6',
+  'BICS_LEVEL_7': 'BicsLevel7',
   'BICS_CONSOLIDATED': 'BicsCode',
   'PORTFOLIO': 'PortfolioShortName',
 
@@ -227,6 +230,9 @@ export const BackendKeyToDisplayLabelDictionary = {
   'BicsLevel2': 'BICS Lv.2',
   'BicsLevel3': 'BICS Lv.3',
   'BicsLevel4': 'BICS Lv.4',
+  'BicsLevel5': 'BICS Lv.5',
+  'BicsLevel6': 'BICS Lv.6',
+  'BicsLevel7': 'BICS Lv.7',
   'BicsCode': 'BicsCode'
 }
 

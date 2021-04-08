@@ -87,10 +87,65 @@
                       <portfolio-breakdown-row
                         [breakdownRow]="fourthLevel"
                         (categoryClicked)="onClickBreakdownCategory($event)"
+                        (rowDiveInClicked)="getNextBicsLevel($event)"
                         (seeBondClicked)="onClickSeeBond($event)"
                         (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
                         (setViewForRowClicked)="updatePopoverRowView($event)">
                       </portfolio-breakdown-row>
+                      <div [ngClass]="{
+                        'sat-popover__levels-fourthDiveIn': true,
+                        'sat-popover__levels-fourthDiveIn--active': fourthLevel.state.isDoveIn
+                      }">
+                        <ul class="sat-popover__levels-fourthDiveIn-list" *ngIf="fourthLevel.data.children">
+                          <li *ngFor="let fifthLevel of fourthLevel.data.children.data.displayCategoryList"
+                          class="sat-popover__levels-fourthDiveIn-list-item">
+                            <portfolio-breakdown-row
+                              [breakdownRow]="fifthLevel"
+                              (categoryClicked)="onClickBreakdownCategory($event)"
+                              (rowDiveInClicked)="getNextBicsLevel($event)"
+                              (seeBondClicked)="onClickSeeBond($event)"
+                              (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+                              (setViewForRowClicked)="updatePopoverRowView($event)">
+                            </portfolio-breakdown-row>
+                            <div [ngClass]="{
+                              'sat-popover__levels-fifthDiveIn': true,
+                              'sat-popover__levels-fifthDiveIn--active': fifthLevel.state.isDoveIn
+                            }">
+                              <ul class="sat-popover__levels-fifthDiveIn-list" *ngIf="fifthLevel.data.children">
+                                <li *ngFor="let sixthLevel of fifthLevel.data.children.data.displayCategoryList"
+                                class="sat-popover__levels-fifthDiveIn-list-item">
+                                  <portfolio-breakdown-row
+                                    [breakdownRow]="sixthLevel"
+                                    (categoryClicked)="onClickBreakdownCategory($event)"
+                                    (rowDiveInClicked)="getNextBicsLevel($event)"
+                                    (seeBondClicked)="onClickSeeBond($event)"
+                                    (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+                                    (setViewForRowClicked)="updatePopoverRowView($event)">
+                                  </portfolio-breakdown-row>
+                                  <div [ngClass]="{
+                                    'sat-popover__levels-sixthDiveIn': true,
+                                    'sat-popover__levels-sixthDiveIn--active': sixthLevel.state.isDoveIn
+                                  }">
+                                    <ul class="sat-popover__levels-sixthDiveIn-list" *ngIf="sixthLevel.data.children">
+                                      <li *ngFor="let seventhLevel of sixthLevel.data.children.data.displayCategoryList"
+                                      class="sat-popover__levels-sixthDiveIn-list-item">
+                                        <portfolio-breakdown-row
+                                          [breakdownRow]="seventhLevel"
+                                          (categoryClicked)="onClickBreakdownCategory($event)"
+                                          (rowDiveInClicked)="getNextBicsLevel($event)"
+                                          (seeBondClicked)="onClickSeeBond($event)"
+                                          (enterSetViewModeClicked)="onClickEnterSetViewMode($event)"
+                                          (setViewForRowClicked)="updatePopoverRowView($event)">
+                                        </portfolio-breakdown-row>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
                     </li>
                   </ul>
                 </div>

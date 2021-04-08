@@ -83,7 +83,20 @@ export enum BICsLevels {
   bicsLevel1 = 1,
   bicsLevel2,
   bicsLevel3,
-  bicsLevel4
+  bicsLevel4,
+  bicsLevel5,
+  bicsLevel6,
+  bicsLevel7
+}
+
+export enum BICSBEBreakdownIdentifiers {
+  bicsCodeLevel1 = 'BicsCodeLevel1',
+  bicsCodeLevel2 = 'BicsCodeLevel2',
+  bicsCodeLevel3 = 'BicsCodeLevel3',
+  bicsCodeLevel4 = 'BicsCodeLevel4',
+  bicsCodeLevel5 = 'BicsCodeLevel5',
+  bicsCodeLevel6 = 'BicsCodeLevel6',
+  bicsCodeLevel7 = 'BicsCodeLevel7'
 }
 
 export const STRUCTURE_EDIT_MODAL_ID = 'Edit Fund Target';
@@ -178,22 +191,37 @@ export const SET_TARGET_CLEAR_ALL_OPTIONS_MAP: Blocks.StructureClearTargetsOptio
   BICS: [
     {
       key: 'Level 1',
-      backendIdentifier: 'BicsCodeLevel1',
+      backendIdentifier: BICSBEBreakdownIdentifiers.bicsCodeLevel1,
       isSelected: false
     },
     {
       key: 'Level 2',
-      backendIdentifier: 'BicsCodeLevel2',
+      backendIdentifier: BICSBEBreakdownIdentifiers.bicsCodeLevel2,
       isSelected: false
     },
     {
       key: 'Level 3',
-      backendIdentifier: 'BicsCodeLevel3',
+      backendIdentifier: BICSBEBreakdownIdentifiers.bicsCodeLevel3,
       isSelected: false
     },
     {
       key: 'Level 4',
-      backendIdentifier: 'BicsCodeLevel4',
+      backendIdentifier: BICSBEBreakdownIdentifiers.bicsCodeLevel4,
+      isSelected: false
+    },
+    {
+      key: 'Level 5',
+      backendIdentifier: BICSBEBreakdownIdentifiers.bicsCodeLevel5,
+      isSelected: false
+    },
+    {
+      key: 'Level 6',
+      backendIdentifier: BICSBEBreakdownIdentifiers.bicsCodeLevel6,
+      isSelected: false
+    },
+    {
+      key: 'Level 7',
+      backendIdentifier: BICSBEBreakdownIdentifiers.bicsCodeLevel7,
       isSelected: false
     }
   ]
