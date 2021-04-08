@@ -226,3 +226,10 @@ export interface GlobalWorkflowLastState {
   module: NavigationModule;
   stateUUID: string;
 }
+
+export interface StructureSetTargetOverrideTransferPack {
+  portfolioID: number;
+  updatePayload: PayloadModifyOverrides,
+  createPayload: PayloadModifyOverrides,
+  deletePayload: PayloadModifyOverrides
+}

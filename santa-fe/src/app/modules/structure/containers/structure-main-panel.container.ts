@@ -28,7 +28,8 @@
       selectActiveDeltaScope,
       selectMetricLevel,
       selectSetViewData,
-      selectFullDataLoadedEvent
+      selectFullDataLoadedEvent,
+      selectOverrideDataTransferEvent
     } from 'Structure/selectors/structure.selectors';
     import {
       PortfolioMetricValues,
