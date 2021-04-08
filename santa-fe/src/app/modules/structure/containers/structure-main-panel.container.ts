@@ -37,7 +37,8 @@
       BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
       BreakdownViewFilter,
-      DeltaScope
+      DeltaScope,
+      BICSBEBreakdownIdentifiers
     } from 'Core/constants/structureConstants.constants';
     import { PortfolioStructuringSample } from 'Structure/stubs/structure.stub';
     import {
@@ -103,7 +104,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     creditLeverage: PortfolioMetricValues.creditLeverage,
     supportedFundList: SUPPORTED_PORTFOLIO_LIST,
     breakdownViewFilter: BreakdownViewFilter,
-    deltaScope: DeltaScope
+    deltaScope: DeltaScope,
+    bicsBEIdentifiers: BICSBEBreakdownIdentifiers
   };
   
   constructor(
@@ -210,6 +212,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe((targetFund: BEStructuringFundBlockWithSubPortfolios) => {
       if (!!targetFund) {
         const targetFundCopy: BEStructuringFundBlockWithSubPortfolios = this.utilityService.deepCopy(targetFund);
+        const bicsBreakdownList = this.extractBICSBreakdownFromRawFundData(targetFundCopy);
+        bicsBreakdownList.forEach((bicsBreakdown: BEStructuringBreakdownBlockWithSubPortfolios) => {
+          this.bicsDataProcessingService.populateServerReturnBICSBreakdownWithRemainingEmptyRows(bicsBreakdown);
+        })
         this.updateRawServerReturnCache(targetFundCopy);
         let deltaRawDataFromCache: BEStructuringFundBlockWithSubPortfolios = null;
         if (!!this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope] && this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].length > 0) {
@@ -337,6 +343,11 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEGetPortfolioStructureServerReturn) => {
+        for (let delta in serverReturn) {
+          if (serverReturn[delta]) {
+            this.updateRawServerReturnWithRawDataForAllRows(serverReturn[delta]);
+          }
+        }
         this.state.fetchResult.rawServerReturnCache = serverReturn;
         this.processStructureData(
           this.extractSubPortfolioFromFullServerReturn(serverReturn.Now),
@@ -390,6 +401,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
+        this.updateRawServerReturnWithRawDataForAllRows(serverReturn);
         this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
         this.processStructureData(
           this.extractSubPortfolioFromFullServerReturn(serverReturn),
@@ -433,8 +445,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       customDefinitionList: customBICSDefinitionList
     } = this.dtoService.formCustomRawBreakdownData(
       rawData,
-      rawData.breakdowns['BicsCodeLevel1'],
-      ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+      rawData.breakdowns[this.constants.bicsBEIdentifiers.bicsCodeLevel1],
+      [this.constants.bicsBEIdentifiers.bicsCodeLevel2, this.constants.bicsBEIdentifiers.bicsCodeLevel3, this.constants.bicsBEIdentifiers.bicsCodeLevel4, this.constants.bicsBEIdentifiers.bicsCodeLevel5, this.constants.bicsBEIdentifiers.bicsCodeLevel6, this.constants.bicsBEIdentifiers.bicsCodeLevel7]
     );
     this.formCustomBICsBreakdownWithSubLevelsPopulateCustomLevel(
       rawData,
@@ -449,7 +461,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       ? this.dtoService.formCustomRawBreakdownData(
           deltaRawData,
           deltaRawData.breakdowns.BicsCodeLevel1,
-          ['BicsCodeLevel2', 'BicsCodeLevel3', 'BicsCodeLevel4']
+          [this.constants.bicsBEIdentifiers.bicsCodeLevel2, this.constants.bicsBEIdentifiers.bicsCodeLevel3, this.constants.bicsBEIdentifiers.bicsCodeLevel4, this.constants.bicsBEIdentifiers.bicsCodeLevel5, this.constants.bicsBEIdentifiers.bicsCodeLevel6, this.constants.bicsBEIdentifiers.bicsCodeLevel7]
         ).customBreakdown
       : null;
     if (!!customDeltaBICSBreakdown) {
@@ -710,5 +722,19 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         this.state.fetchResult.rawServerReturnCache.Now[index] = newFundData;
       }
     });
+  }
+
+  private updateRawServerReturnWithRawDataForAllRows(rawFunds: Array<BEStructuringFundBlockWithSubPortfolios>) {
+    rawFunds.forEach((fund: BEStructuringFundBlockWithSubPortfolios) => {
+      const bicsBreakdownList = this.extractBICSBreakdownFromRawFundData(fund);
+      bicsBreakdownList.forEach((bicsBreakdown: BEStructuringBreakdownBlockWithSubPortfolios) => {
+        this.bicsDataProcessingService.populateServerReturnBICSBreakdownWithRemainingEmptyRows(bicsBreakdown);
+      })
+    })
+  }
+
+  private extractBICSBreakdownFromRawFundData(fund: BEStructuringFundBlockWithSubPortfolios): Array<BEStructuringBreakdownBlockWithSubPortfolios> {
+    const breakdownList = Object.keys(fund.breakdowns).filter(category => category.includes(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)).map(category => fund.breakdowns[category]);
+    return breakdownList;
   }
 }

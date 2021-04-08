@@ -180,6 +180,15 @@ export interface BICSHierarchyDictionaryByLevel {
   }
   level4: {
     [property: string]: string;
+  },
+  level5: {
+    [property: string]: string;
+  },
+  level6: {
+    [property: string]: string;
+  },
+  level7: {
+    [property: string]: string;
   }
 }
 

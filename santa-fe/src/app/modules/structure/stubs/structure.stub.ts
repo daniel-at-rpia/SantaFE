@@ -1,4 +1,7 @@
-import { BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
+import {
+  BEGetPortfolioStructureServerReturn,
+  BEStructuringBreakdownMetricBlockWithSubPortfolios
+} from 'BEModels/backend-models.interface';
 import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
 
 // always remove bics lv 2+ to save space
@@ -83,7 +86,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 239535.8,
                     "currentPct": 0.392,
-                    "indexLevel": 367288713.0,
                     "indexPct": 1.0
                   },
                   "CreditDuration": {
@@ -91,7 +93,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 2.02,
                     "currentPct": 0.391,
-                    "indexLevel": 6.98,
                     "indexPct": 1.0
                   },
                   "CreditLeverage": {
@@ -99,7 +100,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.36,
                     "currentPct": 0.414,
-                    "indexLevel": 1.01,
                     "indexPct": 1.0
                   }
                 },
@@ -109,7 +109,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 2986.9,
                     "currentPct": 0.102,
-                    "indexLevel": 367288713.0,
                     "indexPct": 1.0
                   },
                   "CreditDuration": {
@@ -117,7 +116,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.02,
                     "currentPct": 0.081,
-                    "indexLevel": 6.98,
                     "indexPct": 1.0
                   },
                   "CreditLeverage": {
@@ -125,7 +123,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.11,
                     "currentPct": 0.502,
-                    "indexLevel": 1.01,
                     "indexPct": 1.0
                   }
                 },
@@ -135,7 +132,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 236548.9,
                     "currentPct": 0.406,
-                    "indexLevel": 367288713.0,
                     "indexPct": 1.0
                   },
                   "CreditDuration": {
@@ -143,7 +139,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 2.0,
                     "currentPct": 0.407,
-                    "indexLevel": 6.98,
                     "indexPct": 1.0
                   },
                   "CreditLeverage": {
@@ -151,7 +146,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.25,
                     "currentPct": 0.384,
-                    "indexLevel": 1.01,
                     "indexPct": 1.0
                   }
                 },
@@ -161,7 +155,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 239535.8,
                     "currentPct": 0.389,
-                    "indexLevel": 367288713.0,
                     "indexPct": 1.0
                   },
                   "CreditDuration": {
@@ -169,7 +162,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 2.02,
                     "currentPct": 0.389,
-                    "indexLevel": 6.98,
                     "indexPct": 1.0
                   },
                   "CreditLeverage": {
@@ -177,7 +169,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.36,
                     "currentPct": 0.41,
-                    "indexLevel": 1.01,
                     "indexPct": 1.0
                   }
                 }
@@ -192,7 +183,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 332013.3,
                     "currentPct": 0.543,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -200,7 +190,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 2.8,
                     "currentPct": 0.542,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -208,7 +197,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.44,
                     "currentPct": 0.506,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -218,7 +206,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 26410.7,
                     "currentPct": 0.898,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -226,7 +213,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.22,
                     "currentPct": 0.887,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -234,7 +220,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.11,
                     "currentPct": 0.502,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -244,7 +229,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 305602.5,
                     "currentPct": 0.525,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -252,7 +236,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 2.58,
                     "currentPct": 0.525,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -260,7 +243,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.34,
                     "currentPct": 0.522,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -270,7 +252,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 335788.0,
                     "currentPct": 0.546,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -278,7 +259,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 2.84,
                     "currentPct": 0.547,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -286,7 +266,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.45,
                     "currentPct": 0.513,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 }
@@ -301,7 +280,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 39912.8,
                     "currentPct": 0.065,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -309,7 +287,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.34,
                     "currentPct": 0.066,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -317,7 +294,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.07,
                     "currentPct": 0.08,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -327,7 +303,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -335,7 +310,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -343,7 +317,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -353,7 +326,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 39912.8,
                     "currentPct": 0.069,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -361,7 +333,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.34,
                     "currentPct": 0.069,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -369,7 +340,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.07,
                     "currentPct": 0.108,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -379,7 +349,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 39912.8,
                     "currentPct": 0.065,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -387,7 +356,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.34,
                     "currentPct": 0.065,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -395,7 +363,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.07,
                     "currentPct": 0.08,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 }
@@ -410,7 +377,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -418,7 +384,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -426,7 +391,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -436,7 +400,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -444,7 +407,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -452,7 +414,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -462,7 +423,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -470,7 +430,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -478,7 +437,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -488,7 +446,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -496,7 +453,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -504,7 +460,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 }
@@ -563,7 +518,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 1149.1,
                     "currentPct": 0.002,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -571,7 +525,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.01,
                     "currentPct": 0.002,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -579,7 +532,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -589,7 +541,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 1149.1,
                     "currentPct": 0.002,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -597,7 +548,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.01,
                     "currentPct": 0.002,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -605,7 +555,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -615,7 +564,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 1149.1,
                     "currentPct": 0.039,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -623,7 +571,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.01,
                     "currentPct": 0.04,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -631,7 +578,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 },
@@ -641,7 +587,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditDuration": {
@@ -649,7 +594,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   },
                   "CreditLeverage": {
@@ -657,7 +601,6 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
                     "targetPct": null,
                     "currentLevel": 0.0,
                     "currentPct": 0.0,
-                    "indexLevel": 0.0,
                     "indexPct": 0.0
                   }
                 }
@@ -669,4 +612,102 @@ export const PortfolioStructuringSample: BEGetPortfolioStructureServerReturn = {
       }
     }
   ]
+}
+
+export const PortfolioStructureBreakdownRowEmptySample: BEStructuringBreakdownMetricBlockWithSubPortfolios = {
+  "metricBreakdowns": {
+    "All": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
+    },
+    "NonHedging": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
+    },
+    "NonShortCarry": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
+    },
+    "ShortCarry": {
+      "CreditLeverage": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "CreditDuration" : {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      },
+      "Cs01": {
+        "targetPct": null,
+        "targetLevel": null,
+        "currentLevel": 0.0,
+        "currentPct": 0.0,
+        "indexPct": 0.0
+      }
+    }
+  },
+  "view": null
 }

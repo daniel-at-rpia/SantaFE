@@ -11,7 +11,10 @@ export class BICSDictionaryLookupService {
     level1: {},
     level2: {},
     level3: {},
-    level4: {}
+    level4: {},
+    level5: {},
+    level6: {},
+    level7: {}
   };
   private bicsDictionary: BEBICsHierarchyBlock;
   private bicsGroupingByCode: AdhocPacks.BICSGroupingByCodeBlock = {};
@@ -38,7 +41,13 @@ export class BICSDictionaryLookupService {
       const targetItemBlock = this.bicsDictionary[bicsCode];
       let bicsName = null;
       if (!!targetItemBlock) {
-        if (!!targetItemBlock.item4) {
+        if (!!targetItemBlock.item7) {
+          bicsName = targetItemBlock.item7;
+        } else if (!!targetItemBlock.item6) {
+          bicsName = targetItemBlock.item6;
+        } else if (!!targetItemBlock.item5) {
+          bicsName = targetItemBlock.item5
+        } else if (!!targetItemBlock.item4) {
           bicsName = targetItemBlock.item4;
         } else if (!!targetItemBlock.item3) {
           bicsName = targetItemBlock.item3;
@@ -56,7 +65,7 @@ export class BICSDictionaryLookupService {
   }
 
   public BICSNameToBICSCode(bicsName: string, level: number): string {
-    if (level >= 1 && level <= 4) {
+    if (level >= 1 && level <= 7) {
       const targetBlock = this.reversedBICSHierarchyDictionary[`level${level}`];
       return targetBlock[bicsName] || null;
     } else {
@@ -64,10 +73,15 @@ export class BICSDictionaryLookupService {
     }
   }
 
-  public getBICSSubLevelByCodeGrouping(code: string): Array<string> {
+  public getAllBICSSubLevelCodesPerCategory(code: string): Array<string> {
     const mainCategoryCode = code.substring(0,2);
-    const subCodes = this.bicsGroupingByCode[mainCategoryCode].filter(subCode => subCode.length > code.length && subCode.indexOf(code) === 0);
-    return subCodes;
+    const allSubCodes = this.bicsGroupingByCode[mainCategoryCode].filter(subCode => subCode.length > code.length && subCode.indexOf(code) === 0);
+    return allSubCodes;
+  }
+
+  public getNextBICSSubLevelCodesByPerCategory(code: string): Array<string> {
+    const subLevelCodes = this.getAllBICSSubLevelCodesPerCategory(code).filter(subLevelCodes => subLevelCodes.length === code.length + 2);
+    return subLevelCodes;
   }
 
   private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
@@ -75,7 +89,16 @@ export class BICSDictionaryLookupService {
       const block = data[eachCode];
       let bicsName = null;
       let level = 1;
-      if (!!block.item4) {
+      if (!!block.item7) {
+        bicsName = block.item7;
+        level = 7;
+      } else if (!!block.item6) {
+        bicsName = block.item6;
+        level = 6;
+      } else if (!!block.item5) {
+        bicsName = block.item5;
+        level = 5;
+      } else if (!!block.item4) {
         bicsName = block.item4;
         level = 4;
       } else if (!!block.item3) {

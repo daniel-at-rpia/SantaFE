@@ -499,7 +499,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(2),
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(3),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(4)
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(4),
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(5),
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(6),
+            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(7)
           )
           this.populateSearchShortcuts();
           this.store$.dispatch(new TradeBICSDataLoadedEvent());
