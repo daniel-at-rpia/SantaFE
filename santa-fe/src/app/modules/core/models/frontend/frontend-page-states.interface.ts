@@ -15,7 +15,11 @@ import {
   SubPortfolioFilter,
   DeltaScope
 } from 'Core/constants/structureConstants.constants';
-import { BEStructuringBreakdownBlock, BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
+import {
+  BEStructuringBreakdownBlock,
+  BEGetPortfolioStructureServerReturn,
+  BEFetchAllTradeDataReturn
+} from 'BEModels/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
@@ -137,6 +141,8 @@ export interface TradeCenterPanelState {
     mainTable: Blocks.TableFetchResultBlock;
     initialDataLoadedInternalSyncFlag: boolean;
     totalCount: number;
+    lastFetchBucket: object;
+    lastFetchServerReturn: BEFetchAllTradeDataReturn;
   }
   filters: Blocks.TradeCenterPanelStateFilterBlock;
   editingDriver: boolean;

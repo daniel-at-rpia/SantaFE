@@ -569,6 +569,8 @@ export class UtilityService {
           return AlertSubTypes.buy;
         case AlertSubTypes.sell:
           return AlertSubTypes.sell;
+        case AlertSubTypes.mid:
+          return AlertSubTypes.mid
         default:
           return AlertSubTypes.default;
       }

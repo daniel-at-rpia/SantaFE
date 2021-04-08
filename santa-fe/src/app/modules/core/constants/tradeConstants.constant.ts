@@ -176,6 +176,15 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
+    displayTitle: 'David Galica',
+    includedDefinitions: [
+      {
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
+        groupByActive: false,
+        selectedOptions: ['DG']
+      }
+    ]
+  },{
     displayTitle: 'Derrick',
     includedDefinitions: [
       {
@@ -190,7 +199,7 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
-    displayTitle: 'David',
+    displayTitle: 'David Matheson',
     includedDefinitions: [
       {
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
