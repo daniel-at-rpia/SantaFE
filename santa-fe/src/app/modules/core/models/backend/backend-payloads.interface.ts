@@ -164,9 +164,11 @@ export interface PayloadClearPortfolioBreakdown {
   subPortfolioType: BESubPortfolioFilter;
 }
 
-export interface PayloadUpdatePortfolioOverridesForAllPortfolios {
-  portfolioOverride: {
-    simpleBucket: StructureBucketDataBlock;
-    title: string;
-  }
+export interface PayloadBulkCreateOverridesIndividualBlock {
+  simpleBucket: StructureBucketDataBlock;
+  title?: string;
+}
+
+export interface PayloadBulkCreateOverrides {
+  portfolioOverrides: Array<PayloadBulkCreateOverridesIndividualBlock>
 }

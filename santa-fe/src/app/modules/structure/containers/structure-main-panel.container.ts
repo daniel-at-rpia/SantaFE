@@ -29,7 +29,8 @@
       selectMetricLevel,
       selectSetViewData,
       selectFullDataLoadedEvent,
-      selectOverrideDataTransferEvent
+      selectOverrideDataTransferEvent,
+      selectSetBulkOverridesTransferEvent
     } from 'Structure/selectors/structure.selectors';
     import {
       PortfolioMetricValues,
@@ -71,8 +72,7 @@
     import {
       PayloadGetPortfolioStructures,
       PayloadSetView,
-      PayloadModifyOverrides,
-      PayloadUpdatePortfolioOverridesForAllPortfolios
+      PayloadModifyOverrides
     } from 'App/modules/core/models/backend/backend-payloads.interface';
     import {
       StructureSetViewTransferPack,
@@ -105,7 +105,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     activePortfolioViewFilterSub: null,
     activeSubPortfolioViewFilterSub: null,
     activeDeltaScopeSub: null,
-    overrideDataTransferSub: null
+    overrideDataTransferSub: null,
+    setBulkOverrideDataTransferSub: null
   };
   constants = {
     cs01: PortfolioMetricValues.cs01,
@@ -312,6 +313,16 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           }
         }
         this.makeOverrideAPICalls(overrideData);
+      }
+    })
+    this.subscriptions.setBulkOverrideDataTransferSub = this.store$.pipe(
+      filter((setBulkOverrideData) => {
+        return this.stateActive
+      }),
+      select(selectSetBulkOverridesTransferEvent)
+    ).subscribe((setBulkOverrideData: AdhocPacks.StructureSetBulkOverrideTransferPack) => {
+      if (!!setBulkOverrideData) {
+        this.makeCreateBulkOverrideAPICall(setBulkOverrideData);
       }
     })
     return super.ngOnInit();
@@ -963,6 +974,37 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
       deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
     }
+  }
+
+  private makeCreateBulkOverrideAPICall(bulkOverrideData: AdhocPacks.StructureSetBulkOverrideTransferPack) {
+    const { pack: payload } = bulkOverrideData;
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.createPortfolioOverridesForAllPortfolios, {req: 'POST'}, payload).pipe(
+      first(),
+      tap((serverReturn: BECreateOverrideBlock) => {
+        if(serverReturn) {
+          this.iterateDeltaServerReturnToUpdateRawCache(serverReturn);
+          this.processStructureData(
+            this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
+            this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+          );
+        }
+      }),
+      catchError(err => {
+        this.store$.dispatch(
+          new CoreSendNewAlerts([
+            this.dtoService.formSystemAlertObject(
+              'Structuring',
+              'Error',
+              `Unable to create new overrides across funds`,
+              null
+            )]
+          )
+        );
+        this.restfulCommService.logError('Create Portfolio Override For All Portfolios API failed, unable to create new overrides across all portfolios')
+        console.error(`${this.restfulCommService.apiMap.createPortfolioOverridesForAllPortfolios} failed`, err);
+        return of('error')
+      })
+    ).subscribe()
   }
 
   private iterateDeltaServerReturnToUpdateRawCache(serverReturn: BECreateOverrideBlock) {

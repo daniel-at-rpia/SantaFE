@@ -14,7 +14,8 @@ import {
   BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';
 import {
-  PayloadModifyOverrides
+  PayloadModifyOverrides,
+  PayloadBulkCreateOverrides
 } from 'Core/models/backend/backend-payloads.interface';
 import { 
   PortfolioView,
@@ -232,4 +233,8 @@ export interface StructureSetTargetOverrideTransferPack {
   updatePayload: PayloadModifyOverrides,
   createPayload: PayloadModifyOverrides,
   deletePayload: PayloadModifyOverrides
+}
+
+export interface StructureSetBulkOverrideTransferPack {
+  pack: PayloadBulkCreateOverrides;
 }

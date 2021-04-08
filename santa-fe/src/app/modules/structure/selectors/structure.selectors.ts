@@ -71,3 +71,8 @@ export const selectOverrideDataTransferEvent = createSelector(
   getStructureState,
   (state: StructureState) => state.overrideDataTransfer
 )
+
+export const selectSetBulkOverridesTransferEvent = createSelector(
+  getStructureState,
+  (state: StructureState) => state.setBulkOverridesTransfer
+)
