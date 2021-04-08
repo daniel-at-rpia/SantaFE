@@ -1026,11 +1026,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   private autoLoadTableFillCurrentSearchPresetSlotlist(filterList: Array<DTOs.SecurityDefinitionDTO>) {
     if (!!this.state.currentSearch.previewShortcut && filterList.length > 0) {
       filterList.forEach((eachFilterDefinition) => {
-        const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
-          return eachSlot === null;
+        const alreadyExist = this.state.currentSearch.previewShortcut.style.slotList.find((eachSlot) => {
+          return !!eachSlot && eachSlot.data.key === eachFilterDefinition.data.key;
         });
-        if (indexToEmptySlot < 4) {
-          this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = eachFilterDefinition;
+        if (!alreadyExist) {
+          const copy = this.utilityService.deepCopy(eachFilterDefinition);  // the original is read-only
+          copy.state.filterActive = true;
+          copy.state.isMiniPillVariant = false;
+          const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
+            return eachSlot === null;
+          });
+          if (indexToEmptySlot < 4) {
+            this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = copy;
+          }
         }
       });
     }

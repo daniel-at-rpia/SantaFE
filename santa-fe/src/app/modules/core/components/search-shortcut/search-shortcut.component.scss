@@ -10,7 +10,6 @@
   display: flex;
   flex-direction: column;
   background-color: $color_white;
-  overflow: hidden;
   min-height: 7.5rem;
   &__title {
     @include mix_fixed_div(relative, $z_index_base_item);
@@ -28,10 +27,11 @@
       padding: $spacing_minimum $spacing_x_small;
       font-size: $font_size_x_small;
       color: $font_color_inverse;
-      top: $spacing_small;
+      top: -$spacing_small;
       left: $spacing_small;
     }
     &-text {
+      @include mix_text_overflow_multi_line(3);
       text-align: center;
       user-select: none;
       font-size: $font_size_normal;
@@ -132,6 +132,7 @@
     #{$blockName} {
       &__title {
         flex: 0 0 auto;
+        max-width: 12rem; // preview variant shouldn't take too much space
       }
       &__configOverview {
         flex: 1 1 auto;
