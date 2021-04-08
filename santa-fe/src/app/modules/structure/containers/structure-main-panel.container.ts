@@ -822,25 +822,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         if (!!serverReturn) {
           this.state.overrideModifications.callCount++;
           if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
-            for (let delta in serverReturn) {
-              if (serverReturn[delta]) {
-                for (let portfolioID in serverReturn[delta]) {
-                  if (serverReturn[delta][portfolioID]) {
-                    for (let bucketOptions in serverReturn[delta][portfolioID]) {
-                      if (serverReturn[delta][portfolioID][bucketOptions]) {
-                        for (let bucketOptionsValues in serverReturn[delta][portfolioID][bucketOptions]) {
-                          if (serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues]) {
-                            const updatedDeltaData = serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues];
-                            const { breakdown, title, portfolioOverrideId, bucket, simpleBucket } = updatedDeltaData;
-                            this.updateDataInRawServerReturnCache(breakdown, title, delta, true, portfolioOverrideId, +portfolioID, bucket, simpleBucket, bucketOptions, bucketOptionsValues);
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            this.iterateDeltaServerReturnToUpdateRawCache(serverReturn);
             if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
               this.processStructureData(
                 this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
@@ -980,6 +962,28 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
       createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
       deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
+    }
+  }
+
+  private iterateDeltaServerReturnToUpdateRawCache(serverReturn: BECreateOverrideBlock) {
+    for (let delta in serverReturn) {
+      if (serverReturn[delta]) {
+        for (let portfolioID in serverReturn[delta]) {
+          if (serverReturn[delta][portfolioID]) {
+            for (let bucketOptions in serverReturn[delta][portfolioID]) {
+              if (serverReturn[delta][portfolioID][bucketOptions]) {
+                for (let bucketOptionsValues in serverReturn[delta][portfolioID][bucketOptions]) {
+                  if (serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues]) {
+                    const updatedDeltaData = serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues];
+                    const { breakdown, title, portfolioOverrideId, bucket, simpleBucket } = updatedDeltaData;
+                    this.updateDataInRawServerReturnCache(breakdown, title, delta, true, portfolioOverrideId, +portfolioID, bucket, simpleBucket, bucketOptions, bucketOptionsValues);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
