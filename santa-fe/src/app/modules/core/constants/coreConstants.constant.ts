@@ -284,6 +284,7 @@ export enum AlertSubTypes {
   ratingChange = 'RatingChange',
   buy = 'Buy',
   sell = 'Sell',
+  mid = 'Mid',
   default = ''
 }
 

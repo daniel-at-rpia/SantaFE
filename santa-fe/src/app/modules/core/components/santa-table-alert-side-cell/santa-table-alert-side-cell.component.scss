@@ -1,7 +1,7 @@
 @import "global.scss";
 
 .santaTableAlertSideCell {
-  $santaTableAlertSideCellBlockName: &;
+  $blockName: &;
   display: flex;
   flex-direction: column;
   &__main {
@@ -16,16 +16,27 @@
     }
   }
   &--sideBid {
-    #{$santaTableAlertSideCellBlockName} {
+    #{$blockName} {
       &__main {
         background-color: $color_bid;
       }
     }
   }
   &--sideAsk {
-    #{$santaTableAlertSideCellBlockName} {
+    #{$blockName} {
       &__main {
         background-color: $color_ask;
+      }
+    }
+  }
+  &--sideMid {
+    #{$blockName} {
+      &__main {
+        @include mix_border_generator($typical_border_width, $color_active);
+        background-color: transparent;
+        &-text {
+          color: $color_active;
+        }
       }
     }
   }

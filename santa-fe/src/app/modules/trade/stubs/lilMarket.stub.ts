@@ -155,6 +155,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "bicsLevel5": "Corporate Banks",
         "bicsLevel6": "",
         "bicsLevel7": "",
+        "driver": "Spread",
         "genericSeniority": "SR",
         "globalIdentifier": "US05401AAA97",
         "paymentRank": "SR UNSECURED",
@@ -595,7 +596,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             },
             "strategyAsOfDate": "2020-12-18T00:00:00",
             "mark": {
-              "driver": "Spread",
               "enteredTime": "2020-12-21T00:00:00-05:00",
               "user": null,
               "value": 185.0,
@@ -617,7 +617,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
             "researchName": "LP"
           },
           "securityType": "Bond",
-          "maturityType": "Bullet"
+          "maturityType": "Bullet",
+          "driver": "Spread"
         },
         "rank": 1,
         "name": "AYR 5 04/01/2023 USD SENIOR_UNSECURED",
@@ -755,7 +756,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "ticker": "BJHAIG",
           "unitPosition": null,
           "securityType": "Bond",
-          "maturityType": "Bullet"
+          "maturityType": "Bullet",
+          "driver": "Spread"
         },
         "rank": 1,
         "name": "BJHAIG 4.3 10/08/22",
