@@ -359,7 +359,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       previewCopy.state.isSelected = false;
       previewCopy.state.isUserInputBlocked = true;
       this.state.currentSearch.previewShortcut = previewCopy;
-      this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
+      this.state.configurator.dto.data = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto).data;
       this.checkInitialPageLoadData();
       if (userTriggered) {
         this.restfulCommService.logEngagement(
@@ -493,17 +493,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
         if (!!serverReturn) {
-          this.bicsDataProcessingService.loadBICSData(serverReturn, {children: []});
-          this.dtoService.loadBICSOptionsIntoConfigurator(
-            this.state.configurator.dto,
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(2),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(3),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(4),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(5),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(6),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(7)
-          )
+          this.bicsDataProcessingService.loadBICSData(
+            serverReturn, 
+            {children: []},
+            this.state.configurator.dto
+          );
           this.populateSearchShortcuts();
           this.store$.dispatch(new TradeBICSDataLoadedEvent());
         }
