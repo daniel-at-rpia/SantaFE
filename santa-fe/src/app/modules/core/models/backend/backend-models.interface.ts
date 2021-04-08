@@ -96,7 +96,6 @@ export interface BESecurityDTO {
   isCds?: boolean;
   unitPosition?: {
     mark: {
-      driver: string;
       enteredTime: string;
       user: string;
       value: number;
@@ -130,6 +129,7 @@ export interface BESecurityDTO {
   bicsLevel5: string;
   bicsLevel6: string;
   bicsLevel7: string;
+  driver: string;
 }
 
 export interface BEBestQuoteDTO {
@@ -288,8 +288,8 @@ export interface BESingleBestQuoteDTO {
   askAxeIsOld: boolean;
   isOffTheRunCds: boolean;
   globalIdentifier: string;
-  bestBidQuoteCondition: string;
-  bestAskQuoteCondition: string;
+  isBestAskExecutable: boolean;
+  isBestBidExecutable: boolean;
 }
 
 export interface BEQuoteDTO {
@@ -311,7 +311,6 @@ export interface BEQuoteDTO {
   bidQuantity: number; // null;
   bidIsNatural: boolean; // false;
   bidQualifier: string; // null;
-  bidQuoteCondition: string;  // 'A'
   askQuoteId: string;
   askQuoteStatus: number;  // 0; -1; -2
   askTime: string;
@@ -323,7 +322,8 @@ export interface BEQuoteDTO {
   askQuantity: number; // null;
   askIsNatural: boolean; // null;
   askQualifier: string; // null
-  askQuoteCondition: string;  // 'A'
+  isAskExecutable: boolean;
+  isBidExecutable: boolean;
 }
 
 export interface BEHistoricalSummaryOverviewDTO {
@@ -474,6 +474,7 @@ interface BEAlertMarketListBlock {
   isActive: boolean;
   isDeleted: boolean;
   isCancelled: boolean;
+  sendEmail: boolean;
 }
 
 interface BEQuoteBaseBlock {
