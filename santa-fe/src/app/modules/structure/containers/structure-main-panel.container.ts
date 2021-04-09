@@ -884,9 +884,9 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
             if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
               const deltas = [this.constants.currentDeltaScope, this.constants.deltaScope.dod, this.constants.deltaScope.wow, this.constants.deltaScope.mom, this.constants.deltaScope.ytd, this.constants.deltaScope.tMinusTwo];
               payload.portfolioOverrides.forEach((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
-                const overrideToBeDelated: BEStructuringOverrideBaseBlockWithSubPortfolios = {...override, breakdown: null};
+                const overrideToBeDeleted: BEStructuringOverrideBaseBlockWithSubPortfolios = {...override, breakdown: null};
                 deltas.forEach(delta => {
-                  this.updateDataInRawServerReturnCache(overrideToBeDelated, delta, true, override.portfolioId);
+                  this.updateDataInRawServerReturnCache(overrideToBeDeleted, delta, true, override.portfolioId);
                 })
               });
               this.store$.dispatch(
