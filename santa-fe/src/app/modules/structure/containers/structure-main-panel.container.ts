@@ -785,10 +785,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     return fund;
   }
 
-  private updateOverrides(
-    payload: PayloadModifyOverrides,
-    portfolioID: number
-  ) {
+  private updateOverrides(payload: PayloadModifyOverrides) {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverrides, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: BEUpdateOverrideBlock) => {
@@ -974,8 +971,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   }
 
   private makeOverrideAPICalls(overridesData: AdhocPacks.StructureSetTargetOverrideTransferPack) {
-    const { updatePayload, createPayload, portfolioID, deletePayload } = overridesData;
-    updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
+    const { updatePayload, createPayload, deletePayload } = overridesData;
+    updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload);
     createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
     deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
   }
