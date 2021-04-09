@@ -796,7 +796,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           this.state.overrideModifications.callCount++;
           if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
             serverReturn.forEach((updatedOverride: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
-              this.updateDataInRawServerReturnCache(updatedOverride, this.constants.currentDeltaScope, true, portfolioID);
+              this.updateDataInRawServerReturnCache(updatedOverride, this.constants.currentDeltaScope, true);
             })
             this.store$.dispatch(
               new CoreSendNewAlerts([
@@ -886,7 +886,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               payload.portfolioOverrides.forEach((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
                 const overrideToBeDeleted: BEStructuringOverrideBaseBlockWithSubPortfolios = {...override, breakdown: null};
                 deltas.forEach(delta => {
-                  this.updateDataInRawServerReturnCache(overrideToBeDeleted, delta, true, override.portfolioId);
+                  this.updateDataInRawServerReturnCache(overrideToBeDeleted, delta, true);
                 })
               });
               this.store$.dispatch(
@@ -925,13 +925,12 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   private updateDataInRawServerReturnCache(
     updateData: BEStructuringOverrideBaseBlockWithSubPortfolios | BEStructuringBreakdownBlockWithSubPortfolios,
     delta: string,
-    isOverride: boolean,
-    portfolioID: number
+    isOverride: boolean
   ) {
     // This function serves to update data in the raw server cache
     // Used to update data in both breakdowns and overrides
     // Can be used to delete, update, or create overrides or breakdowns in the cache
-    const existingFundDeltaData: BEStructuringFundBlockWithSubPortfolios = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
+    const existingFundDeltaData: BEStructuringFundBlockWithSubPortfolios = this.getDeltaSpecificFundFromRawServerReturnCache(updateData.portfolioId, delta);
     if (!!existingFundDeltaData) {
       if (isOverride) {
         const updatedOverrideRawData = updateData as BEStructuringOverrideBaseBlockWithSubPortfolios;
@@ -1034,7 +1033,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                     const updatedDeltaData = serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues];
                     updatedDeltaData.rawBucketOptionsText = bucketOptions;
                     updatedDeltaData.rawBucketOptionsValuesText = bucketOptionsValues;
-                    this.updateDataInRawServerReturnCache(updatedDeltaData, delta, true, +portfolioID);
+                    this.updateDataInRawServerReturnCache(updatedDeltaData, delta, true);
                   }
                 }
               }
