@@ -796,8 +796,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           this.state.overrideModifications.callCount++;
           if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
             serverReturn.forEach((updatedOverride: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
-              const { breakdown, title, portfolioOverrideId } = updatedOverride;
-              this.updateDataInRawServerReturnCache(breakdown, title, this.constants.currentDeltaScope, true, portfolioOverrideId, portfolioID, null, null, null, null);
+              this.updateDataInRawServerReturnCache(updatedOverride, this.constants.currentDeltaScope, true, portfolioID);
             })
             this.store$.dispatch(
               new CoreSendNewAlerts([
@@ -838,7 +837,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         if (!!serverReturn) {
           this.state.overrideModifications.callCount++;
           if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
-            this.iterateDeltaServerReturnToUpdateRawCache(serverReturn);
+            this.iterateDeltaServerReturnWithNewOverridesToUpdateRawCache(serverReturn);
             this.store$.dispatch(
               new CoreSendNewAlerts([
                 this.dtoService.formSystemAlertObject(
@@ -885,9 +884,9 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
             if (this.state.overrideModifications.callCount <= this.state.overrideModifications.totalNumberOfNecessaryCalls) {
               const deltas = [this.constants.currentDeltaScope, this.constants.deltaScope.dod, this.constants.deltaScope.wow, this.constants.deltaScope.mom, this.constants.deltaScope.ytd, this.constants.deltaScope.tMinusTwo];
               payload.portfolioOverrides.forEach((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => {
-                const { portfolioOverrideId, portfolioId } = override;
+                const overrideToBeDelated: BEStructuringOverrideBaseBlockWithSubPortfolios = {...override, breakdown: null};
                 deltas.forEach(delta => {
-                  this.updateDataInRawServerReturnCache(null, null, delta, true, portfolioOverrideId, portfolioId, null, null, null, null);
+                  this.updateDataInRawServerReturnCache(overrideToBeDelated, delta, true, override.portfolioId);
                 })
               });
               this.store$.dispatch(
@@ -924,16 +923,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   }
 
   private updateDataInRawServerReturnCache(
-    breakdownRawData: BEStructuringBreakdownMetricBlockWithSubPortfolios,
-    title: string,
+    updateData: BEStructuringOverrideBaseBlockWithSubPortfolios | BEStructuringBreakdownBlockWithSubPortfolios,
     delta: string,
     isOverride: boolean,
-    rowID: string,
-    portfolioID: number,
-    bucket: Blocks.StructureBucketDataBlock,
-    simpleBucket: Blocks.StructureBucketDataBlock,
-    bucketOptions: string,
-    bucketOptionsValues: string
+    portfolioID: number
   ) {
     // This function serves to update data in the raw server cache
     // Used to update data in both breakdowns and overrides
@@ -941,44 +934,38 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     const existingFundDeltaData: BEStructuringFundBlockWithSubPortfolios = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
     if (!!existingFundDeltaData) {
       if (isOverride) {
+        const updatedOverrideRawData = updateData as BEStructuringOverrideBaseBlockWithSubPortfolios;
         if (existingFundDeltaData.overrides) {
-          if (!bucketOptions && !bucketOptionsValues) {
-            // Update an override
+          if (updatedOverrideRawData.rawBucketOptionsText && updatedOverrideRawData.rawBucketOptionsValuesText) {
+            // Create new overrides
+            const { portfolioId, portfolioOverrideId, indexId, bucket, simpleBucket, title, breakdown } = updatedOverrideRawData;
+            // Stored data excludes the raw bucketOptions and bucketOptionsValues text
+            const storedData: BEStructuringOverrideBaseBlockWithSubPortfolios = { portfolioId, portfolioOverrideId, indexId, bucket, simpleBucket, title, breakdown };
+            if (existingFundDeltaData.overrides[updatedOverrideRawData.rawBucketOptionsText]) {
+              // Create a new override within an existing bucket option
+              existingFundDeltaData.overrides[updatedOverrideRawData.rawBucketOptionsText][updatedOverrideRawData.rawBucketOptionsValuesText] = storedData;
+            } else {
+              // Create a new override for a new bucket option
+              existingFundDeltaData.overrides[updatedOverrideRawData.rawBucketOptionsText] = {
+                [updatedOverrideRawData.rawBucketOptionsValuesText]: storedData
+              }
+            }
+          } else {
             for (let existingBucketOption in existingFundDeltaData.overrides) {
               if (existingFundDeltaData.overrides[existingBucketOption]) {
-                // check if it was previously created and this is an update
                 for (let existingBucketOptionValues in existingFundDeltaData.overrides[existingBucketOption]) {
                   if (existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues]) {
-                    if (existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].portfolioOverrideId === rowID) {
-                      if (!breakdownRawData) {
-                        // Deleting an override
+                    if (existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].portfolioOverrideId === updatedOverrideRawData.portfolioOverrideId) {
+                      if (!updatedOverrideRawData.breakdown) {
+                        // Deleting an existing override
                         delete existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues];
                       } else {
-                        existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].breakdown = breakdownRawData;
-                        if (title) {
-                          existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues].title = title;
-                        }
+                        // Updating an existing override
+                        existingFundDeltaData.overrides[existingBucketOption][existingBucketOptionValues] = updatedOverrideRawData;
                       }
                     }
                   }
                 }
-              }
-            }
-          } else {
-            // Create an override (either an override with a complete new bucket option (ex. BicsCode|Ccy) or bucket option values (ex. 10|USD))
-            const newCachedOverrideBreakdown: BEStructuringOverrideBaseBlockWithSubPortfolios = {
-              portfolioOverrideId: rowID,
-              portfolioId: portfolioID,
-              bucket: bucket,
-              simpleBucket: simpleBucket,
-              title: title,
-              breakdown: breakdownRawData
-            }
-            if (existingFundDeltaData.overrides[bucketOptions]) {
-              existingFundDeltaData.overrides[bucketOptions][bucketOptionsValues] = newCachedOverrideBreakdown;
-            } else {
-              existingFundDeltaData.overrides[bucketOptions] = {
-                [bucketOptionsValues]: newCachedOverrideBreakdown
               }
             }
           }
@@ -1000,7 +987,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       first(),
       tap((serverReturn: BECreateOverrideBlock) => {
         if(serverReturn) {
-          this.iterateDeltaServerReturnToUpdateRawCache(serverReturn);
+          this.iterateDeltaServerReturnWithNewOverridesToUpdateRawCache(serverReturn);
           this.store$.dispatch(
             new CoreSendNewAlerts([
               this.dtoService.formSystemAlertObject(
@@ -1035,7 +1022,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe()
   }
 
-  private iterateDeltaServerReturnToUpdateRawCache(serverReturn: BECreateOverrideBlock) {
+  private iterateDeltaServerReturnWithNewOverridesToUpdateRawCache(serverReturn: BECreateOverrideBlock) {
     for (let delta in serverReturn) {
       if (serverReturn[delta]) {
         for (let portfolioID in serverReturn[delta]) {
@@ -1045,8 +1032,9 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 for (let bucketOptionsValues in serverReturn[delta][portfolioID][bucketOptions]) {
                   if (serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues]) {
                     const updatedDeltaData = serverReturn[delta][portfolioID][bucketOptions][bucketOptionsValues];
-                    const { breakdown, title, portfolioOverrideId, bucket, simpleBucket } = updatedDeltaData;
-                    this.updateDataInRawServerReturnCache(breakdown, title, delta, true, portfolioOverrideId, +portfolioID, bucket, simpleBucket, bucketOptions, bucketOptionsValues);
+                    updatedDeltaData.rawBucketOptionsText = bucketOptions;
+                    updatedDeltaData.rawBucketOptionsValuesText = bucketOptionsValues;
+                    this.updateDataInRawServerReturnCache(updatedDeltaData, delta, true, +portfolioID);
                   }
                 }
               }

@@ -683,6 +683,12 @@ export interface BEStructuringOverrideBaseBlock {
   simpleBucketValues?: string;
   title?: string;
   breakdown?: BEStructuringBreakdownMetricBlock;
+  // These two are currently only being used in updateDataInRawServerReturnCache() for newly-created overrides
+  // Normally what's stored in the cache is what is returned from get-portfolio-structures when the page loads
+  // This includes a specific formatting that we typically don't use or need in the FE (ex. { BicsCode|Ccy: { 10|USD: { // override data}}});
+  // For FE to update the cache manually when create overrides API is called, we need to save these values so that they can be used as reference in order to construct the object in the same way as the BE return
+  rawBucketOptionsText?: string;
+  rawBucketOptionsValuesText?: string;
 }
 
 export interface BEStructuringOverrideBlock {
