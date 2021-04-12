@@ -23,7 +23,6 @@ import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
-import { PortfolioStructureBreakdownRowEmptySample } from 'Structure/stubs/structure.stub';
 @Injectable()
 
 export class BICSDataProcessingService {
