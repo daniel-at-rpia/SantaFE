@@ -491,6 +491,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--creditLeverageActiveState {
     #{$blockName} {
       &__utilities {
+        /*
         &-distribution {
           background: $color_disabled;
           &-ctas {
@@ -524,6 +525,7 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
             pointer-events: none;
           }
         }
+        */
       }
     }
   }
