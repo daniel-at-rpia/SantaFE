@@ -237,3 +237,10 @@ export const BEIdentifierToFEDisplayMapping: Array<AdhocPacks.BEIdentifierToFEMa
     display: SECURITY_SUB_TYPE_TITLE
   }
 ]
+
+export enum BESubPortfolioFilter {
+  all = 'All',
+  nonHedging = 'NonHedging',
+  nonShortCarry = 'NonShortCarry',
+  shortCarry = 'ShortCarry'
+}

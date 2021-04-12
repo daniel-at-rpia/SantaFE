@@ -2338,6 +2338,7 @@ export class DTOService {
     const comparedDeltaCategoryData = !!comparedDeltaRawData ? comparedDeltaRawData.breakdown[categoryName] : null;
     if (!!categoryData) {
       const portfolioID = rawData.portfolioId;
+      const overrideID = isOverride ? rawData.breakdown[categoryName].portfolioOverrideId : null;
       const groupOption = rawData.groupOption;
       const parsedBEView = !!categoryData && !!categoryData.view ? categoryData.view.toLowerCase() : null;
       const view = PortfolioView[parsedBEView];
@@ -2375,7 +2376,8 @@ export class DTOService {
             bucket,
             simpleBucket,
             customLevel,
-            code
+            code,
+            overrideID
           ),
         style: {
           branchHeight: '0',
@@ -2421,7 +2423,8 @@ export class DTOService {
     bucket: Blocks.StructureBucketDataBlock,
     simpleBucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
-    code: string = null
+    code: string = null,
+    overrideID: string
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
       const { currentLevel, targetLevel, currentPct, targetPct, indexPct } = rawCategoryData;
@@ -2487,7 +2490,8 @@ export class DTOService {
         displayedSubLevelRows: [],
         displayedSubLevelRowsWithTargets: [],
         editedSubLevelRowsWithTargets: [],
-        code: code
+        code: code,
+        portfolioOverrideId: overrideID
       };
       eachCategoryBlock.diffToTargetDisplay = this.utility.getBreakdownRowDiffText(eachCategoryBlock.diffToTarget, isCs01);
       return eachCategoryBlock;

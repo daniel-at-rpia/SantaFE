@@ -36,13 +36,14 @@ export const APIUrlMap = {
   updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
   getBICsCodeDictionary: 'portfolioStructuring/get-bics-code-dictionary',
   getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
-  updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
-  deletePortfolioOverride: 'portfolioStructuring/delete-portfolio-override',
+  updatePortfolioOverrides: 'portfolioStructuring/update-portfolio-overrides',
+  createPortfolioOverrides: 'portfolioStructuring/create-portfolio-overrides',
+  deletePortfolioOverrides: 'portfolioStructuring/delete-portfolio-overrides',
   getViews: 'portfolioStructuring/get-analyst-views',
   setView: 'portfolioStructuring/set-analyst-view',
   getAllTraceTrades: 'TraceTrade/get-all-trace-trades',
   clearPortfolioBreakdown: 'portfolioStructuring/clear-portfolio-breakdown',
-  updatePortfolioOverridesForAllPortfolios: 'portfolioStructuring/update-portfolio-overrides-for-all-portfolios'
+  createPortfolioOverridesForAllPortfolios: 'portfolioStructuring/create-portfolio-overrides-for-all-portfolios'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
