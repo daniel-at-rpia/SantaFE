@@ -404,22 +404,7 @@ export class BICSDataProcessingService {
       });
     });
   }
-
-  public populateServerReturnBICSBreakdownWithRemainingEmptyRows(rawData: BEStructuringBreakdownBlockWithSubPortfolios) {
-    // this is to allow FE to populate all rows that are not sent by the BE due to performance-related reasons
-    const level = rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER).length === 2 ? +(rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1]) : null;
-    if (level) {
-      const categoryCodes = this.getCategoryCodesBasedOnLevel(level);
-      if (categoryCodes.length > 0) {
-        categoryCodes.forEach(code => {
-          if (!rawData.breakdown[code]) {
-            rawData.breakdown[code] = PortfolioStructureBreakdownRowEmptySample;
-          }
-        })
-      }
-    }
-  }
-
+  
   private setBreakdownListProperties(
     breakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO>,
     parentRow: DTOs.StructurePortfolioBreakdownRowDTO
