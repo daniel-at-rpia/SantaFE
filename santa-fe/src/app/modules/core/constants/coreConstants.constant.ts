@@ -36,13 +36,14 @@ export const APIUrlMap = {
   updatePortfolioBreakdown: 'portfolioStructuring/update-portfolio-breakdown',
   getBICsCodeDictionary: 'portfolioStructuring/get-bics-code-dictionary',
   getPortfolioOverride: 'portfolioStructuring/get-portfolio-override',
-  updatePortfolioOverride: 'portfolioStructuring/update-portfolio-override',
-  deletePortfolioOverride: 'portfolioStructuring/delete-portfolio-override',
+  updatePortfolioOverrides: 'portfolioStructuring/update-portfolio-overrides',
+  createPortfolioOverrides: 'portfolioStructuring/create-portfolio-overrides',
+  deletePortfolioOverrides: 'portfolioStructuring/delete-portfolio-overrides',
   getViews: 'portfolioStructuring/get-analyst-views',
   setView: 'portfolioStructuring/set-analyst-view',
   getAllTraceTrades: 'TraceTrade/get-all-trace-trades',
   clearPortfolioBreakdown: 'portfolioStructuring/clear-portfolio-breakdown',
-  updatePortfolioOverridesForAllPortfolios: 'portfolioStructuring/update-portfolio-overrides-for-all-portfolios'
+  createPortfolioOverridesForAllPortfolios: 'portfolioStructuring/create-portfolio-overrides-for-all-portfolios'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
@@ -193,6 +194,9 @@ export const FrontendKeyToBackendKeyDictionary = {
   'BICS_LEVEL_2': 'BicsLevel2',
   'BICS_LEVEL_3': 'BicsLevel3',
   'BICS_LEVEL_4': 'BicsLevel4',
+  'BICS_LEVEL_5': 'BicsLevel5',
+  'BICS_LEVEL_6': 'BicsLevel6',
+  'BICS_LEVEL_7': 'BicsLevel7',
   'BICS_CONSOLIDATED': 'BicsCode',
 
   // metrics
@@ -226,6 +230,9 @@ export const BackendKeyToDisplayLabelDictionary = {
   'BicsLevel2': 'BICS Lv.2',
   'BicsLevel3': 'BICS Lv.3',
   'BicsLevel4': 'BICS Lv.4',
+  'BicsLevel5': 'BICS Lv.5',
+  'BicsLevel6': 'BICS Lv.6',
+  'BicsLevel7': 'BICS Lv.7',
   'BicsCode': 'BicsCode'
 }
 

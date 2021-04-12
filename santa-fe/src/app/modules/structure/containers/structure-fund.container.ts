@@ -25,7 +25,7 @@
     import {
       PayloadUpdatePortfolioStructuresTargets,
       PayloadUpdateBreakdown,
-      PayloadUpdateOverride
+      PayloadModifyOverrides
     } from 'BEModels/backend-payloads.interface';
     import { BEStructuringFundBlockWithSubPortfolios, BEStructuringBreakdownMetricBlock } from 'BEModels/backend-models.interface';
     import { CoreSendNewAlerts } from 'Core/actions/core.actions';

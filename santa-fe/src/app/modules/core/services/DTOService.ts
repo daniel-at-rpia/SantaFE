@@ -75,13 +75,15 @@
       DeltaScopeBEToFEMapping
     } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
+    import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService'
   //
 
 @Injectable()
 export class DTOService {
   constructor(
     private utility: UtilityService,
-    private securityMap: SecurityMapService
+    private securityMap: SecurityMapService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ){}
 
   public formSecurityCardObject(
@@ -284,7 +286,10 @@ export class DTOService {
           bicsLevel1: !isStencil ? rawData.bicsLevel1 : null,
           bicsLevel2: !isStencil ? rawData.bicsLevel2 : null,
           bicsLevel3: !isStencil ? rawData.bicsLevel3 : null,
-          bicsLevel4: !isStencil ? rawData.bicsLevel4 : null
+          bicsLevel4: !isStencil ? rawData.bicsLevel4 : null,
+          bicsLevel5: !isStencil ? rawData.bicsLevel5 : null,
+          bicsLevel6: !isStencil ? rawData.bicsLevel6 : null,
+          bicsLevel7: !isStencil ? rawData.bicsLevel7 : null
         },
         lastTrace: {
           lastTracePrice: null,
@@ -580,7 +585,8 @@ export class DTOService {
       displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
       bicsLevel: bicsLevel || null,
       shortKey: normalizedOption,
-      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`
+      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`,
+      isDeepestLevel: !!bicsLevel ? this.checkBICSConfiguratorOptionAsDeepestLevel(option, bicsLevel) : false
     }
     if (definitionKey === SecurityDefinitionMap.TENOR.key) {
       newFilterDTO.displayLabel = FilterOptionsTenorRange[newFilterDTO.shortKey].displayLabel;
@@ -719,7 +725,10 @@ export class DTOService {
     sortedLevel1List: Array<string>,
     sortedLevel2List: Array<string>,
     sortedLevel3List: Array<string>,
-    sortedLevel4List: Array<string>
+    sortedLevel4List: Array<string>,
+    sortedLevel5List: Array<string>,
+    sortedLevel6List: Array<string>,
+    sortedLevel7List: Array<string>
   ) {
     configuratorDTO.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
@@ -734,6 +743,12 @@ export class DTOService {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel3List);
         } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel4List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_5.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel5List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_6.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel6List);
+        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_7.key) {
+          this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel7List);
         }
       });
     });
@@ -2323,6 +2338,7 @@ export class DTOService {
     const comparedDeltaCategoryData = !!comparedDeltaRawData ? comparedDeltaRawData.breakdown[categoryName] : null;
     if (!!categoryData) {
       const portfolioID = rawData.portfolioId;
+      const overrideID = isOverride ? rawData.breakdown[categoryName].portfolioOverrideId : null;
       const groupOption = rawData.groupOption;
       const parsedBEView = !!categoryData && !!categoryData.view ? categoryData.view.toLowerCase() : null;
       const view = PortfolioView[parsedBEView];
@@ -2360,7 +2376,8 @@ export class DTOService {
             bucket,
             simpleBucket,
             customLevel,
-            code
+            code,
+            overrideID
           ),
         style: {
           branchHeight: '0',
@@ -2406,7 +2423,8 @@ export class DTOService {
     bucket: Blocks.StructureBucketDataBlock,
     simpleBucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
-    code: string = null
+    code: string = null,
+    overrideID: string
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
       const { currentLevel, targetLevel, currentPct, targetPct, indexPct } = rawCategoryData;
@@ -2472,7 +2490,8 @@ export class DTOService {
         displayedSubLevelRows: [],
         displayedSubLevelRowsWithTargets: [],
         editedSubLevelRowsWithTargets: [],
-        code: code
+        code: code,
+        portfolioOverrideId: overrideID
       };
       eachCategoryBlock.diffToTargetDisplay = this.utility.getBreakdownRowDiffText(eachCategoryBlock.diffToTarget, isCs01);
       return eachCategoryBlock;
@@ -2812,5 +2831,14 @@ export class DTOService {
     newBreakdown.data.portfolioName = rawData.portfolioShortName;
     newBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
     return newBreakdown;
+  }
+
+  private checkBICSConfiguratorOptionAsDeepestLevel(
+    option: string,
+    bicsLevel: number
+  ): boolean {
+    const code = this.bicsDictionaryLookupService.BICSNameToBICSCode(option, bicsLevel);
+    const subCodes = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(code);
+    return subCodes.length === 0;
   }
 }

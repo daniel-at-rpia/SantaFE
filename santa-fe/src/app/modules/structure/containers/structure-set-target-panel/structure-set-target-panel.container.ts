@@ -37,9 +37,8 @@
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       PayloadUpdateBreakdown,
-      PayloadUpdateOverride,
-      PayloadDeleteOverride,
-      PayloadSetView
+      PayloadSetView,
+      PayloadModifyOverrides
     } from 'BEModels/backend-payloads.interface';
     import {
       BEStructuringBreakdownBlock,
@@ -49,7 +48,6 @@
       BEStructuringOverrideBlockWithSubPortfolios,
       BEStructuringBreakdownMetricSingleEntryBlock,
       BEStructuringBreakdownMetricBlockWithSubPortfolios,
-      BESubPortfolioFilter,
       BEStructuringOverrideBaseBlock,
       BEStructuringOverrideBaseBlockWithSubPortfolios
     } from 'BEModels/backend-models.interface';
@@ -60,14 +58,16 @@
     import {
       StructureReloadFundDataPostEditEvent,
       StructureUpdateMainPanelEvent,
-      StructureSetView
+      StructureSetView,
+      StructureOverrideDataTransferEvent
     } from 'Structure/actions/structure.actions';
     import { CoreSendNewAlerts } from 'Core/actions/core.actions';
     import {
       CustomeBreakdownConfiguratorDefinitionLayout,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
       SubPortfolioFilter,
-      SET_TARGET_CLEAR_ALL_OPTIONS_MAP
+      SET_TARGET_CLEAR_ALL_OPTIONS_MAP,
+      BESubPortfolioFilter
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -943,76 +943,22 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   }
 
   private submitOverrideChanges(): boolean {
-    const updatePayload: Array<PayloadUpdateOverride> = this.traverseEditRowsToFormUpdateOverridePayload();
-    const deletePayload: Array<PayloadDeleteOverride> = this.traverseRemovalListToFormDeleteOverridePayload();
-    const necessaryUpdateNumOfCalls = updatePayload.length;
-    const necessaryDeleteNumOfCalls = deletePayload.length;
-    if (necessaryUpdateNumOfCalls + necessaryDeleteNumOfCalls > 0) {
-      if (updatePayload.length > 0) {
-        let callCount = 0;
-        updatePayload.forEach((eachPayload) => {
-          this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-            first(),
-            tap((serverReturn: boolean) => {
-              callCount++;
-              if (callCount === necessaryUpdateNumOfCalls) {
-                if (necessaryDeleteNumOfCalls > 0) {
-                  this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
-                } else {
-                  this.store$.dispatch(
-                    new CoreSendNewAlerts([
-                      this.dtoService.formSystemAlertObject(
-                        'Structuring',
-                        'Updated',
-                        `Successfully Updated Target for ${this.state.targetBreakdown.data.title}`,
-                        null
-                      )]
-                    )
-                  );
-                  serverReturn && this.store$.dispatch(new StructureUpdateMainPanelEvent());
-                }
-              }
-            }),
-            catchError(err => {
-              console.error('update breakdown failed');
-              this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', 'update breakdown failed', null)]));
-              return of('error');
-            })
-          ).subscribe();
-        });
-      } else {
-        this.submitOverrideChangesForDelete(deletePayload, necessaryDeleteNumOfCalls);
+    const [updatePayload, createPayload] = this.traverseEditRowsToFormUpdateOverridePayload();
+    const deletePayload = this.traverseRemovalListToFormDeleteOverridePayload();
+
+    if (updatePayload.portfolioOverrides.length > 0 || createPayload.portfolioOverrides.length > 0 || deletePayload.portfolioOverrides.length > 0) {
+      const transferPack: AdhocPacks.StructureSetTargetOverrideTransferPack = {
+        portfolioID: this.state.targetBreakdown.data.portfolioId,
+        updatePayload: updatePayload,
+        createPayload: createPayload,
+        deletePayload: deletePayload
       }
+      this.store$.dispatch(new StructureOverrideDataTransferEvent(transferPack));
       return true;
     } else {
-      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit new target because no change is detected', null)]));
+      this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Warning', 'Set Target', 'Can not submit override changes because no change were detected', null)]));
       return false;
     }
-  }
-
-  private submitOverrideChangesForDelete(
-    deletePayload: Array<PayloadDeleteOverride>,
-    necessaryDeleteNumOfCalls: number
-  ) {
-    let callCount = 0;
-    deletePayload.forEach((eachPayload, index) => {
-      this.restfulCommService.callAPI(this.restfulCommService.apiMap.deletePortfolioOverride, {req: 'POST'}, eachPayload).pipe(
-        first(),
-        tap((serverReturn: BEStructuringFundBlockWithSubPortfolios) => {
-          callCount++;
-          if (callCount === necessaryDeleteNumOfCalls) {
-            this.store$.dispatch(new StructureUpdateMainPanelEvent());
-            const alert = this.dtoService.formSystemAlertObject('Structuring', 'Deleted', `Deleted Override Successfully`, null);
-            this.store$.dispatch(new CoreSendNewAlerts([alert]));
-          }
-        }),
-        catchError(err => {
-          console.error('delete breakdown failed');
-          this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Set Target', `Delete Override Failed`, null)]));
-          return of('error');
-        })
-      ).subscribe();
-    });
   }
 
   private traverseEditRowsToFormUpdateBreakdownPayload(): Array<PayloadUpdateBreakdown> {
@@ -1084,20 +1030,24 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     return hasModification ? payloads : null;
   }
 
-  private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdateOverride> {
-    const payload: Array<PayloadUpdateOverride> = [];
+  private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadModifyOverrides> {
+    // finds both newly-created and updated override rows
+    let updateOverridePayloads: PayloadModifyOverrides = {
+      portfolioOverrides: []
+    }
+    let createOverridePayloads: PayloadModifyOverrides = {
+      portfolioOverrides: []
+    }
     this.state.editRowList.forEach((eachRow) => {
       let isTitleChanged = false;
       let isTargetChanged = false;
-      const eachPayload: PayloadUpdateOverride = {
-        portfolioOverride: {
-          portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
-        }
+      const eachPayload: BEStructuringOverrideBaseBlockWithSubPortfolios = {
+        portfolioId: this.state.targetBreakdownRawData.portfolioId,
+        simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket,
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.displayRowTitle) {
         isTitleChanged = true;
-        eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
+        eachPayload.title = eachRow.modifiedDisplayRowTitle;
       }
       if(this.cs01ModifiedInEditRow(eachRow) || this.creditLeverageModifiedInEditRow(eachRow)) {
         isTargetChanged = true;
@@ -1121,25 +1071,30 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
             targetPct: eachRow.targetCreditLeverage.percent.savedUnderlineValue
           };
         }
-        eachPayload.portfolioOverride.breakdown = modifiedMetricBreakdowns;
+        eachPayload.breakdown = modifiedMetricBreakdowns;
       }
-      if (isTargetChanged || isTitleChanged || !eachRow.existInServer) {
-        payload.push(eachPayload);
+      if (isTargetChanged || isTitleChanged) {
+        if (!eachRow.existInServer) {
+          createOverridePayloads.portfolioOverrides = [...createOverridePayloads.portfolioOverrides, eachPayload]
+        } else {
+          updateOverridePayloads.portfolioOverrides = [...updateOverridePayloads.portfolioOverrides, eachPayload]
+        }
       }
     });
-    return payload;
+    return [updateOverridePayloads, createOverridePayloads];
   }
 
-  private traverseRemovalListToFormDeleteOverridePayload(): Array<PayloadDeleteOverride> {
-    const payload: Array<PayloadDeleteOverride> = [];
+  private traverseRemovalListToFormDeleteOverridePayload(): PayloadModifyOverrides {
+    const payload: PayloadModifyOverrides = {
+      portfolioOverrides: []
+    };
     this.state.removalList.forEach((eachRow) => {
-      const eachPayload: PayloadDeleteOverride = {
-        portfolioOverride: {
-          portfolioId: this.state.targetBreakdownRawData.portfolioId,
-          simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket
-        }
+      const eachPayload: BEStructuringOverrideBaseBlockWithSubPortfolios = {
+        portfolioId: this.state.targetBreakdownRawData.portfolioId,
+        simpleBucket: eachRow.targetBlockFromBreakdown.simpleBucket,
+        portfolioOverrideId: eachRow.targetBlockFromBreakdown.portfolioOverrideId
       };
-      payload.push(eachPayload);
+      payload.portfolioOverrides.push(eachPayload);
     });
     return payload;
   }
@@ -1285,7 +1240,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   }
 
   private updateDisplayedSubLevelsListWithTargets(row: DTOs.StructurePortfolioBreakdownRowDTO, isCs01List: boolean, isDisplayCs01: boolean) {
-    const subCategoryCodes = this.bicsDictionaryLookupService.getBICSSubLevelByCodeGrouping(row.data.code);
+    const subCategoryCodes = this.bicsDictionaryLookupService.getAllBICSSubLevelCodesPerCategory(row.data.code);
     const customRawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, 1);
     if (!!customRawBreakdown) {
       const definitionList: Array<string> = [];
