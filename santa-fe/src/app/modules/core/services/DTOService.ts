@@ -160,7 +160,7 @@ export class DTOService {
           mark: null,
           markRaw: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.value : null,
           markBackend: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.value : null,
-          markDriver: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.driver : null,
+          markDriver: !isStencil && !!rawData.driver ? rawData.driver : null,
           markChangedBy: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.user : null,
           markChangedTime: !isStencil && !!rawData.unitPosition && !!rawData.unitPosition.mark ? rawData.unitPosition.mark.enteredTime : null,
           markDisBid: null,
@@ -954,14 +954,14 @@ export class DTOService {
             displayNumber: bidNumber,  // not been used right now but could come in handy
             broker: bidDealer,
             size: bidSize,
-            isExecutable: rawData.bestBidQuoteCondition === 'A'
+            isExecutable: !!rawData.isBestBidExecutable
           },
           offer: {
             number: !!offerNumber ? parseFloat(offerNumber) : null,
             displayNumber: offerNumber,  // not been used right now but could come in handy
             broker: askDealer,
             size: offerSize,
-            isExecutable: rawData.bestAskQuoteCondition === 'A'
+            isExecutable: !!rawData.isBestAskExecutable
           }
         },
         style: {
@@ -985,7 +985,7 @@ export class DTOService {
           longEdgeState: (bidNumber && parseFloat(bidNumber).toString().length > 4) || (offerNumber && parseFloat(offerNumber).toString().length > 4),
           bidIsStale: bidIsStale,
           askIsStale: askIsStale,
-          hasExecutableQuote: rawData.bestAskQuoteCondition === 'A' || rawData.bestBidQuoteCondition === 'A'
+          hasExecutableQuote: !!rawData.isBestAskExecutable || !!rawData.isBestBidExecutable
         }
       };
       return object;
@@ -1161,7 +1161,8 @@ export class DTOService {
           state: {
             isStencil: false,
             askSided: false,
-            bidSided: false
+            bidSided: false,
+            midSided: false
           }
         };
         if (alertDTO.state.isMarketListVariant) {
@@ -1171,6 +1172,9 @@ export class DTOService {
           } else if (alertDTO.data.subType === AlertSubTypes.bid) {
             object.data.alertSideDTO.data.side = 'OWIC';
             object.data.alertSideDTO.state.bidSided = true;
+          } else if (alertDTO.data.subType === AlertSubTypes.mid) {
+            object.data.alertSideDTO.data.side = 'MID';
+            object.data.alertSideDTO.state.midSided = true;
           }
         } else if (alertDTO.data.subType === AlertSubTypes.bid) {
           object.data.alertSideDTO.data.side = 'Bid';
@@ -1282,7 +1286,7 @@ export class DTOService {
         benchmark: bidBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? moment(rawData.bidTime).format('HH:mm') : '',
         rawTime: rawData.bidTime.slice(0, 19),  // remove timezone,
-        isExecutable: rawData.bidQuoteCondition === 'A'
+        isExecutable: !!rawData.isBidExecutable
       };
       object.data.ask = {
         isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -1293,7 +1297,7 @@ export class DTOService {
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? moment(rawData.askTime).format('HH:mm') : '',
         rawTime: rawData.askTime.slice(0, 19),  // remove timezone
-        isExecutable: rawData.askQuoteCondition === 'A'
+        isExecutable: !!rawData.isAskExecutable
       };
       this.utility.highlightSecurityQutoe(object, targetRow);
       object.state.isBidDownVoted = rawData.bidQuoteStatus < 0;
@@ -1677,13 +1681,13 @@ export class DTOService {
         alertDTO.data.dealer = rawData.quote.dealer;
         switch (targetDriver) {
           case TriCoreDriverConfig.Spread.label:
-            alertDTO.data.level = rawData.quote.spread;
+            alertDTO.data.level = rawData.quote.spread !== null ? rawData.quote.spread : rawData.quote.price;
             break;
           case TriCoreDriverConfig.Price.label:
-            alertDTO.data.level = rawData.quote.price;
+            alertDTO.data.level = rawData.quote.price !== null ? rawData.quote.price : rawData.quote.spread;
             break;
           case TriCoreDriverConfig.Yield.label:
-            alertDTO.data.level = rawData.quote.yield;
+            alertDTO.data.level = rawData.quote.yield !== null ? rawData.quote.yield : rawData.quote.price;
             break;
           default:
             break;
@@ -1762,7 +1766,7 @@ export class DTOService {
       if (moment().diff(alertDTO.data.validUntilMoment) > 0) {
         alertDTO.state.isExpired = true;
       }
-      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded) {
+      if (alertDTO.state.isCancelled && alertDTO.data.isMarketListTraded && alertDTO.data.level !== null) {
         alertDTO.data.status = `Traded at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
       } else if (alertDTO.state.isCancelled) {
         alertDTO.data.status = `Cancelled at ${alertDTO.data.validUntilMoment.format('HH:mm:ss')}`;
@@ -2334,6 +2338,7 @@ export class DTOService {
     const comparedDeltaCategoryData = !!comparedDeltaRawData ? comparedDeltaRawData.breakdown[categoryName] : null;
     if (!!categoryData) {
       const portfolioID = rawData.portfolioId;
+      const overrideID = isOverride ? rawData.breakdown[categoryName].portfolioOverrideId : null;
       const groupOption = rawData.groupOption;
       const parsedBEView = !!categoryData && !!categoryData.view ? categoryData.view.toLowerCase() : null;
       const view = PortfolioView[parsedBEView];
@@ -2371,7 +2376,8 @@ export class DTOService {
             bucket,
             simpleBucket,
             customLevel,
-            code
+            code,
+            overrideID
           ),
         style: {
           branchHeight: '0',
@@ -2417,7 +2423,8 @@ export class DTOService {
     bucket: Blocks.StructureBucketDataBlock,
     simpleBucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
-    code: string = null
+    code: string = null,
+    overrideID: string
   ): Blocks.PortfolioBreakdownCategoryBlock {
     if (!!rawCategoryData) {
       const { currentLevel, targetLevel, currentPct, targetPct, indexPct } = rawCategoryData;
@@ -2453,6 +2460,7 @@ export class DTOService {
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: categoryName,
         displayCategory:  this.utility.getFormattedRowDisplayCategory(categoryName, isOverride),
+        tooltipText: categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'),
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2482,7 +2490,8 @@ export class DTOService {
         displayedSubLevelRows: [],
         displayedSubLevelRowsWithTargets: [],
         editedSubLevelRowsWithTargets: [],
-        code: code
+        code: code,
+        portfolioOverrideId: overrideID
       };
       eachCategoryBlock.diffToTargetDisplay = this.utility.getBreakdownRowDiffText(eachCategoryBlock.diffToTarget, isCs01);
       return eachCategoryBlock;

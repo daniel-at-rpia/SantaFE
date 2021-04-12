@@ -152,6 +152,10 @@ export interface StructureMainPanelState {
     fetchFundDataFailedError: string;
     rawServerReturnCache: BEGetPortfolioStructureServerReturn;  // need to store a copy of the serverReturn because we don't make new API call when switching strategy & deltas
   }
+  overrideModifications: {
+    totalNumberOfNecessaryCalls: number;
+    callCount: number;
+  }
 }
 
 export interface TradeUtilityPanelState {

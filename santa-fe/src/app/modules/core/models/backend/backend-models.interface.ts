@@ -96,7 +96,6 @@ export interface BESecurityDTO {
   isCds?: boolean;
   unitPosition?: {
     mark: {
-      driver: string;
       enteredTime: string;
       user: string;
       value: number;
@@ -130,6 +129,7 @@ export interface BESecurityDTO {
   bicsLevel5: string;
   bicsLevel6: string;
   bicsLevel7: string;
+  driver: string;
 }
 
 export interface BEBestQuoteDTO {
@@ -288,8 +288,8 @@ export interface BESingleBestQuoteDTO {
   askAxeIsOld: boolean;
   isOffTheRunCds: boolean;
   globalIdentifier: string;
-  bestBidQuoteCondition: string;
-  bestAskQuoteCondition: string;
+  isBestAskExecutable: boolean;
+  isBestBidExecutable: boolean;
 }
 
 export interface BEQuoteDTO {
@@ -311,7 +311,6 @@ export interface BEQuoteDTO {
   bidQuantity: number; // null;
   bidIsNatural: boolean; // false;
   bidQualifier: string; // null;
-  bidQuoteCondition: string;  // 'A'
   askQuoteId: string;
   askQuoteStatus: number;  // 0; -1; -2
   askTime: string;
@@ -323,7 +322,8 @@ export interface BEQuoteDTO {
   askQuantity: number; // null;
   askIsNatural: boolean; // null;
   askQualifier: string; // null
-  askQuoteCondition: string;  // 'A'
+  isAskExecutable: boolean;
+  isBidExecutable: boolean;
 }
 
 export interface BEHistoricalSummaryOverviewDTO {
@@ -474,6 +474,7 @@ interface BEAlertMarketListBlock {
   isActive: boolean;
   isDeleted: boolean;
   isCancelled: boolean;
+  sendEmail: boolean;
 }
 
 interface BEQuoteBaseBlock {
@@ -682,6 +683,12 @@ export interface BEStructuringOverrideBaseBlock {
   simpleBucketValues?: string;
   title?: string;
   breakdown?: BEStructuringBreakdownMetricBlock;
+  // These two are currently only being used in updateDataInRawServerReturnCache() for newly-created overrides
+  // Normally what's stored in the cache is what is returned from get-portfolio-structures when the page loads
+  // This includes a specific formatting that we typically don't use or need in the FE (ex. { BicsCode|Ccy: { 10|USD: { // override data}}});
+  // For FE to update the cache manually when create overrides API is called, we need to save these values so that they can be used as reference in order to construct the object in the same way as the BE return
+  rawBucketOptionsText?: string;
+  rawBucketOptionsValuesText?: string;
 }
 
 export interface BEStructuringOverrideBlock {
@@ -734,6 +741,7 @@ export interface BEStructuringBreakdownMetricBlock {
   bucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
     [property: string]: Array<string>;
   }
+  portfolioOverrideId?: string;
 }
 
 export interface BEStructuringBreakdownMetricSingleEntryBlock {
@@ -800,12 +808,17 @@ export interface BESecurityMap {
   [id: string]: Array<string>;
 }
 
-export enum BESubPortfolioFilter {
-  all = 'All',
-  nonHedging = 'NonHedging',
-  nonShortCarry = 'NonShortCarry',
-  shortCarry = 'ShortCarry'
+export interface BECreateOverrideBlock {
+  [delta: string]: {
+    [portfolioId: string]: {
+      [bucketOptions: string] : {
+        [bucketOptionsValues: string]: BEStructuringOverrideBaseBlockWithSubPortfolios;
+      }
+    };
+  }
 }
+
+export type BEUpdateOverrideBlock = Array<BEStructuringOverrideBaseBlockWithSubPortfolios>;
 
 export interface BEStructuringSetViewReturn {
   [property: string]: any;

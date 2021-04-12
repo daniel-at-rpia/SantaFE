@@ -562,6 +562,8 @@ export class UtilityService {
           return AlertSubTypes.buy;
         case AlertSubTypes.sell:
           return AlertSubTypes.sell;
+        case AlertSubTypes.mid:
+          return AlertSubTypes.mid
         default:
           return AlertSubTypes.default;
       }
@@ -1363,6 +1365,7 @@ export class UtilityService {
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
           matchExistBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
+          matchExistBreakdown.breakdown[categoryKey].portfolioOverrideId = eachRawOverride.portfolioOverrideId;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
             groupOption: overrideBucketIdentifier,
@@ -1378,6 +1381,7 @@ export class UtilityService {
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
           newConvertedBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           newConvertedBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
+          newConvertedBreakdown.breakdown[categoryKey].portfolioOverrideId = eachRawOverride.portfolioOverrideId;
           breakdownList.push(newConvertedBreakdown);
         }
       });

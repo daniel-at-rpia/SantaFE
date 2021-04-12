@@ -241,6 +241,7 @@ export class AgGridMiddleLayerService {
       const targetNode = existIndexInPinned >= 0 ? table.api.gridApi.getPinnedTopRow(existIndexInPinned) : table.api.gridApi.getRowNode(id);
       if (!!targetNode) {
         targetNode.setData(newAgRow);
+        table.api.gridApi.onSortChanged();
       } else {
         this.restfulCommService.logError(`[AgGrid] Couldn't fine AgGrid Row for ${eachRow.data.rowId} (location - ${location})`);
         console.error(`Couldn't fine AgGrid Row for ${eachRow.data.rowId}`, eachRow);

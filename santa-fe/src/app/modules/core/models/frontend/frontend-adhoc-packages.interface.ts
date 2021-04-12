@@ -13,7 +13,10 @@ import {
   BEStructuringBreakdownBlock,
   BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';
-import { PayloadUpdatePortfolioOverridesForAllPortfolios } from 'Core/models/backend/backend-payloads.interface';
+import {
+  PayloadModifyOverrides,
+  PayloadBulkCreateOverrides
+} from 'Core/models/backend/backend-payloads.interface';
 import { 
   PortfolioView,
   SubPortfolioFilter,
@@ -223,4 +226,15 @@ interface SecurityDefinitionFilterOptionTenorRangeItem {
 export interface GlobalWorkflowLastState {
   module: NavigationModule;
   stateUUID: string;
+}
+
+export interface StructureSetTargetOverrideTransferPack {
+  portfolioID: number;
+  updatePayload: PayloadModifyOverrides,
+  createPayload: PayloadModifyOverrides,
+  deletePayload: PayloadModifyOverrides
+}
+
+export interface StructureSetBulkOverrideTransferPack {
+  pack: PayloadBulkCreateOverrides;
 }
