@@ -16,7 +16,10 @@
     } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-    import { StructureFullDataLoadedEvent } from 'Structure/actions/structure.actions';
+    import {
+      StructureFullDataLoadedEvent,
+      StructureReloadFundDataPostEditEvent
+    } from 'Structure/actions/structure.actions';
     import { selectUserInitials } from 'Core/selectors/core.selectors';
     import {
       selectReloadFundDataPostEdit,
@@ -785,7 +788,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     return fund;
   }
 
-  private updateOverrides(payload: PayloadModifyOverrides) {
+  private updateOverrides(
+    payload: PayloadModifyOverrides,
+    portfolioID: number
+  ) {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverrides, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: BEUpdateOverrideBlock) => {
@@ -805,7 +811,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 )]
               )
             );
-            this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+            this.initiateFundUIRefreshFromOverrideAPICalls(portfolioID, this.state.activeDeltaScope);
           }
         }
       }),
@@ -827,7 +833,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe()
   }
 
-  private createOverrides(payload: PayloadModifyOverrides) {
+  private createOverrides(
+    payload: PayloadModifyOverrides,
+    portfolioID: number
+  ) {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.createPortfolioOverrides, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: BECreateOverrideBlock) => {
@@ -845,7 +854,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 )]
               )
             );
-            this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+            this.initiateFundUIRefreshFromOverrideAPICalls(portfolioID, this.state.activeDeltaScope);
           }
         }
       }),
@@ -867,7 +876,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe()
   }
 
-  private deleteOverrides(payload: PayloadModifyOverrides) {
+  private deleteOverrides(
+    payload: PayloadModifyOverrides,
+    portfolioID: number
+  ) {
     const formattedPayloadList = payload.portfolioOverrides.map((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => ({portfolioId: override.portfolioId, simpleBucket: override.simpleBucket}));
     const modifiedPayloadFull: PayloadModifyOverrides = {
       portfolioOverrides: formattedPayloadList
@@ -896,7 +908,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                   )]
                 )
               );
-              this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+              this.initiateFundUIRefreshFromOverrideAPICalls(portfolioID, this.state.activeDeltaScope);
             }
           }
         }
@@ -971,10 +983,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   }
 
   private makeOverrideAPICalls(overridesData: AdhocPacks.StructureSetTargetOverrideTransferPack) {
-    const { updatePayload, createPayload, deletePayload } = overridesData;
-    updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload);
-    createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
-    deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
+    const { updatePayload, createPayload, deletePayload, portfolioID } = overridesData;
+    updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
+    createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload, portfolioID);
+    deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload, portfolioID);
   }
 
   private makeCreateBulkOverrideAPICall(bulkOverrideData: AdhocPacks.StructureSetBulkOverrideTransferPack) {
@@ -1041,11 +1053,16 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     }
   }
 
-  private refreshMainPanelUIWithNewDataForOverrideAPICalls() {
+  private initiateFundUIRefreshFromOverrideAPICalls(
+    portfolioID: number,
+    delta: string
+  ) {
     if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
-      this.processStructureData(
-        this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-        this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+      const currentFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, this.constants.currentDeltaScope);
+      const deltaFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
+      this.loadFund(
+        this.extractSubPortfolioFromFundReturn(currentFund),
+        this.extractSubPortfolioFromFundReturn(deltaFund)
       );
     }
   }
