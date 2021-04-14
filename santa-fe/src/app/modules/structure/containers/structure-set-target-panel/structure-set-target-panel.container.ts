@@ -67,7 +67,8 @@
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
       SubPortfolioFilter,
       SET_TARGET_CLEAR_ALL_OPTIONS_MAP,
-      BESubPortfolioFilter
+      BESubPortfolioFilter,
+      StructureMetricBlockFallback
     } from 'Core/constants/structureConstants.constants';
   //
 
@@ -91,7 +92,8 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     definitionMap: SecurityDefinitionMap,
     view: PortfolioView,
     subPortfolio: SubPortfolioFilter,
-    clearAllOptionsMap: SET_TARGET_CLEAR_ALL_OPTIONS_MAP
+    clearAllOptionsMap: SET_TARGET_CLEAR_ALL_OPTIONS_MAP,
+    metricBlockFallback: StructureMetricBlockFallback
   };
 
   constructor(
@@ -1422,12 +1424,24 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
 
   private updateRowRawBreakdownData(targetCategory: Blocks.StructureSetTargetPanelEditRowBlock, targetItem: Blocks.StructureSetTargetPanelEditRowItemBlock) {
     const identifier = this.state.targetBreakdown.state.isBICs ? targetCategory.rowDTO.data.code : targetCategory.rowIdentifier;
-    if (targetItem.metric === this.constants.metric.cs01) {
-      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
-      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.Cs01.targetPct = targetCategory.targetCs01.percent.savedUnderlineValue;
+    const targetCategoryData = this.state.targetBreakdownRawData.breakdown[identifier];
+    if (!!targetCategoryData) {
+      if (!targetCategoryData.metricBreakdowns.Cs01) {
+        targetCategoryData.metricBreakdowns.Cs01 = this.utilityService.deepCopy(this.constants.metricBlockFallback.metricBreakdowns.Cs01);
+      }
+      if (!targetCategoryData.metricBreakdowns.CreditLeverage) {
+        targetCategoryData.metricBreakdowns.CreditLeverage = this.utilityService.deepCopy(this.constants.metricBlockFallback.metricBreakdowns.CreditLeverage);
+      }
     } else {
-      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetLevel = targetCategory.targetCreditLeverage.level.savedUnderlineValue;
-      this.state.targetBreakdownRawData.breakdown[identifier].metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
+      // should never be missing entire block unless data has issue
+      console.error('data issue, missing entire category data for', identifier);
+    }
+    if (targetItem.metric === this.constants.metric.cs01) {
+      targetCategoryData.metricBreakdowns.Cs01.targetLevel = targetCategory.targetCs01.level.savedUnderlineValue;
+      targetCategoryData.metricBreakdowns.Cs01.targetPct = targetCategory.targetCs01.percent.savedUnderlineValue;
+    } else {
+      targetCategoryData.metricBreakdowns.CreditLeverage.targetLevel = targetCategory.targetCreditLeverage.level.savedUnderlineValue;
+      targetCategoryData.metricBreakdowns.CreditLeverage.targetPct = targetCategory.targetCreditLeverage.percent.savedUnderlineValue;
     }
   }
 
