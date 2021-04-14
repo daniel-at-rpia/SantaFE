@@ -491,23 +491,22 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
   &--creditLeverageActiveState {
     #{$blockName} {
       &__utilities {
-        /*
         &-distribution {
-          background: $color_disabled;
-          &-ctas {
-            &-btnContainer {
-              &-btn {
-                &--evenly,
-                &--proportionally {
-                  @include material('none');
-                  @include mix_border_generator(1px,$font_color_inverse);
-                  background-color: $color_disabled;
-                  color: $font_color_inverse;
-                  pointer-events: none;
-                }
-              }
-            }
-          }
+          // background: $color_disabled;
+          // &-ctas {
+          //   &-btnContainer {
+          //     &-btn {
+          //       &--evenly,
+          //       &--proportionally {
+          //         @include material('none');
+          //         @include mix_border_generator(1px,$font_color_inverse);
+          //         background-color: $color_disabled;
+          //         color: $font_color_inverse;
+          //         pointer-events: none;
+          //       }
+          //     }
+          //   }
+          // }
           &-label {
             &--cs01 {
               display: none;
@@ -517,15 +516,14 @@ $structureSetTargetPanel_rating_top_offset: 4.25rem;
             }
           }
         }
-        &-setView {
-          &-btn {
-            @include material('none');
-            background-color: $color_disabled;
-            color: $font_color_inverse;
-            pointer-events: none;
-          }
-        }
-        */
+        // &-setView {
+        //   &-btn {
+        //     @include material('none');
+        //     background-color: $color_disabled;
+        //     color: $font_color_inverse;
+        //     pointer-events: none;
+        //   }
+        // }
       }
     }
   }
