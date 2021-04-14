@@ -65,7 +65,8 @@
       BEStructuringOverrideBaseBlockWithSubPortfolios,
       BEPortfolioDTO,
       BEUpdateOverrideBlock,
-      BEStructuringBreakdownMetricBlockWithSubPortfolios
+      BEStructuringBreakdownMetricBlockWithSubPortfolios,
+      BEStructuringSetViewReturn
     } from 'App/modules/core/models/backend/backend-models.interface';
     import {
       CoreSendNewAlerts,
@@ -234,15 +235,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           this.bicsDataProcessingService.populateServerReturnBICSBreakdownWithRemainingEmptyRows(bicsBreakdown);
         })
         this.updateRawServerReturnCache(targetFundCopy);
-        let deltaRawDataFromCache: BEStructuringFundBlockWithSubPortfolios = null;
-        if (!!this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope] && this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].length > 0) {
-          deltaRawDataFromCache = this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].find((eachFund) => {
-            return eachFund.portfolioId === targetFund.portfolioId;
-          });
-        }
-        this.loadFund(
-          this.extractSubPortfolioFromFundReturn(targetFundCopy), 
-          !!deltaRawDataFromCache ? this.extractSubPortfolioFromFundReturn(deltaRawDataFromCache) : null
+        this.refreshMainPanelUIWithNewData(
+          this.state.fetchResult.rawServerReturnCache,
+          this.state.activeDeltaScope,
+          [targetFundCopy.portfolioId]
         );
       }
     });
@@ -413,8 +409,6 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   }
 
   private updateViewData(data: StructureSetViewTransferPack) {
-    const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
-    this.loadStencilFunds();
     const { bucket, view, displayCategory} = data;
     const payload: PayloadSetView = {
       buckets: bucket,
@@ -433,25 +427,58 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
-        this.updateRawServerReturnWithRawDataForAllRows(serverReturn);
-        this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
-        this.refreshMainPanelUIWithNewData(this.state.fetchResult.rawServerReturnCache, this.constants.deltaScope.dod);
-        const completeAlertMessage = `Successfully updated ${messageDetails}`;
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-        this.restfulCommService.logEngagement(
-          this.restfulCommService.engagementMap.portfolioStructureSetView,
-          null,
-          `View value for ${displayCategory} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
-          'Portfolio Structure Breakdown'
-        )
+      tap((serverReturn: BEStructuringSetViewReturn) => {
+        if (!!serverReturn) {
+          const updatedFunds = [];
+          for (const eachFundId in serverReturn) {
+            updatedFunds.push(eachFundId);
+            const eachFundReturn = serverReturn[eachFundId];
+            if (eachFundReturn.portfolioBreakdown) {
+              for (const eachBucketOptionValues in eachFundReturn.portfolioBreakdown) {
+                this.updateDataInRawServerReturnCache(
+                  eachFundReturn.portfolioBreakdown[eachBucketOptionValues],
+                  this.constants.currentDeltaScope,
+                  false
+                );
+              }
+            }
+            if (eachFundReturn.portfolioOverride) {
+              for (const eachBucketOption in eachFundReturn.portfolioOverride) {
+                for (const eachBucketOptionValues in eachFundReturn.portfolioOverride[eachBucketOption]) {
+                  this.updateDataInRawServerReturnCache(
+                    eachFundReturn.portfolioOverride[eachBucketOption][eachBucketOptionValues],
+                    this.constants.currentDeltaScope,
+                    true
+                  );
+                }
+              }
+            }
+          }
+          const completeAlertMessage = `Successfully updated ${messageDetails}`;
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+          this.restfulCommService.logEngagement(
+            this.restfulCommService.engagementMap.portfolioStructureSetView,
+            null,
+            `View value for ${displayCategory} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
+            'Portfolio Structure Breakdown'
+          );
+          this.refreshMainPanelUIWithNewData(
+            this.state.fetchResult.rawServerReturnCache,
+            this.state.activeDeltaScope,
+            updatedFunds
+          );
+        } else {
+          // no need to do anything except showing the error prompt, the best way is to expect the user to refresh
+          const completeAlertMessage = `Failed to update ${messageDetails}, please refresh page.`;
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Failure', `${completeAlertMessage}`, null);
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        }
       }),
       catchError(err => {
         setTimeout(() => {
           this.state.fetchResult.fetchFundDataFailed = true;
           this.state.fetchResult.fetchFundDataFailedError = err.message;
-          this.state.fetchResult.fundList = currentFunds;
           const completeAlertMessage = `Unable to update ${messageDetails}`;
           const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', completeAlertMessage, null);
           alert.state.isError = true;
@@ -966,6 +993,15 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
             }
           }
         }
+      } else {
+        const updatedBreakdownRawData = updateData as BEStructuringBreakdownBlockWithSubPortfolios;
+        if (existingFundDeltaData.breakdowns) {
+          for (const eachBreakdownOption in existingFundDeltaData.breakdowns) {
+            if (updatedBreakdownRawData.groupOption === eachBreakdownOption) {
+              existingFundDeltaData.breakdowns[eachBreakdownOption] = updatedBreakdownRawData;
+            }
+          }
+        }
       }
     }
   }
@@ -1056,11 +1092,11 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     if (portfolioIDs.length > 0) {
       portfolioIDs.forEach(portfolioID => {
         const currentFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, this.constants.currentDeltaScope);
-        const deltaFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
-        if (!!currentFund && !!deltaFund) {
+        const deltaFund = delta ? this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta) : null;
+        if (!!currentFund) {
           this.loadFund(
             this.extractSubPortfolioFromFundReturn(currentFund),
-            this.extractSubPortfolioFromFundReturn(deltaFund)
+            deltaFund ? this.extractSubPortfolioFromFundReturn(deltaFund) : null
           );
         }
       })
@@ -1068,7 +1104,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       // Default: refresh all the funds
       this.processStructureData(
         this.extractSubPortfolioFromFullServerReturn(rawData.Now),
-        this.extractSubPortfolioFromFullServerReturn(rawData[delta])
+        !!delta ? this.extractSubPortfolioFromFullServerReturn(rawData[delta]) : null
       );
     }
   }

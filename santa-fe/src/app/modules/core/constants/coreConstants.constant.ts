@@ -40,7 +40,7 @@ export const APIUrlMap = {
   createPortfolioOverrides: 'portfolioStructuring/create-portfolio-overrides',
   deletePortfolioOverrides: 'portfolioStructuring/delete-portfolio-overrides',
   getViews: 'portfolioStructuring/get-analyst-views',
-  setView: 'portfolioStructuring/set-analyst-view',
+  setView: 'portfolioStructuring/set-analyst-views',
   getAllTraceTrades: 'TraceTrade/get-all-trace-trades',
   clearPortfolioBreakdown: 'portfolioStructuring/clear-portfolio-breakdown',
   createPortfolioOverridesForAllPortfolios: 'portfolioStructuring/create-portfolio-overrides-for-all-portfolios'

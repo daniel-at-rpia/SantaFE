@@ -812,9 +812,7 @@ export interface BEStructuringSetViewReturn {
 
 interface BEStructuringSetViewReturnEntry {
   portfolioBreakdown?: {
-    [bucketOptions: string]: {
-      [bucketOptionsValues: string]: BEStructuringBreakdownBlockWithSubPortfolios;
-    }
+    [bucketOptionsValues: string]: BEStructuringBreakdownBlockWithSubPortfolios;
   }
   portfolioOverride?: {
     [bucketOptions: string]: {
