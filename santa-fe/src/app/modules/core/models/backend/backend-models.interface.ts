@@ -705,35 +705,15 @@ export interface BEStructuringOverrideBlockWithSubPortfolios {
 
 export interface BEStructuringBreakdownMetricBlockWithSubPortfolios extends Omit<BEStructuringBreakdownMetricBlock, 'metricBreakdowns'>{
   metricBreakdowns: {
-    All?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
-    NonHedging?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
-    NonShortCarry?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
-    ShortCarry?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
+    All?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
+    NonHedging?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
+    NonShortCarry?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
+    ShortCarry?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
   }
 }
 
 export interface BEStructuringBreakdownMetricBlock {
-  metricBreakdowns: {
-    CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-    Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-    CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-  },
+  metricBreakdowns: BEStructuringBreakdownMetricBlockMultiEntryBlock,
   view?: string;
   simpleBucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
     [property: string]: Array<string>;
@@ -742,6 +722,12 @@ export interface BEStructuringBreakdownMetricBlock {
     [property: string]: Array<string>;
   }
   portfolioOverrideId?: string;
+}
+
+interface BEStructuringBreakdownMetricBlockMultiEntryBlock {
+  CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
+  Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
+  CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
 }
 
 export interface BEStructuringBreakdownMetricSingleEntryBlock {
@@ -819,3 +805,20 @@ export interface BECreateOverrideBlock {
 }
 
 export type BEUpdateOverrideBlock = Array<BEStructuringOverrideBaseBlockWithSubPortfolios>;
+
+export interface BEStructuringSetViewReturn {
+  [portfolioId: string]: BEStructuringSetViewReturnEntry;
+}
+
+interface BEStructuringSetViewReturnEntry {
+  portfolioBreakdown?: {
+    [bucketOptions: string]: {
+      [bucketOptionsValues: string]: BEStructuringBreakdownBlockWithSubPortfolios;
+    }
+  }
+  portfolioOverride?: {
+    [bucketOptions: string]: {
+      [bucketOptionsValues: string]: BEStructuringOverrideBaseBlockWithSubPortfolios;
+    }
+  }
+}

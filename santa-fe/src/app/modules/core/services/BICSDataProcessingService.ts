@@ -16,7 +16,8 @@ import {
   BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
   BICS_BREAKDOWN_FRONTEND_KEY,
-  DeltaScope
+  DeltaScope,
+  StructureMetricBlockFallback
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
@@ -216,12 +217,28 @@ export class BICSDataProcessingService {
     portfolioId: number,
     level: number,
     code: string
-  ): BEStructuringBreakdownMetricBlock | null {
+  ): BEStructuringBreakdownMetricBlock {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
     if (!!rawData) {
       const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
-      const targetRawData = rawData[groupOption].breakdown[code];
+      const targetRawData: BEStructuringBreakdownMetricBlock = rawData[groupOption].breakdown[code];
+      if (!!targetRawData && !!targetRawData.metricBreakdowns) {
+        if (!targetRawData.metricBreakdowns.CreditDuration) {
+          targetRawData.metricBreakdowns.CreditDuration = StructureMetricBlockFallback.metricBreakdowns.CreditDuration;
+        }
+        if (!targetRawData.metricBreakdowns.Cs01) {
+          targetRawData.metricBreakdowns.Cs01 = StructureMetricBlockFallback.metricBreakdowns.Cs01;
+        }
+        if (!targetRawData.metricBreakdowns.CreditLeverage) {
+          targetRawData.metricBreakdowns.CreditLeverage = StructureMetricBlockFallback.metricBreakdowns.CreditLeverage;
+        }
+        return targetRawData;
+      } else {
+        return StructureMetricBlockFallback;
+      }
       return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
+    } else {
+      return StructureMetricBlockFallback;
     }
   }
 
@@ -419,7 +436,7 @@ export class BICSDataProcessingService {
       }
     }
   }
-
+  
   private setBreakdownListProperties(
     breakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO>,
     parentRow: DTOs.StructurePortfolioBreakdownRowDTO
