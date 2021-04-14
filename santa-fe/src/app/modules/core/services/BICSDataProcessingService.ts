@@ -16,13 +16,15 @@ import {
   BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
   BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
   BICS_BREAKDOWN_FRONTEND_KEY,
-  DeltaScope
+  DeltaScope,
+  StructureMetricBlockFallback
 } from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
 import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
+import { PortfolioStructureBreakdownRowEmptySample } from 'Structure/stubs/structure.stub';
 @Injectable()
 
 export class BICSDataProcessingService {
@@ -215,12 +217,28 @@ export class BICSDataProcessingService {
     portfolioId: number,
     level: number,
     code: string
-  ): BEStructuringBreakdownMetricBlock | null {
+  ): BEStructuringBreakdownMetricBlock {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
     if (!!rawData) {
       const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
-      const targetRawData = rawData[groupOption].breakdown[code];
+      const targetRawData: BEStructuringBreakdownMetricBlock = rawData[groupOption].breakdown[code];
+      if (!!targetRawData && !!targetRawData.metricBreakdowns) {
+        if (!targetRawData.metricBreakdowns.CreditDuration) {
+          targetRawData.metricBreakdowns.CreditDuration = StructureMetricBlockFallback.metricBreakdowns.CreditDuration;
+        }
+        if (!targetRawData.metricBreakdowns.Cs01) {
+          targetRawData.metricBreakdowns.Cs01 = StructureMetricBlockFallback.metricBreakdowns.Cs01;
+        }
+        if (!targetRawData.metricBreakdowns.CreditLeverage) {
+          targetRawData.metricBreakdowns.CreditLeverage = StructureMetricBlockFallback.metricBreakdowns.CreditLeverage;
+        }
+        return targetRawData;
+      } else {
+        return StructureMetricBlockFallback;
+      }
       return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
+    } else {
+      return StructureMetricBlockFallback;
     }
   }
 
@@ -402,6 +420,21 @@ export class BICSDataProcessingService {
         }
       });
     });
+  }
+
+  public populateServerReturnBICSBreakdownWithRemainingEmptyRows(rawData: BEStructuringBreakdownBlockWithSubPortfolios) {
+    // this is to allow FE to populate all rows that are not sent by the BE due to performance-related reasons
+    const level = rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER).length === 2 ? +(rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1]) : null;
+    if (level) {
+      const categoryCodes = this.getCategoryCodesBasedOnLevel(level);
+      if (categoryCodes.length > 0) {
+        categoryCodes.forEach(code => {
+          if (!rawData.breakdown[code]) {
+            rawData.breakdown[code] = PortfolioStructureBreakdownRowEmptySample;
+          }
+        })
+      }
+    }
   }
   
   private setBreakdownListProperties(
