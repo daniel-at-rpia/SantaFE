@@ -62,7 +62,8 @@
       BEStructuringOverrideBaseBlockWithSubPortfolios,
       BEPortfolioDTO,
       BEUpdateOverrideBlock,
-      BEStructuringBreakdownMetricBlockWithSubPortfolios
+      BEStructuringBreakdownMetricBlockWithSubPortfolios,
+      BEStructuringSetViewReturn
     } from 'App/modules/core/models/backend/backend-models.interface';
     import {
       CoreSendNewAlerts,
@@ -419,8 +420,8 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   }
 
   private updateViewData(data: StructureSetViewTransferPack) {
-    const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
-    this.loadStencilFunds();
+    // const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
+    // this.loadStencilFunds();
     const { bucket, view, displayCategory} = data;
     const payload: PayloadSetView = {
       buckets: bucket,
@@ -439,22 +440,44 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     this.state.fetchResult.fetchFundDataFailed && this.resetAPIErrors();
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
-      tap((serverReturn: Array<BEStructuringFundBlockWithSubPortfolios>) => {
-        this.updateRawServerReturnWithRawDataForAllRows(serverReturn);
-        this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
-        this.processStructureData(
-          this.extractSubPortfolioFromFullServerReturn(serverReturn),
-          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
-        );
-        const completeAlertMessage = `Successfully updated ${messageDetails}`;
-        const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
-        this.store$.dispatch(new CoreSendNewAlerts([alert]));
-        this.restfulCommService.logEngagement(
-          this.restfulCommService.engagementMap.portfolioStructureSetView,
-          null,
-          `View value for ${displayCategory} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
-          'Portfolio Structure Breakdown'
-        )
+      tap((serverReturn: BEStructuringSetViewReturn) => {
+        // this.updateRawServerReturnWithRawDataForAllRows(serverReturn);
+        // this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
+        // this.processStructureData(
+        //   this.extractSubPortfolioFromFullServerReturn(serverReturn),
+        //   this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
+        // );
+        if (!!serverReturn) {
+          for (const eachFundId in serverReturn) {
+            const eachFundReturn = serverReturn[eachFundId];
+            if (eachFundReturn.portfolioOverride) {
+              for (const eachBucketOption in eachFundReturn.portfolioOverride) {
+                for (const eachBucketOptionValues in eachFundReturn.portfolioOverride[eachBucketOption]) {
+                  this.updateDataInRawServerReturnCache(
+                    eachFundReturn.portfolioOverride[eachBucketOption][eachBucketOptionValues],
+                    this.constants.currentDeltaScope,
+                    true
+                  );
+                }
+              }
+            }
+          }
+          const completeAlertMessage = `Successfully updated ${messageDetails}`;
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Updated', `${completeAlertMessage}`, null);
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+          this.restfulCommService.logEngagement(
+            this.restfulCommService.engagementMap.portfolioStructureSetView,
+            null,
+            `View value for ${displayCategory} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
+            'Portfolio Structure Breakdown'
+          );
+          this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+        } else {
+          // no need to do anything except showing the error prompt, the best way is to expect the user to refresh
+          const completeAlertMessage = `Failed to update ${messageDetails}, please refresh page.`;
+          const alert = this.dtoService.formSystemAlertObject('Structuring', 'Failure', `${completeAlertMessage}`, null);
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+        }
       }),
       catchError(err => {
         setTimeout(() => {
