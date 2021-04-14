@@ -420,8 +420,6 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   }
 
   private updateViewData(data: StructureSetViewTransferPack) {
-    // const currentFunds = this.utilityService.deepCopy(this.state.fetchResult.fundList);
-    // this.loadStencilFunds();
     const { bucket, view, displayCategory} = data;
     const payload: PayloadSetView = {
       buckets: bucket,
@@ -450,6 +448,15 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         if (!!serverReturn) {
           for (const eachFundId in serverReturn) {
             const eachFundReturn = serverReturn[eachFundId];
+            if (eachFundReturn.portfolioBreakdown) {
+              for (const eachBucketOptionValues in eachFundReturn.portfolioBreakdown) {
+                this.updateDataInRawServerReturnCache(
+                  eachFundReturn.portfolioBreakdown[eachBucketOptionValues],
+                  this.constants.currentDeltaScope,
+                  false
+                );
+              }
+            }
             if (eachFundReturn.portfolioOverride) {
               for (const eachBucketOption in eachFundReturn.portfolioOverride) {
                 for (const eachBucketOptionValues in eachFundReturn.portfolioOverride[eachBucketOption]) {
@@ -483,7 +490,6 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
         setTimeout(() => {
           this.state.fetchResult.fetchFundDataFailed = true;
           this.state.fetchResult.fetchFundDataFailedError = err.message;
-          this.state.fetchResult.fundList = currentFunds;
           const completeAlertMessage = `Unable to update ${messageDetails}`;
           const alert = this.dtoService.formSystemAlertObject('Structuring', 'ERROR', completeAlertMessage, null);
           alert.state.isError = true;
@@ -986,6 +992,15 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                   }
                 }
               }
+            }
+          }
+        }
+      } else {
+        const updatedBreakdownRawData = updateData as BEStructuringBreakdownBlockWithSubPortfolios;
+        if (existingFundDeltaData.breakdowns) {
+          for (const eachBreakdownOption in existingFundDeltaData.breakdowns) {
+            if (updatedBreakdownRawData.groupOption === eachBreakdownOption) {
+              existingFundDeltaData.breakdowns[eachBreakdownOption] = updatedBreakdownRawData;
             }
           }
         }
