@@ -235,15 +235,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           this.bicsDataProcessingService.populateServerReturnBICSBreakdownWithRemainingEmptyRows(bicsBreakdown);
         })
         this.updateRawServerReturnCache(targetFundCopy);
-        let deltaRawDataFromCache: BEStructuringFundBlockWithSubPortfolios = null;
-        if (!!this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope] && this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].length > 0) {
-          deltaRawDataFromCache = this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope].find((eachFund) => {
-            return eachFund.portfolioId === targetFund.portfolioId;
-          });
-        }
-        this.loadFund(
-          this.extractSubPortfolioFromFundReturn(targetFundCopy), 
-          !!deltaRawDataFromCache ? this.extractSubPortfolioFromFundReturn(deltaRawDataFromCache) : null
+        this.refreshMainPanelUIWithNewData(
+          this.state.fetchResult.rawServerReturnCache,
+          this.state.activeDeltaScope,
+          [targetFundCopy.portfolioId]
         );
       }
     });
