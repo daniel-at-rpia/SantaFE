@@ -2667,7 +2667,13 @@ export class DTOService {
       for (let code in selectedBreakdown.breakdown) {
         const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
         const eachCategory = selectedBreakdown.breakdown[code];
-        if (!!eachCategory && !!eachCategory.metricBreakdowns && !!eachCategory.metricBreakdowns.Cs01 && !!eachCategory.metricBreakdowns.CreditLeverage && !!isCodeValid) {
+        if (!!eachCategory && !!eachCategory.metricBreakdowns && !!isCodeValid) {
+          if (!eachCategory.metricBreakdowns.Cs01) {
+            eachCategory.metricBreakdowns.Cs01 = this.utility.deepCopy(StructureMetricBlockFallback.metricBreakdowns.Cs01);
+          }
+          if (!eachCategory.metricBreakdowns.CreditLeverage) {
+            eachCategory.metricBreakdowns.CreditLeverage = this.utility.deepCopy(StructureMetricBlockFallback.metricBreakdowns.CreditLeverage);
+          }
           if (
             eachCategory.metricBreakdowns.Cs01.targetLevel >= 1000 || 
             eachCategory.metricBreakdowns.Cs01.targetLevel <= -1000 || 
