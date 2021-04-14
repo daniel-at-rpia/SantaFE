@@ -433,14 +433,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     this.restfulCommService.callAPI(endpoint, { req: 'POST' }, payload, false, false).pipe(
       first(),
       tap((serverReturn: BEStructuringSetViewReturn) => {
-        // this.updateRawServerReturnWithRawDataForAllRows(serverReturn);
-        // this.state.fetchResult.rawServerReturnCache.Now = serverReturn;
-        // this.processStructureData(
-        //   this.extractSubPortfolioFromFullServerReturn(serverReturn),
-        //   this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Dod)
-        // );
         if (!!serverReturn) {
+          const updatedFunds = [];
           for (const eachFundId in serverReturn) {
+            updatedFunds.push(eachFundId);
             const eachFundReturn = serverReturn[eachFundId];
             if (eachFundReturn.portfolioBreakdown) {
               for (const eachBucketOptionValues in eachFundReturn.portfolioBreakdown) {
@@ -472,7 +468,11 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
             `View value for ${displayCategory} updated as ${displayViewValue}. Set by ${this.state.ownerInitial}`,
             'Portfolio Structure Breakdown'
           );
-          this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+          this.refreshMainPanelUIWithNewData(
+            this.state.fetchResult.rawServerReturnCache,
+            this.state.activeDeltaScope,
+            updatedFunds
+          );
         } else {
           // no need to do anything except showing the error prompt, the best way is to expect the user to refresh
           const completeAlertMessage = `Failed to update ${messageDetails}, please refresh page.`;
@@ -1097,11 +1097,11 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     if (portfolioIDs.length > 0) {
       portfolioIDs.forEach(portfolioID => {
         const currentFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, this.constants.currentDeltaScope);
-        const deltaFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
-        if (!!currentFund && !!deltaFund) {
+        const deltaFund = delta ? this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta) : null;
+        if (!!currentFund) {
           this.loadFund(
             this.extractSubPortfolioFromFundReturn(currentFund),
-            this.extractSubPortfolioFromFundReturn(deltaFund)
+            deltaFund ? this.extractSubPortfolioFromFundReturn(deltaFund) : null
           );
         }
       })
@@ -1109,7 +1109,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
       // Default: refresh all the funds
       this.processStructureData(
         this.extractSubPortfolioFromFullServerReturn(rawData.Now),
-        this.extractSubPortfolioFromFullServerReturn(rawData[delta])
+        !!delta ? this.extractSubPortfolioFromFullServerReturn(rawData[delta]) : null
       );
     }
   }
