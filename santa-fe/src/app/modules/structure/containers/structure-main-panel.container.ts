@@ -16,7 +16,10 @@
     } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { StructureMainPanelState } from 'FEModels/frontend-page-states.interface';
-    import { StructureFullDataLoadedEvent } from 'Structure/actions/structure.actions';
+    import {
+      StructureFullDataLoadedEvent,
+      StructureReloadFundDataPostEditEvent
+    } from 'Structure/actions/structure.actions';
     import { selectUserInitials } from 'Core/selectors/core.selectors';
     import {
       selectReloadFundDataPostEdit,
@@ -281,10 +284,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe((activeFilter) => {
       this.state.activeSubPortfolioFilter = activeFilter;
       if (!!this.state.fetchResult.rawServerReturnCache) {
-        this.processStructureData(
-          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
-        );
+        this.refreshMainPanelUIWithNewData(this.state.fetchResult.rawServerReturnCache, this.state.activeDeltaScope);
       }
     });
     this.subscriptions.activeDeltaScopeSub = this.store$.pipe(
@@ -295,10 +295,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe((activeScope) => {
       this.state.activeDeltaScope = activeScope;
       if (!!this.state.fetchResult.rawServerReturnCache) {
-        this.processStructureData(
-          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-          this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[activeScope])
-        );
+        this.refreshMainPanelUIWithNewData(this.state.fetchResult.rawServerReturnCache, activeScope);
       }
     });
     this.subscriptions.overrideDataTransferSub = this.store$.pipe(
@@ -389,10 +386,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
           }
         }
         this.state.fetchResult.rawServerReturnCache = serverReturn;
-        this.processStructureData(
-          this.extractSubPortfolioFromFullServerReturn(serverReturn.Now),
-          this.extractSubPortfolioFromFullServerReturn(serverReturn[this.state.activeDeltaScope])
-        );
+        this.refreshMainPanelUIWithNewData(this.state.fetchResult.rawServerReturnCache, this.state.activeDeltaScope);
         const isViewingHistoricalData = !this.state.currentDataDatestamp.isSame(moment(), 'day');
         this.state.fetchResult.fundList.forEach((eachFund) => {
           eachFund.state.isViewingHistoricalData = isViewingHistoricalData;
@@ -814,7 +808,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     return fund;
   }
 
-  private updateOverrides(payload: PayloadModifyOverrides) {
+  private updateOverrides(
+    payload: PayloadModifyOverrides,
+    portfolioID: number
+  ) {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverrides, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: BEUpdateOverrideBlock) => {
@@ -834,7 +831,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 )]
               )
             );
-            this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+            this.initiateFundUIRefreshFromOverrideAPICalls(this.state.fetchResult.rawServerReturnCache, this.state.activeDeltaScope, [portfolioID]);
           }
         }
       }),
@@ -856,7 +853,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe()
   }
 
-  private createOverrides(payload: PayloadModifyOverrides) {
+  private createOverrides(
+    payload: PayloadModifyOverrides,
+    portfolioID: number
+  ) {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.createPortfolioOverrides, {req: 'POST'}, payload).pipe(
       first(),
       tap((serverReturn: BECreateOverrideBlock) => {
@@ -874,7 +874,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                 )]
               )
             );
-            this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+            this.initiateFundUIRefreshFromOverrideAPICalls(this.state.fetchResult.rawServerReturnCache, this.state.activeDeltaScope, [portfolioID]);
           }
         }
       }),
@@ -896,7 +896,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     ).subscribe()
   }
 
-  private deleteOverrides(payload: PayloadModifyOverrides) {
+  private deleteOverrides(
+    payload: PayloadModifyOverrides,
+    portfolioID: number
+  ) {
     const formattedPayloadList = payload.portfolioOverrides.map((override: BEStructuringOverrideBaseBlockWithSubPortfolios) => ({portfolioId: override.portfolioId, simpleBucket: override.simpleBucket}));
     const modifiedPayloadFull: PayloadModifyOverrides = {
       portfolioOverrides: formattedPayloadList
@@ -925,7 +928,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
                   )]
                 )
               );
-              this.refreshMainPanelUIWithNewDataForOverrideAPICalls();
+              this.initiateFundUIRefreshFromOverrideAPICalls(this.state.fetchResult.rawServerReturnCache, this.state.activeDeltaScope, [portfolioID]);
             }
           }
         }
@@ -1009,10 +1012,10 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
   }
 
   private makeOverrideAPICalls(overridesData: AdhocPacks.StructureSetTargetOverrideTransferPack) {
-    const { updatePayload, createPayload, deletePayload } = overridesData;
-    updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload);
-    createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload);
-    deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload);
+    const { updatePayload, createPayload, deletePayload, portfolioID } = overridesData;
+    updatePayload.portfolioOverrides.length > 0 && this.updateOverrides(updatePayload, portfolioID);
+    createPayload.portfolioOverrides.length > 0 && this.createOverrides(createPayload, portfolioID);
+    deletePayload.portfolioOverrides.length > 0 && this.deleteOverrides(deletePayload, portfolioID);
   }
 
   private makeCreateBulkOverrideAPICall(bulkOverrideData: AdhocPacks.StructureSetBulkOverrideTransferPack) {
@@ -1032,10 +1035,7 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
               )]
             )
           );
-          this.processStructureData(
-            this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-            this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
-          );
+          this.refreshMainPanelUIWithNewData(this.state.fetchResult.rawServerReturnCache, this.state.activeDeltaScope);
         }
       }),
       catchError(err => {
@@ -1079,11 +1079,37 @@ export class StructureMainPanel extends SantaContainerComponentBase implements O
     }
   }
 
-  private refreshMainPanelUIWithNewDataForOverrideAPICalls() {
+  private initiateFundUIRefreshFromOverrideAPICalls(
+    rawData: BEGetPortfolioStructureServerReturn,
+    delta: string,
+    portfolioIDs: Array<number> = []
+  ) {
     if (this.state.overrideModifications.callCount === this.state.overrideModifications.totalNumberOfNecessaryCalls) {
+      this.refreshMainPanelUIWithNewData(rawData, delta, portfolioIDs)
+    }
+  }
+
+  private refreshMainPanelUIWithNewData(
+    rawData: BEGetPortfolioStructureServerReturn,
+    delta: string,
+    portfolioIDs: Array<number> = []
+  ) {
+    if (portfolioIDs.length > 0) {
+      portfolioIDs.forEach(portfolioID => {
+        const currentFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, this.constants.currentDeltaScope);
+        const deltaFund = this.getDeltaSpecificFundFromRawServerReturnCache(portfolioID, delta);
+        if (!!currentFund && !!deltaFund) {
+          this.loadFund(
+            this.extractSubPortfolioFromFundReturn(currentFund),
+            this.extractSubPortfolioFromFundReturn(deltaFund)
+          );
+        }
+      })
+    } else {
+      // Default: refresh all the funds
       this.processStructureData(
-        this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache.Now),
-        this.extractSubPortfolioFromFullServerReturn(this.state.fetchResult.rawServerReturnCache[this.state.activeDeltaScope])
+        this.extractSubPortfolioFromFullServerReturn(rawData.Now),
+        this.extractSubPortfolioFromFullServerReturn(rawData[delta])
       );
     }
   }
