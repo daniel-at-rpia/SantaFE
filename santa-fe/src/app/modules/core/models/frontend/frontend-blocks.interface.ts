@@ -112,6 +112,7 @@ export interface SecurityGroupPieChartColorSchemeBlock {
 export interface SecurityDefinitionFilterBlock {
   isSelected: boolean;  // means it is selected for filtering
   isFilteredOut: boolean;  // means it is hidden/disabled in the UI, sry about this naming failure, it's just not worth it to mass-rename it in the code
+  isDeepestLevel?: boolean; // for BICS only
   displayLabel: string;
   bicsLevel?: number;  // only exist for consolidated bics options
   shortKey: string;
@@ -318,6 +319,7 @@ export interface PortfolioBreakdownCategoryBlock {
   displayedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used to indicate which sub levels have targets
   editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
+  portfolioOverrideId: string;
 }
 
 export interface GlobalNavLegendBlock {
@@ -376,7 +378,10 @@ export interface BICSCategorizationBlock {
   bicsLevel1: BEStructuringBreakdownBlock,
   bicsLevel2?: BEStructuringBreakdownBlock,
   bicsLevel3?: BEStructuringBreakdownBlock,
-  bicsLevel4?: BEStructuringBreakdownBlock
+  bicsLevel4?: BEStructuringBreakdownBlock,
+  bicsLevel5?: BEStructuringBreakdownBlock,
+  bicsLevel6?: BEStructuringBreakdownBlock,
+  bicsLevel7?: BEStructuringBreakdownBlock
 }
 
 export interface StructureBucketDataBlock {

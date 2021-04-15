@@ -586,6 +586,30 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     securityDTOAttr: 'bicsLevel4',
     securityDTOAttrBlock: 'bics'
   },
+  BICS_LEVEL_5: {
+    key: 'BICS_LEVEL_5',
+    displayName: 'BICS Lv.5',
+    icon: 'fal fa-industry-alt',
+    optionList: [],
+    securityDTOAttr: 'bicsLevel5',
+    securityDTOAttrBlock: 'bics'
+  },
+  BICS_LEVEL_6: {
+    key: 'BICS_LEVEL_6',
+    displayName: 'BICS Lv.6',
+    icon: 'fal fa-industry-alt',
+    optionList: [],
+    securityDTOAttr: 'bicsLevel6',
+    securityDTOAttrBlock: 'bics'
+  },
+  BICS_LEVEL_7: {
+    key: 'BICS_LEVEL_7',
+    displayName: 'BICS Lv.7',
+    icon: 'fal fa-industry-alt',
+    optionList: [],
+    securityDTOAttr: 'bicsLevel7',
+    securityDTOAttrBlock: 'bics'
+  },
   TICKER: {
     key: 'TICKER',
     displayName: 'Ticker',

@@ -1365,6 +1365,7 @@ export class UtilityService {
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
           matchExistBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
+          matchExistBreakdown.breakdown[categoryKey].portfolioOverrideId = eachRawOverride.portfolioOverrideId;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
             groupOption: overrideBucketIdentifier,
@@ -1380,6 +1381,7 @@ export class UtilityService {
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
           newConvertedBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           newConvertedBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
+          newConvertedBreakdown.breakdown[categoryKey].portfolioOverrideId = eachRawOverride.portfolioOverrideId;
           breakdownList.push(newConvertedBreakdown);
         }
       });
@@ -1531,8 +1533,12 @@ export class UtilityService {
 
     public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
       const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
-      const isDiveInAvailable = !isNonDiveInCategory && row.data.bicsLevel < 4 ? true : false;
-      return isDiveInAvailable;
+      if (!isNonDiveInCategory && row.data.code) {
+        const subLevelCategories = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(row.data.code);
+        return subLevelCategories.length > 0;
+      } else {
+        return false;
+      }
     }
 
     public formViewPayloadTransferPackForSingleEdit(data: AdhocPacks.StructureRowSetViewData): AdhocPacks.StructureSetViewTransferPack {
@@ -1546,7 +1552,7 @@ export class UtilityService {
         formattedDisplayCategory = row.data.displayCategory;
       }
       const viewData: AdhocPacks.StructureSetViewTransferPack = {
-        bucket: [row.data.bucket],
+        bucket: !!row.data.portfolioOverrideId ? [row.data.simpleBucket] : [row.data.bucket],
         view: view !== row.data.view ? [view] : [null],
         displayCategory: formattedDisplayCategory
       }

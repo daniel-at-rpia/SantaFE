@@ -94,6 +94,9 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                     "bicsLevel2": "Banking",
                     "bicsLevel3": "Banking",
                     "bicsLevel4": "Banks",
+                    "bicsLevel5": "Corporate Banks",
+                    "bicsLevel6": "",
+                    "bicsLevel7": "",
                     "name": "UCGIM 6.125 04/19/2021 EUR EMTN SUBORDINATE",
                     "genericSeniority": "SUB",
                     "globalIdentifier": "XS0618847775",
@@ -349,6 +352,9 @@ export const PortfolioList: BEFetchAllTradeDataReturn = {
                     "bicsLevel2": "Materials",
                     "bicsLevel3": "Containers & Packaging",
                     "bicsLevel4": "Containers & Packaging",
+                    "bicsLevel5": "Metal Containers & Packaging",
+                    "bicsLevel6": "Metail Containers",
+                    "bicsLevel7": "",
                     "name": "BLL CDS USD SR 5Y",
                     "genericSeniority": "SR",
                     "globalIdentifier": "BLL CDS USD SR 5Y",
@@ -559,6 +565,9 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -645,6 +654,9 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -731,6 +743,9 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -817,6 +832,9 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   }
 ];
@@ -906,6 +924,9 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -992,6 +1013,9 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -1078,6 +1102,9 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -1164,6 +1191,9 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -1250,6 +1280,9 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   },
   {
@@ -1336,6 +1369,9 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel2": null,
     "bicsLevel3": null,
     "bicsLevel4": null,
+    "bicsLevel5": null,
+    "bicsLevel6": null,
+    "bicsLevel7": null,
     "driver": "Spread"
   }
 ]

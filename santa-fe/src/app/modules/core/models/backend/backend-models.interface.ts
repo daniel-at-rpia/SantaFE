@@ -126,6 +126,9 @@ export interface BESecurityDTO {
   bicsLevel2: string;
   bicsLevel3: string;
   bicsLevel4: string;
+  bicsLevel5: string;
+  bicsLevel6: string;
+  bicsLevel7: string;
   driver: string;
 }
 
@@ -680,6 +683,12 @@ export interface BEStructuringOverrideBaseBlock {
   simpleBucketValues?: string;
   title?: string;
   breakdown?: BEStructuringBreakdownMetricBlock;
+  // These two are currently only being used in updateDataInRawServerReturnCache() for newly-created overrides
+  // Normally what's stored in the cache is what is returned from get-portfolio-structures when the page loads
+  // This includes a specific formatting that we typically don't use or need in the FE (ex. { BicsCode|Ccy: { 10|USD: { // override data}}});
+  // For FE to update the cache manually when create overrides API is called, we need to save these values so that they can be used as reference in order to construct the object in the same way as the BE return
+  rawBucketOptionsText?: string;
+  rawBucketOptionsValuesText?: string;
 }
 
 export interface BEStructuringOverrideBlock {
@@ -696,35 +705,15 @@ export interface BEStructuringOverrideBlockWithSubPortfolios {
 
 export interface BEStructuringBreakdownMetricBlockWithSubPortfolios extends Omit<BEStructuringBreakdownMetricBlock, 'metricBreakdowns'>{
   metricBreakdowns: {
-    All?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
-    NonHedging?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
-    NonShortCarry?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
-    ShortCarry?: {
-      CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-      Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-      CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-    };
+    All?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
+    NonHedging?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
+    NonShortCarry?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
+    ShortCarry?: BEStructuringBreakdownMetricBlockMultiEntryBlock;
   }
 }
 
 export interface BEStructuringBreakdownMetricBlock {
-  metricBreakdowns: {
-    CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
-    Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
-    CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
-  },
+  metricBreakdowns: BEStructuringBreakdownMetricBlockMultiEntryBlock,
   view?: string;
   simpleBucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
     [property: string]: Array<string>;
@@ -732,6 +721,13 @@ export interface BEStructuringBreakdownMetricBlock {
   bucket?: {  // exist merely for being compatible with override block in order to make the override-convertted blocks to pass over data more easily
     [property: string]: Array<string>;
   }
+  portfolioOverrideId?: string;
+}
+
+interface BEStructuringBreakdownMetricBlockMultiEntryBlock {
+  CreditLeverage?: BEStructuringBreakdownMetricSingleEntryBlock;
+  Cs01?: BEStructuringBreakdownMetricSingleEntryBlock;
+  CreditDuration?: BEStructuringBreakdownMetricSingleEntryBlock;
 }
 
 export interface BEStructuringBreakdownMetricSingleEntryBlock {
@@ -739,7 +735,6 @@ export interface BEStructuringBreakdownMetricSingleEntryBlock {
   targetPct: number;
   currentLevel?: number;
   currentPct?: number;
-  indexLevel?: number;
   indexPct?: number;
 }
 
@@ -799,9 +794,29 @@ export interface BESecurityMap {
   [id: string]: Array<string>;
 }
 
-export enum BESubPortfolioFilter {
-  all = 'All',
-  nonHedging = 'NonHedging',
-  nonShortCarry = 'NonShortCarry',
-  shortCarry = 'ShortCarry'
+export interface BECreateOverrideBlock {
+  [delta: string]: {
+    [portfolioId: string]: {
+      [bucketOptions: string] : {
+        [bucketOptionsValues: string]: BEStructuringOverrideBaseBlockWithSubPortfolios;
+      }
+    };
+  }
+}
+
+export type BEUpdateOverrideBlock = Array<BEStructuringOverrideBaseBlockWithSubPortfolios>;
+
+export interface BEStructuringSetViewReturn {
+  [portfolioId: string]: BEStructuringSetViewReturnEntry;
+}
+
+interface BEStructuringSetViewReturnEntry {
+  portfolioBreakdown?: {
+    [bucketOptionsValues: string]: BEStructuringBreakdownBlockWithSubPortfolios;
+  }
+  portfolioOverride?: {
+    [bucketOptions: string]: {
+      [bucketOptionsValues: string]: BEStructuringOverrideBaseBlockWithSubPortfolios;
+    }
+  }
 }

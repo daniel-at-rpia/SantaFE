@@ -62,6 +62,9 @@ export interface SecurityDefinitionMapStub {
   BICS_LEVEL_2: SecurityDefinitionStub;
   BICS_LEVEL_3: SecurityDefinitionStub;
   BICS_LEVEL_4: SecurityDefinitionStub;
+  BICS_LEVEL_5: SecurityDefinitionStub;
+  BICS_LEVEL_6: SecurityDefinitionStub;
+  BICS_LEVEL_7: SecurityDefinitionStub;
   TICKER: SecurityDefinitionStub;
 }
 
