@@ -10,6 +10,16 @@ export enum NavigationModule {
   market = 'market'
 }
 
+export enum PortfolioShortNames {
+  DOF = 'DOF',
+  SOF = 'SOF',
+  STIP = 'STIP',
+  FIP = 'FIP',
+  CIP = 'CIP',
+  AGB = 'AGB',
+  BBB = 'BBB'
+}
+
 export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
   getSecurityIdMap: `security/get-security-identifiers`,

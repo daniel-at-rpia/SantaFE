@@ -10,12 +10,12 @@ import {
   AlertSubTypes,
   AlertTypes,
   NavigationModule,
-  GlobalWorkflowTypes
+  GlobalWorkflowTypes,
+  PortfolioShortNames
 } from 'Core/constants/coreConstants.constant';
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import {
-  PortfolioShortNames,
   PortfolioMetricValues,
   DeltaScope,
   DeltaScopeDisplayText
@@ -304,6 +304,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
     uuid: string;
     displayTitle: string;
+    highlightTitle: string;
     headerOverwrites: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite>;
     searchFilters: Array<Array<SecurityDefinitionDTO>>;  // allowing multiple sets of filters, chained in an "OR" relation, to enable a more complex grouping logic;
     securityExclusionList: Array<string>;  // array of individual securityIds to be excluded on top of "searchFilters"
@@ -960,6 +961,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     module: NavigationModule;
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
+      associatedDisplayTitle?: string;
       filterList?: Array<SecurityDefinitionDTO>;
       activeMetric?: PortfolioMetricValues;
       structureUtilityPanelSnapshot?: StructureUtilityPanelState;

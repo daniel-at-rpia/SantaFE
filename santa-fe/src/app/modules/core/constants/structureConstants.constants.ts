@@ -1,5 +1,6 @@
 import { DTOs, Blocks, AdhocPacks, Stubs } from 'Core/models/frontend';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
 export enum PortfolioView {
   positive = 'Positive',
@@ -15,16 +16,6 @@ export enum PortfolioBreakdownGroupOptions {
   RatingNoNotch = 'Rating',
   SecuritySubType = 'SecuritySubType',
   BICs = 'BICS'
-}
-
-export enum PortfolioShortNames {
-  DOF = 'DOF',
-  SOF = 'SOF',
-  STIP = 'STIP',
-  FIP = 'FIP',
-  CIP = 'CIP',
-  AGB = 'AGB',
-  BBB = 'BBB'
 }
 
 export const PORTFOLIO_ID_TO_SHORTNAMES = {

@@ -1,19 +1,17 @@
-import {
-  TradeFilterConstantStub,
-  SearchShortcutStub,
-  SecurityDefinitionStub
-} from 'FEModels/frontend-stub-models.interface';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-import { SecurityMetricOptions } from 'Core/constants/coreConstants.constant';
+import { Stubs } from 'Core/models/frontend';
+import { SecurityDefinitionMap, FullStrategyList } from 'Core/constants/securityDefinitionConstants.constant';
+import { SecurityMetricOptions, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
-export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
+const allPortfolios: Stubs.SearchShortcutIncludedDefinitionStub = {
+  definitionKey: 'PORTFOLIO',
+  groupByActive: false,
+  selectedOptions: [PortfolioShortNames.DOF, PortfolioShortNames.SOF, PortfolioShortNames.STIP, PortfolioShortNames.FIP, PortfolioShortNames.CIP, PortfolioShortNames.AGB, PortfolioShortNames.BBB]
+};
+
+export const PortfolioShortcuts: Array<Stubs.SearchShortcutStub> = [{
     displayTitle: 'All Portfolios',
     includedDefinitions: [
-      {
-        definitionKey: 'PORTFOLIO',
-        groupByActive: false,
-        selectedOptions: ['DOF', 'SOF', 'STIP', 'FIP', 'CIP', 'AGB', 'BBB']
-      }
+      allPortfolios
     ],
     isHero: true
   },
@@ -23,7 +21,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['DOF', 'SOF']
+        selectedOptions: [PortfolioShortNames.DOF, PortfolioShortNames.SOF]
       }
     ],
     isMajor: true
@@ -33,7 +31,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['STIP', 'FIP', 'CIP', 'AGB', 'BBB']
+        selectedOptions: [PortfolioShortNames.STIP, PortfolioShortNames.FIP, PortfolioShortNames.CIP, PortfolioShortNames.AGB, PortfolioShortNames.BBB]
       }
     ],
     isMajor: true
@@ -43,7 +41,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['DOF']
+        selectedOptions: [PortfolioShortNames.DOF]
       }
     ]
   },{
@@ -52,7 +50,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['SOF']
+        selectedOptions: [PortfolioShortNames.SOF]
       }
     ]
   },{
@@ -61,7 +59,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['STIP']
+        selectedOptions: [PortfolioShortNames.STIP]
       }
     ]
   },{
@@ -70,7 +68,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['FIP']
+        selectedOptions: [PortfolioShortNames.FIP]
       }
     ]
   },{
@@ -79,7 +77,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['CIP']
+        selectedOptions: [PortfolioShortNames.CIP]
       }
     ]
   },{
@@ -88,7 +86,7 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['AGB']
+        selectedOptions: [PortfolioShortNames.AGB]
       }
     ]
   },{
@@ -97,13 +95,13 @@ export const PortfolioShortcuts: Array<SearchShortcutStub> = [{
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['BBB']
+        selectedOptions: [PortfolioShortNames.BBB]
       }
     ]
   }
 ];
 
-export const OwnershipShortcuts: Array<SearchShortcutStub> = [
+export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
   {
     displayTitle: 'All Securties I Own',
     includedDefinitions: [
@@ -111,7 +109,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'OWNER',
         groupByActive: false,
         selectedOptions: ['PLACEHOLDER']
-      }
+      },
+      allPortfolios
     ],
     isHero: true
   },{
@@ -121,7 +120,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['AG']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Aaron',
@@ -130,7 +130,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['AY']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Brian',
@@ -139,7 +140,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['BT']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Daanish',
@@ -148,7 +150,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DA']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'David Galica',
@@ -157,7 +160,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DG']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Derrick',
@@ -166,7 +170,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DJ']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'David Matheson',
@@ -175,7 +180,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['DM']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Lorne',
@@ -184,7 +190,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['LC']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Louise',
@@ -193,7 +200,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['LP']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Ilias',
@@ -202,7 +210,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['IL']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Phillip',
@@ -211,7 +220,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['PD']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Peter',
@@ -220,7 +230,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['PM']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Ryan',
@@ -229,7 +240,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['RV']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Sarah',
@@ -238,7 +250,8 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['SP']
-      }
+      },
+      allPortfolios
     ]
   },{
     displayTitle: 'Tony',
@@ -247,116 +260,137 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
         definitionKey: 'RESEARCH',
         groupByActive: false,
         selectedOptions: ['TW']
-      }
+      },
+      allPortfolios
     ]
   }
 ];
 
-export const StrategyShortcuts: Array<SearchShortcutStub> = [
+export const StrategyShortcuts: Array<Stubs.SearchShortcutStub> = [
   {
-    displayTitle: 'Short Carry in DOF',
+    displayTitle: `${FullStrategyList[0]} in DOF`,
     includedDefinitions: [
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['DOF']
+        selectedOptions: [PortfolioShortNames.DOF]
       },{
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['Short Carry']
+        selectedOptions: [FullStrategyList[0]]
       }
     ],
     isMajor: true
   },{
-    displayTitle: 'Non-Short Carry in DOF',
+    displayTitle: `Non-${FullStrategyList[0]} in DOF`,
     includedDefinitions: [
       {
         definitionKey: 'PORTFOLIO',
         groupByActive: false,
-        selectedOptions: ['DOF']
+        selectedOptions: [PortfolioShortNames.DOF]
       },{
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['STOV', 'Relative Value', 'Portfolio Shorts', 'LTOV - Yield', 'LTOV - Spread', 'LTOV - Special Situations', 'HEDGE', 'Basis']
+        selectedOptions: FullStrategyList.filter((eachStrategy) => {
+          return eachStrategy !== FullStrategyList[0]
+        })
       }
     ],
     isMajor: true
   },{
-    displayTitle: 'Short Carry',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[0]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['Short Carry']
-      }
+        selectedOptions: [FullStrategyList[0]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'STOV',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[1]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['STOV']
-      }
+        selectedOptions: [FullStrategyList[1]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'Relative Value',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[2]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['Relative Value']
-      }
+        selectedOptions: [FullStrategyList[2]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'Portfolio Shorts',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[3]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['Portfolio Shorts']
-      }
+        selectedOptions: [FullStrategyList[3]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'LTOV - Yield',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[4]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['LTOV - Yield']
-      }
+        selectedOptions: [FullStrategyList[4]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'LTOV - Spread',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[5]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['LTOV - Spread']
-      }
+        selectedOptions: [FullStrategyList[5]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'LTOV - Special Situations',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[6]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['LTOV - Special Situations']
-      }
+        selectedOptions: [FullStrategyList[6]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'HEDGE',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[7]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['HEDGE']
-      }
+        selectedOptions: [FullStrategyList[7]]
+      },
+      allPortfolios
     ]
   },{
-    displayTitle: 'Basis',
-    includedDefinitions: [{
+    displayTitle: `${FullStrategyList[8]}`,
+    includedDefinitions: [
+      {
         definitionKey: 'STRATEGY',
         groupByActive: false,
-        selectedOptions: ['Basis']
-      }
+        selectedOptions: [FullStrategyList[8]]
+      },
+      allPortfolios
     ]
   }
 ];
 
-export const TrendingShortcuts: Array<SearchShortcutStub> = [
+export const TrendingShortcuts: Array<Stubs.SearchShortcutStub> = [
   {
     displayTitle: 'COVID Sensitive',
     includedDefinitions: [
@@ -445,7 +479,7 @@ export const MARKET_ANALYSIS_YIELD_METRIC_KEY = SecurityMetricOptions[6].label;
 
 export const HISTORICAL_SUMMARY_ROUNDING = 2;
 
-export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
+export const MarketAnalysisGroupByOptions: Array<Stubs.SecurityDefinitionStub> = [
   SecurityDefinitionMap.CURRENCY,
   SecurityDefinitionMap.SECURITY_TYPE,
   SecurityDefinitionMap.COUPON_TYPE,

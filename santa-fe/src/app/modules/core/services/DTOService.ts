@@ -61,7 +61,6 @@
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import {
-      PortfolioShortNames,
       PortfolioMetricValues,
       PortfolioView,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
@@ -803,6 +802,7 @@ export class DTOService {
       data: {
         uuid: this.utility.generateUUID(),
         displayTitle: title,
+        highlightTitle: '',
         headerOverwrites: [],
         searchFilters: [definitionList],
         securityExclusionList: [],

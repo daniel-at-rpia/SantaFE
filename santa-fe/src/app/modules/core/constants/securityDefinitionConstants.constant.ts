@@ -352,7 +352,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
 
-  const FullStrategyList = [
+  export const FullStrategyList = [
     'Short Carry',
     'STOV',
     'Relative Value',

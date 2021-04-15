@@ -1,6 +1,6 @@
 import { AlertTypes } from 'Core/constants/coreConstants.constant';
 import {AxeAlertType} from "Core/constants/tradeConstants.constant";
-import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 
 export interface BEFetchAllTradeDataReturn {
