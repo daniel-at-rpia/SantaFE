@@ -234,10 +234,10 @@ export class BICSDataProcessingService {
         }
         return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
       } else {
-        return StructureMetricBlockFallback;
+        return this.utilityService.deepCopy(StructureMetricBlockFallback);
       }
     } else {
-      return StructureMetricBlockFallback;
+      return this.utilityService.deepCopy(StructureMetricBlockFallback);
     }
   }
 
