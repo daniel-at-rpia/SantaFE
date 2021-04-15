@@ -232,11 +232,10 @@ export class BICSDataProcessingService {
         if (!targetRawData.metricBreakdowns.CreditLeverage) {
           targetRawData.metricBreakdowns.CreditLeverage = StructureMetricBlockFallback.metricBreakdowns.CreditLeverage;
         }
-        return targetRawData;
+        return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
       } else {
         return StructureMetricBlockFallback;
       }
-      return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
     } else {
       return StructureMetricBlockFallback;
     }
