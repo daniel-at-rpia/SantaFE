@@ -61,7 +61,6 @@
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import {
-      PortfolioShortNames,
       PortfolioMetricValues,
       PortfolioView,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,

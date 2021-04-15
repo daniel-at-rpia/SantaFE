@@ -6,11 +6,10 @@ import * as Blocks from './frontend-blocks.interface';
 import * as Stubs from './frontend-stub-models.interface';
 import * as AdhocPacks from './frontend-adhoc-packages.interface';
 import { SantaDatePicker } from 'Form/models/form-models.interface';
-import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
+import { AlertTypes, NavigationModule, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames,
   PortfolioView,
   SubPortfolioFilter,
   DeltaScope

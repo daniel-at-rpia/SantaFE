@@ -10,12 +10,12 @@ import {
   AlertSubTypes,
   AlertTypes,
   NavigationModule,
-  GlobalWorkflowTypes
+  GlobalWorkflowTypes,
+  PortfolioShortNames
 } from 'Core/constants/coreConstants.constant';
 import { Alert } from "Core/components/alert/alert.component";
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import {
-  PortfolioShortNames,
   PortfolioMetricValues,
   DeltaScope,
   DeltaScopeDisplayText
