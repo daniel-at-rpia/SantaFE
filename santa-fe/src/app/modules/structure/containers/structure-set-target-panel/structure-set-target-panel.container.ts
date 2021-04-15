@@ -546,13 +546,11 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
   }
 
   public onClearRowTarget(targetRow: Blocks.StructureSetTargetPanelEditRowBlock) {
-    targetRow.targetCs01.level.modifiedDisplayValue = '';
-    targetRow.targetCs01.level.modifiedUnderlineValue = null;
-    targetRow.targetCs01.level.isActive = true;
-    targetRow.targetCreditLeverage.level.modifiedDisplayValue = '';
-    targetRow.targetCreditLeverage.level.modifiedUnderlineValue = null;
-    targetRow.targetCreditLeverage.level.isImplied = true;
-    this.onClickSaveEdit(targetRow, targetRow.targetCs01.level);
+    const targetRowLevel = this.state.activeMetric === this.constants.metric.cs01 ? targetRow.targetCs01.level : targetRow.targetCreditLeverage.level;
+    targetRowLevel.modifiedDisplayValue = '';
+    targetRowLevel.modifiedUnderlineValue = null;
+    targetRowLevel.isActive = true;
+    this.onClickSaveEdit(targetRow, targetRowLevel);
   }
 
   private checkIfEvenRow(editRow: Blocks.StructureSetTargetPanelEditRowBlock): boolean {
