@@ -306,3 +306,8 @@ export enum GlobalWorkflowTypes {
 }
 
 export const GLOBAL_WORKFLOW_STATE_ID_KEY = 'stateId';
+
+export enum IndexedDBActions {
+  GlobalWorkflow = 'GlobalWorkflow',
+  TradeWatchlist = 'TradeWatchlist'
+}
