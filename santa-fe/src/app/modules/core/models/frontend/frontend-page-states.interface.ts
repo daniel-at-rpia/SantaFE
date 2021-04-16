@@ -149,6 +149,7 @@ export interface TradeCenterPanelState {
   currentSearch: {
     previewShortcut: DTOs.SearchShortcutDTO;
   }
+  isIndexedDBReady: boolean;
 }
 
 export interface StructureMainPanelState {

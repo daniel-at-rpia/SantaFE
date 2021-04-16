@@ -190,7 +190,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       editingDriver: false,
       currentSearch: {
         previewShortcut: null
-      }
+      },
+      isIndexedDBReady: false
     };
 
     return state;

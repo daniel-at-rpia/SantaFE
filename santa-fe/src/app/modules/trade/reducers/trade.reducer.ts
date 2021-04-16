@@ -40,6 +40,9 @@ export interface TradeState {
       metric: PortfolioMetricValues;
     }
   }
+  watchlist: {
+    indexedDBReady: boolean;
+  }
 }
 
 const initialState: TradeState = {
@@ -72,6 +75,9 @@ const initialState: TradeState = {
       filterList: [],
       metric: null
     }
+  },
+  watchlist: {
+    indexedDBReady: false
   }
 };
 
@@ -241,6 +247,13 @@ export function tradeReducer(
       return {
         ...state,
         bicsDataLoaded: true
+      }
+    case TradeActions.WatchlistIndexedDBReady:
+      return {
+        ...state,
+        watchlist: {
+          indexedDBReady: true
+        }
       }
     default:
       return state;

@@ -24,7 +24,8 @@ export enum TradeActions {
   AlertTableReceiveNewAlerts = '[Trade] Alert Table Receive New Alerts',
   KeywordSearchThisSecurity = '[Trade] Keyword Search This Security',
   CenterPanelLoadTableWithFilter = '[Trade] Center Panel Load Table With Filter',
-  BICSDataLoaded = '[Trade] BICS Data Loaded'
+  BICSDataLoaded = '[Trade] BICS Data Loaded',
+  WatchlistIndexedDBReady = '[Trade] Watchlist IndexedDB Ready'
 }
 
 export class TradeStoreResetEvent implements Action {
@@ -165,5 +166,10 @@ export class TradeCenterPanelLoadTableWithFilterEvent implements Action {
 
 export class TradeBICSDataLoadedEvent implements Action {
   readonly type = TradeActions.BICSDataLoaded;
+  constructor(){}
+}
+
+export class TradeWatchlistIndexedDBReady implements Action {
+  readonly type = TradeActions.WatchlistIndexedDBReady;
   constructor(){}
 }
