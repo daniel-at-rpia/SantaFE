@@ -13,7 +13,11 @@ import {
   GlobalWorkflowTypes
 } from 'Core/constants/coreConstants.constant';
 import { Alert } from "Core/components/alert/alert.component";
-import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import {
+  AxeAlertScope,
+  AxeAlertType,
+  UoBWatchListType
+} from 'Core/constants/tradeConstants.constant';
 import {
   PortfolioShortNames,
   PortfolioMetricValues,
@@ -971,5 +975,13 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   state: {
     triggersRedirect: boolean;
     updateCurrentState: boolean;
+  }
+}
+
+export interface UoBWatchlistDTO extends BasicDTOStructure {
+  uuid: string;
+  data: {
+    searchShortcut: SearchShortcutDTO,
+    type: UoBWatchListType
   }
 }

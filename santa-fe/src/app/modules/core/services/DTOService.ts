@@ -58,7 +58,8 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType
+      AxeAlertType,
+      UoBWatchListType
     } from 'Core/constants/tradeConstants.constant';
     import {
       PortfolioShortNames,
@@ -2739,6 +2740,22 @@ export class DTOService {
         opened: false
       }
     };
+    return object;
+  }
+
+  public formUoBWatchlistObject(
+    searchShortcut: DTOs.SearchShortcutDTO,
+    type: UoBWatchListType
+    ): DTOs.UoBWatchlistDTO {
+    const uuid = this.utility.generateUUID();
+    const object: DTOs.UoBWatchlistDTO = {
+      uuid: uuid,
+      data: {
+        searchShortcut: searchShortcut,
+        type: type
+      },
+      state: null
+    }
     return object;
   }
 

@@ -252,4 +252,4 @@ export interface IndexedDBTableBlock {
   [table: string]: IndexedDBTableBlockItem
 }
 
-export type IndexedDBEntryBlock = GlobalWorkflowLastState | DTOs.GlobalWorkflowStateDTO;
+export type IndexedDBEntryBlock = GlobalWorkflowLastState | DTOs.UoBWatchlistDTO | DTOs.GlobalWorkflowStateDTO;

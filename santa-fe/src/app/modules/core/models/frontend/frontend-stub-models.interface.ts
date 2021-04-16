@@ -8,7 +8,7 @@ export interface SearchShortcutStub {
   isHero?: boolean;
 }
 
-interface SearchShortcutIncludedDefinitionStub {
+export interface SearchShortcutIncludedDefinitionStub {
   definitionKey: string;
   groupByActive: boolean;
   selectedOptions: Array<string>;
