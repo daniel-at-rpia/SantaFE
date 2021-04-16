@@ -239,3 +239,17 @@ export interface SecurityTableHeaderConfigOverwrite {
   pinned: boolean;
   explicitOrder?: number;  // by default the order is implied by each entry's position in the array, but sometimes we need rules to bump up/down specific header, use this to do that
 }
+
+export interface IndexedDBAPIBlock {
+  api: IDBDatabase;
+}
+
+export interface IndexedDBTableBlockItem {
+  name: string;
+  key: string;
+}
+export interface IndexedDBTableBlock {
+  [table: string]: IndexedDBTableBlockItem
+}
+
+export type IndexedDBEntryBlock = GlobalWorkflowLastState | DTOs.GlobalWorkflowStateDTO;
