@@ -1,7 +1,7 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { Router } from '@angular/router';
-    import { of, Subscription, Subject } from 'rxjs';
+    import { of, Subscription, Subject, Observable } from 'rxjs';
     import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
@@ -113,7 +113,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     validWindowSub: null,
     keywordSearchSub: null,
     receiveKeywordSearchInMainTable: null,
-    selectCenterPanelFilterListForTableLoadSub: null
+    selectCenterPanelFilterListForTableLoadSub: null,
+    indexedDBReadySub: null
   };
   keywordChanged$: Subject<string> = new Subject<string>();
   constants = {
@@ -531,6 +532,21 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             this.state.configurator.dto
           );
           this.populateSearchShortcuts();
+          this.subscriptions.indexedDBReadySub = this.store$.pipe(
+            select(selectWatchlistIndexedDBReady)
+          ).subscribe((isReady) => {
+            this.state.isIndexedDBReady = isReady;
+            if (isReady) {
+              this.indexedDBService.getAllState(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.indexedDBAction.TradeWatchlist} Get All Recent Watchlist`, true).pipe(
+                first()
+              ).subscribe((storedRecentWatchlists: Array<DTOs.UoBWatchlistDTO>) => {
+                if (storedRecentWatchlists.length > 0) {
+                  const dispalyedRecentWatchlists: Array<DTOs.SearchShortcutDTO> = storedRecentWatchlists.map((watchlist: DTOs.UoBWatchlistDTO) => ({...watchlist.data.searchShortcut}));
+                  this.state.presets.recentWatchlistShortcutList = dispalyedRecentWatchlists;
+                }
+              })
+            }
+          })
           this.store$.dispatch(new TradeBICSDataLoadedEvent());
         }
       }),
