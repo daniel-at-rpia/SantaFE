@@ -43,7 +43,8 @@ export class IndexedDBService {
       console.log('IDB open request success.', successEvent);
       indexedDBAPI.api = openRequest.result;
       // only dispatch action when request is success, even in case of upgradeNeeded, it will still come to success once the upgrade is completed
-      this.store$.dispatch(new this.constants.ngRxActions[action]())
+      const indexedDBIsReadyAction = this.constants.ngRxActions[action]
+      this.store$.dispatch(new indexedDBIsReadyAction())
     }
 
     openRequest.onupgradeneeded = (newVersionDetectedEvent) => {
