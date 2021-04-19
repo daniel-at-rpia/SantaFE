@@ -1080,7 +1080,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
       const recentWatchlist = this.dtoService.formUoBWatchlistObject(recentShortcut, this.constants.watchlistType.recent);
       const recentWatchlistCopy = this.utilityService.deepCopy(recentWatchlist);
-      this.state.currentSearch.previewShortcut = recentShortcut;
+      const recentShortcutCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(recentShortcut);
+      recentShortcutCopy.state.isPreviewVariant = true;
+      recentShortcutCopy.state.isUserInputBlocked = true;
+      this.state.currentSearch.previewShortcut = recentShortcutCopy;
       this.indexedDBService.storeState(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, recentWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} - Recent Watchlist`, false);
     }
   }
