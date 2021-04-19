@@ -2747,9 +2747,8 @@ export class DTOService {
     searchShortcut: DTOs.SearchShortcutDTO,
     type: UoBWatchListType
     ): DTOs.UoBWatchlistDTO {
-    const uuid = this.utility.generateUUID();
     const object: DTOs.UoBWatchlistDTO = {
-      uuid: uuid,
+      uuid: searchShortcut.data.uuid,
       data: {
         searchShortcut: searchShortcut,
         type: type
