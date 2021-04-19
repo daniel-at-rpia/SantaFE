@@ -1372,6 +1372,7 @@ export class UtilityService {
           matchExistBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
           matchExistBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           matchExistBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
+          matchExistBreakdown.breakdown[categoryKey].portfolioOverrideId = eachRawOverride.portfolioOverrideId;
         } else {
           const newConvertedBreakdown: BEStructuringBreakdownBlock = {
             groupOption: overrideBucketIdentifier,
@@ -1387,6 +1388,7 @@ export class UtilityService {
           newConvertedBreakdown.breakdown[categoryKey] = eachRawOverride.breakdown;
           newConvertedBreakdown.breakdown[categoryKey].bucket = eachRawOverride.bucket;
           newConvertedBreakdown.breakdown[categoryKey].simpleBucket = eachRawOverride.simpleBucket;
+          newConvertedBreakdown.breakdown[categoryKey].portfolioOverrideId = eachRawOverride.portfolioOverrideId;
           breakdownList.push(newConvertedBreakdown);
         }
       });
@@ -1557,7 +1559,7 @@ export class UtilityService {
         formattedDisplayCategory = row.data.displayCategory;
       }
       const viewData: AdhocPacks.StructureSetViewTransferPack = {
-        bucket: [row.data.bucket],
+        bucket: !!row.data.portfolioOverrideId ? [row.data.simpleBucket] : [row.data.bucket],
         view: view !== row.data.view ? [view] : [null],
         displayCategory: formattedDisplayCategory
       }

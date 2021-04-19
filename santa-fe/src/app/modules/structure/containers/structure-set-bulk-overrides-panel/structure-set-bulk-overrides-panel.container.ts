@@ -23,14 +23,15 @@
       BICS_OVERRIDES_TITLE
     } from 'Core/constants/structureConstants.constants';
     import {
-      PayloadUpdatePortfolioOverridesForAllPortfolios,
-      PayloadGetPortfolioOverride
+      PayloadBulkCreateOverridesIndividualBlock,
+      PayloadGetPortfolioOverride,
+      PayloadBulkCreateOverrides
     } from 'Core/models/backend/backend-payloads.interface';
     import { BEStructuringFundBlockWithSubPortfolios } from 'Core/models/backend/backend-models.interface';
     import { ModalService } from 'Form/services/ModalService';
     import { CoreSendNewAlerts } from 'Core/actions/core.actions';
     import { SecurityDefinitionMap } from 'App/modules/core/constants/securityDefinitionConstants.constant';
-    import { StructureUpdateMainPanelEvent } from 'Structure/actions/structure.actions';
+    import { StructureSetBulkOverridesTransferEvent } from 'Structure/actions/structure.actions';
     import { selectSetBulkOverridesEvent } from 'Structure/selectors/structure.selectors';
   //
 @Component({
@@ -190,70 +191,42 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
     this.state.editRowList.forEach((row:Blocks.StructureSetBulkOverridesEditRow, index: number) => row.isEven = index % 2 === 0);
   }
 
-  private traverseEditRowsToFormUpdateOverridePayload(): Array<PayloadUpdatePortfolioOverridesForAllPortfolios> {
-    const payload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = [];
+  private traverseEditRowsToFormUpdateOverridePayload(): PayloadBulkCreateOverrides {
+    const payload: PayloadBulkCreateOverrides = {
+      portfolioOverrides: []
+    }
     this.state.editRowList.forEach((eachRow: Blocks.StructureSetBulkOverridesEditRow) => {
-      const eachPayload: PayloadUpdatePortfolioOverridesForAllPortfolios = {
-        portfolioOverride: {
-          simpleBucket: eachRow.simpleBucket,
-          title: eachRow.displayRowTitle
-        }
+      const eachPayload: PayloadBulkCreateOverridesIndividualBlock = {
+        simpleBucket: eachRow.simpleBucket,
+        title: eachRow.displayRowTitle
       };
       if (eachRow.modifiedDisplayRowTitle !== eachRow.displayRowTitle) {
-        eachPayload.portfolioOverride.title = eachRow.modifiedDisplayRowTitle;
+        eachPayload.title = eachRow.modifiedDisplayRowTitle;
       }
-      payload.push(eachPayload);
+      payload.portfolioOverrides.push(eachPayload);
     });
     return payload;
   }
 
   private submitOverrideChanges(): boolean {
-    const updatePayload: Array<PayloadUpdatePortfolioOverridesForAllPortfolios> = this.traverseEditRowsToFormUpdateOverridePayload();
-    if (updatePayload.length > 0) {
-      const necessaryUpdateNumOfCalls = updatePayload.length;
-      let callCount = 0;
-      updatePayload.forEach((eachPayload: PayloadUpdatePortfolioOverridesForAllPortfolios, index: number) => {
-        if (index === 0) {
-          // inform users that data is being processed as this API call can take a while, especially if there are multiple overrides added
-          // this is temp solution until a spinner can be implemented for better usability and to prevent users from making any other changes on the screen
-          this.store$.dispatch(
-            new CoreSendNewAlerts([
-              this.dtoService.formSystemAlertObject(
-                'Processing',
-                'Add Overrides',
-                `Processing Overrides To Be Added To All Funds`,
-                null
-              )]
-            )
-          );
-        }
-        this.restfulCommService.callAPI(this.restfulCommService.apiMap.updatePortfolioOverridesForAllPortfolios, {req: 'POST'}, eachPayload).pipe(
-          first(),
-          tap((serverReturn: boolean) => {
-            callCount++;
-            if (callCount === necessaryUpdateNumOfCalls) {
-              if (serverReturn) {
-                this.store$.dispatch(
-                  new CoreSendNewAlerts([
-                    this.dtoService.formSystemAlertObject(
-                      'Success',
-                      'Add Overrides',
-                      `Successfully Added New Overrides to All Funds`,
-                      null
-                    )]
-                  )
-                );
-                this.store$.dispatch(new StructureUpdateMainPanelEvent());
-              }
-            }
-          }),
-          catchError(err => {
-            console.error('update portfolio overrides for all portfolios failed', err);
-            this.store$.dispatch(new CoreSendNewAlerts([this.dtoService.formSystemAlertObject('Error', 'Add Overrides', 'Unable to Add Overrides Across All Funds', null)]));
-            return of('error');
-          })
-        ).subscribe();
-      });
+    const updatePayload: PayloadBulkCreateOverrides = this.traverseEditRowsToFormUpdateOverridePayload();
+    if (updatePayload.portfolioOverrides.length > 0) {
+      const transferPack: AdhocPacks.StructureSetBulkOverrideTransferPack = {
+        pack: updatePayload
+      }
+      // There's a delay that occurs with this API, especially if users are adding multiple categories across all funds
+      // This alert serves as a temp solution until a spinner, loader, etc can be implemented
+      this.store$.dispatch(
+        new CoreSendNewAlerts([
+          this.dtoService.formSystemAlertObject(
+            'Structuring',
+            'Processing',
+            `Processing overrides to be added across all portfolios`,
+            null
+          )]
+        )
+      );
+      this.store$.dispatch(new StructureSetBulkOverridesTransferEvent(transferPack));
       this.state.editRowList = [];
       return true;
     } else {

@@ -9,10 +9,9 @@ import {
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
 import {
   BEStructuringOverrideBaseBlockWithSubPortfolios,
-  BEStructuringBreakdownMetricBlockWithSubPortfolios,
-  BESubPortfolioFilter
+  BEStructuringBreakdownMetricBlockWithSubPortfolios
 } from './backend-models.interface';
-
+import { BESubPortfolioFilter } from 'Core/constants/structureConstants.constants';
 export interface PayloadGetSantaGroups {
   source: string;
   yyyyMMdd?: number;
@@ -139,13 +138,9 @@ export interface PayloadUpdateBreakdown {
     }
   };
 }
-
-export interface PayloadUpdateOverride {
-  portfolioOverride: BEStructuringOverrideBaseBlockWithSubPortfolios;
-}
-
-export interface PayloadDeleteOverride {
-  portfolioOverride: BEStructuringOverrideBaseBlockWithSubPortfolios;
+export interface PayloadModifyOverrides {
+  // used for create, update, and delete Structuring overrides
+  portfolioOverrides: Array<BEStructuringOverrideBaseBlockWithSubPortfolios>;
 }
 
 export interface PayloadGetPortfolioOverride {
@@ -169,9 +164,11 @@ export interface PayloadClearPortfolioBreakdown {
   subPortfolioType: BESubPortfolioFilter;
 }
 
-export interface PayloadUpdatePortfolioOverridesForAllPortfolios {
-  portfolioOverride: {
-    simpleBucket: StructureBucketDataBlock;
-    title: string;
-  }
+export interface PayloadBulkCreateOverridesIndividualBlock {
+  simpleBucket: StructureBucketDataBlock;
+  title?: string;
+}
+
+export interface PayloadBulkCreateOverrides {
+  portfolioOverrides: Array<PayloadBulkCreateOverridesIndividualBlock>
 }

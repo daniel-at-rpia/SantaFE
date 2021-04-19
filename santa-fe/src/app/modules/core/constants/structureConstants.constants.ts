@@ -1,5 +1,6 @@
 import { DTOs, Blocks, AdhocPacks, Stubs } from 'Core/models/frontend';
 import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+import { BEStructuringBreakdownMetricBlock } from 'Core/models/backend/backend-models.interface';
 import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
 export enum PortfolioView {
@@ -228,3 +229,37 @@ export const BEIdentifierToFEDisplayMapping: Array<AdhocPacks.BEIdentifierToFEMa
     display: SECURITY_SUB_TYPE_TITLE
   }
 ]
+
+export enum BESubPortfolioFilter {
+  all = 'All',
+  nonHedging = 'NonHedging',
+  nonShortCarry = 'NonShortCarry',
+  shortCarry = 'ShortCarry'
+}
+
+export const StructureMetricBlockFallback: BEStructuringBreakdownMetricBlock = {
+  metricBreakdowns: {
+    CreditLeverage: {
+      "targetPct": null,
+      "targetLevel": null,
+      "currentLevel": 0.0,
+      "currentPct": 0.0,
+      "indexPct": 0.0
+    },
+    Cs01: {
+      "targetPct": null,
+      "targetLevel": null,
+      "currentLevel": 0.0,
+      "currentPct": 0.0,
+      "indexPct": 0.0
+    },
+    CreditDuration: {
+      "targetPct": null,
+      "targetLevel": null,
+      "currentLevel": 0.0,
+      "currentPct": 0.0,
+      "indexPct": 0.0
+    }
+  },
+  view: null
+}
