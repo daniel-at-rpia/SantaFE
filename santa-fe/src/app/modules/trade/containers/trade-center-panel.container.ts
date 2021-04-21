@@ -213,7 +213,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       },
       editingDriver: false,
       currentSearch: {
-        previewShortcut: null
+        previewShortcut: null,
+        redirectedFromStrurturing: false
       },
       isIndexedDBReady: false
     };
@@ -340,7 +341,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         const filterList = pack.filterList;
         const metric = pack.metric;
         if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric) {
-          this.autoLoadTable(filterList, metric);
+          this.autoLoadTable(filterList, metric, pack.presetDisplayTitle);
         }
       }
     });
@@ -845,25 +846,27 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private autoLoadTable(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues
+    portfolioMetric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ) {
     if (!!this.state.presets.selectedPreset) {
       this.performUnselectPresetInBackground();
       const delayToLoad = 1;  // the actual load needs to be executed on a delay because we need to give time for agGrid to react on santaTable's "activated" flag being set to false, this way when the autoLoadTable actually set it to "true" again, it will rebuild the header, otherwise the headers won't be rebuild. The time it takes for agGrid to react is trivial, we just need to wait for a single frame
       setTimeout(
         function(){
-          this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+          this.autoLoadTablePerformLoad(filterList, portfolioMetric, presetDisplayTitle);
         }.bind(this),
         delayToLoad
       );
     } else {
-      this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+      this.autoLoadTablePerformLoad(filterList, portfolioMetric, presetDisplayTitle);
     }
   }
 
   private autoLoadTablePerformLoad(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues
+    portfolioMetric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ){
     const targetPortfolioDefinition = filterList.find((eachDefinition) => {
       return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
@@ -911,6 +914,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.onApplyFilter(params, false);
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
+      this.state.currentSearch.redirectedFromStrurturing = true;
+      this.state.currentSearch.previewShortcut.data.highlightTitle = 'From Structuring';
+      this.autoLoadTableFillCurrentSearchPresetSlotlist(filterList);
+      if (!!presetDisplayTitle && presetDisplayTitle.length > 0) {
+        this.state.currentSearch.previewShortcut.data.displayTitle = ` ${this.state.currentSearch.previewShortcut.data.displayTitle} - ${presetDisplayTitle}`;
+      }
     } else {
       console.warn('see bond does not have a portfolio definition', filterList);
       this.restfulCommService.logError('see bond does not have a portfolio definition');
@@ -1091,5 +1100,26 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   private checkIfUoBWatchList(): boolean {
     const { owner, portfolios, strategy } = this.state.filters.quickFilters;
     return owner.length === 0 && portfolios.length === 0 && strategy.length === 0;
+  }
+  
+  private autoLoadTableFillCurrentSearchPresetSlotlist(filterList: Array<DTOs.SecurityDefinitionDTO>) {
+    if (!!this.state.currentSearch.previewShortcut && filterList.length > 0) {
+      filterList.forEach((eachFilterDefinition) => {
+        const alreadyExist = this.state.currentSearch.previewShortcut.style.slotList.find((eachSlot) => {
+          return !!eachSlot && eachSlot.data.key === eachFilterDefinition.data.key;
+        });
+        if (!alreadyExist) {
+          const copy = this.utilityService.deepCopy(eachFilterDefinition);  // the original is read-only
+          copy.state.filterActive = true;
+          copy.state.isMiniPillVariant = false;
+          const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
+            return eachSlot === null;
+          });
+          if (indexToEmptySlot < 4) {
+            this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = copy;
+          }
+        }
+      });
+    }
   }
 }

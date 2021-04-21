@@ -163,6 +163,7 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
       filterList.push(subPortfolioDefinition);
     }
     newWorkflowState.data.stateInfo.filterList = filterList;
+    newWorkflowState.data.stateInfo.associatedDisplayTitle = targetRow.data.displayCategory;
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 

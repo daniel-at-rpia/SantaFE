@@ -155,12 +155,15 @@ export class TradeCenterPanelLoadTableWithFilterEvent implements Action {
   readonly type = TradeActions.CenterPanelLoadTableWithFilter;
   readonly filterList: Array<DTOs.SecurityDefinitionDTO>;
   readonly metric: PortfolioMetricValues;
+  readonly presetDisplayTitle: string;
   constructor(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    metric: PortfolioMetricValues
+    metric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ){
     this.filterList = filterList;
     this.metric = metric;
+    this.presetDisplayTitle = presetDisplayTitle;
   }
 }
 

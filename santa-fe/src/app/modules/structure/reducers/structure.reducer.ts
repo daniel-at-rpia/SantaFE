@@ -1,15 +1,16 @@
 import { Action } from '@ngrx/store';
+import * as moment from 'moment';
+
 import { StructureActions } from 'Structure/actions/structure.actions';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames,
   SubPortfolioFilter,
   DeltaScope
 } from 'Core/constants/structureConstants.constants';
+import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 import { AdhocPacks, PageStates } from 'Core/models/frontend';
 import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
-import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
@@ -25,6 +26,8 @@ export interface StructureState {
   utilityPanelLoadState: PageStates.StructureUtilityPanelState;
   setBulkOverrides: boolean;
   fullStructureDataLoaded: boolean;
+  overrideDataTransfer: AdhocPacks.StructureSetTargetOverrideTransferPack;
+  setBulkOverridesTransfer: AdhocPacks.StructureSetBulkOverrideTransferPack;
 }
 
 const initialState: StructureState = {
@@ -48,7 +51,9 @@ const initialState: StructureState = {
   dataDatestamp: moment().unix(),
   utilityPanelLoadState: null,
   setBulkOverrides: false,
-  fullStructureDataLoaded: false
+  fullStructureDataLoaded: false,
+  overrideDataTransfer: null,
+  setBulkOverridesTransfer: null
 }
 
 export function structureReducer(
@@ -122,6 +127,16 @@ export function structureReducer(
       return {
         ...state,
         fullStructureDataLoaded: action.fullDataLoaded
+      };
+    case StructureActions.StructureOverrideDataTransfer:
+      return {
+        ...state,
+        overrideDataTransfer: action.transferPack
+      };
+    case StructureActions.StructureSetBulkOverridesTransfer:
+      return {
+        ...state,
+        setBulkOverridesTransfer: action.transferPack
       };
     default:
       return state;

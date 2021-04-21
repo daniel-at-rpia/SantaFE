@@ -140,7 +140,13 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
       switch (state.data.workflowType) {
         case this.constants.globalWorkflowTypes.launchTradeToSeeBonds:
           if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
-            this.store$.dispatch(new TradeCenterPanelLoadTableWithFilterEvent(state.data.stateInfo.filterList, state.data.stateInfo.activeMetric));
+            this.store$.dispatch(
+              new TradeCenterPanelLoadTableWithFilterEvent(
+                state.data.stateInfo.filterList,
+                state.data.stateInfo.activeMetric,
+                state.data.stateInfo.associatedDisplayTitle || null
+              )
+            );
           }
           break;
         case this.constants.globalWorkflowTypes.unselectPreset:

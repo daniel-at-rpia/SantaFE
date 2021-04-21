@@ -263,7 +263,7 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -346,7 +346,7 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -429,7 +429,7 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -512,7 +512,7 @@ export const SeniorityLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   }
 ];
 
@@ -598,7 +598,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -681,7 +681,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -764,7 +764,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -847,7 +847,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -930,7 +930,7 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   },
   {
     "securityIdentifier":"79",
@@ -1013,6 +1013,6 @@ export const RatingLegendList: Array<BESecurityDTO> = [
     "bicsLevel5": null,
     "bicsLevel6": null,
     "bicsLevel7": null,
-    "driver": "spread"
+    "driver": "Spread"
   }
 ]

@@ -13,7 +13,10 @@ import {
   BEStructuringBreakdownBlock,
   BEStructuringBreakdownMetricBlock
 } from 'BEModels/backend-models.interface';
-import { PayloadUpdatePortfolioOverridesForAllPortfolios } from 'Core/models/backend/backend-payloads.interface';
+import {
+  PayloadModifyOverrides,
+  PayloadBulkCreateOverrides
+} from 'Core/models/backend/backend-payloads.interface';
 import { 
   PortfolioView,
   SubPortfolioFilter,
@@ -225,6 +228,16 @@ export interface GlobalWorkflowLastState {
   stateUUID: string;
 }
 
+export interface StructureSetTargetOverrideTransferPack {
+  portfolioID: number;
+  updatePayload: PayloadModifyOverrides,
+  createPayload: PayloadModifyOverrides,
+  deletePayload: PayloadModifyOverrides
+}
+
+export interface StructureSetBulkOverrideTransferPack {
+  pack: PayloadBulkCreateOverrides;
+}
 /*
 The overwrite is for "overwriting" the default configurations. Current use of it is to embed it into SearchShortcutDTO, so when apply a "preset" or "watchlist", the FE will tune the table layout to that search's specific context. 
 The reason we develop this overwrite instead of just using an array of <SecurityTableHeaderConfigStub> to act as an overwrite is for two reasons:

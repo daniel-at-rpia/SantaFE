@@ -14,7 +14,7 @@ import {
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock, BEStructuringBreakdownMetricBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
@@ -319,6 +319,7 @@ export interface PortfolioBreakdownCategoryBlock {
   displayedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>; // used to indicate which sub levels have targets
   editedSubLevelRowsWithTargets?: Array<DTOs.StructurePortfolioBreakdownRowDTO>;
   code: string;
+  portfolioOverrideId: string;
 }
 
 export interface GlobalNavLegendBlock {

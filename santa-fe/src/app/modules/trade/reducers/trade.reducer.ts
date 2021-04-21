@@ -38,6 +38,7 @@ export interface TradeState {
     autoLoadTable: {
       filterList: Array<DTOs.SecurityDefinitionDTO>;
       metric: PortfolioMetricValues;
+      presetDisplayTitle: string;
     }
   }
   watchlist: {
@@ -73,7 +74,8 @@ const initialState: TradeState = {
   centerPanel: {
     autoLoadTable: {
       filterList: [],
-      metric: null
+      metric: null,
+      presetDisplayTitle: ''
     }
   },
   watchlist: {
@@ -239,7 +241,8 @@ export function tradeReducer(
           ...state.centerPanel,
           autoLoadTable: {
             filterList: action.filterList,
-            metric: action.metric
+            metric: action.metric,
+            presetDisplayTitle: action.presetDisplayTitle
           }
         }
       }
