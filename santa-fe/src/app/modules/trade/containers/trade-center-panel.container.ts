@@ -466,9 +466,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
       }
     });
-    const isUoBWatchlist = this.checkIfUoBWatchList();
-    if (isUoBWatchlist) {
-      this.storeRecentWatchList(params);
+    if (params.filterList.length > 0) {
+      this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcutList);
     }
     // just comment it out because we will bring it back in some way in a later task
     // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
@@ -1181,5 +1180,35 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       storedWatchlistCopy.data.searchShortcut.data.metadata.dbStoredTime = currentTime;
       this.indexedDBService.addDataToIndexedDB(storeObject, storedWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} (Recent) - Updating time stamp for uuid: ${uuid}`);
     };
+  }
+
+  private checkExistingRecentWatchlistSearches(
+    params: AdhocPacks.DefinitionConfiguratorEmitterParams,
+    watchlist: Array<DTOs.SearchShortcutDTO>
+  ) {
+    if (watchlist.length > 0) {
+      const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, watchlist);
+      if (!existingWatchlist) {
+        this.storeRecentWatchList(params);
+      } else {
+        this.changeRecentWatchlistTimeStamp(existingWatchlist.data.uuid);
+      }
+    } else {
+      this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.indexedDBAction.TradeWatchlist} Get All Recent Watchlist`, true).pipe(
+        first()
+      ).subscribe((storedRecentWatchlists: Array<DTOs.UoBWatchlistDTO>) => {
+        if (storedRecentWatchlists.length > 0) {
+          const indexedDBWatchlist: Array<DTOs.SearchShortcutDTO> = storedRecentWatchlists.map((watchlist: DTOs.UoBWatchlistDTO) => ({...watchlist.data.searchShortcut}));
+          const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, indexedDBWatchlist);
+          if (!existingWatchlist) {
+            this.storeRecentWatchList(params);
+          } else {
+            this.changeRecentWatchlistTimeStamp(existingWatchlist.data.uuid);
+          }
+        } else {
+          this.storeRecentWatchList(params)
+        }
+      })
+    }
   }
 }
