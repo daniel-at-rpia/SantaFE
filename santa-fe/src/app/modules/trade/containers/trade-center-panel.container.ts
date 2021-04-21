@@ -337,7 +337,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.store$.pipe(select(selectBICSDataLoaded))
       )
     ).subscribe(([pack, bicsLoaded]) => {
-      if (!!pack) {
+      if (!!pack && !!this.stateActive) {
         const filterList = pack.filterList;
         const metric = pack.metric;
         if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric) {
