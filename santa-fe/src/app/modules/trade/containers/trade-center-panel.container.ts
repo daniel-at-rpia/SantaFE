@@ -408,9 +408,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   public onUnselectPreset() {
-    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, false, this.constants.globalWorkflowTypes.unselectPreset);
-    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
-    // unselect preset would just need to trigger the reuse strategy to inintialize a new state now
+    this.performUnselectPresetInBackground();
   }
 
   public buryConfigurator() {
