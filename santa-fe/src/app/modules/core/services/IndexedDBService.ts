@@ -134,7 +134,7 @@ export class IndexedDBService {
       // Type casting event to 'any' for now as otherwise it will throw error TS2339: Property 'result' does not exist on type 'EventTarget'
       // Known issue in TS: https://github.com/microsoft/TypeScript/issues/30669
       getAllStoreObjects.onsuccess = (event: any) => {
-        if (event.target.result && event.target.result.length > 0) {
+        if (event.target.result) {
           subscriber.next(event.target.result)
         }
       }
