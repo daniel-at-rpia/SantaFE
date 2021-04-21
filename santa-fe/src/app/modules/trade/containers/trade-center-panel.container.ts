@@ -540,8 +540,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
                 first()
               ).subscribe((storedRecentWatchlists: Array<DTOs.UoBWatchlistDTO>) => {
                 if (storedRecentWatchlists.length > 0) {
-                  const dispalyedRecentWatchlists: Array<DTOs.SearchShortcutDTO> = storedRecentWatchlists.map((watchlist: DTOs.UoBWatchlistDTO) => ({...watchlist.data.searchShortcut}));
-                  this.state.presets.recentWatchlistShortcutList = dispalyedRecentWatchlists;
+                  const displayedRecentWatchLists: Array<DTOs.SearchShortcutDTO> = storedRecentWatchlists.map((watchlist: DTOs.UoBWatchlistDTO) => ({...watchlist.data.searchShortcut}));
+                  this.state.presets.recentWatchlistShortcutList = [...this.state.presets.recentWatchlistShortcutList, ...displayedRecentWatchLists];
                 }
               })
             }
