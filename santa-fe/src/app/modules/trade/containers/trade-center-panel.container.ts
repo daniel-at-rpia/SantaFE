@@ -58,7 +58,8 @@
       OwnershipShortcuts,
       StrategyShortcuts,
       DISPLAY_DRIVER_MAP,
-      TrendingShortcuts
+      TrendingShortcuts,
+      TradeCenterPanelSearchModes
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectLiveUpdateTick,
@@ -126,7 +127,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     defaultMetrics: SecurityTableHeaderConfigs,
     navigationModule: NavigationModule,
     globalWorkflowTypes: GlobalWorkflowTypes,
-    displayDriverMap: DISPLAY_DRIVER_MAP
+    displayDriverMap: DISPLAY_DRIVER_MAP,
+    searchModes: TradeCenterPanelSearchModes
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -190,7 +192,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       editingDriver: false,
       currentSearch: {
         previewShortcut: null,
-        redirectedFromStrurturing: false
+        redirectedFromStrurturing: false,
+        mode: null
       }
     };
 
@@ -438,11 +441,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
       }
     });
-    // just comment it out because we will bring it back in some way in a later task
-    // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-    if (this.state.filters.quickFilters.portfolios.length === 1) {
-      this.modifyWeightColumnHeadersUpdateFundName();
-    }
+    this.updateSearchMode();
+    this.updateTableLayout();
     if (!!userTriggered) {
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
@@ -1035,6 +1035,24 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           }
         }
       });
+    }
+  }
+
+  private updateSearchMode() {
+    let isInternal = false;
+    this.state.configurator.dto.data.definitionList.forEach((eachDefinitionGroup) => {
+      eachDefinitionGroup.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.state.filterActive && eachDefinition.data.internalOnly) {
+          isInternal = true;
+        }
+      });
+    });
+    this.state.currentSearch.mode = isInternal ? this.constants.searchModes.internal : this.constants.searchModes.uob;
+  }
+
+  private updateTableLayout() {
+    if (this.state.filters.quickFilters.portfolios.length === 1) {
+      this.modifyWeightColumnHeadersUpdateFundName();
     }
   }
 }

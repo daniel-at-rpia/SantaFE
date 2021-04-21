@@ -19,6 +19,7 @@ import {
   BEGetPortfolioStructureServerReturn,
   BEFetchAllTradeDataReturn
 } from 'BEModels/backend-models.interface';
+import { TradeCenterPanelSearchModes } from 'Core/constants/tradeConstants.constant';
 
 export interface RootState {
   ownerInitial: string;
@@ -148,6 +149,7 @@ export interface TradeCenterPanelState {
   currentSearch: {
     previewShortcut: DTOs.SearchShortcutDTO;
     redirectedFromStrurturing: boolean;
+    mode: TradeCenterPanelSearchModes;
   }
 }
 

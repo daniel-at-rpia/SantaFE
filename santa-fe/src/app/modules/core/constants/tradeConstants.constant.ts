@@ -2,6 +2,11 @@ import { Stubs } from 'Core/models/frontend';
 import { SecurityDefinitionMap, FullStrategyList } from 'Core/constants/securityDefinitionConstants.constant';
 import { SecurityMetricOptions, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
+export enum TradeCenterPanelSearchModes {
+  internal = 'Internal',
+  uob = 'Universe Of Bonds'
+}
+
 const allPortfolios: Stubs.SearchShortcutIncludedDefinitionStub = {
   definitionKey: 'PORTFOLIO',
   groupByActive: false,

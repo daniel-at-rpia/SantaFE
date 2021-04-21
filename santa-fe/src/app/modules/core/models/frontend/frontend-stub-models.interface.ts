@@ -25,6 +25,7 @@ export interface SecurityDefinitionStub {
   urlForGetLongOptionListFromServer?: string;
   securityDTOAttr?: string;
   securityDTOAttrBlock?: string;
+  internalOnly: boolean;  // only our internal securities would have this definition
 }
 
 export interface SecurityDefinitionBundleStub {

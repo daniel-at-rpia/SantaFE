@@ -245,6 +245,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     securityDTOAttrBlock: string;
     backendDtoAttrName: string;
     totalMatchingResults: number;
+    internalOnly: boolean;  // see stub interface for explanation
   }
   style: {
     icon: string;
