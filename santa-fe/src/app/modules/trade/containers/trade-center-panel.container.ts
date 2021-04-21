@@ -92,6 +92,7 @@
     import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
     import { IndexedDBService } from 'Core/services/IndexedDBService';
+    import * as moment from 'moment';
   //
 
 @Component({
@@ -1086,12 +1087,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
       const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
       const recentWatchlist = this.dtoService.formUoBWatchlistObject(recentShortcut, this.constants.watchlistType.recent);
-      const recentWatchlistCopy = this.utilityService.deepCopy(recentWatchlist);
+      const recentWatchlistCopy: DTOs.UoBWatchlistDTO = this.utilityService.deepCopy(recentWatchlist);
+      recentWatchlistCopy.data.searchShortcut.data.metadata.dbStoredTime = moment().unix();
+      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, recentWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} - Recent Watchlist`, false);
       const recentShortcutCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(recentShortcut);
       recentShortcutCopy.state.isPreviewVariant = true;
       recentShortcutCopy.state.isUserInputBlocked = true;
+      this.state.presets.recentWatchlistShortcutList.push(recentShortcut);
       this.state.currentSearch.previewShortcut = recentShortcutCopy;
-      this.indexedDBService.storeState(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, recentWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} - Recent Watchlist`, false);
     }
   }
 
