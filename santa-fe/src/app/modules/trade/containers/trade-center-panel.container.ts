@@ -1064,6 +1064,27 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
   }
 
+  private autoLoadTableFillCurrentSearchPresetSlotlist(filterList: Array<DTOs.SecurityDefinitionDTO>) {
+    if (!!this.state.currentSearch.previewShortcut && filterList.length > 0) {
+      filterList.forEach((eachFilterDefinition) => {
+        const alreadyExist = this.state.currentSearch.previewShortcut.style.slotList.find((eachSlot) => {
+          return !!eachSlot && eachSlot.data.key === eachFilterDefinition.data.key;
+        });
+        if (!alreadyExist) {
+          const copy = this.utilityService.deepCopy(eachFilterDefinition);  // the original is read-only
+          copy.state.filterActive = true;
+          copy.state.isMiniPillVariant = false;
+          const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
+            return eachSlot === null;
+          });
+          if (indexToEmptySlot < 4) {
+            this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = copy;
+          }
+        }
+      });
+    }
+  }
+
   private storeRecentWatchList(params: AdhocPacks.DefinitionConfiguratorEmitterParams) {
     if (params.filterList.length > 0) {
       const searchShortcutDefinitionList: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [];
@@ -1098,29 +1119,50 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
   }
 
-  private checkIfUoBWatchList(): boolean {
-    const { owner, portfolios, strategy } = this.state.filters.quickFilters;
-    return owner.length === 0 && portfolios.length === 0 && strategy.length === 0;
-  }
-  
-  private autoLoadTableFillCurrentSearchPresetSlotlist(filterList: Array<DTOs.SecurityDefinitionDTO>) {
-    if (!!this.state.currentSearch.previewShortcut && filterList.length > 0) {
-      filterList.forEach((eachFilterDefinition) => {
-        const alreadyExist = this.state.currentSearch.previewShortcut.style.slotList.find((eachSlot) => {
-          return !!eachSlot && eachSlot.data.key === eachFilterDefinition.data.key;
-        });
-        if (!alreadyExist) {
-          const copy = this.utilityService.deepCopy(eachFilterDefinition);  // the original is read-only
-          copy.state.filterActive = true;
-          copy.state.isMiniPillVariant = false;
-          const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
-            return eachSlot === null;
-          });
-          if (indexToEmptySlot < 4) {
-            this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = copy;
-          }
+  private checkIfWatchlistSearchExists(
+    filterList: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>,
+    watchlists: Array<DTOs.SearchShortcutDTO>
+  ): DTOs.SearchShortcutDTO {
+    let isExist = false;
+    let matchedWatchlist: DTOs.SearchShortcutDTO = null;
+    let allFiltersForConfigurator: Array<string> = [];
+    filterList.forEach((filterList: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+      const formattedFilters = filterList.filterByBlocks.map((filterBlock: Blocks.SecurityDefinitionFilterBlock) => this.convertFiltersForWatchlistCompare(filterBlock.shortKey));
+      allFiltersForConfigurator = [...allFiltersForConfigurator, ...formattedFilters];
+    })
+    watchlists.forEach((watchlist: DTOs.SearchShortcutDTO) => {
+      if (!isExist) {
+        if (watchlist.data.searchFilters.length > 0) {
+          watchlist.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
+            let allFiltersForWatchlist: Array<string> = [];
+            searchFilter.forEach((filter) => {
+              filter.data.highlightSelectedOptionList.forEach((highlightedOption: Blocks.SecurityDefinitionFilterBlock) => {
+                if (highlightedOption.shortKey) {
+                  const formattedShortkey = this.convertFiltersForWatchlistCompare(highlightedOption.shortKey);
+                  allFiltersForWatchlist = [...allFiltersForWatchlist, formattedShortkey];
+                }
+              })
+            })
+            if (allFiltersForWatchlist.length > 0) {
+              if (allFiltersForConfigurator.length !== allFiltersForWatchlist.length) {
+                matchedWatchlist = null;
+              } else {
+                const allFiltersForConfiguratorSorted = allFiltersForConfigurator.sort();
+                const allWatchlistFiltersSorted = allFiltersForWatchlist.sort();
+                isExist = allFiltersForConfiguratorSorted.every((filter: string, i: number) => filter === allWatchlistFiltersSorted[i]);
+                if (!!isExist) {
+                  matchedWatchlist = watchlist;
+                }
+              }
+            }
+          })
         }
-      });
-    }
+      }
+    })
+    return matchedWatchlist;
+  }
+
+  private convertFiltersForWatchlistCompare(filter: string): string {
+    return filter.trim().split(' ').join('').toLowerCase();
   }
 }
