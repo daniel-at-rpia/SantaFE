@@ -80,14 +80,14 @@ export class GlobalWorkflowIOService {
       const writableCopy = this.utilityService.deepCopy(targetState);
       writableCopy.data.stateInfo = JSON.stringify(writableCopy.data.stateInfo);
       writableCopy.api = null;
-      this.indexedDBService.storeState(this.constants.idbWorkflowAllStateTableName, this.workflowIndexedDBAPI.api, writableCopy, `${this.constants.IndexedDBAction.GlobalWorkflow} - Store State`, false);
+      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWorkflowAllStateTableName, this.workflowIndexedDBAPI.api, writableCopy, `${this.constants.IndexedDBAction.GlobalWorkflow} - Store State`, false);
     }
 
     public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
       return new Observable(subscriber => {
         if (!!targetUUID) {
           const IOTransaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWorkflowAllStateTableName, this.workflowIndexedDBAPI.api, null, true);
-          const IOService = this.indexedDBService.retrieveIndexedDBStoreObject(this.constants.idbWorkflowAllStateTableName, IOTransaction);
+          const IOService = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWorkflowAllStateTableName, IOTransaction);
           const request = IOService.get(targetUUID);
           IOTransaction.oncomplete = ((event) => {
             if (!!request.result && !!request.result.data) {
@@ -117,7 +117,7 @@ export class GlobalWorkflowIOService {
           subscriber.next(null);
         }
       });
-    }
+  }
 
     private storeLastState(targetModule: NavigationModule, targetUUID: string) {
 
@@ -127,7 +127,7 @@ export class GlobalWorkflowIOService {
           module: targetModule,
           stateUUID: targetUUID
         };
-        this.indexedDBService.storeState(this.constants.idbWorkflowLastStateTableName, this.workflowIndexedDBAPI.api, newEntry, `${this.constants.IndexedDBAction.GlobalWorkflow} - Store Last State`, false);
+        this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWorkflowLastStateTableName, this.workflowIndexedDBAPI.api, newEntry, `${this.constants.IndexedDBAction.GlobalWorkflow} - Store Last State`, false);
       }
     }
 
@@ -140,7 +140,7 @@ export class GlobalWorkflowIOService {
         }
         for (let eachModule in NavigationModule) {
           const IOTransaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWorkflowLastStateTableName, this.workflowIndexedDBAPI.api, null, true);
-          const IOService = this.indexedDBService.retrieveIndexedDBStoreObject(this.constants.idbWorkflowLastStateTableName, IOTransaction);
+          const IOService = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWorkflowLastStateTableName, IOTransaction);
           const request = IOService.get(eachModule);
           IOTransaction.oncomplete = ((event) => {
             results.push(request.result);

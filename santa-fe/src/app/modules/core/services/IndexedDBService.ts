@@ -100,14 +100,14 @@ export class IndexedDBService {
     return transaction;
   }
 
-  public retrieveIndexedDBStoreObject(
+  public retrieveIndexedDBObjectStore(
     tableName: string,
     transaction: IDBTransaction
   ): IDBObjectStore {
     return transaction.objectStore(tableName);
   }
 
-  public storeState(
+  public retrieveAndStoreDataToIndexedDB (
     tableName: string,
     indexedDBAPI: IDBDatabase,
     entry: AdhocPacks.IndexedDBEntryBlock,
@@ -115,13 +115,13 @@ export class IndexedDBService {
     customTransactionHandlers: boolean
   ) {
     const transaction = this.retreiveIndexedDBTransaction(tableName, indexedDBAPI, message, customTransactionHandlers);
-    const storeObject = this.retrieveIndexedDBStoreObject(tableName, transaction);
-    if (!!storeObject) {
-      storeObject.put(entry);
+    const objectStore = this.retrieveIndexedDBObjectStore(tableName, transaction);
+    if (!!objectStore) {
+      this.addDataToIndexedDB(objectStore, entry, message);
     }
   }
 
-  public getAllState(
+  public retrieveAndGetAllIndexedDBData(
     tableName: string,
     indexedDBAPI: IDBDatabase,
     action: string,
@@ -129,16 +129,16 @@ export class IndexedDBService {
   ) {
     return new Observable(subscriber => {
       const transaction = this.retreiveIndexedDBTransaction(tableName, indexedDBAPI, action, customTransactionHandlers);
-      const storeObject = this.retrieveIndexedDBStoreObject(tableName, transaction);
-      const getAllStoreObjects = storeObject.getAll();
+      const objectStore = this.retrieveIndexedDBObjectStore(tableName, transaction);
+      const getAllObjectStores = objectStore.getAll();
       // Type casting event to 'any' for now as otherwise it will throw error TS2339: Property 'result' does not exist on type 'EventTarget'
       // Known issue in TS: https://github.com/microsoft/TypeScript/issues/30669
-      getAllStoreObjects.onsuccess = (event: any) => {
+      getAllObjectStores.onsuccess = (event: any) => {
         if (event.target.result) {
           subscriber.next(event.target.result)
         }
       }
-      getAllStoreObjects.onerror = (event: any) => {
+      getAllObjectStores.onerror = (event: any) => {
         console.error(`${action}, Cannot retrieve all store objects`, event);
         subscriber.next(null)
       }
@@ -158,6 +158,28 @@ export class IndexedDBService {
     return tableBlock;
   }
 
+  public retrieveSpecificDataFromIndexedDB(
+    objectStore: IDBObjectStore,
+    identifier: string 
+  ): IDBRequest {
+    const request = objectStore.get(identifier);
+    return request;
+  }
+ 
+  public addDataToIndexedDB(
+    objectStore: IDBObjectStore,
+    identifier: AdhocPacks.IndexedDBEntryBlock,
+    action: string
+  ) {
+    const requestUpdate = objectStore.put(identifier);
+    requestUpdate.onerror = (event) => {
+      console.error(`${action} error`, event)
+    }
+    requestUpdate.onsuccess = (event) => {
+      console.log(`${action} success`, event)
+    }
+  }
+
   private initializeDatabaseTable(
     indexedDBAPI: IDBDatabase,
     tableName: string,
@@ -165,4 +187,5 @@ export class IndexedDBService {
   ) {
     indexedDBAPI.createObjectStore(tableName, {keyPath: key})
   }
+
 }

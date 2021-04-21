@@ -538,7 +538,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           ).subscribe((isReady) => {
             this.state.isIndexedDBReady = isReady;
             if (isReady) {
-              this.indexedDBService.getAllState(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.indexedDBAction.TradeWatchlist} Get All Recent Watchlist`, true).pipe(
+              this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.indexedDBAction.TradeWatchlist} Get All Recent Watchlist`, true).pipe(
                 first()
               ).subscribe((storedRecentWatchlists: Array<DTOs.UoBWatchlistDTO>) => {
                 if (storedRecentWatchlists.length > 0) {
