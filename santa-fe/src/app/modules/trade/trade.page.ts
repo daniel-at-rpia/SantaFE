@@ -145,6 +145,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
           break;
         case this.constants.globalWorkflowTypes.unselectPreset:
           // do nothing as nothing is needed
+          break;
         default:
           // code...
           break;
