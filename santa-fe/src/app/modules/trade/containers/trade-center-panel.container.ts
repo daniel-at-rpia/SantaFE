@@ -401,7 +401,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         );
         const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
         this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-        this.onApplyFilter(params, false);
+        this.onApplyFilter(params, false, targetPreset.data.displayTitle);
         this.loadFreshData();
       }
     }
@@ -449,7 +449,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public onApplyFilter(
     params: AdhocPacks.DefinitionConfiguratorEmitterParams,
-    userTriggered: boolean
+    userTriggered: boolean,
+    presetDisplayTitle: string = null
   ) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
@@ -467,7 +468,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     });
     if (params.filterList.length > 0) {
-      this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcutList);
+      this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcutList, presetDisplayTitle);
     }
     // just comment it out because we will bring it back in some way in a later task
     // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
@@ -909,7 +910,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
       this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
       this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
-      this.onApplyFilter(params, false);
+      this.onApplyFilter(params, false, presetDisplayTitle);
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
       this.state.currentSearch.redirectedFromStrurturing = true;
@@ -1084,7 +1085,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
   }
 
-  private storeRecentWatchList(params: AdhocPacks.DefinitionConfiguratorEmitterParams) {
+  private storeRecentWatchList(
+    params: AdhocPacks.DefinitionConfiguratorEmitterParams,
+    presetDisplayTitle: string
+  ) {
     if (params.filterList.length > 0) {
       const searchShortcutDefinitionList: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [];
       let customDisplayTitle = '';
@@ -1094,10 +1098,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           groupByActive: false,
           selectedOptions: definitionItem.filterBy.map((item: string) => item)
         }
-        if (customDisplayTitle === '') {
-          customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${definitionItem.key}(${shortcutDefinition.selectedOptions.length})` : `${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
+        if (!presetDisplayTitle) {
+          if (customDisplayTitle === '') {
+            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${definitionItem.key}(${shortcutDefinition.selectedOptions.length})` : `${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
+          } else {
+            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${customDisplayTitle} ${definitionItem.key}(${shortcutDefinition.selectedOptions.length})` : `${customDisplayTitle} ${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
+          }
         } else {
-          customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${customDisplayTitle} ${definitionItem.key}(${shortcutDefinition.selectedOptions.length})` : `${customDisplayTitle} ${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
+          customDisplayTitle = presetDisplayTitle;
         }
         searchShortcutDefinitionList.push(shortcutDefinition);
       })
@@ -1184,12 +1192,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private checkExistingRecentWatchlistSearches(
     params: AdhocPacks.DefinitionConfiguratorEmitterParams,
-    watchlist: Array<DTOs.SearchShortcutDTO>
+    watchlist: Array<DTOs.SearchShortcutDTO>,
+    presetDisplayTitle: string
   ) {
     if (watchlist.length > 0) {
       const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, watchlist);
       if (!existingWatchlist) {
-        this.storeRecentWatchList(params);
+        this.storeRecentWatchList(params, presetDisplayTitle);
       } else {
         this.changeRecentWatchlistTimeStamp(existingWatchlist.data.uuid);
       }
@@ -1201,12 +1210,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           const indexedDBWatchlist: Array<DTOs.SearchShortcutDTO> = storedRecentWatchlists.map((watchlist: DTOs.UoBWatchlistDTO) => ({...watchlist.data.searchShortcut}));
           const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, indexedDBWatchlist);
           if (!existingWatchlist) {
-            this.storeRecentWatchList(params);
+            this.storeRecentWatchList(params, presetDisplayTitle);
           } else {
             this.changeRecentWatchlistTimeStamp(existingWatchlist.data.uuid);
           }
         } else {
-          this.storeRecentWatchList(params)
+          this.storeRecentWatchList(params, presetDisplayTitle)
         }
       })
     }
