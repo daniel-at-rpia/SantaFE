@@ -1175,8 +1175,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private changeRecentWatchlistTimeStamp(uuid: string) {
     const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${uuid}`, false);
-    const storeObject = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
-    const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(storeObject, uuid);
+    const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
+    const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(objectStore, uuid);
     request.onerror = (event) => {
       console.error(`${this.constants.indexedDBAction.TradeWatchlist} (Recent) - Get stored watchlist for uuid: ${uuid} error`, event)
     };
@@ -1186,7 +1186,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const currentTime = moment().unix();
       storedWatchlistCopy.data.searchShortcut.data.metadata.lastUseTime = currentTime;
       storedWatchlistCopy.data.searchShortcut.data.metadata.dbStoredTime = currentTime;
-      this.indexedDBService.addDataToIndexedDB(storeObject, storedWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} (Recent) - Updating time stamp for uuid: ${uuid}`);
+      this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} (Recent) - Updating time stamp for uuid: ${uuid}`);
     };
   }
 
