@@ -22,6 +22,7 @@ import {
 
 export interface RootState {
   ownerInitial: string;
+  currentUrl: string;
 }
 
 export interface GlobalNavState {
