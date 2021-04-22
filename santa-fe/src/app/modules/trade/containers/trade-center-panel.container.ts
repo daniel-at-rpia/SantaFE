@@ -401,7 +401,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         );
         const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
         this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-        this.onApplyFilter(params, false, targetPreset.data.displayTitle);
+        this.onApplyFilter(params, false, targetPreset, targetPreset.data.displayTitle);
         this.loadFreshData();
       }
     }
@@ -450,7 +450,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   public onApplyFilter(
     params: AdhocPacks.DefinitionConfiguratorEmitterParams,
     userTriggered: boolean,
-    presetDisplayTitle: string = null
+    targetPreset: DTOs.SearchShortcutDTO = null,
+    presetDisplayTitle: string = ''
   ) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
@@ -467,7 +468,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
       }
     });
-    if (params.filterList.length > 0) {
+    if (params.filterList.length > 0 && (!targetPreset || targetPreset.state.isAbleToSaveAsRecentWatchlist)) {
       this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcutList, presetDisplayTitle);
     }
     // just comment it out because we will bring it back in some way in a later task
@@ -564,6 +565,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.strategyShortcuts);
     this.state.presets.trendingWatchlistShortcutList = this.populateSingleShortcutList(this.constants.trendingShortcuts);
     this.state.presets.presetsReady = true;
+    const prepopulatedShortcutList = [...this.state.presets.portfolioShortcutList, ...this.state.presets.ownershipShortcutList, ...this.state.presets.strategyShortcutList, ...this.state.presets.trendingWatchlistShortcutList];
+    if (prepopulatedShortcutList.length > 0) {
+      prepopulatedShortcutList.forEach((shortcut: DTOs.SearchShortcutDTO) => {
+        shortcut.state.isAbleToSaveAsRecentWatchlist = false;
+      })
+    }
   }
 
   private populateSingleShortcutList(
@@ -882,6 +889,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       });
       if (!!targetPreset) {
+        targetPreset.state.isAbleToSaveAsRecentWatchlist = true;
         this.onSelectPreset(targetPreset, false);
       } else {
         this.onSelectPreset(this.state.presets.portfolioShortcutList[0], false);
@@ -910,7 +918,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
       this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
       this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
-      this.onApplyFilter(params, false, presetDisplayTitle);
+      this.onApplyFilter(params, false, targetPreset, presetDisplayTitle);
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
       this.state.currentSearch.redirectedFromStrurturing = true;
