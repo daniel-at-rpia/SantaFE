@@ -376,7 +376,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         );
         const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
         this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-        this.onApplyFilter(params, false);
+        this.onApplyFilter(params, false, null);
         this.loadFreshData();
       }
     }
@@ -426,7 +426,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public onApplyFilter(
     params: AdhocPacks.DefinitionConfiguratorEmitterParams,
-    userTriggered: boolean
+    userTriggered: boolean,
+    preloadMetricFromSeeBond: PortfolioMetricValues
   ) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
@@ -444,7 +445,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     });
     this.updateSearchMode();
-    this.updateTableLayout();
+    if(!!preloadMetricFromSeeBond){
+      this.updateTableLayout(preloadMetricFromSeeBond);
+    } else {
+      this.updateTableLayout();
+    }
     if (!!userTriggered) {
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
@@ -864,8 +869,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       });
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
       this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-      this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
-      this.onApplyFilter(params, false);
+      this.onApplyFilter(params, false, portfolioMetric);
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
       this.state.currentSearch.redirectedFromStrurturing = true;
@@ -1052,10 +1056,17 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.currentSearch.mode = isInternal ? this.constants.searchModes.internal : this.constants.searchModes.uob;
   }
 
-  private updateTableLayout() {
+  private updateTableLayout(portfolioMetric: PortfolioMetricValues = this.constants.portolioMetricValues.cs01) {
+    const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
+      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
+      return !targetSpecifics.disabled;
+    });
+    // reset metrics
+    this.state.table.metrics = this.utilityService.deepCopy(mainTableMetrics);
     if (this.state.currentSearch.mode === this.constants.searchModes.internal) {
       if (this.state.filters.quickFilters.portfolios.length === 1) {
         this.modifyWeightColumnHeadersUpdateFundName();
+        this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
       }
     } else {
       // right now only apply the default, but when we store the configs for each saved watchlist then we can use those if they are present
@@ -1086,7 +1097,5 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       }
     });
-    // trigger the ngOnChanges in santa table
-    this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
   }
 }

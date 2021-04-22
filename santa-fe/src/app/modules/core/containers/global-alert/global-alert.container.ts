@@ -113,7 +113,7 @@ export class GlobalAlert implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.makeAlertAPICallSub = this.store$.pipe(
       select(selectGlobalAlertMakeAPICall)
       ).subscribe((makeAPICall: boolean) => {
-      !!makeAPICall && this.getRawAlerts();
+      // !!makeAPICall && this.getRawAlerts();
     });
     this.subscriptions.newAlertSubscription = this.store$.pipe(
       select(selectNewAlerts),

@@ -264,6 +264,18 @@ export class AgGridMiddleLayerService {
     });
   }
 
+  public expandStencilGroup(table: DTOs.SecurityTableDTO) {
+    if (!!table && !!table.api.gridApi) {
+      table.api.gridApi.forEachNode((eachNode, index) => {
+        if (index === 0) {  // the stencil group should always have the first row as the grouping row
+          if (!!eachNode && !!eachNode.group) {
+            eachNode.setExpanded(true);
+          }
+        }
+      });
+    }
+  }
+
   private loadAgGridHeadersComparator(
     targetHeader: DTOs.SecurityTableHeaderDTO,
     newAgColumn: Blocks.AgGridColumnDefinition
