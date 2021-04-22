@@ -172,6 +172,7 @@ export interface AgGridColumnDefinition {
   children?: Array<AgGridColumnDefinition>;
   columnGroupShow?: string;
   valueFormatter?: (params: ValueFormatterParams) => string;
+  rowGroup?: boolean;
 }
 
 export interface AgGridRowNode {

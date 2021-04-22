@@ -425,6 +425,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     groupBelongs: string;
     groupShow: boolean;
     activePortfolios: Array<string>;
+    groupByActive: boolean;
   },
   style: {
     columnWidthOverride: number;

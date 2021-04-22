@@ -1,4 +1,4 @@
-import { Stubs } from 'Core/models/frontend';
+import { Stubs, AdhocPacks } from 'Core/models/frontend';
 import { SecurityDefinitionMap, FullStrategyList } from 'Core/constants/securityDefinitionConstants.constant';
 import { SecurityMetricOptions, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
@@ -526,3 +526,10 @@ export const DISPLAY_DRIVER_MAP  = {
   'Yield': 'Yield',
   'Price': 'Price'
 };
+
+export const TradeUoBDefaultSecurityTableHeaderOverwriteConfigs: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite> = [
+  {
+    key: 'ticker',
+    groupBy: true
+  }
+]

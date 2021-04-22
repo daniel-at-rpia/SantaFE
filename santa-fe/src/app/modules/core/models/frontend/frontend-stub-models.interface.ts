@@ -127,6 +127,7 @@ interface SecurityTableHeaderConfigStubTableSpecificsBlock {
   disabled?: boolean;
   groupShow?: boolean;
   sortActivated?: AggridSortOptions;
+  groupByActive?: boolean;
 }
 
 export interface TriCoreDriverConfigStub {

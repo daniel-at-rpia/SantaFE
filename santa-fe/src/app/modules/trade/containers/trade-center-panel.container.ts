@@ -59,7 +59,8 @@
       StrategyShortcuts,
       DISPLAY_DRIVER_MAP,
       TrendingShortcuts,
-      TradeCenterPanelSearchModes
+      TradeCenterPanelSearchModes,
+      TradeUoBDefaultSecurityTableHeaderOverwriteConfigs
     } from 'Core/constants/tradeConstants.constant';
     import {
       selectLiveUpdateTick,
@@ -128,7 +129,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     navigationModule: NavigationModule,
     globalWorkflowTypes: GlobalWorkflowTypes,
     displayDriverMap: DISPLAY_DRIVER_MAP,
-    searchModes: TradeCenterPanelSearchModes
+    searchModes: TradeCenterPanelSearchModes,
+    uobDefaultOverwriteTableLayout: TradeUoBDefaultSecurityTableHeaderOverwriteConfigs
   }
 
   private initializePageState(): PageStates.TradeCenterPanelState {
@@ -1051,8 +1053,40 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   private updateTableLayout() {
-    if (this.state.filters.quickFilters.portfolios.length === 1) {
-      this.modifyWeightColumnHeadersUpdateFundName();
+    if (this.state.currentSearch.mode === this.constants.searchModes.internal) {
+      if (this.state.filters.quickFilters.portfolios.length === 1) {
+        this.modifyWeightColumnHeadersUpdateFundName();
+      }
+    } else {
+      // right now only apply the default, but when we store the configs for each saved watchlist then we can use those if they are present
+      this.updateTableLayoutApplyConfigOverwrite(this.constants.uobDefaultOverwriteTableLayout);
     }
+  }
+
+  private updateTableLayoutApplyConfigOverwrite(overwrites: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite>) {
+    this.state.table.metrics.forEach((eachHeader) => {
+      const existInOverwrite = overwrites.find((eachOverwrite) => {
+        return eachOverwrite.key === eachHeader.key;
+      });
+      if (!!existInOverwrite) {
+        if (existInOverwrite.hasOwnProperty('active')) {
+          eachHeader.content.tableSpecifics.default.active = existInOverwrite.active;
+        }
+        if (existInOverwrite.hasOwnProperty('groupShow')) {
+          eachHeader.content.tableSpecifics.default.groupShow = existInOverwrite.groupShow;
+        }
+        if (existInOverwrite.hasOwnProperty('disabled')) {
+          eachHeader.content.tableSpecifics.default.disabled = existInOverwrite.disabled;
+        }
+        if (existInOverwrite.hasOwnProperty('pinned')) {
+          eachHeader.content.tableSpecifics.default.pinned = existInOverwrite.pinned;
+        }
+        if (existInOverwrite.hasOwnProperty('groupBy')) {
+          eachHeader.content.tableSpecifics.default.groupByActive = existInOverwrite.groupBy;
+        }
+      }
+    });
+    // trigger the ngOnChanges in santa table
+    this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
   }
 }

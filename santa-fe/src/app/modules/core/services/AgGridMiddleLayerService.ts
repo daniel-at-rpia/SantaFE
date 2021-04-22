@@ -108,7 +108,8 @@ export class AgGridMiddleLayerService {
         sort: eachHeader.data.sortActivated || null,
         enablePivot: false,
         enableRowGroup: false,
-        hide: !isActiveByDefault
+        hide: !isActiveByDefault,
+        rowGroup: eachHeader.data.groupByActive
       };
       if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
         if (eachHeader.data.key === 'alertTraceVolumeEstimated') {

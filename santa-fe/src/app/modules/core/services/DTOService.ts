@@ -1063,7 +1063,8 @@ export class DTOService {
         pinned: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].pinned : !!stub.content.tableSpecifics.default.pinned,
         sortActivated: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? stub.content.tableSpecifics[useSpecificsFrom].sortActivated : stub.content.tableSpecifics.default.sortActivated,
         groupShow: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].groupShow : !!stub.content.tableSpecifics.default.groupShow,
-        activePortfolios: activePortfolios || []
+        activePortfolios: activePortfolios || [],
+        groupByActive: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? stub.content.tableSpecifics[useSpecificsFrom].groupByActive : stub.content.tableSpecifics.default.groupByActive
       },
       style: {
         columnWidthOverride: stub.content.columnWidth > 0 ? stub.content.columnWidth : null
