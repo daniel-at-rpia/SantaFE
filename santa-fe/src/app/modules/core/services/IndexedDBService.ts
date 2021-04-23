@@ -231,6 +231,34 @@ export class IndexedDBService {
     }
   }
 
+  public retrieveAndDeleteDataFromIndexedDB(
+    uuid: string,
+    tableName: string,
+    databaseType: IndexedDBDatabases,
+    action: string,
+    customTransactionHandlers: boolean
+  ) {
+    const transaction = this.retreiveIndexedDBTransaction(tableName, databaseType, action, customTransactionHandlers);
+    const objectStore = this.retrieveIndexedDBObjectStore(tableName, transaction);
+    if (!!objectStore) {
+      this.deleteDataFromIndexedDB(objectStore, uuid, action);
+    }
+  }
+
+  public deleteDataFromIndexedDB(
+    objectStore: IDBObjectStore,
+    uuid: string,
+    action: string
+  ) {
+    const requestDelete = objectStore.delete(uuid);
+    requestDelete.onerror = (event) => {
+      console.error(`${action} error`, event)
+    }
+    requestDelete.onsuccess = (event) => {
+      console.log(`${action} success`, event)
+    }
+  }
+
   private initializeDatabaseTable(
     indexedDBAPI: IDBDatabase,
     tableName: string,
