@@ -16,8 +16,7 @@ import {
 import { Alert } from "Core/components/alert/alert.component";
 import {
   AxeAlertScope,
-  AxeAlertType,
-  UoBWatchListType
+  AxeAlertType
 } from 'Core/constants/tradeConstants.constant';
 import {
   PortfolioMetricValues,
@@ -981,10 +980,3 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   }
 }
 
-export interface UoBWatchlistDTO extends BasicDTOStructure {
-  uuid: string;
-  data: {
-    searchShortcut: SearchShortcutDTO,
-    type: UoBWatchListType
-  }
-}

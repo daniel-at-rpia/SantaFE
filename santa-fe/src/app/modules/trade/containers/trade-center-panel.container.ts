@@ -34,8 +34,7 @@
       FAILED_USER_INITIALS_FALLBACK,
       DevWhitelist,
       NavigationModule,
-      GlobalWorkflowTypes,
-      IndexedDBActions
+      GlobalWorkflowTypes
     } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
@@ -60,12 +59,13 @@
       StrategyShortcuts,
       DISPLAY_DRIVER_MAP,
       TrendingShortcuts,
-      INDEXEDDB_WATCHLIST_VERSION,
-      INDEXEDDB_WATCHLIST_DATABASE_NAME,
+    } from 'Core/constants/tradeConstants.constant';
+    import {
       INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
       INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME,
-      UoBWatchListType
-    } from 'Core/constants/tradeConstants.constant';
+      IndexedDBWatchListType,
+      IndexedDBDatabases
+    } from 'Core/constants/indexedDB.constants'
     import {
       selectLiveUpdateTick,
       selectInitialDataLoadedInMainTable,
@@ -103,9 +103,6 @@
 })
 
 export class TradeCenterPanel extends SantaContainerComponentBase implements OnInit {
-  private watchlistIndexedDBAPI: AdhocPacks.IndexedDBAPIBlock = {
-    api: null
-  }
   state: PageStates.TradeCenterPanelState;
   subscriptions = {
     userInitialsSub: null,
@@ -140,19 +137,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     navigationModule: NavigationModule,
     globalWorkflowTypes: GlobalWorkflowTypes,
     displayDriverMap: DISPLAY_DRIVER_MAP,
-    idbVersion: INDEXEDDB_WATCHLIST_VERSION,
-    idbWatchlistDbName: INDEXEDDB_WATCHLIST_DATABASE_NAME,
     idbWatchlistRecentTableName: INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
     idbWatchlistSavedTableName: INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME,
-    watchlistType: UoBWatchListType,
-    indexedDBAction: IndexedDBActions
+    watchlistType: IndexedDBWatchListType,
+    indexedDBDatabase: IndexedDBDatabases
   }
-  private indexedDBTableBlockItems: Array<AdhocPacks.IndexedDBTableBlockItem> = [
-    {
-      name: this.constants.idbWatchlistRecentTableName,
-      key: 'uuid'
-    }
-  ]
   private initializePageState(): PageStates.TradeCenterPanelState {
     const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcutList : [];
     const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
@@ -242,9 +231,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public ngOnInit() {
     this.state = this.initializePageState();
-    const openRequest = this.indexedDBService.openRequestToIndexDBDatabase(this.constants.idbWatchlistDbName, this.constants.idbVersion);
-    const indexedDBTableBlock: AdhocPacks.IndexedDBTableBlock = this.indexedDBService.createTableBlock(this.indexedDBTableBlockItems);
-    indexedDBTableBlock && this.indexedDBService.initiateIndexedDBRequestHandler(openRequest, this.watchlistIndexedDBAPI, this.constants.idbWatchlistDbName, indexedDBTableBlock, this.constants.indexedDBAction.TradeWatchlist);
+    this.indexedDBService.initializeIndexedDB(this.constants.indexedDBDatabase.TradeWatchlist);
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
       filter((tick) => {
         return this.stateActive;
@@ -538,12 +525,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           ).subscribe((isReady) => {
             this.state.isIndexedDBReady = isReady;
             if (isReady) {
-              this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.indexedDBAction.TradeWatchlist} Get All Recent Watchlist`, true).pipe(
+              this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
                 first()
-              ).subscribe((storedRecentWatchlists: Array<DTOs.UoBWatchlistDTO>) => {
+              ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
                 if (storedRecentWatchlists.length > 0) {
-                  const displayedRecentWatchLists: Array<DTOs.SearchShortcutDTO> = storedRecentWatchlists.map((watchlist: DTOs.UoBWatchlistDTO) => ({...watchlist.data.searchShortcut}));
-                  this.state.presets.recentWatchlistShortcutList = [...this.state.presets.recentWatchlistShortcutList, ...displayedRecentWatchLists];
+                  this.state.presets.recentWatchlistShortcutList = [...this.state.presets.recentWatchlistShortcutList, ...storedRecentWatchlists];
                 }
               })
             }
@@ -1122,15 +1108,15 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         includedDefinitions: searchShortcutDefinitionList
       }
       const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
-      const recentWatchlist = this.dtoService.formUoBWatchlistObject(recentShortcut, this.constants.watchlistType.recent);
-      const recentWatchlistCopy: DTOs.UoBWatchlistDTO = this.utilityService.deepCopy(recentWatchlist);
-      recentWatchlistCopy.data.searchShortcut.data.metadata.dbStoredTime = moment().unix();
-      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, recentWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} - Recent Watchlist`, false);
-      const recentShortcutCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(recentShortcut);
-      recentShortcutCopy.state.isPreviewVariant = true;
-      recentShortcutCopy.state.isUserInputBlocked = true;
-      this.state.presets.recentWatchlistShortcutList.push(recentShortcut);
-      this.state.currentSearch.previewShortcut = recentShortcutCopy;
+      const recentShortcutCopy = this.utilityService.deepCopy(recentShortcut);
+      recentShortcutCopy.state.isPreviewVariant = false;
+      recentShortcutCopy.state.isUserInputBlocked = false;
+      recentShortcutCopy.data.metadata.dbStoredTime = recentShortcutCopy.data.metadata.createTime;
+      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} - (${this.constants.watchlistType.recent}) - Store Watchlist`, false);
+      this.state.presets.recentWatchlistShortcutList.push(recentShortcutCopy);
+      recentShortcut.state.isPreviewVariant = true;
+      recentShortcut.state.isUserInputBlocked = true;
+      this.state.currentSearch.previewShortcut = recentShortcut;
     }
   }
 
@@ -1182,19 +1168,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   private changeRecentWatchlistTimeStamp(uuid: string) {
-    const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${uuid}`, false);
+    const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${uuid}`, false);
     const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
     const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(objectStore, uuid);
     request.onerror = (event) => {
-      console.error(`${this.constants.indexedDBAction.TradeWatchlist} (Recent) - Get stored watchlist for uuid: ${uuid} error`, event)
+      console.error(`${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get stored watchlist for uuid: ${uuid} error`, event)
     };
     request.onsuccess = (event) => {
-      const storedWatchlist: DTOs.UoBWatchlistDTO = request.result;
-      const storedWatchlistCopy: DTOs.UoBWatchlistDTO = this.utilityService.deepCopy(storedWatchlist);
+      const storedWatchlist: DTOs.SearchShortcutDTO = request.result;
+      const storedWatchlistCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(storedWatchlist);
       const currentTime = moment().unix();
-      storedWatchlistCopy.data.searchShortcut.data.metadata.lastUseTime = currentTime;
-      storedWatchlistCopy.data.searchShortcut.data.metadata.dbStoredTime = currentTime;
-      this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBAction.TradeWatchlist} (Recent) - Updating time stamp for uuid: ${uuid}`);
+      storedWatchlistCopy.data.metadata.lastUseTime = currentTime;
+      storedWatchlistCopy.data.metadata.dbStoredTime = currentTime;
+      this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Updating time stamp for uuid: ${uuid}`);
     };
   }
 
@@ -1211,12 +1197,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.changeRecentWatchlistTimeStamp(existingWatchlist.data.uuid);
       }
     } else {
-      this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.watchlistIndexedDBAPI.api, `${this.constants.indexedDBAction.TradeWatchlist} Get All Recent Watchlist`, true).pipe(
+      this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
         first()
-      ).subscribe((storedRecentWatchlists: Array<DTOs.UoBWatchlistDTO>) => {
+      ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
         if (storedRecentWatchlists.length > 0) {
-          const indexedDBWatchlist: Array<DTOs.SearchShortcutDTO> = storedRecentWatchlists.map((watchlist: DTOs.UoBWatchlistDTO) => ({...watchlist.data.searchShortcut}));
-          const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, indexedDBWatchlist);
+          const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, storedRecentWatchlists);
           if (!existingWatchlist) {
             this.storeRecentWatchList(params, presetDisplayTitle);
           } else {

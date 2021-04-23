@@ -58,8 +58,7 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType,
-      UoBWatchListType
+      AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import {
       PortfolioMetricValues,
@@ -2766,20 +2765,6 @@ export class DTOService {
     return object;
   }
 
-  public formUoBWatchlistObject(
-    searchShortcut: DTOs.SearchShortcutDTO,
-    type: UoBWatchListType
-    ): DTOs.UoBWatchlistDTO {
-    const object: DTOs.UoBWatchlistDTO = {
-      uuid: searchShortcut.data.uuid,
-      data: {
-        searchShortcut: searchShortcut,
-        type: type
-      },
-      state: null
-    }
-    return object;
-  }
 
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioFundDTO,

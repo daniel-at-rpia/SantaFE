@@ -521,16 +521,3 @@ export const DISPLAY_DRIVER_MAP  = {
   'Yield': 'Yield',
   'Price': 'Price'
 };
-
-export const INDEXEDDB_WATCHLIST_VERSION = 1;
-
-export const INDEXEDDB_WATCHLIST_DATABASE_NAME = 'WatchList';
-
-export const INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME = 'Recent_Table_Name';
-
-export const INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME = 'Saved_Table_Name';
-
-export enum UoBWatchListType {
-  recent = 'Recent',
-  saved = 'Saved'
-}
