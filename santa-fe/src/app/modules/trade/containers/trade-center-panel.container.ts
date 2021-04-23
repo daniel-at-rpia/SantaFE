@@ -1132,32 +1132,30 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       allFiltersForConfigurator = [...allFiltersForConfigurator, ...formattedFilters];
     })
     watchlists.forEach((watchlist: DTOs.SearchShortcutDTO) => {
-      if (!isExist) {
-        if (watchlist.data.searchFilters.length > 0) {
-          watchlist.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
-            let allFiltersForWatchlist: Array<string> = [];
-            searchFilter.forEach((filter) => {
-              filter.data.highlightSelectedOptionList.forEach((highlightedOption: Blocks.SecurityDefinitionFilterBlock) => {
-                if (highlightedOption.shortKey) {
-                  const formattedShortkey = this.convertFiltersForWatchlistCompare(highlightedOption.shortKey);
-                  allFiltersForWatchlist = [...allFiltersForWatchlist, formattedShortkey];
-                }
-              })
+      if (!isExist && watchlist.data.searchFilters.length > 0) {
+        watchlist.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
+          let allFiltersForWatchlist: Array<string> = [];
+          searchFilter.forEach((filter) => {
+            filter.data.highlightSelectedOptionList.forEach((highlightedOption: Blocks.SecurityDefinitionFilterBlock) => {
+              if (highlightedOption.shortKey) {
+                const formattedShortkey = this.convertFiltersForWatchlistCompare(highlightedOption.shortKey);
+                allFiltersForWatchlist = [...allFiltersForWatchlist, formattedShortkey];
+              }
             })
-            if (allFiltersForWatchlist.length > 0) {
-              if (allFiltersForConfigurator.length !== allFiltersForWatchlist.length) {
-                matchedWatchlist = null;
-              } else {
-                const allFiltersForConfiguratorSorted = allFiltersForConfigurator.sort();
-                const allWatchlistFiltersSorted = allFiltersForWatchlist.sort();
-                isExist = allFiltersForConfiguratorSorted.every((filter: string, i: number) => filter === allWatchlistFiltersSorted[i]);
-                if (!!isExist) {
-                  matchedWatchlist = watchlist;
-                }
+          })
+          if (allFiltersForWatchlist.length > 0) {
+            if (allFiltersForConfigurator.length !== allFiltersForWatchlist.length) {
+              matchedWatchlist = null;
+            } else {
+              const allFiltersForConfiguratorSorted = allFiltersForConfigurator.sort();
+              const allWatchlistFiltersSorted = allFiltersForWatchlist.sort();
+              isExist = allFiltersForConfiguratorSorted.every((filter: string, i: number) => filter === allWatchlistFiltersSorted[i]);
+              if (!!isExist) {
+                matchedWatchlist = watchlist;
               }
             }
-          })
-        }
+          }
+        })
       }
     })
     return matchedWatchlist;
