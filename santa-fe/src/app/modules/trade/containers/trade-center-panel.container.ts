@@ -388,7 +388,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         );
         const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
         this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-        this.onApplyFilter(params, false, targetPreset, targetPreset.data.displayTitle);
+        this.onApplyFilter(params, false, targetPreset);
         this.loadFreshData();
       }
     }
@@ -437,8 +437,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   public onApplyFilter(
     params: AdhocPacks.DefinitionConfiguratorEmitterParams,
     userTriggered: boolean,
-    targetPreset: DTOs.SearchShortcutDTO = null,
-    presetDisplayTitle: string = ''
+    targetPreset: DTOs.SearchShortcutDTO = null
   ) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
@@ -456,6 +455,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     });
     if (params.filterList.length > 0 && (!targetPreset || targetPreset.state.isAbleToSaveAsRecentWatchlist)) {
+      const presetDisplayTitle = targetPreset && targetPreset.data ? targetPreset.data.displayTitle : '';
       this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcutList, presetDisplayTitle);
     }
     // just comment it out because we will bring it back in some way in a later task
@@ -875,6 +875,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       });
       if (!!targetPreset) {
+        targetPreset.data.displayTitle = `${targetPreset.data.displayTitle} - ${presetDisplayTitle}`;
         targetPreset.state.isAbleToSaveAsRecentWatchlist = true;
         this.onSelectPreset(targetPreset, false);
       } else {
@@ -904,15 +905,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
       this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
       this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
-      this.onApplyFilter(params, false, targetPreset, presetDisplayTitle);
+      this.onApplyFilter(params, false, targetPreset);
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
       this.state.currentSearch.redirectedFromStrurturing = true;
       this.state.currentSearch.previewShortcut.data.highlightTitle = 'From Structuring';
       this.autoLoadTableFillCurrentSearchPresetSlotlist(filterList);
-      if (!!presetDisplayTitle && presetDisplayTitle.length > 0) {
-        this.state.currentSearch.previewShortcut.data.displayTitle = ` ${this.state.currentSearch.previewShortcut.data.displayTitle} - ${presetDisplayTitle}`;
-      }
     } else {
       console.warn('see bond does not have a portfolio definition', filterList);
       this.restfulCommService.logError('see bond does not have a portfolio definition');
@@ -1116,7 +1114,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.state.presets.recentWatchlistShortcutList.push(recentShortcutCopy);
       recentShortcut.state.isPreviewVariant = true;
       recentShortcut.state.isUserInputBlocked = true;
+      const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
       this.state.currentSearch.previewShortcut = recentShortcut;
+      this.state.currentSearch.previewShortcut.data.highlightTitle = highlightTitle;
     }
   }
 
