@@ -469,6 +469,52 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
+  &__timeSpecificDisplay {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_enable_scrollbar('both');
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    height: 100%;
+    padding-top: $spacing_large;
+    &-block {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      flex: 0 0 100%;
+      min-height: 200px;
+      &-list {
+        flex: 0 0 100%;
+        display: flex;
+        flex-wrap: wrap;
+        padding: $spacing_small $spacing_medium 0;
+        margin-bottom: $spacing_large;
+        &-item {
+          @include mix_alive('light');
+          flex: 0 1 25%;
+          display: flex;
+          padding: $spacing_x_small $spacing_medium $spacing_medium 0;
+          search-shortcut {
+            display: flex;
+            flex: 1 1 auto;
+          }
+          &--major {
+            flex: 0 1 50%;
+          }
+          &--hero {
+            flex: 0 1 100%;
+          }
+        }
+      }
+      &-title {
+        flex: 1 1 auto;
+        padding-left: $spacing_medium;
+        font-size: convert_px_to_rem(26px);
+        color: $color_disabled;
+      }
+    }
+  }
   &__list {
     @include mix_fixed_div(relative, $z_index_base_item);
     @include mix_enable_scrollbar('both');
@@ -505,6 +551,16 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   &--bottomCategorySelectedState {
     transform: translate(0, $tradeCenterPresetShortcutCanvas_selected_movement_length);
     align-items: flex-end;
+  }
+  &--timeSpecificCategoryState {
+    #{$blockName} {
+      &__timeSpecificDisplay {
+        display: flex;
+      }
+      &__list {
+        display: none;
+      }
+    }
   }
   @include mq-large-min {
     margin: $spacing_xx_large;
