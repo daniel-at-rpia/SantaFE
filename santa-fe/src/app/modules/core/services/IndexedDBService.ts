@@ -113,14 +113,14 @@ export class IndexedDBService {
   public retreiveIndexedDBTransaction(
     tableName: string,
     databaseType: IndexedDBDatabases,
-    message: string,
+    action: string,
     hasCustomHandlers: boolean,
     isReadWrite: boolean = true
   ): IDBTransaction {
     const transaction = isReadWrite ? this.allDatabases[databaseType].api.transaction([tableName], "readwrite") : this.allDatabases[databaseType].api.transaction([tableName]);
     if (!hasCustomHandlers) {
       transaction.onerror = (event) => {
-        console.error(`${message}, error`, event);
+        console.error(`${action}, error`, event);
       }
     }
     return transaction;
@@ -137,13 +137,13 @@ export class IndexedDBService {
     tableName: string,
     databaseType: IndexedDBDatabases,
     entry: AdhocPacks.IndexedDBEntryBlock,
-    message: string,
+    action: string,
     customTransactionHandlers: boolean
   ) {
-    const transaction = this.retreiveIndexedDBTransaction(tableName, databaseType, message, customTransactionHandlers);
+    const transaction = this.retreiveIndexedDBTransaction(tableName, databaseType, action, customTransactionHandlers);
     const objectStore = this.retrieveIndexedDBObjectStore(tableName, transaction);
     if (!!objectStore) {
-      this.addDataToIndexedDB(objectStore, entry, message);
+      this.addDataToIndexedDB(objectStore, entry, action);
     }
   }
 
@@ -220,7 +220,6 @@ export class IndexedDBService {
     targetUUID: string,
     databaseType: IndexedDBDatabases
   ) {
-
     if (!!this.allDatabases[databaseType].api) {
       // this if condition serves both as a null-check and a guard for not recording the initial state on app load, because it is unnecessary to store it
       const newEntry: AdhocPacks.GlobalWorkflowLastState = {
