@@ -1240,7 +1240,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     const watchlistTime = moment.unix(lastUseTime).format('YYYY-MM-DD');
     const isSameCurrentDate = moment(watchlistTime).isSame(moment(), 'day');
     const isWithinThisWeek = moment(watchlistTime).isSame(moment(), 'week');
-    const oneWeekAgo = moment(watchlistTime).subtract(7, 'days');
+    const oneWeekAgo = moment().subtract(7, 'days');
     const isWithinLastWeek = moment(watchlistTime).isSame(moment(oneWeekAgo), 'week');
     if (isSameCurrentDate) {
       this.state.presets.recentWatchlistShortcuts.todayList.push(watchlist);
