@@ -1111,18 +1111,20 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           selectedOptions: definitionItem.filterBy.map((item: string) => item)
         }
         if (!presetDisplayTitle) {
+          const groupDefinition = definitionItem.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key ? 'BICS' : this.constants.securityGroupDefinitionMap[definitionItem.key].displayName;
           if (customDisplayTitle === '') {
-            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${definitionItem.key}(${shortcutDefinition.selectedOptions.length})` : `${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
+            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${groupDefinition}(${shortcutDefinition.selectedOptions.length})` : `${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
           } else {
-            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${customDisplayTitle} ${definitionItem.key}(${shortcutDefinition.selectedOptions.length})` : `${customDisplayTitle} ${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
+            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${customDisplayTitle} ${groupDefinition}(${shortcutDefinition.selectedOptions.length})` : `${customDisplayTitle} ${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
           }
         } else {
           customDisplayTitle = presetDisplayTitle;
         }
         searchShortcutDefinitionList.push(shortcutDefinition);
       })
+
       const recentShortcutStub: Stubs.SearchShortcutStub = {
-        displayTitle: customDisplayTitle,
+        displayTitle: customDisplayTitle.length > 25 ? `${customDisplayTitle.substring(0,24)}...` : customDisplayTitle,
         includedDefinitions: searchShortcutDefinitionList,
         isHero: false,
         isMajor: false
