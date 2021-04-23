@@ -522,6 +522,7 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
     display: flex;
     flex-wrap: wrap;
     padding: $spacing_large $spacing_medium;
+    height: 100%;
     &-item {
       @include mix_alive('light');
       flex: 0 1 25%;
