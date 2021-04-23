@@ -1188,21 +1188,30 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     return filter.trim().split(' ').join('').toLowerCase();
   }
 
-  private changeRecentWatchlistTimeStamp(uuid: string) {
-    const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${uuid}`, false);
-    const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
-    const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(objectStore, uuid);
-    request.onerror = (event) => {
-      console.error(`${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get stored watchlist for uuid: ${uuid} error`, event)
-    };
-    request.onsuccess = (event) => {
-      const storedWatchlist: DTOs.SearchShortcutDTO = request.result;
-      const storedWatchlistCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(storedWatchlist);
-      const currentTime = moment().unix();
-      storedWatchlistCopy.data.metadata.lastUseTime = currentTime;
-      storedWatchlistCopy.data.metadata.dbStoredTime = currentTime;
-      this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Updating time stamp for uuid: ${uuid}`);
-    };
+  private changeRecentWatchlistTimeStamp(
+    filterList: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>,
+    watchlist: DTOs.SearchShortcutDTO
+  ) {
+    if (filterList && filterList.length > 0) {
+      // only update the watchlist lastUseTime and dbStoredTime if it's the preset being selected
+      const isWatchlistCurrentSearch = this.checkIfWatchlistSearchExists(filterList, [watchlist]);
+      if (!!isWatchlistCurrentSearch) {
+        const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${watchlist.data.uuid}`, false);
+        const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
+        const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(objectStore, watchlist.data.uuid);
+        request.onerror = (event) => {
+          console.error(`${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get stored watchlist for uuid: ${watchlist.data.uuid} error`, event)
+        };
+        request.onsuccess = (event) => {
+          const storedWatchlist: DTOs.SearchShortcutDTO = request.result;
+          const storedWatchlistCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(storedWatchlist);
+          const currentTime = moment().unix();
+          storedWatchlistCopy.data.metadata.lastUseTime = currentTime;
+          storedWatchlistCopy.data.metadata.dbStoredTime = currentTime;
+          this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Updating time stamp for uuid: ${watchlist.data.uuid}`);
+        };
+      }
+    }
   }
 
   private checkExistingRecentWatchlistSearches(
@@ -1215,7 +1224,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       if (!existingWatchlist) {
         this.storeRecentWatchList(params, presetDisplayTitle);
       } else {
-        this.changeRecentWatchlistTimeStamp(existingWatchlist.data.uuid);
+        this.changeRecentWatchlistTimeStamp(params.filterList, existingWatchlist);
       }
     } else {
       this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
@@ -1226,7 +1235,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           if (!existingWatchlist) {
             this.storeRecentWatchList(params, presetDisplayTitle);
           } else {
-            this.changeRecentWatchlistTimeStamp(existingWatchlist.data.uuid);
+            this.changeRecentWatchlistTimeStamp(params.filterList, existingWatchlist);
           }
         } else {
           this.storeRecentWatchList(params, presetDisplayTitle)
