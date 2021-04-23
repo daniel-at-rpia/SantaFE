@@ -143,7 +143,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     indexedDBDatabase: IndexedDBDatabases
   }
   private initializePageState(): PageStates.TradeCenterPanelState {
-    const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcutList : [];
+    const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcuts.fullList : [];
     const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
@@ -159,7 +159,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         portfolioShortcutList: [],
         ownershipShortcutList: [],
         strategyShortcutList: [],
-        recentWatchlistShortcutList: existingRecentWatchlist,
+        recentWatchlistShortcuts: {
+          fullList: existingRecentWatchlist,
+          todayList: [],
+          thisWeekList: [],
+          lastWeekList: []
+        },
         savedWatchlistShortcutList: [],
         trendingWatchlistShortcutList: []
       },
@@ -456,7 +461,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
     if (params.filterList.length > 0 && (!targetPreset || targetPreset.state.isAbleToSaveAsRecentWatchlist)) {
       const presetDisplayTitle = targetPreset && targetPreset.data ? targetPreset.data.displayTitle : '';
-      this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcutList, presetDisplayTitle);
+      this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcuts.fullList, presetDisplayTitle);
     }
     // just comment it out because we will bring it back in some way in a later task
     // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
@@ -529,7 +534,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
                 first()
               ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
                 if (storedRecentWatchlists.length > 0) {
-                  this.state.presets.recentWatchlistShortcutList = [...this.state.presets.recentWatchlistShortcutList, ...storedRecentWatchlists];
+                  this.state.presets.recentWatchlistShortcuts.fullList = [...this.state.presets.recentWatchlistShortcuts.fullList, ...storedRecentWatchlists];
                 }
               })
             }
@@ -1111,7 +1116,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       recentShortcutCopy.state.isUserInputBlocked = false;
       recentShortcutCopy.data.metadata.dbStoredTime = recentShortcutCopy.data.metadata.createTime;
       this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} - (${this.constants.watchlistType.recent}) - Store Watchlist`, false);
-      this.state.presets.recentWatchlistShortcutList.push(recentShortcutCopy);
+      this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcutCopy);
       recentShortcut.state.isPreviewVariant = true;
       recentShortcut.state.isUserInputBlocked = true;
       const { highlightTitle } = this.state.currentSearch.previewShortcut.data;

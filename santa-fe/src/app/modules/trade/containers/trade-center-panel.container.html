@@ -129,11 +129,11 @@
           </li>
           <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
             <button
-              (click)="onSelectPresetCategory(state.presets.recentWatchlistShortcutList, false)"
+              (click)="onSelectPresetCategory(state.presets.recentWatchlistShortcuts.fullList, false)"
               [ngClass]="{
                 'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
                 'sat-tradeCenterPresetCategoryCanvas__list-item-btn--third': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.recentWatchlistShortcutList,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList,
                 'santaBtn--labelled': true,
                 'santaBtn--inverseLabelled': true
               }">
