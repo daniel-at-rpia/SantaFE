@@ -1122,7 +1122,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       })
       const recentShortcutStub: Stubs.SearchShortcutStub = {
         displayTitle: customDisplayTitle,
-        includedDefinitions: searchShortcutDefinitionList
+        includedDefinitions: searchShortcutDefinitionList,
+        isHero: false,
+        isMajor: false
       }
       const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
       const recentShortcutCopy = this.utilityService.deepCopy(recentShortcut);
