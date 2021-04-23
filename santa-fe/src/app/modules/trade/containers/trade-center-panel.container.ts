@@ -535,6 +535,20 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
                 if (storedRecentWatchlists.length > 0) {
                   this.state.presets.recentWatchlistShortcuts.fullList = [...this.state.presets.recentWatchlistShortcuts.fullList, ...storedRecentWatchlists];
+                  if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
+                    this.state.presets.recentWatchlistShortcuts.fullList.sort((watchlistA: DTOs.SearchShortcutDTO, watchlistB: DTOs.SearchShortcutDTO) => {
+                      if (watchlistA.data.metadata.lastUseTime > watchlistB.data.metadata.lastUseTime) {
+                        return -1;
+                      } else if (watchlistA.data.metadata.lastUseTime < watchlistB.data.metadata.lastUseTime) {
+                        return 1;
+                      } else {
+                        return 0;
+                      }
+                    })
+                    this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.SearchShortcutDTO) => {
+                      this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist);
+                    })
+                  }
                 }
               })
             }
@@ -1214,6 +1228,25 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           this.storeRecentWatchList(params, presetDisplayTitle)
         }
       })
+    }
+  }
+
+  private addRecentWatchlistToTimeSpecificShortcutlist(watchlist: DTOs.SearchShortcutDTO) {
+    const { lastUseTime } = watchlist.data.metadata;
+    const watchlistTime = moment.unix(lastUseTime).format('YYYY-MM-DD');
+    const isSameCurrentDate = moment(watchlistTime).isSame(moment(), 'day');
+    const isWithinThisWeek = moment(watchlistTime).isSame(moment(), 'week');
+    const oneWeekAgo = moment(watchlistTime).subtract(7, 'days');
+    const isWithinLastWeek = moment(watchlistTime).isSame(moment(oneWeekAgo), 'week');
+    if (isSameCurrentDate) {
+      this.state.presets.recentWatchlistShortcuts.todayList.push(watchlist);
+    } else if (isWithinThisWeek) {
+      this.state.presets.recentWatchlistShortcuts.thisWeekList.push(watchlist);
+    } else if (isWithinLastWeek) {
+      this.state.presets.recentWatchlistShortcuts.lastWeekList.push(watchlist);
+    } else {
+      // Delete older watchlists from IndexedDB
+      this.indexedDBService.retrieveAndDeleteDataFromIndexedDB(watchlist.data.uuid, this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Delete stored watchlist for uuid: ${watchlist.data.uuid}`, false);
     }
   }
 }
