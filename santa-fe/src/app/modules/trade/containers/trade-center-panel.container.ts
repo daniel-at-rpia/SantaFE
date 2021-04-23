@@ -1221,7 +1221,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
         first()
       ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
-        if (storedRecentWatchlists.length > 0) {
+        if (storedRecentWatchlists && storedRecentWatchlists.length > 0) {
           const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, storedRecentWatchlists);
           if (!existingWatchlist) {
             this.storeRecentWatchList(params, presetDisplayTitle);
