@@ -602,7 +602,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             });
           } else {
             definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
-              if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
+              const compareRef = eachIncludedDef.definitionKey === 'TENOR' ? eachFilterOption.displayLabel : eachFilterOption.shortKey;
+              if (eachIncludedDef.selectedOptions.indexOf(compareRef) >= 0) {
                 eachFilterOption.isSelected = true;
                 definitionDTO.data.highlightSelectedOptionList.push(eachFilterOption);
               }
