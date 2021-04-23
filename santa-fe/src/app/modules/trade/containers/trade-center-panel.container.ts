@@ -1131,6 +1131,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       recentShortcutCopy.data.metadata.dbStoredTime = recentShortcutCopy.data.metadata.createTime;
       this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} - (${this.constants.watchlistType.recent}) - Store Watchlist`, false);
       this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcutCopy);
+      this.state.presets.recentWatchlistShortcuts.todayList.unshift(recentShortcutCopy);
       recentShortcut.state.isPreviewVariant = true;
       recentShortcut.state.isUserInputBlocked = true;
       const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
