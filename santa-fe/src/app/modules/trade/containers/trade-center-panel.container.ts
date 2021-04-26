@@ -1124,7 +1124,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       })
 
       const recentShortcutStub: Stubs.SearchShortcutStub = {
-        displayTitle: customDisplayTitle.length > 25 ? `${customDisplayTitle.substring(0,24)}...` : customDisplayTitle,
+        displayTitle: customDisplayTitle,
         includedDefinitions: searchShortcutDefinitionList,
         isHero: false,
         isMajor: false
