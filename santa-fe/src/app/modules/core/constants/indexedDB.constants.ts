@@ -1,7 +1,7 @@
 import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
   
   // Global Workflow
-  export const INDEXEDDB_WORKFLOW_VERSION = 1;
+  export const INDEXEDDB_WORKFLOW_VERSION = 2;
   export const INDEXEDDB_WORKFLOW_DATABASE_NAME = 'GlobalWorkflow';
   export const INDEXEDDB_WORKFLOW_TABLE_NAME = 'All_Workflow_State_Table';
   export const INDEXEDDB_LAST_STATE_TABLE_NAME = 'Last_State_Table';
