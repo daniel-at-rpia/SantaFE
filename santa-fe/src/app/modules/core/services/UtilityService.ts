@@ -1552,7 +1552,7 @@ export class UtilityService {
         formattedDisplayCategory = row.data.displayCategory;
       }
       const viewData: AdhocPacks.StructureSetViewTransferPack = {
-        bucket: [row.data.bucket],
+        bucket: !!row.data.portfolioOverrideId ? [row.data.simpleBucket] : [row.data.bucket],
         view: view !== row.data.view ? [view] : [null],
         displayCategory: formattedDisplayCategory
       }
