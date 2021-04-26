@@ -518,6 +518,7 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   &__list {
     @include mix_fixed_div(relative, $z_index_base_item);
     @include mix_enable_scrollbar('both');
+    align-content: flex-start;
     flex: 1 1 auto;
     display: flex;
     flex-wrap: wrap;
