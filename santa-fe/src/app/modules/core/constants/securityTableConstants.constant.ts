@@ -736,6 +736,26 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'workoutTerm',
+    content: {
+      label: 'Precise Workout Term',
+      attrName: 'Workout Term',
+      underlineAttrName: 'Workout Term',
+      blockAttrName: 'metricPack',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: false,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
     key: 'rating',
     content: {
       label: 'Rating',

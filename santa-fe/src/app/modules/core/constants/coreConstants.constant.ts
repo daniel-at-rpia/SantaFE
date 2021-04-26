@@ -147,6 +147,11 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Ytd',
       'TMinusTwo'
     ]
+  },
+  {
+    label: 'Workout Term',
+    backendDtoAttrName: 'workoutTerm',
+    deltaOptions: []
   }
 ];
 

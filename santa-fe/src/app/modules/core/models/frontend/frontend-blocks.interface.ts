@@ -80,13 +80,34 @@ export interface SecurityGroupMetricBlock {
 }
 
 export interface SecurityGroupMetricPackBlock {
-  raw: object;
+  raw: SecurityGroupMetricPackIndividualEntryBlock;
   delta: {
-    Dod: object;
-    Wow: object;
-    Mom: object;
-    Ytd: object;
-    TMinusTwo: object;
+    Dod: SecurityGroupMetricPackIndividualEntryBlock;
+    Wow: SecurityGroupMetricPackIndividualEntryBlock;
+    Mom: SecurityGroupMetricPackIndividualEntryBlock;
+    Ytd: SecurityGroupMetricPackIndividualEntryBlock;
+    TMinusTwo: SecurityGroupMetricPackIndividualEntryBlock;
+  }
+}
+
+interface SecurityGroupMetricPackIndividualEntryBlock {
+  'Default Spread'?: number,
+  'Price'?: number,
+  'Rating'?: number,
+  'G Spread'?: number,
+  'OAS Spread'?: number,
+  'Z-Spread'?: number,
+  'YieldWorst'?: number,
+  'Asset Swap Spread (into USD)'?: number,
+  index: {
+    'Default Spread'?: number,
+    'Price'?: number,
+    'Rating'?: number,
+    'G Spread'?: number,
+    'OAS Spread'?: number,
+    'Z-Spread'?: number,
+    'YieldWorst'?: number,
+    'Asset Swap Spread (into USD)'?: number,
   }
 }
 

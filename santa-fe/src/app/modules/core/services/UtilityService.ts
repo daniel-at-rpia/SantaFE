@@ -346,14 +346,26 @@ export class UtilityService {
     }
 
     public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): Blocks.SecurityGroupMetricPackBlock {
-      const object: Blocks.SecurityGroupMetricPackBlock = {
-        raw: {},
+      const object = {
+        raw: {
+          index: {}
+        },
         delta: {
-          Dod: {},
-          Wow: {},
-          Mom: {},
-          Ytd: {},
-          TMinusTwo: {}
+          Dod: {
+            index: {}
+          },
+          Wow: {
+            index: {}
+          },
+          Mom: {
+            index: {}
+          },
+          Ytd: {
+            index: {}
+          },
+          TMinusTwo: {
+            index: {}
+          }
         }
       };
       if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {
@@ -363,21 +375,20 @@ export class UtilityService {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
           if (eachMetric.label === 'Default Spread') {
             keyToRetrieveMetric = 'spread';
-            // this logic is disabled, since after BE cut off Citi, we no longer have those spread metrics
-            // if (this.isCDS(isGroup, rawData)) {
-            //   keyToRetrieveMetric = 'spread';
-            //  } else if (this.isFloat(isGroup, rawData)) {
-            //    keyToRetrieveMetric = 'zSpread';
-            // } else {
-            //   keyToRetrieveMetric = 'gSpread';
-            // }
           };
+          const metricBlock = rawData.metrics['Default'];
           const indexMetricBlock = rawData.ccy === 'CAD' ? rawData.metrics['FTSE'] : rawData.metrics['BB'];
-          const rawValue = indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
+          let rawValue = !!metricBlock ? metricBlock[keyToRetrieveMetric] : null;
+          let rawIndexValue = !!indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
             object.raw[eachMetric.label] = null;
           } else {
             object.raw[eachMetric.label] = rawValue;
+          }
+          if (rawIndexValue === null || rawIndexValue === undefined) {
+            object.raw.index[eachMetric.label] = null;
+          } else {
+            object.raw.index[eachMetric.label] = rawIndexValue;
           }
           eachMetric.deltaOptions.forEach((eachDeltaScope) => {
             const deltaSubPack = rawData.deltaMetrics[eachDeltaScope];
@@ -836,12 +847,13 @@ export class UtilityService {
           underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
         }
         const driverLabel = attrName;
-        let value, deltaSubPack;
+        let value;
         if (!!header.data.metricPackDeltaScope) {
-          deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
+          const deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
           value = !!deltaSubPack ? deltaSubPack[driverLabel] : null;
         } else {
-          value = dto.data.metricPack.raw[driverLabel];
+          const rawPack = header.data.key === 'indexMark' ? dto.data.metricPack.raw.index : dto.data.metricPack.raw;
+          value = !!rawPack ? rawPack[driverLabel] : null;
         }
         if (header.data.isDriverDependent && header.data.isAttrChangable) {
           value = this.parseTriCoreDriverNumber(value, attrName, dto, false);
