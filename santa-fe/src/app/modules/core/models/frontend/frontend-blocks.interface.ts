@@ -35,12 +35,12 @@ export interface SecurityPortfolioBlock {
 
 export interface SecurityCostPortfolioBlock {
   fifo: {
-    'Default Spread': number;
-    'Price': number;
+    defaultSpread: number;
+    price: number;
   };
   weightedAvg: {
-    'Default Spread': number;
-    'Price': number;
+    defaultSpread: number;
+    price: number;
   };
 }
 
@@ -91,23 +91,25 @@ export interface SecurityGroupMetricPackBlock {
 }
 
 interface SecurityGroupMetricPackIndividualEntryBlock {
-  'Default Spread'?: number,
-  'Price'?: number,
-  'Rating'?: number,
-  'G Spread'?: number,
-  'OAS Spread'?: number,
-  'Z-Spread'?: number,
-  'YieldWorst'?: number,
-  'Asset Swap Spread (into USD)'?: number,
+  defaultSpread?: number,
+  price?: number,
+  rating?: number,
+  gSpread?: number,
+  oasSpread?: number,
+  zSpread?: number,
+  yieldWorst?: number,
+  aswUsd?: number,
+  workoutTerm?: number,
   index: {
-    'Default Spread'?: number,
-    'Price'?: number,
-    'Rating'?: number,
-    'G Spread'?: number,
-    'OAS Spread'?: number,
-    'Z-Spread'?: number,
-    'YieldWorst'?: number,
-    'Asset Swap Spread (into USD)'?: number,
+    defaultSpread?: number,
+    price?: number,
+    rating?: number,
+    gSpread?: number,
+    oasSpread?: number,
+    zSpread?: number,
+    yieldWorst?: number,
+    aswUsd?: number,
+    workoutTerm?: number
   }
 }
 

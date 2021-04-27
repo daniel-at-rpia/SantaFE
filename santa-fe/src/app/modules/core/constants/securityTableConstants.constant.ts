@@ -738,7 +738,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'workoutTerm',
     content: {
-      label: 'Precise Workout Term',
+      label: 'Workout Term (yr)',
       attrName: 'Workout Term',
       underlineAttrName: 'Workout Term',
       blockAttrName: 'metricPack',

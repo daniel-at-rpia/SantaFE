@@ -220,22 +220,22 @@ export class DTOService {
         cost: {
           current: {
             fifo: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             },
             weightedAvg: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             }
           },
           firm: {
             fifo: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             },
             weightedAvg: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             }
           },
           DOF: null,
@@ -397,12 +397,12 @@ export class DTOService {
     dto.data.portfolios.push(newBlock);
     const newCostPortfolioBlock: Blocks.SecurityCostPortfolioBlock = {
       fifo: {
-        'Default Spread': newBlock.costFifoSpread,
-        'Price': newBlock.costFifoPrice
+        defaultSpread: newBlock.costFifoSpread,
+        price: newBlock.costFifoPrice
       },
       weightedAvg: {
-        'Default Spread': newBlock.costWeightedAvgSpread,
-        'Price': newBlock.costWeightedAvgPrice
+        defaultSpread: newBlock.costWeightedAvgSpread,
+        price: newBlock.costWeightedAvgPrice
       }
     };
     dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
@@ -453,10 +453,10 @@ export class DTOService {
           break;
       }
       block.positionFirm = block.positionFirm + eachPortfolioBlock.quantity;
-      dto.data.cost.firm.fifo['Default Spread'] = dto.data.cost.firm.fifo['Default Spread'] + eachPortfolioBlock.costFifoSpread;
-      dto.data.cost.firm.fifo.Price = dto.data.cost.firm.fifo.Price + eachPortfolioBlock.costFifoPrice;
-      dto.data.cost.firm.weightedAvg['Default Spread'] = dto.data.cost.firm.weightedAvg['Default Spread'] + eachPortfolioBlock.costWeightedAvgSpread;
-      dto.data.cost.firm.weightedAvg.Price = dto.data.cost.firm.weightedAvg.Price + eachPortfolioBlock.costWeightedAvgPrice;
+      dto.data.cost.firm.fifo.defaultSpread = dto.data.cost.firm.fifo.defaultSpread + eachPortfolioBlock.costFifoSpread;
+      dto.data.cost.firm.fifo.price = dto.data.cost.firm.fifo.price + eachPortfolioBlock.costFifoPrice;
+      dto.data.cost.firm.weightedAvg.defaultSpread = dto.data.cost.firm.weightedAvg.defaultSpread + eachPortfolioBlock.costWeightedAvgSpread;
+      dto.data.cost.firm.weightedAvg.price = dto.data.cost.firm.weightedAvg.price + eachPortfolioBlock.costWeightedAvgPrice;
       dto.data.cs01CadFirm = dto.data.cs01CadFirm + eachPortfolioBlock.cs01Cad;
       dto.data.cs01LocalFirm = dto.data.cs01LocalFirm + eachPortfolioBlock.cs01Local;
     });

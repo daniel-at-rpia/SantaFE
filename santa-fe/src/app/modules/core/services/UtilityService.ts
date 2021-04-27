@@ -381,22 +381,22 @@ export class UtilityService {
           let rawValue = !!metricBlock ? metricBlock[keyToRetrieveMetric] : null;
           let rawIndexValue = !!indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
-            object.raw[eachMetric.label] = null;
+            object.raw[eachMetric.backendDtoAttrName] = null;
           } else {
-            object.raw[eachMetric.label] = rawValue;
+            object.raw[eachMetric.backendDtoAttrName] = rawValue;
           }
           if (rawIndexValue === null || rawIndexValue === undefined) {
-            object.raw.index[eachMetric.label] = null;
+            object.raw.index[eachMetric.backendDtoAttrName] = null;
           } else {
-            object.raw.index[eachMetric.label] = rawIndexValue;
+            object.raw.index[eachMetric.backendDtoAttrName] = rawIndexValue;
           }
           eachMetric.deltaOptions.forEach((eachDeltaScope) => {
             const deltaSubPack = rawData.deltaMetrics[eachDeltaScope];
             const deltaValue = !!deltaSubPack ? deltaSubPack[keyToRetrieveMetric] : null;
             if (deltaValue === null || deltaValue === undefined) {
-              object.delta[eachDeltaScope][eachMetric.label] = null;
+              object.delta[eachDeltaScope][eachMetric.backendDtoAttrName] = null;
             } else {
-              object.delta[eachDeltaScope][eachMetric.label] = deltaValue;
+              object.delta[eachDeltaScope][eachMetric.backendDtoAttrName] = deltaValue;
             }
           })
         });
@@ -880,10 +880,10 @@ export class UtilityService {
                 return eachPortfolioBlock.portfolioName === eachPortfolio;
               });
               if (!!portfolioExist) {
-                dto.data.cost.current.fifo['Default Spread'] = dto.data.cost.current.fifo['Default Spread'] + portfolioExist.costFifoSpread;
-                dto.data.cost.current.fifo.Price = dto.data.cost.current.fifo.Price + portfolioExist.costFifoPrice;
-                dto.data.cost.current.weightedAvg['Default Spread'] = dto.data.cost.current.weightedAvg['Default Spread'] + portfolioExist.costFifoSpread;
-                dto.data.cost.current.weightedAvg.Price = dto.data.cost.current.weightedAvg.Price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.fifo.defaultSpread = dto.data.cost.current.fifo.defaultSpread + portfolioExist.costFifoSpread;
+                dto.data.cost.current.fifo.price = dto.data.cost.current.fifo.price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.weightedAvg.defaultSpread = dto.data.cost.current.weightedAvg.defaultSpread + portfolioExist.costFifoSpread;
+                dto.data.cost.current.weightedAvg.price = dto.data.cost.current.weightedAvg.price + portfolioExist.costFifoPrice;
               }
             });
           } else {
