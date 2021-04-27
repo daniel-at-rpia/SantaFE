@@ -1,0 +1,1 @@
+export const ROUTE_REUSE_HANDLER_STORE_SIZE_CAP = 5;

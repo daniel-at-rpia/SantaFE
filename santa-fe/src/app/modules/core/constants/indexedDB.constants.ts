@@ -5,7 +5,6 @@ import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/fr
   export const INDEXEDDB_WORKFLOW_DATABASE_NAME = 'GlobalWorkflow';
   export const INDEXEDDB_WORKFLOW_TABLE_NAME = 'All_Workflow_State_Table';
   export const INDEXEDDB_LAST_STATE_TABLE_NAME = 'Last_State_Table';
-  export const ROUTE_REUSE_HANDLER_STORE_SIZE_CAP = 5;
 
   // Watchlists
   export const INDEXEDDB_WATCHLIST_VERSION = 1;

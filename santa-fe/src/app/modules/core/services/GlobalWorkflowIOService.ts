@@ -7,7 +7,7 @@ import { DTOs, AdhocPacks } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
-import { ROUTE_REUSE_HANDLER_STORE_SIZE_CAP } from 'App/modules/core/constants/indexedDB.constants';
+import { ROUTE_REUSE_HANDLER_STORE_SIZE_CAP } from 'App/modules/core/constants/globalWorkflowConstants.constants';
 import {
   IndexedDBDatabases,
   INDEXEDDB_WORKFLOW_TABLE_NAME,
