@@ -402,6 +402,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public onUnselectPreset() {
     this.performUnselectPresetInBackground();
+    if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
+      this.state.presets.recentWatchlistShortcuts.todayList = [];
+      this.state.presets.recentWatchlistShortcuts.thisWeekList = [];
+      this.state.presets.recentWatchlistShortcuts.lastWeekList = [];
+      this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.SearchShortcutDTO) => this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist));
+    }
   }
 
   public buryConfigurator() {
@@ -536,15 +542,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
                 if (storedRecentWatchlists.length > 0) {
                   this.state.presets.recentWatchlistShortcuts.fullList = [...this.state.presets.recentWatchlistShortcuts.fullList, ...storedRecentWatchlists];
                   if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
-                    this.state.presets.recentWatchlistShortcuts.fullList.sort((watchlistA: DTOs.SearchShortcutDTO, watchlistB: DTOs.SearchShortcutDTO) => {
-                      if (watchlistA.data.metadata.lastUseTime > watchlistB.data.metadata.lastUseTime) {
-                        return -1;
-                      } else if (watchlistA.data.metadata.lastUseTime < watchlistB.data.metadata.lastUseTime) {
-                        return 1;
-                      } else {
-                        return 0;
-                      }
-                    })
+                    this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
                     this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.SearchShortcutDTO) => {
                       this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist);
                     })
@@ -1142,7 +1140,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       recentShortcutCopy.data.metadata.dbStoredTime = recentShortcutCopy.data.metadata.createTime;
       this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} - (${this.constants.watchlistType.recent}) - Store Watchlist`, false);
       this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcutCopy);
-      this.state.presets.recentWatchlistShortcuts.todayList.unshift(recentShortcutCopy);
+      this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
     }
   }
 
@@ -1199,6 +1197,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       // only update the watchlist lastUseTime and dbStoredTime if it's the preset being selected
       const isWatchlistCurrentSearch = this.checkIfWatchlistSearchExists(filterList, [watchlist]);
       if (!!isWatchlistCurrentSearch) {
+        const lastUseTime = moment().unix();
+        watchlist.data.metadata.lastUseTime = lastUseTime;
         const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${watchlist.data.uuid}`, false);
         const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
         const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(objectStore, watchlist.data.uuid);
@@ -1208,12 +1208,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         request.onsuccess = (event) => {
           const storedWatchlist: DTOs.SearchShortcutDTO = request.result;
           const storedWatchlistCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(storedWatchlist);
-          const currentTime = moment().unix();
-          storedWatchlistCopy.data.metadata.lastUseTime = currentTime;
-          storedWatchlistCopy.data.metadata.dbStoredTime = currentTime;
+          storedWatchlistCopy.data.metadata.lastUseTime = lastUseTime;
+          const dbStoredTime = moment().unix();
+          storedWatchlistCopy.data.metadata.dbStoredTime = dbStoredTime;
+          watchlist.data.metadata.dbStoredTime = dbStoredTime;
           this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Updating time stamp for uuid: ${watchlist.data.uuid}`);
         };
       }
+      this.state.presets.recentWatchlistShortcuts.fullList.length > 0 && this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
     }
   }
 
@@ -1264,5 +1266,20 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       // Delete older watchlists from IndexedDB
       this.indexedDBService.retrieveAndDeleteDataFromIndexedDB(watchlist.data.uuid, this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Delete stored watchlist for uuid: ${watchlist.data.uuid}`, false);
     }
+  }
+
+  private sortWatchlistFromLastUseTime(
+    watchlists: Array<DTOs.SearchShortcutDTO>,
+    sortByRecent: boolean
+  ) {
+    watchlists.sort((watchlistA: DTOs.SearchShortcutDTO, watchlistB: DTOs.SearchShortcutDTO) => {
+      if (watchlistA.data.metadata.lastUseTime > watchlistB.data.metadata.lastUseTime) {
+        return sortByRecent ? -1 : 1;
+      } else if (watchlistA.data.metadata.lastUseTime < watchlistB.data.metadata.lastUseTime) {
+        return sortByRecent ? 1 : -1;
+      } else {
+        return 0;
+      }
+    })
   }
 }
