@@ -24,6 +24,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { IndexedDBDatabases } from 'Core/constants/indexedDB.constants';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -251,4 +252,27 @@ export interface SecurityTableHeaderConfigOverwrite {
   disabled: boolean;
   pinned: boolean;
   explicitOrder?: number;  // by default the order is implied by each entry's position in the array, but sometimes we need rules to bump up/down specific header, use this to do that
+}
+export interface IndexedDBTableBlockItem {
+  name: string;
+  key: string;
+}
+export interface IndexedDBTableBlock {
+  [table: string]: IndexedDBTableBlockItem
+}
+
+export type IndexedDBEntryBlock = GlobalWorkflowLastState | DTOs.SearchShortcutDTO | DTOs.GlobalWorkflowStateDTO;
+
+export type IndexedDBConfigBlock = {
+  [databaseType in IndexedDBDatabases]: Array<IndexedDBTableBlockItem>
+}
+
+export type IndexedDBAllDatabaseMapping = {
+  [database in IndexedDBDatabases]: {
+    name: string;
+    version: number;
+    ngRxAction: any,
+    api: IDBDatabase,
+    configs: Array<IndexedDBTableBlockItem>
+  }
 }

@@ -14,7 +14,10 @@ import {
   PortfolioShortNames
 } from 'Core/constants/coreConstants.constant';
 import { Alert } from "Core/components/alert/alert.component";
-import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import {
+  AxeAlertScope,
+  AxeAlertType
+} from 'Core/constants/tradeConstants.constant';
 import {
   PortfolioMetricValues,
   DeltaScope,
@@ -329,6 +332,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
     isMajorShortcut: boolean;
     isHeroShortcut: boolean;
     isPreviewVariant: boolean;
+    isAbleToSaveAsRecentWatchlist: boolean;
   }
 }
 
@@ -975,3 +979,4 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     updateCurrentState: boolean;
   }
 }
+

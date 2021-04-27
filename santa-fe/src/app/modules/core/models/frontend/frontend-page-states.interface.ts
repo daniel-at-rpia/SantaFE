@@ -22,6 +22,7 @@ import {
 
 export interface RootState {
   ownerInitial: string;
+  currentUrl: string;
 }
 
 export interface GlobalNavState {
@@ -149,6 +150,7 @@ export interface TradeCenterPanelState {
     previewShortcut: DTOs.SearchShortcutDTO;
     redirectedFromStrurturing: boolean;
   }
+  isIndexedDBReady: boolean;
 }
 
 export interface StructureMainPanelState {
