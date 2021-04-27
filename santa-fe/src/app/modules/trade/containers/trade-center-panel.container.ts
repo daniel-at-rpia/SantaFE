@@ -1104,6 +1104,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     if (params.filterList.length > 0) {
       const searchShortcutDefinitionList: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [];
       let customDisplayTitle = '';
+      let selectionOptionsList: Array<string> = [];
       params.filterList.forEach((definitionItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
         const shortcutDefinition: Stubs.SearchShortcutIncludedDefinitionStub = {
           definitionKey: definitionItem.key,
@@ -1111,18 +1112,18 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           selectedOptions: definitionItem.filterBy.map((item: string) => item)
         }
         if (!presetDisplayTitle) {
-          const groupDefinition = definitionItem.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key ? 'BICS' : this.constants.securityGroupDefinitionMap[definitionItem.key].displayName;
-          if (customDisplayTitle === '') {
-            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${groupDefinition}(${shortcutDefinition.selectedOptions.length})` : `${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
-          } else {
-            customDisplayTitle = shortcutDefinition.selectedOptions.length > 2 ? `${customDisplayTitle} ${groupDefinition}(${shortcutDefinition.selectedOptions.length})` : `${customDisplayTitle} ${shortcutDefinition.selectedOptions.map((option: string) => option)}`;
-          }
+          const isBICS = definitionItem.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key;
+          const groupDefinition = isBICS ? 'BICS' : this.constants.securityGroupDefinitionMap[definitionItem.key].displayName;
+          selectionOptionsList = [
+            ...selectionOptionsList,
+            ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => isBICS ? this.bicsDictionaryLookupService.BICSCodeToBICSName(option) : option)
+          ];
+          customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
         } else {
           customDisplayTitle = presetDisplayTitle;
         }
         searchShortcutDefinitionList.push(shortcutDefinition);
       })
-
       const recentShortcutStub: Stubs.SearchShortcutStub = {
         displayTitle: customDisplayTitle,
         includedDefinitions: searchShortcutDefinitionList,
