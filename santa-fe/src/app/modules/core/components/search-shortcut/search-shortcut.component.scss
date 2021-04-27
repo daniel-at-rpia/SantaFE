@@ -13,7 +13,6 @@
   min-height: 7.5rem;
   &__title {
     @include mix_fixed_div(relative, $z_index_base_item);
-    @include mix_text_overflow_multi_line(3);
     flex: 1 1 auto;
     display: flex;
     align-items: center;
