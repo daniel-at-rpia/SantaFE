@@ -23,6 +23,7 @@ import { TradeCenterPanelSearchModes } from 'Core/constants/tradeConstants.const
 
 export interface RootState {
   ownerInitial: string;
+  currentUrl: string;
 }
 
 export interface GlobalNavState {
@@ -151,6 +152,7 @@ export interface TradeCenterPanelState {
     redirectedFromStrurturing: boolean;
     mode: TradeCenterPanelSearchModes;
   }
+  isIndexedDBReady: boolean;
 }
 
 export interface StructureMainPanelState {

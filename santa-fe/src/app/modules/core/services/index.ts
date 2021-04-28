@@ -7,3 +7,4 @@ export { RestfulCommService } from './RestfulCommService';
 export { UtilityService } from './UtilityService';
 export { BICSDictionaryLookupService } from './BICSDictionaryLookupService';
 export { SecurityMapService } from './SecurityMapService';
+export { IndexedDBService } from './IndexedDBService';

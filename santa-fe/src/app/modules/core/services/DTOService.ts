@@ -825,7 +825,8 @@ export class DTOService {
         isUserInputBlocked: false,
         isMajorShortcut: !!isMajor,
         isHeroShortcut: !!isHero,
-        isPreviewVariant: false
+        isPreviewVariant: false,
+        isAbleToSaveAsRecentWatchlist: true
       }
     };
     definitionList.forEach((eachDefinition, index) => {
@@ -2765,6 +2766,7 @@ export class DTOService {
     };
     return object;
   }
+
 
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioFundDTO,
