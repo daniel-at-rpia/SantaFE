@@ -469,13 +469,53 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
+  &__timeSpecificDisplay {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_enable_scrollbar('vertical');
+    display: none;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+    padding: $spacing_large $spacing_medium;
+    &-block {
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 auto;
+      min-height: 14rem;
+      &-list {
+        flex: 0 0 100%;
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: $spacing_large;
+        &-item {
+          @include mix_alive('light');
+          flex: 0 1 25%;
+          display: flex;
+          padding: $spacing_x_small $spacing_medium $spacing_medium 0;
+          search-shortcut {
+            display: flex;
+            flex: 1 1 auto;
+          }
+        }
+      }
+      &-title {
+        flex: 0 0 auto;
+        padding-left: $spacing_medium;
+        font-size: $font_size_xx_large;
+        color: $color_disabled;
+        margin-bottom: $spacing_medium;
+      }
+    }
+  }
   &__list {
     @include mix_fixed_div(relative, $z_index_base_item);
     @include mix_enable_scrollbar('both');
+    align-content: flex-start;
     flex: 1 1 auto;
     display: flex;
     flex-wrap: wrap;
     padding: $spacing_large $spacing_medium;
+    height: 100%;
     &-item {
       @include mix_alive('light');
       flex: 0 1 25%;
@@ -505,6 +545,16 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   &--bottomCategorySelectedState {
     transform: translate(0, $tradeCenterPresetShortcutCanvas_selected_movement_length);
     align-items: flex-end;
+  }
+  &--timeSpecificCategoryState {
+    #{$blockName} {
+      &__timeSpecificDisplay {
+        display: flex;
+      }
+      &__list {
+        display: none;
+      }
+    }
   }
   @include mq-large-min {
     margin: $spacing_xx_large;

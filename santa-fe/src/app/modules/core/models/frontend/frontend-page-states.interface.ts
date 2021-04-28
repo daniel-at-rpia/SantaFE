@@ -124,7 +124,12 @@ export interface TradeCenterPanelState {
     portfolioShortcutList: Array<DTOs.SearchShortcutDTO>;
     ownershipShortcutList: Array<DTOs.SearchShortcutDTO>;
     strategyShortcutList: Array<DTOs.SearchShortcutDTO>;
-    recentWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    recentWatchlistShortcuts: {
+      fullList: Array<DTOs.SearchShortcutDTO>;
+      todayList: Array<DTOs.SearchShortcutDTO>,
+      thisWeekList: Array<DTOs.SearchShortcutDTO>,
+      lastWeekList: Array<DTOs.SearchShortcutDTO>
+    }
     savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
     trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
   }
