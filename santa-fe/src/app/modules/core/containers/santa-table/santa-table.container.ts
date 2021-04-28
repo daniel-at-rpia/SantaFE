@@ -625,9 +625,15 @@ export class SantaTable implements OnInit, OnChanges {
       const securityA = rowA.data.security;
       const securityB = rowB.data.security;
       if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
-        if (!!securityA.data.metricPack && !!securityA.data.metricPack.raw && !!securityB.data.metricPack && !!securityB.data.metricPack.raw && securityA.data.metricPack.raw.workoutTerm < securityB.data.metricPack.raw.workoutTerm) {
+        if (
+          (!!securityA.data.metricPack.raw.workoutTerm && !securityB.data.metricPack.raw.workoutTerm) || 
+          (!!securityA.data.metricPack.raw.workoutTerm && !!securityB.data.metricPack.raw.workoutTerm && securityA.data.metricPack.raw.workoutTerm < securityB.data.metricPack.raw.workoutTerm)
+        ) {
           return -4;
-        } else if (!!securityA.data.metricPack && !!securityA.data.metricPack.raw && !!securityB.data.metricPack && !!securityB.data.metricPack.raw && securityA.data.metricPack.raw.workoutTerm > securityB.data.metricPack.raw.workoutTerm) {
+        } else if (
+          (!securityA.data.metricPack.raw.workoutTerm && !!securityB.data.metricPack.raw.workoutTerm) || 
+          (!!securityA.data.metricPack.raw.workoutTerm && !!securityB.data.metricPack.raw.workoutTerm && securityA.data.metricPack.raw.workoutTerm > securityB.data.metricPack.raw.workoutTerm)
+        ) {
           return 4;
         } else if (securityA.data.name < securityB.data.name) {
           return -1;

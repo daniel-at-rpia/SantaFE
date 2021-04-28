@@ -739,8 +739,8 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
     key: 'workoutTerm',
     content: {
       label: 'Workout Term (yr)',
-      attrName: 'Workout Term',
-      underlineAttrName: 'Workout Term',
+      attrName: 'workoutTerm',
+      underlineAttrName: 'workoutTerm',
       blockAttrName: 'metricPack',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: false,
