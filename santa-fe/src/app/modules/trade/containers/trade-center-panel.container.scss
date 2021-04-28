@@ -471,24 +471,21 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   visibility: hidden;
   &__timeSpecificDisplay {
     @include mix_fixed_div(relative, $z_index_base_item);
-    @include mix_enable_scrollbar('both');
+    @include mix_enable_scrollbar('vertical');
     display: none;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     flex: 1 1 auto;
     height: 100%;
-    padding-top: $spacing_large;
+    padding: $spacing_large $spacing_medium;
     &-block {
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      flex: 0 0 100%;
-      min-height: 200px;
+      flex-direction: column;
+      flex: 0 0 auto;
+      min-height: 14rem;
       &-list {
         flex: 0 0 100%;
         display: flex;
         flex-wrap: wrap;
-        padding: $spacing_small $spacing_medium 0;
         margin-bottom: $spacing_large;
         &-item {
           @include mix_alive('light');
@@ -499,19 +496,14 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
             display: flex;
             flex: 1 1 auto;
           }
-          &--major {
-            flex: 0 1 50%;
-          }
-          &--hero {
-            flex: 0 1 100%;
-          }
         }
       }
       &-title {
-        flex: 1 1 auto;
+        flex: 0 0 auto;
         padding-left: $spacing_medium;
-        font-size: convert_px_to_rem(26px);
+        font-size: $font_size_xx_large;
         color: $color_disabled;
+        margin-bottom: $spacing_medium;
       }
     }
   }
