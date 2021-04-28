@@ -925,50 +925,50 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
     if (targetMetric === this.constants.portolioMetricValues.cs01) {
       fundCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: this.constants.sortOption.desc
       };
       tableCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: null
       };
       fundBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
       tableBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
     } else if (targetMetric === this.constants.portolioMetricValues.creditLeverage) {
       fundCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
       tableCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
       fundBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: this.constants.sortOption.desc
       };
       tableBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: null

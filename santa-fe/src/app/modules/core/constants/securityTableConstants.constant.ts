@@ -116,6 +116,91 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
+    key: 'weightFundCS01',
+    content: {
+      label: `${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - CS01`,
+      attrName: 'fundCS01PctDisplay',
+      underlineAttrName: 'fundCS01Pct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      columnWidth: 110,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          disabled: true,
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'weightTableCS01',
+    content: {
+      label: 'Table - CS01',
+      attrName: 'groupCS01PctDisplay',
+      underlineAttrName: 'groupCS01Pct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isFrontendAggregation: true,
+      columnWidth: 110,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: true
+        },
+        tradeAlert: {
+          disabled: true,
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'weightFundBEV',
+    content: {
+      label: `${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - BEV`,
+      attrName: 'fundBEVPctDisplay',
+      underlineAttrName: 'fundBEVPct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      columnWidth: 110,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default: {
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          disabled: true,
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'weightTableBEV',
+    content: {
+      label: 'Table - BEV',
+      attrName: 'groupBEVPctDisplay',
+      underlineAttrName: 'groupBEVPct',
+      blockAttrName: 'weight',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      columnWidth: 110,
+      groupBelongs: SecurityTableHeaderConfigGroups.weight,
+      tableSpecifics: {
+        default:{
+          active: true,
+          groupShow: false
+        },
+        tradeAlert: {
+          disabled: true,
+          active: false
+        }
+      }
+    }
+  },{
     key: 'alertType',
     content: {
       label: 'Type',
@@ -1154,91 +1239,6 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
           groupShow: true
         },
         tradeAlert: {
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'weightFundCS01',
-    content: {
-      label: `${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - CS01`,
-      attrName: 'fundCS01PctDisplay',
-      underlineAttrName: 'fundCS01Pct',
-      blockAttrName: 'weight',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      columnWidth: 110,
-      groupBelongs: SecurityTableHeaderConfigGroups.weight,
-      tableSpecifics: {
-        default: {
-          active: true,
-          groupShow: false
-        },
-        tradeAlert: {
-          disabled: true,
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'weightTableCS01',
-    content: {
-      label: 'Table - CS01',
-      attrName: 'groupCS01PctDisplay',
-      underlineAttrName: 'groupCS01Pct',
-      blockAttrName: 'weight',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      isFrontendAggregation: true,
-      columnWidth: 110,
-      groupBelongs: SecurityTableHeaderConfigGroups.weight,
-      tableSpecifics: {
-        default: {
-          active: true,
-          groupShow: true
-        },
-        tradeAlert: {
-          disabled: true,
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'weightFundBEV',
-    content: {
-      label: `${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}Fund${SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} - BEV`,
-      attrName: 'fundBEVPctDisplay',
-      underlineAttrName: 'fundBEVPct',
-      blockAttrName: 'weight',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      columnWidth: 110,
-      groupBelongs: SecurityTableHeaderConfigGroups.weight,
-      tableSpecifics: {
-        default: {
-          active: true,
-          groupShow: false
-        },
-        tradeAlert: {
-          disabled: true,
-          active: false
-        }
-      }
-    }
-  },{
-    key: 'weightTableBEV',
-    content: {
-      label: 'Table - BEV',
-      attrName: 'groupBEVPctDisplay',
-      underlineAttrName: 'groupBEVPct',
-      blockAttrName: 'weight',
-      readyStage: SECURITY_TABLE_FINAL_STAGE,
-      columnWidth: 110,
-      groupBelongs: SecurityTableHeaderConfigGroups.weight,
-      tableSpecifics: {
-        default:{
-          active: true,
-          groupShow: false
-        },
-        tradeAlert: {
-          disabled: true,
           active: false
         }
       }
