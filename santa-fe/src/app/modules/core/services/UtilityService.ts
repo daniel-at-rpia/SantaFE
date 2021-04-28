@@ -858,6 +858,9 @@ export class UtilityService {
         if (header.data.isDriverDependent && header.data.isAttrChangable) {
           value = this.parseTriCoreDriverNumber(value, attrName, dto, false);
         }
+        if (header.data.key === 'workoutTerm' && value !== null && value !== undefined) {
+          value = this.round(value, 3).toFixed(3);
+        }
         return value;
       } else {
         return null;

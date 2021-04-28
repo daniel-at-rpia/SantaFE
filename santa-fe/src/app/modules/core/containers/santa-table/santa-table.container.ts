@@ -79,7 +79,9 @@ export class SantaTable implements OnInit, OnChanges {
     },
     autoGroupColumnDef: {
       pinned: true,
-      sort:'desc'
+      sort:'desc',
+      width: 140,
+      resizable: true
     },
     context: {
       componentParent: this

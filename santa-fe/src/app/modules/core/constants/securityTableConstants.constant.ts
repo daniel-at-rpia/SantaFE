@@ -810,6 +810,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'ticker',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
+      columnWidth: 85,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
@@ -823,12 +824,13 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
   },{
     key: 'workoutTerm',
     content: {
-      label: 'Workout Term (yr)',
+      label: 'Workout Term',
       attrName: 'workoutTerm',
       underlineAttrName: 'workoutTerm',
       blockAttrName: 'metricPack',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: false,
+      columnWidth: 110,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
@@ -848,6 +850,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'ratingValue',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
+      columnWidth: 75,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
@@ -866,6 +869,7 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       underlineAttrName: 'currency',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
+      columnWidth: 95,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
       tableSpecifics: {
         default: {
