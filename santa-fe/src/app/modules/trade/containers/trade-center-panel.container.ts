@@ -600,8 +600,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             });
           } else {
             definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
-              const compareRef = eachIncludedDef.definitionKey === 'TENOR' ? eachFilterOption.displayLabel : eachFilterOption.shortKey;
-              if (eachIncludedDef.selectedOptions.indexOf(compareRef) >= 0) {
+              if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
                 eachFilterOption.isSelected = true;
                 definitionDTO.data.highlightSelectedOptionList.push(eachFilterOption);
               }
@@ -1107,7 +1106,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         const shortcutDefinition: Stubs.SearchShortcutIncludedDefinitionStub = {
           definitionKey: definitionItem.key,
           groupByActive: false,
-          selectedOptions: definitionItem.filterBy.map((item: string) => item)
+          selectedOptions: definitionItem.key === this.constants.securityGroupDefinitionMap.TENOR.key ? definitionItem.filterByBlocks.map((item: Blocks.SecurityDefinitionFilterBlock) => item.shortKey) : definitionItem.filterBy.map((item: string) => item)
         }
         if (!presetDisplayTitle) {
           const isBICS = definitionItem.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key;
