@@ -530,6 +530,90 @@ export const DISPLAY_DRIVER_MAP  = {
 export const TradeUoBDefaultSecurityTableHeaderOverwriteConfigs: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite> = [
   {
     key: 'ticker',
-    groupBy: true
+    groupBy: true,
+    groupShow: true,
+    active: true
+  },{
+    key: 'bicsLevel2',
+    groupShow: true,
+    active: true
+  },{
+    key: 'bicsLevel3',
+    groupShow: true,
+    active: true
+  },{
+    key: 'bicsLevel4',
+    groupShow: true,
+    active: true
+  },
+  {
+    key: 'costDOFWeightedAvg',
+    active: false
+  },{
+    key: 'costSOFWeightedAvg',
+    active: false
+  },{
+    key: 'costSTIPWeightedAvg',
+    active: false
+  },{
+    key: 'costFIPWeightedAvg',
+    active: false
+  },{
+    key: 'costCIPWeightedAvg',
+    active: false
+  },{
+    key: 'costAGBWeightedAvg',
+    active: false
+  },{
+    key: 'costBBBWeightedAvg',
+    active: false
+  },{
+    key: 'currentPosition',
+    active: false
+  },{
+    key: 'unitPosition',
+    active: false
+  },{
+    key: 'hfPosition',
+    active: false
+  },{
+    key: 'nlfPosition',
+    active: false
+  },{
+    key: 'dofPosition',
+    active: false
+  },{
+    key: 'sofPosition',
+    active: false
+  },{
+    key: 'stipPosition',
+    active: false
+  },{
+    key: 'fipPosition',
+    active: false
+  },{
+    key: 'cipPosition',
+    active: false
+  },{
+    key: 'agbPosition',
+    active: false
+  },{
+    key: 'bbbPosition',
+    active: false
+  },{
+    key: 'primaryPM',
+    active: false
+  },{
+    key: 'backupPM',
+    active: false
+  },{
+    key: 'research',
+    active: false
+  },{
+    key: 'strategy',
+    active: false
+  },{
+    key: 'hedgeFactor',
+    active: false
   }
 ]
