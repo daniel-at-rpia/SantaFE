@@ -18,7 +18,8 @@ import {
   BICSDataProcessingService,
   GlobalWorkflowIOService,
   BICSDictionaryLookupService,
-  SecurityMapService
+  SecurityMapService,
+  IndexedDBService
 } from 'Core/services';
 import { CoreEffect } from 'Core/effects/core.effects';
 import { EffectsModule } from '@ngrx/effects';
@@ -113,6 +114,7 @@ import { SantaContainerComponentBase } from './containers/santa-container-compon
     GlobalWorkflowIOService,
     BICSDictionaryLookupService,
     SecurityMapService,
+    IndexedDBService,
     {
       provide: RouteReuseStrategy,
       useClass: SantaRouteReuseStrategy

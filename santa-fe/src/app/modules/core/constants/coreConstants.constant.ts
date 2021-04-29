@@ -10,6 +10,16 @@ export enum NavigationModule {
   market = 'market'
 }
 
+export enum PortfolioShortNames {
+  DOF = 'DOF',
+  SOF = 'SOF',
+  STIP = 'STIP',
+  FIP = 'FIP',
+  CIP = 'CIP',
+  AGB = 'AGB',
+  BBB = 'BBB'
+}
+
 export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
   getSecurityIdMap: `security/get-security-identifiers`,
@@ -58,7 +68,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -69,7 +79,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -80,7 +90,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -91,7 +101,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -102,7 +112,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -113,7 +123,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -124,7 +134,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -135,7 +145,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   }
 ];
@@ -198,6 +208,7 @@ export const FrontendKeyToBackendKeyDictionary = {
   'BICS_LEVEL_6': 'BicsLevel6',
   'BICS_LEVEL_7': 'BicsLevel7',
   'BICS_CONSOLIDATED': 'BicsCode',
+  'PORTFOLIO': 'PortfolioShortName',
 
   // metrics
   'SPREAD': 'oasSpread',

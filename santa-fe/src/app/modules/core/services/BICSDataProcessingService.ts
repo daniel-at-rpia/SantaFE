@@ -42,13 +42,23 @@ export class BICSDataProcessingService {
 
   public loadBICSData(
     data: BEBICsHierarchyBlock,
-    parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock
+    parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock,
+    immediatelyLoadBICSToConfigurator?: DTOs.SecurityDefinitionConfiguratorDTO
   ) {
-    this.bicsRawCategoryCodes = [...Object.keys(data)];
-    this.bicsDictionaryLookupService.loadBICSData(data);
-    this.setBICsLevelOneCategories(data, parent);
-    this.iterateBICsData(data, parent);
-    this.formattedBICsHierarchyData = parent;
+    if (this.bicsRawCategoryCodes && this.formattedBICsHierarchyData) {
+      // the data would be already formed if the user was on a diff page before, therefore no need to form it again
+      !!immediatelyLoadBICSToConfigurator && this.loadBICSOptionsIntoConfigurator(immediatelyLoadBICSToConfigurator);
+    } else {
+      this.bicsRawCategoryCodes = [...Object.keys(data)];
+      this.bicsDictionaryLookupService.loadBICSData(data);
+      this.setBICsLevelOneCategories(data, parent);
+      // if the formattedBICsHierarchyData is not formed, then we should form it in an async process because it is very costly. And sometimes we need to populate the bics in a configurator rightaway, if so then do that right after the formattedBICsHierarchyData is ready
+      setTimeout(function(){
+        this.iterateBICsData(data, parent);
+        this.formattedBICsHierarchyData = parent;
+        !!immediatelyLoadBICSToConfigurator && this.loadBICSOptionsIntoConfigurator(immediatelyLoadBICSToConfigurator);
+      }.bind(this), 2000);
+    }
   }
 
   public getTargetSpecificHierarchyList(

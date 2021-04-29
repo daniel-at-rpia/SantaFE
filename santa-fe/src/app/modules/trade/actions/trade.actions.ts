@@ -9,6 +9,7 @@ export enum TradeActions {
   LiveUpdateInProgressEvent = '[Trade] Live Update Processing',
   LiveUpdatePassRawDataToMainTableEvent = '[Trade] Live Update Pass Raw Data to Main Table',
   LiveUpdateProcessingDataCompleteInMainTableEvent = '[Trade] Live Update Processing Data Complete in Main Table',
+  TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent = '[Trade] Live Update Initiate New Data Fetch From Backend In Main Table',
   LiveUpdatePassRawDataToAlertTableEvent = '[Trade] Live Update Pass Raw Data to Alert Table',
   LiveUpdateProcessingDataCompleteInAlertTableEvent = '[Trade] Live Update Processing Data Complete in Alert Table',
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
@@ -23,7 +24,8 @@ export enum TradeActions {
   AlertTableReceiveNewAlerts = '[Trade] Alert Table Receive New Alerts',
   KeywordSearchThisSecurity = '[Trade] Keyword Search This Security',
   CenterPanelLoadTableWithFilter = '[Trade] Center Panel Load Table With Filter',
-  BICSDataLoaded = '[Trade] BICS Data Loaded'
+  BICSDataLoaded = '[Trade] BICS Data Loaded',
+  WatchlistIndexedDBReady = '[Trade] Watchlist IndexedDB Ready'
 }
 
 export class TradeStoreResetEvent implements Action {
@@ -53,6 +55,11 @@ export class TradeLiveUpdatePassRawDataToMainTableEvent implements Action {
 
 export class TradeLiveUpdateProcessDataCompleteInMainTableEvent implements Action {
   readonly type = TradeActions.LiveUpdateProcessingDataCompleteInMainTableEvent;
+  constructor(){}
+}
+
+export class TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent implements Action {
+  readonly type = TradeActions.TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent;
   constructor(){}
 }
 
@@ -148,16 +155,24 @@ export class TradeCenterPanelLoadTableWithFilterEvent implements Action {
   readonly type = TradeActions.CenterPanelLoadTableWithFilter;
   readonly filterList: Array<DTOs.SecurityDefinitionDTO>;
   readonly metric: PortfolioMetricValues;
+  readonly presetDisplayTitle: string;
   constructor(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    metric: PortfolioMetricValues
+    metric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ){
     this.filterList = filterList;
     this.metric = metric;
+    this.presetDisplayTitle = presetDisplayTitle;
   }
 }
 
 export class TradeBICSDataLoadedEvent implements Action {
   readonly type = TradeActions.BICSDataLoaded;
+  constructor(){}
+}
+
+export class TradeWatchlistIndexedDBReady implements Action {
+  readonly type = TradeActions.WatchlistIndexedDBReady;
   constructor(){}
 }

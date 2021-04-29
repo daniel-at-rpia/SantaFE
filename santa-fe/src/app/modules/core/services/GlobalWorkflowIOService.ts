@@ -6,31 +6,23 @@ import { Store } from '@ngrx/store';
 import { DTOs, AdhocPacks } from '../models/frontend';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
+import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { ROUTE_REUSE_HANDLER_STORE_SIZE_CAP } from 'App/modules/core/constants/globalWorkflowConstants.constants';
 import {
-  GlobalWorkflowTypes,
-  NavigationModule
-} from 'Core/constants/coreConstants.constant';
-import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
-import {
-  INDEXEDDB_VERSION,
-  INDEXEDDB_WORKFLOW_DATABASE_NAME,
+  IndexedDBDatabases,
   INDEXEDDB_WORKFLOW_TABLE_NAME,
-  INDEXEDDB_LAST_STATE_TABLE_NAME,
-  ROUTE_REUSE_HANDLER_STORE_SIZE_CAP
-} from 'Core/constants/globalWorkflowConstants.constants';
+  INDEXEDDB_LAST_STATE_TABLE_NAME
+} from 'Core/constants/indexedDB.constants';
+import { IndexedDBService } from 'Core/services/IndexedDBService';
 
 @Injectable()
 
 export class GlobalWorkflowIOService {
-  // given that storing workflow state is the only application of indexedDB in Santa at the moment, there is no need to over-engineer the indexedDB layer in santa, just put it in IOService for now
-  private workflowIndexedDBAPI: IDBDatabase;
   constants = {
-    idbVersion: INDEXEDDB_VERSION,
-    idbWorkflowDbName: INDEXEDDB_WORKFLOW_DATABASE_NAME,
     idbWorkflowAllStateTableName: INDEXEDDB_WORKFLOW_TABLE_NAME,
-    idbWorkflowLastStateTableName: INDEXEDDB_LAST_STATE_TABLE_NAME
+    idbWorkflowLastStateTableName: INDEXEDDB_LAST_STATE_TABLE_NAME,
+    idbDatabase: IndexedDBDatabases
   }
-
   private currentState: string = 'initialState';
   private currentModule: NavigationModule = null;
   private routeHandlerStore: 
@@ -52,10 +44,10 @@ export class GlobalWorkflowIOService {
   constructor(
     private store$: Store<any>,
     private utilityService: UtilityService,
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private indexedDBService: IndexedDBService
   ){
-    const openRequest = window.indexedDB.open(this.constants.idbWorkflowDbName, this.constants.idbVersion);
-    this.initiateIndexedDBRequestHandler(openRequest);
+    this.indexedDBService.initializeIndexedDB(this.constants.idbDatabase.GlobalWorkflow)
     this.initializeSubscriptionStore();
   }
 
@@ -65,19 +57,14 @@ export class GlobalWorkflowIOService {
       const writableCopy = this.utilityService.deepCopy(targetState);
       writableCopy.data.stateInfo = JSON.stringify(writableCopy.data.stateInfo);
       writableCopy.api = null;
-      const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
-      const IOService = IOTransaction.objectStore(this.constants.idbWorkflowAllStateTableName);
-      IOTransaction.onerror = (event) => {
-        console.error('Global Workflow, store state error', event);
-      }
-      IOService.put(writableCopy);
+      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWorkflowAllStateTableName, this.constants.idbDatabase.GlobalWorkflow, writableCopy, `${this.constants.idbDatabase.GlobalWorkflow} - Store State`, false);
     }
 
     public fetchState(targetUUID: string): Observable<DTOs.GlobalWorkflowStateDTO> {
       return new Observable(subscriber => {
         if (!!targetUUID) {
-          const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowAllStateTableName], "readwrite");
-          const IOService = IOTransaction.objectStore(this.constants.idbWorkflowAllStateTableName);
+          const IOTransaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWorkflowAllStateTableName, this.constants.idbDatabase.GlobalWorkflow, null, true);
+          const IOService = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWorkflowAllStateTableName, IOTransaction);
           const request = IOService.get(targetUUID);
           IOTransaction.oncomplete = ((event) => {
             if (!!request.result && !!request.result.data) {
@@ -107,75 +94,7 @@ export class GlobalWorkflowIOService {
           subscriber.next(null);
         }
       });
-    }
-
-    private initiateIndexedDBRequestHandler(openRequest: IDBOpenDBRequest) {
-      openRequest.onerror = (errorEvent) => {
-        console.error('IDB open request failed', errorEvent);
-      }
-
-      openRequest.onsuccess = (successEvent) => {
-        console.log('IDB open request success.', successEvent);
-        this.workflowIndexedDBAPI = openRequest.result;
-        // only dispatch action when request is success, even in case of upgradeNeeded, it will still come to success once the upgrade is completed
-        this.store$.dispatch(new CoreGlobalWorkflowIndexedDBReady());
-      }
-
-      openRequest.onupgradeneeded = (newVersionDetectedEvent) => {
-        console.log('IDB open request upgrade needed.', newVersionDetectedEvent);
-        // reconstruct the database upon version change
-        this.workflowIndexedDBAPI = openRequest.result;
-
-        if (newVersionDetectedEvent.oldVersion === 0) {
-          // version 0 means that the client had no database
-          // perform initialization
-          this.initializeWorkflowTable();
-          this.initializeLastStateTable();
-        } else {
-          // for all other versions, simply destory the database and reload, which will trigger the "version === 0" condition that rebuilds the database
-          // this is not the most efficient way to handle upgrade but it is error-proof
-          const deleteRequest = window.indexedDB.deleteDatabase(this.constants.idbWorkflowDbName);
-          deleteRequest.onsuccess = (event) => {
-            window.location.reload(true);
-          }
-        }
-        this.workflowIndexedDBAPI.onversionchange = (event) => {
-          // versionchange event will trigger on other instances of the application that did not trigger the delete of the database
-          // this is to handle scenarios where users have multiple tabs of the Santa open. What will happen is, one of the tabs triggers the delete, the other tabs will refresh themselves as the delete is completed.
-          this.workflowIndexedDBAPI.close();
-          setTimeout(()=>{
-            // delayed to reload in order to make sure when reload database is already deleted
-            window.location.reload(true);
-          }, 1000);
-        };
-
-      }
-    }
-
-    private initializeWorkflowTable() {
-      this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowAllStateTableName, { keyPath: "uuid" });  // this key field has to be the "id" field 
-    }
-
-    private initializeLastStateTable() {
-      this.workflowIndexedDBAPI.createObjectStore(this.constants.idbWorkflowLastStateTableName, { keyPath: "module" });
-    }
-
-    private storeLastState(targetModule: NavigationModule, targetUUID: string) {
-      if (!!this.workflowIndexedDBAPI) {
-        // this if condition serves both as a null-check and a guard for not recording the initial state on app load, because it is unnecessary to store it
-        const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowLastStateTableName], "readwrite");
-        const IOService = IOTransaction.objectStore(this.constants.idbWorkflowLastStateTableName);
-        IOTransaction.onerror = (event) => {
-          console.error('Global Workflow, store last state error', event);
-        }
-        const newEntry: AdhocPacks.GlobalWorkflowLastState = {
-          module: targetModule,
-          stateUUID: targetUUID
-        };
-        IOService.put(newEntry);
-      }
-    }
-
+  }
     public loadLastStates(): Observable<Array<AdhocPacks.GlobalWorkflowLastState>> {
       return new Observable(subscriber => {
         const results = [];
@@ -184,8 +103,8 @@ export class GlobalWorkflowIOService {
           expectedNumOfResults++;
         }
         for (let eachModule in NavigationModule) {
-          const IOTransaction = this.workflowIndexedDBAPI.transaction([this.constants.idbWorkflowLastStateTableName], "readwrite");
-          const IOService = IOTransaction.objectStore(this.constants.idbWorkflowLastStateTableName);
+          const IOTransaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWorkflowLastStateTableName, this.constants.idbDatabase.GlobalWorkflow, null, true);
+          const IOService = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWorkflowLastStateTableName, IOTransaction);
           const request = IOService.get(eachModule);
           IOTransaction.oncomplete = ((event) => {
             results.push(request.result);
@@ -194,7 +113,7 @@ export class GlobalWorkflowIOService {
             }
           });
           IOTransaction.onerror = ((event) => {
-            console.error('Global Workflow, retrieve state failure', event, eachModule);
+            console.error(`${this.constants.idbDatabase.GlobalWorkflow}, retrieve state failure`, event, eachModule);
           });
         }
       });
@@ -207,7 +126,7 @@ export class GlobalWorkflowIOService {
     public updateCurrentState(newModule: NavigationModule ,newStateId: string) {
       this.currentModule = newModule;
       this.currentState = newStateId;
-      this.storeLastState(newModule, newStateId)
+      this.indexedDBService.storeLastState(this.constants.idbWorkflowLastStateTableName, newModule, newStateId, this.constants.idbDatabase.GlobalWorkflow);
     }
 
     public attachRouteHandlerToState(targetUUID: string, targetHandler: DetachedRouteHandle) {

@@ -24,6 +24,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { IndexedDBDatabases } from 'Core/constants/indexedDB.constants';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -237,4 +238,41 @@ export interface StructureSetTargetOverrideTransferPack {
 
 export interface StructureSetBulkOverrideTransferPack {
   pack: PayloadBulkCreateOverrides;
+}
+/*
+The overwrite is for "overwriting" the default configurations. Current use of it is to embed it into SearchShortcutDTO, so when apply a "preset" or "watchlist", the FE will tune the table layout to that search's specific context. 
+The reason we develop this overwrite instead of just using an array of <SecurityTableHeaderConfigStub> to act as an overwrite is for two reasons:
+  1. This overwrite is lightweight, by keeping it optional and only have some of the properties from <SecurityTableHeaderConfigStub> means we are storing an object of 50-100 lines instead of 1000+lines
+  2. Remove the dependency on the <SecurityTableHeaderConfigStub> data model, as that can change over time, while this overwrite goes into the indexedDB so needs to be less flexible
+*/
+export interface SecurityTableHeaderConfigOverwrite {
+  key: string;
+  active: boolean;
+  groupShow: boolean;
+  disabled: boolean;
+  pinned: boolean;
+  explicitOrder?: number;  // by default the order is implied by each entry's position in the array, but sometimes we need rules to bump up/down specific header, use this to do that
+}
+export interface IndexedDBTableBlockItem {
+  name: string;
+  key: string;
+}
+export interface IndexedDBTableBlock {
+  [table: string]: IndexedDBTableBlockItem
+}
+
+export type IndexedDBEntryBlock = GlobalWorkflowLastState | DTOs.SearchShortcutDTO | DTOs.GlobalWorkflowStateDTO;
+
+export type IndexedDBConfigBlock = {
+  [databaseType in IndexedDBDatabases]: Array<IndexedDBTableBlockItem>
+}
+
+export type IndexedDBAllDatabaseMapping = {
+  [database in IndexedDBDatabases]: {
+    name: string;
+    version: number;
+    ngRxAction: any,
+    api: IDBDatabase,
+    configs: Array<IndexedDBTableBlockItem>
+  }
 }

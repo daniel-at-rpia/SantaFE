@@ -3,9 +3,12 @@
   [ngClass]="{
     'sat-searchShortcut': true,
     'sat-searchShortcut--selectedState': shortcutData.state.isSelected,
-    'sat-searchShortcut--userInputBlockedState': shortcutData.state.isUserInputBlocked
+    'sat-searchShortcut--userInputBlockedState': shortcutData.state.isUserInputBlocked,
+    'sat-searchShortcut--previewVariant': shortcutData.state.isPreviewVariant,
+    'sat-searchShortcut--hasHighlightTitle': shortcutData.data.highlightTitle.length > 0
   }">
   <section class="sat-searchShortcut__title">
+    <span class="sat-searchShortcut__title-highlightText">{{shortcutData.data.highlightTitle}}</span>
     <span class="sat-searchShortcut__title-text">{{shortcutData.data.displayTitle}}</span>
   </section>
   <section class="sat-searchShortcut__configOverview">

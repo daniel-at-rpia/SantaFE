@@ -12,7 +12,6 @@
       PortfolioMetricValues,
       BreakdownViewFilter,
       SUPPORTED_PORTFOLIO_LIST,
-      PortfolioShortNames,
       UTILITY_PANEL_HISTORICAL_TIME_LABEL,
       SubPortfolioFilter,
       DeltaScope,
@@ -39,7 +38,7 @@
       StructureChangeDeltaScopeEvent
     } from 'Structure/actions/structure.actions';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { NavigationModule, GlobalWorkflowTypes, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
   //
 
 @Component({

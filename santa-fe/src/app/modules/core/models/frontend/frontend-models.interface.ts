@@ -10,12 +10,15 @@ import {
   AlertSubTypes,
   AlertTypes,
   NavigationModule,
-  GlobalWorkflowTypes
+  GlobalWorkflowTypes,
+  PortfolioShortNames
 } from 'Core/constants/coreConstants.constant';
 import { Alert } from "Core/components/alert/alert.component";
-import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import {
-  PortfolioShortNames,
+  AxeAlertScope,
+  AxeAlertType
+} from 'Core/constants/tradeConstants.constant';
+import {
   PortfolioMetricValues,
   DeltaScope,
   DeltaScopeDisplayText
@@ -302,8 +305,23 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
 
 export interface SearchShortcutDTO extends BasicDTOStructure {
   data: {
+    uuid: string;
     displayTitle: string;
-    configuration: Array<SecurityDefinitionDTO>;
+    highlightTitle: string;
+    headerOverwrites: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite>;
+    searchFilters: Array<Array<SecurityDefinitionDTO>>;  // allowing multiple sets of filters, chained in an "OR" relation, to enable a more complex grouping logic;
+    securityExclusionList: Array<string>;  // array of individual securityIds to be excluded on top of "searchFilters"
+    securityInclusionList: Array<string>;  // array of individual securityIds to be included on top of "searchFilters"
+    metadata: {
+      createTime: number;  // unixTimestamp
+      dbStoredTime: number;  // unixTimestamp
+      lastUseTime: number;  // unixTimestamp
+      size: number;
+    };
+    structurModuleLink: {
+      portfolio: PortfolioShortNames;
+      backendGroupOptionIdentifier: string;
+    }
   },
   style: {
     slotList: Array<SecurityDefinitionDTO>
@@ -313,6 +331,8 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
     isUserInputBlocked: boolean;
     isMajorShortcut: boolean;
     isHeroShortcut: boolean;
+    isPreviewVariant: boolean;
+    isAbleToSaveAsRecentWatchlist: boolean;
   }
 }
 
@@ -945,6 +965,7 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     module: NavigationModule;
     workflowType: GlobalWorkflowTypes;
     stateInfo: {
+      associatedDisplayTitle?: string;
       filterList?: Array<SecurityDefinitionDTO>;
       activeMetric?: PortfolioMetricValues;
       structureUtilityPanelSnapshot?: StructureUtilityPanelState;
@@ -958,3 +979,4 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
     updateCurrentState: boolean;
   }
 }
+

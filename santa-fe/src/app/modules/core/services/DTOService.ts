@@ -61,7 +61,6 @@
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import {
-      PortfolioShortNames,
       PortfolioMetricValues,
       PortfolioView,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
@@ -802,8 +801,20 @@ export class DTOService {
   ): DTOs.SearchShortcutDTO {
     const object: DTOs.SearchShortcutDTO = {
       data: {
+        uuid: this.utility.generateUUID(),
         displayTitle: title,
-        configuration: definitionList
+        highlightTitle: '',
+        headerOverwrites: [],
+        searchFilters: [definitionList],
+        securityExclusionList: [],
+        securityInclusionList: [],
+        metadata: {
+          createTime: moment().unix(),
+          dbStoredTime: null,
+          lastUseTime: moment().unix(),
+          size: null
+        },
+        structurModuleLink: null
       },
       style: {
         slotList: [null, null, null, null, null]
@@ -812,7 +823,9 @@ export class DTOService {
         isSelected: false,
         isUserInputBlocked: false,
         isMajorShortcut: !!isMajor,
-        isHeroShortcut: !!isHero
+        isHeroShortcut: !!isHero,
+        isPreviewVariant: false,
+        isAbleToSaveAsRecentWatchlist: true
       }
     };
     definitionList.forEach((eachDefinition, index) => {
@@ -2751,6 +2764,7 @@ export class DTOService {
     };
     return object;
   }
+
 
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioFundDTO,

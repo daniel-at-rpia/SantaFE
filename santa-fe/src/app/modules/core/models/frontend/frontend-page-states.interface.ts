@@ -6,19 +6,23 @@ import * as Blocks from './frontend-blocks.interface';
 import * as Stubs from './frontend-stub-models.interface';
 import * as AdhocPacks from './frontend-adhoc-packages.interface';
 import { SantaDatePicker } from 'Form/models/form-models.interface';
-import { AlertTypes, NavigationModule } from 'Core/constants/coreConstants.constant';
+import { AlertTypes, NavigationModule, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames,
   PortfolioView,
   SubPortfolioFilter,
   DeltaScope
 } from 'Core/constants/structureConstants.constants';
-import { BEStructuringBreakdownBlock, BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
+import {
+  BEStructuringBreakdownBlock,
+  BEGetPortfolioStructureServerReturn,
+  BEFetchAllTradeDataReturn
+} from 'BEModels/backend-models.interface';
 
 export interface RootState {
   ownerInitial: string;
+  currentUrl: string;
 }
 
 export interface GlobalNavState {
@@ -114,11 +118,19 @@ export interface TradeCenterPanelState {
     presetsReady: boolean;
     selectedPreset: DTOs.SearchShortcutDTO;
     selectedList: Array<DTOs.SearchShortcutDTO>;
-    recentShortcutList: Array<DTOs.SearchShortcutDTO>;
+    selectedCategoryFromTop: boolean;
+    selectedCategoryFromBottom: boolean;  // the reason we want to do two flags instead of one is so that we can have the default set to be "neither" which is more correct in the UI
     portfolioShortcutList: Array<DTOs.SearchShortcutDTO>;
     ownershipShortcutList: Array<DTOs.SearchShortcutDTO>;
     strategyShortcutList: Array<DTOs.SearchShortcutDTO>;
-    individualShortcutList: Array<DTOs.SearchShortcutDTO>;
+    recentWatchlistShortcuts: {
+      fullList: Array<DTOs.SearchShortcutDTO>;
+      todayList: Array<DTOs.SearchShortcutDTO>,
+      thisWeekList: Array<DTOs.SearchShortcutDTO>,
+      lastWeekList: Array<DTOs.SearchShortcutDTO>
+    }
+    savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
   }
   configurator: {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;
@@ -133,8 +145,17 @@ export interface TradeCenterPanelState {
     fetchTableDataFailedError: string;
     mainTable: Blocks.TableFetchResultBlock;
     initialDataLoadedInternalSyncFlag: boolean;
+    totalCount: number;
+    lastFetchBucket: object;
+    lastFetchServerReturn: BEFetchAllTradeDataReturn;
   }
   filters: Blocks.TradeCenterPanelStateFilterBlock;
+  editingDriver: boolean;
+  currentSearch: {
+    previewShortcut: DTOs.SearchShortcutDTO;
+    redirectedFromStrurturing: boolean;
+  }
+  isIndexedDBReady: boolean;
 }
 
 export interface StructureMainPanelState {

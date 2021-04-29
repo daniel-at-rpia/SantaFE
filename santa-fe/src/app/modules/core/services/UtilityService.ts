@@ -353,7 +353,7 @@ export class UtilityService {
           Wow: {},
           Mom: {},
           Ytd: {},
-          Yoy: {}
+          TMinusTwo: {}
         }
       };
       if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {
@@ -432,14 +432,21 @@ export class UtilityService {
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
       const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
-      shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
+      // currently the configurator does not support multiple groups of filters chained together, we will change that when we need to utilize this feature
+      const primaryFilterGroup = shortcutCopy.data.searchFilters[0];
+      primaryFilterGroup.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
-              eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
-              eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
-                return !!eachFilter.isSelected;
-              });
+              if (eachShortcutDef.data.displayOptionList.length === 0) {
+                // sometimes the display options are loaded async in API, in those cases the shortcut which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
+                eachDefinition.data.highlightSelectedOptionList = eachShortcutDef.data.highlightSelectedOptionList;
+              } else {
+                eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
+                eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
+                  return !!eachFilter.isSelected;
+                });
+              }
               eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
               eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
             }
@@ -1636,7 +1643,9 @@ export class UtilityService {
               return eachBlock.shortKey;
             });
           } else {
-            simpleBucket[property] = eachItem.filterBy;
+            if (property !== 'n/a') {
+              simpleBucket[property] = eachItem.filterBy;
+            }
           }
         }
       })

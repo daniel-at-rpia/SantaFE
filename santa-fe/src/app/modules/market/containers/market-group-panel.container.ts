@@ -163,7 +163,7 @@ export class MarketGroupPanel implements OnDestroy {
       this.state.configurator.shortcutList.forEach((eachShortcut) => {
         eachShortcut.state.isUserInputBlocked = true;
       });
-      this.startSearch(this.state.configurator.selectedShortcut.data.configuration);
+      this.startSearch(this.state.configurator.selectedShortcut.data.searchFilters[0]);
     } else {
       this.state.searchResult.securityGroupList = [];
       this.state.isGroupDataLoaded = false;

@@ -101,19 +101,30 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   public onClickDefinition(targetDefinition: DTOs.SecurityDefinitionDTO, hasAppliedFilter: boolean = false) {
     if (!!targetDefinition && !targetDefinition.state.isUnactivated) {
       this.clearSearchFilter(hasAppliedFilter);
-      this.configuratorData.state.showFiltersFromDefinition = this.configuratorData.state.showFiltersFromDefinition === targetDefinition ? null : targetDefinition;
-      if (this.configuratorData.state.showFiltersFromDefinition) {
-        if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
-         this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = [];
-         if (this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.length > 0) {
-          this.configuratorData.state.showFiltersFromDefinition.data.highlightSelectedOptionList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => {
-            this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.push(selectedOption);
+      if (this.configuratorData.state.showFiltersFromDefinition !== targetDefinition) {
+        if (targetDefinition.state.isFilterCapped) {
+         targetDefinition.data.displayOptionList = [];
+         if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
+          targetDefinition.data.highlightSelectedOptionList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => {
+            targetDefinition.data.displayOptionList.push(selectedOption);
           })
          }
+        } else {
+          if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
+            targetDefinition.data.highlightSelectedOptionList.forEach((eachSelectedOption) => {
+              const existInDisplay = targetDefinition.data.displayOptionList.find((eachDisplayOption) => {
+                return eachDisplayOption.key === eachSelectedOption.key;
+              });
+              if (!!existInDisplay) {
+                existInDisplay.isSelected = true;
+              }
+            });
+          }
         }
-        const definitionShown = this.configuratorData.state.showFiltersFromDefinition;
+        this.configuratorData.state.showFiltersFromDefinition = targetDefinition;
         this.boostConfigurator.emit();
       } else {
+        this.configuratorData.state.showFiltersFromDefinition = null;
         this.buryConfigurator.emit();
       }
     }

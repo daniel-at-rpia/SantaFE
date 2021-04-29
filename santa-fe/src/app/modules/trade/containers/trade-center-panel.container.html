@@ -2,97 +2,287 @@
   [ngClass]="{
     'sat-tradeCenterPanel': true,
     'sat-tradeCenterPanel--keywordSearchActiveState': !!state.filters.keyword.actualValue && state.filters.keyword.actualValue.length >= 2,
-    'sat-tradeCenterPanel--presetReadyState': state.presets.presetsReady,
-    'sat-tradeCenterPanel--presetCategorySelectedState': state.presets.selectedList,
     'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
-    'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted
+    'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted,
+    'sat-tradeCenterPanel--editingDriverState': state.editingDriver,
+    'sat-tradeCenterPanel--initialDataLoaded': state.fetchResult.initialDataLoadedInternalSyncFlag,
+    'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount
   }">
-  <section class="sat-tradeCenterPanel__presetsAndFilters">
-    <div class="sat-tradeCenterPanel__presetsAndFilters-presets">
-      <div class="sat-tradeCenterPanel__presetsAndFilters-presets-title">
-        <span class="sat-tradeCenterPanel__presetsAndFilters-presets-title-text">Select Preset</span>
-      </div>
-      <div class="sat-tradeCenterPanel__presetsAndFilters-presets-content">
-        <aside class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas">
-          <div class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-ribbon"></div>
-          <ul class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list">
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
-              <button
-                (click)="onSelectPresetCategory(state.presets.portfolioShortcutList)"
-                [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--portfolio': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.portfolioShortcutList,
-                  'santaBtn--labelled': true,
-                  'santaBtn--inverseLabelled': true
-                }">
-                <i class="fal fa-file-invoice-dollar"></i>
-                <span>Portfolio</span>
-              </button>
-            </li>
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
-              <button
-                (click)="onSelectPresetCategory(state.presets.ownershipShortcutList)"
-                [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--ownership': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.ownershipShortcutList,
-                  'santaBtn--labelled': true,
-                  'santaBtn--inverseLabelled': true
-                }">
-                <i class="fad fa-users"></i>
-                <span>Ownership</span>
-              </button>
-            </li>
-            <li class="sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item">
-              <button
-                (click)="onSelectPresetCategory(state.presets.strategyShortcutList)"
-                [ngClass]="{
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--strategy': true,
-                  'sat-tradeCenterPanel__presetsAndFilters-presets-content-categoryCanvas-list-item-btn--selected': state.presets.selectedList === state.presets.strategyShortcutList,
-                  'santaBtn--labelled': true,
-                  'santaBtn--inverseLabelled': true
-                }">
-                <i class="fal fa-chess"></i>
-                <span>Strategy</span>
-              </button>
-            </li>
-          </ul>
-        </aside>
-        <div class="sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas">
-          <ul
-            [ngClass]="{
-              'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list': true,
-              'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list--showingFirst': state.presets.selectedList === state.presets.recentShortcutList,
-              'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list--showingSecond': state.presets.selectedList === state.presets.portfolioShortcutList,
-              'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list--showingThird': state.presets.selectedList === state.presets.ownershipShortcutList,
-              'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list--showingFourth': state.presets.selectedList === state.presets.strategyShortcutList,
-              'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list--showingFifth': state.presets.selectedList === state.presets.individualShortcutList
-            }">
-            <li
-              *ngFor="let eachShortcut of state.presets.selectedList"
+  <section class="sat-tradeCenterPanel__presets">
+    <div class="sat-tradeCenterPanel__presets-title">
+      <span class="sat-tradeCenterPanel__presets-title-text">Select Preset</span>
+    </div>
+    <div class="sat-tradeCenterPanel__presets-content">
+      <article
+        [ngClass]="{
+          'sat-tradeCenterPresetCategoryCanvas': true,
+          'sat-tradeCenterPresetCategoryCanvas--top': true,
+          'sat-tradeCenterPresetCategoryCanvas--readyState': state.presets.presetsReady
+        }">
+        <section class="sat-tradeCenterPresetCategoryCanvas__ribbon"></section>
+        <ul class="sat-tradeCenterPresetCategoryCanvas__list">
+          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+            <button
+              (click)="onSelectPresetCategory(state.presets.portfolioShortcutList, true)"
               [ngClass]="{
-                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item': true,
-                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--major': eachShortcut.state.isMajorShortcut,
-                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--hero': eachShortcut.state.isHeroShortcut,
-                'sat-tradeCenterPanel__presetsAndFilters-presets-content-shortcutCanvas-list-item--selected': state.presets.selectedPreset === eachShortcut
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--first': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.portfolioShortcutList,
+                'santaBtn--labelled': true,
+                'santaBtn--inverseLabelled': true
+              }">
+              <i class="fal fa-file-invoice-dollar"></i>
+              <span>Portfolio</span>
+            </button>
+          </li>
+          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+            <button
+              (click)="onSelectPresetCategory(state.presets.ownershipShortcutList, true)"
+              [ngClass]="{
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--second': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.ownershipShortcutList,
+                'santaBtn--labelled': true,
+                'santaBtn--inverseLabelled': true
+              }">
+              <i class="fad fa-users"></i>
+              <span>Ownership</span>
+            </button>
+          </li>
+          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+            <button
+              (click)="onSelectPresetCategory(state.presets.strategyShortcutList, true)"
+              [ngClass]="{
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--third': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.strategyShortcutList,
+                'santaBtn--labelled': true,
+                'santaBtn--inverseLabelled': true
+              }">
+              <i class="fal fa-chess"></i>
+              <span>Strategy</span>
+            </button>
+          </li>
+        </ul>
+        <section class="sat-tradeCenterPresetCategoryCanvas__title">
+          <span class="sat-tradeCenterPresetCategoryCanvas__title-text">RPIA's Portfolios</span>
+        </section>
+      </article>
+      <article
+        [ngClass]="{
+          'sat-tradeCenterPresetShortcutCanvas': true,
+          'sat-tradeCenterPresetShortcutCanvas--categorySelectedState': state.presets.selectedList,
+          'sat-tradeCenterPresetShortcutCanvas--topCategorySelectedState': !!state.presets.selectedCategoryFromTop,
+          'sat-tradeCenterPresetShortcutCanvas--bottomCategorySelectedState': !!state.presets.selectedCategoryFromBottom,
+          'sat-tradeCenterPresetShortcutCanvas--timeSpecificCategoryState': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList
+        }">
+        <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay">
+          <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block">
+            <span class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-title">Today:</span>
+            <ul class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list">
+              <li
+              *ngFor="let eachShortcut of state.presets.recentWatchlistShortcuts.todayList"
+              [ngClass]="{
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item': true,
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--major': eachShortcut.state.isMajorShortcut,
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--hero': eachShortcut.state.isHeroShortcut
               }">
               <search-shortcut
                 [shortcutData]="eachShortcut"
-                (onClickShortcutCallback)="onSelectPreset($event)"
+                (onClickShortcutCallback)="onSelectPreset($event, true)"
               ></search-shortcut>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block">
+            <span class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-title">This Week:</span>
+            <ul class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list">
+              <li
+              *ngFor="let eachShortcut of state.presets.recentWatchlistShortcuts.thisWeekList"
+              [ngClass]="{
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item': true,
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--major': eachShortcut.state.isMajorShortcut,
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--hero': eachShortcut.state.isHeroShortcut
+              }">
+              <search-shortcut
+                [shortcutData]="eachShortcut"
+                (onClickShortcutCallback)="onSelectPreset($event, true)"
+              ></search-shortcut>
+              </li>
+            </ul>
+          </div>
+          <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block">
+            <span class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-title">Last Week:</span>
+            <ul class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list">
+              <li
+              *ngFor="let eachShortcut of state.presets.recentWatchlistShortcuts.lastWeekList"
+              [ngClass]="{
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item': true,
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--major': eachShortcut.state.isMajorShortcut,
+                'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--hero': eachShortcut.state.isHeroShortcut
+              }">
+              <search-shortcut
+                [shortcutData]="eachShortcut"
+                (onClickShortcutCallback)="onSelectPreset($event, true)"
+              ></search-shortcut>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <ul class="sat-tradeCenterPresetShortcutCanvas__list">
+          <li
+            *ngFor="let eachShortcut of state.presets.selectedList"
+            [ngClass]="{
+              'sat-tradeCenterPresetShortcutCanvas__list-item': true,
+              'sat-tradeCenterPresetShortcutCanvas__list-item--major': eachShortcut.state.isMajorShortcut,
+              'sat-tradeCenterPresetShortcutCanvas__list-item--hero': eachShortcut.state.isHeroShortcut
+            }">
+            <search-shortcut
+              [shortcutData]="eachShortcut"
+              (onClickShortcutCallback)="onSelectPreset($event, true)"
+            ></search-shortcut>
+          </li>
+        </ul>
+      </article>
+      <article
+        [ngClass]="{
+          'sat-tradeCenterPresetCategoryCanvas': true,
+          'sat-tradeCenterPresetCategoryCanvas--bottom': true,
+          'sat-tradeCenterPresetCategoryCanvas--readyState': state.presets.presetsReady
+        }">
+        <section class="sat-tradeCenterPresetCategoryCanvas__ribbon"></section>
+        <ul class="sat-tradeCenterPresetCategoryCanvas__list">
+          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+            <button
+              (click)="onSelectPresetCategory(state.presets.trendingWatchlistShortcutList, false)"
+              [ngClass]="{
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--first': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.trendingWatchlistShortcutList,
+                'santaBtn--labelled': true,
+                'santaBtn--inverseLabelled': true
+              }">
+              <i class="fal fa-fire"></i>
+              <span>Trending</span>
+            </button>
+          </li>
+          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+            <button
+              (click)="onSelectPresetCategory(state.presets.savedWatchlistShortcutList, false)"
+              [ngClass]="{
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--second': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.savedWatchlistShortcutList,
+                'santaBtn--labelled': true,
+                'santaBtn--inverseLabelled': true
+              }">
+              <i class="fad fa-download"></i>
+              <span>Saved</span>
+            </button>
+          </li>
+          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+            <button
+              (click)="onSelectPresetCategory(state.presets.recentWatchlistShortcuts.fullList, false)"
+              [ngClass]="{
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--third': true,
+                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList,
+                'santaBtn--labelled': true,
+                'santaBtn--inverseLabelled': true
+              }">
+              <i class="fal fa-history"></i>
+              <span>Recent</span>
+            </button>
+          </li>
+        </ul>
+        <section class="sat-tradeCenterPresetCategoryCanvas__title">
+          <span class="sat-tradeCenterPresetCategoryCanvas__title-text">Universe Of Bonds</span>
+        </section>
+      </article>
+    </div>
+  </section>
+  <section class="sat-tradeCenterPanel__utilities">
+    <div class="sat-tradeCenterPanel__utilities-selectedPreset">
+      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--iconOnly fal fa-arrow-left"></button>
+      <span class="sat-tradeCenterPanel__utilities-selectedPreset-label">Preset: </span>
+      <search-shortcut
+        *ngIf="state.currentSearch.previewShortcut"
+        [shortcutData]="state.currentSearch.previewShortcut"
+      ></search-shortcut>
+    </div>
+    <div class="sat-tradeCenterPanel__utilities-keywordSearch">
+      <i class="sat-tradeCenterPanel__utilities-keywordSearch-activeIcon fal fa-search"></i>
+      <santa-input
+        [inputValue]="state.filters.keyword.defaultValueForUI"
+        [placeholder]="'filter security name by keyword'"
+        [isHero]="true"
+        (onInputChange)="onSearchKeywordChange($event)">
+      </santa-input>
+    </div>
+    <div class="sat-tradeCenterPanel__utilities-tableRowCount">
+      <div class="sat-tradeCenterPanel__utilities-tableRowCount-icon">
+        <i class="sat-tradeCenterPanel__utilities-tableRowCount-icon-img fal fa-exclamation-square"></i>
+      </div>
+      <div class="sat-tradeCenterPanel__utilities-tableRowCount-content">
+        <div class="sat-tradeCenterPanel__utilities-tableRowCount-content-mainRow">
+          <span class="sat-tradeCenterPanel__utilities-tableRowCount-content-mainRow-label">Showing</span>
+          <span class="sat-tradeCenterPanel__utilities-tableRowCount-content-mainRow-highlightValue">{{state.fetchResult.mainTable.rowList.length}}</span>
+          <span class="sat-tradeCenterPanel__utilities-tableRowCount-content-mainRow-label">/</span>
+          <span class="sat-tradeCenterPanel__utilities-tableRowCount-content-mainRow-value">{{state.fetchResult.totalCount}}</span>
+          <span class="sat-tradeCenterPanel__utilities-tableRowCount-content-mainRow-label">Securities</span>
+        </div>
+        <div class="sat-tradeCenterPanel__utilities-tableRowCount-content-incompleteRow">
+          <span class="sat-tradeCenterPanel__utilities-tableRowCount-content-incompleteRow-label">Capped at 5000, try to use more filters</span>
         </div>
       </div>
     </div>
-    <div class="sat-tradeCenterPanel__presetsAndFilters-configurator">
-      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__presetsAndFilters-configurator-backBtn santaBtn--labelled">
-        <i class="fal fa-chevron-left"></i>
-        <span>Back to Presets</span>
-      </button>
+    <div class="sat-tradeCenterPanel__utilities-driver">
+      <span class="sat-tradeCenterPanel__utilities-driver-label">Driver :</span>
+      <span class="sat-tradeCenterPanel__utilities-driver-value">{{constants.displayDriverMap[state.filters.driverType]}}</span>
+      <div class="santaBtnGroup sat-tradeCenterPanel__utilities-driver-btnGroup">
+        <button
+          (click)="onSwitchDriver(constants.defaultMetricIdentifier)"
+          [ngClass]="{
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn': true,
+            'santaBtn--labelled': true,
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn--active': state.filters.driverType === constants.defaultMetricIdentifier
+          }">
+          <span>Combined</span>
+        </button>
+        <button
+          (click)="onSwitchDriver('Spread')"
+          [ngClass]="{
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn': true,
+            'santaBtn--labelled': true,
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn--active': state.filters.driverType === 'Spread'
+          }">
+          <span>Spread</span>
+        </button>
+        <button
+          (click)="onSwitchDriver('Yield')"
+          [ngClass]="{
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn': true,
+            'santaBtn--labelled': true,
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn--active': state.filters.driverType === 'Yield'
+          }">
+          <span>Yield</span>
+        </button>
+        <button
+          (click)="onSwitchDriver('Price')"
+          [ngClass]="{
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn': true,
+            'santaBtn--labelled': true,
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn--active': state.filters.driverType === 'Price'
+          }">
+          <span>Price</span>
+        </button>
+      </div>
+      <button (click)="onEditDriver()" class="sat-tradeCenterPanel__utilities-driver-editCta santaBtn--iconOnly fal fa-pencil"></button>
+    </div>
+  </section>
+  <section class="sat-tradeCenterPanel__main">
+    <div class="sat-tradeCenterPanel__main-configurator">
       <security-definition-configurator
         [configuratorData]="state.configurator.dto"
         (clickedApplyFilter)="onApplyFilter($event, true)"
@@ -100,71 +290,7 @@
         (boostConfigurator)="boostConfigurator()"
       ></security-definition-configurator>
     </div>
-  </section>
-  <section class="sat-tradeCenterPanel__result">
-    <div class="sat-tradeCenterPanel__result-utilities">
-      <div class="sat-tradeCenterPanel__result-utilities-keywordSearch">
-        <i class="sat-tradeCenterPanel__result-utilities-keywordSearch-activeIcon fal fa-search"></i>
-        <santa-input
-          [inputValue]="state.filters.keyword.defaultValueForUI"
-          [placeholder]="'filter security name by keyword'"
-          [isHero]="true"
-          (onInputChange)="onSearchKeywordChange($event)">
-        </santa-input>
-      </div>
-      <div class="sat-tradeCenterPanel__result-utilities-driver">
-        <span class="sat-tradeCenterPanel__result-utilities-driver-label">Driver :</span>
-        <div class="santaBtnGroup">
-          <button
-            (click)="onSwitchDriver(constants.defaultMetricIdentifier)"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === constants.defaultMetricIdentifier
-            }">
-            <span>Combined</span>
-          </button>
-          <button
-            (click)="onSwitchDriver('Spread')"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Spread'
-            }">
-            <span>Spread</span>
-          </button>
-          <button
-            (click)="onSwitchDriver('Yield')"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Yield'
-            }">
-            <span>Yield</span>
-          </button>
-          <button
-            (click)="onSwitchDriver('Price')"
-            [ngClass]="{
-              'sat-tradeCenterPanel__result-utilities-driver-btn': true,
-              'santaBtn--labelled': true,
-              'sat-tradeCenterPanel__result-utilities-driver-btn--active': state.filters.driverType === 'Price'
-            }">
-            <span>Price</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="sat-tradeCenterPanel__result-errorPrompt">
-      <i class="sat-tradeCenterPanel__result-errorPrompt-icon fal fa-sad-tear"></i>
-      <span class="sat-tradeCenterPanel__result-errorPrompt-title">Backend request failed due to </span>
-      <span class="sat-tradeCenterPanel__result-errorPrompt-errorText">{{state.fetchResult.fetchTableDataFailedError}}</span>
-      <!--
-        <span class="sat-tradeCenterPanel__result-errorPrompt-errorText">If you are seeing it for the first time, it is likely caused by a security check. Click on this link to allow your browser talk to server:</span>
-        <button class="sat-tradeCenterPanel__result-errorPrompt-btn" (click)="openLinkForCertificate()">Link</button>
-        <button class="sat-tradeCenterPanel__result-errorPrompt-btn" (click)="refreshAfterOpenLink()">Try again after clicking link</button>
-      -->
-    </div>
-    <div class="sat-tradeCenterPanel__result-table">
+    <div class="sat-tradeCenterPanel__main-table">
       <santa-table
         [tableName]="'tradeMain'"
         [activated]="!!state.presets.selectedPreset"
@@ -179,5 +305,15 @@
         (selectedSecurityForAnalysis)="onSelectSecurityForAnalysis($event)"
       ></santa-table>
     </div>
+  </section>
+  <section class="sat-tradeCenterPanel__errorPrompt">
+    <i class="sat-tradeCenterPanel__errorPrompt-icon fal fa-sad-tear"></i>
+    <span class="sat-tradeCenterPanel__errorPrompt-title">Backend request failed due to </span>
+    <span class="sat-tradeCenterPanel__errorPrompt-errorText">{{state.fetchResult.fetchTableDataFailedError}}</span>
+    <!--
+      <span class="sat-tradeCenterPanel__errorPrompt-errorText">If you are seeing it for the first time, it is likely caused by a security check. Click on this link to allow your browser talk to server:</span>
+      <button class="sat-tradeCenterPanel__errorPrompt-btn" (click)="openLinkForCertificate()">Link</button>
+      <button class="sat-tradeCenterPanel__errorPrompt-btn" (click)="refreshAfterOpenLink()">Try again after clicking link</button>
+    -->
   </section>
 </article>

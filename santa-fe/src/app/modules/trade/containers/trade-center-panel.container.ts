@@ -1,7 +1,7 @@
   // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
     import { Router } from '@angular/router';
-    import { of, Subscription, Subject } from 'rxjs';
+    import { of, Subscription, Subject, Observable } from 'rxjs';
     import { catchError, first, tap, withLatestFrom, combineLatest, debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
 
@@ -11,7 +11,8 @@
       UtilityService,
       RestfulCommService,
       BICSDataProcessingService,
-      GlobalWorkflowIOService
+      GlobalWorkflowIOService,
+      BICSDictionaryLookupService
     } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
@@ -55,8 +56,16 @@
     import {
       PortfolioShortcuts,
       OwnershipShortcuts,
-      StrategyShortcuts
+      StrategyShortcuts,
+      DISPLAY_DRIVER_MAP,
+      TrendingShortcuts,
     } from 'Core/constants/tradeConstants.constant';
+    import {
+      INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
+      INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME,
+      IndexedDBWatchListType,
+      IndexedDBDatabases
+    } from 'Core/constants/indexedDB.constants'
     import {
       selectLiveUpdateTick,
       selectInitialDataLoadedInMainTable,
@@ -66,7 +75,8 @@
       selectLiveUpdateProcessingRawDataToMainTable,
       selectKeywordSearchInMainTable,
       selectCenterPanelFilterListForTableLoad,
-      selectBICSDataLoaded
+      selectBICSDataLoaded,
+      selectWatchlistIndexedDBReady
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdatePassRawDataToMainTableEvent,
@@ -76,10 +86,13 @@
       TradeSelectedSecurityForAlertConfigEvent,
       TradeTogglePresetEvent,
       TradeAlertTableReceiveNewAlertsEvent,
-      TradeBICSDataLoadedEvent
+      TradeBICSDataLoadedEvent,
+      TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent
     } from 'Trade/actions/trade.actions';
     import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
+    import { IndexedDBService } from 'Core/services/IndexedDBService';
+    import * as moment from 'moment';
   //
 
 @Component({
@@ -98,7 +111,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     validWindowSub: null,
     keywordSearchSub: null,
     receiveKeywordSearchInMainTable: null,
-    selectCenterPanelFilterListForTableLoadSub: null
+    selectCenterPanelFilterListForTableLoadSub: null,
+    indexedDBReadySub: null
   };
   keywordChanged$: Subject<string> = new Subject<string>();
   constants = {
@@ -106,6 +120,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     portfolioShortcuts: PortfolioShortcuts,
     ownershipShortcuts: OwnershipShortcuts,
     strategyShortcuts: StrategyShortcuts,
+    trendingShortcuts: TrendingShortcuts,
     securityGroupDefinitionMap: SecurityDefinitionMap,
     securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
     fullOwnerList: FullOwnerList,
@@ -120,10 +135,15 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     sortOption: AggridSortOptions,
     defaultMetrics: SecurityTableHeaderConfigs,
     navigationModule: NavigationModule,
-    globalWorkflowTypes: GlobalWorkflowTypes
+    globalWorkflowTypes: GlobalWorkflowTypes,
+    displayDriverMap: DISPLAY_DRIVER_MAP,
+    idbWatchlistRecentTableName: INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
+    idbWatchlistSavedTableName: INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME,
+    watchlistType: IndexedDBWatchListType,
+    indexedDBDatabase: IndexedDBDatabases
   }
-
   private initializePageState(): PageStates.TradeCenterPanelState {
+    const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcuts.fullList : [];
     const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
@@ -134,11 +154,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         presetsReady: false,
         selectedPreset: null,
         selectedList: null,
-        recentShortcutList: [],
+        selectedCategoryFromTop: false,
+        selectedCategoryFromBottom: false,
         portfolioShortcutList: [],
         ownershipShortcutList: [],
         strategyShortcutList: [],
-        individualShortcutList: []
+        recentWatchlistShortcuts: {
+          fullList: existingRecentWatchlist,
+          todayList: [],
+          thisWeekList: [],
+          lastWeekList: []
+        },
+        savedWatchlistShortcutList: [],
+        trendingWatchlistShortcutList: []
       },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, true),
@@ -159,7 +187,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           liveUpdatedRowList: [],
           removalRowList: []
         },
-        initialDataLoadedInternalSyncFlag: false
+        initialDataLoadedInternalSyncFlag: false,
+        totalCount: 0,
+        lastFetchBucket: null,
+        lastFetchServerReturn: null
       },
       filters: {
         keyword: {
@@ -174,7 +205,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           tenor: []
         },
         securityFilters: []
-      }
+      },
+      editingDriver: false,
+      currentSearch: {
+        previewShortcut: null,
+        redirectedFromStrurturing: false
+      },
+      isIndexedDBReady: false
     };
 
     return state;
@@ -189,7 +226,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private restfulCommService: RestfulCommService,
     private processingService: LiveDataProcessingService,
     private bicsDataProcessingService: BICSDataProcessingService,
-    private securityMapService: SecurityMapService
+    private securityMapService: SecurityMapService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService,
+    private indexedDBService: IndexedDBService
   ) {
     super(utilityService, globalWorkflowIOService, router);
     this.state = this.initializePageState();
@@ -197,6 +236,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public ngOnInit() {
     this.state = this.initializePageState();
+    this.indexedDBService.initializeIndexedDB(this.constants.indexedDBDatabase.TradeWatchlist);
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
       filter((tick) => {
         return this.stateActive;
@@ -290,11 +330,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.store$.pipe(select(selectBICSDataLoaded))
       )
     ).subscribe(([pack, bicsLoaded]) => {
-      if (!!pack) {
+      if (!!pack && !!this.stateActive) {
         const filterList = pack.filterList;
         const metric = pack.metric;
         if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric) {
-          this.autoLoadTable(filterList, metric);
+          this.autoLoadTable(filterList, metric, pack.presetDisplayTitle);
         }
       }
     });
@@ -302,41 +342,72 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     return super.ngOnInit();
   }
 
-  public onSelectPresetCategory(targetCategory: Array<DTOs.SearchShortcutDTO>) {
+  public onSelectPresetCategory(
+    targetCategory: Array<DTOs.SearchShortcutDTO>,
+    fromTop: boolean
+  ) {
     if (this.state.presets.selectedList === targetCategory) {
       this.state.presets.selectedList = null;
+      if (fromTop) {
+        this.state.presets.selectedCategoryFromTop = false;
+      } else {
+        this.state.presets.selectedCategoryFromBottom = false
+      }
     } else {
       this.state.presets.selectedList = targetCategory;
+      if (fromTop) {
+        this.state.presets.selectedCategoryFromTop = true;
+        this.state.presets.selectedCategoryFromBottom = false;
+      } else {
+        this.state.presets.selectedCategoryFromBottom = true;
+        this.state.presets.selectedCategoryFromTop = false;
+      }
     }
   }
 
-  public onSelectPreset(targetPreset: DTOs.SearchShortcutDTO) {
+  public onSelectPreset(
+    targetPreset: DTOs.SearchShortcutDTO,
+    userTriggered: boolean
+  ) {
     if (this.state.presets.selectedPreset === targetPreset) {
       targetPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
+      this.state.currentSearch.previewShortcut = null;
       this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
     } else {
-      this.checkInitialPageLoadData();
-      this.restfulCommService.logEngagement(
-        EngagementActionList.selectPreset,
-        'n/a',
-        targetPreset.data.displayTitle,
-        'Trade - Center Panel'
-      );
       targetPreset.state.isSelected = true;
       this.state.presets.selectedPreset = targetPreset;
-      this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
-      const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
-      this.onApplyFilter(params, false);
-      this.loadFreshData();
+      const previewCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(targetPreset);
+      previewCopy.state.isPreviewVariant = true;
+      previewCopy.state.isSelected = false;
+      previewCopy.state.isUserInputBlocked = true;
+      this.state.currentSearch.previewShortcut = previewCopy;
+      this.state.configurator.dto.data = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto).data;
+      this.checkInitialPageLoadData();
+      if (userTriggered) {
+        this.restfulCommService.logEngagement(
+          EngagementActionList.selectPreset,
+          'n/a',
+          targetPreset.data.displayTitle,
+          'Trade - Center Panel'
+        );
+        const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+        this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
+        this.onApplyFilter(params, false, targetPreset);
+        this.loadFreshData();
+      }
     }
     this.store$.dispatch(new TradeTogglePresetEvent);
   }
 
   public onUnselectPreset() {
-    const newWorkflowState = this.dtoService.formGlobalWorkflow(this.constants.navigationModule.trade, false, false, this.constants.globalWorkflowTypes.unselectPreset);
-    this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
-    // unselect preset would just need to trigger the reuse strategy to inintialize a new state now
+    this.performUnselectPresetInBackground();
+    if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
+      this.state.presets.recentWatchlistShortcuts.todayList = [];
+      this.state.presets.recentWatchlistShortcuts.thisWeekList = [];
+      this.state.presets.recentWatchlistShortcuts.lastWeekList = [];
+      this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.SearchShortcutDTO) => this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist));
+    }
   }
 
   public buryConfigurator() {
@@ -370,10 +441,15 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       });
       this.state.table.metrics = newMetrics;
+      this.state.editingDriver = false;
     }
   }
 
-  public onApplyFilter(params: AdhocPacks.DefinitionConfiguratorEmitterParams, logEngagement: boolean) {
+  public onApplyFilter(
+    params: AdhocPacks.DefinitionConfiguratorEmitterParams,
+    userTriggered: boolean,
+    targetPreset: DTOs.SearchShortcutDTO = null
+  ) {
     this.state.filters.securityFilters = params.filterList;
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
     params.filterList.forEach((eachFilter) => {
@@ -389,11 +465,18 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
       }
     });
-    this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
+    if (params.filterList.length > 0 && (!targetPreset || targetPreset.state.isAbleToSaveAsRecentWatchlist)) {
+      const presetDisplayTitle = targetPreset && targetPreset.data ? targetPreset.data.displayTitle : '';
+      this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcuts.fullList, presetDisplayTitle);
+    }
+    // just comment it out because we will bring it back in some way in a later task
+    // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
     if (this.state.filters.quickFilters.portfolios.length === 1) {
       this.modifyWeightColumnHeadersUpdateFundName();
     }
-    if (!!logEngagement) {
+    if (!!userTriggered) {
+      this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
+      this.loadFreshData();
       let filterValue = '';
       params.filterList.forEach((eachFilter) => {
         filterValue = `${filterValue} | ${eachFilter.targetAttribute}: ${eachFilter.filterBy.toString()}`; 
@@ -433,23 +516,41 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.keywordChanged$.next(newKeyword);
   }
 
+  public onEditDriver() {
+    this.state.editingDriver = true;
+  }
+
   private fetchBICsHierarchy() {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsCodeDictionary, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
         if (!!serverReturn) {
-          this.bicsDataProcessingService.loadBICSData(serverReturn, {children: []});
-          this.dtoService.loadBICSOptionsIntoConfigurator(
-            this.state.configurator.dto,
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(2),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(3),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(4),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(5),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(6),
-            this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(7)
-          )
+          this.bicsDataProcessingService.loadBICSData(
+            serverReturn, 
+            {children: []},
+            this.state.configurator.dto
+          );
           this.populateSearchShortcuts();
+          this.subscriptions.indexedDBReadySub = this.store$.pipe(
+            select(selectWatchlistIndexedDBReady)
+          ).subscribe((isReady) => {
+            this.state.isIndexedDBReady = isReady;
+            if (isReady) {
+              this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
+                first()
+              ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
+                if (storedRecentWatchlists.length > 0) {
+                  this.state.presets.recentWatchlistShortcuts.fullList = [...this.state.presets.recentWatchlistShortcuts.fullList, ...storedRecentWatchlists];
+                  if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
+                    this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
+                    this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.SearchShortcutDTO) => {
+                      this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist);
+                    })
+                  }
+                }
+              })
+            }
+          })
           this.store$.dispatch(new TradeBICSDataLoadedEvent());
         }
       }),
@@ -465,7 +566,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.portfolioShortcuts);
     this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.ownershipShortcuts);
     this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.strategyShortcuts);
+    this.state.presets.trendingWatchlistShortcutList = this.populateSingleShortcutList(this.constants.trendingShortcuts);
     this.state.presets.presetsReady = true;
+    const prepopulatedShortcutList = [...this.state.presets.portfolioShortcutList, ...this.state.presets.ownershipShortcutList, ...this.state.presets.strategyShortcutList, ...this.state.presets.trendingWatchlistShortcutList];
+    if (prepopulatedShortcutList.length > 0) {
+      prepopulatedShortcutList.forEach((shortcut: DTOs.SearchShortcutDTO) => {
+        shortcut.state.isAbleToSaveAsRecentWatchlist = false;
+      })
+    }
   }
 
   private populateSingleShortcutList(
@@ -478,11 +586,26 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
-          definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
-            if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
-              eachFilterOption.isSelected = true;
-            }
-          });
+          if (this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey].optionList.length === 0) {
+            definitionDTO.data.highlightSelectedOptionList = eachIncludedDef.selectedOptions.map((eachOption) => {
+                const bicsLevel = eachIncludedDef.definitionKey === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key ? Math.floor(eachOption.length/2) : null;
+                const optionValue = this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey].securityDTOAttrBlock === 'bics' ? this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption) : eachOption;
+                const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+                  eachIncludedDef.definitionKey,
+                  optionValue,
+                  bicsLevel
+                );
+                selectedOption.isSelected = true;
+                return selectedOption;
+            });
+          } else {
+            definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
+              if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
+                eachFilterOption.isSelected = true;
+                definitionDTO.data.highlightSelectedOptionList.push(eachFilterOption);
+              }
+            });
+          }
         }
         return definitionDTO;
       });
@@ -499,6 +622,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private loadFreshData() {
     this.state.fetchResult.mainTable.prinstineRowList = [];
+    this.state.fetchResult.initialDataLoadedInternalSyncFlag = false;
     this.loadInitialStencilTable();
     this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
     this.fetchAllData(true);
@@ -532,18 +656,24 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   private fetchAllData(isInitialFetch: boolean) {
-    this.fetchDataForMainTable(isInitialFetch);
+    const packedGroupFilters = this.utilityService.getSimpleBucketFromConfigurator({filterList: this.state.filters.securityFilters});
+    if (isInitialFetch && this.existFetchResultContainsNewSearchFilters(packedGroupFilters)) {
+      this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
+      this.loadDataForMainTable(this.state.fetchResult.lastFetchServerReturn);
+    } else {
+      this.fetchDataForMainTable(isInitialFetch, packedGroupFilters);
+    }
   }
 
-  private fetchDataForMainTable(isInitialFetch: boolean) {
+  private fetchDataForMainTable(isInitialFetch: boolean, packedGroupFilters: object) {
     const payload: PayloadGetTradeFullData = {
-      maxNumberOfSecurities: 2000,
+      maxNumberOfSecurities: 5000,
       groupIdentifier: {},
       groupFilters: {
-        PortfolioShortName: ["DOF","SOF","STIP","FIP","CIP","AGB","BBB"]
         // SecurityIdentifier: ['17163', '338|5Y']
       }
     };
+    payload.groupFilters = packedGroupFilters;
     if (!!this.state.bestQuoteValidWindow) {
       payload.lookbackHrs = this.state.bestQuoteValidWindow;
     }
@@ -555,6 +685,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           this.store$.dispatch(new TradeLiveUpdatePassRawDataToMainTableEvent());
         } else {
           this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
+          // only capture the lastFetch data if the API returned and the return was the entire payload (not truncated due to the 5000 cap)
+          if (serverReturn.totalNumberOfSecurities <= 5000) {
+            this.state.fetchResult.lastFetchServerReturn = serverReturn;
+            this.state.fetchResult.lastFetchBucket = packedGroupFilters;
+          }
         }
         this.loadDataForMainTable(serverReturn);
       }),
@@ -583,6 +718,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.onSelectSecurityForAlertConfig.bind(this),
       this.state.filters
     );
+    this.state.fetchResult.totalCount = serverReturn.totalNumberOfSecurities;
     this.calculateBestQuoteComparerWidthAndHeight();
     this.state.fetchResult.mainTable.fetchComplete = true;
     this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);
@@ -719,52 +855,83 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private autoLoadTable(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues
+    portfolioMetric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ) {
     if (!!this.state.presets.selectedPreset) {
       this.performUnselectPresetInBackground();
       const delayToLoad = 1;  // the actual load needs to be executed on a delay because we need to give time for agGrid to react on santaTable's "activated" flag being set to false, this way when the autoLoadTable actually set it to "true" again, it will rebuild the header, otherwise the headers won't be rebuild. The time it takes for agGrid to react is trivial, we just need to wait for a single frame
       setTimeout(
         function(){
-          this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+          this.autoLoadTablePerformLoad(filterList, portfolioMetric, presetDisplayTitle);
         }.bind(this),
         delayToLoad
       );
     } else {
-      this.autoLoadTablePerformLoad(filterList, portfolioMetric);
+      this.autoLoadTablePerformLoad(filterList, portfolioMetric, presetDisplayTitle);
     }
   }
 
   private autoLoadTablePerformLoad(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues
+    portfolioMetric: PortfolioMetricValues,
+    presetDisplayTitle: string
   ){
-    this.onSelectPreset(this.state.presets.portfolioShortcutList[0]);
-    filterList.forEach((eachFilterDefinition) => {
-      this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
-        eachBundle.data.list.forEach((eachDefinition) => {
-          if (eachDefinition.data.key === eachFilterDefinition.data.key) {
-            // deepCopy is necessary because the array was already set to readonly because it's from the store
-            eachDefinition.data.highlightSelectedOptionList = this.utilityService.deepCopy(eachFilterDefinition.data.highlightSelectedOptionList);
-            eachDefinition.data.highlightSelectedOptionList.forEach((eachHighlightedFilterOption) => {
-              const findMatchInFilterOptionList = eachDefinition.data.displayOptionList.find((eachFilterOption) => {
-                return eachFilterOption.shortKey === eachHighlightedFilterOption.shortKey;
-              });
-              if (!!findMatchInFilterOptionList) {
-                findMatchInFilterOptionList.isSelected = true;
-              } else {
-                // it's common for BICS to not find the selected option from the entire option list, because the option list only contain level.1 on default. This is already handled at the convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode() level
-              }
-            });
-            eachDefinition.state.filterActive = true;
-          }
-        });
-      })
+    const targetPortfolioDefinition = filterList.find((eachDefinition) => {
+      return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
     });
-    const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
-    this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-    this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
-    this.onApplyFilter(params, false);
+    if (!!targetPortfolioDefinition) {
+      const targetPreset = this.state.presets.portfolioShortcutList.find((eachShortcut) => {
+        const primaryFilterGroupInShortcut = eachShortcut.data.searchFilters[0];
+        const portfolioDefinitionInThisShortcut = primaryFilterGroupInShortcut.find((eachDefinition) => {
+          return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
+        });
+        if (portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList.length === 1) {
+          // always use the individual-fund presets, since "see bond" is always on a singular fund
+          return portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList[0].shortKey === targetPortfolioDefinition.data.highlightSelectedOptionList[0].shortKey;
+        }
+      });
+      if (!!targetPreset) {
+        targetPreset.data.displayTitle = `${targetPreset.data.displayTitle} - ${presetDisplayTitle}`;
+        targetPreset.state.isAbleToSaveAsRecentWatchlist = true;
+        this.onSelectPreset(targetPreset, false);
+      } else {
+        this.onSelectPreset(this.state.presets.portfolioShortcutList[0], false);
+      }
+      filterList.forEach((eachFilterDefinition) => {
+        this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
+          eachBundle.data.list.forEach((eachDefinition) => {
+            if (eachDefinition.data.key === eachFilterDefinition.data.key) {
+              // deepCopy is necessary because the array was already set to readonly because it's from the store
+              eachDefinition.data.highlightSelectedOptionList = this.utilityService.deepCopy(eachFilterDefinition.data.highlightSelectedOptionList);
+              eachDefinition.data.highlightSelectedOptionList.forEach((eachHighlightedFilterOption) => {
+                const findMatchInFilterOptionList = eachDefinition.data.displayOptionList.find((eachFilterOption) => {
+                  return eachFilterOption.shortKey === eachHighlightedFilterOption.shortKey;
+                });
+                if (!!findMatchInFilterOptionList) {
+                  findMatchInFilterOptionList.isSelected = true;
+                } else {
+                  // it's common for BICS to not find the selected option from the entire option list, because the option list only contain level.1 on default. This is already handled at the convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode() level
+                }
+              });
+              eachDefinition.state.filterActive = true;
+            }
+          });
+        })
+      });
+      const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+      this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
+      this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
+      this.onApplyFilter(params, false, targetPreset);
+      this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
+      this.loadFreshData();
+      this.state.currentSearch.redirectedFromStrurturing = true;
+      this.state.currentSearch.previewShortcut.data.highlightTitle = 'From Structuring';
+      this.autoLoadTableFillCurrentSearchPresetSlotlist(filterList);
+    } else {
+      console.warn('see bond does not have a portfolio definition', filterList);
+      this.restfulCommService.logError('see bond does not have a portfolio definition');
+    }
   }
 
   private modifyWeightColumnHeadersUpdateFundName() {
@@ -874,5 +1041,244 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.filters.keyword.defaultValueForUI = null;
     this.state.fetchResult = newState.fetchResult;
     this.store$.dispatch(new TradeTogglePresetEvent);
+  }
+
+  private existFetchResultContainsNewSearchFilters(newSearchFilters): boolean {
+    const lastFetchBucket = this.state.fetchResult.lastFetchBucket;
+    if (!!lastFetchBucket) {
+      let allContained = true;
+      for (const eachDefinition in lastFetchBucket) {
+        if (!!newSearchFilters[eachDefinition]) {
+          // TODO: this logic may or may not need to be modified once we introduce the feature to exclude options via the "!" symbol. 
+          let containAllOptions = true;
+          const lastFetchOptionsParsed = lastFetchBucket[eachDefinition].toString();
+          const newSearchOptionsParsed = newSearchFilters[eachDefinition].toString();
+          if (lastFetchOptionsParsed != newSearchOptionsParsed) {
+            newSearchFilters[eachDefinition].forEach((eachOption) => {
+              if (lastFetchBucket[eachDefinition].indexOf(eachOption) < 0){
+                containAllOptions = false;
+              };
+            });
+          }
+          if (!containAllOptions) {
+            allContained = false;
+          }
+        } else {
+          allContained = false;
+        }
+      }
+      return allContained;
+    } else {
+      return false;
+    }
+  }
+
+  private autoLoadTableFillCurrentSearchPresetSlotlist(filterList: Array<DTOs.SecurityDefinitionDTO>) {
+    if (!!this.state.currentSearch.previewShortcut && filterList.length > 0) {
+      filterList.forEach((eachFilterDefinition) => {
+        const alreadyExist = this.state.currentSearch.previewShortcut.style.slotList.find((eachSlot) => {
+          return !!eachSlot && eachSlot.data.key === eachFilterDefinition.data.key;
+        });
+        if (!alreadyExist) {
+          const copy = this.utilityService.deepCopy(eachFilterDefinition);  // the original is read-only
+          copy.state.filterActive = true;
+          copy.state.isMiniPillVariant = false;
+          const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
+            return eachSlot === null;
+          });
+          if (indexToEmptySlot < 4) {
+            this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = copy;
+          }
+        }
+      });
+    }
+  }
+
+  private storeRecentWatchList(
+    params: AdhocPacks.DefinitionConfiguratorEmitterParams,
+    presetDisplayTitle: string
+  ) {
+    if (params.filterList.length > 0) {
+      const searchShortcutDefinitionList: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [];
+      let customDisplayTitle = '';
+      let selectionOptionsList: Array<string> = [];
+      params.filterList.forEach((definitionItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+        const shortcutDefinition: Stubs.SearchShortcutIncludedDefinitionStub = {
+          definitionKey: definitionItem.key,
+          groupByActive: false,
+          selectedOptions: definitionItem.key === this.constants.securityGroupDefinitionMap.TENOR.key ? definitionItem.filterByBlocks.map((item: Blocks.SecurityDefinitionFilterBlock) => item.shortKey) : definitionItem.filterBy.map((item: string) => item)
+        }
+        if (!presetDisplayTitle) {
+          const isBICS = definitionItem.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key;
+          const groupDefinition = isBICS ? 'BICS' : this.constants.securityGroupDefinitionMap[definitionItem.key].displayName;
+          selectionOptionsList = [
+            ...selectionOptionsList,
+            ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => isBICS ? this.bicsDictionaryLookupService.BICSCodeToBICSName(option) : option)
+          ];
+          customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
+        } else {
+          customDisplayTitle = presetDisplayTitle;
+        }
+        searchShortcutDefinitionList.push(shortcutDefinition);
+      })
+      const recentShortcutStub: Stubs.SearchShortcutStub = {
+        displayTitle: customDisplayTitle,
+        includedDefinitions: searchShortcutDefinitionList,
+        isHero: false,
+        isMajor: false
+      }
+      const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
+      recentShortcut.state.isPreviewVariant = true;
+      recentShortcut.state.isUserInputBlocked = true;
+      const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
+      this.state.currentSearch.previewShortcut = recentShortcut;
+      this.state.currentSearch.previewShortcut.data.highlightTitle = highlightTitle;
+      const recentShortcutCopy = this.utilityService.deepCopy(recentShortcut);
+      recentShortcutCopy.state.isPreviewVariant = false;
+      recentShortcutCopy.state.isUserInputBlocked = false;
+      recentShortcutCopy.data.metadata.dbStoredTime = recentShortcutCopy.data.metadata.createTime;
+      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} - (${this.constants.watchlistType.recent}) - Store Watchlist`, false);
+      this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcutCopy);
+      this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
+    }
+  }
+
+  private checkIfWatchlistSearchExists(
+    filterList: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>,
+    watchlists: Array<DTOs.SearchShortcutDTO>
+  ): DTOs.SearchShortcutDTO {
+    let isExist = false;
+    let matchedWatchlist: DTOs.SearchShortcutDTO = null;
+    let allFiltersForConfigurator: Array<string> = [];
+    filterList.forEach((filterList: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+      const formattedFilters = filterList.filterByBlocks.map((filterBlock: Blocks.SecurityDefinitionFilterBlock) => this.convertFiltersForWatchlistCompare(filterBlock.shortKey));
+      allFiltersForConfigurator = [...allFiltersForConfigurator, ...formattedFilters];
+    })
+    watchlists.forEach((watchlist: DTOs.SearchShortcutDTO) => {
+      if (!isExist && watchlist.data.searchFilters.length > 0) {
+        watchlist.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
+          let allFiltersForWatchlist: Array<string> = [];
+          searchFilter.forEach((filter) => {
+            filter.data.highlightSelectedOptionList.forEach((highlightedOption: Blocks.SecurityDefinitionFilterBlock) => {
+              if (highlightedOption.shortKey) {
+                const formattedShortkey = this.convertFiltersForWatchlistCompare(highlightedOption.shortKey);
+                allFiltersForWatchlist = [...allFiltersForWatchlist, formattedShortkey];
+              }
+            })
+          })
+          if (allFiltersForWatchlist.length > 0) {
+            if (allFiltersForConfigurator.length !== allFiltersForWatchlist.length) {
+              matchedWatchlist = null;
+            } else {
+              const allFiltersForConfiguratorSorted = allFiltersForConfigurator.sort();
+              const allWatchlistFiltersSorted = allFiltersForWatchlist.sort();
+              isExist = allFiltersForConfiguratorSorted.every((filter: string, i: number) => filter === allWatchlistFiltersSorted[i]);
+              if (!!isExist) {
+                matchedWatchlist = watchlist;
+              }
+            }
+          }
+        })
+      }
+    })
+    return matchedWatchlist;
+  }
+
+  private convertFiltersForWatchlistCompare(filter: string): string {
+    return filter.trim().split(' ').join('').toLowerCase();
+  }
+
+  private changeRecentWatchlistTimeStamp(
+    filterList: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>,
+    watchlist: DTOs.SearchShortcutDTO
+  ) {
+    if (filterList && filterList.length > 0) {
+      // only update the watchlist lastUseTime and dbStoredTime if it's the preset being selected
+      const isWatchlistCurrentSearch = this.checkIfWatchlistSearchExists(filterList, [watchlist]);
+      if (!!isWatchlistCurrentSearch) {
+        const lastUseTime = moment().unix();
+        watchlist.data.metadata.lastUseTime = lastUseTime;
+        const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${watchlist.data.uuid}`, false);
+        const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
+        const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(objectStore, watchlist.data.uuid);
+        request.onerror = (event) => {
+          console.error(`${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get stored watchlist for uuid: ${watchlist.data.uuid} error`, event)
+        };
+        request.onsuccess = (event) => {
+          const storedWatchlist: DTOs.SearchShortcutDTO = request.result;
+          const storedWatchlistCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(storedWatchlist);
+          storedWatchlistCopy.data.metadata.lastUseTime = lastUseTime;
+          const dbStoredTime = moment().unix();
+          storedWatchlistCopy.data.metadata.dbStoredTime = dbStoredTime;
+          watchlist.data.metadata.dbStoredTime = dbStoredTime;
+          this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Updating time stamp for uuid: ${watchlist.data.uuid}`);
+        };
+      }
+      this.state.presets.recentWatchlistShortcuts.fullList.length > 0 && this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
+    }
+  }
+
+  private checkExistingRecentWatchlistSearches(
+    params: AdhocPacks.DefinitionConfiguratorEmitterParams,
+    watchlist: Array<DTOs.SearchShortcutDTO>,
+    presetDisplayTitle: string
+  ) {
+    if (watchlist.length > 0) {
+      const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, watchlist);
+      if (!existingWatchlist) {
+        this.storeRecentWatchList(params, presetDisplayTitle);
+      } else {
+        this.changeRecentWatchlistTimeStamp(params.filterList, existingWatchlist);
+      }
+    } else {
+      this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
+        first()
+      ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
+        if (storedRecentWatchlists && storedRecentWatchlists.length > 0) {
+          const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, storedRecentWatchlists);
+          if (!existingWatchlist) {
+            this.storeRecentWatchList(params, presetDisplayTitle);
+          } else {
+            this.changeRecentWatchlistTimeStamp(params.filterList, existingWatchlist);
+          }
+        } else {
+          this.storeRecentWatchList(params, presetDisplayTitle)
+        }
+      })
+    }
+  }
+
+  private addRecentWatchlistToTimeSpecificShortcutlist(watchlist: DTOs.SearchShortcutDTO) {
+    const { lastUseTime } = watchlist.data.metadata;
+    const watchlistTime = moment.unix(lastUseTime).format('YYYY-MM-DD');
+    const isSameCurrentDate = moment(watchlistTime).isSame(moment(), 'day');
+    const isWithinThisWeek = moment(watchlistTime).isSame(moment(), 'week');
+    const oneWeekAgo = moment().subtract(7, 'days');
+    const isWithinLastWeek = moment(watchlistTime).isSame(moment(oneWeekAgo), 'week');
+    if (isSameCurrentDate) {
+      this.state.presets.recentWatchlistShortcuts.todayList.push(watchlist);
+    } else if (isWithinThisWeek) {
+      this.state.presets.recentWatchlistShortcuts.thisWeekList.push(watchlist);
+    } else if (isWithinLastWeek) {
+      this.state.presets.recentWatchlistShortcuts.lastWeekList.push(watchlist);
+    } else {
+      // Delete older watchlists from IndexedDB
+      this.indexedDBService.retrieveAndDeleteDataFromIndexedDB(watchlist.data.uuid, this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Delete stored watchlist for uuid: ${watchlist.data.uuid}`, false);
+    }
+  }
+
+  private sortWatchlistFromLastUseTime(
+    watchlists: Array<DTOs.SearchShortcutDTO>,
+    sortByRecent: boolean
+  ) {
+    watchlists.sort((watchlistA: DTOs.SearchShortcutDTO, watchlistB: DTOs.SearchShortcutDTO) => {
+      if (watchlistA.data.metadata.lastUseTime > watchlistB.data.metadata.lastUseTime) {
+        return sortByRecent ? -1 : 1;
+      } else if (watchlistA.data.metadata.lastUseTime < watchlistB.data.metadata.lastUseTime) {
+        return sortByRecent ? 1 : -1;
+      } else {
+        return 0;
+      }
+    })
   }
 }
