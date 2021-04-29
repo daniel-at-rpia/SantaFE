@@ -523,7 +523,7 @@ export class SantaTable implements OnInit, OnChanges {
     targetRow: SecurityTableRowDTO,
     params?: any  // this is a AgGridRowParams, can't enforce type checking here because agGrid's native function redrawRows() would throw an compliation error
   ){
-    if (!!targetRow) {
+    if (!!targetRow && !!targetRow.data.security && !targetRow.data.security.state.isStencil) {
       targetRow.data.quotes = this.dtoService.formSecurityTableRowObject(targetRow.data.security ,targetRow.data.alert, false, targetRow.data.rowId).data.quotes;
       const payload: PayloadGetAllQuotes = {
         "identifier": targetRow.data.security.data.securityID
