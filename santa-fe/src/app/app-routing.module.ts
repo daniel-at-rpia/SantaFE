@@ -13,7 +13,8 @@ const routes: Routes = [
       },
       {
         path: `${NavigationModule.trade}/:stateId`,
-        component: TradePage
+        component: TradePage,
+        canActivate: [AuthGuard]
       },
       {
         path: `${NavigationModule.structuring}/:stateId`,
@@ -24,7 +25,8 @@ const routes: Routes = [
       },
       {
         path: `${NavigationModule.trade}`,
-        component: TradePage
+        component: TradePage,
+        canActivate: [AuthGuard]
       },
       {
         path: `${NavigationModule.structuring}`,

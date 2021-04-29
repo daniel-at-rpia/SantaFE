@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
 
     return this.restfulCommService.authenticate().pipe(
         first(),
-        delay(20000), 
+        // delay(20000), 
         map((serverReturn) => {
           console.log('auth succeeded');
           return true;
