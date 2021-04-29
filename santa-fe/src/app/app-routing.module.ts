@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { TradePage } from 'Trade/trade.page';
 import { StructurePage } from 'Structure/structure.page';
+import { AuthGuard } from 'App/auth.guard';
 
 const routes: Routes = [
       {
@@ -16,7 +17,8 @@ const routes: Routes = [
       },
       {
         path: `${NavigationModule.structuring}/:stateId`,
-        component: StructurePage
+        component: StructurePage,
+        canActivate: [AuthGuard]
         // this is for eventually we introduce lazy loading
         // loadChildren: () => import('./modules/structure/structure.module').then(mod => mod.StructureModule)
       },
@@ -26,7 +28,8 @@ const routes: Routes = [
       },
       {
         path: `${NavigationModule.structuring}`,
-        component: StructurePage
+        component: StructurePage,
+        canActivate: [AuthGuard]
       },
       {
         path: '**',
