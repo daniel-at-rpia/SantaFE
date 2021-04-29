@@ -25,6 +25,7 @@ export interface SecurityDefinitionStub {
   urlForGetLongOptionListFromServer?: string;
   securityDTOAttr?: string;
   securityDTOAttrBlock?: string;
+  internalOnly: boolean;  // only our internal securities would have this definition
 }
 
 export interface SecurityDefinitionBundleStub {
@@ -126,6 +127,7 @@ interface SecurityTableHeaderConfigStubTableSpecificsBlock {
   disabled?: boolean;
   groupShow?: boolean;
   sortActivated?: AggridSortOptions;
+  groupByActive?: boolean;
 }
 
 export interface TriCoreDriverConfigStub {

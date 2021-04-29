@@ -59,6 +59,8 @@
       StrategyShortcuts,
       DISPLAY_DRIVER_MAP,
       TrendingShortcuts,
+      TradeCenterPanelSearchModes,
+      TradeUoBDefaultSecurityTableHeaderOverwriteConfigs
     } from 'Core/constants/tradeConstants.constant';
     import {
       INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
@@ -136,11 +138,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     defaultMetrics: SecurityTableHeaderConfigs,
     navigationModule: NavigationModule,
     globalWorkflowTypes: GlobalWorkflowTypes,
-    displayDriverMap: DISPLAY_DRIVER_MAP,
     idbWatchlistRecentTableName: INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
     idbWatchlistSavedTableName: INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME,
     watchlistType: IndexedDBWatchListType,
-    indexedDBDatabase: IndexedDBDatabases
+    indexedDBDatabase: IndexedDBDatabases,
+    displayDriverMap: DISPLAY_DRIVER_MAP,
+    searchModes: TradeCenterPanelSearchModes,
+    uobDefaultOverwriteTableLayout: TradeUoBDefaultSecurityTableHeaderOverwriteConfigs
   }
   private initializePageState(): PageStates.TradeCenterPanelState {
     const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcuts.fullList : [];
@@ -209,7 +213,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       editingDriver: false,
       currentSearch: {
         previewShortcut: null,
-        redirectedFromStrurturing: false
+        redirectedFromStrurturing: false,
+        mode: null
       },
       isIndexedDBReady: false
     };
@@ -393,7 +398,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         );
         const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
         this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-        this.onApplyFilter(params, false, targetPreset);
+        this.onApplyFilter(params, false, null, targetPreset);
         this.loadFreshData();
       }
     }
@@ -448,6 +453,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   public onApplyFilter(
     params: AdhocPacks.DefinitionConfiguratorEmitterParams,
     userTriggered: boolean,
+    preloadMetricFromSeeBond: PortfolioMetricValues,
     targetPreset: DTOs.SearchShortcutDTO = null
   ) {
     this.state.filters.securityFilters = params.filterList;
@@ -469,10 +475,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const presetDisplayTitle = targetPreset && targetPreset.data ? targetPreset.data.displayTitle : '';
       this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcuts.fullList, presetDisplayTitle);
     }
-    // just comment it out because we will bring it back in some way in a later task
-    // this.state.fetchResult.mainTable.rowList = this.filterPrinstineRowList(this.state.fetchResult.mainTable.prinstineRowList);
-    if (this.state.filters.quickFilters.portfolios.length === 1) {
-      this.modifyWeightColumnHeadersUpdateFundName();
+    this.updateSearchMode();
+    if(!!preloadMetricFromSeeBond){
+      this.updateTableLayout(preloadMetricFromSeeBond);
+    } else {
+      this.updateTableLayout();
     }
     if (!!userTriggered) {
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
@@ -921,8 +928,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       });
       const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
       this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-      this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
-      this.onApplyFilter(params, false, targetPreset);
+      this.onApplyFilter(params, false, portfolioMetric, targetPreset);
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
       this.state.currentSearch.redirectedFromStrurturing = true;
@@ -975,50 +981,50 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     });
     if (targetMetric === this.constants.portolioMetricValues.cs01) {
       fundCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: this.constants.sortOption.desc
       };
       tableCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: null
       };
       fundBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
       tableBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
     } else if (targetMetric === this.constants.portolioMetricValues.creditLeverage) {
       fundCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
       tableCS01Header.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: false,
         sortActivated: null
       };
       fundBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: this.constants.sortOption.desc
       };
       tableBEVHeader.content.tableSpecifics.default = {
-        pinned: true,
+        pinned: false,
         active: true,
         groupShow: true,
         sortActivated: null
@@ -1280,5 +1286,60 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         return 0;
       }
     })
+  }
+
+  private updateSearchMode() {
+    let isInternal = false;
+    this.state.configurator.dto.data.definitionList.forEach((eachDefinitionGroup) => {
+      eachDefinitionGroup.data.list.forEach((eachDefinition) => {
+        if (eachDefinition.state.filterActive && eachDefinition.data.internalOnly) {
+          isInternal = true;
+        }
+      });
+    });
+    this.state.currentSearch.mode = isInternal ? this.constants.searchModes.internal : this.constants.searchModes.uob;
+  }
+
+  private updateTableLayout(portfolioMetric: PortfolioMetricValues = this.constants.portolioMetricValues.cs01) {
+    const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
+      const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
+      return !targetSpecifics.disabled;
+    });
+    // reset metrics
+    this.state.table.metrics = this.utilityService.deepCopy(mainTableMetrics);
+    if (this.state.currentSearch.mode === this.constants.searchModes.internal) {
+      if (this.state.filters.quickFilters.portfolios.length === 1) {
+        this.modifyWeightColumnHeadersUpdateFundName();
+        this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
+      }
+    } else {
+      // right now only apply the default, but when we store the configs for each saved watchlist then we can use those if they are present
+      this.updateTableLayoutApplyConfigOverwrite(this.constants.uobDefaultOverwriteTableLayout);
+    }
+  }
+
+  private updateTableLayoutApplyConfigOverwrite(overwrites: Array<AdhocPacks.SecurityTableHeaderConfigOverwrite>) {
+    this.state.table.metrics.forEach((eachHeader) => {
+      const existInOverwrite = overwrites.find((eachOverwrite) => {
+        return eachOverwrite.key === eachHeader.key;
+      });
+      if (!!existInOverwrite) {
+        if (existInOverwrite.hasOwnProperty('active')) {
+          eachHeader.content.tableSpecifics.default.active = existInOverwrite.active;
+        }
+        if (existInOverwrite.hasOwnProperty('groupShow')) {
+          eachHeader.content.tableSpecifics.default.groupShow = existInOverwrite.groupShow;
+        }
+        if (existInOverwrite.hasOwnProperty('disabled')) {
+          eachHeader.content.tableSpecifics.default.disabled = existInOverwrite.disabled;
+        }
+        if (existInOverwrite.hasOwnProperty('pinned')) {
+          eachHeader.content.tableSpecifics.default.pinned = existInOverwrite.pinned;
+        }
+        if (existInOverwrite.hasOwnProperty('groupBy')) {
+          eachHeader.content.tableSpecifics.default.groupByActive = existInOverwrite.groupBy;
+        }
+      }
+    });
   }
 }

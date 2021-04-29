@@ -346,14 +346,26 @@ export class UtilityService {
     }
 
     public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): Blocks.SecurityGroupMetricPackBlock {
-      const object: Blocks.SecurityGroupMetricPackBlock = {
-        raw: {},
+      const object = {
+        raw: {
+          index: {}
+        },
         delta: {
-          Dod: {},
-          Wow: {},
-          Mom: {},
-          Ytd: {},
-          TMinusTwo: {}
+          Dod: {
+            index: {}
+          },
+          Wow: {
+            index: {}
+          },
+          Mom: {
+            index: {}
+          },
+          Ytd: {
+            index: {}
+          },
+          TMinusTwo: {
+            index: {}
+          }
         }
       };
       if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {
@@ -363,29 +375,28 @@ export class UtilityService {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
           if (eachMetric.label === 'Default Spread') {
             keyToRetrieveMetric = 'spread';
-            // this logic is disabled, since after BE cut off Citi, we no longer have those spread metrics
-            // if (this.isCDS(isGroup, rawData)) {
-            //   keyToRetrieveMetric = 'spread';
-            //  } else if (this.isFloat(isGroup, rawData)) {
-            //    keyToRetrieveMetric = 'zSpread';
-            // } else {
-            //   keyToRetrieveMetric = 'gSpread';
-            // }
           };
+          const metricBlock = rawData.metrics['Default'];
           const indexMetricBlock = rawData.ccy === 'CAD' ? rawData.metrics['FTSE'] : rawData.metrics['BB'];
-          const rawValue = indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
+          let rawValue = !!metricBlock ? metricBlock[keyToRetrieveMetric] : null;
+          let rawIndexValue = !!indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
-            object.raw[eachMetric.label] = null;
+            object.raw[eachMetric.backendDtoAttrName] = null;
           } else {
-            object.raw[eachMetric.label] = rawValue;
+            object.raw[eachMetric.backendDtoAttrName] = rawValue;
+          }
+          if (rawIndexValue === null || rawIndexValue === undefined) {
+            object.raw.index[eachMetric.backendDtoAttrName] = null;
+          } else {
+            object.raw.index[eachMetric.backendDtoAttrName] = rawIndexValue;
           }
           eachMetric.deltaOptions.forEach((eachDeltaScope) => {
             const deltaSubPack = rawData.deltaMetrics[eachDeltaScope];
             const deltaValue = !!deltaSubPack ? deltaSubPack[keyToRetrieveMetric] : null;
             if (deltaValue === null || deltaValue === undefined) {
-              object.delta[eachDeltaScope][eachMetric.label] = null;
+              object.delta[eachDeltaScope][eachMetric.backendDtoAttrName] = null;
             } else {
-              object.delta[eachDeltaScope][eachMetric.label] = deltaValue;
+              object.delta[eachDeltaScope][eachMetric.backendDtoAttrName] = deltaValue;
             }
           })
         });
@@ -836,15 +847,19 @@ export class UtilityService {
           underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
         }
         const driverLabel = attrName;
-        let value, deltaSubPack;
+        let value;
         if (!!header.data.metricPackDeltaScope) {
-          deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
+          const deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
           value = !!deltaSubPack ? deltaSubPack[driverLabel] : null;
         } else {
-          value = dto.data.metricPack.raw[driverLabel];
+          const rawPack = header.data.key === 'indexMark' ? dto.data.metricPack.raw.index : dto.data.metricPack.raw;
+          value = !!rawPack ? rawPack[driverLabel] : null;
         }
         if (header.data.isDriverDependent && header.data.isAttrChangable) {
           value = this.parseTriCoreDriverNumber(value, attrName, dto, false);
+        }
+        if (header.data.key === 'workoutTerm' && value !== null && value !== undefined) {
+          value = this.round(value, 3).toFixed(3);
         }
         return value;
       } else {
@@ -868,10 +883,10 @@ export class UtilityService {
                 return eachPortfolioBlock.portfolioName === eachPortfolio;
               });
               if (!!portfolioExist) {
-                dto.data.cost.current.fifo['Default Spread'] = dto.data.cost.current.fifo['Default Spread'] + portfolioExist.costFifoSpread;
-                dto.data.cost.current.fifo.Price = dto.data.cost.current.fifo.Price + portfolioExist.costFifoPrice;
-                dto.data.cost.current.weightedAvg['Default Spread'] = dto.data.cost.current.weightedAvg['Default Spread'] + portfolioExist.costFifoSpread;
-                dto.data.cost.current.weightedAvg.Price = dto.data.cost.current.weightedAvg.Price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.fifo.defaultSpread = dto.data.cost.current.fifo.defaultSpread + portfolioExist.costFifoSpread;
+                dto.data.cost.current.fifo.price = dto.data.cost.current.fifo.price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.weightedAvg.defaultSpread = dto.data.cost.current.weightedAvg.defaultSpread + portfolioExist.costFifoSpread;
+                dto.data.cost.current.weightedAvg.price = dto.data.cost.current.weightedAvg.price + portfolioExist.costFifoPrice;
               }
             });
           } else {

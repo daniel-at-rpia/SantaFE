@@ -182,7 +182,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       bicsLevel5: string;
       bicsLevel6: string;
       bicsLevel7: string;
-    }
+    };
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -248,6 +248,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     securityDTOAttrBlock: string;
     backendDtoAttrName: string;
     totalMatchingResults: number;
+    internalOnly: boolean;  // see stub interface for explanation
   }
   style: {
     icon: string;
@@ -428,6 +429,7 @@ export interface SecurityTableHeaderDTO extends BasicDTOStructure {
     groupBelongs: string;
     groupShow: boolean;
     activePortfolios: Array<string>;
+    groupByActive: boolean;
   },
   style: {
     columnWidthOverride: number;

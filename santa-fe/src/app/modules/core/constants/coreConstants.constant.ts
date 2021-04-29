@@ -94,7 +94,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     ]
   },
   {
-    label: 'G Spread',
+    label: 'G-Spread',
     backendDtoAttrName: 'gSpread',
     deltaOptions: [
       'Dod',
@@ -127,7 +127,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
     ]
   },
   {
-    label: 'YieldWorst',
+    label: 'Yield Worst',
     backendDtoAttrName: 'yieldWorst',
     deltaOptions: [
       'Dod',
@@ -147,6 +147,11 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Ytd',
       'TMinusTwo'
     ]
+  },
+  {
+    label: 'Workout Term',
+    backendDtoAttrName: 'workoutTerm',
+    deltaOptions: []  // it doesn't make sense to track workout term's delta, workout term is time-based already
   }
 ];
 
@@ -157,7 +162,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
     tier2Threshold: 20,
     inversed: false,
     rounding: 0,
-    driverLabel: SecurityMetricOptions[0].label,
+    driverLabel: SecurityMetricOptions[0].backendDtoAttrName,
     backendTargetQuoteAttr: 'bestSpreadQuote'
   },
   Yield: {
@@ -165,7 +170,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
     tier2Threshold: 1,
     inversed: false,
     rounding: 3,
-    driverLabel: SecurityMetricOptions[6].label,
+    driverLabel: SecurityMetricOptions[6].backendDtoAttrName,
     backendTargetQuoteAttr: 'bestYieldQuote'
   },
   Price: {
@@ -173,7 +178,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
     tier2Threshold: 3,
     inversed: true,
     rounding: 3,
-    driverLabel: SecurityMetricOptions[1].label,
+    driverLabel: SecurityMetricOptions[1].backendDtoAttrName,
     backendTargetQuoteAttr: 'bestPriceQuote'
   }
 }

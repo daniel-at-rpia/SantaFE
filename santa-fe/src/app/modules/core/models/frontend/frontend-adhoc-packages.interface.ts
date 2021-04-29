@@ -247,10 +247,11 @@ The reason we develop this overwrite instead of just using an array of <Security
 */
 export interface SecurityTableHeaderConfigOverwrite {
   key: string;
-  active: boolean;
-  groupShow: boolean;
-  disabled: boolean;
-  pinned: boolean;
+  active?: boolean;
+  groupShow?: boolean;
+  disabled?: boolean;
+  pinned?: boolean;
+  groupBy?: boolean;
   explicitOrder?: number;  // by default the order is implied by each entry's position in the array, but sometimes we need rules to bump up/down specific header, use this to do that
 }
 export interface IndexedDBTableBlockItem {

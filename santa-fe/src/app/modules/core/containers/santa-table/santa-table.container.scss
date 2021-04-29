@@ -138,10 +138,17 @@ $alt-background: $color_white;
           background: linear-gradient(45deg,  $theme_color_1 40%, $theme_color_2 100%) !important;
           color: $color_white;
         }
+        .ag-cell-label-container.ag-header-cell-sorted-desc, .ag-cell-label-container.ag-header-cell-sorted-asc {
+          background: $color_active !important;
+        }
         &--noGroup {
           .ag-cell-label-container, .ag-header-group-cell-label {
             background: transparent !important;
             color: $font_color_major;
+          }
+          .ag-cell-label-container.ag-header-cell-sorted-desc, .ag-cell-label-container.ag-header-cell-sorted-asc {
+            background: $color_active !important;
+            color: $color_white;
           }
         }
         .ag-header-cell {
