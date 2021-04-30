@@ -69,6 +69,9 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           &:last-of-type {
             margin-bottom: $spacing_medium;
           }
+          &--hiddenInCoreDefinitionGroupState {
+            display: none;
+          }
         }
       }
     }
@@ -90,12 +93,10 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       flex-direction: column;
       align-items: center;
       transform: translate(-125%, 0) scale(0.01, 1);
-      &-closeBtn {
+      &-collapseBtn {
         @include mix_fixed_div(absolute, $z_index_hovering_item);
         top: $spacing_small;
         right: $spacing_small;
-        background-color: $color_kill;
-        color: $font_color_inverse;
       }
       &-title {
         display: flex;
@@ -142,6 +143,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
       &-selectedListTitle {
         display: none;
+        align-items: center;
         &-highlightedText {
           @include mix_border_radius(3px);
           background-color: $color_filter;
@@ -153,6 +155,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         &-text {
           color: $font_color_minor;
           font-size: $font_size_normal;
+          margin-right: $spacing_small;
         }
       }
       &-optionList {
