@@ -57,6 +57,9 @@
       <div class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle">
         <span class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle-highlightedText">{{configuratorData.state.showFiltersFromDefinition?.data.highlightSelectedOptionList?.length}}</span>
         <span class="sat-securityDefinitionConfigurator__filters-content-selectedListTitle-text">Selected</span>
+        <button (click)="clearAllSelectedOptions(configuratorData.state.showFiltersFromDefinition)"
+        class="sat-securityDefinitionConfigurator__filters-content-selected-clearBtn santaBtn--iconOnly santaBtn--small fal fa-eraser" title="Clear all selected options">
+        </button>
       </div>
       <ul class="sat-securityDefinitionConfigurator__filters-content-optionList sat-securityDefinitionConfigurator__filters-content-optionList--selected">
         <button

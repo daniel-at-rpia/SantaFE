@@ -239,6 +239,29 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
+  public clearAllSelectedOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
+    targetDefinition.data.highlightSelectedOptionList = [];
+    targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
+      option.isSelected = false;
+    })
+    const selectedDefinitionList = this.configuratorData.data.definitionList[0].data.list;
+    const definitionIndex = selectedDefinitionList.findIndex((definitionItem: DTOs.SecurityDefinitionDTO) => definitionItem.data.key === targetDefinition.data.key);
+    selectedDefinitionList.splice(definitionIndex, 1);
+    const matchedGroupDefinition = this.configuratorData.data.definitionList.find((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label === targetDefinition.data.configuratorCoreDefinitionGroup);
+    if (!!matchedGroupDefinition) {
+      matchedGroupDefinition.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+        if (definition.data.key === targetDefinition.data.key) {
+          definition.state.isHiddenInCoreDefinitionGroup = false;
+          definition.data.highlightSelectedOptionList = [];
+          definition.state.filterActive = false;
+          definition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
+            option.isSelected = false;
+          })
+        }
+      })
+    }
+  }
+
   private clearSearchFilter(hasAppliedFilter: boolean) {
     this.configuratorData.data.filterSearchInputValue = '';
     this.onSearchKeywordChange('', hasAppliedFilter);
