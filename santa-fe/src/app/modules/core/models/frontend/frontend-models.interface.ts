@@ -266,6 +266,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isFilterLong: boolean;
     currentFilterPathInConsolidatedBICS: Array<string>;
     isFilterCapped: boolean;
+    isHiddenInCoreDefinitionGroup: boolean;
   }
 }
 
