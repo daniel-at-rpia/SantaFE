@@ -654,6 +654,16 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   }
 };
 
+export enum SecurityDefinitionConfiguratorGroupLabels {
+  selected = 'Selected',
+  popular = 'Popular',
+  external = 'External',
+  internal = 'Internal',
+  common = 'Common',
+  bics = 'BICS',
+  bond = 'Bond'
+}
+
 export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
     label: 'Basic',
