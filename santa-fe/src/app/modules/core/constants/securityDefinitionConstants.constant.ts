@@ -558,6 +558,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'QUOTED_TODAY',
     displayName: 'Quoted Today',
     icon: 'far fa-calendar-day',
+    securityDTOAttr: 'quotedToday',
     optionList: FilterOptionsBoolean,
     backendDtoAttrName: FrontendKeyToBackendKeyDictionary['QUOTED_TODAY'],
     internalOnly: false
