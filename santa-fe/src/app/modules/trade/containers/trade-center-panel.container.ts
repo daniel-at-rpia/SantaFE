@@ -481,6 +481,18 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     } else {
       this.updateTableLayout();
     }
+    const filterListkeys: Array<string> = params.filterList.map((options: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => options.key);
+    const selectedGroup = this.state.configurator.dto.data.definitionList[0].data.list;
+    this.state.configurator.dto.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+      definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+        const isSelected = filterListkeys.find((key: string) => key === definition.data.key);
+        if (!!isSelected) {
+          const definitionCopy = this.utilityService.deepCopy(definition);
+          definition.state.isHiddenInCoreDefinitionGroup = true;
+          selectedGroup.push(definitionCopy);
+        }
+      })
+    })
     if (!!userTriggered) {
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
