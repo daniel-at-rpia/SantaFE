@@ -699,6 +699,7 @@ export class DTOService {
         securityAttrOnly: securityAttrOnly
       }
     };
+    this.utility.setCoreDefinitionGroupForEachConfiguratorDefinition(object);
     return object;
   }
 

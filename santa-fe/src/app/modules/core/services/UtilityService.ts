@@ -610,6 +610,14 @@ export class UtilityService {
         return null;
       }
     }
+
+  public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
+    configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+      definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+        definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as SecurityDefinitionConfiguratorGroupLabels;
+      })
+    })
+  }
   // shared end
 
   // market specific
