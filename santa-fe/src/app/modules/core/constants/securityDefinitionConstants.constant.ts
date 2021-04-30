@@ -666,49 +666,44 @@ export enum SecurityDefinitionConfiguratorGroupLabels {
 
 export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
-    label: 'Basic',
+    label: SecurityDefinitionConfiguratorGroupLabels.selected,
     list: [
-      SecurityDefinitionMap.PORTFOLIO,
-      SecurityDefinitionMap.CURRENCY,
-      SecurityDefinitionMap.RATING,
-      SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.COUNTRY,
-      SecurityDefinitionMap.SECURITY_TYPE,
-      SecurityDefinitionMap.SECURITY_SUB_TYPE
+      SecurityDefinitionMap.QUOTED_TODAY
     ]
-  }, {
-    label: 'BICS',
-    list: [
-      SecurityDefinitionMap.BICS_CONSOLIDATED
-    ]
-  },{
-    label: 'Owner',
-    list: [
-      SecurityDefinitionMap.OWNER,
-      SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER,
-      SecurityDefinitionMap.BACKUP_PORTFOLIO_MANAGER,
-      SecurityDefinitionMap.RESEARCH
-    ]
-  },{
-    label: 'Quality',
-    list: [
-      SecurityDefinitionMap.RATING_BUCKET,
-      SecurityDefinitionMap.SENIORITY
-    ]
-  },{
-    label: 'Bond',
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.popular,
     list: [
       SecurityDefinitionMap.TICKER,
+      SecurityDefinitionMap.CURRENCY,
+      SecurityDefinitionMap.BICS_CONSOLIDATED,
+      SecurityDefinitionMap.SENIORITY,
+      SecurityDefinitionMap.RATING,
+    ]
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.external,
+    list: [
+      SecurityDefinitionMap.TENOR,
+      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.RATING_BUCKET,
+      SecurityDefinitionMap.SECURITY_TYPE,
+      SecurityDefinitionMap.SECURITY_SUB_TYPE,
       SecurityDefinitionMap.COUPON_TYPE,
-      SecurityDefinitionMap.BACKEND_TENOR,
-      SecurityDefinitionMap.BAIL_IN_STATUS,
       SecurityDefinitionMap.MATURITY,
-      SecurityDefinitionMap.IS_NEWISSUE,
-      SecurityDefinitionMap.IS_ONTHERUN
+      SecurityDefinitionMap.QUOTED_TODAY
+    ]
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.internal,
+    list: [
+      SecurityDefinitionMap.PORTFOLIO,
+      SecurityDefinitionMap.STRATEGY,
+      SecurityDefinitionMap.OWNER,
+      SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER
     ]
   }
-];
+]
 
 export const SeniorityValueToLevelMapping = [
   {
