@@ -39,7 +39,8 @@
     import {
       SecurityDefinitionMap,
       StrategyExcludedFiltersMapping,
-      FilterOptionsTenorRange
+      FilterOptionsTenorRange,
+      SecurityDefinitionConfiguratorGroupLabels
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       traceTradeFilterAmounts,

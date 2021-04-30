@@ -49,7 +49,8 @@
       DEFINITION_LONG_THRESHOLD,
       FilterOptionsCouponType,
       FilterOptionsTenorRange,
-      FilterOptionSecuritySubType
+      FilterOptionSecuritySubType,
+      SecurityDefinitionConfiguratorGroupLabels
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       QuoteHeaderConfigList,
@@ -610,7 +611,8 @@ export class DTOService {
         highlightSelectedOptionList: [],
         backendDtoAttrName: rawData.backendDtoAttrName,
         totalMatchingResults: 0,
-        internalOnly: !!rawData.internalOnly
+        internalOnly: !!rawData.internalOnly,
+        configuratorCoreDefinitionGroup: null
       },
       style: {
         icon: rawData.icon,
