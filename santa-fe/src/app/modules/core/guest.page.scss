@@ -16,17 +16,17 @@
     padding: $spacing_large;
     max-width: 80rem;
     &-heroIcon {
-      font-size: $font_size_hero_xx_large;
+      font-size: $font_size_hero_x_large;
       color: $font_color_trivial;
       margin-top: $spacing_large;
     }
     &-heroText {
       text-align: center;
-      font-size: $font_size_hero;
+      font-size: $font_size_xxxx_large;
       color: $font_color_major;
     }
     &-minorText {
-      font-size: $font_size_xx_large;
+      font-size: $font_size_x_large;
       color: $font_color_major;
       margin-bottom: $spacing_large;
     }
@@ -37,7 +37,7 @@
       background-color: $color_border_gray;
     }
     &-brandText {
-      font-size: $font_size_x_large;
+      font-size: $font_size_large;
       color: $font_color_minor;
       margin: $spacing_medium 0;
     }
