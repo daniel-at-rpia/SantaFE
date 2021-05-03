@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { TradePage } from 'Trade/trade.page';
 import { StructurePage } from 'Structure/structure.page';
+import { GuestPage } from 'Core/guest.page';
 import { AuthGuard } from 'App/auth.guard';
 
 const routes: Routes = [
@@ -32,6 +33,10 @@ const routes: Routes = [
         path: `${NavigationModule.structuring}`,
         component: StructurePage,
         canActivate: [AuthGuard]
+      },{
+        path: 'guest',
+        component: GuestPage,
+        pathMatch: 'full'
       },
       {
         path: '**',

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, Subscription, interval, of } from 'rxjs';
-import { tap, map, delay,
-      catchError,first, withLatestFrom, switchMap, filter } from 'rxjs/operators';
+import { tap, map, delay, catchError , first, withLatestFrom, switchMap, filter } from 'rxjs/operators';
 
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 
@@ -13,25 +12,28 @@ export class AuthGuard implements CanActivate {
     private restfulCommService: RestfulCommService
   ) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.restfulCommService.authenticate().pipe(
-        first(),
-        // delay(20000), 
-        map((serverReturn) => {
-          console.log('auth succeeded');
+      first(),
+      map((serverReturn) => {
+        console.log('auth succeeded');
+        if (typeof serverReturn === "string" && serverReturn.length === 2) {
           return true;
-        }),
-        catchError(err => {
-          console.log('auth failed');
-          return of(false);
-        })
-      )
-
-
-    // console.log('rejected by auth');
-    // // not logged in so redirect to login page with the return url
-    // this.router.navigate(['/trade']);
-    // return false;
+        } else {
+          this.blockAccess();
+          return false;
+        }
+      }),
+      catchError(err => {
+        console.error('auth failed');
+        this.blockAccess();
+        return of(false);
+      })
+    );
   }
+
+  private blockAccess() {
+    this.router.navigate(['guest']);
+  }
+
 }

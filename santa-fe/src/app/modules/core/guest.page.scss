@@ -1,0 +1,54 @@
+@import "global.scss";
+
+.sat-guest {
+  $blockName: &;
+  @include mix_fixed_div(absolute, $z_index_base_item);
+  display: flex;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+  &__main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing_large;
+    max-width: 80rem;
+    &-heroIcon {
+      font-size: $font_size_hero_xx_large;
+      color: $font_color_trivial;
+      margin-top: $spacing_large;
+    }
+    &-heroText {
+      text-align: center;
+      font-size: $font_size_hero;
+      color: $font_color_major;
+    }
+    &-minorText {
+      font-size: $font_size_xx_large;
+      color: $font_color_major;
+      margin-bottom: $spacing_large;
+    }
+    &-divider {
+      align-self: stretch;
+      margin: $spacing_x_large;
+      height: $typical_border_width;
+      background-color: $color_border_gray;
+    }
+    &-brandText {
+      font-size: $font_size_x_large;
+      color: $font_color_minor;
+      margin: $spacing_medium 0;
+    }
+    &-logo {
+      margin-top: $spacing_medium;
+      width: $font_size_hero;
+      height: $font_size_hero;
+      &-img {
+        width: $font_size_hero;
+        height: 100%;
+      }
+    }
+  }
+}
