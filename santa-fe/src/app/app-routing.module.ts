@@ -10,7 +10,8 @@ const routes: Routes = [
       {
         path: NavigationModule.market,
         redirectTo: NavigationModule.market,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        canActivate: [AuthGuard]
       },
       {
         path: `${NavigationModule.trade}/:stateId`,
