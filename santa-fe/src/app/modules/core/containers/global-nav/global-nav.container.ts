@@ -1,6 +1,6 @@
 // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-    import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+    import { Router, NavigationEnd } from '@angular/router';
     import { interval, Observable, of, Subscription } from 'rxjs';
     import { catchError, filter, first, tap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
