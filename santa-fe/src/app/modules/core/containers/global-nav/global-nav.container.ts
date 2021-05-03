@@ -1,6 +1,6 @@
 // dependencies
     import { Component, Input, OnChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-    import { Router, NavigationEnd } from '@angular/router';
+    import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
     import { interval, Observable, of, Subscription } from 'rxjs';
     import { catchError, filter, first, tap } from 'rxjs/operators';
     import { select, Store } from '@ngrx/store';
@@ -76,6 +76,9 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+    const modulePortion = this.utilityService.getModulePortionFromUrl(window.location.pathname) as NavigationModule;
+    this.updateCurrentModule(modulePortion);
+
     this.subscriptions.userInitialsSub = this.store$.pipe(
       select(selectUserInitials)
     ).subscribe((userInitials) => {
@@ -88,24 +91,7 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
         const modulePortion = this.utilityService.getModulePortionFromNavigation(event) as NavigationModule;
         const stateId = this.utilityService.getStateUUIDFromNavigation(event);
         stateId !== 'n/a' && this.globalWorkflowIOService.updateCurrentState(modulePortion, stateId);
-        switch (modulePortion) {
-          case this.constants.moduleUrl.trade:
-            this.state.currentModule = this.constants.moduleUrl.trade;
-            break;
-          case this.constants.moduleUrl.structuring:
-            this.state.currentModule = this.constants.moduleUrl.structuring;
-            break;
-          case this.constants.moduleUrl.market:
-            this.state.currentModule = this.constants.moduleUrl.market;
-            break;
-          case this.constants.moduleUrl.guest:
-            this.state.currentModule = this.constants.moduleUrl.guest;
-            break;
-          default:
-            console.error('Navigation Failure', event);
-            this.restfulCommService.logError(`Navigation Failure, ${event.url}`);
-            break;
-        }
+        this.updateCurrentModule(modulePortion);
       }
     });
     this.subscriptions.newGlobalWorkflowStateSub = this.store$.pipe(
@@ -203,6 +189,27 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
       }
       setTimeout(navigateToTrade.bind(this), 500);
     };
+  }
+
+  private updateCurrentModule(modulePortion: NavigationModule) {
+    switch (modulePortion) {
+      case this.constants.moduleUrl.trade:
+        this.state.currentModule = this.constants.moduleUrl.trade;
+        break;
+      case this.constants.moduleUrl.structuring:
+        this.state.currentModule = this.constants.moduleUrl.structuring;
+        break;
+      case this.constants.moduleUrl.market:
+        this.state.currentModule = this.constants.moduleUrl.market;
+        break;
+      case this.constants.moduleUrl.guest:
+        this.state.currentModule = this.constants.moduleUrl.guest;
+        break;
+      default:
+        console.error('Navigation Failure', event);
+        this.restfulCommService.logError(`Navigation Failure`);
+        break;
+    }
   }
 
   private loadLegend(mapping, stubList: Array<BESecurityDTO>): Array<Blocks.GlobalNavLegendBlock> {
