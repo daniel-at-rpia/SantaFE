@@ -8,6 +8,9 @@ import { DTOs, AdhocPacks } from 'Core/models/frontend';
 import { CoreActions } from 'Core/actions/core.actions';
 
 export interface CoreState {
+  authentication: {
+    authenticated: boolean;
+  }
   user: {
     initials: string;
   };
@@ -33,6 +36,9 @@ export interface CoreState {
 }
 
 const initialState: CoreState = {
+  authentication: {
+    authenticated: false
+  },
   user: {
     initials: null
   },
@@ -65,6 +71,9 @@ export function coreReducer(
     case CoreActions.UserLoggedIn:
       return {
         ...state,
+        authentication: {
+          authenticated: true
+        },
         user: {
           initials: action.initials
         }

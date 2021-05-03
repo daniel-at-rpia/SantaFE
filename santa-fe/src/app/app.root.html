@@ -1,4 +1,13 @@
-<global-nav></global-nav>
-<global-alert></global-alert>
-<global-workflow></global-workflow>
-<router-outlet></router-outlet>
+<article
+  [ngClass]="{
+    'sat-appRoot': true
+  }">
+  <section *ngIf="state.authenticated" class="sat-appRoot__globalComponents">
+    <global-nav></global-nav>
+    <global-alert></global-alert>
+    <global-workflow></global-workflow>
+  </section>
+  <section class="sat-appRoot__pageView">
+    <router-outlet></router-outlet>
+  </section>
+</article>

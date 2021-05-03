@@ -3,6 +3,10 @@ import { createSelector } from '@ngrx/store';
 import { CoreState } from 'Core/reducers/core.reducer';
 import { getCoreState } from 'App/selectors';
 
+export const selectAuthenticated = createSelector(
+  getCoreState,
+  (state: CoreState) => state.authentication.authenticated
+);
 
 export const selectUserInitials = createSelector(
   getCoreState,

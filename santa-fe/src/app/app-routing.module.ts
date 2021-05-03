@@ -4,7 +4,7 @@ import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { TradePage } from 'Trade/trade.page';
 import { StructurePage } from 'Structure/structure.page';
 import { GuestPage } from 'Core/guest.page';
-import { AuthGuard } from 'App/auth.guard';
+import { AuthGuard } from 'Core/auth.guard';
 
 const routes: Routes = [
       {
