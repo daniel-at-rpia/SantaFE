@@ -15,6 +15,7 @@
       BICSDictionaryLookupService
     } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import * as globalConstants from 'Core/constants';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import { PayloadGetTradeFullData } from 'BEModels/backend-payloads.interface';
     import {
@@ -25,49 +26,11 @@
       BEBICsHierarchyBlock,
       BESecurityMap
     } from 'BEModels/backend-models.interface';
-    import {
-      TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER,
-      EngagementActionList,
-      AlertTypes,
-      KEYWORDSEARCH_DEBOUNCE_TIME,
-      FAILED_USER_INITIALS_FALLBACK,
-      DevWhitelist,
-      NavigationModule,
-      GlobalWorkflowTypes
-    } from 'Core/constants/coreConstants.constant';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
       CoreUserLoggedIn,
       CoreGlobalWorkflowSendNewState
     } from 'Core/actions/core.actions';
-    import {
-      SecurityTableHeaderConfigs,
-      SECURITY_TABLE_FINAL_STAGE,
-      SecurityTableHeaderConfigGroups,
-      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
-      SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
-      AggridSortOptions
-    } from 'Core/constants/securityTableConstants.constant';
-    import {
-      SecurityDefinitionMap,
-      FullOwnerList
-    } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      PortfolioShortcuts,
-      OwnershipShortcuts,
-      StrategyShortcuts,
-      DISPLAY_DRIVER_MAP,
-      TrendingShortcuts,
-      TradeCenterPanelSearchModes,
-      TradeUoBDefaultSecurityTableHeaderOverwriteConfigs
-    } from 'Core/constants/tradeConstants.constant';
-    import {
-      INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
-      INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME,
-      IndexedDBWatchListType,
-      IndexedDBDatabases
-    } from 'Core/constants/indexedDB.constants'
     import {
       selectLiveUpdateTick,
       selectInitialDataLoadedInMainTable,
@@ -91,7 +54,6 @@
       TradeBICSDataLoadedEvent,
       TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent
     } from 'Trade/actions/trade.actions';
-    import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
     import { IndexedDBService } from 'Core/services/IndexedDBService';
     import * as moment from 'moment';
@@ -117,38 +79,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     indexedDBReadySub: null
   };
   keywordChanged$: Subject<string> = new Subject<string>();
-  constants = {
-    defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
-    portfolioShortcuts: PortfolioShortcuts,
-    ownershipShortcuts: OwnershipShortcuts,
-    strategyShortcuts: StrategyShortcuts,
-    trendingShortcuts: TrendingShortcuts,
-    securityGroupDefinitionMap: SecurityDefinitionMap,
-    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    fullOwnerList: FullOwnerList,
-    alertTypes: AlertTypes,
-    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
-    userInitialsFallback: FAILED_USER_INITIALS_FALLBACK,
-    devWhitelist: DevWhitelist,
-    portolioMetricValues: PortfolioMetricValues,
-    securityTableHeaderConfigGroups: SecurityTableHeaderConfigGroups,
-    weigthHeaderNameDelimiterStart: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START,
-    weigthHeaderNameDelimiterEnd: SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END,
-    sortOption: AggridSortOptions,
-    defaultMetrics: SecurityTableHeaderConfigs,
-    navigationModule: NavigationModule,
-    globalWorkflowTypes: GlobalWorkflowTypes,
-    idbWatchlistRecentTableName: INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME,
-    idbWatchlistSavedTableName: INDEXEDDB_WATCHLIST_SAVED_TABLE_NAME,
-    watchlistType: IndexedDBWatchListType,
-    indexedDBDatabase: IndexedDBDatabases,
-    displayDriverMap: DISPLAY_DRIVER_MAP,
-    searchModes: TradeCenterPanelSearchModes,
-    uobDefaultOverwriteTableLayout: TradeUoBDefaultSecurityTableHeaderOverwriteConfigs
-  }
+  constants = globalConstants;
   private initializePageState(): PageStates.TradeCenterPanelState {
     const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcuts.fullList : [];
-    const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
+    const mainTableMetrics = this.constants.table.SecurityTableHeaderConfigs.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
@@ -201,7 +135,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           defaultValueForUI: '',
           actualValue: ''
         },
-        driverType: this.constants.defaultMetricIdentifier,
+        driverType: this.constants.core.DEFAULT_DRIVER_IDENTIFIER,
         quickFilters: {
           portfolios: [],
           owner: [],
@@ -241,7 +175,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   public ngOnInit() {
     this.state = this.initializePageState();
-    this.indexedDBService.initializeIndexedDB(this.constants.indexedDBDatabase.TradeWatchlist);
+    this.indexedDBService.initializeIndexedDB(this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist);
     this.subscriptions.startNewUpdateSub = this.store$.pipe(
       filter((tick) => {
         return this.stateActive;
@@ -282,7 +216,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       filter((keyword) => {
         return this.stateActive;
       }),
-      debounceTime(this.constants.keywordSearchDebounceTime),
+      debounceTime(this.constants.core.KEYWORDSEARCH_DEBOUNCE_TIME),
       distinctUntilChanged()
     ).subscribe((keyword) => {
       const targetTable = this.state.fetchResult.mainTable;
@@ -312,15 +246,15 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       select(selectUserInitials)
     ).subscribe((userInitials) => {
       if (userInitials) {
-        const matchedInitial = this.constants.fullOwnerList.find((eachInitial) => {
+        const matchedInitial = this.constants.definition.FullOwnerList.find((eachInitial) => {
           return eachInitial === userInitials;
         });
         if (!!matchedInitial) {
           const filter = [];
           filter.push(userInitials);
-          this.constants.ownershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+          this.constants.trade.OwnershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
         } else {
-          this.constants.ownershipShortcuts.splice(0, 1);
+          this.constants.trade.OwnershipShortcuts.splice(0, 1);
         }
         this.fetchBICsHierarchy();
       }
@@ -391,7 +325,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.checkInitialPageLoadData();
       if (userTriggered) {
         this.restfulCommService.logEngagement(
-          EngagementActionList.selectPreset,
+          this.constants.core.EngagementActionList.selectPreset,
           'n/a',
           targetPreset.data.displayTitle,
           'Trade - Center Panel'
@@ -426,7 +360,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   public onSwitchDriver(targetDriver) {
     if (this.state.filters.driverType !== targetDriver) {
       this.restfulCommService.logEngagement(
-        EngagementActionList.switchDriver,
+        this.constants.core.EngagementActionList.switchDriver,
         'n/a',
         targetDriver,
         'Trade - Center Panel'
@@ -436,12 +370,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const newMetrics: Array<Stubs.SecurityTableHeaderConfigStub> = this.utilityService.deepCopy(this.state.table.metrics);
       newMetrics.forEach((eachMetricStub) => {
         if (eachMetricStub.content.isDriverDependent && eachMetricStub.content.isAttrChangable) {
-          if (targetDriver === this.constants.defaultMetricIdentifier) {
+          if (targetDriver === this.constants.core.DEFAULT_DRIVER_IDENTIFIER) {
             eachMetricStub.content.attrName = targetDriver;
             eachMetricStub.content.underlineAttrName = targetDriver;
           } else {
-            eachMetricStub.content.attrName = TriCoreDriverConfig[targetDriver].driverLabel;
-            eachMetricStub.content.underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
+            eachMetricStub.content.attrName = this.constants.core.TriCoreDriverConfig[targetDriver].driverLabel;
+            eachMetricStub.content.underlineAttrName = this.constants.core.TriCoreDriverConfig[targetDriver].driverLabel;
           }
         }
       });
@@ -453,7 +387,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   public onApplyFilter(
     params: AdhocPacks.DefinitionConfiguratorEmitterParams,
     userTriggered: boolean,
-    preloadMetricFromSeeBond: PortfolioMetricValues,
+    preloadMetricFromSeeBond: globalConstants.structuring.PortfolioMetricValues,
     targetPreset: DTOs.SearchShortcutDTO = null
   ) {
     this.state.filters.securityFilters = params.filterList;
@@ -489,7 +423,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         filterValue = `${filterValue} | ${eachFilter.targetAttribute}: ${eachFilter.filterBy.toString()}`; 
       });
       this.restfulCommService.logEngagement(
-        EngagementActionList.applyFilter,
+        this.constants.core.EngagementActionList.applyFilter,
         'n/a',
         `Filter By : ${filterValue}`,
         'Trade - Center Panel'
@@ -500,7 +434,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   public onSelectSecurityForAnalysis(targetSecurity: DTOs.SecurityDTO) {
     this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
     this.restfulCommService.logEngagement(
-      EngagementActionList.selectSecurityForAnalysis,
+      this.constants.core.EngagementActionList.selectSecurityForAnalysis,
       targetSecurity.data.securityID,
       'n/a',
       'Trade - Center Panel'
@@ -543,7 +477,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           ).subscribe((isReady) => {
             this.state.isIndexedDBReady = isReady;
             if (isReady) {
-              this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
+              this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Get All Watchlists`, true).pipe(
                 first()
               ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
                 if (storedRecentWatchlists.length > 0) {
@@ -570,10 +504,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private populateSearchShortcuts() {
     this.state.presets = this.initializePageState().presets;
-    this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.portfolioShortcuts);
-    this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.ownershipShortcuts);
-    this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.strategyShortcuts);
-    this.state.presets.trendingWatchlistShortcutList = this.populateSingleShortcutList(this.constants.trendingShortcuts);
+    this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.trade.PortfolioShortcuts);
+    this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.trade.OwnershipShortcuts);
+    this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.trade.StrategyShortcuts);
+    this.state.presets.trendingWatchlistShortcutList = this.populateSingleShortcutList(this.constants.trade.TrendingShortcuts);
     this.state.presets.presetsReady = true;
     const prepopulatedShortcutList = [...this.state.presets.portfolioShortcutList, ...this.state.presets.ownershipShortcutList, ...this.state.presets.strategyShortcutList, ...this.state.presets.trendingWatchlistShortcutList];
     if (prepopulatedShortcutList.length > 0) {
@@ -589,14 +523,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     const list: Array<DTOs.SearchShortcutDTO> = [];
     stubList.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
-        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
+        const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
           definitionDTO.state.filterActive = true;
-          if (this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey].optionList.length === 0) {
+          if (this.constants.definition.SecurityDefinitionMap[eachIncludedDef.definitionKey].optionList.length === 0) {
             definitionDTO.data.highlightSelectedOptionList = eachIncludedDef.selectedOptions.map((eachOption) => {
-                const bicsLevel = eachIncludedDef.definitionKey === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key ? Math.floor(eachOption.length/2) : null;
-                const optionValue = this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey].securityDTOAttrBlock === 'bics' ? this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption) : eachOption;
+                const bicsLevel = eachIncludedDef.definitionKey === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key ? Math.floor(eachOption.length/2) : null;
+                const optionValue = this.constants.definition.SecurityDefinitionMap[eachIncludedDef.definitionKey].securityDTOAttrBlock === 'bics' ? this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption) : eachOption;
                 const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
                   eachIncludedDef.definitionKey,
                   optionValue,
@@ -704,7 +638,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.restfulCommService.logError(`Get portfolios failed`);
         this.store$.dispatch(new TradeLiveUpdatePassRawDataToMainTableEvent());
         this.store$.dispatch(new TradeLiveUpdateProcessDataCompleteInMainTableEvent());
-        this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);
+        this.updateStage(this.constants.table.SECURITY_TABLE_FINAL_STAGE, this.state.fetchResult.mainTable, this.state.table.dto);
         console.error('error', err);
         this.state.fetchResult.fetchTableDataFailed = true;
         this.state.fetchResult.fetchTableDataFailedError = err.message;
@@ -728,7 +662,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.fetchResult.totalCount = serverReturn.totalNumberOfSecurities;
     this.calculateBestQuoteComparerWidthAndHeight();
     this.state.fetchResult.mainTable.fetchComplete = true;
-    this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.mainTable, this.state.table.dto);
+    this.updateStage(this.constants.table.SECURITY_TABLE_FINAL_STAGE, this.state.fetchResult.mainTable, this.state.table.dto);
   }
 
   private updateStage(
@@ -737,7 +671,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     targetTableDTO: DTOs.SecurityTableDTO
   ) {
     targetTableBlock.currentContentStage = stageNumber;
-    if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
+    if (targetTableBlock.currentContentStage === this.constants.table.SECURITY_TABLE_FINAL_STAGE) {
       this.store$.pipe(
         select(selectInitialDataLoadedInMainTable),
         withLatestFrom(
@@ -815,7 +749,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       select(selectUserInitials)
     ).subscribe((userInitials) => {
       // use userInitial as an indicator for whether the inital page load data was fetched successfully, since it should be the last API to fail
-      if (userInitials === this.constants.userInitialsFallback) {
+      if (userInitials === this.constants.core.FAILED_USER_INITIALS_FALLBACK) {
         this.fetchSecurityMap();
         this.fetchOwnerInitial();
       }
@@ -832,7 +766,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         if (!!err && !!err.error && !!err.error.text) {
           this.loadOwnerInitial(err.error.text);
         } else {
-          this.loadOwnerInitial(this.constants.userInitialsFallback);
+          this.loadOwnerInitial(this.constants.core.FAILED_USER_INITIALS_FALLBACK);
           this.restfulCommService.logError(`Can not find user, error`);
         }
         return of('error');
@@ -841,7 +775,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   }
 
   private loadOwnerInitial(serverReturn: string) {
-    const ownerInitials = this.constants.devWhitelist.indexOf(serverReturn) !== -1 ? 'DM' : serverReturn;
+    const ownerInitials = this.constants.core.DevWhitelist.indexOf(serverReturn) !== -1 ? 'DM' : serverReturn;
     this.restfulCommService.updateUser(ownerInitials);
     this.store$.dispatch(new CoreUserLoggedIn(ownerInitials));
   }
@@ -862,7 +796,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private autoLoadTable(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues,
+    portfolioMetric: globalConstants.structuring.PortfolioMetricValues,
     presetDisplayTitle: string
   ) {
     if (!!this.state.presets.selectedPreset) {
@@ -881,17 +815,17 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   private autoLoadTablePerformLoad(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
-    portfolioMetric: PortfolioMetricValues,
+    portfolioMetric: globalConstants.structuring.PortfolioMetricValues,
     presetDisplayTitle: string
   ){
     const targetPortfolioDefinition = filterList.find((eachDefinition) => {
-      return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
+      return eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.PORTFOLIO.key;
     });
     if (!!targetPortfolioDefinition) {
       const targetPreset = this.state.presets.portfolioShortcutList.find((eachShortcut) => {
         const primaryFilterGroupInShortcut = eachShortcut.data.searchFilters[0];
         const portfolioDefinitionInThisShortcut = primaryFilterGroupInShortcut.find((eachDefinition) => {
-          return eachDefinition.data.key === this.constants.securityGroupDefinitionMap.PORTFOLIO.key;
+          return eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.PORTFOLIO.key;
         });
         if (portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList.length === 1) {
           // always use the individual-fund presets, since "see bond" is always on a singular fund
@@ -945,20 +879,20 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.table.metrics.forEach((eachHeader) => {
       if (eachHeader.key === 'weightFundCS01') {
         let newLabel = eachHeader.content.label;
-        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterStart, '|');
-        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterEnd, '|');
+        newLabel = newLabel.replace(this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START, '|');
+        newLabel = newLabel.replace(this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END, '|');
         const array = newLabel.split('|');
         if (array.length === 3) {
-          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd}`).concat(array[2]);
+          eachHeader.content.label = array[0].concat(` ${this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}${targetFund}${this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END}`).concat(array[2]);
         }
       }
       if (eachHeader.key === 'weightFundBEV') {
         let newLabel = eachHeader.content.label;
-        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterStart, '|');
-        newLabel = newLabel.replace(this.constants.weigthHeaderNameDelimiterEnd, '|');
+        newLabel = newLabel.replace(this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START, '|');
+        newLabel = newLabel.replace(this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END, '|');
         const array = newLabel.split('|');
         if (array.length === 3) {
-          eachHeader.content.label = array[0].concat(` ${this.constants.weigthHeaderNameDelimiterStart}${targetFund}${this.constants.weigthHeaderNameDelimiterEnd} `).concat(array[2]);
+          eachHeader.content.label = array[0].concat(` ${this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_START}${targetFund}${this.constants.table.SECURITY_TABLE_HEADER_WEIGHT_FUND_RESERVED_DELIMITER_END} `).concat(array[2]);
         }
       }
     });
@@ -966,7 +900,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.table.metrics = this.utilityService.deepCopy(this.state.table.metrics);
   }
 
-  private modifyWeightColumnHeadersUpdateActiveAndPinState(targetMetric: PortfolioMetricValues) {
+  private modifyWeightColumnHeadersUpdateActiveAndPinState(targetMetric: globalConstants.structuring.PortfolioMetricValues) {
     const fundCS01Header = this.state.table.metrics.find((eachHeaderMetric) => {
       return eachHeaderMetric.key === 'weightFundCS01';
     });
@@ -979,12 +913,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     const tableBEVHeader = this.state.table.metrics.find((eachHeaderMetric) => {
       return eachHeaderMetric.key === 'weightTableBEV';
     });
-    if (targetMetric === this.constants.portolioMetricValues.cs01) {
+    if (targetMetric === this.constants.structuring.PortfolioMetricValues.cs01) {
       fundCS01Header.content.tableSpecifics.default = {
         pinned: false,
         active: true,
         groupShow: true,
-        sortActivated: this.constants.sortOption.desc
+        sortActivated: this.constants.table.AggridSortOptions.desc
       };
       tableCS01Header.content.tableSpecifics.default = {
         pinned: false,
@@ -1004,7 +938,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         groupShow: false,
         sortActivated: null
       };
-    } else if (targetMetric === this.constants.portolioMetricValues.creditLeverage) {
+    } else if (targetMetric === this.constants.structuring.PortfolioMetricValues.creditLeverage) {
       fundCS01Header.content.tableSpecifics.default = {
         pinned: false,
         active: true,
@@ -1021,7 +955,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         pinned: false,
         active: true,
         groupShow: true,
-        sortActivated: this.constants.sortOption.desc
+        sortActivated: this.constants.table.AggridSortOptions.desc
       };
       tableBEVHeader.content.tableSpecifics.default = {
         pinned: false,
@@ -1039,7 +973,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.presets.selectedPreset.state.isSelected = false;
     this.state.presets.selectedPreset = null;
     this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
-    this.state.table.metrics = this.utilityService.deepCopy(this.constants.defaultMetrics).filter((eachStub) => {
+    this.state.table.metrics = this.utilityService.deepCopy(this.constants.table.SecurityTableHeaderConfigs).filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
@@ -1112,11 +1046,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         const shortcutDefinition: Stubs.SearchShortcutIncludedDefinitionStub = {
           definitionKey: definitionItem.key,
           groupByActive: false,
-          selectedOptions: definitionItem.key === this.constants.securityGroupDefinitionMap.TENOR.key ? definitionItem.filterByBlocks.map((item: Blocks.SecurityDefinitionFilterBlock) => item.shortKey) : definitionItem.filterBy.map((item: string) => item)
+          selectedOptions: definitionItem.key === this.constants.definition.SecurityDefinitionMap.TENOR.key ? definitionItem.filterByBlocks.map((item: Blocks.SecurityDefinitionFilterBlock) => item.shortKey) : definitionItem.filterBy.map((item: string) => item)
         }
         if (!presetDisplayTitle) {
-          const isBICS = definitionItem.key === this.constants.securityGroupDefinitionMap.BICS_CONSOLIDATED.key;
-          const groupDefinition = isBICS ? 'BICS' : this.constants.securityGroupDefinitionMap[definitionItem.key].displayName;
+          const isBICS = definitionItem.key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key;
+          const groupDefinition = isBICS ? 'BICS' : this.constants.definition.SecurityDefinitionMap[definitionItem.key].displayName;
           selectionOptionsList = [
             ...selectionOptionsList,
             ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => isBICS ? this.bicsDictionaryLookupService.BICSCodeToBICSName(option) : option)
@@ -1143,7 +1077,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       recentShortcutCopy.state.isPreviewVariant = false;
       recentShortcutCopy.state.isUserInputBlocked = false;
       recentShortcutCopy.data.metadata.dbStoredTime = recentShortcutCopy.data.metadata.createTime;
-      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} - (${this.constants.watchlistType.recent}) - Store Watchlist`, false);
+      this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} - (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Store Watchlist`, false);
       this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcutCopy);
       this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
     }
@@ -1204,11 +1138,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       if (!!isWatchlistCurrentSearch) {
         const lastUseTime = moment().unix();
         watchlist.data.metadata.lastUseTime = lastUseTime;
-        const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.idbWatchlistRecentTableName} - Change Recent TimeStamp for ${watchlist.data.uuid}`, false);
-        const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWatchlistRecentTableName, transaction);
+        const transaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME} - Change Recent TimeStamp for ${watchlist.data.uuid}`, false);
+        const objectStore = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, transaction);
         const request = this.indexedDBService.retrieveSpecificDataFromIndexedDB(objectStore, watchlist.data.uuid);
         request.onerror = (event) => {
-          console.error(`${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get stored watchlist for uuid: ${watchlist.data.uuid} error`, event)
+          console.error(`${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Get stored watchlist for uuid: ${watchlist.data.uuid} error`, event)
         };
         request.onsuccess = (event) => {
           const storedWatchlist: DTOs.SearchShortcutDTO = request.result;
@@ -1217,7 +1151,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           const dbStoredTime = moment().unix();
           storedWatchlistCopy.data.metadata.dbStoredTime = dbStoredTime;
           watchlist.data.metadata.dbStoredTime = dbStoredTime;
-          this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Updating time stamp for uuid: ${watchlist.data.uuid}`);
+          this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlistCopy, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Updating time stamp for uuid: ${watchlist.data.uuid}`);
         };
       }
       this.state.presets.recentWatchlistShortcuts.fullList.length > 0 && this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
@@ -1237,7 +1171,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.changeRecentWatchlistTimeStamp(params.filterList, existingWatchlist);
       }
     } else {
-      this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Get All Watchlists`, true).pipe(
+      this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Get All Watchlists`, true).pipe(
         first()
       ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
         if (storedRecentWatchlists && storedRecentWatchlists.length > 0) {
@@ -1269,7 +1203,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.state.presets.recentWatchlistShortcuts.lastWeekList.push(watchlist);
     } else {
       // Delete older watchlists from IndexedDB
-      this.indexedDBService.retrieveAndDeleteDataFromIndexedDB(watchlist.data.uuid, this.constants.idbWatchlistRecentTableName, this.constants.indexedDBDatabase.TradeWatchlist, `${this.constants.indexedDBDatabase.TradeWatchlist} (${this.constants.watchlistType.recent}) - Delete stored watchlist for uuid: ${watchlist.data.uuid}`, false);
+      this.indexedDBService.retrieveAndDeleteDataFromIndexedDB(watchlist.data.uuid, this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Delete stored watchlist for uuid: ${watchlist.data.uuid}`, false);
     }
   }
 
@@ -1297,24 +1231,24 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       });
     });
-    this.state.currentSearch.mode = isInternal ? this.constants.searchModes.internal : this.constants.searchModes.uob;
+    this.state.currentSearch.mode = isInternal ? this.constants.trade.TradeCenterPanelSearchModes.internal : this.constants.trade.TradeCenterPanelSearchModes.uob;
   }
 
-  private updateTableLayout(portfolioMetric: PortfolioMetricValues = this.constants.portolioMetricValues.cs01) {
-    const mainTableMetrics = this.constants.defaultMetrics.filter((eachStub) => {
+  private updateTableLayout(portfolioMetric: globalConstants.structuring.PortfolioMetricValues = this.constants.structuring.PortfolioMetricValues.cs01) {
+    const mainTableMetrics = this.constants.table.SecurityTableHeaderConfigs.filter((eachStub) => {
       const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
       return !targetSpecifics.disabled;
     });
     // reset metrics
     this.state.table.metrics = this.utilityService.deepCopy(mainTableMetrics);
-    if (this.state.currentSearch.mode === this.constants.searchModes.internal) {
+    if (this.state.currentSearch.mode === this.constants.trade.TradeCenterPanelSearchModes.internal) {
       if (this.state.filters.quickFilters.portfolios.length === 1) {
         this.modifyWeightColumnHeadersUpdateFundName();
         this.modifyWeightColumnHeadersUpdateActiveAndPinState(portfolioMetric);
       }
     } else {
       // right now only apply the default, but when we store the configs for each saved watchlist then we can use those if they are present
-      this.updateTableLayoutApplyConfigOverwrite(this.constants.uobDefaultOverwriteTableLayout);
+      this.updateTableLayoutApplyConfigOverwrite(this.constants.trade.TradeUoBDefaultSecurityTableHeaderOverwriteConfigs);
     }
   }
 

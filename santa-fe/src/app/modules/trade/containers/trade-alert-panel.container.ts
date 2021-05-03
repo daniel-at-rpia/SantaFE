@@ -9,6 +9,7 @@
     import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
     import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import * as globalConstants from 'Core/constants';
     import { LiveDataProcessingService } from 'Trade/services/LiveDataProcessingService';
     import {
       BESecurityDTO,
@@ -31,13 +32,6 @@
       selectGlobalAlertTradeTableFetchAlertTick
     } from 'Core/selectors/core.selectors';
     import {
-      ALERT_MAX_SECURITY_SEARCH_COUNT,
-      AxeAlertScope,
-      ALERT_UPDATE_COUNTDOWN,
-      AxeAlertType
-    } from 'Core/constants/tradeConstants.constant';
-    import { FullOwnerList, FilterOptionsPortfolioResearchList } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
       CoreSendNewAlerts,
       CoreGlobalAlertsClearAllTradeAlertTableAlerts,
       CoreGlobalAlertsTradeAlertFetch
@@ -58,19 +52,6 @@
       selectSelectedSecurityForAlertConfig,
       selectPresetSelected
     } from 'Trade/selectors/trade.selectors';
-    import {
-      SecurityTableHeaderConfigs,
-      SECURITY_TABLE_FINAL_STAGE,
-      SecurityTableAlertHeaderConfigs
-    } from 'Core/constants/securityTableConstants.constant';
-    import {
-      DEFAULT_DRIVER_IDENTIFIER,
-      EngagementActionList,
-      AlertSubTypes,
-      AlertTypes,
-      KEYWORDSEARCH_DEBOUNCE_TIME,
-      TriCoreDriverConfig
-    } from 'Core/constants/coreConstants.constant';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
 
@@ -103,20 +84,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
   }
   keywordChanged$: Subject<string> = new Subject<string>();
   fetchAlertFromGlobal$: Observable<any>;
-  constants = {
-    // alertTypes: AlertTypes,
-    alertTypes: AlertTypes,
-    alertSubTypes: AlertSubTypes,
-    axeAlertScope: AxeAlertScope,
-    axeAlertType: AxeAlertType,
-    countdown: ALERT_UPDATE_COUNTDOWN,
-    fullOwnerList: FullOwnerList,
-    researchList: FilterOptionsPortfolioResearchList,
-    defaultMetricIdentifier: DEFAULT_DRIVER_IDENTIFIER,
-    securityTableFinalStage: SECURITY_TABLE_FINAL_STAGE,
-    keywordSearchDebounceTime: KEYWORDSEARCH_DEBOUNCE_TIME,
-    driver: TriCoreDriverConfig
-  }
+  constants = globalConstants;
 
   constructor(
     protected globalWorkflowIOService: GlobalWorkflowIOService,
@@ -135,7 +103,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
 
   // general
     private initializePageState(): PageStates.TradeAlertPanelState {
-      const alertTableMetrics = SecurityTableHeaderConfigs.filter((eachStub) => {
+      const alertTableMetrics = this.constants.table.SecurityTableHeaderConfigs.filter((eachStub) => {
         const targetSpecifics = eachStub.content.tableSpecifics.tradeAlert || eachStub.content.tableSpecifics.default;
         return !targetSpecifics.disabled;
       });
@@ -180,7 +148,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           },
           quickFilters: {
             keyword: '',
-            driverType: this.constants.defaultMetricIdentifier,
+            driverType: this.constants.core.DEFAULT_DRIVER_IDENTIFIER,
             portfolios: [],
           }
         },
@@ -229,7 +197,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
             this.store$.dispatch(new CoreSendNewAlerts([systemAlert]));
             this.saveAxeConfiguration();
             this.restfulCommService.logEngagement(
-              EngagementActionList.sendToAlertConfig,
+              this.constants.core.EngagementActionList.sendToAlertConfig,
               targetSecurity.data.securityID,
               `Current Number of Alerts = ${this.state.configuration.axe.securityList.length}`,
               'Trade - Alert Panel'
@@ -268,7 +236,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         filter((tick) => {
           return this.stateActive;
         }),
-        debounceTime(this.constants.keywordSearchDebounceTime),
+        debounceTime(this.constants.core.KEYWORDSEARCH_DEBOUNCE_TIME),
         distinctUntilChanged()
       ).subscribe((keyword) => {
         const targetTable = this.state.fetchResult.alertTable;
@@ -294,7 +262,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         select(selectUserInitials)
       ).subscribe((userInitials) => {
         if (userInitials) {
-          this.state.isUserPM = this.constants.fullOwnerList.indexOf(userInitials) >= 0;
+          this.state.isUserPM = this.constants.definition.FullOwnerList.indexOf(userInitials) >= 0;
         }
       });
 
@@ -366,7 +334,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
                     eachHeader,
                     eachRow,
                     this.dtoService.formSecurityTableCellObject(false, null, eachHeader, null, eachRow.data.alert),
-                    this.constants.defaultMetricIdentifier
+                    this.constants.core.DEFAULT_DRIVER_IDENTIFIER
                   );
                 }
               });
@@ -407,8 +375,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         } else {
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
-        this.restfulCommService.logEngagement(
-          EngagementActionList.tradeAlertClickedTab,
+        this.restfulCommService.logEngagement(this.constants.core.EngagementActionList.tradeAlertClickedTab,
           'n/a',
           `All Alerts Tab - ${this.state.displayAlertTable ? 'Open' : 'Close'}`,
           'Trade - Alert Panel'
@@ -438,9 +405,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     }
 
     private getAlertHeaders(alertType: string) {
-      const securityTableHeaderConfigsCopy = this.utilityService.deepCopy(SecurityTableHeaderConfigs);
-      const formattedAlert = alertType !== this.constants.alertTypes.traceAlert ? alertType.toLowerCase() : alertType.toLowerCase().split('trade')[0];
-      const headerAlertConfig = SecurityTableAlertHeaderConfigs[formattedAlert];
+      const securityTableHeaderConfigsCopy = this.utilityService.deepCopy(this.constants.table.SecurityTableHeaderConfigs);
+      const formattedAlert = alertType !== this.constants.core.AlertTypes.traceAlert ? alertType.toLowerCase() : alertType.toLowerCase().split('trade')[0];
+      const headerAlertConfig = this.constants.table.SecurityTableAlertHeaderConfigs[formattedAlert];
       securityTableHeaderConfigsCopy.forEach(metric => {
         if (headerAlertConfig.include.indexOf(metric.key) > -1) {
           metric.content.tableSpecifics.tradeAlert.active = true;
@@ -453,12 +420,12 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     }
 
     public onClickSpecificAlertTypeTab(
-      targetType: AlertTypes,
+      targetType: globalConstants.core.AlertTypes,
       isMarketListOnly?: boolean
     ) {
       if (this.state.fetchResult.alertTable.fetchComplete) {
         const tabName = isMarketListOnly ? 'Inquiry' : targetType;
-        if (targetType === this.constants.alertTypes.axeAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.alertTypes.axeAlert && this.state.alert.marketListAxeAlertCount > 0) {
+        if (targetType === this.constants.core.AlertTypes.axeAlert && this.state.alert.nonMarketListAxeAlertCount > 0 || targetType === this.constants.core.AlertTypes.axeAlert && this.state.alert.marketListAxeAlertCount > 0) {
           if (this.state.alert.scopedAlertType !== targetType || this.state.alert.scopedForMarketListOnly !== !!isMarketListOnly) {
             this.state.displayAlertTable = true;
             this.state.alert.scopedAlertType = targetType;
@@ -472,9 +439,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         } else {
           this.state.alert.scopedForMarketListOnly = false;
           let alertTypeCount;
-          if (targetType === this.constants.alertTypes.markAlert) {
+          if (targetType === this.constants.core.AlertTypes.markAlert) {
             alertTypeCount = this.state.alert.markAlertCount;
-          } else if (targetType === this.constants.alertTypes.traceAlert) {
+          } else if (targetType === this.constants.core.AlertTypes.traceAlert) {
             alertTypeCount = this.state.alert.traceAlertCount;
           } else {
             alertTypeCount = this.state.alert.tradeAlertCount;
@@ -497,7 +464,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           this.collapseAlertTable && this.collapseAlertTable.emit();
         }
         this.restfulCommService.logEngagement(
-          EngagementActionList.tradeAlertClickedTab,
+          this.constants.core.EngagementActionList.tradeAlertClickedTab,
           'n/a',
           `${tabName} Tab - ${this.state.displayAlertTable ? 'Open' : 'Close'}`,
           'Trade - Alert Panel'
@@ -525,7 +492,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           }
           config.matchedResultCount = result.length;
           config.searchIsValid = true;
-          if ( config.matchedResultCount > 0 && config.matchedResultCount < ALERT_MAX_SECURITY_SEARCH_COUNT ) {
+          if ( config.matchedResultCount > 0 && config.matchedResultCount < this.constants.trade.ALERT_MAX_SECURITY_SEARCH_COUNT ) {
             config.searchIsValid = true;
             this.fetchSecurities(result);
           } else {
@@ -551,13 +518,13 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       }
     }
 
-    public onSelectAxeWatchlistSideType(targetType: AxeAlertType, targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
-      const currTypes: AxeAlertType[] = targetBlock.data.axeAlertTypes.slice();
+    public onSelectAxeWatchlistSideType(targetType: globalConstants.trade.AxeAlertType, targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO) {
+      const currTypes: globalConstants.trade.AxeAlertType[] = targetBlock.data.axeAlertTypes.slice();
       if (!!targetType && !!targetBlock && !targetBlock.state.isDisabled) {
         if (targetBlock.data.axeAlertTypes.indexOf(targetType) === -1) {
           targetBlock.data.axeAlertTypes = [targetType, ...currTypes];
         } else {
-          targetBlock.data.axeAlertTypes = currTypes.filter((a: AxeAlertType) => a !== targetType);
+          targetBlock.data.axeAlertTypes = currTypes.filter((a: globalConstants.trade.AxeAlertType) => a !== targetType);
         }
         this.restfulCommService.logEngagement(
           this.restfulCommService.engagementMap.tradeAlertConfigure,
@@ -575,7 +542,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         } else {
           if (targetBlock.data.axeAlertTypes.length > 1) {
             targetBlock.data.axeAlertTypes =
-              targetBlock.data.axeAlertTypes.filter((a: AxeAlertType) => a !== targetType);
+              targetBlock.data.axeAlertTypes.filter((a: globalConstants.trade.AxeAlertType) => a !== targetType);
           }
         }
         this.restfulCommService.logEngagement(
@@ -755,7 +722,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       rawGroupConfig.forEach(security => {
         security.groupFilters.SecurityIdentifier.forEach(securityID => allIdentifiers.push(securityID));
         const { WatchType } = security.parameters;
-        const targetScope = security.subType as AxeAlertScope;
+        const targetScope = security.subType as globalConstants.trade.AxeAlertScope;
         const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(security, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
         this.state.configuration.axe.securityList.unshift(newEntry);
       })
@@ -785,15 +752,18 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       ).subscribe();
     }
 
-    private addScopeToAxeWatchlistEntry(targetEntry: DTOs.TradeAlertConfigurationAxeGroupBlockDTO, targetScope: AxeAlertScope) {
-      if (targetScope === this.constants.axeAlertScope.liquidation) {
+    private addScopeToAxeWatchlistEntry(
+      targetEntry: DTOs.TradeAlertConfigurationAxeGroupBlockDTO,
+      targetScope: globalConstants.trade.AxeAlertScope
+    ) {
+      if (targetScope === this.constants.trade.AxeAlertScope.liquidation) {
         if (targetEntry.data.scopes.indexOf(targetScope) >= 0) {
           targetEntry.data.scopes = [];
         } else {
           targetEntry.data.scopes = [targetScope];
         }
-      } else if ((targetScope === this.constants.axeAlertScope.bid || this.constants.axeAlertScope.ask) && targetEntry.data.scopes.indexOf(this.constants.axeAlertScope.liquidation) >= 0){
-        targetEntry.data.scopes.splice(targetEntry.data.scopes.indexOf(this.constants.axeAlertScope.liquidation), 1);
+      } else if ((targetScope === this.constants.trade.AxeAlertScope.bid || this.constants.trade.AxeAlertScope.ask) && targetEntry.data.scopes.indexOf(this.constants.trade.AxeAlertScope.liquidation) >= 0){
+        targetEntry.data.scopes.splice(targetEntry.data.scopes.indexOf(this.constants.trade.AxeAlertScope.liquidation), 1);
         targetEntry.data.scopes.push(targetScope);
       } else {
         if (targetEntry.data.scopes.indexOf(targetScope) >= 0) {
@@ -811,7 +781,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         };
         this.state.configuration.axe.securityList.forEach((eachEntry) => {
           const payload: PayloadUpdateSingleAlertConfig = {
-            type: this.constants.alertTypes.axeAlert,
+            type: this.constants.core.AlertTypes.axeAlert,
             subType: this.mapAxeScopesToAlertSubtypes(eachEntry.data.scopes),
             groupFilters: {},
             parameters: {
@@ -852,29 +822,29 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       }
     }
 
-    private mapAxeScopesToAlertSubtypes(targetScopes: Array<string>): AlertSubTypes {
-      if (targetScopes.includes(this.constants.axeAlertScope.ask) && targetScopes.includes(this.constants.axeAlertScope.bid)) {
-        return this.constants.alertSubTypes.both;
-      } else if (targetScopes.includes(this.constants.axeAlertScope.ask)) {
-        return this.constants.alertSubTypes.ask;
-      } else if (targetScopes.includes(this.constants.axeAlertScope.bid)) {
-        return this.constants.alertSubTypes.bid;
-      } else if (targetScopes.includes(this.constants.axeAlertScope.liquidation)) {
-        return this.constants.alertSubTypes.liquidation;
+    private mapAxeScopesToAlertSubtypes(targetScopes: Array<string>): globalConstants.core.AlertSubTypes {
+      if (targetScopes.includes(this.constants.trade.AxeAlertScope.ask) && targetScopes.includes(this.constants.trade.AxeAlertScope.bid)) {
+        return this.constants.core.AlertSubTypes.both;
+      } else if (targetScopes.includes(this.constants.trade.AxeAlertScope.ask)) {
+        return this.constants.core.AlertSubTypes.ask;
+      } else if (targetScopes.includes(this.constants.trade.AxeAlertScope.bid)) {
+        return this.constants.core.AlertSubTypes.bid;
+      } else if (targetScopes.includes(this.constants.trade.AxeAlertScope.liquidation)) {
+        return this.constants.core.AlertSubTypes.liquidation;
       } else {
-        return this.constants.alertSubTypes.bid;
+        return this.constants.core.AlertSubTypes.bid;
       }
     }
 
-    private mapWatchTypesToWatchType(alertTypes: AxeAlertType[]): AxeAlertType {
-      if (alertTypes.includes(AxeAlertType.normal) && alertTypes.includes(AxeAlertType.marketList)) {
-        return AxeAlertType.both;
-      } else if (alertTypes.includes(AxeAlertType.normal)) {
-        return AxeAlertType.normal;
-      } else if (alertTypes.includes(AxeAlertType.marketList)) {
-        return AxeAlertType.marketList;
+    private mapWatchTypesToWatchType(alertTypes: globalConstants.trade.AxeAlertType[]): globalConstants.trade.AxeAlertType {
+      if (alertTypes.includes(globalConstants.trade.AxeAlertType.normal) && alertTypes.includes(globalConstants.trade.AxeAlertType.marketList)) {
+        return globalConstants.trade.AxeAlertType.both;
+      } else if (alertTypes.includes(globalConstants.trade.AxeAlertType.normal)) {
+        return globalConstants.trade.AxeAlertType.normal;
+      } else if (alertTypes.includes(globalConstants.trade.AxeAlertType.marketList)) {
+        return globalConstants.trade.AxeAlertType.marketList;
       } else {
-        return AxeAlertType.both;
+        return globalConstants.trade.AxeAlertType.both;
       }
     }
 
@@ -888,9 +858,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
 
     private populateWatchDriverFromRawConfig(rawGroupConfig: BEAlertConfigurationDTO): string {
       if (rawGroupConfig.parameters.UpperSpreadThreshold || rawGroupConfig.parameters.LowerSpreadThreshold) {
-        return TriCoreDriverConfig.Spread.label;
+        return this.constants.core.TriCoreDriverConfig.Spread.label;
       } else if (rawGroupConfig.parameters.UpperPriceThreshold || rawGroupConfig.parameters.LowerPriceThreshold) {
-        return TriCoreDriverConfig.Price.label;
+        return this.constants.core.TriCoreDriverConfig.Price.label;
       } else {
         return null;
       }
@@ -913,14 +883,14 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       targetBlock: DTOs.TradeAlertConfigurationAxeGroupBlockDTO
     ) {
       if (targetBlock && targetBlock.data.targetDriver && targetBlock.data.targetRange && targetBlock.data.targetRange.data) {
-        if (targetBlock.data.targetDriver === this.constants.driver.Spread.label) {
+        if (targetBlock.data.targetDriver === this.constants.core.TriCoreDriverConfig.Spread.label) {
           if (targetBlock.data.targetRange.data.maxNumber) {
             payload.parameters.UpperSpreadThreshold = parseFloat(targetBlock.data.targetRange.data.maxNumber as string);
           }
           if (targetBlock.data.targetRange.data.minNumber) {
             payload.parameters.LowerSpreadThreshold = parseFloat(targetBlock.data.targetRange.data.minNumber as string);
           }
-        } else if (targetBlock.data.targetDriver === this.constants.driver.Price.label) {
+        } else if (targetBlock.data.targetDriver === this.constants.core.TriCoreDriverConfig.Price.label) {
           if (targetBlock.data.targetRange.data.maxNumber) {
             payload.parameters.UpperPriceThreshold = parseFloat(targetBlock.data.targetRange.data.maxNumber as string);
           }
@@ -940,7 +910,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
     public onSelectSecurityForAnalysis(targetSecurity: DTOs.SecurityDTO) {
       this.store$.dispatch(new TradeSelectedSecurityForAnalysisEvent(this.utilityService.deepCopy(targetSecurity)));
       this.restfulCommService.logEngagement(
-        EngagementActionList.selectSecurityForAnalysis,
+        this.constants.core.EngagementActionList.selectSecurityForAnalysis,
         targetSecurity.data.securityID,
         'n/a',
         'Trade - Alert Panel'
@@ -965,7 +935,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
               || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)
               || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.alert.alertMessage, this.state.filters.quickFilters.keyword)) {
               if (!this.state.alert.scopedAlertType || eachRow.data.alert.data.type == this.state.alert.scopedAlertType) {
-                if (this.state.alert.scopedAlertType === this.constants.alertTypes.axeAlert) {
+                if (this.state.alert.scopedAlertType === this.constants.core.AlertTypes.axeAlert) {
                   // the axe tab only have non-marketList alerts, the inquiry tab only have marketList alerts
                   if (this.state.alert.scopedForMarketListOnly && eachRow.data.alert.state.isMarketListVariant) {
                     filteredList.push(eachRow);
@@ -1129,7 +1099,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         this.onClickedSecurityCardSearch.bind(this)
       );
       this.calculateBestQuoteComparerWidthAndHeight();
-      this.updateStage(this.constants.securityTableFinalStage, this.state.fetchResult.alertTable, this.state.table.alertDto);
+      this.updateStage(this.constants.table.SECURITY_TABLE_FINAL_STAGE, this.state.fetchResult.alertTable, this.state.table.alertDto);
     }
 
     private updateStage(
@@ -1138,7 +1108,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       targetTableDTO: DTOs.SecurityTableDTO
     ) {
       targetTableBlock.currentContentStage = stageNumber;
-      if (targetTableBlock.currentContentStage === this.constants.securityTableFinalStage) {
+      if (targetTableBlock.currentContentStage === this.constants.table.SECURITY_TABLE_FINAL_STAGE) {
         this.store$.pipe(
           select(selectInitialDataLoadedInAlertTable),
           withLatestFrom(
@@ -1164,20 +1134,20 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       alertList.forEach((eachAlert) => {
         if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
           switch (eachAlert.data.type) {
-            case this.constants.alertTypes.axeAlert:
+            case this.constants.core.AlertTypes.axeAlert:
               if (eachAlert.state.isMarketListVariant) {
                 this.state.alert.marketListAxeAlertCount++;
               } else {
                 this.state.alert.nonMarketListAxeAlertCount++;
               }
               break;
-            case this.constants.alertTypes.markAlert:
+            case this.constants.core.AlertTypes.markAlert:
               this.state.alert.markAlertCount++;
               break;
-            case this.constants.alertTypes.tradeAlert:
+            case this.constants.core.AlertTypes.tradeAlert:
               this.state.alert.tradeAlertCount++;
               break;
-            case this.constants.alertTypes.traceAlert:
+            case this.constants.core.AlertTypes.traceAlert:
               this.state.alert.traceAlertCount++;
               break;
             default:
@@ -1191,7 +1161,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       removalList.forEach((eachAlert) => {
         if (!this.state.alert.alertTableAlertList[eachAlert.data.id]) {
           switch (eachAlert.data.type) {
-            case this.constants.alertTypes.axeAlert:
+            case this.constants.core.AlertTypes.axeAlert:
               if (eachAlert.state.isMarketListVariant) {
                 if (this.state.alert.marketListAxeAlertCount > 0) {
                   this.state.alert.marketListAxeAlertCount--;
@@ -1206,21 +1176,21 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
                 }
               }
               break;
-            case this.constants.alertTypes.markAlert:
+            case this.constants.core.AlertTypes.markAlert:
               if (this.state.alert.markAlertCount > 0) {
                 this.state.alert.markAlertCount--;
               } else {
                 this.state.alert.markAlertCount = 0;
               }
               break;
-            case this.constants.alertTypes.tradeAlert:
+            case this.constants.core.AlertTypes.tradeAlert:
               if (this.state.alert.tradeAlertCount > 0) {
                 this.state.alert.tradeAlertCount--;
               } else {
                 this.state.alert.tradeAlertCount = 0;
               }
               break;
-            case this.constants.alertTypes.traceAlert:
+            case this.constants.core.AlertTypes.traceAlert:
               if (this.state.alert.traceAlertCount > 0) {
                 this.state.alert.traceAlertCount--;
               } else {
@@ -1302,9 +1272,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
             // cancellation of alerts carries diff meaning depending on the alert type:
             // axe & mark & inquiry: it could be the trader entered it by mistake, but it could also be the trader changed his mind so he/she cancels the previous legitmate entry. So when such an cancelled alert comes in
             // trade and trace: since it is past tense, so it could only be cancelled because of entered by mistake
-            if (eachAlert.data.type === this.constants.alertTypes.markAlert || eachAlert.data.type === this.constants.alertTypes.axeAlert) {
+            if (eachAlert.data.type === this.constants.core.AlertTypes.markAlert || eachAlert.data.type === this.constants.core.AlertTypes.axeAlert) {
               !eachAlert.state.isRead && alertTableList.push(eachAlert);
-            } else if (eachAlert.data.type === this.constants.alertTypes.tradeAlert || eachAlert.data.type === this.constants.alertTypes.traceAlert) {
+            } else if (eachAlert.data.type === this.constants.core.AlertTypes.tradeAlert || eachAlert.data.type === this.constants.core.AlertTypes.traceAlert) {
               alertTableRemovalList.push(eachAlert);
             }
           } else {

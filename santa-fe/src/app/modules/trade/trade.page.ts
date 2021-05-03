@@ -13,6 +13,7 @@
     } from 'Core/services';
     import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import * as globalConstants from 'Core/constants';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { selectGlobalWorkflowIndexedDBReadyState } from 'Core/selectors/core.selectors';
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
@@ -21,8 +22,6 @@
       TradeStoreResetEvent,
       TradeCenterPanelLoadTableWithFilterEvent
     } from 'Trade/actions/trade.actions';
-    import { GlobalWorkflowTypes, GLOBAL_WORKFLOW_STATE_ID_KEY } from 'Core/constants/coreConstants.constant';
-    import { SecurityDefinitionDTO } from 'FEModels/frontend-models.interface';
   //
 
 @Component({
@@ -33,16 +32,13 @@
 })
 export class TradePage extends SantaContainerComponentBase implements OnInit {
   state: PageStates.TradeState;
+  constants = globalConstants;
   subscriptions = {
     routeChange: null,
     receiveSelectedSecuritySub: null,
     displayAlertThumbnailSub: null,
     ownerInitialsSub: null
   };
-  constants = {
-    globalWorkflowTypes: GlobalWorkflowTypes,
-    stateId: GLOBAL_WORKFLOW_STATE_ID_KEY
-  }
 
   private initializePageState() {
     this.state = {
@@ -81,7 +77,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
         return !!indexedDBIsReady;
       }),
       switchMap(([params, indexedDBIsReady]) => {
-        return this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
+        return this.globalWorkflowIOService.fetchState(params.get(this.constants.core.GLOBAL_WORKFLOW_STATE_ID_KEY));
       })
     ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
       this.globalStateHandler(result);
@@ -138,7 +134,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
   private globalStateHandler(state: DTOs.GlobalWorkflowStateDTO) {
     if (!!state) {
       switch (state.data.workflowType) {
-        case this.constants.globalWorkflowTypes.launchTradeToSeeBonds:
+        case this.constants.core.GlobalWorkflowTypes.launchTradeToSeeBonds:
           if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
             this.store$.dispatch(
               new TradeCenterPanelLoadTableWithFilterEvent(
@@ -149,7 +145,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
             );
           }
           break;
-        case this.constants.globalWorkflowTypes.unselectPreset:
+        case this.constants.core.GlobalWorkflowTypes.unselectPreset:
           // do nothing as nothing is needed
           break;
         default:
