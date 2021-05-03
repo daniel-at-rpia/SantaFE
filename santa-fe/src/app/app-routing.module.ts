@@ -3,30 +3,41 @@ import { Routes, RouterModule } from '@angular/router';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { TradePage } from 'Trade/trade.page';
 import { StructurePage } from 'Structure/structure.page';
+import { GuestPage } from 'Core/guest.page';
+import { AuthGuard } from 'Core/auth.guard';
 
 const routes: Routes = [
       {
         path: NavigationModule.market,
         redirectTo: NavigationModule.market,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        canActivate: [AuthGuard]
       },
       {
         path: `${NavigationModule.trade}/:stateId`,
-        component: TradePage
+        component: TradePage,
+        canActivate: [AuthGuard]
       },
       {
         path: `${NavigationModule.structuring}/:stateId`,
-        component: StructurePage
+        component: StructurePage,
+        canActivate: [AuthGuard]
         // this is for eventually we introduce lazy loading
         // loadChildren: () => import('./modules/structure/structure.module').then(mod => mod.StructureModule)
       },
       {
         path: `${NavigationModule.trade}`,
-        component: TradePage
+        component: TradePage,
+        canActivate: [AuthGuard]
       },
       {
         path: `${NavigationModule.structuring}`,
-        component: StructurePage
+        component: StructurePage,
+        canActivate: [AuthGuard]
+      },{
+        path: 'guest',
+        component: GuestPage,
+        pathMatch: 'full'
       },
       {
         path: '**',

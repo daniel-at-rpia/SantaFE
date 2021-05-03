@@ -6,8 +6,12 @@ import {
 
 import { DTOs, AdhocPacks } from 'Core/models/frontend';
 import { CoreActions } from 'Core/actions/core.actions';
+import { FAILED_USER_INITIALS_FALLBACK } from 'Core/constants/coreConstants.constant';
 
 export interface CoreState {
+  authentication: {
+    authenticated: boolean;
+  }
   user: {
     initials: string;
   };
@@ -33,6 +37,9 @@ export interface CoreState {
 }
 
 const initialState: CoreState = {
+  authentication: {
+    authenticated: false
+  },
   user: {
     initials: null
   },
@@ -63,12 +70,27 @@ export function coreReducer(
 ): CoreState {
   switch (action.type) {
     case CoreActions.UserLoggedIn:
+    if (action.initials === FAILED_USER_INITIALS_FALLBACK) {
       return {
         ...state,
+        authentication: {
+          authenticated: false
+        },
         user: {
           initials: action.initials
         }
       };
+    } else {
+      return {
+        ...state,
+        authentication: {
+          authenticated: true
+        },
+        user: {
+          initials: action.initials
+        }
+      };
+    }
     case CoreActions.ToggleAlertThumbnailDisplay:
        return {
          ...state,

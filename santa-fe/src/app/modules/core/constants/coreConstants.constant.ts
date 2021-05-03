@@ -7,7 +7,8 @@ import {
 export enum NavigationModule {
   trade = 'trade',
   structuring = 'structuring',
-  market = 'market'
+  market = 'market',
+  guest = 'guest'
 }
 
 export const APIUrlMap = {

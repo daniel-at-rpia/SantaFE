@@ -18,7 +18,8 @@ import {
 import { BEStructuringBreakdownBlock, BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
 
 export interface RootState {
-  ownerInitial: string;
+  appReady: boolean;
+  authenticated: boolean;
 }
 
 export interface GlobalNavState {
