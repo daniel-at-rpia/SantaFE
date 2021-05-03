@@ -40,4 +40,8 @@ export class GuestPage extends SantaContainerComponentBase implements OnInit {
     this.initializePageState();
   }
 
+  public reloadPage() {
+    window.location.href = "/";
+  }
+
 }
