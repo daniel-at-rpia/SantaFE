@@ -7,7 +7,7 @@
     import { Store, select } from '@ngrx/store';
 
     import { CoreUserLoggedIn } from 'Core/actions/core.actions';
-    import { selectAuthenticated } from 'Core/selectors/core.selectors';
+    import { selectAuthenticated, selectUserInitials } from 'Core/selectors/core.selectors';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { EngagementActionList } from 'Core/constants/coreConstants.constant';
     import { PageStates, AdhocPacks } from 'Core/models/frontend';
@@ -29,7 +29,8 @@ export class AppRoot implements OnInit, OnDestroy {
   globalCount$: Observable<any>;
   subscriptions = {
     globalCountSub: null,
-    authenticationSub: null
+    authenticationSub: null,
+    appReadySub: null
   };
 
   constructor(
@@ -45,6 +46,7 @@ export class AppRoot implements OnInit, OnDestroy {
 
   private initializedRootState() {
     this.state = {
+      appReady: false,
       authenticated: false
     };
   }
@@ -70,7 +72,7 @@ export class AppRoot implements OnInit, OnDestroy {
       filter((authenticated) => {
         return !!authenticated;
       })
-    ).subscribe(authenticated => {
+    ).subscribe((authenticated) => {
       this.state.authenticated = true;
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSecurityIdMap, {req: 'GET'}).pipe(
         first(),
@@ -82,6 +84,13 @@ export class AppRoot implements OnInit, OnDestroy {
           }
         })
       ).subscribe();
+    });
+    this.subscriptions.appReadySub = this.store$.pipe(
+      select(selectUserInitials)
+    ).subscribe((userInitial) => {
+      if (!!userInitial) {
+        this.state.appReady = true;
+      }
     });
   }
 

@@ -1,6 +1,6 @@
 @import "global.scss";
 
-.sat-guest {
+.sat-guestPage {
   $blockName: &;
   @include mix_fixed_div(absolute, $z_index_base_item);
   display: flex;

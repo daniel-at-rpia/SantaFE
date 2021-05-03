@@ -1,6 +1,7 @@
 <article
   [ngClass]="{
-    'sat-appRoot': true
+    'sat-appRoot': true,
+    'sat-appRoot--loading': !state.appReady
   }">
   <section *ngIf="state.authenticated" class="sat-appRoot__globalComponents">
     <global-nav></global-nav>
@@ -9,5 +10,10 @@
   </section>
   <section class="sat-appRoot__pageView">
     <router-outlet></router-outlet>
+  </section>
+  <section class="sat-appRoot__globalLoading">
+    <div class="sat-appRoot__globalLoading-spinningWheel">
+      <i class="sat-appRoot__globalLoading-spinningWheel-icon fal fa-circle-notch fa-spin"></i>
+    </div>
   </section>
 </article>

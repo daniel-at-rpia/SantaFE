@@ -26,7 +26,6 @@ export class AuthGuard implements CanActivate {
     return this.restfulCommService.authenticate().pipe(
       first(),
       map((serverReturn) => {
-        console.log('auth succeeded');
         if (typeof serverReturn === "string" && serverReturn.length === 2) {
           this.loadOwnerInitial(serverReturn);
           return true;
@@ -45,7 +44,7 @@ export class AuthGuard implements CanActivate {
 
   private blockAccess() {
     this.router.navigate(['guest']);
-    this.restfulCommService.updateUser(this.constants.userInitialsFallback);
+    this.loadOwnerInitial(this.constants.userInitialsFallback);
   }
 
   private loadOwnerInitial(serverReturn: string) {

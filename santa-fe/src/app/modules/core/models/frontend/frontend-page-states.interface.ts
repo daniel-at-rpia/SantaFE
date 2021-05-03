@@ -18,6 +18,7 @@ import {
 import { BEStructuringBreakdownBlock, BEGetPortfolioStructureServerReturn } from 'BEModels/backend-models.interface';
 
 export interface RootState {
+  appReady: boolean;
   authenticated: boolean;
 }
 
