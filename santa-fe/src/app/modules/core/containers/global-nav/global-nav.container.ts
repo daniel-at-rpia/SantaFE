@@ -98,6 +98,9 @@ export class GlobalNav implements OnInit, OnChanges, OnDestroy {
           case this.constants.moduleUrl.market:
             this.state.currentModule = this.constants.moduleUrl.market;
             break;
+          case this.constants.moduleUrl.guest:
+            this.state.currentModule = this.constants.moduleUrl.guest;
+            break;
           default:
             console.error('Navigation Failure', event);
             this.restfulCommService.logError(`Navigation Failure, ${event.url}`);
