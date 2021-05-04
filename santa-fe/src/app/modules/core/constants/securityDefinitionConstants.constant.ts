@@ -503,6 +503,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-file-invoice-dollar',
     optionList: FilterOptionsPortfolioList,
     securityDTOAttr: 'portfolios',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['PORTFOLIO'],
     internalOnly: true
   },
   PRIMARY_PORTFOLIO_MANAGER: {
@@ -511,6 +512,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'primaryPmName',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['PRIMARY'],
     internalOnly: true
   },
   BACKUP_PORTFOLIO_MANAGER: {
@@ -535,6 +537,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fad fa-users',
     optionList: FullOwnerList,
     securityDTOAttr: 'owner',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['OWNER'],
     internalOnly: true
   },
   STRATEGY: {
@@ -543,6 +546,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-chess',
     optionList: FullStrategyList,
     securityDTOAttr: 'strategyList',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['STRATEGY'],
     internalOnly: true
   },
   COUNTRY: {
