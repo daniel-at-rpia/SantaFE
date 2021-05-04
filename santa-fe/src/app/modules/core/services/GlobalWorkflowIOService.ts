@@ -203,6 +203,12 @@ export class GlobalWorkflowIOService {
       });
     }
 
+    public removeTradeRoutesinRouteHandlerStore() {
+      if (this.routeHandlerStore.length > 0 ) {
+        this.routeHandlerStore = this.routeHandlerStore.filter((handle: any) => !handle.handle.route.value.snapshot.routeConfig.path.includes('trade/:stateId'))
+      }
+    }
+
     private initiateIndexedDBRequestHandler(openRequest: IDBOpenDBRequest) {
       openRequest.onerror = (errorEvent) => {
         console.error('IDB open request failed', errorEvent);
