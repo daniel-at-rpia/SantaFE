@@ -89,7 +89,7 @@ export class AppRoot implements OnInit, OnDestroy {
           `App Root`
         );
         if (this.state.currentUrl.includes(this.constants.moduleUrl.trade)) {
-          this.router.navigateByUrl(`/${this.constants.moduleUrl.trade}`);
+          window.location.href = `/${this.constants.moduleUrl.trade}`;
         } else {
           window.location.reload(true);
         }
