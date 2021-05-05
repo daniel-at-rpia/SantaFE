@@ -10,9 +10,6 @@
     'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount
   }">
   <section class="sat-tradeCenterPanel__presets">
-    <div class="sat-tradeCenterPanel__presets-title">
-      <span class="sat-tradeCenterPanel__presets-title-text">Select Preset</span>
-    </div>
     <div class="sat-tradeCenterPanel__presets-content">
       <article
         [ngClass]="{
@@ -206,7 +203,7 @@
         }">
         <section class="sat-tradeCenterPanelSearchEngine__input">
           <mat-form-field appearance="outline">
-            <mat-label>Some Label</mat-label>
+            <mat-label>Tickers / BICS</mat-label>
             <input
               matInput
               >
