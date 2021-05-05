@@ -32,6 +32,15 @@ export class RestfulCommService {
     this.user = user;
   }
 
+  public authenticate(): Observable<string> {
+    const fullUrl = `${this.endpoint}/${this.apiMap.getUserInitials}`;
+    const queryOpts = {
+      withCredentials: true,
+      responseType: 'text' as 'json'
+    };
+    return this.http.get<string>(fullUrl, queryOpts);
+  }
+
   public callAPI(
     url: string,
     opts: Object = {},

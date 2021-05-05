@@ -22,7 +22,8 @@ import {
 import { TradeCenterPanelSearchModes } from 'Core/constants/tradeConstants.constant';
 
 export interface RootState {
-  ownerInitial: string;
+  appReady: boolean;
+  authenticated: boolean;
   currentUrl: string;
 }
 
