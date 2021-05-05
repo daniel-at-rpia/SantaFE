@@ -77,7 +77,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
         return !!indexedDBIsReady;
       }),
       switchMap(([params, indexedDBIsReady]) => {
-        return this.globalWorkflowIOService.fetchState(params.get(this.constants.core.GLOBAL_WORKFLOW_STATE_ID_KEY));
+        return this.globalWorkflowIOService.fetchState(params.get(this.constants.globalWorkflow.GLOBAL_WORKFLOW_STATE_ID_KEY));
       })
     ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
       this.globalStateHandler(result);
@@ -134,7 +134,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
   private globalStateHandler(state: DTOs.GlobalWorkflowStateDTO) {
     if (!!state) {
       switch (state.data.workflowType) {
-        case this.constants.core.GlobalWorkflowTypes.launchTradeToSeeBonds:
+        case this.constants.globalWorkflow.GlobalWorkflowTypes.launchTradeToSeeBonds:
           if (!!state.data.stateInfo.filterList && state.data.stateInfo.filterList.length > 0) {
             this.store$.dispatch(
               new TradeCenterPanelLoadTableWithFilterEvent(
@@ -145,7 +145,7 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
             );
           }
           break;
-        case this.constants.core.GlobalWorkflowTypes.unselectPreset:
+        case this.constants.globalWorkflow.GlobalWorkflowTypes.unselectPreset:
           // do nothing as nothing is needed
           break;
         default:

@@ -38,7 +38,8 @@
       StructureChangeDeltaScopeEvent
     } from 'Structure/actions/structure.actions';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-    import { NavigationModule, GlobalWorkflowTypes, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
+    import { NavigationModule, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
+    import { GlobalWorkflowTypes } from 'Core/constants/globalWorkflowConstants.constants';
   //
 
 @Component({
