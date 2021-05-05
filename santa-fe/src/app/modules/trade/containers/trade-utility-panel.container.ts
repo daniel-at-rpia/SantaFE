@@ -9,6 +9,7 @@
     import { PageStates } from 'Core/models/frontend';
     import { DTOService, UtilityService, GlobalWorkflowIOService } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import * as globalConstants from 'Core/constants';
     import {
       TradeLiveUpdateStartEvent,
       TradeLiveUpdateUtilityInternalCountEvent,
@@ -22,12 +23,6 @@
       selectPresetSelected,
       selectInitialDataLoadedInMainTable
     } from 'Trade/selectors/trade.selectors';
-    import {
-      LIVE_UPDATE_COUNTDOWN,
-      LIVE_UPDATE_INPROG_PROMPT,
-      LIVE_UPDATE_PROCESSING_PROMPT,
-      UTILITY_VALID_WINDOW_OPTIONS
-    } from 'Core/constants/tradeConstants.constant';
   //
 
 @Component({
@@ -40,12 +35,7 @@
 export class TradeUtilityPanel extends SantaContainerComponentBase implements OnInit {
   @Input() sidePanelsDisplayed: boolean;
   state: PageStates.TradeUtilityPanelState;
-  constants = {
-    liveUpdateCountdown: LIVE_UPDATE_COUNTDOWN,
-    liveUpdateInprogPrompt: LIVE_UPDATE_INPROG_PROMPT,
-    liveUpdateProcessingPrompt: LIVE_UPDATE_PROCESSING_PROMPT,
-    utilityValidWindowOptions: UTILITY_VALID_WINDOW_OPTIONS
-  }
+  constants = globalConstants;
   internalCount$: Observable<any>;
   subscriptions = {
     internalCountSub: null,
@@ -58,8 +48,8 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
   private initializePageState() {
     this.state = {
       tongueExpanded: false,
-      prompt: this.constants.liveUpdateInprogPrompt,
-      updateCountdown: this.constants.liveUpdateCountdown.toString(),
+      prompt: this.constants.trade.LIVE_UPDATE_INPROG_PROMPT,
+      updateCountdown: this.constants.trade.LIVE_UPDATE_COUNTDOWN.toString(),
       isPaused: true,
       isCallingAPI: false,
       isProcessingData: false,
@@ -111,7 +101,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
         this.store$.pipe(select(selectInitialDataLoadedInMainTable))
       )
     ).subscribe(([count, isPresetSelected, isInitialDataLoaded]) => {
-      if (isPresetSelected && isInitialDataLoaded && count >= this.constants.liveUpdateCountdown) {
+      if (isPresetSelected && isInitialDataLoaded && count >= this.constants.trade.LIVE_UPDATE_COUNTDOWN) {
         this.startUpdate();
       }
     });
@@ -125,10 +115,10 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
       if (!!flag) {
         this.state.isCallingAPI = false;
         this.state.isProcessingData = true;
-        this.state.prompt = this.constants.liveUpdateProcessingPrompt;
+        this.state.prompt = this.constants.trade.LIVE_UPDATE_PROCESSING_PROMPT;
       } else {
         this.state.isProcessingData = false;
-        this.state.prompt = this.constants.liveUpdateInprogPrompt;
+        this.state.prompt = this.constants.trade.LIVE_UPDATE_INPROG_PROMPT;
       }
     });
 
@@ -186,7 +176,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
 
   private startUpdate() {
     if (!this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
-      this.state.updateCountdown = this.constants.liveUpdateCountdown.toString();
+      this.state.updateCountdown = this.constants.trade.LIVE_UPDATE_COUNTDOWN.toString();
       this.state.isCallingAPI = true;
       this.store$.dispatch(new TradeLiveUpdateStartEvent());
     }

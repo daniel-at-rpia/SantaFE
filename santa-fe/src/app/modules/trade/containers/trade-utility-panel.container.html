@@ -15,7 +15,7 @@
   </section>
   <section class="sat-tradeUtilityPanel__validWindowOptionList">
     <button
-      *ngFor="let eachOption of constants.utilityValidWindowOptions"
+      *ngFor="let eachOption of constants.trade.UTILITY_VALID_WINDOW_OPTIONS"
       (click)="onSelectValidWindow(eachOption)"
       [ngClass]="{
         'sat-tradeUtilityPanel__validWindowOptionList-item': true,
