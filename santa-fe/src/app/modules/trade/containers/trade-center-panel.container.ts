@@ -80,6 +80,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   };
   keywordChanged$: Subject<string> = new Subject<string>();
   constants = globalConstants;
+
   private initializePageState(): PageStates.TradeCenterPanelState {
     const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcuts.fullList : [];
     const mainTableMetrics = this.constants.table.SecurityTableHeaderConfigs.filter((eachStub) => {
@@ -104,7 +105,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           lastWeekList: []
         },
         savedWatchlistShortcutList: [],
-        trendingWatchlistShortcutList: []
+        trendingWatchlistShortcutList: [],
+        searchEngine: {}
       },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, true),

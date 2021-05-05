@@ -5,6 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 import { CoreModule } from 'Core/core.module';
 import { FormModule } from 'App/modules/form/form.module';
 import { reducer } from 'Trade/reducers/trade.reducer';
@@ -45,6 +48,10 @@ import { NavigationModule } from "Core/constants/coreConstants.constant";
     ]),
     StoreModule.forFeature(NavigationModule.trade, reducer),
     EffectsModule.forFeature([TradeEffect]),
+
+    // angular material
+    MatFormFieldModule,
+    MatInputModule,
 
     // Native modules
     CoreModule,

@@ -133,6 +133,9 @@ export interface TradeCenterPanelState {
     }
     savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
     trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    searchEngine: {
+      
+    }
   }
   configurator: {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;

@@ -33,6 +33,11 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      align-items: center;
+      justify-content: center;
+      .sat-tradeCenterPanelSearchEngine {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+      }
     }
   }
   &__utilities {
@@ -565,4 +570,11 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   @include mq-xx-large-min {
     margin: $spacing_xx_large 25%;
   }
+}
+
+.sat-tradeCenterPanelSearchEngine {
+  $blockName: &;
+  @include mix_border_radius(15px);
+  padding: $spacing_large;
+  background-color: $color_active;
 }
