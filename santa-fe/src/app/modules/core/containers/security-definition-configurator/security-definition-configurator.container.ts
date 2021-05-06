@@ -11,7 +11,8 @@
       ConfiguratorDefinitionLayout,
       DEFINITION_CAPPED_THRESHOLD,
       SecurityDefinitionMap,
-      DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD
+      DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD,
+      SecurityDefinitionConfiguratorGroupLabels
     } from 'Core/constants/securityDefinitionConstants.constant';
   //
 
@@ -34,6 +35,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   constants = {
     map: SecurityDefinitionMap,
     cappedAmount: DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD,
+    securityDefinitionLabel: SecurityDefinitionConfiguratorGroupLabels
   }
 
   constructor(
