@@ -1307,7 +1307,30 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     public onClickSearchBonds() {
-
+      const definitionList = [];
+      const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.TICKER);
+      definitionDTO.data.highlightSelectedOptionList = this.state.presets.searchEngine.constructedSearchBucket.BICS.map((eachOption) => {
+        // const bicsLevel = eachIncludedDef.definitionKey === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key ? Math.floor(eachOption.length/2) : null;
+        // const optionValue = this.constants.definition.SecurityDefinitionMap[eachIncludedDef.definitionKey].securityDTOAttrBlock === 'bics' ? this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption) : eachOption;
+        const optionValue = eachOption;
+        const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+          this.constants.definition.SecurityDefinitionMap.TICKER.key,
+          optionValue,
+          null
+        );
+        selectedOption.isSelected = true;
+        return selectedOption;
+      });
+      definitionDTO.state.filterActive = true;
+      definitionList.push(definitionDTO);
+      const shortcut = this.dtoService.formSearchShortcutObject(
+        definitionList,
+        'Test Search Engine',
+        false,
+        false,
+        false
+      );
+      this.onSelectPreset(shortcut, true);
     }
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {
