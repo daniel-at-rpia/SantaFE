@@ -47,6 +47,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           display: flex;
           flex-direction: column;
           margin-top: $spacing_small;
+          position: relative;
           &-selectBtn {
             @include mix_border_radius(5px, 'top');
             margin-left: $securityDefinition_configuratorVariant_width/4;
@@ -70,15 +71,35 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           &:last-of-type {
             margin-bottom: $spacing_medium;
           }
+          &-clearAllOptionsBtn {
+            @include mix_fixed_div(absolute, $z_index_hovering_item);
+            display: none;
+            background-color: $color_negative;
+            color: $font_color_inverse;
+            top: 50%;
+            right: $spacing_x_small;
+            transform: translateY(-50%);
+          }
           &--hiddenInCoreDefinitionGroupState {
             display: none;
+          }
+          &--selectedDefinitionState {
+            #{$blockName} {
+              &__definitions {
+                &-list-section-item {
+                  &-clearAllOptionsBtn {
+                    display: flex;
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   }
   &__filters {
-    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    @include mix_fixed_div(absolute, $z_index_buried_item);
     @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
@@ -184,7 +205,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           flex: 0 0 auto;
           display: none;
           max-height: 11rem;
-          padding: $spacing_x_small;
+          padding: $spacing_medium $spacing_x_small;
           margin: 0 $spacing_medium;
         }
         &--selected > &-item {
