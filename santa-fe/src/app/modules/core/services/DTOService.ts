@@ -629,7 +629,7 @@ export class DTOService {
         currentFilterPathInConsolidatedBICS: [],
         isFilterCapped: false,
         isConsolidatedBICSVariant: rawData.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key,
-        isHiddenInCoreDefinitionGroup: false
+        isHiddenInConfiguratorDefinitionBundle: false
       }
     }
     return object;

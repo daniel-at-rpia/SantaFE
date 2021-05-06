@@ -21,7 +21,7 @@
         *ngFor="let eachDefinition of eachLayoutSection.data.list"
         [ngClass]="{
           'sat-securityDefinitionConfigurator__definitions-list-section-item': true,
-          'sat-securityDefinitionConfigurator__definitions-list-section-item--hiddenInCoreDefinitionGroupState': eachDefinition.state.isHiddenInCoreDefinitionGroup
+          'sat-securityDefinitionConfigurator__definitions-list-section-item--hiddenInCoreDefinitionGroupState': eachDefinition.state.isHiddenInConfiguratorDefinitionBundle
         }">
           <button
             (click)="selectDefinitionForGrouping(eachDefinition)"
