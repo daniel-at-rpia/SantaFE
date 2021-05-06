@@ -261,6 +261,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         }
       })
     }
+    if (this.configuratorData.state.groupByDisabled) {
+      this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
+    }
   }
 
   private clearSearchFilter(hasAppliedFilter: boolean) {
