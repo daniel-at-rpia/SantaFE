@@ -661,7 +661,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
 export enum SecurityDefinitionConfiguratorGroupLabels {
   selected = 'Selected',
   popular = 'Popular',
-  external = 'External',
+  standard = 'Standard',
   internal = 'Internal',
   common = 'Common',
   bics = 'BICS',
@@ -686,7 +686,7 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
     ]
   },
   {
-    label: SecurityDefinitionConfiguratorGroupLabels.external,
+    label: SecurityDefinitionConfiguratorGroupLabels.standard,
     list: [
       SecurityDefinitionMap.TENOR,
       SecurityDefinitionMap.COUNTRY,
