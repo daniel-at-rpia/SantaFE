@@ -239,14 +239,14 @@
     </div>
     <div class="sat-tradeCenterPanel__utilities-driver">
       <span class="sat-tradeCenterPanel__utilities-driver-label">Driver :</span>
-      <span class="sat-tradeCenterPanel__utilities-driver-value">{{constants.displayDriverMap[state.filters.driverType]}}</span>
+      <span class="sat-tradeCenterPanel__utilities-driver-value">{{constants.trade.DISPLAY_DRIVER_MAP[state.filters.driverType]}}</span>
       <div class="santaBtnGroup sat-tradeCenterPanel__utilities-driver-btnGroup">
         <button
-          (click)="onSwitchDriver(constants.defaultMetricIdentifier)"
+          (click)="onSwitchDriver(constants.core.DEFAULT_DRIVER_IDENTIFIER)"
           [ngClass]="{
             'sat-tradeCenterPanel__utilities-driver-btnGroup-btn': true,
             'santaBtn--labelled': true,
-            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn--active': state.filters.driverType === constants.defaultMetricIdentifier
+            'sat-tradeCenterPanel__utilities-driver-btnGroup-btn--active': state.filters.driverType === constants.core.DEFAULT_DRIVER_IDENTIFIER
           }">
           <span>Combined</span>
         </button>
@@ -285,7 +285,7 @@
     <div class="sat-tradeCenterPanel__main-configurator">
       <security-definition-configurator
         [configuratorData]="state.configurator.dto"
-        (clickedApplyFilter)="onApplyFilter($event, true)"
+        (clickedApplyFilter)="onApplyFilter($event, true, null)"
         (buryConfigurator)="buryConfigurator()"
         (boostConfigurator)="boostConfigurator()"
       ></security-definition-configurator>

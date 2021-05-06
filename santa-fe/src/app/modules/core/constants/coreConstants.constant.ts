@@ -7,7 +7,8 @@ import {
 export enum NavigationModule {
   trade = 'trade',
   structuring = 'structuring',
-  market = 'market'
+  market = 'market',
+  guest = 'guest'
 }
 
 export enum PortfolioShortNames {
@@ -314,13 +315,3 @@ export const TRACE_VOLUME_REPORTED_THRESHOLD = 1000000;
 
 export const QUANT_COMPARER_PERCENTILE = 90;
 export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;
-
-export enum GlobalWorkflowTypes {
-  genericType = 'Generic',
-  launchTradeToSeeBonds = 'Launch Trade To See Bonds',
-  routeHandlerPlaceholder = 'Placeholder for Route Handler',
-  changedStructureUtilityConfig = 'Changed Structure Utility Config',
-  unselectPreset = 'Unselect Trade Preset'
-}
-
-export const GLOBAL_WORKFLOW_STATE_ID_KEY = 'stateId';

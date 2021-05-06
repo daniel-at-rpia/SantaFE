@@ -1268,7 +1268,11 @@ export class UtilityService {
     }
 
     public getModulePortionFromNavigation(event: NavigationEnd):string {
-      const removeForwardSlash = event.urlAfterRedirects.slice(1);
+      return this.getModulePortionFromUrl(event.urlAfterRedirects);
+    }
+
+    public getModulePortionFromUrl(url: string): string {
+      const removeForwardSlash = url.slice(1);
       const modulePortion = removeForwardSlash.split('/').length > 0 ? removeForwardSlash.split('/')[0] : '';
       return modulePortion;
     }

@@ -10,9 +10,7 @@
     import { DTOs } from 'Core/models/frontend';
     import { DTOService, UtilityService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
-    import {
-      HISTORICAL_SUMMARY_ROUNDING
-    } from 'Core/constants/tradeConstants.constant';
+    import * as globalConstants from 'Core/constants';
   //
 
 @Component({
@@ -27,8 +25,7 @@ export class HistoricalSummary extends SantaContainerComponentBase implements On
   @Input() summaryData: DTOs.HistoricalSummaryDTO;
   subscriptions = {
   }
-  constants = {
-  };
+  constants = globalConstants;
 
   constructor(
     protected utilityService: UtilityService,
@@ -98,11 +95,11 @@ export class HistoricalSummary extends SantaContainerComponentBase implements On
         const leftSpace = globalMin < eachMoveVisualizer.data.min ? globalMin - eachMoveVisualizer.data.min : 0;
         const distance = eachMoveVisualizer.data.end - eachMoveVisualizer.data.start;
         const rightSpace = globalMax > eachMoveVisualizer.data.max ? globalMax - eachMoveVisualizer.data.max : 0;
-        eachMoveVisualizer.style.leftGap = this.utilityService.round(Math.abs(leftSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-        eachMoveVisualizer.style.leftEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.min - leftNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-        eachMoveVisualizer.style.moveDistance = this.utilityService.round(Math.abs(distance) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-        eachMoveVisualizer.style.rightEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.max - rightNode) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
-        eachMoveVisualizer.style.rightGap = this.utilityService.round(Math.abs(rightSpace) / globalDistance * 100, HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.leftGap = this.utilityService.round(Math.abs(leftSpace) / globalDistance * 100, this.constants.trade.HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.leftEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.min - leftNode) / globalDistance * 100, this.constants.trade.HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.moveDistance = this.utilityService.round(Math.abs(distance) / globalDistance * 100, this.constants.trade.HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.rightEdge = this.utilityService.round(Math.abs(eachMoveVisualizer.data.max - rightNode) / globalDistance * 100, this.constants.trade.HISTORICAL_SUMMARY_ROUNDING);
+        eachMoveVisualizer.style.rightGap = this.utilityService.round(Math.abs(rightSpace) / globalDistance * 100, this.constants.trade.HISTORICAL_SUMMARY_ROUNDING);
         eachMoveVisualizer.style.endPinLocation = eachMoveVisualizer.state.isInversed ? eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap : eachMoveVisualizer.style.leftEdge + eachMoveVisualizer.style.leftGap + eachMoveVisualizer.style.moveDistance;
       }
     });

@@ -30,9 +30,10 @@
       SecurityDefinitionMap
     } from 'Core/constants/securityDefinitionConstants.constant';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
-    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { NavigationModule } from 'Core/constants/coreConstants.constant';
     import { selectDataDatestamp, selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.selectors';
     import { StructureSetView } from 'Structure/actions/structure.actions';
+    import { GlobalWorkflowTypes } from 'Core/constants/globalWorkflowConstants.constants';
   //
 
 @Component({

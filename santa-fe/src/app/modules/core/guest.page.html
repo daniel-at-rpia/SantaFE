@@ -1,0 +1,21 @@
+<article
+  [ngClass]="{
+    'sat-guestPage': true
+  }">
+  <section class="sat-guestPage__main">
+    <i class="sat-guestPage__main-heroIcon fal fa-fingerprint"></i>
+    <h2 class="sat-guestPage__main-heroText">You are not a recognized user of Santa</h2>
+    <span class="sat-guestPage__main-minorText">If you want to have access, please reach out to rcao@rpia.ca</span>
+    <button (click)="reloadPage()" class="santaBtn--labelled">
+      <i class="fal fa-sync"></i>
+      <span>Try Again</span>
+    </button>
+    <hr class="sat-guestPage__main-divider">
+    <span class="sat-guestPage__main-brandText">Santa - RPIA Trading & Portfolio Management</span>
+    <div class="sat-guestPage__main-logo">
+      <img class="sat-guestPage__main-logo-img" src="assets/rpia.png">
+    </div>
+    <span class="sat-guestPage__main-brandText">© RP Investment Advisors 2020</span>
+    <span class="sat-guestPage__main-brandText">All rights reserved.</span>
+  </section>
+</article>
