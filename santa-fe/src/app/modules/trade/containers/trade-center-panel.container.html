@@ -202,12 +202,24 @@
           'sat-tradeCenterPanelSearchEngine': true,
           'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.presets.searchEngine.typeaheadActive
         }">
+        <section class="sat-tradeCenterPanelSearchEngine__bucket">
+          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition">
+            <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">BICS: </span>
+            <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
+              <li *ngFor="let eachKeyword of state.presets.searchEngine.constructedSearchBucket.BICS">
+                {{eachKeyword}}
+              </li>
+            </ul>
+          </div>
+        </section>
         <section class="sat-tradeCenterPanelSearchEngine__input">
           <santa-input
             [autoFocus]="true"
             [isHero]="true"
             [placeholder]="''"
-            (onInputChange)="onSearchEngineInputChange($event)">
+            [inputValue]="state.presets.searchEngine.activeKeyword"
+            (onInputChange)="onSearchEngineInputChange($event)"
+            (onGenericKeyPressed)="onSearchEngineKeyPressed($event)">
           </santa-input>
           <!-- <mat-form-field appearance="outline">
             <mat-label>Tickers / BICS</mat-label>
@@ -216,6 +228,10 @@
               (onInputChange)="onSearchEngineInputChange($event)"
               >
           </mat-form-field> -->
+          <button (click)="search" class="santaBtn--labelled">
+            <i class="fal fa-search"></i>
+            <span>Search</span>
+          </button>
         </section>
         <section class="sat-tradeCenterPanelSearchEngine__typeahead">
           <ul class="sat-tradeCenterPanelSearchEngine__typeahead-list">

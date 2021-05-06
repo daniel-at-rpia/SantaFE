@@ -564,6 +564,10 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   $blockName: &;
   @include mix_border_radius(15px);
   padding: $spacing_large;
+  &__bucket {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    bottom: 100%;
+  }
   &__input {
     display: flex;
     width: 20rem;
@@ -576,6 +580,7 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
     // }
   }
   &__typeahead {
-
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    top: 100%;
   }
 }

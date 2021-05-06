@@ -7,6 +7,7 @@
     'santaInput--disabledState': !!isDisabled,
     'santaInput--nonEditable': !!isNonEditable
   }">
+  <!-- tie onPressedGenericKey() with "keyDown" because otherwise special keys won't be detected, such as tab -->
   <input
     type="{{ isNumeric ? 'number' : 'text' }}"
     [ngClass]="{
@@ -22,5 +23,6 @@
     (blur)="onBlur()"
     (keyup.enter)="onPressedEnterKey()"
     autofocus="!!autoFocus"
+    (keydown)="onPressedGenericKey($event)"
   >
 </article>

@@ -619,3 +619,5 @@ export const TradeUoBDefaultSecurityTableHeaderOverwriteConfigs: Array<AdhocPack
 ]
 
 export const SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP = 10;
+export const SEARCH_ENGINE_TYPEAHEAD_MINIMUM_CHAR_LENGTH = 1;
+export const SEARCH_ENGINE_BREAK_KEY = 9;
