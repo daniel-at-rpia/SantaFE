@@ -567,9 +567,15 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   &__input {
     display: flex;
     width: 20rem;
-    mat-form-field {
+    santa-input {
       flex: 1 1 auto;
-      @include material_form_font_size_override('hero');
     }
+    // mat-form-field {
+    //   flex: 1 1 auto;
+    //   @include material_form_font_size_override('hero');
+    // }
+  }
+  &__typeahead {
+
   }
 }

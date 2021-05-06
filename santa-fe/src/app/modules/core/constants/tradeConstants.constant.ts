@@ -617,3 +617,5 @@ export const TradeUoBDefaultSecurityTableHeaderOverwriteConfigs: Array<AdhocPack
     active: false
   }
 ]
+
+export const SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP = 10;

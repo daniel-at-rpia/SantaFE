@@ -199,16 +199,28 @@
       </article>
       <article
         [ngClass]="{
-          'sat-tradeCenterPanelSearchEngine': true
+          'sat-tradeCenterPanelSearchEngine': true,
+          'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.presets.searchEngine.typeaheadActive
         }">
         <section class="sat-tradeCenterPanelSearchEngine__input">
-          <mat-form-field appearance="outline">
+          <santa-input
+            [autoFocus]="true"
+            [isHero]="true"
+            [placeholder]="''"
+            (onInputChange)="onSearchEngineInputChange($event)">
+          </santa-input>
+          <!-- <mat-form-field appearance="outline">
             <mat-label>Tickers / BICS</mat-label>
             <input
               matInput
               (onInputChange)="onSearchEngineInputChange($event)"
               >
-          </mat-form-field>
+          </mat-form-field> -->
+        </section>
+        <section class="sat-tradeCenterPanelSearchEngine__typeahead">
+          <ul class="sat-tradeCenterPanelSearchEngine__typeahead-list">
+            <li *ngFor="let eachEntry of state.presets.searchEngine.typeaheadEntries" class="sat-tradeCenterPanelSearchEngine__typeahead-list-item">{{eachEntry.displayKeyword}}</li>
+          </ul>
         </section>
       </article>
     </div>
