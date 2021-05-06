@@ -596,7 +596,8 @@ export class DTOService {
   }
 
   public formSecurityDefinitionObject(
-    rawData: Stubs.SecurityDefinitionStub
+    rawData: Stubs.SecurityDefinitionStub,
+    configuratorLabel: SecurityDefinitionConfiguratorGroupLabels | null = null
   ): DTOs.SecurityDefinitionDTO {
     const object: DTOs.SecurityDefinitionDTO = {
       data: {
@@ -612,7 +613,7 @@ export class DTOService {
         backendDtoAttrName: rawData.backendDtoAttrName,
         totalMatchingResults: 0,
         internalOnly: !!rawData.internalOnly,
-        configuratorCoreDefinitionGroup: null
+        configuratorCoreDefinitionGroup: configuratorLabel
       },
       style: {
         icon: rawData.icon,
@@ -663,7 +664,7 @@ export class DTOService {
       data: {
         label: stubData.label,
         list: stubData.list.map((eachStubDefinition) => {
-          return this.formSecurityDefinitionObject(eachStubDefinition);
+          return this.formSecurityDefinitionObject(eachStubDefinition, stubData.label as SecurityDefinitionConfiguratorGroupLabels);
         })
       },
       state: {
