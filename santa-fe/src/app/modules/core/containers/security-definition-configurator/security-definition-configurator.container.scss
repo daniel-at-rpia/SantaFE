@@ -23,6 +23,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       &-section {
         display: flex;
         flex-direction: column;
+        margin-bottom: $spacing_medium;
         &-label {
           @include mix_fixed_div(relative, $z_index_base_item);
           display: flex;
