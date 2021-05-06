@@ -13,6 +13,14 @@ const allPortfolios: Stubs.SearchShortcutIncludedDefinitionStub = {
   selectedOptions: [PortfolioShortNames.DOF, PortfolioShortNames.SOF, PortfolioShortNames.STIP, PortfolioShortNames.FIP, PortfolioShortNames.CIP, PortfolioShortNames.AGB, PortfolioShortNames.BBB]
 };
 
+export const SelectedShortcuts: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [
+  {
+    definitionKey: 'QUOTED_TODAY',
+    groupByActive: false,
+    selectedOptions: ['Y']
+  }
+]
+
 export const PortfolioShortcuts: Array<Stubs.SearchShortcutStub> = [{
     displayTitle: 'All Portfolios',
     includedDefinitions: [
