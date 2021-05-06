@@ -106,7 +106,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         },
         savedWatchlistShortcutList: [],
         trendingWatchlistShortcutList: [],
-        searchEngine: {}
+        searchEngine: {
+          indexedKeywords: []
+        }
       },
       configurator: {
         dto: this.dtoService.createSecurityDefinitionConfigurator(true, false, true),
@@ -463,6 +465,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     this.state.editingDriver = true;
   }
 
+  public onSearchEngineInputChange(newInput: string) {
+    console.log('test, input change', newInput);
+  }
+
   private fetchBICsHierarchy() {
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsCodeDictionary, {req: 'GET'}).pipe(
       first(),
@@ -474,26 +480,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             this.state.configurator.dto
           );
           this.populateSearchShortcuts();
-          this.subscriptions.indexedDBReadySub = this.store$.pipe(
-            select(selectWatchlistIndexedDBReady)
-          ).subscribe((isReady) => {
-            this.state.isIndexedDBReady = isReady;
-            if (isReady) {
-              this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Get All Watchlists`, true).pipe(
-                first()
-              ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
-                if (storedRecentWatchlists.length > 0) {
-                  this.state.presets.recentWatchlistShortcuts.fullList = [...this.state.presets.recentWatchlistShortcuts.fullList, ...storedRecentWatchlists];
-                  if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
-                    this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
-                    this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.SearchShortcutDTO) => {
-                      this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist);
-                    })
-                  }
-                }
-              })
-            }
-          })
+          this.startIndexedDBSub();
+          this.indexSearchEngineBICS(serverReturn);
           this.store$.dispatch(new TradeBICSDataLoadedEvent());
         }
       }),
@@ -1277,5 +1265,42 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       }
     });
+  }
+
+  private startIndexedDBSub() {
+    this.subscriptions.indexedDBReadySub = this.store$.pipe(
+      select(selectWatchlistIndexedDBReady)
+    ).subscribe((isReady) => {
+      this.state.isIndexedDBReady = isReady;
+      if (isReady) {
+        this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Get All Watchlists`, true).pipe(
+          first()
+        ).subscribe((storedRecentWatchlists: Array<DTOs.SearchShortcutDTO>) => {
+          if (storedRecentWatchlists.length > 0) {
+            this.state.presets.recentWatchlistShortcuts.fullList = [...this.state.presets.recentWatchlistShortcuts.fullList, ...storedRecentWatchlists];
+            if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
+              this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
+              this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.SearchShortcutDTO) => {
+                this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist);
+              })
+            }
+          }
+        })
+      }
+    })
+  }
+
+  private indexSearchEngineBICS(bicsData: BEBICsHierarchyBlock) {
+    for (const eachCode in bicsData) {
+      const leafBICSName = bicsData[eachCode].item7 || bicsData[eachCode].item6 || bicsData[eachCode].item5 || bicsData[eachCode].item4 || bicsData[eachCode].item3 || bicsData[eachCode].item2 || bicsData[eachCode].item1;
+      if (leafBICSName) {
+        const entry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry = {
+          pristineKeyword: leafBICSName,
+          displayKeyword: leafBICSName,
+          type: 'BICS'
+        };
+        this.state.presets.searchEngine.indexedKeywords.push(entry);
+      }
+    }
   }
 }

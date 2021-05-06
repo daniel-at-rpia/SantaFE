@@ -277,3 +277,9 @@ export type IndexedDBAllDatabaseMapping = {
     configs: Array<IndexedDBTableBlockItem>
   }
 }
+
+export interface TradeCenterPanelSearchEngineIndexEntry {
+  pristineKeyword: string;
+  displayKeyword: string;
+  type: string;
+}

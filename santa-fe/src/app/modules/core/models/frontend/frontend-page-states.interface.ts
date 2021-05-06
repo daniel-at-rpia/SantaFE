@@ -134,7 +134,7 @@ export interface TradeCenterPanelState {
     savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
     trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
     searchEngine: {
-      
+      indexedKeywords: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;  // switch to <object> if we want to guarantee unique-ness
     }
   }
   configurator: {
