@@ -839,6 +839,14 @@ export class UtilityService {
       }
     }
 
+    public getDefinitionBundleFromConfigurator(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      bundleKey: string
+    ): DTOs.SecurityDefinitionBundleDTO {
+      const selectedDefinitionBundle = configurator.data.definitionList.find((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label === bundleKey);
+      return selectedDefinitionBundle;
+    }
+
     // TODO: move this into a SecurityTableHelper service
     private retrieveSecurityMetricFromMetricPack(dto: DTOs.SecurityDTO, header: DTOs.SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
