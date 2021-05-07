@@ -1072,7 +1072,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           const groupDefinition = isBICS ? 'BICS' : this.constants.definition.SecurityDefinitionMap[definitionItem.key].displayName;
           selectionOptionsList = [
             ...selectionOptionsList,
-            ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => isBICS ? this.bicsDictionaryLookupService.BICSCodeToBICSName(option) : option)
+            ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => this.getParsedOptionForShortcutTitle(definitionItem.key, option))
           ];
           customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
         } else {
@@ -1336,4 +1336,16 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     })
   }
 
+  private getParsedOptionForShortcutTitle(
+    key: string,
+    option: string
+  ): string {
+    if (key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+      return this.bicsDictionaryLookupService.BICSCodeToBICSName(option);
+    } else if (key === this.constants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
+      return option === 'Y' ? 'Quoted Today' : 'Not Quoted Today';
+    } else {
+      return option;
+    }
+  }
 }
