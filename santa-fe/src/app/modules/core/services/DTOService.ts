@@ -59,7 +59,8 @@
     } from 'Core/constants/securityTableConstants.constant';
     import {
       AxeAlertScope,
-      AxeAlertType
+      AxeAlertType,
+      SelectedShortcuts
     } from 'Core/constants/tradeConstants.constant';
     import {
       PortfolioMetricValues,
@@ -624,14 +625,17 @@ export class DTOService {
         isUnactivated: false,
         // isUnactivated: true,
         groupByActive: false,
-        filterActive: false,
+        filterActive: configuratorLabel ? configuratorLabel === SecurityDefinitionConfiguratorGroupLabels.selected : false,
         isMiniPillVariant: false,
         isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
         currentFilterPathInConsolidatedBICS: [],
         isFilterCapped: false,
         isConsolidatedBICSVariant: rawData.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key,
-        isHiddenInConfiguratorDefinitionBundle: false
+        isHiddenInConfiguratorDefinitionBundle: !!configuratorLabel ? configuratorLabel !== SecurityDefinitionConfiguratorGroupLabels.selected ? this.checkIfDefinitionIsInSelectedDefinitionBundle(rawData.key) : false : null
       }
+    }
+    if (!!configuratorLabel && configuratorLabel === SecurityDefinitionConfiguratorGroupLabels.selected) {
+      this.prePopulateListsWithSelectedOptions(SelectedShortcuts, object);
     }
     return object;
   }
@@ -714,6 +718,7 @@ export class DTOService {
       targetConfigurator.state.securityAttrOnly
     );
     object.data.definitionList = targetConfigurator.data.definitionList;
+    const selectedGroupDefinition = object.data.definitionList.find((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label === SecurityDefinitionConfiguratorGroupLabels.selected);
     object.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
         eachDefinition.data.displayOptionList = this.utility.deepCopy(eachDefinition.data.prinstineFilterOptionList);
@@ -721,8 +726,41 @@ export class DTOService {
         eachDefinition.state.filterActive = false;
         eachDefinition.state.groupByActive = false;
         eachDefinition.state.currentFilterPathInConsolidatedBICS = [];
+        eachDefinition.state.isHiddenInConfiguratorDefinitionBundle = false;
       });
     });
+    if (!!selectedGroupDefinition) {
+      selectedGroupDefinition.data.list = [];
+      const defaultSelectedList: Array<DTOs.SecurityDefinitionDTO> = [];
+      SelectedShortcuts.forEach((shortcutStubs: Stubs.SearchShortcutIncludedDefinitionStub) => {
+        const { definitionKey } = shortcutStubs;
+        object.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+          definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+            if (definition.data.key === definitionKey) {
+              shortcutStubs.selectedOptions.forEach(option => {
+                const optionMatch = definition.data.prinstineFilterOptionList.find((prinstineOption: Blocks.SecurityDefinitionFilterBlock) => prinstineOption.shortKey === option);
+                if (!!optionMatch) {
+                  const optionMatchCopy: Blocks.SecurityDefinitionFilterBlock = this.utility.deepCopy(optionMatch);
+                  optionMatchCopy.isSelected = true;
+                  definition.data.highlightSelectedOptionList.push(optionMatchCopy);
+                  const displayOptionMatch = definition.data.displayOptionList.find((displayOption: Blocks.SecurityDefinitionFilterBlock) => displayOption.shortKey === option);
+                  if (!!displayOptionMatch) {
+                    displayOptionMatch.isSelected = true;
+                  }
+                }
+              })
+              definition.state.isHiddenInConfiguratorDefinitionBundle = true;
+              definition.state.filterActive = true;
+              const definitionCopy: DTOs.SecurityDefinitionDTO = this.utility.deepCopy(definition);
+              definitionCopy.state.isHiddenInConfiguratorDefinitionBundle = false;
+              definitionCopy.data.configuratorCoreDefinitionGroup = SecurityDefinitionConfiguratorGroupLabels.selected;
+              defaultSelectedList.push(definitionCopy);
+            }
+          })
+        })
+      })
+      selectedGroupDefinition.data.list = defaultSelectedList;
+    }
     return object;
   }
 
@@ -2879,5 +2917,49 @@ export class DTOService {
     const code = this.bicsDictionaryLookupService.BICSNameToBICSCode(option, bicsLevel);
     const subCodes = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(code);
     return subCodes.length === 0;
+  }
+
+  private checkIfDefinitionIsInSelectedDefinitionBundle(targetKey: string): boolean {
+    const selectedSecurityDefinitionBundleStub = ConfiguratorDefinitionLayout.find((definitionBundleStub: Stubs.SecurityDefinitionBundleStub) => definitionBundleStub.label === SecurityDefinitionConfiguratorGroupLabels.selected);
+    if (!!selectedSecurityDefinitionBundleStub) {
+      const isSelected = selectedSecurityDefinitionBundleStub.list.find((securityDefinitionStub: Stubs.SecurityDefinitionStub) => securityDefinitionStub.key === targetKey);
+      return !!isSelected;
+    } else {
+      return false;
+    }
+  }
+
+  private addPreSelectedOptionsToConfiguratorDefinitionList(
+    targetList: Array<Blocks.SecurityDefinitionFilterBlock>,
+    selectedKeys: Array<string>
+  ): Array<Blocks.SecurityDefinitionFilterBlock> {
+    const preSelectedList: Array<Blocks.SecurityDefinitionFilterBlock> = targetList.filter((definitionBlock: Blocks.SecurityDefinitionFilterBlock) => {
+      const isSelected = selectedKeys.find(key => key === definitionBlock.shortKey);
+      return !!isSelected;
+    });
+    if (preSelectedList.length > 0) {
+      preSelectedList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => selectedOption.isSelected = true);
+      return preSelectedList;
+    } else {
+      return [];
+    }
+  }
+
+  private prePopulateListsWithSelectedOptions(
+    selectedStubList: Array<Stubs.SearchShortcutIncludedDefinitionStub>,
+    targetDefinition: DTOs.SecurityDefinitionDTO
+  ) {
+    const selectedStub = selectedStubList.find((definitionStub: Stubs.SearchShortcutIncludedDefinitionStub) => definitionStub.definitionKey === targetDefinition.data.key);
+    if (!!selectedStub) {
+      const selectedKeys = selectedStub.selectedOptions;
+      const preSelectedList = this.addPreSelectedOptionsToConfiguratorDefinitionList(targetDefinition.data.displayOptionList, selectedKeys);
+      targetDefinition.data.highlightSelectedOptionList = preSelectedList;
+      preSelectedList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => {
+        const displayOptionEquivalent = targetDefinition.data.displayOptionList.find((displayOption: Blocks.SecurityDefinitionFilterBlock) => displayOption.key === selectedOption.key);
+        if (!!displayOptionEquivalent) {
+          displayOptionEquivalent.isSelected = true;
+        }
+      })
+    }
   }
 }
