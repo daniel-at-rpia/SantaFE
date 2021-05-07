@@ -103,7 +103,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
-    left: $securityDefinition_configuratorVariant_width + $securityDefinitionConfigurator_gapBetweenDefAndFilter;
+    left: $securityDefinition_configuratorVariant_width + $spacing_large + $spacing_x_small;
     width: $securityDefinitionConfigurator_filters_width;
     padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
     overflow: hidden;
@@ -340,7 +340,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
   &--filterActiveState {
     #{$blockName} {
       &__filters {
-        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
         &-content {
           @include mix_border_generator(3px, $color_active);
           transform: translate(0, 0) scale(1, 1);
