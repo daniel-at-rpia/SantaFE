@@ -153,6 +153,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       }
     });
     targetDefinition.state.filterActive = filterActive;
+    if (targetDefinition.data.configuratorCoreDefinitionGroup === SecurityDefinitionConfiguratorGroupLabels.selected) {
+      this.utilityService.applySelectedDefinitionChangestoCoreDefinition(this.configuratorData, targetDefinition, true);
+    }
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
@@ -251,19 +254,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         option.isSelected = false;
       })
     }
-    const matchedGroupDefinition = this.configuratorData.data.definitionList.find((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label === targetDefinition.data.configuratorCoreDefinitionGroup);
-    if (!!matchedGroupDefinition) {
-      matchedGroupDefinition.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-        if (definition.data.key === targetDefinition.data.key) {
-          definition.state.isHiddenInConfiguratorDefinitionBundle = false;
-          definition.data.highlightSelectedOptionList = [];
-          definition.state.filterActive = false;
-          definition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
-            option.isSelected = false;
-          })
-        }
-      })
-    }
+    this.utilityService.applySelectedDefinitionChangestoCoreDefinition(this.configuratorData, targetDefinition, true);
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
