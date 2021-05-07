@@ -276,7 +276,13 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
 
   private checkFilterCanApply(): boolean {
     let canApply = false;
-    this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
+    const parsedLastExecueted = this.lastExecutedConfiguration.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+    const parsedcurrentConfiguration = this.configuratorData.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+    const prevCompareCopy = this.utilityService.deepCopy(this.lastExecutedConfiguration);
+    const currentCompareCopy = this.utilityService.deepCopy(this.configuratorData);
+    prevCompareCopy.data.definitionList = parsedLastExecueted;
+    currentCompareCopy.data.definitionList = parsedcurrentConfiguration;
+    currentCompareCopy.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
       eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
         const activeFilters = eachDefinition.state.isConsolidatedBICSVariant || eachDefinition.state.isFilterCapped ? eachDefinition.data.highlightSelectedOptionList.filter((eachOption) => {
           return eachOption.isSelected;
@@ -285,9 +291,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         })
         let previousListForCompare: Array<Blocks.SecurityDefinitionFilterBlock>;
         if (eachDefinition.state.isFilterCapped) {
-          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList;
+          previousListForCompare = prevCompareCopy.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList;
         } else {
-          previousListForCompare = eachDefinition.state.isConsolidatedBICSVariant ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
+          previousListForCompare = eachDefinition.state.isConsolidatedBICSVariant ? prevCompareCopy.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : prevCompareCopy.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
         const prevActiveFilters = !eachDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
         if (activeFilters.length === prevActiveFilters.length) {
@@ -348,5 +354,4 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: DTOs.SecurityDefinitionDTO): boolean {
     return !!targetDefinition.data.prinstineFilterOptionList ? targetDefinition.data.prinstineFilterOptionList.length > DEFINITION_CAPPED_THRESHOLD : false;
   }
-
 }
