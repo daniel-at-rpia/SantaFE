@@ -634,8 +634,9 @@ export class DTOService {
         isHiddenInConfiguratorDefinitionBundle: !!configuratorLabel ? configuratorLabel !== SecurityDefinitionConfiguratorGroupLabels.selected ? this.checkIfDefinitionIsInSelectedDefinitionBundle(rawData.key) : false : null
       }
     }
-    if (!!configuratorLabel && configuratorLabel === SecurityDefinitionConfiguratorGroupLabels.selected) {
-      this.prePopulateListsWithSelectedOptions(SelectedShortcuts, object);
+    if (!!configuratorLabel) {
+      const matchedSelectedStub = SelectedShortcuts.find((definitionStub: Stubs.SearchShortcutIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
+      !!matchedSelectedStub && this.prePopulateListsWithSelectedOptions(matchedSelectedStub, object);
     }
     return object;
   }
@@ -2946,20 +2947,17 @@ export class DTOService {
   }
 
   private prePopulateListsWithSelectedOptions(
-    selectedStubList: Array<Stubs.SearchShortcutIncludedDefinitionStub>,
+    selectedStub: Stubs.SearchShortcutIncludedDefinitionStub,
     targetDefinition: DTOs.SecurityDefinitionDTO
   ) {
-    const selectedStub = selectedStubList.find((definitionStub: Stubs.SearchShortcutIncludedDefinitionStub) => definitionStub.definitionKey === targetDefinition.data.key);
-    if (!!selectedStub) {
-      const selectedKeys = selectedStub.selectedOptions;
-      const preSelectedList = this.addPreSelectedOptionsToConfiguratorDefinitionList(targetDefinition.data.displayOptionList, selectedKeys);
-      targetDefinition.data.highlightSelectedOptionList = preSelectedList;
-      preSelectedList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => {
-        const displayOptionEquivalent = targetDefinition.data.displayOptionList.find((displayOption: Blocks.SecurityDefinitionFilterBlock) => displayOption.key === selectedOption.key);
-        if (!!displayOptionEquivalent) {
-          displayOptionEquivalent.isSelected = true;
-        }
-      })
-    }
+    const selectedKeys = selectedStub.selectedOptions;
+    const preSelectedList = this.addPreSelectedOptionsToConfiguratorDefinitionList(targetDefinition.data.displayOptionList, selectedKeys);
+    targetDefinition.data.highlightSelectedOptionList = preSelectedList;
+    preSelectedList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => {
+      const displayOptionEquivalent = targetDefinition.data.displayOptionList.find((displayOption: Blocks.SecurityDefinitionFilterBlock) => displayOption.key === selectedOption.key);
+      if (!!displayOptionEquivalent) {
+        displayOptionEquivalent.isSelected = true;
+      }
+    })
   }
 }
