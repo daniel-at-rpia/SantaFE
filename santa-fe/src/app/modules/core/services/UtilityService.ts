@@ -454,6 +454,18 @@ export class UtilityService {
               if (eachShortcutDef.data.displayOptionList.length === 0) {
                 // sometimes the display options are loaded async in API, in those cases the shortcut which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
                 eachDefinition.data.highlightSelectedOptionList = eachShortcutDef.data.highlightSelectedOptionList;
+                // Definition from the configurator may have display option populated if users unselect a preset, which populates the display option from the pristine option list
+                if (eachDefinition.data.displayOptionList.length > 0) {
+                  eachDefinition.data.highlightSelectedOptionList.forEach(highlightOption => {
+                    const existingDisplayOption = eachDefinition.data.displayOptionList.find((displayOption) => displayOption.shortKey === highlightOption.shortKey);
+                    if (!!existingDisplayOption) {
+                      const index = eachDefinition.data.displayOptionList.findIndex(displayOption => displayOption.shortKey === highlightOption.shortKey);
+                      if (index >= 0) {
+                        eachDefinition.data.displayOptionList[index] = highlightOption;
+                      }
+                    }
+                  })
+                }
               } else {
                 eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
                 eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
