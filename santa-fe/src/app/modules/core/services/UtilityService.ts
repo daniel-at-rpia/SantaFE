@@ -14,7 +14,7 @@
       BEStructuringBreakdownBlock,
       BEStructuringOverrideBaseBlock
     } from 'BEModels/backend-models.interface';
-    import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
+    import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -40,7 +40,8 @@
       SecurityDefinitionMap,
       StrategyExcludedFiltersMapping,
       FilterOptionsTenorRange,
-      SecurityDefinitionConfiguratorGroupLabels
+      SecurityDefinitionConfiguratorGroupLabels,
+      ConfiguratorDefinitionLayout
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       traceTradeFilterAmounts,
@@ -1285,6 +1286,45 @@ export class UtilityService {
       } else {
         return 'n/a';
       }
+    }
+
+    public createNewCoreDefinitionFromSelectedDefinitionChanges(
+      targetDefinition: DTOs. SecurityDefinitionDTO,
+      isHiddenDefinition: boolean,
+      filterActive: boolean
+    ): DTOs.SecurityDefinitionDTO {
+      const newDefinition: DTOs.SecurityDefinitionDTO = this.deepCopy(targetDefinition);
+      newDefinition.state.isHiddenInConfiguratorDefinitionBundle = isHiddenDefinition;
+      newDefinition.state.filterActive = !!filterActive;
+      newDefinition.data.configuratorCoreDefinitionGroup = this.setCoreDefinitionBundleLabel(targetDefinition.data.key);
+      return newDefinition;
+    }
+
+    public setCoreDefinitionBundleLabel(targetKey: string): SecurityDefinitionConfiguratorGroupLabels | null {
+      const nonSelectedDefinitionLayout = ConfiguratorDefinitionLayout.filter((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+      const selectedBundle = nonSelectedDefinitionLayout.find((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.list.find((definitionStub: Stubs.SecurityDefinitionStub) => definitionStub.key === targetKey));
+      if (!!selectedBundle) {
+        return selectedBundle.label as SecurityDefinitionConfiguratorGroupLabels;
+      } else {
+        return null;
+      }
+    }
+
+    public applySelectedDefinitionChangestoCoreDefinition(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      targetDefinition: DTOs.SecurityDefinitionDTO,
+      isHiddenDefinition: boolean,
+    ) {
+      configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO, definitionBundleIndex: number) => {
+        if (definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected) {
+          definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO, definitionIndex: number) => {
+            if (definition.data.key === targetDefinition.data.key) {
+              const newCoreDefinition = this.createNewCoreDefinitionFromSelectedDefinitionChanges(targetDefinition, isHiddenDefinition, targetDefinition.state.filterActive);
+              configurator.data.definitionList[definitionBundleIndex].data.list[definitionIndex] = newCoreDefinition
+            }
+          })
+        }
+      })
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
