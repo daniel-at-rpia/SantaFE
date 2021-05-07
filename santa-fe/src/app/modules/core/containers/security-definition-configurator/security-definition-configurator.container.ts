@@ -243,6 +243,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
 
   public clearAllSelectedOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
     targetDefinition.data.highlightSelectedOptionList = [];
+    targetDefinition.state.filterActive = false;
     if (targetDefinition.state.isFilterCapped) {
       targetDefinition.data.displayOptionList = [];
     } else {
