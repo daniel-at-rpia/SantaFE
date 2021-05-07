@@ -273,13 +273,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     this.onSearchKeywordChange('', hasAppliedFilter);
   }
 
-  private clearDefinitionFilterOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
-    targetDefinition.data.displayOptionList.forEach((eachOption) => {
-      eachOption.isSelected = false;
-    });
-    targetDefinition.state.filterActive = false;
-  }
-
   private checkFilterCanApply(): boolean {
     let canApply = false;
     this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
