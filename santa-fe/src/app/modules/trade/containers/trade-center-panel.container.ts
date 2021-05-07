@@ -321,7 +321,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       previewCopy.state.isSelected = false;
       previewCopy.state.isUserInputBlocked = true;
       this.state.currentSearch.previewShortcut = previewCopy;
-      this.state.configurator.dto.data = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto).data;
+      this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
+      if (!!targetPreset && targetPreset.data.searchFilters.length > 0) {
+        targetPreset.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
+          searchFilter.forEach((filter: DTOs.SecurityDefinitionDTO) => {
+            filter.state.isHiddenInConfiguratorDefinitionBundle = true;
+          })
+        })
+      }
       this.checkInitialPageLoadData();
       if (userTriggered) {
         this.restfulCommService.logEngagement(
