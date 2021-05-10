@@ -200,13 +200,13 @@
       <article
         [ngClass]="{
           'sat-tradeCenterPanelSearchEngine': true,
-          'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.presets.searchEngine.typeaheadActive
+          'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.searchEngine.typeaheadActive
         }">
         <section class="sat-tradeCenterPanelSearchEngine__bucket">
           <div class="sat-tradeCenterPanelSearchEngine__bucket-definition">
             <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">BICS: </span>
             <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
-              <li *ngFor="let eachKeyword of state.presets.searchEngine.constructedSearchBucket.BICS">
+              <li *ngFor="let eachKeyword of state.searchEngine.constructedSearchBucket.BICS">
                 {{eachKeyword}}
               </li>
             </ul>
@@ -217,7 +217,7 @@
             [autoFocus]="true"
             [isHero]="true"
             [placeholder]="''"
-            [inputValue]="state.presets.searchEngine.activeKeyword"
+            [inputValue]="state.searchEngine.activeKeyword"
             (onInputChange)="onSearchEngineInputChange($event)"
             (onGenericKeyPressed)="onSearchEngineKeyPressed($event)">
           </santa-input>
@@ -238,10 +238,10 @@
             <li
               (mouseover)="onHoverTypeaheadEntry(eachEntryIndex)"
               (click)="onClickTypeaheadEntry(eachEntry)"
-              *ngFor="let eachEntry of state.presets.searchEngine.typeaheadEntries; let eachEntryIndex = index;"
+              *ngFor="let eachEntry of state.searchEngine.typeaheadEntries; let eachEntryIndex = index;"
               [ngClass]="{
                 'sat-tradeCenterPanelSearchEngine__typeahead-list-item': true,
-                'sat-tradeCenterPanelSearchEngine__typeahead-list-item--selected': state.presets.searchEngine.selectedTypeaheadEntryIndex === eachEntryIndex
+                'sat-tradeCenterPanelSearchEngine__typeahead-list-item--selected': state.searchEngine.selectedTypeaheadEntryIndex === eachEntryIndex
               }">
               <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-displayText">{{eachEntry.displayText}}</span>
               <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-type">{{eachEntry.type}}</span>

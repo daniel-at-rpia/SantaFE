@@ -133,16 +133,16 @@ export interface TradeCenterPanelState {
     }
     savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
     trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
-    searchEngine: {
-      typeaheadActive: boolean;
-      selectedTypeaheadEntryIndex: number;
-      activeKeyword: string;
-      indexedKeywords: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;  // switch to <object> if we want to guarantee unique-ness
-      typeaheadEntries: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;
-      constructedSearchBucket: {
-        TICKER: Array<string>,
-        BICS: Array<string>
-      }
+  }
+  searchEngine: {
+    typeaheadActive: boolean;
+    selectedTypeaheadEntryIndex: number;
+    activeKeyword: string;
+    indexedKeywords: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;  // switch to <object> if we want to guarantee unique-ness
+    typeaheadEntries: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;
+    constructedSearchBucket: {
+      TICKER: Array<string>,
+      BICS: Array<string>
     }
   }
   configurator: {

@@ -106,17 +106,17 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             lastWeekList: []
           },
           savedWatchlistShortcutList: [],
-          trendingWatchlistShortcutList: [],
-          searchEngine: {
-            typeaheadActive: false,
-            selectedTypeaheadEntryIndex: 0,
-            activeKeyword: '',
-            indexedKeywords: [],
-            typeaheadEntries: [],
-            constructedSearchBucket: {
-              TICKER: [],
-              BICS: []
-            }
+          trendingWatchlistShortcutList: []
+        },
+        searchEngine: {
+          typeaheadActive: false,
+          selectedTypeaheadEntryIndex: 0,
+          activeKeyword: '',
+          indexedKeywords: [],
+          typeaheadEntries: [],
+          constructedSearchBucket: {
+            TICKER: [],
+            BICS: []
           }
         },
         configurator: {
@@ -270,6 +270,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             this.constants.trade.OwnershipShortcuts.splice(0, 1);
           }
           this.fetchBICsHierarchy();
+          this.fetchTickers();
         }
       });
 
@@ -495,6 +496,21 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           return of('error');
         })
       ).subscribe()
+    }
+
+    private fetchTickers() {
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getTickers, {req: 'GET'}).pipe(
+        first(),
+        tap((serverReturn: Array<string>) => {
+          if (!!serverReturn && serverReturn.length > 0) {
+            this.indexSearchEngineTickers(serverReturn);
+          }
+        }),
+        catchError(err => {
+          this.restfulCommService.logError('Cannot retrieve ticker data');
+          return of('error');
+        })
+      ).subscribe();
     }
 
     private populateSearchShortcuts() {
@@ -1299,8 +1315,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
   // Search Engine
     public onSearchEngineInputChange(newInput: string) {
       console.log('test, input change', newInput);
-      if (newInput !== this.state.presets.searchEngine.activeKeyword) {
-        this.state.presets.searchEngine.activeKeyword = newInput;
+      if (newInput !== this.state.searchEngine.activeKeyword) {
+        this.state.searchEngine.activeKeyword = newInput;
         this.performTypeaheadSearch();
       }
     }
@@ -1308,7 +1324,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     public onClickSearchBonds() {
       const definitionList = [];
       const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.TICKER);
-      definitionDTO.data.highlightSelectedOptionList = this.state.presets.searchEngine.constructedSearchBucket.BICS.map((eachOption) => {
+      definitionDTO.data.highlightSelectedOptionList = this.state.searchEngine.constructedSearchBucket.BICS.map((eachOption) => {
         // const bicsLevel = eachIncludedDef.definitionKey === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key ? Math.floor(eachOption.length/2) : null;
         // const optionValue = this.constants.definition.SecurityDefinitionMap[eachIncludedDef.definitionKey].securityDTOAttrBlock === 'bics' ? this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption) : eachOption;
         const optionValue = eachOption;
@@ -1333,7 +1349,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {
-      const searchEngine = this.state.presets.searchEngine;
+      const searchEngine = this.state.searchEngine;
       switch (event.keyCode) {
         case this.constants.trade.SEARCH_ENGINE_BREAK_KEY:
           event.preventDefault();
@@ -1370,8 +1386,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     public onHoverTypeaheadEntry(targetIndex: number) {
-      if (this.state.presets.searchEngine.selectedTypeaheadEntryIndex !== targetIndex) {
-        this.state.presets.searchEngine.selectedTypeaheadEntryIndex = targetIndex;
+      if (this.state.searchEngine.selectedTypeaheadEntryIndex !== targetIndex) {
+        this.state.searchEngine.selectedTypeaheadEntryIndex = targetIndex;
       }
     }
 
@@ -1383,15 +1399,26 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           const entry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry = {
             pristineText: leafBICSName,
             displayText: leafBICSName,
-            type: 'BICS - lv.' + this.bicsDictionaryLookupService.getBICSLevel(eachCode)
+            type: `${this.constants.trade.SEARCH_ENGINE_TYPES.BICS} - lv.${this.bicsDictionaryLookupService.getBICSLevel(eachCode)}`
           };
-          this.state.presets.searchEngine.indexedKeywords.push(entry);
+          this.state.searchEngine.indexedKeywords.push(entry);
         }
       }
     }
 
+    private indexSearchEngineTickers(tickerList: Array<string>) {
+      tickerList.forEach((eachTicker) => {
+        const entry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry = {
+          pristineText: eachTicker,
+          displayText: eachTicker,
+          type: this.constants.trade.SEARCH_ENGINE_TYPES.TICKER
+        };
+        this.state.searchEngine.indexedKeywords.push(entry);
+      });
+    }
+
     private performTypeaheadSearch() {
-      const searchEngine = this.state.presets.searchEngine;
+      const searchEngine = this.state.searchEngine;
       if (searchEngine.activeKeyword && searchEngine.activeKeyword.length >= this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_MINIMUM_CHAR_LENGTH) {
         searchEngine.typeaheadActive = true;
         searchEngine.typeaheadEntries = searchEngine.indexedKeywords.filter((eachEntry) => {
@@ -1432,7 +1459,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     private selectTypeaheadEntry(targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry) {
-      const searchEngine = this.state.presets.searchEngine;
+      const searchEngine = this.state.searchEngine;
       if (targetEntry.type.indexOf(this.constants.trade.SEARCH_ENGINE_TYPES.BICS) >= 0) {
         searchEngine.constructedSearchBucket.BICS.push(targetEntry.pristineText);
       } else if (targetEntry.type === this.constants.trade.SEARCH_ENGINE_TYPES.TICKER) {
