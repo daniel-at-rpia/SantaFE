@@ -611,13 +611,13 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
           padding: 0 $spacing_x_small;
           margin-left: $spacing_medium;
         }
-        &:hover {
+        &--selected {
           background-color: $color_active;
         }
-        &:hover>&-displayText {
+        &--selected>&-displayText {
           color: $font_color_inverse;
         }
-        &:hover>&-type {
+        &--selected>&-type {
           border-color: $color_white;
           color: $font_color_inverse;
         }

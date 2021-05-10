@@ -135,6 +135,7 @@ export interface TradeCenterPanelState {
     trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
     searchEngine: {
       typeaheadActive: boolean;
+      selectedTypeaheadEntryIndex: number;
       activeKeyword: string;
       indexedKeywords: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;  // switch to <object> if we want to guarantee unique-ness
       typeaheadEntries: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;

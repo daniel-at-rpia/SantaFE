@@ -109,6 +109,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           trendingWatchlistShortcutList: [],
           searchEngine: {
             typeaheadActive: false,
+            selectedTypeaheadEntryIndex: 0,
             activeKeyword: '',
             indexedKeywords: [],
             typeaheadEntries: [],
@@ -1300,9 +1301,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       console.log('test, input change', newInput);
       if (newInput !== this.state.presets.searchEngine.activeKeyword) {
         this.state.presets.searchEngine.activeKeyword = newInput;
-        if (newInput && newInput.length >= this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_MINIMUM_CHAR_LENGTH) {
-          this.performTypeaheadSearch();
-        }
+        this.performTypeaheadSearch();
       }
     }
 
@@ -1337,14 +1336,21 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const searchEngine = this.state.presets.searchEngine;
       if (event.keyCode === this.constants.trade.SEARCH_ENGINE_BREAK_KEY) {
         event.preventDefault();
-        if (searchEngine.activeKeyword && searchEngine.activeKeyword.length > 0) {
+        if (searchEngine.activeKeyword && searchEngine.activeKeyword.length > 0 && !!searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]) {
           console.log('test, got tab');
+          this.selectTypeaheadEntry(searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]);
         }
       }
     }
 
     public onClickTypeaheadEntry(targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry) {
       this.selectTypeaheadEntry(targetEntry);
+    }
+
+    public onHoverTypeaheadEntry(targetIndex: number) {
+      if (this.state.presets.searchEngine.selectedTypeaheadEntryIndex !== targetIndex) {
+        this.state.presets.searchEngine.selectedTypeaheadEntryIndex = targetIndex;
+      }
     }
 
     private indexSearchEngineBICS(bicsData: BEBICsHierarchyBlock) {
@@ -1376,11 +1382,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.performTypeaheadSearchSortResultByRelevancy();
         if (searchEngine.typeaheadEntries.length > this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP) {
           searchEngine.typeaheadEntries = searchEngine.typeaheadEntries.slice(0, this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP);
+        } else if (searchEngine.typeaheadEntries.length === 0) {
+          searchEngine.typeaheadActive = false;
         }
       } else {
         searchEngine.typeaheadEntries = [];
         searchEngine.typeaheadActive = false;
       }
+      searchEngine.selectedTypeaheadEntryIndex = 0;
     }
 
     private performTypeaheadSearchMatchEntry(

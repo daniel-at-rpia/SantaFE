@@ -236,9 +236,13 @@
         <section class="sat-tradeCenterPanelSearchEngine__typeahead">
           <ul class="sat-tradeCenterPanelSearchEngine__typeahead-list">
             <li
+              (mouseover)="onHoverTypeaheadEntry(eachEntryIndex)"
               (click)="onClickTypeaheadEntry(eachEntry)"
-              *ngFor="let eachEntry of state.presets.searchEngine.typeaheadEntries"
-              class="sat-tradeCenterPanelSearchEngine__typeahead-list-item">
+              *ngFor="let eachEntry of state.presets.searchEngine.typeaheadEntries; let eachEntryIndex = index;"
+              [ngClass]="{
+                'sat-tradeCenterPanelSearchEngine__typeahead-list-item': true,
+                'sat-tradeCenterPanelSearchEngine__typeahead-list-item--selected': state.presets.searchEngine.selectedTypeaheadEntryIndex === eachEntryIndex
+              }">
               <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-displayText">{{eachEntry.displayText}}</span>
               <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-type">{{eachEntry.type}}</span>
             </li>
