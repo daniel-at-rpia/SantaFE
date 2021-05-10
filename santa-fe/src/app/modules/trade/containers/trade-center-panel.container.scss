@@ -561,19 +561,21 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   }
 }
 
+$tradeCenterPanelSearchEngine_input_width: 30rem;
 .sat-tradeCenterPanelSearchEngine {
   $blockName: &;
   @include mix_border_radius(15px);
-  padding: $spacing_large;
+  // padding: $spacing_large;
   &__bucket {
     @include mix_fixed_div(absolute, $z_index_base_item);
     bottom: 100%;
   }
   &__input {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
-    width: 20rem;
+    // width: $tradeCenterPanelSearchEngine_input_width;
     santa-input {
-      flex: 1 1 auto;
+      width: $tradeCenterPanelSearchEngine_input_width;
     }
     // mat-form-field {
     //   flex: 1 1 auto;
@@ -582,17 +584,50 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   }
   &__typeahead {
     @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_border_radius(15px, 'bottom');
+    @include mix_border_generator;
+    @include material();
+    @include mix_alive('light');
+    display: none;
+    left: 0;
     top: 100%;
+    width: $tradeCenterPanelSearchEngine_input_width;
+    overflow: hidden;
+    background-color: $color_white;
     &-list {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
       &-item {
         display: flex;
-        justify-content: space-between;
         padding: $spacing_small;
+        &-displayText {
+          flex: 1 1 auto;
+        }
         &-type {
           @include mix_border_radius(3px);
           @include mix_border_generator;
+          flex: 0 0 auto;
           padding: 0 $spacing_x_small;
+          margin-left: $spacing_medium;
         }
+        &:hover {
+          background-color: $color_active;
+        }
+        &:hover>&-displayText {
+          color: $font_color_inverse;
+        }
+        &:hover>&-type {
+          border-color: $color_white;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--typeaheadActive {
+    #{$blockName} {
+      &__typeahead {
+        display: flex;
       }
     }
   }

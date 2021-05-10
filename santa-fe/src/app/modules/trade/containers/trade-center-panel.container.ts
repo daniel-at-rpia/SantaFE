@@ -1334,16 +1334,17 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {
-      console.log('test', event);
       const searchEngine = this.state.presets.searchEngine;
       if (event.keyCode === this.constants.trade.SEARCH_ENGINE_BREAK_KEY) {
         event.preventDefault();
         if (searchEngine.activeKeyword && searchEngine.activeKeyword.length > 0) {
           console.log('test, got tab');
-          searchEngine.constructedSearchBucket.BICS.push(searchEngine.activeKeyword);
-          searchEngine.activeKeyword = "";
         }
       }
+    }
+
+    public onClickTypeaheadEntry(targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry) {
+      this.selectTypeaheadEntry(targetEntry);
     }
 
     private indexSearchEngineBICS(bicsData: BEBICsHierarchyBlock) {
@@ -1363,17 +1364,22 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     private performTypeaheadSearch() {
       const searchEngine = this.state.presets.searchEngine;
-      searchEngine.typeaheadActive = true;
-      searchEngine.typeaheadEntries = searchEngine.indexedKeywords.filter((eachEntry) => {
-        if (this.performTypeaheadSearchMatchEntry(eachEntry, searchEngine.activeKeyword)) {
-          return true;
-        } else {
-          return false;
+      if (searchEngine.activeKeyword && searchEngine.activeKeyword.length >= this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_MINIMUM_CHAR_LENGTH) {
+        searchEngine.typeaheadActive = true;
+        searchEngine.typeaheadEntries = searchEngine.indexedKeywords.filter((eachEntry) => {
+          if (this.performTypeaheadSearchMatchEntry(eachEntry, searchEngine.activeKeyword)) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        this.performTypeaheadSearchSortResultByRelevancy();
+        if (searchEngine.typeaheadEntries.length > this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP) {
+          searchEngine.typeaheadEntries = searchEngine.typeaheadEntries.slice(0, this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP);
         }
-      });
-      this.performTypeaheadSearchSortResultByRelevancy();
-      if (searchEngine.typeaheadEntries.length > this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP) {
-        searchEngine.typeaheadEntries = searchEngine.typeaheadEntries.slice(0, this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP);
+      } else {
+        searchEngine.typeaheadEntries = [];
+        searchEngine.typeaheadActive = false;
       }
     }
 
@@ -1392,6 +1398,17 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     private performTypeaheadSearchSortResultByRelevancy() {
 
+    }
+
+    private selectTypeaheadEntry(targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry) {
+      const searchEngine = this.state.presets.searchEngine;
+      if (targetEntry.type.indexOf(this.constants.trade.SEARCH_ENGINE_TYPES.BICS) >= 0) {
+        searchEngine.constructedSearchBucket.BICS.push(targetEntry.pristineText);
+      } else if (targetEntry.type === this.constants.trade.SEARCH_ENGINE_TYPES.TICKER) {
+        searchEngine.constructedSearchBucket.TICKER.push(targetEntry.pristineText);
+      }
+      searchEngine.activeKeyword = "";
+      this.performTypeaheadSearch();
     }
   // Search Engine End
 }
