@@ -28,7 +28,8 @@ export class GlobalWorkflowIOService {
     idbVersion: INDEXEDDB_VERSION,
     idbWorkflowDbName: INDEXEDDB_WORKFLOW_DATABASE_NAME,
     idbWorkflowAllStateTableName: INDEXEDDB_WORKFLOW_TABLE_NAME,
-    idbWorkflowLastStateTableName: INDEXEDDB_LAST_STATE_TABLE_NAME
+    idbWorkflowLastStateTableName: INDEXEDDB_LAST_STATE_TABLE_NAME,
+    moduleUrl: NavigationModule
   }
 
   private currentState: string = 'initialState';
@@ -205,7 +206,14 @@ export class GlobalWorkflowIOService {
 
     public removeTradeRoutesinRouteHandlerStore() {
       if (this.routeHandlerStore.length > 0 ) {
-        this.routeHandlerStore = this.routeHandlerStore.filter((handle: any) => !handle.handle.route.value.snapshot.routeConfig.path.includes('trade/:stateId'))
+        this.routeHandlerStore = this.routeHandlerStore.filter((handle: any) => {
+          if (!!handle && !!handle.handle && !!handle.handle.route && !!handle.handle.route.value && !!handle.handle.route.value.snapshot && !!handle.handle.route.value.snapshot.url && handle.handle.route.value.snapshot.url.length > 0) {
+            const isTradeRoute = handle.handle.route.value.snapshot.url.find(url => url.path === this.constants.moduleUrl.trade);
+            return !isTradeRoute;
+          } else {
+            return true;
+          }
+        })
       }
     }
 
