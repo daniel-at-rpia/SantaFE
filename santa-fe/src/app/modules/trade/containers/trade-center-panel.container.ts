@@ -1349,11 +1349,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private indexSearchEngineBICS(bicsData: BEBICsHierarchyBlock) {
       for (const eachCode in bicsData) {
         const leafBICSName = bicsData[eachCode].item7 || bicsData[eachCode].item6 || bicsData[eachCode].item5 || bicsData[eachCode].item4 || bicsData[eachCode].item3 || bicsData[eachCode].item2 || bicsData[eachCode].item1;
+        let level = 1;
         if (leafBICSName) {
           const entry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry = {
-            pristineKeyword: leafBICSName,
-            displayKeyword: leafBICSName,
-            type: 'BICS'
+            pristineText: leafBICSName,
+            displayText: leafBICSName,
+            type: 'BICS - lv.' + this.bicsDictionaryLookupService.getBICSLevel(eachCode)
           };
           this.state.presets.searchEngine.indexedKeywords.push(entry);
         }
@@ -1380,10 +1381,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry, 
       keyword: string
     ): boolean {
-      // if (condition) {
-        // code...
-      // }
-      return true;
+      const parsedPristineEntryText = targetEntry.pristineText.toUpperCase();
+      const parsedKeyword = keyword.toUpperCase();
+      if (parsedPristineEntryText.indexOf(parsedKeyword) >= 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     private performTypeaheadSearchSortResultByRelevancy() {

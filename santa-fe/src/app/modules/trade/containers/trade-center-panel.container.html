@@ -235,7 +235,10 @@
         </section>
         <section class="sat-tradeCenterPanelSearchEngine__typeahead">
           <ul class="sat-tradeCenterPanelSearchEngine__typeahead-list">
-            <li *ngFor="let eachEntry of state.presets.searchEngine.typeaheadEntries" class="sat-tradeCenterPanelSearchEngine__typeahead-list-item">{{eachEntry.displayKeyword}}</li>
+            <li *ngFor="let eachEntry of state.presets.searchEngine.typeaheadEntries" class="sat-tradeCenterPanelSearchEngine__typeahead-list-item">
+              <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-displayText">{{eachEntry.displayText}}</span>
+              <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-type">{{eachEntry.type}}</span>
+            </li>
           </ul>
         </section>
       </article>

@@ -279,7 +279,7 @@ export type IndexedDBAllDatabaseMapping = {
 }
 
 export interface TradeCenterPanelSearchEngineIndexEntry {
-  pristineKeyword: string;
-  displayKeyword: string;
+  pristineText: string;
+  displayText: string;
   type: string;
 }
