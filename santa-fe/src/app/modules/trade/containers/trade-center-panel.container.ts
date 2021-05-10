@@ -1334,12 +1334,34 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {
       const searchEngine = this.state.presets.searchEngine;
-      if (event.keyCode === this.constants.trade.SEARCH_ENGINE_BREAK_KEY) {
-        event.preventDefault();
-        if (searchEngine.activeKeyword && searchEngine.activeKeyword.length > 0 && !!searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]) {
-          console.log('test, got tab');
-          this.selectTypeaheadEntry(searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]);
-        }
+      switch (event.keyCode) {
+        case this.constants.trade.SEARCH_ENGINE_BREAK_KEY:
+          event.preventDefault();
+          if (searchEngine.activeKeyword && searchEngine.activeKeyword.length > 0 && !!searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]) {
+            console.log('test, got tab');
+            this.selectTypeaheadEntry(searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]);
+          }
+          break;
+        case this.constants.trade.SEARCH_ENGINE_DOWNWARD_KEY:
+          event.preventDefault();
+          if (searchEngine.typeaheadEntries.length > 1) {
+            searchEngine.selectedTypeaheadEntryIndex++;
+            if (searchEngine.selectedTypeaheadEntryIndex >= searchEngine.typeaheadEntries.length ) {
+              searchEngine.selectedTypeaheadEntryIndex = 0;
+            }
+          }
+          break;
+        case this.constants.trade.SEARCH_ENGINE_UPWARD_KEY:
+          event.preventDefault();
+          if (searchEngine.typeaheadEntries.length > 1) {
+            searchEngine.selectedTypeaheadEntryIndex--;
+            if (searchEngine.selectedTypeaheadEntryIndex < 0) {
+              searchEngine.selectedTypeaheadEntryIndex = searchEngine.typeaheadEntries.length - 1;
+            }
+          }
+        default:
+          // code...
+          break;
       }
     }
 
