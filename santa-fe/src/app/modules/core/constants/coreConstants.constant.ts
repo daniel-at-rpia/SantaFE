@@ -217,7 +217,7 @@ export const FrontendKeyToBackendKeyDictionary = {
   'PORTFOLIO': 'PortfolioShortName',
   'STRATEGY': 'StrategyName',
   'OWNER': 'Owner',
-  'PRIMARY': 'PrimaryPmName',
+  'PRIMARY_PORTFOLIO_MANAGER': 'PrimaryPmName',
   // metrics
   'SPREAD': 'oasSpread',
   'PRICE': 'price',
