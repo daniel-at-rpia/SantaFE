@@ -135,13 +135,8 @@ export class BICSDataProcessingService {
   }
 
   public returnAllBICSBasedOnHierarchyDepth(depth: number): Array<string> {
-    const allBICSList = [];
-    this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
-      allBICSList,
-      this.formattedBICsHierarchyData.children,
-      depth,
-      1
-    );
+    const identifier = `level${depth}`;
+    const allBICSList = this.bicsDictionaryLookupService.getBICSCategoryNamesByLevel(identifier);
     allBICSList.sort((bicsA, bicsB) => {
       if (bicsA > bicsB) {
         return 1;
@@ -281,10 +276,10 @@ export class BICSDataProcessingService {
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
     const deltaRawData = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(rawData => rawData.portfolioID === categoryPortfolioID) : null;
     const targetCodeList = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(breakdownRow.data.code);
-    let subTierList: Array<string> = [];
+    let subLevelCategoryNames: Array<string> = [];
     targetCodeList.forEach(subLevelCode => {
       const name = this.bicsDictionaryLookupService.BICSCodeToBICSName(subLevelCode);
-      subTierList = [...subTierList, name];
+      subLevelCategoryNames = [...subLevelCategoryNames, name];
     })
     const customRawBreakdown: BEStructuringBreakdownBlock = this.formBEBreakdownRawDataFromCategorizationBlock(
       selectedSubRawBICsData,
@@ -307,7 +302,7 @@ export class BICSDataProcessingService {
         }
       })
     }
-    const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, customRawDeltaBreakdown, subTierList, isDisplayCs01);
+    const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, customRawDeltaBreakdown, subLevelCategoryNames, isDisplayCs01);
     breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
     this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
     this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
