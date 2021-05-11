@@ -282,4 +282,5 @@ export interface TradeCenterPanelSearchEngineIndexEntry {
   pristineText: string;
   displayText: string;
   type: string;
+  bicsLevel?: number;
 }

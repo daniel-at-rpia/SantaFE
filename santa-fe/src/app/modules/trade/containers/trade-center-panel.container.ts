@@ -1321,23 +1321,16 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     }
 
-    public onClickSearchBonds() {
+    public onClickSearchEngineSearchBonds() {
       const definitionList = [];
-      const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.TICKER);
-      definitionDTO.data.highlightSelectedOptionList = this.state.searchEngine.constructedSearchBucket.BICS.map((eachOption) => {
-        // const bicsLevel = eachIncludedDef.definitionKey === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key ? Math.floor(eachOption.length/2) : null;
-        // const optionValue = this.constants.definition.SecurityDefinitionMap[eachIncludedDef.definitionKey].securityDTOAttrBlock === 'bics' ? this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOption) : eachOption;
-        const optionValue = eachOption;
-        const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
-          this.constants.definition.SecurityDefinitionMap.TICKER.key,
-          optionValue,
-          null
-        );
-        selectedOption.isSelected = true;
-        return selectedOption;
-      });
-      definitionDTO.state.filterActive = true;
-      definitionList.push(definitionDTO);
+      if (this.state.searchEngine.constructedSearchBucket.BICS.length > 0) {
+        const BICSDefinitionDTO = this.searchEngineSearchBondsGenerateBICSDefinition();
+        definitionList.push(BICSDefinitionDTO);
+      }
+      if (this.state.searchEngine.constructedSearchBucket.TICKER.length > 0) {
+        const tickerDefinitionDTO = this.searchEngineSearchBondsGenerateTickerDefinition();
+        definitionList.push(tickerDefinitionDTO);
+      }
       const shortcut = this.dtoService.formSearchShortcutObject(
         definitionList,
         'Test Search Engine',
@@ -1394,12 +1387,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private indexSearchEngineBICS(bicsData: BEBICsHierarchyBlock) {
       for (const eachCode in bicsData) {
         const leafBICSName = bicsData[eachCode].item7 || bicsData[eachCode].item6 || bicsData[eachCode].item5 || bicsData[eachCode].item4 || bicsData[eachCode].item3 || bicsData[eachCode].item2 || bicsData[eachCode].item1;
-        let level = 1;
         if (leafBICSName) {
           const entry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry = {
             pristineText: leafBICSName,
             displayText: leafBICSName,
-            type: `${this.constants.trade.SEARCH_ENGINE_TYPES.BICS} - lv.${this.bicsDictionaryLookupService.getBICSLevel(eachCode)}`
+            type: `${this.constants.trade.SEARCH_ENGINE_TYPES.BICS} - lv.${this.bicsDictionaryLookupService.getBICSLevel(eachCode)}`,
+            bicsLevel: this.bicsDictionaryLookupService.getBICSLevel(eachCode)
           };
           this.state.searchEngine.indexedKeywords.push(entry);
         }
@@ -1461,12 +1454,45 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     private selectTypeaheadEntry(targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry) {
       const searchEngine = this.state.searchEngine;
       if (targetEntry.type.indexOf(this.constants.trade.SEARCH_ENGINE_TYPES.BICS) >= 0) {
-        searchEngine.constructedSearchBucket.BICS.push(targetEntry.pristineText);
+        searchEngine.constructedSearchBucket.BICS.push(targetEntry);
       } else if (targetEntry.type === this.constants.trade.SEARCH_ENGINE_TYPES.TICKER) {
-        searchEngine.constructedSearchBucket.TICKER.push(targetEntry.pristineText);
+        searchEngine.constructedSearchBucket.TICKER.push(targetEntry);
       }
       searchEngine.activeKeyword = "";
       this.performTypeaheadSearch();
+    }
+
+    private searchEngineSearchBondsGenerateBICSDefinition(): DTOs.SecurityDefinitionDTO {
+      const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED);
+      definitionDTO.data.highlightSelectedOptionList = this.state.searchEngine.constructedSearchBucket.BICS.map((eachEntry) => {
+        const bicsLevel = eachEntry.bicsLevel;
+        const optionValue = eachEntry.pristineText;
+        const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+          this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
+          optionValue,
+          bicsLevel
+        );
+        selectedOption.isSelected = true;
+        return selectedOption;
+      });
+      definitionDTO.state.filterActive = true;
+      return definitionDTO;
+    }
+
+    private searchEngineSearchBondsGenerateTickerDefinition(): DTOs.SecurityDefinitionDTO {
+      const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.TICKER);
+      definitionDTO.data.highlightSelectedOptionList = this.state.searchEngine.constructedSearchBucket.TICKER.map((eachEntry) => {
+        const optionValue = eachEntry.pristineText;
+        const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+          this.constants.definition.SecurityDefinitionMap.TICKER.key,
+          optionValue,
+          null
+        );
+        selectedOption.isSelected = true;
+        return selectedOption;
+      });
+      definitionDTO.state.filterActive = true;
+      return definitionDTO;
     }
   // Search Engine End
 }

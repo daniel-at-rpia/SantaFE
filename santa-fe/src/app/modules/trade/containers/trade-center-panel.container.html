@@ -206,8 +206,18 @@
           <div class="sat-tradeCenterPanelSearchEngine__bucket-definition">
             <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">BICS: </span>
             <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
-              <li *ngFor="let eachKeyword of state.searchEngine.constructedSearchBucket.BICS">
-                {{eachKeyword}}
+              <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.BICS" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition">
+            <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">Ticker: </span>
+            <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
+              <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.TICKER" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
               </li>
             </ul>
           </div>
@@ -228,7 +238,7 @@
               (onInputChange)="onSearchEngineInputChange($event)"
               >
           </mat-form-field> -->
-          <button (click)="onClickSearchBonds()" class="santaBtn--labelled">
+          <button (click)="onClickSearchEngineSearchBonds()" class="santaBtn--labelled">
             <i class="fal fa-search"></i>
             <span>Search</span>
           </button>

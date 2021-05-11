@@ -568,7 +568,33 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
   // padding: $spacing_large;
   &__bucket {
     @include mix_fixed_div(absolute, $z_index_base_item);
+    display: flex;
+    flex-direction: column;
     bottom: 100%;
+    &-definition {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      &-label {
+        font-size: $font_size_large;
+        color: $font_color_minor;
+      }
+      &-list {
+        display: flex;
+        margin-left: $spacing_medium;
+        &-item {
+          margin-left: $spacing_medium;
+          &-text {
+          }
+          &-type {
+            @include mix_border_radius(3px);
+            @include mix_border_generator;
+            padding: 0 $spacing_x_small;
+            margin-left: $spacing_medium;
+          }
+        }
+      }
+    }
   }
   &__input {
     @include mix_fixed_div(relative, $z_index_base_item_solid);

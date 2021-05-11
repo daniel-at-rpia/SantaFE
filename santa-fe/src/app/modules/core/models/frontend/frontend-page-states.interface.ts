@@ -141,8 +141,8 @@ export interface TradeCenterPanelState {
     indexedKeywords: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;  // switch to <object> if we want to guarantee unique-ness
     typeaheadEntries: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>;
     constructedSearchBucket: {
-      TICKER: Array<string>,
-      BICS: Array<string>
+      TICKER: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>,
+      BICS: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>
     }
   }
   configurator: {
