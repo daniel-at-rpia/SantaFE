@@ -130,7 +130,7 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
     displayTitle: 'Arnav',
     includedDefinitions: [
       {
-        definitionKey: 'RESEARCH',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['AG']
       },
@@ -200,7 +200,7 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
     displayTitle: 'Lorne',
     includedDefinitions: [
       {
-        definitionKey: 'RESEARCH',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['LC']
       },
@@ -210,7 +210,7 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
     displayTitle: 'Louise',
     includedDefinitions: [
       {
-        definitionKey: 'RESEARCH',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['LP']
       },
@@ -230,7 +230,7 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
     displayTitle: 'Phillip',
     includedDefinitions: [
       {
-        definitionKey: 'RESEARCH',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['PD']
       },
@@ -250,7 +250,7 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
     displayTitle: 'Ryan',
     includedDefinitions: [
       {
-        definitionKey: 'RESEARCH',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['RV']
       },
@@ -270,7 +270,7 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
     displayTitle: 'Tony',
     includedDefinitions: [
       {
-        definitionKey: 'RESEARCH',
+        definitionKey: 'PRIMARY_PORTFOLIO_MANAGER',
         groupByActive: false,
         selectedOptions: ['TW']
       },

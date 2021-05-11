@@ -280,6 +280,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
   const FilterOptionsPortfolioManagerList = [
+    'AG',
     'AY',
     'BT',
     'DA',
@@ -287,7 +288,11 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'DJ',
     'DM',
     'IL',
+    'LC',
+    'LP',
+    'PD',
     'PM',
+    'RV',
     'SP',
     'TW'
   ];
