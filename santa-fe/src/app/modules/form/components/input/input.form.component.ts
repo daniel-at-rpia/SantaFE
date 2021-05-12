@@ -6,6 +6,7 @@ import {
   EventEmitter,
   OnChanges
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'santa-input',
@@ -24,11 +25,15 @@ export class SantaInput implements OnChanges{
   @Input() isDisabled: boolean;
   @Input() isNonEditable: boolean;
   @Input() autoFocus: boolean;
+  @Input() label: string;
   @Output() onInputChange = new EventEmitter<string>();
   @Output() onInputFocus = new EventEmitter();
   @Output() onInputBlur = new EventEmitter();
   @Output() onEnterKeyPressed = new EventEmitter<string>();
   @Output() onGenericKeyPressed = new EventEmitter<KeyboardEvent>();
+
+  public formControl = new FormControl(null);
+  
   constructor(
   ) {
   }
