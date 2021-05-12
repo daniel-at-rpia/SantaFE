@@ -30,8 +30,6 @@ import { PortfolioStructureBreakdownRowEmptySample } from 'Structure/stubs/struc
 export class BICSDataProcessingService {
   private bicsRawData: Array<Blocks.BICSCategorizationBlock> = [];
   private bicsComparedDeltaRawData: Array<Blocks.BICSCategorizationBlock> = [];
-  private formattedBICsHierarchyData: Blocks.BICsHierarchyAllDataBlock;
-  private subBicsLevelList: Array<string> = [];
   private bicsRawCategoryCodes: Array<string> = [];
 
   constructor(
@@ -42,23 +40,11 @@ export class BICSDataProcessingService {
 
   public loadBICSData(
     data: BEBICsHierarchyBlock,
-    parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock,
     immediatelyLoadBICSToConfigurator?: DTOs.SecurityDefinitionConfiguratorDTO
   ) {
-    if (this.bicsRawCategoryCodes && this.formattedBICsHierarchyData) {
-      // the data would be already formed if the user was on a diff page before, therefore no need to form it again
-      !!immediatelyLoadBICSToConfigurator && this.loadBICSOptionsIntoConfigurator(immediatelyLoadBICSToConfigurator);
-    } else {
-      this.bicsRawCategoryCodes = [...Object.keys(data)];
-      this.bicsDictionaryLookupService.loadBICSData(data);
-      this.setBICsLevelOneCategories(data, parent);
-      // if the formattedBICsHierarchyData is not formed, then we should form it in an async process because it is very costly. And sometimes we need to populate the bics in a configurator rightaway, if so then do that right after the formattedBICsHierarchyData is ready
-      setTimeout(function(){
-        this.iterateBICsData(data, parent);
-        this.formattedBICsHierarchyData = parent;
-        !!immediatelyLoadBICSToConfigurator && this.loadBICSOptionsIntoConfigurator(immediatelyLoadBICSToConfigurator);
-      }.bind(this), 2000);
-    }
+    this.bicsRawCategoryCodes = [...Object.keys(data)];
+    this.bicsDictionaryLookupService.loadBICSData(data);
+    !!immediatelyLoadBICSToConfigurator && this.loadBICSOptionsIntoConfigurator(immediatelyLoadBICSToConfigurator);
   }
 
   public getTargetSpecificHierarchyList(
@@ -145,13 +131,8 @@ export class BICSDataProcessingService {
   }
 
   public returnAllBICSBasedOnHierarchyDepth(depth: number): Array<string> {
-    const allBICSList = [];
-    this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
-      allBICSList,
-      this.formattedBICsHierarchyData.children,
-      depth,
-      1
-    );
+    const identifier = `level${depth}`;
+    const allBICSList = this.bicsDictionaryLookupService.getBICSCategoryNamesByLevel(identifier);
     allBICSList.sort((bicsA, bicsB) => {
       if (bicsA > bicsB) {
         return 1;
@@ -271,17 +252,6 @@ export class BICSDataProcessingService {
     }
   }
 
-  public getSubLevelList(
-    category: string,
-    bicsLevel: number = 1
-  ): Array<string> {
-    if(!!this.formattedBICsHierarchyData) {
-      const BICSDataList = this.formattedBICsHierarchyData.children.map(category => category); 
-      this.getSubLevels(category, bicsLevel, BICSDataList);
-      return this.subBicsLevelList;
-    }
-  }
-
   public formSubLevelBreakdown(
     breakdownRow: DTOs.StructurePortfolioBreakdownRowDTO,
     isDisplayCs01: boolean,
@@ -291,10 +261,10 @@ export class BICSDataProcessingService {
     const selectedSubRawBICsData = this.bicsRawData.find(rawData => rawData.portfolioID === categoryPortfolioID);
     const deltaRawData = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(rawData => rawData.portfolioID === categoryPortfolioID) : null;
     const targetCodeList = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(breakdownRow.data.code);
-    let subTierList: Array<string> = [];
+    let subLevelCategoryNames: Array<string> = [];
     targetCodeList.forEach(subLevelCode => {
       const name = this.bicsDictionaryLookupService.BICSCodeToBICSName(subLevelCode);
-      subTierList = [...subTierList, name];
+      subLevelCategoryNames = [...subLevelCategoryNames, name];
     })
     const customRawBreakdown: BEStructuringBreakdownBlock = this.formBEBreakdownRawDataFromCategorizationBlock(
       selectedSubRawBICsData,
@@ -317,7 +287,7 @@ export class BICSDataProcessingService {
         }
       })
     }
-    const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, customRawDeltaBreakdown, subTierList, isDisplayCs01);
+    const breakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, customRawDeltaBreakdown, subLevelCategoryNames, isDisplayCs01);
     breakdown.data.diveInLevel = breakdownRow.data.diveInLevel + 1;
     this.setBreakdownListProperties(breakdown.data.rawCs01CategoryList, breakdownRow);
     this.setBreakdownListProperties(breakdown.data.rawLeverageCategoryList, breakdownRow);
@@ -480,27 +450,6 @@ export class BICSDataProcessingService {
     }
   }
 
-  private setBICsLevelOneCategories(
-    data: BEBICsHierarchyBlock,
-    parent: Blocks.BICsHierarchyAllDataBlock
-  ) {
-    for (let code in data) {
-      if (!!data[code]) {
-        const intiialLevel = 1;
-        const key = `item${intiialLevel}`;
-        const BICsData: Blocks.BICsHierarchyBlock = {
-          name: data[code][key],
-          bicsLevel: intiialLevel,
-          code: code,
-          children: []
-        }
-        const isExists = parent.children.find(block => block.name === data[code][key])
-        if (!isExists) {
-          parent.children.push(BICsData);;
-        }
-      }
-    }
-  }
 
   private formCompleteHierarchyWithSubLevels(
     rawData: BEBICsHierarchyBlock,
@@ -537,110 +486,6 @@ export class BICSDataProcessingService {
     }
   }
 
-  private iterateBICsData(
-    rawData: BEBICsHierarchyBlock,
-    parent: Blocks.BICsHierarchyAllDataBlock | Blocks.BICsHierarchyBlock
-  ) {
-    parent.children.forEach(category => {
-      let counter = 1;
-      this.formCompleteHierarchyWithSubLevels(rawData, category, counter)
-    })
-  }
-
-  private getSubLevels(
-    category: string,
-    bicsLevel: number,
-    data: Array<Blocks.BICsHierarchyBlock>
-  ): Array<string> {
-    if (!data || data.length <= 0) return;
-    data.forEach(block => {
-      for (let key in block) {
-        const value = block[key];
-        if (category === block.name && bicsLevel === block.bicsLevel) { 
-          const subLevels = block.children.map(child => child.name); 
-          this.subBicsLevelList = subLevels;
-        } else {
-          if (Array.isArray(value)) {
-            this.getSubLevels(category, bicsLevel, value);
-          }
-        }
-      }
-    })
-  }
-
-  private recursiveTraverseForPackagingAllBICSAtGivenDepth(
-    packageList: Array<string>,
-    formattedDataList: Array<Blocks.BICsHierarchyBlock>,
-    targetDepth: number,
-    counter: number
-  ) {
-    if (targetDepth === counter) {
-      formattedDataList.forEach((eachBlock) => {
-        packageList.push(eachBlock.name);
-      });
-    } else {
-      formattedDataList.forEach((eachBlock) => {
-        if (eachBlock.children && eachBlock.children.length > 0) {
-          const newCounter = counter + 1;
-          this.recursiveTraverseForPackagingAllBICSAtGivenDepth(
-            packageList,
-            eachBlock.children,
-            targetDepth,
-            newCounter
-          );
-        }
-      });
-    }
-  }
-
-  private getLevelRecursion(
-    targetCategory: string,
-    currentLevel: number,
-    currentLevelBlockList: Array<Blocks.BICsHierarchyBlock>
-  ): number {
-    if (!currentLevelBlockList || currentLevelBlockList.length === 0) {
-      return -1;
-    } else {
-      const existOnThisLevel = currentLevelBlockList.find((eachBlock) => {
-        return eachBlock.name === targetCategory;
-      });
-      if (!!existOnThisLevel) {
-        return currentLevel;
-      } else {
-        const resultInChild = currentLevelBlockList.map((eachBlock) => {
-          return this.getLevelRecursion(
-            targetCategory,
-            currentLevel+1,
-            eachBlock.children
-          );
-        });
-        const childExistLevel = Math.max(...resultInChild);
-        if ( childExistLevel > 0) {
-          return childExistLevel;
-        } else {
-          return -1;
-        }
-      }
-    }
-  }
-
-  private convertCategoryToChildren(
-    category: string,
-    categoryLevel: number,
-    targetLevel: number
-  ): Array<string>{
-    let loopCategoryList = [category];
-    for (let i = categoryLevel; i < targetLevel; i++) {
-      let convertResult = [];
-      loopCategoryList.forEach((eachCategory) =>{
-        const children = this.getSubLevelList(eachCategory, i);
-        convertResult = convertResult.concat(children);
-      });
-      loopCategoryList = convertResult;
-    }
-    return loopCategoryList;
-  }
-
   private formBEBreakdownRawDataFromCategorizationBlock(
     rawData: Blocks.BICSCategorizationBlock,
     level: number,
@@ -670,24 +515,6 @@ export class BICSDataProcessingService {
     } else {
       return null;
     }
-  }
-
-  private getBICsBreakdownDefinitionList(rawData: BEStructuringBreakdownBlock): Array<string> {
-    const definitionList = [];
-    for (const category in rawData.breakdown) {
-      definitionList.push(category);
-    }
-    return definitionList;
-  }
-
-  private getShallowestLevel(category: string): number {
-    // traverse the bics and return the level of the earliest encounter of a given bics, useful to find the true level of a bics since now that same category would nest over and over
-    // not used in anywhere but might be useful
-    return this.getLevelRecursion(
-      category,
-      1,
-      this.formattedBICsHierarchyData.children
-    );
   }
 
   private getDisplayedSubLevelsWithTargetsForCategory(
