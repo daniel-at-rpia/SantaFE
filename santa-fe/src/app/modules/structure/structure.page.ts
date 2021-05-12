@@ -41,11 +41,6 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
 
   private initializePageState(): PageStates.StructureState {
     const state: PageStates.StructureState = {
-      BICsData: {
-        formattedBICsHierarchy: {
-          children: [],
-        },
-      },
       fetchResult: {
         fetchBICsHierarchyFailed: false,
         fetchBICsHierarchyError: ''
@@ -102,7 +97,7 @@ export class StructurePage extends SantaContainerComponentBase implements OnInit
       tap((serverReturn: BEBICsHierarchyBlock) => {
        if (!!serverReturn) {
          this.updateBICsFetch(true);
-         this.bicsDataProcessingService.loadBICSData(serverReturn, this.state.BICsData.formattedBICsHierarchy);
+         this.bicsDataProcessingService.loadBICSData(serverReturn);
        }
       }),
       catchError(err => {

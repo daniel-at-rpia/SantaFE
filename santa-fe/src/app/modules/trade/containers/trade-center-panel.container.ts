@@ -438,7 +438,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       first(),
       tap((serverReturn: BEBICsHierarchyBlock) => {
         if (!!serverReturn) {
-          this.bicsDataProcessingService.loadBICSData(serverReturn, {children: []});
+          this.bicsDataProcessingService.loadBICSData(serverReturn);
           this.dtoService.loadBICSOptionsIntoConfigurator(
             this.state.configurator.dto,
             this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(1),
