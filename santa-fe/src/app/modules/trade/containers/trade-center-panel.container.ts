@@ -481,8 +481,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         tap((serverReturn: BEBICsHierarchyBlock) => {
           if (!!serverReturn) {
             this.bicsDataProcessingService.loadBICSData(
-              serverReturn, 
-              {children: []},
+              serverReturn,
               this.state.configurator.dto
             );
             this.populateSearchShortcuts();
@@ -843,10 +842,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             return portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList[0].shortKey === targetPortfolioDefinition.data.highlightSelectedOptionList[0].shortKey;
           }
         });
+        let targetPresetCopy: DTOs.SearchShortcutDTO;
         if (!!targetPreset) {
-          targetPreset.data.displayTitle = `${targetPreset.data.displayTitle} - ${presetDisplayTitle}`;
-          targetPreset.state.isAbleToSaveAsRecentWatchlist = true;
-          this.onSelectPreset(targetPreset, false);
+          targetPresetCopy = this.utilityService.deepCopy(targetPreset);
+          targetPresetCopy.data.displayTitle = `${targetPresetCopy.data.displayTitle} - ${presetDisplayTitle}`;
+          targetPresetCopy.state.isAbleToSaveAsRecentWatchlist = true;
+          this.onSelectPreset(targetPresetCopy, false);
         } else {
           this.onSelectPreset(this.state.presets.portfolioShortcutList[0], false);
         }
@@ -873,7 +874,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
         const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
         this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-        this.onApplyFilter(params, false, portfolioMetric, targetPreset);
+        this.onApplyFilter(params, false, portfolioMetric, targetPresetCopy);
         this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
         this.loadFreshData();
         this.state.currentSearch.redirectedFromStrurturing = true;

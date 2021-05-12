@@ -84,6 +84,30 @@ export class BICSDictionaryLookupService {
     return subLevelCodes;
   }
 
+  public getSubLevelCategoryNames(targetCode: string): Array<string> {
+    const targetCodeList = this.getNextBICSSubLevelCodesByPerCategory(targetCode);
+    let subLevelCategoryNames: Array<string> = [];
+    targetCodeList.forEach(subLevelCode => {
+      const name = this.BICSCodeToBICSName(subLevelCode);
+      subLevelCategoryNames = [...subLevelCategoryNames, name];
+    });
+    return subLevelCategoryNames;
+  }
+
+  public getBICSCategoryNamesByLevel(identifierKey: string): Array<string> {
+    if (this.reversedBICSHierarchyDictionary) {
+      const categories = this.reversedBICSHierarchyDictionary[identifierKey];
+      if (!!categories) {
+        const categoryNamesList = Object.keys(categories);
+        return categoryNamesList;
+      } else {
+        return [];
+      }
+    } else {
+      return [];
+    }
+   }
+
   public getBICSLevel(code: string): number {
     return Math.floor(code.length/2);
   }
