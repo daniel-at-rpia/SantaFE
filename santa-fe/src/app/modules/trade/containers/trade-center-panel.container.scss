@@ -573,11 +573,13 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
     bottom: 100%;
     &-definition {
       flex: 0 0 auto;
-      display: flex;
+      display: none;
       flex-direction: column;
+      padding: $spacing_x_small 0;
       &-label {
         font-size: $font_size_large;
-        color: $font_color_minor;
+        color: $font_color_trivial;
+        margin-bottom: $spacing_x_small;
       }
       &-list {
         display: flex;
@@ -592,6 +594,12 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
             padding: 0 $spacing_x_small;
             margin-left: $spacing_medium;
           }
+          &-plusIcon {
+            margin-left: $spacing_medium;
+          }
+          &:last-of-type>&-plusIcon {
+            display: none;
+          }
         }
       }
     }
@@ -602,6 +610,13 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
     // width: $tradeCenterPanelSearchEngine_input_width;
     santa-input {
       width: $tradeCenterPanelSearchEngine_input_width;
+    }
+    &-mainCTA {
+      @include mix_alive('light');
+      margin-left: $spacing_medium;
+      user-select: none;
+      opacity: 0;
+      transform: scale(0.01);
     }
     // mat-form-field {
     //   flex: 1 1 auto;
@@ -654,6 +669,38 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
     #{$blockName} {
       &__typeahead {
         display: flex;
+      }
+    }
+  }
+  &--bicsEntered {
+    #{$blockName} {
+      &__bucket {
+        &-definition--bics {
+          display: flex;
+        }
+      }
+      &__input {
+        &-mainCTA {
+          user-select: all;
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    }
+  }
+  &--tickerEntered {
+    #{$blockName} {
+      &__bucket {
+        &-definition--ticker {
+          display: flex;
+        }
+      }
+      &__input {
+        &-mainCTA {
+          user-select: all;
+          opacity: 1;
+          transform: scale(1);
+        }
       }
     }
   }

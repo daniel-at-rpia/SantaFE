@@ -200,24 +200,28 @@
       <article
         [ngClass]="{
           'sat-tradeCenterPanelSearchEngine': true,
-          'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.searchEngine.typeaheadActive
+          'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.searchEngine.typeaheadActive,
+          'sat-tradeCenterPanelSearchEngine--bicsEntered': state.searchEngine.constructedSearchBucket.BICS.length > 0,
+          'sat-tradeCenterPanelSearchEngine--tickerEntered': state.searchEngine.constructedSearchBucket.TICKER.length > 0
         }">
         <section class="sat-tradeCenterPanelSearchEngine__bucket">
-          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition">
+          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--bics">
             <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">BICS: </span>
             <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
               <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.BICS" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
                 <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
                 <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
+                <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-plusIcon fal fa-plus"></i>
               </li>
             </ul>
           </div>
-          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition">
+          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--ticker">
             <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">Ticker: </span>
             <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
               <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.TICKER" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
                 <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
                 <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
+                <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-plusIcon fal fa-plus"></i>
               </li>
             </ul>
           </div>
@@ -238,7 +242,7 @@
               (onInputChange)="onSearchEngineInputChange($event)"
               >
           </mat-form-field> -->
-          <button (click)="onClickSearchEngineSearchBonds()" class="santaBtn--labelled">
+          <button (click)="onClickSearchEngineSearchBonds()" class="sat-tradeCenterPanelSearchEngine__input-mainCTA santaBtn--labelled">
             <i class="fal fa-search"></i>
             <span>Search</span>
           </button>

@@ -1368,6 +1368,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               searchEngine.selectedTypeaheadEntryIndex = searchEngine.typeaheadEntries.length - 1;
             }
           }
+        case this.constants.trade.SEARCH_ENGINE_ENTER_KEY:
+          event.preventDefault();
+          if (searchEngine.constructedSearchBucket.BICS.length > 0 || searchEngine.constructedSearchBucket.TICKER.length > 0) {
+            this.onClickSearchEngineSearchBonds();
+          }
         default:
           // code...
           break;
