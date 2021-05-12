@@ -14,7 +14,7 @@ import {
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
-import { PortfolioMetricValues, PortfolioShortNames, PortfolioView } from 'Core/constants/structureConstants.constants';
+import { PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock, BEStructuringBreakdownMetricBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 
@@ -35,12 +35,12 @@ export interface SecurityPortfolioBlock {
 
 export interface SecurityCostPortfolioBlock {
   fifo: {
-    'Default Spread': number;
-    'Price': number;
+    defaultSpread: number;
+    price: number;
   };
   weightedAvg: {
-    'Default Spread': number;
-    'Price': number;
+    defaultSpread: number;
+    price: number;
   };
 }
 
@@ -80,13 +80,36 @@ export interface SecurityGroupMetricBlock {
 }
 
 export interface SecurityGroupMetricPackBlock {
-  raw: object;
+  raw: SecurityGroupMetricPackIndividualEntryBlock;
   delta: {
-    Dod: object;
-    Wow: object;
-    Mom: object;
-    Ytd: object;
-    Yoy: object;
+    Dod: SecurityGroupMetricPackIndividualEntryBlock;
+    Wow: SecurityGroupMetricPackIndividualEntryBlock;
+    Mom: SecurityGroupMetricPackIndividualEntryBlock;
+    Ytd: SecurityGroupMetricPackIndividualEntryBlock;
+    TMinusTwo: SecurityGroupMetricPackIndividualEntryBlock;
+  }
+}
+
+interface SecurityGroupMetricPackIndividualEntryBlock {
+  defaultSpread?: number,
+  price?: number,
+  rating?: number,
+  gSpread?: number,
+  oasSpread?: number,
+  zSpread?: number,
+  yieldWorst?: number,
+  aswUsd?: number,
+  workoutTerm?: number,
+  index: {
+    defaultSpread?: number,
+    price?: number,
+    rating?: number,
+    gSpread?: number,
+    oasSpread?: number,
+    zSpread?: number,
+    yieldWorst?: number,
+    aswUsd?: number,
+    workoutTerm?: number
   }
 }
 
@@ -172,6 +195,7 @@ export interface AgGridColumnDefinition {
   children?: Array<AgGridColumnDefinition>;
   columnGroupShow?: string;
   valueFormatter?: (params: ValueFormatterParams) => string;
+  rowGroup?: boolean;
 }
 
 export interface AgGridRowNode {

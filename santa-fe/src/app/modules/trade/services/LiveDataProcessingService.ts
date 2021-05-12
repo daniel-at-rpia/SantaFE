@@ -10,8 +10,7 @@
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    import { TriCoreDriverConfig, DEFAULT_DRIVER_IDENTIFIER } from 'Core/constants/coreConstants.constant';
-    import { SecurityDefinitionMap, FilterOptionsTenorRange } from 'Core/constants/securityDefinitionConstants.constant';
+    import * as globalConstants from 'Core/constants';
   // dependencies
 
 @Injectable()
@@ -35,7 +34,7 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachKey in rawSecurityDTOMap){
@@ -81,7 +80,7 @@ export class LiveDataProcessingService {
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
     searchCallback: (card: DTOs.SecurityDTO) => void
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachAlertId in alertDTOMap) {
@@ -281,7 +280,7 @@ export class LiveDataProcessingService {
     const newPriceQuant = !!quote 
       ? this.dtoService.formBestQuoteComparerObject(
           false,
-          TriCoreDriverConfig.Price.label,
+          globalConstants.core.TriCoreDriverConfig.Price.label,
           quote,
           targetRow.data.security,
           false
@@ -290,7 +289,7 @@ export class LiveDataProcessingService {
     const newSpreadQuant = !!quote 
       ? this.dtoService.formBestQuoteComparerObject(
           false,
-          TriCoreDriverConfig.Spread.label,
+          globalConstants.core.TriCoreDriverConfig.Spread.label,
           quote,
           targetRow.data.security,
           false
@@ -299,7 +298,7 @@ export class LiveDataProcessingService {
     const newYieldQuant = !!quote 
     ? this.dtoService.formBestQuoteComparerObject(
         false,
-        TriCoreDriverConfig.Yield.label,
+        globalConstants.core.TriCoreDriverConfig.Yield.label,
         quote,
         targetRow.data.security,
         false
@@ -308,7 +307,7 @@ export class LiveDataProcessingService {
     const newAxePriceQuant = !!quote 
       ? this.dtoService.formBestQuoteComparerObject(
           false,
-          TriCoreDriverConfig.Price.label,
+          globalConstants.core.TriCoreDriverConfig.Price.label,
           quote,
           targetRow.data.security,
           true
@@ -317,7 +316,7 @@ export class LiveDataProcessingService {
     const newAxeSpreadQuant = !!quote
       ? this.dtoService.formBestQuoteComparerObject(
         false,
-        TriCoreDriverConfig.Spread.label,
+        globalConstants.core.TriCoreDriverConfig.Spread.label,
         quote,
         targetRow.data.security,
         true
@@ -326,7 +325,7 @@ export class LiveDataProcessingService {
     const newAxeYieldQuant = !!quote
       ? this.dtoService.formBestQuoteComparerObject(
         false,
-        TriCoreDriverConfig.Yield.label,
+        globalConstants.core.TriCoreDriverConfig.Yield.label,
         quote,
         targetRow.data.security,
         true
@@ -432,7 +431,7 @@ export class LiveDataProcessingService {
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): boolean {
     const targetSecurity = targetRow.data.security;
-    let includeFlag = false;
+    let includeFlag = panelStateFilterBlock.quickFilters.portfolios.length === 0;  // if no portfolio filter is specified, then the user is look at external securities, therefore the includeFlag will default to true
     targetSecurity.data.weight.fundCS01Pct = null;
     targetSecurity.data.weight.fundCS01PctDisplay = null;
     targetSecurity.data.weight.fundBEVPct = null;
@@ -524,7 +523,7 @@ export class LiveDataProcessingService {
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): boolean {
     let includeFlag = false;
-    if (targetFilter.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+    if (targetFilter.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
       targetFilter.filterBy.forEach((eachValue) => {
         if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
           includeFlag = true;
@@ -547,7 +546,7 @@ export class LiveDataProcessingService {
     let includeFlag = false;
     if (panelStateFilterBlock.quickFilters.tenor.length > 0) {
       panelStateFilterBlock.quickFilters.tenor.forEach((eachTenor) => {
-        const targetRange = FilterOptionsTenorRange[eachTenor];
+        const targetRange = globalConstants.definition.FilterOptionsTenorRange[eachTenor];
         if (!!targetRow && !!targetRow.data.security && targetRow.data.security.data.tenor >= targetRange.min && targetRow.data.security.data.tenor <= targetRange.max) {
           includeFlag = true;
         }

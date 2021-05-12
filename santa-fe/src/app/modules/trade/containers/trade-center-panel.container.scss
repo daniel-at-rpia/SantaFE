@@ -1,230 +1,148 @@
 @import "global.scss";
 @import "modules/trade/trade.scss";
 
-$tradeCenterPanel_presetsAndFilters_presets_title_height: 6rem;
-$tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width: 10rem;
-$tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_list_margin_left: $spacing_x_large + $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width - 6rem;
-$tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent: -5rem;
-$tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
+$tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVariant_width + $securityDefinitionConfigurator_gapBetweenDefAndFilter + $spacing_medium;
 .sat-tradeCenterPanel {
-  $tradeCenterPanelBlockName: &;
+  $blockName: &;
   @include mix_border_generator;
   @include mix_border_radius(10px);
   flex: 1 1 auto;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
-  &__presetsAndFilters {
-    @include mix_fixed_div(relative, $z_index_base_item);
-    flex: 1 1 auto;
+  &__presets {
+    flex: 0 0 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    &-presets {
+    &-title {
       @include mix_fixed_div(absolute, $z_index_base_item);
-      @include mix_alive('custom', transform $animation_duration_light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      &-text {
+        text-align: center;
+        font-size: $font_size_x_large;
+        color: $font_color_minor;
+      }
+    }
+    &-content {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      width: 100%;
-      transform: translate(0, 0);
       overflow: hidden;
-      &-title {
-        flex: 0 0 $tradeCenterPanel_presetsAndFilters_presets_title_height;
-        display: flex;
-        justify-content: center;
+    }
+  }
+  &__utilities {
+    display: none;
+    align-items: center;
+    padding: 0 $spacing_medium;
+    &-selectedPreset {
+      display: flex;
+      align-items: center;
+      margin: $spacing_small $spacing_medium $spacing_small $page_gutter_width_for_navTrigger;
+      &-label {
+        font-size: $font_size_large;
+        color: $font_color_minor;
+        margin: 0 $spacing_small;
+      }
+      &>search-shortcut {
+        margin-right: $spacing_small;
+        width: 30rem;
+      }
+    }
+    &-keywordSearch {
+      @include mix_border_radius(5px);
+      flex: 0 1 25rem;
+      display: flex;
+      align-items: center;
+      margin-left: auto; // pushes keyword search and everything after it to the far right
+      &-activeIcon {
+        font-size: $font_size_x_large;
+        color: $font_color_major;
+        margin: 0 $spacing_small;
+      }
+      santa-input {
+        flex: 1 1 auto;
+        margin: $spacing_small $spacing_small $spacing_small 0;
+      }
+    }
+    &-tableRowCount {
+      @include mix_border_radius(5px);
+      display: flex;
+      visibility: hidden;
+      width: 20rem;
+      margin-right: $spacing_small;
+      &-icon {
+        flex: 0 0 auto;
+        display: none;
         align-items: center;
-        padding: $spacing_small;
-        &-text {
-          text-align: center;
-          font-size: $font_size_x_large;
-          color: $font_color_minor;
+        margin: $spacing_x_small;
+        padding: 0 $spacing_x_small;
+        &-img {
+          color: $color_warning;
+          font-size: $font_size_xx_large;
         }
       }
       &-content {
         flex: 1 1 auto;
         display: flex;
-        overflow: hidden;
-        &-categoryCanvas {
-          @include mix_fixed_div(relative, $z_index_base_item_solid);
-          @include mix_alive('custom', transform $animation_duration_normal);
-          flex: 0 0 auto;
+        flex-direction: column;
+        padding: $spacing_x_small;
+        &-mainRow {
           display: flex;
-          transform: translate(0, 100%);
-          &-ribbon {
-            @include mix_fixed_div(absolute, $z_index_base_item);
-            @include mix_border_radius(25px, 'top');
-            // @include mix_gradient($color_gray_85, $color_gray_7, 60%, 65deg);
-            top: 0;
-            left: $spacing_x_large;
-            width: $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_ribbon_width;
-            height: 100%;
-            background-color: $color_gray_85;
+          align-items: center;
+          &-label {
+            color: $font_color_minor;
           }
-          &-list {
-            @include mix_fixed_div(relative, $z_index_base_item_solid);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            margin: $spacing_medium 0 $spacing_medium $tradeCenterPanel_presetsAndFilters_presets_categoryCanvas_list_margin_left;
-            overflow: hidden;
-            &-item {
-              @include mix_alive('light');
-              display: flex;
-              padding: $spacing_medium $spacing_x_large $spacing_medium $spacing_medium;
-              transform: translate(-100%, 0);
-              transition-delay: $animation_duration_normal;
-              &-btn {
-                @include mix_border_radius(15px);
-                flex: 1 1 auto;
-                padding: $spacing_medium;
-                margin-bottom: $spacing_large;
-                &>i {
-                  font-size: $font_size_xx_large;
-                }
-                &>span {
-                  font-size: $font_size_x_large;
-                }
-                &:hover {
-                  transform: translate($spacing_medium, 0);
-                }
-                &--recent {
-                  background-color: $color_teal_7_A;
-                }
-                &--portfolio {
-                  background-color: $color_blue_5;
-                }
-                &--ownership {
-                  background-color: $color_yellow_7;
-                }
-                &--strategy {
-                  background-color: $color_deeppurple_1_A;
-                }
-                &--individual {
-                  background-color: $color_pink_3;
-                }
-                &--selected {
-                  @include material('none');
-                  background-color: $color_active;
-                }
-              }
-            }
-          }
-        }
-        &-shortcutCanvas {
-          flex: 1 1 auto;
-          display: flex;
-          flex-direction: column;
-          &-list {
-            @include mix_fixed_div(relative, $z_index_base_item);
-            @include mix_alive('light');
-            @include mix_enable_scrollbar('both');
-            @include mix_border_radius(15px);
-            flex: 0 0 75%;
-            display: flex;
-            visibility: hidden;
-            flex-wrap: wrap;
-            align-content: flex-start;
+          &-highlightValue {
+            @include mix_border_radius(3px);
             background-color: $color_active;
-            padding: $spacing_medium 0 $spacing_medium $spacing_x_large;
-            margin-top: 0;
-            margin-left: $tradeCenterPanel_presetsAndFilters_presets_shortcutCanvas_left_indent;
-            margin-right: $spacing_large;
-            opacity: 0;
-            transform: translate(-15%, 0);
-            max-width: 64rem;
-            &-item {
-              @include mix_alive('light');
-              flex: 0 1 33.33%;
-              display: flex;
-              padding: $spacing_x_small $spacing_medium $spacing_medium 0;
-              search-shortcut {
-                display: flex;
-                flex: 1 1 auto;
-              }
-              &--major {
-                flex: 0 1 50%;
-              }
-              &--hero {
-                flex: 0 1 100%;
-              }
-            }
-            &--showingFirst {
-              top: 0;
-            }
-            &--showingSecond {
-              top: 5%
-            }
-            &--showingThird {
-              top: 10%
-            }
-            &--showingFourth {
-              top: 15%
-            }
-            &--showingFifth {
-              top: 20%;
-            }
+            padding: 0 $spacing_x_small;
+            color: $font_color_inverse;
+            margin: 0 $spacing_x_small;
+            line-height: $line_height_small;
+          }
+          &-value {
+            color: $font_color_major;
+            margin: 0 $spacing_x_small;
+          }
+        }
+        &-incompleteRow {
+          display: none;
+          &-label {
+            color: $color_warning;
           }
         }
       }
     }
-    &-configurator {
-      @include mix_fixed_div(absolute, $z_index_base_item);
-      @include mix_alive('custom', opacity $animation_duration_light, transform $animation_duration_light);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      width: 100%;
-      transform: translate(100%, 0);
-      &-backBtn {
-        margin: $spacing_x_large $spacing_medium $spacing_large $spacing_medium;
-        &>i {
-          margin-left: $spacing_small;
-          margin-right: 0;
-        }
-      }
-      security-definition-configurator {
-        @include mix_calculate(height, 100%, $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size, '-');
-        display: flex;
-      }
-    }
-  }
-  &__result {
-    flex: 1 1 auto;
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    padding: $spacing_medium;
-    &-utilities {
+    &-driver {
+      @include mix_fixed_div(relative, $z_index_base_item);
+      @include mix_alive('custom', padding-right $animation_duration_light);
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: $spacing_small;
-      &-keywordSearch {
-        @include mix_border_radius(5px);
-        flex: 0 1 25rem;
-        display: flex;
-        align-items: center;
-        margin-right: $spacing_medium;
-        &-activeIcon {
-          font-size: $font_size_x_large;
-          color: $font_color_major;
-          margin: 0 $spacing_small;
-        }
-        santa-input {
-          flex: 1 1 auto;
-          margin: $spacing_small $spacing_small $spacing_small 0;
-        }
-      }
-      &-driver {
+      padding-right: 2.25rem;
+      &-label {
         flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        &-label {
-          flex: 0 0 auto;
-          color: $font_color_minor;
-          font-size: $font_size_large;
-          margin-right: $spacing_small;
-        }
+        color: $font_color_minor;
+        font-size: $font_size_large;
+        margin-right: $spacing_small;
+      }
+      &-value {
+        @include mix_border_radius(5px);
+        flex: 0 0 auto;
+        color: $font_color_inverse;
+        margin-right: $spacing_small;
+        padding: $spacing_x_small $spacing_small;
+        background-color: $color_active;
+      }
+      &-btnGroup {
+        @include mix_fixed_div(absolute, $z_index_base_item_lift);
+        @include mix_alive('custom', right $animation_duration_light);
+        right: -18rem;
         &-btn {
           @include mix_border_radius(5px);
           &--active {
@@ -234,37 +152,30 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
           }
         }
       }
+      &-editCta {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        right: 0;
+      }
     }
-    &-errorPrompt {
-      @include mix_border_radius(10px);
-      flex: 0 1 auto;
-      display: none;
+  }
+  &__main {
+    flex: 1 1 auto;
+    display: none;
+    overflow: hidden;
+    padding: 0 $spacing_medium $spacing_medium $spacing_medium;
+    &-configurator {
+      flex: 0 0 auto;
+      display: flex;
       flex-direction: column;
-      align-items: center;
-      background-color: $color_red_1;
-      padding: $spacing_large;
-      margin: $spacing_small 0;
-      &-icon {
-        font-size: $font_size_xxxx_large;
-        color: $color_kill;
-      }
-      &-title {
-        text-align: center;
-        font-size: $font_size_xx_large;
-        color: $color_kill;
-        margin: $spacing_large 0;
-      }
-      &-errorText {
-        text-align: center;
-        font-size: $font_size_large;
-        color: $font_color_major;
-        margin-bottom: $spacing_medium;
-      }
-      &-btn {
-        margin-top: $spacing_medium;
+      width: $tradeCenterPanel_main_configurator_width;
+      margin-right: $spacing_large;
+      security-definition-configurator {
+        height: 100%;
+        display: flex;
       }
     }
     &-table {
+      @include mix_fixed_div(relative, $z_index_hovering_item); // need to be above the configurator's internal $z_index_base_item_lift
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
@@ -276,73 +187,382 @@ $tradeCenterPanel_presetsAndFilters_configurator_backBtn_size: 8rem;
       }
     }
   }
-  &--keywordSearchActiveState {
-    #{$tradeCenterPanelBlockName} {
-      &__result {
-        &-utilities-keywordSearch {
-          background-color: $color_filter;
-          &-activeIcon {
-            color: $font_color_inverse;
+  &__errorPrompt {
+    @include mix_border_radius(10px);
+    flex: 0 1 auto;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color_red_1;
+    padding: $spacing_large;
+    margin: $spacing_small;
+    &-icon {
+      font-size: $font_size_xxxx_large;
+      color: $color_kill;
+    }
+    &-title {
+      text-align: center;
+      font-size: $font_size_xx_large;
+      color: $color_kill;
+      margin: $spacing_large 0;
+    }
+    &-errorText {
+      text-align: center;
+      font-size: $font_size_large;
+      color: $font_color_major;
+      margin-bottom: $spacing_medium;
+    }
+    &-btn {
+      margin-top: $spacing_medium;
+    }
+  }
+  &--viewingIncompleteResultState {
+    #{$blockName} {
+      &__utilities-tableRowCount {
+        background-color: $color_orange_1;
+        &-icon {
+          display: flex;
+        }
+        &-content {
+          &-mainRow {
+            margin-bottom: $spacing_x_small;
+            &-label {
+              color: $color_warning;
+            }
           }
+          &-incompleteRow {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
+  &--editingDriverState {
+    #{$blockName} {
+      &__utilities-driver {
+        padding-right: 15.5rem;
+        &-btnGroup {
+          right: 0;
+        }
+        &-editCta {
+          right: -4rem;
+        }
+      }
+    }
+  }
+  &--keywordSearchActiveState {
+    #{$blockName} {
+      &__utilities-keywordSearch {
+        background-color: $color_filter;
+        &-activeIcon {
+          color: $font_color_inverse;
         }
       }
     }
   }
   &--boostConfiguratorState {
-    #{$tradeCenterPanelBlockName} {
-      &__presetsAndFilters {
-        @include mix_fixed_div(relative, $z_index_tooltip);
-      }
-    }
-  }
-  &--fetchDataFailedState {
-    #{$tradeCenterPanelBlockName} {
-      &__result {
-        &-errorPrompt {
-          display: flex;
+    #{$blockName} {
+      &__main {
+        &-configurator {
+          @include mix_fixed_div(relative, $z_index_tooltip);
         }
       }
     }
   }
-  &--presetCategorySelectedState {
-    #{$tradeCenterPanelBlockName} {
-      &__presetsAndFilters {
-        &-presets-content-shortcutCanvas-list {
-          opacity: 1;
-          visibility: visible;
-          transform: translate(0, 0);
-        }
+  &--initialDataLoaded {
+    #{$blockName} {
+      &__utilities-tableRowCount {
+        visibility: visible;
       }
     }
   }
   &--presetSelectedState {
-    #{$tradeCenterPanelBlockName} {
-      &__presetsAndFilters {
-        flex: 0 0 10rem;
-        overflow: visible;
-        &-presets {
-          transform: translate(-100%, 0);
-        }
-        &-configurator {
-          opacity: 1;
-          transform: translate(0, 0);
-        }
+    #{$blockName} {
+      &__presets {
+        display: none;
       }
-      &__result {
+      &__utilities {
+        display: flex;
+      }
+      &__main {
         display: flex;
       }
     }
   }
-  &--presetReadyState {
-    #{$tradeCenterPanelBlockName} {
-      &__presetsAndFilters {
-        &-presets-content-categoryCanvas {
-          transform: translate(0, 0);
-          &-list-item {
-            transform: translate(0, 0);
-          }
+  &--fetchDataFailedState {
+    #{$blockName} {
+      &__presets {
+        display: none;
+      }
+      &__utilities {
+        display: none;
+      }
+      &__main {
+        display: none;
+      }
+      &__errorPrompt {
+        display: flex;
+      }
+    }
+  }
+}
+
+$tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
+.sat-tradeCenterPresetCategoryCanvas {
+  $blockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item_solid);
+  @include mix_alive('custom', transform $animation_duration_normal);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: $tradeCenterPresetCategoryCanvas_ribbon_width;
+  &__ribbon {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    top: 0;
+    height: $tradeCenterPresetCategoryCanvas_ribbon_width;
+    width: 100%;
+    background-color: $color_gray_85;
+  }
+  &__list {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    @include mix_alive('light');
+    flex: 1 1 auto;;
+    display: flex;
+    justify-content: space-evenly;
+    opacity: 0;
+    transition-delay: $animation_duration_normal;
+    &-item {
+      @include mix_alive('light');
+      display: flex;
+      &-btn {
+        @include mix_border_radius(15px);
+        flex: 1 1 auto;
+        padding: $spacing_medium;
+        &>i {
+          font-size: $font_size_xx_large;
+        }
+        &>span {
+          font-size: $font_size_x_large;
+        }
+        &--first {
+          background-color: $color_blue_5;
+        }
+        &--second {
+          background-color: $color_yellow_7;
+        }
+        &--third {
+          background-color: $color_deeppurple_1_A;
+        }
+        &--selected {
+          @include material('none');
+          background-color: $color_active;
         }
       }
     }
+  }
+  &__title {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    &-text {
+      font-size: $font_size_large;
+      color: $color_gray_5;
+    }
+  }
+  &--top {
+    transform: translate(-100%, 0%);
+    #{$blockName} {
+      &__list {
+        @include mix_calculate(top, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
+        transform: translate(0, -100%);
+        &-item:hover {
+          transform: translate(0, $spacing_small);
+        }
+      }
+      &__title {
+        margin-right: $spacing_x_large;
+      }
+    }
+  }
+  &--bottom {
+    transform: translate(100%, 0%);
+    direction: rtl;
+    #{$blockName} {
+      &__list {
+        @include mix_calculate(bottom, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
+        transform: translate(0, 100%);
+        &-item {
+          direction: ltr;
+          &:hover {
+            transform: translate(0, -$spacing_small);
+          }
+        }
+      }
+      &__title {
+        margin-left: $spacing_x_large;
+      }
+    }
+  }
+  &--readyState {
+    transform: translate(0, 0);
+    #{$blockName} {
+      &__list {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+    }
+  }
+  @include mq-large-min {
+    width: 75%;
+    #{$blockName} {
+      &__title {
+        &-text {
+          font-size: $font_size_xx_large;
+        }
+      }
+    }
+    &--top {
+      margin-right: 25%;
+      #{$blockName} {
+        &__ribbon {
+          @include mix_border_radius(25px, 'bottom-right');
+        }
+      }
+    }
+    &--bottom {
+      margin-left: 25%;
+      #{$blockName} {
+        &__ribbon {
+          @include mix_border_radius(25px, 'top-left');
+        }
+      }
+    }
+  }
+  @include mq-x-large-min {
+    &--top {
+      #{$blockName} {
+        &__list {
+          margin-left: 25%;
+        }
+      }
+    }
+    &--bottom {
+      #{$blockName} {
+        &__list {
+          margin-right: 25%;
+        }
+      }
+    }
+  }
+}
+
+$tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $spacing_medium;
+.sat-tradeCenterPresetShortcutCanvas {
+  $blockName: &;
+  @include mix_alive('light');
+  @include mix_border_radius(15px);
+  flex: 1 1 auto;
+  display: flex;
+  margin: $spacing_xx_large 0;
+  background-color: $color_active;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  &__timeSpecificDisplay {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_enable_scrollbar('vertical');
+    display: none;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+    padding: $spacing_large $spacing_medium;
+    &-block {
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 auto;
+      min-height: 14rem;
+      &-list {
+        flex: 0 0 100%;
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: $spacing_large;
+        &-item {
+          @include mix_alive('light');
+          flex: 0 1 25%;
+          display: flex;
+          padding: $spacing_x_small $spacing_medium $spacing_medium 0;
+          search-shortcut {
+            display: flex;
+            flex: 1 1 auto;
+          }
+        }
+      }
+      &-title {
+        flex: 0 0 auto;
+        padding-left: $spacing_medium;
+        font-size: $font_size_xx_large;
+        color: $color_disabled;
+        margin-bottom: $spacing_medium;
+      }
+    }
+  }
+  &__list {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_enable_scrollbar('both');
+    align-content: flex-start;
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    padding: $spacing_large $spacing_medium;
+    height: 100%;
+    &-item {
+      @include mix_alive('light');
+      flex: 0 1 25%;
+      display: flex;
+      padding: $spacing_x_small $spacing_medium $spacing_medium 0;
+      search-shortcut {
+        display: flex;
+        flex: 1 1 auto;
+      }
+      &--major {
+        flex: 0 1 50%;
+      }
+      &--hero {
+        flex: 0 1 100%;
+      }
+    }
+  }
+  &--categorySelectedState {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
+  }
+  &--topCategorySelectedState {
+    transform: translate(0, -$tradeCenterPresetShortcutCanvas_selected_movement_length);
+    align-items: flex-start;;
+  }
+  &--bottomCategorySelectedState {
+    transform: translate(0, $tradeCenterPresetShortcutCanvas_selected_movement_length);
+    align-items: flex-end;
+  }
+  &--timeSpecificCategoryState {
+    #{$blockName} {
+      &__timeSpecificDisplay {
+        display: flex;
+      }
+      &__list {
+        display: none;
+      }
+    }
+  }
+  @include mq-large-min {
+    margin: $spacing_xx_large;
+  }
+  @include mq-x-large-min {
+    margin: $spacing_xx_large 18%;
+  }
+  @include mq-xx-large-min {
+    margin: $spacing_xx_large 25%;
   }
 }

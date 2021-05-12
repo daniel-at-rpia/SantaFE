@@ -2,7 +2,7 @@
 @import "modules/market/market.scss";
 
 .sat-searchShortcut {
-  $searchShortcutBlockName: &;
+  $blockName: &;
   @include material();
   @include mix_alive('material');
   @include mix_border_radius(15px);
@@ -10,15 +10,28 @@
   display: flex;
   flex-direction: column;
   background-color: $color_white;
-  overflow: hidden;
   min-height: 7.5rem;
   &__title {
+    @include mix_fixed_div(relative, $z_index_base_item);
     flex: 1 1 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: $spacing_small;
+    min-width: 7rem;  // leave enough space for displaying the highlight text
+    &-highlightText {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_border_radius(3px);
+      @include mix_theme_background;
+      display: none;
+      padding: $spacing_minimum $spacing_x_small;
+      font-size: $font_size_x_small;
+      color: $font_color_inverse;
+      top: -$spacing_small;
+      left: $spacing_small;
+    }
     &-text {
+      @include mix_text_overflow_multi_line(3);
       text-align: center;
       user-select: none;
       font-size: $font_size_normal;
@@ -70,13 +83,22 @@
           background-color: $color_active;
         }
         &--filterActive {
-          #{$searchShortcutBlockName} {
+          #{$blockName} {
             &__configOverview {
               &-slotList-item-filterActive {
                 display: flex;
               }
             }
           }
+        }
+      }
+    }
+  }
+  &--hasHighlightTitle {
+    #{$blockName} {
+      &__title {
+        &-highlightText {
+          display: inline-block;
         }
       }
     }
@@ -88,7 +110,7 @@
   &--selectedState {
     @include material('none');
     background-color: $color_active;
-    #{$searchShortcutBlockName} {
+    #{$blockName} {
       &__title {
         &-text {
           color: $font_color_inverse;
@@ -98,6 +120,23 @@
         &-slotList-item {
           background-color: inherit;
         }
+      }
+    }
+  }
+  &--previewVariant {
+    @include material('none');
+    @include mix_border_generator;
+    background-color: $color_white;
+    min-height: 4.5rem;
+    flex-direction: row;
+    #{$blockName} {
+      &__title {
+        flex: 0 0 auto;
+        max-width: 12rem; // preview variant shouldn't take too much space
+      }
+      &__configOverview {
+        flex: 1 1 auto;
+        margin-top: $spacing_small;
       }
     }
   }

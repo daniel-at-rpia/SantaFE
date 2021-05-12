@@ -78,7 +78,10 @@ export class SantaTable implements OnInit, OnChanges {
       sortable: true
     },
     autoGroupColumnDef: {
-      sort:'desc'
+      pinned: true,
+      sort:'desc',
+      width: 140,
+      resizable: true
     },
     context: {
       componentParent: this
@@ -165,41 +168,12 @@ export class SantaTable implements OnInit, OnChanges {
     }
     if (!!this.tableData.state.isActivated) {
       if (!!activateStatusChanged) {
-        console.log(`[${this.tableName}] - just become activated`);
-        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.loadTableHeaders();
-        this.loadTableRows(this.newRows);
-        this.tableData.state.loadedContentStage = this.receivedContentStage;
-      } else if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
-        console.log(`[${this.tableName}] - rows updated for inter-stage change`, this.receivedContentStage);
-        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate; // saving initial cache
-        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.tableData.state.loadedContentStage = this.receivedContentStage;
-        this.loadTableRows(this.newRows);
-      } else if (this.securityTableHeaderConfigsCache !== this.receivedSecurityTableHeaderConfigsUpdate) {
-        console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableHeaderConfigsUpdate);
-        this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
-        this.loadTableHeaders();
-        this.loadTableRows(this.newRows);
-      } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage && JSON.stringify(this.removeRows) == JSON.stringify(this.removeRowsCache)) {  // the reason for checking removeRowsCache diffing is if they are different, then the newRows diffing is caused by a removal update, in that case bypass this condition since the removal is handled in the bit code below
-        console.log(`[${this.tableName}] - rows updated for change within same stage, triggered when filters are applied`, this.tableData.state.loadedContentStage);
-        this.loadTableRows(this.newRows);
-      } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
-        this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
-        // console.log(`[${this.tableName}] - rows updated from live update`, this.liveUpdatedRows);
-        if (this.liveUpdateRowsCache.length > 0) {
-          this.liveUpdateRows(this.liveUpdateRowsCache);
-        }
-        this.liveUpdateAllQuotesForExpandedRows();
+        this.componentOnChangeJustActivatedHandling();
+      } else {
+        this.componentOnChangeUpdateHandling();
       }
-      // removal can happen in parallel to other input changes
-      if (this.removeRows.length > 0 && JSON.stringify(this.removeRows) != JSON.stringify(this.removeRowsCache)) {
-        // the prinstine rows are updated with the removal, so the rows in the tableDTO needs to be updated to the newRows so it won't trigger "filter applied" condition in the bit code above
-        this.tableData.data.rows = this.newRows;
-        this.removeRowsCache = this.utilityService.deepCopy(this.removeRows);
-        this.removeTableRows();
+      if (this.receivedContentStage === 0) {
+        this.agGridMiddleLayerService.expandStencilGroup(this.tableData);
       }
     }
   }
@@ -429,6 +403,48 @@ export class SantaTable implements OnInit, OnChanges {
     return !!rowNode && !!rowNode.data && rowNode.data.isFullWidth; 
   }
 
+  private componentOnChangeJustActivatedHandling() {
+    console.log(`[${this.tableName}] - just become activated`);
+    this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
+    this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
+    this.loadTableHeaders();
+    this.loadTableRows(this.newRows);
+    this.tableData.state.loadedContentStage = this.receivedContentStage;
+  }
+
+  private componentOnChangeUpdateHandling() {
+    if (this.securityTableHeaderConfigsCache !== this.receivedSecurityTableHeaderConfigsUpdate) {
+      console.log(`[${this.tableName}] - metrics update`, this.receivedSecurityTableHeaderConfigsUpdate);
+      this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate;
+      this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
+      this.loadTableHeaders();
+    }
+    if (this.tableData.state.loadedContentStage !== this.receivedContentStage) {
+      console.log(`[${this.tableName}] - rows updated for inter-stage change`, this.receivedContentStage);
+      this.securityTableHeaderConfigsCache = this.receivedSecurityTableHeaderConfigsUpdate; // saving initial cache
+      this.securityTableHeaderConfigs = this.receivedSecurityTableHeaderConfigsUpdate;
+      this.tableData.state.loadedContentStage = this.receivedContentStage;
+      this.loadTableRows(this.newRows);
+    } else if (!!this.newRows && this.newRows != this.tableData.data.rows && this.tableData.state.loadedContentStage === this.receivedContentStage && JSON.stringify(this.removeRows) == JSON.stringify(this.removeRowsCache)) {  // the reason for checking removeRowsCache diffing is if they are different, then the newRows diffing is caused by a removal update, in that case bypass this condition since the removal is handled in the bit code below
+      console.log(`[${this.tableName}] - rows updated for change within same stage, triggered when filters are applied`, this.tableData.state.loadedContentStage);
+      this.loadTableRows(this.newRows);
+    } else if (this.liveUpdateRowsCache !== this.liveUpdatedRows && this.tableData.state.loadedContentStage === this.constants.securityTableFinalStage) {
+      this.liveUpdateRowsCache = this.utilityService.deepCopy(this.liveUpdatedRows);
+      // console.log(`[${this.tableName}] - rows updated from live update`, this.liveUpdatedRows);
+      if (this.liveUpdateRowsCache.length > 0) {
+        this.liveUpdateRows(this.liveUpdateRowsCache);
+      }
+      this.liveUpdateAllQuotesForExpandedRows();
+    }
+    // removal can happen in parallel to other input changes
+    if (this.removeRows.length > 0 && JSON.stringify(this.removeRows) != JSON.stringify(this.removeRowsCache)) {
+      // the prinstine rows are updated with the removal, so the rows in the tableDTO needs to be updated to the newRows so it won't trigger "filter applied" condition in the bit code above
+      this.tableData.data.rows = this.newRows;
+      this.removeRowsCache = this.utilityService.deepCopy(this.removeRows);
+      this.removeTableRows();
+    }
+  }
+
   private loadTableHeaders(skipAgGrid = false) {
     this.agGridMiddleLayerService.selectedDriverType = this.activeTriCoreDriver;
     this.tableData.data.headers = [];
@@ -611,7 +627,17 @@ export class SantaTable implements OnInit, OnChanges {
       const securityA = rowA.data.security;
       const securityB = rowB.data.security;
       if (!!securityA && !!securityB && !securityA.state.isStencil && !securityB.state.isStencil) {
-        if (securityA.data.name < securityB.data.name) {
+        if (
+          (!!securityA.data.metricPack.raw.workoutTerm && !securityB.data.metricPack.raw.workoutTerm) || 
+          (!!securityA.data.metricPack.raw.workoutTerm && !!securityB.data.metricPack.raw.workoutTerm && securityA.data.metricPack.raw.workoutTerm < securityB.data.metricPack.raw.workoutTerm)
+        ) {
+          return -4;
+        } else if (
+          (!securityA.data.metricPack.raw.workoutTerm && !!securityB.data.metricPack.raw.workoutTerm) || 
+          (!!securityA.data.metricPack.raw.workoutTerm && !!securityB.data.metricPack.raw.workoutTerm && securityA.data.metricPack.raw.workoutTerm > securityB.data.metricPack.raw.workoutTerm)
+        ) {
+          return 4;
+        } else if (securityA.data.name < securityB.data.name) {
           return -1;
         } else if (securityA.data.name > securityB.data.name) {
           return 1;

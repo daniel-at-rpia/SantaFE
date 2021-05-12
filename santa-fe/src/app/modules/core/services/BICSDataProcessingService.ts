@@ -38,9 +38,13 @@ export class BICSDataProcessingService {
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {}
 
-  public loadBICSData(data: BEBICsHierarchyBlock) {
+  public loadBICSData(
+    data: BEBICsHierarchyBlock,
+    immediatelyLoadBICSToConfigurator?: DTOs.SecurityDefinitionConfiguratorDTO
+  ) {
     this.bicsRawCategoryCodes = [...Object.keys(data)];
     this.bicsDictionaryLookupService.loadBICSData(data);
+    !!immediatelyLoadBICSToConfigurator && this.loadBICSOptionsIntoConfigurator(immediatelyLoadBICSToConfigurator);
   }
 
   public getTargetSpecificHierarchyList(

@@ -8,20 +8,13 @@
     import { DTOs, PageStates, AdhocPacks } from 'Core/models/frontend';
     import { DTOService, UtilityService, GraphService, RestfulCommService, GlobalWorkflowIOService } from 'Core/services';
     import { SantaContainerComponentBase } from 'Core/containers/santa-container-component-base';
+    import * as globalConstants from 'Core/constants';
     import {
       BEHistoricalSummaryDTO,
       BEHistoricalSummaryOverviewDTO,
       BEHistoricalQuantBlock
     } from 'BEModels/backend-models.interface';
     import { PayloadGetGroupHistoricalSummary } from 'BEModels/backend-payloads.interface';
-    import { EngagementActionList } from 'Core/constants/coreConstants.constant';
-    import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      MARKET_ANALYSIS_SPREAD_METRIC_KEY,
-      MARKET_ANALYSIS_YIELD_METRIC_KEY,
-      MarketAnalysisGroupByOptions,
-      MarketAnalysisGroupByOpionsDefaultActiveList
-    } from 'Core/constants/tradeConstants.constant';
     import { selectSelectedSecurityForAnalysis } from 'Trade/selectors/trade.selectors';
     import { TradeSelectedSecurityForAlertConfigEvent } from 'Trade/actions/trade.actions';
     import { HistoricalSummarySampleReturn } from 'Trade/stubs/lilMarket.stub';
@@ -41,13 +34,7 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
   subscriptions = {
     receiveSelectedSecuritySub: null
   }
-  constants = {
-    marketAnalysisGroupByOptions: MarketAnalysisGroupByOptions,
-    optionDefaultActiveList: MarketAnalysisGroupByOpionsDefaultActiveList,
-    securityDefinitionMap: SecurityDefinitionMap,
-    spreadMetricKey: MARKET_ANALYSIS_SPREAD_METRIC_KEY,
-    yieldMetricKey: MARKET_ANALYSIS_YIELD_METRIC_KEY
-  };
+  constants = globalConstants;
 
   private initializePageState(): PageStates.TradeMarketAnalysisPanelState {
     if (!!this.state) {
@@ -123,7 +110,7 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
     if (!!this.state.apiReturnedState) {
       if (!targetOption.state.isLocked) {
         this.restfulCommService.logEngagement(
-          EngagementActionList.clickGroupByOption,
+          this.constants.core.EngagementActionList.clickGroupByOption,
           this.state.targetSecurity.data.securityID,
           targetOption.data.key,
           'Trade - Lil Market Panel'
@@ -143,7 +130,7 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
     if (!!this.state.apiReturnedState) {
       if (this.state.config.timeScope !== targetScope) {
         this.restfulCommService.logEngagement(
-          EngagementActionList.changeTimeScope,
+          this.constants.core.EngagementActionList.changeTimeScope,
           this.state.targetSecurity.data.securityID,
           targetScope,
           'Trade - Lil Market Panel'
@@ -157,7 +144,7 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
   public onClickDriver(targetDriver: string) {
     if (this.state.config.driver !== targetDriver) {
       this.restfulCommService.logEngagement(
-        EngagementActionList.changeDriver,
+        this.constants.core.EngagementActionList.changeDriver,
         this.state.targetSecurity.data.securityID,
         targetDriver,
         'Trade - Lil Market Panel'
@@ -177,7 +164,7 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
 
   public onClickSecurityCardThumbDown(targetSecurity: DTOs.SecurityDTO) {
     this.restfulCommService.logEngagement(
-      EngagementActionList.thumbdownSecurity,
+      this.constants.core.EngagementActionList.thumbdownSecurity,
       targetSecurity.data.securityID,
       'Thumbdown',
       'Trade - Lil Market Panel'
@@ -192,7 +179,7 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
     const targetData = this.state.table.levelSummary.data.list[targetIndex].data.timeSeries;
     if (!!targetData && targetData.length > 0) {
       this.restfulCommService.logEngagement(
-        EngagementActionList.populateGraph,
+        this.constants.core.EngagementActionList.populateGraph,
         targetSecurity.data.name || this.state.table.presentList[1].data.name || 'Something is Wrong',
         'Main Graph',
         'Trade - Lil Market Panel'
@@ -242,18 +229,18 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
   private populateDefinitionOptions(newState: PageStates.TradeMarketAnalysisPanelState) {
     const options = [];
     const activeOptions = [];
-    this.constants.marketAnalysisGroupByOptions.forEach((eachDefinitionStub) => {
+    this.constants.trade.MarketAnalysisGroupByOptions.forEach((eachDefinitionStub) => {
       const definitionDTO = this.dtoService.formSecurityDefinitionObject(eachDefinitionStub);
       definitionDTO.state.isMiniPillVariant = true;
       definitionDTO.state.groupByActive = true;
       definitionDTO.state.isLocked = true;
       if (
-        definitionDTO.data.key === this.constants.securityDefinitionMap.CURRENCY.key || 
-        definitionDTO.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
-        definitionDTO.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
+        definitionDTO.data.key === this.constants.definition.SecurityDefinitionMap.CURRENCY.key || 
+        definitionDTO.data.key === this.constants.definition.SecurityDefinitionMap.COUPON_TYPE.key ||
+        definitionDTO.data.key === this.constants.definition.SecurityDefinitionMap.SECURITY_TYPE.key) {
         // do nothing
       } else {
-        if (this.constants.optionDefaultActiveList.indexOf(definitionDTO.data.key) >= 0) {
+        if (this.constants.trade.MarketAnalysisGroupByOpionsDefaultActiveList.indexOf(definitionDTO.data.key) >= 0) {
           activeOptions.push(definitionDTO);
         }
       }
@@ -476,9 +463,9 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
           }
         }
         if (
-          eachOption.data.key === this.constants.securityDefinitionMap.CURRENCY.key || 
-          eachOption.data.key === this.constants.securityDefinitionMap.COUPON_TYPE.key ||
-          eachOption.data.key === this.constants.securityDefinitionMap.SECURITY_TYPE.key) {
+          eachOption.data.key === this.constants.definition.SecurityDefinitionMap.CURRENCY.key || 
+          eachOption.data.key === this.constants.definition.SecurityDefinitionMap.COUPON_TYPE.key ||
+          eachOption.data.key === this.constants.definition.SecurityDefinitionMap.SECURITY_TYPE.key) {
           // do nothing
         } else {
           eachOption.state.isLocked = false;

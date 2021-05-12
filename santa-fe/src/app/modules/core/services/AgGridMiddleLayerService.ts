@@ -108,7 +108,8 @@ export class AgGridMiddleLayerService {
         sort: eachHeader.data.sortActivated || null,
         enablePivot: false,
         enableRowGroup: false,
-        hide: !isActiveByDefault
+        hide: !isActiveByDefault,
+        rowGroup: eachHeader.data.groupByActive
       };
       if (eachHeader.data.key === 'alertTraceVolumeEstimated' || eachHeader.data.key === 'alertTraceVolumeReported') {
         if (eachHeader.data.key === 'alertTraceVolumeEstimated') {
@@ -261,6 +262,18 @@ export class AgGridMiddleLayerService {
     table.api.gridApi.updateRowData({
       remove: agGridRemovalList
     });
+  }
+
+  public expandStencilGroup(table: DTOs.SecurityTableDTO) {
+    if (!!table && !!table.api.gridApi) {
+      table.api.gridApi.forEachNode((eachNode, index) => {
+        if (index === 0) {  // the stencil group should always have the first row as the grouping row
+          if (!!eachNode && !!eachNode.group) {
+            eachNode.setExpanded(true);
+          }
+        }
+      });
+    }
   }
 
   private loadAgGridHeadersComparator(

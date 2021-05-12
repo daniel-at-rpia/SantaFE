@@ -19,9 +19,9 @@
       ALERT_STATUS_SORTINGVALUE_UNIT,
       TRACE_VOLUME_REPORTED_THRESHOLD,
       NavigationModule,
-      GlobalWorkflowTypes,
       FrontendKeyToBackendKeyDictionary
     } from 'Core/constants/coreConstants.constant';
+    import { GlobalWorkflowTypes } from 'Core/constants/globalWorkflowConstants.constants';
     import {
       SECURITY_TABLE_QUOTE_TYPE_RUN,
       SECURITY_TABLE_QUOTE_TYPE_AXE,
@@ -61,7 +61,6 @@
       AxeAlertType
     } from 'Core/constants/tradeConstants.constant';
     import {
-      PortfolioShortNames,
       PortfolioMetricValues,
       PortfolioView,
       BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
@@ -221,22 +220,22 @@ export class DTOService {
         cost: {
           current: {
             fifo: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             },
             weightedAvg: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             }
           },
           firm: {
             fifo: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             },
             weightedAvg: {
-              'Default Spread': null,
-              'Price': null
+              defaultSpread: null,
+              price: null
             }
           },
           DOF: null,
@@ -398,12 +397,12 @@ export class DTOService {
     dto.data.portfolios.push(newBlock);
     const newCostPortfolioBlock: Blocks.SecurityCostPortfolioBlock = {
       fifo: {
-        'Default Spread': newBlock.costFifoSpread,
-        'Price': newBlock.costFifoPrice
+        defaultSpread: newBlock.costFifoSpread,
+        price: newBlock.costFifoPrice
       },
       weightedAvg: {
-        'Default Spread': newBlock.costWeightedAvgSpread,
-        'Price': newBlock.costWeightedAvgPrice
+        defaultSpread: newBlock.costWeightedAvgSpread,
+        price: newBlock.costWeightedAvgPrice
       }
     };
     dto.data.cost[newBlock.portfolioName] = newCostPortfolioBlock;
@@ -454,10 +453,10 @@ export class DTOService {
           break;
       }
       block.positionFirm = block.positionFirm + eachPortfolioBlock.quantity;
-      dto.data.cost.firm.fifo['Default Spread'] = dto.data.cost.firm.fifo['Default Spread'] + eachPortfolioBlock.costFifoSpread;
-      dto.data.cost.firm.fifo.Price = dto.data.cost.firm.fifo.Price + eachPortfolioBlock.costFifoPrice;
-      dto.data.cost.firm.weightedAvg['Default Spread'] = dto.data.cost.firm.weightedAvg['Default Spread'] + eachPortfolioBlock.costWeightedAvgSpread;
-      dto.data.cost.firm.weightedAvg.Price = dto.data.cost.firm.weightedAvg.Price + eachPortfolioBlock.costWeightedAvgPrice;
+      dto.data.cost.firm.fifo.defaultSpread = dto.data.cost.firm.fifo.defaultSpread + eachPortfolioBlock.costFifoSpread;
+      dto.data.cost.firm.fifo.price = dto.data.cost.firm.fifo.price + eachPortfolioBlock.costFifoPrice;
+      dto.data.cost.firm.weightedAvg.defaultSpread = dto.data.cost.firm.weightedAvg.defaultSpread + eachPortfolioBlock.costWeightedAvgSpread;
+      dto.data.cost.firm.weightedAvg.price = dto.data.cost.firm.weightedAvg.price + eachPortfolioBlock.costWeightedAvgPrice;
       dto.data.cs01CadFirm = dto.data.cs01CadFirm + eachPortfolioBlock.cs01Cad;
       dto.data.cs01LocalFirm = dto.data.cs01LocalFirm + eachPortfolioBlock.cs01Local;
     });
@@ -610,7 +609,8 @@ export class DTOService {
         securityDTOAttrBlock: rawData.securityDTOAttrBlock,
         highlightSelectedOptionList: [],
         backendDtoAttrName: rawData.backendDtoAttrName,
-        totalMatchingResults: 0
+        totalMatchingResults: 0,
+        internalOnly: !!rawData.internalOnly
       },
       style: {
         icon: rawData.icon,
@@ -802,8 +802,20 @@ export class DTOService {
   ): DTOs.SearchShortcutDTO {
     const object: DTOs.SearchShortcutDTO = {
       data: {
+        uuid: this.utility.generateUUID(),
         displayTitle: title,
-        configuration: definitionList
+        highlightTitle: '',
+        headerOverwrites: [],
+        searchFilters: [definitionList],
+        securityExclusionList: [],
+        securityInclusionList: [],
+        metadata: {
+          createTime: moment().unix(),
+          dbStoredTime: null,
+          lastUseTime: moment().unix(),
+          size: null
+        },
+        structurModuleLink: null
       },
       style: {
         slotList: [null, null, null, null, null]
@@ -812,7 +824,9 @@ export class DTOService {
         isSelected: false,
         isUserInputBlocked: false,
         isMajorShortcut: !!isMajor,
-        isHeroShortcut: !!isHero
+        isHeroShortcut: !!isHero,
+        isPreviewVariant: false,
+        isAbleToSaveAsRecentWatchlist: true
       }
     };
     definitionList.forEach((eachDefinition, index) => {
@@ -1050,7 +1064,8 @@ export class DTOService {
         pinned: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].pinned : !!stub.content.tableSpecifics.default.pinned,
         sortActivated: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? stub.content.tableSpecifics[useSpecificsFrom].sortActivated : stub.content.tableSpecifics.default.sortActivated,
         groupShow: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? !!stub.content.tableSpecifics[useSpecificsFrom].groupShow : !!stub.content.tableSpecifics.default.groupShow,
-        activePortfolios: activePortfolios || []
+        activePortfolios: activePortfolios || [],
+        groupByActive: (useSpecificsFrom && stub.content.tableSpecifics[useSpecificsFrom]) ? stub.content.tableSpecifics[useSpecificsFrom].groupByActive : stub.content.tableSpecifics.default.groupByActive
       },
       style: {
         columnWidthOverride: stub.content.columnWidth > 0 ? stub.content.columnWidth : null
@@ -2751,6 +2766,7 @@ export class DTOService {
     };
     return object;
   }
+
 
   private processBreakdownDataForStructureFund(
     object: DTOs.PortfolioFundDTO,

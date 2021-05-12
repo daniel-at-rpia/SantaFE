@@ -4,12 +4,12 @@ import * as moment from 'moment';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames,
   SubPortfolioFilter,
   DeltaScope
 } from 'Core/constants/structureConstants.constants';
 import { AdhocPacks, PageStates } from 'Core/models/frontend';
 import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
+import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
 export enum StructureActions {
   StructureStoreReset = '[Structure] Reset Store Upon Entering',

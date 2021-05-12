@@ -1,15 +1,16 @@
 import { Action } from '@ngrx/store';
+import * as moment from 'moment';
+
 import { StructureActions } from 'Structure/actions/structure.actions';
 import {
   PortfolioMetricValues,
   BreakdownViewFilter,
-  PortfolioShortNames,
   SubPortfolioFilter,
   DeltaScope
 } from 'Core/constants/structureConstants.constants';
+import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 import { AdhocPacks, PageStates } from 'Core/models/frontend';
 import { BEStructuringFundBlockWithSubPortfolios } from 'BEModels/backend-models.interface';
-import * as moment from 'moment';
 
 export interface StructureState {
   selectedMetric: string;
