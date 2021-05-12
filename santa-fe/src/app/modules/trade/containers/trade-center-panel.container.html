@@ -257,7 +257,7 @@
                 'sat-tradeCenterPanelSearchEngine__typeahead-list-item': true,
                 'sat-tradeCenterPanelSearchEngine__typeahead-list-item--selected': state.searchEngine.selectedTypeaheadEntryIndex === eachEntryIndex
               }">
-              <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-displayText">{{eachEntry.displayText}}</span>
+              <p class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-displayText" [innerHtml]="eachEntry.displayText"></p>
               <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-type">{{eachEntry.type}}</span>
             </li>
           </ul>

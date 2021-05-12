@@ -1421,6 +1421,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         searchEngine.typeaheadActive = true;
         searchEngine.typeaheadEntries = searchEngine.indexedKeywords.filter((eachEntry) => {
           if (this.performTypeaheadSearchMatchEntry(eachEntry, searchEngine.activeKeyword)) {
+            eachEntry.displayText = this.utilityService.highlightKeywordInParagraph(eachEntry.pristineText, searchEngine.activeKeyword);
             return true;
           } else {
             return false;
