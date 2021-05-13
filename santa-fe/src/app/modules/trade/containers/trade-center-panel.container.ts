@@ -286,7 +286,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         if (!!pack && !!this.stateActive) {
           const filterList = pack.filterList;
           const metric = pack.metric;
-          if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric) {
+          if (!!filterList && filterList.length > 0 && bicsLoaded && !!metric && this.initialState !== 'n/a') {
             this.autoLoadTable(filterList, metric, pack.presetDisplayTitle);
           }
         }
