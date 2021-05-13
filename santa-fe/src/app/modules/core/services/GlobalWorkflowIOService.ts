@@ -26,13 +26,7 @@ export class GlobalWorkflowIOService {
   }
   private currentState: string = 'initialState';
   private currentModule: NavigationModule = null;
-  private routeHandlerStore: 
-    Array<
-      {
-        state: string,
-        handle: DetachedRouteHandle
-      }
-    > = [];
+  private routeHandlerStore: Array<AdhocPacks.RouteHandlerStoreBlock> = [];
   private subscriptionStore: 
     Map<
       NavigationModule,
