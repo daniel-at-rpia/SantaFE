@@ -80,7 +80,9 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
         return this.globalWorkflowIOService.fetchState(params.get(this.constants.globalWorkflow.GLOBAL_WORKFLOW_STATE_ID_KEY));
       })
     ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
-      this.globalStateHandler(result);
+      if (this.initialState !== 'n/a') {
+        this.globalStateHandler(result);
+      }
     });
 
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
