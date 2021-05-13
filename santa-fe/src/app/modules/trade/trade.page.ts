@@ -1,6 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-    import { ActivatedRoute, Router } from '@angular/router';
+    import { ActivatedRoute, ParamMap, Router } from '@angular/router';
     import { Observable, Subscription, interval, of } from 'rxjs';
     import { tap, first, withLatestFrom, switchMap, catchError, combineLatest, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
@@ -69,6 +69,15 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
     this.subscriptions.routeChange = this.route.paramMap.pipe(
       filter((params) => {
         return this.stateActive;
+      }),
+      tap((params: ParamMap) => {
+        // Navigating to an empty states (i.e. /trade) clears the store, and causes issues when users navigate back and forth using the browser's native navigation
+        // With the state cleared and the route reuse running, this creates an inconsistency with the states required and the UI that's rendered based on route reuse (ex. trade/:stateId urls won't re-render components, but certain features such as the 30s countdown won't work as it relies on the preset state set to true)
+        // The logic below clears out the route handler store for all trade/:stateId urls so that if this scenario occurs, it will re-render with the correct states and UI
+        const stateId = params.get('stateId');
+        if (!stateId) {
+          this.globalWorkflowIOService.removeTradeRoutesinRouteHandlerStore();
+        }
       }),
       combineLatest(
         this.store$.pipe(select(selectGlobalWorkflowIndexedDBReadyState))

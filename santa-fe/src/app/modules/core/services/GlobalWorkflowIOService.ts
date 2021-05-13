@@ -21,7 +21,8 @@ export class GlobalWorkflowIOService {
   constants = {
     idbWorkflowAllStateTableName: INDEXEDDB_WORKFLOW_TABLE_NAME,
     idbWorkflowLastStateTableName: INDEXEDDB_LAST_STATE_TABLE_NAME,
-    idbDatabase: IndexedDBDatabases
+    idbDatabase: IndexedDBDatabases,
+    moduleUrl: NavigationModule
   }
   private currentState: string = 'initialState';
   private currentModule: NavigationModule = null;
@@ -94,7 +95,8 @@ export class GlobalWorkflowIOService {
           subscriber.next(null);
         }
       });
-  }
+    }
+  
     public loadLastStates(): Observable<Array<AdhocPacks.GlobalWorkflowLastState>> {
       return new Observable(subscriber => {
         const results = [];
@@ -187,6 +189,19 @@ export class GlobalWorkflowIOService {
           eachModuleStore.delete(targetStateId);
         }
       });
+    }
+
+    public removeTradeRoutesinRouteHandlerStore() {
+      if (this.routeHandlerStore.length > 0 ) {
+        this.routeHandlerStore = this.routeHandlerStore.filter((handle: any) => {
+          if (!!handle && !!handle.handle && !!handle.handle.route && !!handle.handle.route.value && !!handle.handle.route.value.snapshot && !!handle.handle.route.value.snapshot.url && handle.handle.route.value.snapshot.url.length > 0) {
+            const isTradeRoute = handle.handle.route.value.snapshot.url.find(url => url.path === this.constants.moduleUrl.trade);
+            return !isTradeRoute;
+          } else {
+            return true;
+          }
+        })
+      }
     }
 
     private initializeSubscriptionStore(){

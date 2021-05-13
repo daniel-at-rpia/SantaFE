@@ -306,9 +306,6 @@ export interface TradeAlertPanelState {
 }
 
 export interface StructureState {
-  BICsData: {
-    formattedBICsHierarchy: Blocks.BICsHierarchyAllDataBlock;
-  }
   fetchResult: {
     fetchBICsHierarchyFailed: boolean;
     fetchBICsHierarchyError: string;
