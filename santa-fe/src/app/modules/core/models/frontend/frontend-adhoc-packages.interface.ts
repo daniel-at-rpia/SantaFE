@@ -24,6 +24,7 @@ import {
 } from 'Core/constants/structureConstants.constants';
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
+import { DetachedRouteHandle } from '@angular/router';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -237,4 +238,9 @@ export interface StructureSetTargetOverrideTransferPack {
 
 export interface StructureSetBulkOverrideTransferPack {
   pack: PayloadBulkCreateOverrides;
+}
+
+export interface RouteHandlerStoreBlock {
+  state: string;
+  handle: DetachedRouteHandle;
 }
