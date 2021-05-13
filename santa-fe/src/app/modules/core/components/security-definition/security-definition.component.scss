@@ -123,7 +123,7 @@ $securityDefinition_configuratorVariant_filter_size: 1.5rem;
     display: none;
     left: 100%;
     height: 100%;
-    width: $spacing_x_large;
+    width: $securityDefinitionConfigurator_gapBetweenDefAndFilter;
     background-color: $color_active;
   }
   &:hover {

@@ -1311,7 +1311,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     })
     if (removedList.length > 0) {
       removedList.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-        this.utilityService.applySelectedDefinitionChangestoCoreDefinition(this.state.configurator.dto, definition, false);
+        this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.state.configurator.dto, definition, false);
       })
     }
     definitionBundle.data.list = updatedList;

@@ -44,10 +44,10 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           }
         }
         &-item {
+          @include mix_fixed_div(relative, $z_index_base_item);
           display: flex;
           flex-direction: column;
           margin-top: $spacing_small;
-          position: relative;
           &-selectBtn {
             @include mix_border_radius(5px, 'top');
             margin-left: $securityDefinition_configuratorVariant_width/4;
@@ -65,12 +65,6 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
               background-color: inherit;
             }
           }
-          security-definition {
-            align-self: flex-start;
-          }
-          &:last-of-type {
-            margin-bottom: $spacing_medium;
-          }
           &-clearAllOptionsBtn {
             @include mix_fixed_div(absolute, $z_index_hovering_item);
             display: none;
@@ -79,6 +73,12 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
             top: 50%;
             right: $spacing_x_small;
             transform: translateY(-50%);
+          }
+          security-definition {
+            align-self: flex-start;
+          }
+          &:last-of-type {
+            margin-bottom: $spacing_medium;
           }
           &--hiddenInCoreDefinitionGroupState {
             display: none;
@@ -103,7 +103,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
-    left: $securityDefinition_configuratorVariant_width + $spacing_large + $spacing_x_small;
+    left: $securityDefinition_configuratorVariant_width + $spacing_medium;
     width: $securityDefinitionConfigurator_filters_width;
     padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
     overflow: hidden;

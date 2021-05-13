@@ -1322,7 +1322,7 @@ export class UtilityService {
       }
     }
 
-    public applySelectedDefinitionChangestoCoreDefinition(
+    public syncDefinitionStateBetweenSelectedAndCore(
       configurator: DTOs.SecurityDefinitionConfiguratorDTO,
       targetDefinition: DTOs.SecurityDefinitionDTO,
       isHiddenDefinition: boolean,

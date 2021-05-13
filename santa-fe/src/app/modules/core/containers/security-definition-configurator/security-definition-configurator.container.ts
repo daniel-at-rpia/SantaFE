@@ -156,7 +156,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     });
     targetDefinition.state.filterActive = filterActive;
     if (targetDefinition.data.configuratorCoreDefinitionGroup === SecurityDefinitionConfiguratorGroupLabels.selected) {
-      this.utilityService.applySelectedDefinitionChangestoCoreDefinition(this.configuratorData, targetDefinition, true);
+      this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.configuratorData, targetDefinition, true);
     }
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
@@ -255,7 +255,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         option.isSelected = false;
       })
     }
-    this.utilityService.applySelectedDefinitionChangestoCoreDefinition(this.configuratorData, targetDefinition, true);
+    this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.configuratorData, targetDefinition, true);
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }

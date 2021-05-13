@@ -598,7 +598,7 @@ export class DTOService {
 
   public formSecurityDefinitionObject(
     rawData: Stubs.SecurityDefinitionStub,
-    configuratorLabel: SecurityDefinitionConfiguratorGroupLabels | null = null
+    configuratorLabel: SecurityDefinitionConfiguratorGroupLabels = null
   ): DTOs.SecurityDefinitionDTO {
     const object: DTOs.SecurityDefinitionDTO = {
       data: {
@@ -631,12 +631,12 @@ export class DTOService {
         currentFilterPathInConsolidatedBICS: [],
         isFilterCapped: false,
         isConsolidatedBICSVariant: rawData.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key,
-        isHiddenInConfiguratorDefinitionBundle: !!configuratorLabel ? configuratorLabel !== SecurityDefinitionConfiguratorGroupLabels.selected ? this.checkIfDefinitionIsInSelectedDefinitionBundle(rawData.key) : false : null
+        isHiddenInConfiguratorDefinitionBundle: !!configuratorLabel ? configuratorLabel !== SecurityDefinitionConfiguratorGroupLabels.selected ? this.formSecurityDefinitionObjectCheckForWithinSelectedGroup(rawData.key) : false : null
       }
     }
     if (!!configuratorLabel) {
       const matchedSelectedStub = SelectedShortcuts.find((definitionStub: Stubs.SearchShortcutIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
-      !!matchedSelectedStub && this.prePopulateListsWithSelectedOptions(matchedSelectedStub, object);
+      !!matchedSelectedStub && this.formSecurityDefinitionObjectPrePopulateListsWithSelectedOptions(matchedSelectedStub, object);
     }
     return object;
   }
@@ -731,36 +731,7 @@ export class DTOService {
       });
     });
     if (!!selectedGroupDefinition) {
-      selectedGroupDefinition.data.list = [];
-      const defaultSelectedList: Array<DTOs.SecurityDefinitionDTO> = [];
-      SelectedShortcuts.forEach((shortcutStubs: Stubs.SearchShortcutIncludedDefinitionStub) => {
-        const { definitionKey } = shortcutStubs;
-        object.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
-          definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-            if (definition.data.key === definitionKey) {
-              shortcutStubs.selectedOptions.forEach(option => {
-                const optionMatch = definition.data.prinstineFilterOptionList.find((prinstineOption: Blocks.SecurityDefinitionFilterBlock) => prinstineOption.shortKey === option);
-                if (!!optionMatch) {
-                  const optionMatchCopy: Blocks.SecurityDefinitionFilterBlock = this.utility.deepCopy(optionMatch);
-                  optionMatchCopy.isSelected = true;
-                  definition.data.highlightSelectedOptionList.push(optionMatchCopy);
-                  const displayOptionMatch = definition.data.displayOptionList.find((displayOption: Blocks.SecurityDefinitionFilterBlock) => displayOption.shortKey === option);
-                  if (!!displayOptionMatch) {
-                    displayOptionMatch.isSelected = true;
-                  }
-                }
-              })
-              definition.state.isHiddenInConfiguratorDefinitionBundle = true;
-              definition.state.filterActive = true;
-              const definitionCopy: DTOs.SecurityDefinitionDTO = this.utility.deepCopy(definition);
-              definitionCopy.state.isHiddenInConfiguratorDefinitionBundle = false;
-              definitionCopy.data.configuratorCoreDefinitionGroup = SecurityDefinitionConfiguratorGroupLabels.selected;
-              defaultSelectedList.push(definitionCopy);
-            }
-          })
-        })
-      })
-      selectedGroupDefinition.data.list = defaultSelectedList;
+      this.resetSelectedGroupDefinitionInConfigurator(selectedGroupDefinition, object);
     }
     return object;
   }
@@ -2920,7 +2891,7 @@ export class DTOService {
     return subCodes.length === 0;
   }
 
-  private checkIfDefinitionIsInSelectedDefinitionBundle(targetKey: string): boolean {
+  private formSecurityDefinitionObjectCheckForWithinSelectedGroup(targetKey: string): boolean {
     const selectedSecurityDefinitionBundleStub = ConfiguratorDefinitionLayout.find((definitionBundleStub: Stubs.SecurityDefinitionBundleStub) => definitionBundleStub.label === SecurityDefinitionConfiguratorGroupLabels.selected);
     if (!!selectedSecurityDefinitionBundleStub) {
       const isSelected = selectedSecurityDefinitionBundleStub.list.find((securityDefinitionStub: Stubs.SecurityDefinitionStub) => securityDefinitionStub.key === targetKey);
@@ -2930,7 +2901,7 @@ export class DTOService {
     }
   }
 
-  private addPreSelectedOptionsToConfiguratorDefinitionList(
+  private formSecurityDefinitionObjectCreatePreSelectedOptionList(
     targetList: Array<Blocks.SecurityDefinitionFilterBlock>,
     selectedKeys: Array<string>
   ): Array<Blocks.SecurityDefinitionFilterBlock> {
@@ -2946,12 +2917,12 @@ export class DTOService {
     }
   }
 
-  private prePopulateListsWithSelectedOptions(
+  private formSecurityDefinitionObjectPrePopulateListsWithSelectedOptions(
     selectedStub: Stubs.SearchShortcutIncludedDefinitionStub,
     targetDefinition: DTOs.SecurityDefinitionDTO
   ) {
     const selectedKeys = selectedStub.selectedOptions;
-    const preSelectedList = this.addPreSelectedOptionsToConfiguratorDefinitionList(targetDefinition.data.displayOptionList, selectedKeys);
+    const preSelectedList = this.formSecurityDefinitionObjectCreatePreSelectedOptionList(targetDefinition.data.displayOptionList, selectedKeys);
     targetDefinition.data.highlightSelectedOptionList = preSelectedList;
     preSelectedList.forEach((selectedOption: Blocks.SecurityDefinitionFilterBlock) => {
       const displayOptionEquivalent = targetDefinition.data.displayOptionList.find((displayOption: Blocks.SecurityDefinitionFilterBlock) => displayOption.key === selectedOption.key);
@@ -2959,5 +2930,41 @@ export class DTOService {
         displayOptionEquivalent.isSelected = true;
       }
     })
+  }
+
+  private resetSelectedGroupDefinitionInConfigurator(
+    selectedGroupDefinition: DTOs.SecurityDefinitionBundleDTO,
+    configurator: DTOs.SecurityDefinitionConfiguratorDTO
+  ) {
+    selectedGroupDefinition.data.list = [];
+    const defaultSelectedList: Array<DTOs.SecurityDefinitionDTO> = [];
+    SelectedShortcuts.forEach((shortcutStubs: Stubs.SearchShortcutIncludedDefinitionStub) => {
+      const { definitionKey } = shortcutStubs;
+      configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+        definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          if (definition.data.key === definitionKey) {
+            shortcutStubs.selectedOptions.forEach(option => {
+              const optionMatch = definition.data.prinstineFilterOptionList.find((prinstineOption: Blocks.SecurityDefinitionFilterBlock) => prinstineOption.shortKey === option);
+              if (!!optionMatch) {
+                const optionMatchCopy: Blocks.SecurityDefinitionFilterBlock = this.utility.deepCopy(optionMatch);
+                optionMatchCopy.isSelected = true;
+                definition.data.highlightSelectedOptionList.push(optionMatchCopy);
+                const displayOptionMatch = definition.data.displayOptionList.find((displayOption: Blocks.SecurityDefinitionFilterBlock) => displayOption.shortKey === option);
+                if (!!displayOptionMatch) {
+                  displayOptionMatch.isSelected = true;
+                }
+              }
+            })
+            definition.state.isHiddenInConfiguratorDefinitionBundle = true;
+            definition.state.filterActive = true;
+            const definitionCopy: DTOs.SecurityDefinitionDTO = this.utility.deepCopy(definition);
+            definitionCopy.state.isHiddenInConfiguratorDefinitionBundle = false;
+            definitionCopy.data.configuratorCoreDefinitionGroup = SecurityDefinitionConfiguratorGroupLabels.selected;
+            defaultSelectedList.push(definitionCopy);
+          }
+        })
+      })
+    })
+    selectedGroupDefinition.data.list = defaultSelectedList;
   }
 }
