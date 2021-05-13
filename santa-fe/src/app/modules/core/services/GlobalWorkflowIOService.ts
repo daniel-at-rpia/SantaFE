@@ -198,19 +198,6 @@ export class GlobalWorkflowIOService {
       });
     }
 
-    public removeTradeRoutesinRouteHandlerStore() {
-      if (this.routeHandlerStore.length > 0 ) {
-        this.routeHandlerStore = this.routeHandlerStore.filter((handle: any) => {
-          if (!!handle && !!handle.handle && !!handle.handle.route && !!handle.handle.route.value && !!handle.handle.route.value.snapshot && !!handle.handle.route.value.snapshot.url && handle.handle.route.value.snapshot.url.length > 0) {
-            const isTradeRoute = handle.handle.route.value.snapshot.url.find(url => url.path === this.constants.moduleUrl.trade);
-            return !isTradeRoute;
-          } else {
-            return true;
-          }
-        })
-      }
-    }
-
     private initiateIndexedDBRequestHandler(openRequest: IDBOpenDBRequest) {
       openRequest.onerror = (errorEvent) => {
         console.error('IDB open request failed', errorEvent);
