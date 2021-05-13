@@ -607,7 +607,6 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
   &__input {
     @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
-    // width: $tradeCenterPanelSearchEngine_input_width;
     santa-input {
       width: $tradeCenterPanelSearchEngine_input_width;
     }
@@ -618,10 +617,6 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
       opacity: 0;
       transform: scale(0.01);
     }
-    // mat-form-field {
-    //   flex: 1 1 auto;
-    //   @include material_form_font_size_override('hero');
-    // }
   }
   &__typeahead {
     @include mix_fixed_div(absolute, $z_index_base_item);
@@ -631,7 +626,7 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
     @include mix_alive('light');
     display: none;
     left: 0;
-    top: 100%;
+    top: 90%;
     width: $tradeCenterPanelSearchEngine_input_width;
     overflow: hidden;
     background-color: $color_white;

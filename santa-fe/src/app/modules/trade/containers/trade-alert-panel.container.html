@@ -98,7 +98,7 @@
       <i class="sat-tradeAlertPanel__overview-keywordSearch-activeIcon fal fa-search"></i>
       <santa-input
         [inputValue]="state.filters.keyword.defaultValueForUI"
-        [placeholder]="'filter security name and alert message'"
+        [label]="'filter security name and alert message'"
         (onInputChange)="onTableSearchKeywordChange($event)">
       </santa-input>
     </div>
@@ -157,10 +157,10 @@
           </div>
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search">
             <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search-utility">
-              <span class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search-utility-label">Search For Securities :</span>
               <santa-input
                 [inputValue]="state.configuration.axe.securitySearchKeyword"
-                [placeholder]="'find security by name / CUSIP / ISIN'"
+                [label]="'Search For Securities'"
+                [placeholder]="'name / CUSIP / ISIN'"
                 (onInputChange)="onConfigSearchKeywordChange($event)">
               </santa-input>
             </div>

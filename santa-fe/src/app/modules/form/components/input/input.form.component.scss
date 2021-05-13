@@ -11,71 +11,68 @@
     &-input {
       flex: 1 1 auto;
     }
-    &.mat-form-field-appearance-outline>.mat-form-field-wrapper {
-      margin: 0;
-      padding-bottom: 0;
-      &>.mat-form-field-flex {
-        &>.mat-form-field-infix {
-          padding: $spacing_x_small 0;
-          &>.mat-form-field-label-wrapper {
-            overflow: visible;
-            &>.mat-form-field-label {
-              top: 1.15rem;
+    // always follow this full structure for material input styling overwrites so that we can manage the styling precedence properly between base & modifiers
+    &.mat-form-field-appearance-outline {
+      &>.mat-form-field-wrapper {
+        @include mix_border_radius(5px);
+        @include mix_alive('light');
+        background-color: $color_white;
+        margin: 0;
+        padding-bottom: 0;
+        &>.mat-form-field-flex {
+          &>.mat-form-field-infix {
+            padding: $spacing_x_small 0;
+            &>.mat-form-field-label-wrapper {
+              overflow: visible;
+              &>.mat-form-field-label {
+                top: 1.15rem;
+              }
             }
           }
-        }
-        &>.mat-form-field-outline {
-          opacity: 1;
-          border-color: $color_active;
-          &>* {
-            border-width: $typical_border_width*2;
-          }
-        }
-      }
-    }
-    &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float {
-      .mat-form-field-flex {
-        &>.mat-form-field-infix {
-          &>.mat-form-field-label-wrapper {
-            &>.mat-form-field-label {
-              transform: translateY(-1rem) scale(0.75);
+          &>.mat-form-field-outline {
+            opacity: 1;
+            color: $color_border_gray;
+            &>* {
+              border-width: $typical_border_width*2;
             }
           }
         }
       }
+      &.mat-focused {
+        &>.mat-form-field-wrapper {
+          &>.mat-form-field-flex {
+            &>.mat-form-field-infix {
+              &>.mat-form-field-label-wrapper {
+                &>.mat-form-field-label {
+                  color: $color_active;
+                }
+              }
+            }
+            &>.mat-form-field-outline {
+              color: $color_active;
+            }
+          }
+        }
+      }
+      &.mat-form-field-can-float.mat-form-field-should-float {
+        &>.mat-form-field-wrapper {
+          background-color: transparent;
+          &>.mat-form-field-flex {
+            &>.mat-form-field-infix {
+              &>.mat-form-field-label-wrapper {
+                &>.mat-form-field-label {
+                  color: $color_active;
+                  transform: translateY(-1rem) scale(0.75);
+                }
+              }
+            }
+            &>.mat-form-field-outline {
+              color: $color_active;
+            }
+          }
+        }
+      }
     }
-  }
-  &--numericVariant {
-    // #{$blockName} {
-    //   &__inputElement {
-    //     text-align: right;
-            // @include mix_border_generator($static_color: $color_active);
-            // @include mix_border_radius(5px);
-    //   }
-    // }
-  }
-  &--grayedOutState {
-    // #{$blockName} {
-    //   &__inputElement {
-    //     background-color: transparent;
-    //     border-color: $color_white;
-    //     color: $color_white;
-    //   }
-    // }
-  }
-  &--hasError {
-    // #{$blockName} {
-    //   &__inputElement {
-    //     @include mix_border_generator($static_color: $color_negative);
-    //   }
-    // }
-  }
-  &--disabledState {
-    // #{$blockName} {
-    //   &__inputElement {
-    //     cursor: not-allowed;
-    //   }
-    // }
   }
   &--heroVariant {
     #{$blockName} {
@@ -113,11 +110,42 @@
       }
     }
   }
-  &--nonEditable {
+  &--inverseColored {
+    #{$blockName} {
+      &__matForm {
+        &-input {
+          color: $font_color_inverse;
+        }
+        &-matLabel {
+          color: $font_color_inverse;
+        }
+        &.mat-form-field-appearance-outline {
+          &>.mat-form-field-wrapper {
+            background-color: transparent;
+            &>.mat-form-field-flex {
+              &>.mat-form-field-outline {
+                color: $font_color_inverse;
+              }
+            }
+          }
+          &.mat-form-field-can-float.mat-form-field-should-float {
+            &>.mat-form-field-wrapper {
+              &>.mat-form-field-flex {
+                &>.mat-form-field-outline {
+                  color: $font_color_inverse;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &--disabledState {
+    // TODO: add aesthetics when we need to use disabled state
     // #{$blockName} {
     //   &__inputElement {
-    //     background-color: $color_white;
-    //     opacity: 0.2;
+    //     cursor: not-allowed;
     //   }
     // }
   }
