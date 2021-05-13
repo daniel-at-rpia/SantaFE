@@ -99,7 +99,6 @@
       <santa-input
         [inputValue]="state.filters.keyword.defaultValueForUI"
         [placeholder]="'filter security name and alert message'"
-        [isHero]="true"
         (onInputChange)="onTableSearchKeywordChange($event)">
       </santa-input>
     </div>
@@ -162,7 +161,6 @@
               <santa-input
                 [inputValue]="state.configuration.axe.securitySearchKeyword"
                 [placeholder]="'find security by name / CUSIP / ISIN'"
-                [isHero]="true"
                 (onInputChange)="onConfigSearchKeywordChange($event)">
               </santa-input>
             </div>

@@ -3,53 +3,122 @@
 .santaInput {
   $blockName: &;
   display: flex;
-  &__inputElement {
+  &__matForm {
     flex: 1 1 auto;
-    &--numeric {
-      @include mix_border_generator($static_color: $color_active);
-      @include mix_border_radius(5px);
+    &-matLabel {
+
     }
-    &--error {
-      @include mix_border_generator($static_color: $color_negative);
+    &-input {
+      flex: 1 1 auto;
     }
-  }
-  &--heroVariant {
-    #{$blockName} {
-      &__inputElement {
-        font-size: $font_size_normal;
-        padding: $spacing_xx_small $spacing_small;
+    &.mat-form-field-appearance-outline>.mat-form-field-wrapper {
+      margin: 0;
+      padding-bottom: 0;
+      &>.mat-form-field-flex {
+        &>.mat-form-field-infix {
+          padding: $spacing_x_small 0;
+          &>.mat-form-field-label-wrapper {
+            overflow: visible;
+            &>.mat-form-field-label {
+              top: 1.15rem;
+            }
+          }
+        }
+        &>.mat-form-field-outline {
+          opacity: 1;
+          border-color: $color_active;
+          &>* {
+            border-width: $typical_border_width*2;
+          }
+        }
+      }
+    }
+    &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float {
+      .mat-form-field-flex {
+        &>.mat-form-field-infix {
+          &>.mat-form-field-label-wrapper {
+            &>.mat-form-field-label {
+              transform: translateY(-1rem) scale(0.75);
+            }
+          }
+        }
       }
     }
   }
   &--numericVariant {
-    #{$blockName} {
-      &__inputElement {
-        text-align: right;
-      }
-    }
+    // #{$blockName} {
+    //   &__inputElement {
+    //     text-align: right;
+            // @include mix_border_generator($static_color: $color_active);
+            // @include mix_border_radius(5px);
+    //   }
+    // }
   }
   &--grayedOutState {
-    #{$blockName} {
-      &__inputElement {
-        background-color: transparent;
-        border-color: $color_white;
-        color: $color_white;
-      }
-    }
+    // #{$blockName} {
+    //   &__inputElement {
+    //     background-color: transparent;
+    //     border-color: $color_white;
+    //     color: $color_white;
+    //   }
+    // }
+  }
+  &--hasError {
+    // #{$blockName} {
+    //   &__inputElement {
+    //     @include mix_border_generator($static_color: $color_negative);
+    //   }
+    // }
   }
   &--disabledState {
+    // #{$blockName} {
+    //   &__inputElement {
+    //     cursor: not-allowed;
+    //   }
+    // }
+  }
+  &--heroVariant {
     #{$blockName} {
-      &__inputElement {
-        cursor: not-allowed;
+      &__matForm {
+        &-input {
+          font-size: $font_size_large;
+        }
+        &-matLabel {
+          font-size: $font_size_large;
+        }
+        &.mat-form-field-appearance-outline>.mat-form-field-wrapper {
+          margin: $spacing_x_small 0;
+          &>.mat-form-field-flex {
+            &>.mat-form-field-infix {
+              padding: $spacing_small 0;
+              &>.mat-form-field-label-wrapper {
+                &>.mat-form-field-label {
+                  top: 1.15rem;
+                }
+              }
+            }
+          }
+        }
+        &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float {
+          .mat-form-field-flex {
+            &>.mat-form-field-infix {
+              &>.mat-form-field-label-wrapper {
+                &>.mat-form-field-label {
+                  transform: translateY(-1.25rem) scale(0.75);
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
   &--nonEditable {
-    #{$blockName} {
-      &__inputElement {
-        background-color: $color_white;
-        opacity: 0.2;
-      }
-    }
+    // #{$blockName} {
+    //   &__inputElement {
+    //     background-color: $color_white;
+    //     opacity: 0.2;
+    //   }
+    // }
   }
 }

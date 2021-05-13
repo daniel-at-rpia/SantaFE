@@ -12,7 +12,7 @@ import { FormControl } from '@angular/forms';
   selector: 'santa-input',
   templateUrl: './input.form.component.html',
   styleUrls: ['./input.form.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.None // needs to be None because we are overwriting Angular Material's internal stylings, which has components that are generated within the "mat-form-field" component itself
 })
 
 export class SantaInput implements OnChanges{
