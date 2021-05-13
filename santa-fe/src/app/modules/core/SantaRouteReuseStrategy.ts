@@ -26,7 +26,17 @@ export class SantaRouteReuseStrategy implements RouteReuseStrategy {
   }
 
   public shouldDetach(route: ActivatedRouteSnapshot): boolean {
-    return true;
+    if (!!route.params && !!route.params.stateId) {
+      // temporarily disable routeReuse for Trade due to issues with observables being incorrectly emitted in Trade states
+      let shouldDetachRoute = false;
+      if (!!route.url && route.url.length > 0) {
+        const isStructuringRoute = route.url.find(url => url.path === NavigationModule.structuring);
+        shouldDetachRoute = !!isStructuringRoute;
+      }
+      return shouldDetachRoute;
+    } else {
+      return false;
+    }
   }
 
   public store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle) {

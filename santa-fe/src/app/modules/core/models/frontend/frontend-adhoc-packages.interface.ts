@@ -25,6 +25,7 @@ import {
 import { TraceTradeParty } from '../../constants/securityTableConstants.constant';
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { IndexedDBDatabases } from 'Core/constants/indexedDB.constants';
+import { DetachedRouteHandle } from '@angular/router';
 
 export interface SecurityMapEntry {
   keywords: Array<string>;
@@ -277,6 +278,12 @@ export type IndexedDBAllDatabaseMapping = {
     configs: Array<IndexedDBTableBlockItem>
   }
 }
+
+export interface RouteHandlerStoreBlock {
+  state: string;
+  handle: DetachedRouteHandle;
+}
+
 
 export interface TradeCenterPanelSearchEngineIndexEntry {
   pristineText: string;
