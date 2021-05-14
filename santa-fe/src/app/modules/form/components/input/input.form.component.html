@@ -14,8 +14,8 @@
       class="santaInput__matForm-input"
       type="{{ isNumeric ? 'number' : 'text' }}"
       autofocus="!!autoFocus"
-      placeholder="placeholder"
 
+      [placeholder]="placeholder"
       [formControl]="formControl"
       
       (keyup)="onKey()"

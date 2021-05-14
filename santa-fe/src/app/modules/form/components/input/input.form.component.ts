@@ -33,15 +33,16 @@ export class SantaInput implements OnChanges{
   @Output() onEnterKeyPressed = new EventEmitter<string>();
   @Output() onGenericKeyPressed = new EventEmitter<KeyboardEvent>();
   
-  public formControl = new FormControl({value: this.inputValue, disabled: !!this.isDisabled});
+  public formControl = new FormControl({value: '', disabled: !!this.isDisabled});
   
   constructor() {}
 
   public ngOnChanges() {
-    // console.log('test, within input, input value is', this.inputValue);
+    this.formControl.setValue(this.inputValue);
   }
 
   public onKey() {
+    this.inputValue = this.formControl.value;
     !!this.onInputChange && this.onInputChange.emit(this.inputValue);
   }
 

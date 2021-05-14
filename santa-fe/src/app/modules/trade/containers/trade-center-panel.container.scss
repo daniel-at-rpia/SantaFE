@@ -607,6 +607,7 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
   &__input {
     @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
+    align-items: center;
     santa-input {
       width: $tradeCenterPanelSearchEngine_input_width;
     }
