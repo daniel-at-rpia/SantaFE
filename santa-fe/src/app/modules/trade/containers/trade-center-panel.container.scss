@@ -572,6 +572,7 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
     flex-direction: column;
     bottom: 100%;
     &-definition {
+      @include mix_fixed_div(relative, $z_index_base_item);
       flex: 0 0 auto;
       display: none;
       flex-direction: column;
@@ -601,6 +602,14 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
             display: none;
           }
         }
+      }
+      &-clearBtn {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        left: 100%;
+        bottom: $spacing_small;
+        margin-left: $spacing_small;
+        background-color: $color_kill;
+        color: $font_color_inverse;
       }
     }
   }

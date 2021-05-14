@@ -1390,6 +1390,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     }
 
+    public onClickClearBucket(targetBucket: string) {
+      // can't directly send the list cuz reassigning it would just create a new reference
+      if (this.state.searchEngine.constructedSearchBucket[targetBucket]) {
+        this.state.searchEngine.constructedSearchBucket[targetBucket] = [];
+      }
+    }
+
     private indexSearchEngineBICS(bicsData: BEBICsHierarchyBlock) {
       for (const eachCode in bicsData) {
         const leafBICSName = bicsData[eachCode].item7 || bicsData[eachCode].item6 || bicsData[eachCode].item5 || bicsData[eachCode].item4 || bicsData[eachCode].item3 || bicsData[eachCode].item2 || bicsData[eachCode].item1;
