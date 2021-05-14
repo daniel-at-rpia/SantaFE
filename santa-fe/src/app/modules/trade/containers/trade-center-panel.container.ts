@@ -1455,7 +1455,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const parsedPristineEntryText = targetEntry.pristineText.toUpperCase();
       const parsedKeyword = keyword.toUpperCase();
       if (parsedPristineEntryText.indexOf(parsedKeyword) >= 0) {
-        return true;
+        // also checks for whether the entry is already inserted into the bucket
+        if (targetEntry.type.indexOf(this.constants.trade.SEARCH_ENGINE_TYPES.BICS) >= 0) {
+          const exist = this.state.searchEngine.constructedSearchBucket.BICS.find((eachEntry) => {
+            return eachEntry.pristineText === targetEntry.pristineText;
+          });
+          return !exist;
+        } else if (targetEntry.type === this.constants.trade.SEARCH_ENGINE_TYPES.TICKER) {
+          const exist = this.state.searchEngine.constructedSearchBucket.TICKER.find((eachEntry) => {
+            return eachEntry.pristineText === targetEntry.pristineText;
+          });
+          return !exist;
+        }
+        return false;
       } else {
         return false;
       }
