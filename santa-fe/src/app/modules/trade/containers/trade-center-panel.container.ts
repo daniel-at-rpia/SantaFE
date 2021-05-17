@@ -117,6 +117,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           constructedSearchBucket: {
             TICKER: [],
             BICS: []
+          },
+          searchBucketDefinitionDTOs: {
+            TICKER: this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.TICKER),
+            BICS: this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED)
           }
         },
         configurator: {
@@ -1315,7 +1319,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   // Search Engine
     public onSearchEngineInputChange(newInput: string) {
-      console.log('test, input change', newInput);
       if (newInput !== this.state.searchEngine.activeKeyword) {
         this.state.searchEngine.activeKeyword = newInput;
         this.performTypeaheadSearch();
@@ -1348,7 +1351,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         case this.constants.trade.SEARCH_ENGINE_BREAK_KEY:
           event.preventDefault();
           if (searchEngine.activeKeyword && searchEngine.activeKeyword.length > 0 && !!searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]) {
-            console.log('test, got tab');
             this.selectTypeaheadEntry(searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]);
           }
           break;
@@ -1369,6 +1371,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               searchEngine.selectedTypeaheadEntryIndex = searchEngine.typeaheadEntries.length - 1;
             }
           }
+          break;
         case this.constants.trade.SEARCH_ENGINE_ENTER_KEY:
           event.preventDefault();
           if (searchEngine.constructedSearchBucket.BICS.length > 0 || searchEngine.constructedSearchBucket.TICKER.length > 0) {

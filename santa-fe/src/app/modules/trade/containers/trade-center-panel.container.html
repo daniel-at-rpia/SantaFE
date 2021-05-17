@@ -207,26 +207,40 @@
         }">
         <section class="sat-tradeCenterPanelSearchEngine__bucket">
           <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--bics">
-            <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">BICS: </span>
-            <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
-              <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.BICS" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
-                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
-                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
-                <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-plusIcon fal fa-plus"></i>
-              </li>
-            </ul>
-            <button (click)="onClickClearBucket('BICS')" class="sat-tradeCenterPanelSearchEngine__bucket-definition-clearBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+            <div class="sat-tradeCenterPanelSearchEngine__bucket-definition-icon">
+              <security-definition
+                [definitionData]="state.searchEngine.searchBucketDefinitionDTOs.BICS"
+                [backgroundVariant]="true">
+              </security-definition>
+            </div>
+            <div class="sat-tradeCenterPanelSearchEngine__bucket-definition-content">
+              <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-label">BICS: </span>
+              <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list">
+                <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.BICS" class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item">
+                  <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item-text">{{eachEntry.pristineText}}</span>
+                  <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item-plusIcon fal fa-plus"></i>
+                </li>
+              </ul>
+              <button (click)="onClickClearBucket('BICS')" class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-clearBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+            </div>
           </div>
           <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--ticker">
-            <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">Ticker: </span>
-            <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
-              <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.TICKER" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
-                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
-                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
-                <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-plusIcon fal fa-plus"></i>
-              </li>
-            </ul>
-            <button (click)="onClickClearBucket('TICKER')" class="sat-tradeCenterPanelSearchEngine__bucket-definition-clearBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+            <div class="sat-tradeCenterPanelSearchEngine__bucket-definition-icon">
+              <security-definition
+                [definitionData]="state.searchEngine.searchBucketDefinitionDTOs.TICKER"
+                [backgroundVariant]="true">
+              </security-definition>
+            </div>
+            <div class="sat-tradeCenterPanelSearchEngine__bucket-definition-content">
+              <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-label">Ticker: </span>
+              <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list">
+                <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.TICKER" class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item">
+                  <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item-text">{{eachEntry.pristineText}}</span>
+                  <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item-plusIcon fal fa-plus"></i>
+                </li>
+              </ul>
+              <button (click)="onClickClearBucket('TICKER')" class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-clearBtn santaBtn--iconOnly santaBtn--small fal fa-times"></button>
+            </div>
           </div>
         </section>
         <section class="sat-tradeCenterPanelSearchEngine__input">
@@ -268,6 +282,35 @@
           </ul>
         </section>
         <section class="sat-tradeCenterPanelSearchEngine__background"></section>
+        <section class="sat-tradeCenterPanelSearchEngine__keyboardShortcut">
+          <div class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row">
+            <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-text">Use keyboard</span>
+            <div class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key">
+              <i class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key-icon fal fa-arrow-up"></i>
+            </div>
+            <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-text">or</span>
+            <div class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key">
+              <i class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key-icon fal fa-arrow-down"></i>
+            </div>
+            <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-text">to navigate on the auto-complete results</span>
+          </div>
+          <div class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row">
+            <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-text">Use keyboard</span>
+            <div class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key">
+              <i class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key-icon fal fa-arrow-to-right"></i>
+              <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key-label">Tab</span>
+            </div>
+            <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-text">to select an auto-complete result</span>
+          </div>
+          <div class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row">
+            <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-text">Use keyboard</span>
+            <div class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key">
+              <i class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key-icon sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key-icon--enter fal fa-level-down fa-rotate-90"></i>
+              <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-key-label">Enter</span>
+            </div>
+            <span class="sat-tradeCenterPanelSearchEngine__keyboardShortcut-row-text">to launch the search</span>
+          </div>
+        </section>
       </article>
     </div>
   </section>
