@@ -1056,34 +1056,24 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     ) {
       if (params.filterList.length > 0) {
         const searchShortcutDefinitionList: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [];
-        let customDisplayTitle = '';
-        let selectionOptionsList: Array<string> = [];
         params.filterList.forEach((definitionItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
           const shortcutDefinition: Stubs.SearchShortcutIncludedDefinitionStub = {
             definitionKey: definitionItem.key,
             groupByActive: false,
             selectedOptions: definitionItem.key === this.constants.definition.SecurityDefinitionMap.TENOR.key ? definitionItem.filterByBlocks.map((item: Blocks.SecurityDefinitionFilterBlock) => item.shortKey) : definitionItem.filterBy.map((item: string) => item)
           }
-          if (!presetDisplayTitle) {
-            const isBICS = definitionItem.key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key;
-            const groupDefinition = isBICS ? 'BICS' : this.constants.definition.SecurityDefinitionMap[definitionItem.key].displayName;
-            selectionOptionsList = [
-              ...selectionOptionsList,
-              ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => isBICS ? this.bicsDictionaryLookupService.BICSCodeToBICSName(option) : option)
-            ];
-            customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
-          } else {
-            customDisplayTitle = presetDisplayTitle;
-          }
           searchShortcutDefinitionList.push(shortcutDefinition);
         })
         const recentShortcutStub: Stubs.SearchShortcutStub = {
-          displayTitle: customDisplayTitle,
+          displayTitle: presetDisplayTitle,
           includedDefinitions: searchShortcutDefinitionList,
           isHero: false,
           isMajor: false
         }
         const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
+        if (!presetDisplayTitle) {
+          recentShortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(recentShortcut);
+        }
         recentShortcut.state.isPreviewVariant = true;
         recentShortcut.state.isUserInputBlocked = true;
         const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
@@ -1337,11 +1327,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
       const shortcut = this.dtoService.formSearchShortcutObject(
         definitionList,
-        'Test Search Engine',
+        null,
         false,
         false,
         false
       );
+      shortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(shortcut);
       this.onSelectPreset(shortcut, true);
       const indexCopy = this.state.searchEngine.indexedKeywords;
       this.state.searchEngine = this.initializePageState().searchEngine;

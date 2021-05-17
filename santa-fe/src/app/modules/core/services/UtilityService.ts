@@ -14,7 +14,7 @@
       BEStructuringBreakdownBlock,
       BEStructuringOverrideBaseBlock
     } from 'BEModels/backend-models.interface';
-    import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
+    import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -1282,6 +1282,26 @@ export class UtilityService {
       } else {
         return 'n/a';
       }
+    }
+
+    public generateCustomizedTitleForShortcut(targetShortcut: DTOs.SearchShortcutDTO): string {
+      let customDisplayTitle = '';
+      let selectionOptionsList: Array<string> = [];
+      // we only use the first (primary) set of configurations in the searchFilters to name the shortcut, ignore all the other "OR" conditions for now because it would make the name too long
+      targetShortcut.data.searchFilters[0].forEach((definitionItem: DTOs.SecurityDefinitionDTO) => {
+        const isBICS = definitionItem.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key;
+        const groupDefinition = isBICS ? 'BICS' : SecurityDefinitionMap[definitionItem.data.key].displayName;
+        selectionOptionsList = [
+          ...selectionOptionsList,
+          ...definitionItem.data.highlightSelectedOptionList.length > 2
+            ? [`${groupDefinition}(${definitionItem.data.highlightSelectedOptionList.length})`]
+            : definitionItem.data.highlightSelectedOptionList.map((eachOption) => {
+              return eachOption.shortKey;
+            })
+        ];
+        customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
+      })
+      return customDisplayTitle;
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
