@@ -1435,7 +1435,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             return false;
           }
         });
-        this.performTypeaheadSearchSortResultByRelevancy();
+        this.performTypeaheadSearchSortResultByRelevancy(searchEngine.typeaheadEntries, searchEngine.activeKeyword);
         if (searchEngine.typeaheadEntries.length > this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP) {
           searchEngine.typeaheadEntries = searchEngine.typeaheadEntries.slice(0, this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP);
         } else if (searchEngine.typeaheadEntries.length === 0) {
@@ -1473,8 +1473,45 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     }
 
-    private performTypeaheadSearchSortResultByRelevancy() {
-
+    private performTypeaheadSearchSortResultByRelevancy(
+      targetList: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>, 
+      searchKeyword: string
+    ) {
+      targetList.sort((itemA, itemB) => {
+        if (itemA.pristineText.length === searchKeyword.length && itemB.pristineText.length !== searchKeyword.length) {
+          // whether it is an exact match, because the items already have a match, if their length are the same then it is an exact match
+          return -64;
+        } else if (itemB.pristineText.length === searchKeyword.length && itemA.pristineText.length !== searchKeyword.length) {
+          return 64;
+        } else if (itemA.bicsLevel === 1 && itemB.bicsLevel !== 1) {
+          return -32;
+        } else if (itemB.bicsLevel === 1 && itemA.bicsLevel !== 1) {
+          return 32;
+        } else if (itemA.displayText.indexOf('<kbd>') === 0 && itemB.displayText.indexOf('<kbd>') !== 0) {
+          // whether it starts with the keyword
+          return -16;
+        } else if (itemB.displayText.indexOf('<kbd>') === 0 && itemA.displayText.indexOf('<kbd>') !== 0) {
+          return 16;
+        } else if (itemA.bicsLevel === 2 && itemB.bicsLevel !== 2) {
+          return -8;
+        } else if (itemB.bicsLevel === 2 && itemA.bicsLevel !== 2) {
+          return 8;
+        } else if (itemA.bicsLevel === 3 && itemB.bicsLevel !== 3) {
+          return -4;
+        } else if (itemB.bicsLevel === 3 && itemA.bicsLevel !== 3) {
+          return 4;
+        } else if (itemA.pristineText.length < itemB.pristineText.length) {
+          return -2;
+        } else if (itemA.pristineText.length > itemB.pristineText.length) {
+          return 2;
+        } else if (itemA.pristineText < itemB.pristineText) {
+          return -1;
+        } else if (itemA.pristineText > itemB.pristineText) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
     }
 
     private selectTypeaheadEntry(targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry) {
