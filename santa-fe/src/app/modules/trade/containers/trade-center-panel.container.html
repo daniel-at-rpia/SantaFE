@@ -202,7 +202,8 @@
           'sat-tradeCenterPanelSearchEngine': true,
           'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.searchEngine.typeaheadActive,
           'sat-tradeCenterPanelSearchEngine--bicsEntered': state.searchEngine.constructedSearchBucket.BICS.length > 0,
-          'sat-tradeCenterPanelSearchEngine--tickerEntered': state.searchEngine.constructedSearchBucket.TICKER.length > 0
+          'sat-tradeCenterPanelSearchEngine--tickerEntered': state.searchEngine.constructedSearchBucket.TICKER.length > 0,
+          'sat-tradeCenterPanelSearchEngine--readyState': state.presets.presetsReady
         }">
         <section class="sat-tradeCenterPanelSearchEngine__bucket">
           <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--bics">
@@ -235,6 +236,7 @@
             [placeholder]="''"
             [label]="'Tickers / BICS'"
             [inputValue]="state.searchEngine.activeKeyword"
+            [inverseColored]="true"
             (onInputChange)="onSearchEngineInputChange($event)"
             (onGenericKeyPressed)="onSearchEngineKeyPressed($event)">
           </santa-input>
@@ -265,6 +267,7 @@
             </li>
           </ul>
         </section>
+        <section class="sat-tradeCenterPanelSearchEngine__background"></section>
       </article>
     </div>
   </section>

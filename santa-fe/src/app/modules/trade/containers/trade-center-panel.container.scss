@@ -21,9 +21,9 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       flex-direction: column;
       overflow: hidden;
       align-items: center;
+      justify-content: center;
       .sat-tradeCenterPanelSearchEngine {
-        @include mix_fixed_div(absolute, $z_index_base_item_solid);
-        top: 20rem;
+        @include mix_fixed_div(absolute, $z_index_base_item);
       }
     }
   }
@@ -564,8 +564,7 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
 $tradeCenterPanelSearchEngine_input_width: 30rem;
 .sat-tradeCenterPanelSearchEngine {
   $blockName: &;
-  @include mix_border_radius(15px);
-  // padding: $spacing_large;
+  padding: $spacing_medium;
   &__bucket {
     @include mix_fixed_div(absolute, $z_index_base_item);
     display: flex;
@@ -629,18 +628,18 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
     }
   }
   &__typeahead {
-    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
     @include mix_border_radius(15px, 'bottom');
     @include mix_border_generator;
     @include material();
     @include mix_alive('light');
     display: none;
-    left: 0;
-    top: 90%;
+    left: $spacing_medium;
+    top: 75%;
     width: $tradeCenterPanelSearchEngine_input_width;
     overflow: hidden;
     background-color: $color_white;
-    max-height: 21rem;
+    max-height: 18rem;
     &-list {
       @include mix_enable_scrollbar();
       flex: 1 1 auto;
@@ -672,6 +671,18 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
       }
     }
   }
+  &__background {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_border_radius(15px);
+    @include mix_alive('light');
+    @include mix_calculate(width, 100%, 6.75rem, '-');
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: $color_active;
+    opacity: 0;
+    transform: scale(2);
+  }
   &--typeaheadActive {
     #{$blockName} {
       &__typeahead {
@@ -693,6 +704,9 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
           transform: scale(1);
         }
       }
+      &__background {
+        width: 100%;
+      }
     }
   }
   &--tickerEntered {
@@ -708,6 +722,17 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
           opacity: 1;
           transform: scale(1);
         }
+      }
+      &__background {
+        width: 100%;
+      }
+    }
+  }
+  &--readyState {
+    #{$blockName} {
+      &__background {
+        opacity: 1;
+        transform: scale(1);
       }
     }
   }
