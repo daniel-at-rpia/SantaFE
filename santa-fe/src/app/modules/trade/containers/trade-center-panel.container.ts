@@ -1343,6 +1343,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         false
       );
       this.onSelectPreset(shortcut, true);
+      const indexCopy = this.state.searchEngine.indexedKeywords;
+      this.state.searchEngine = this.initializePageState().searchEngine;
+      this.state.searchEngine.indexedKeywords = indexCopy;
     }
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {
