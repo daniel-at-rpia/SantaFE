@@ -1277,7 +1277,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             eachHeader.content.tableSpecifics.default.pinned = existInOverwrite.pinned;
           }
           if (existInOverwrite.hasOwnProperty('groupBy')) {
-            eachHeader.content.tableSpecifics.default.groupByActive = existInOverwrite.groupBy;
+            if (eachHeader.key === 'ticker' && !!existInOverwrite.groupBy) {
+              const tickerDefinition = this.state.currentSearch.previewShortcut.data.searchFilters[0].find((eachDefinition) => {
+                return eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.TICKER.key;
+              });
+              if (!!tickerDefinition && tickerDefinition.data.highlightSelectedOptionList.length === 1) {
+                // if user is searching for a specific ticker, then it's counter-productive to group the table by ticker
+                eachHeader.content.tableSpecifics.default.groupByActive = false;
+              } else {
+                eachHeader.content.tableSpecifics.default.groupByActive = true;
+              }
+            } else {
+              eachHeader.content.tableSpecifics.default.groupByActive = existInOverwrite.groupBy;
+            }
           }
         }
       });
