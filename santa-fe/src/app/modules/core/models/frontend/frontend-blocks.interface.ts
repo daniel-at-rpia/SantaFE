@@ -369,9 +369,6 @@ export interface BICsHierarchyBlock {
   children: Array<BICsHierarchyBlock>;
 }
 
-export interface BICsHierarchyAllDataBlock {
-  children: Array<BICsHierarchyBlock>;
-}
 
 export interface BICSCategorizationBlock {
   portfolioID: number,
