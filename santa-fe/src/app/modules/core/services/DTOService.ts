@@ -702,10 +702,15 @@ export class DTOService {
         showFiltersFromDefinition: null,
         isLoading: false,
         noMainCTA: !!noMainCTA,
-        securityAttrOnly: securityAttrOnly
+        securityAttrOnly: securityAttrOnly,
+        includesSelectedDefinitions: false
       }
     };
     this.utility.setCoreDefinitionGroupForEachConfiguratorDefinition(object);
+    const selectedDefinitionBundle = this.utility.getDefinitionBundleFromConfigurator(object, SecurityDefinitionConfiguratorGroupLabels.selected);
+    if (selectedDefinitionBundle) {
+      object.state.includesSelectedDefinitions = true;
+    }
     return object;
   }
 
@@ -719,7 +724,7 @@ export class DTOService {
       targetConfigurator.state.securityAttrOnly
     );
     object.data.definitionList = targetConfigurator.data.definitionList;
-    const selectedGroupDefinition = object.data.definitionList.find((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label === SecurityDefinitionConfiguratorGroupLabels.selected);
+    const selectedGroupDefinition = this.utility.getDefinitionBundleFromConfigurator(object, SecurityDefinitionConfiguratorGroupLabels.selected);
     object.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
         eachDefinition.data.displayOptionList = this.utility.deepCopy(eachDefinition.data.prinstineFilterOptionList);

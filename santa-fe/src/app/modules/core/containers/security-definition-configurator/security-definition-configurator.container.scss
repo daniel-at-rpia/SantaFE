@@ -337,6 +337,13 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
+  &--includesSelectedDefinitionState {
+    #{$blockName} {
+      &__definitions {
+        @include mix_fixed_div(relative, $z_index_hovering_item)
+      }
+    }
+  }
   &--filterActiveState {
     #{$blockName} {
       &__filters {

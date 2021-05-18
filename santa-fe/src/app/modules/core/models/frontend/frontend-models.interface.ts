@@ -289,6 +289,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
     showFiltersFromDefinition: SecurityDefinitionDTO;
     noMainCTA: boolean;
     securityAttrOnly: boolean;
+    includesSelectedDefinitions: boolean;
   }
 }
 
