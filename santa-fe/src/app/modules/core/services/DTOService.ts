@@ -721,7 +721,8 @@ export class DTOService {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = this.createSecurityDefinitionConfigurator(
       targetConfigurator.state.groupByDisabled,
       targetConfigurator.state.noMainCTA,
-      targetConfigurator.state.securityAttrOnly
+      targetConfigurator.state.securityAttrOnly,
+      definitionLayoutMap
     );
     object.data.definitionList = targetConfigurator.data.definitionList;
     const selectedGroupDefinition = this.utility.getDefinitionBundleFromConfigurator(object, SecurityDefinitionConfiguratorGroupLabels.selected);
