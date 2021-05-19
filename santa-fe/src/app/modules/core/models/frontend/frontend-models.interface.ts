@@ -26,6 +26,7 @@ import {
 import { BEStructuringFundBlock } from 'Core/models/backend/backend-models.interface';
 import { TraceTradeParty, AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 import { StructureUtilityPanelState } from './frontend-page-states.interface';
+import { SecurityDefinitionConfiguratorGroupLabels } from 'Core/constants/securityDefinitionConstants.constant';
 
 interface BasicDTOStructure {
   id?: string;
@@ -249,6 +250,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     backendDtoAttrName: string;
     totalMatchingResults: number;
     internalOnly: boolean;  // see stub interface for explanation
+    configuratorCoreDefinitionGroup: SecurityDefinitionConfiguratorGroupLabels;
   }
   style: {
     icon: string;
@@ -264,6 +266,7 @@ export interface SecurityDefinitionDTO extends BasicDTOStructure {
     isFilterLong: boolean;
     currentFilterPathInConsolidatedBICS: Array<string>;
     isFilterCapped: boolean;
+    isHiddenInConfiguratorDefinitionBundle: boolean;
   }
 }
 
@@ -286,6 +289,7 @@ export interface SecurityDefinitionConfiguratorDTO extends BasicDTOStructure {
     showFiltersFromDefinition: SecurityDefinitionDTO;
     noMainCTA: boolean;
     securityAttrOnly: boolean;
+    includesSelectedDefinitions: boolean;
   }
 }
 

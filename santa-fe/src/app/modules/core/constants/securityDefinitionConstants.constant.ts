@@ -280,6 +280,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
   const FilterOptionsPortfolioManagerList = [
+    'AG',
     'AY',
     'BT',
     'DA',
@@ -287,7 +288,11 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'DJ',
     'DM',
     'IL',
+    'LC',
+    'LP',
+    'PD',
     'PM',
+    'RV',
     'SP',
     'TW'
   ];
@@ -503,6 +508,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-file-invoice-dollar',
     optionList: FilterOptionsPortfolioList,
     securityDTOAttr: 'portfolios',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['PORTFOLIO'],
     internalOnly: true
   },
   PRIMARY_PORTFOLIO_MANAGER: {
@@ -511,6 +517,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
     securityDTOAttr: 'primaryPmName',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['PRIMARY'],
     internalOnly: true
   },
   BACKUP_PORTFOLIO_MANAGER: {
@@ -535,6 +542,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fad fa-users',
     optionList: FullOwnerList,
     securityDTOAttr: 'owner',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['OWNER'],
     internalOnly: true
   },
   STRATEGY: {
@@ -543,6 +551,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-chess',
     optionList: FullStrategyList,
     securityDTOAttr: 'strategyList',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['STRATEGY'],
     internalOnly: true
   },
   COUNTRY: {
@@ -558,6 +567,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     key: 'QUOTED_TODAY',
     displayName: 'Quoted Today',
     icon: 'far fa-calendar-day',
+    securityDTOAttr: 'quotedToday',
     optionList: FilterOptionsBoolean,
     backendDtoAttrName: FrontendKeyToBackendKeyDictionary['QUOTED_TODAY'],
     internalOnly: false
@@ -653,51 +663,56 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   }
 };
 
+export enum SecurityDefinitionConfiguratorGroupLabels {
+  selected = 'Selected',
+  popular = 'Popular',
+  standard = 'Standard',
+  internal = 'Internal',
+  common = 'Common',
+  bics = 'BICS',
+  bond = 'Bond'
+}
+
 export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
-    label: 'Basic',
+    label: SecurityDefinitionConfiguratorGroupLabels.selected,
     list: [
-      SecurityDefinitionMap.PORTFOLIO,
-      SecurityDefinitionMap.CURRENCY,
-      SecurityDefinitionMap.RATING,
-      SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.COUNTRY,
-      SecurityDefinitionMap.SECURITY_TYPE,
-      SecurityDefinitionMap.SECURITY_SUB_TYPE
+      SecurityDefinitionMap.QUOTED_TODAY
     ]
-  }, {
-    label: 'BICS',
-    list: [
-      SecurityDefinitionMap.BICS_CONSOLIDATED
-    ]
-  },{
-    label: 'Owner',
-    list: [
-      SecurityDefinitionMap.OWNER,
-      SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER,
-      SecurityDefinitionMap.BACKUP_PORTFOLIO_MANAGER,
-      SecurityDefinitionMap.RESEARCH
-    ]
-  },{
-    label: 'Quality',
-    list: [
-      SecurityDefinitionMap.RATING_BUCKET,
-      SecurityDefinitionMap.SENIORITY
-    ]
-  },{
-    label: 'Bond',
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.popular,
     list: [
       SecurityDefinitionMap.TICKER,
+      SecurityDefinitionMap.CURRENCY,
+      SecurityDefinitionMap.BICS_CONSOLIDATED,
+      SecurityDefinitionMap.SENIORITY,
+      SecurityDefinitionMap.RATING,
+    ]
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.standard,
+    list: [
+      SecurityDefinitionMap.TENOR,
+      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.RATING_BUCKET,
+      SecurityDefinitionMap.SECURITY_TYPE,
+      SecurityDefinitionMap.SECURITY_SUB_TYPE,
       SecurityDefinitionMap.COUPON_TYPE,
-      SecurityDefinitionMap.BACKEND_TENOR,
-      SecurityDefinitionMap.BAIL_IN_STATUS,
       SecurityDefinitionMap.MATURITY,
-      SecurityDefinitionMap.IS_NEWISSUE,
-      SecurityDefinitionMap.IS_ONTHERUN
+      SecurityDefinitionMap.QUOTED_TODAY
+    ]
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.internal,
+    list: [
+      SecurityDefinitionMap.PORTFOLIO,
+      SecurityDefinitionMap.STRATEGY,
+      SecurityDefinitionMap.OWNER,
+      SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER
     ]
   }
-];
+]
 
 export const SeniorityValueToLevelMapping = [
   {

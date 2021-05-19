@@ -8,7 +8,8 @@
     'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
     'sat-securityDefinitionConfigurator--filterLongState': configuratorData.state.showFiltersFromDefinition?.state.isFilterLong,
     'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.BICS_CONSOLIDATED.key,
-    'sat-securityDefinitionConfigurator--cappedFilterListState': configuratorData.state.showFiltersFromDefinition?.state.isFilterCapped
+    'sat-securityDefinitionConfigurator--cappedFilterListState': configuratorData.state.showFiltersFromDefinition?.state.isFilterCapped,
+    'sat-securityDefinitionConfigurator--includesSelectedDefinitionState': configuratorData.state.includesSelectedDefinitions
   }">
   <section class="sat-securityDefinitionConfigurator__definitions">
     <ul class="sat-securityDefinitionConfigurator__definitions-list">
@@ -17,7 +18,13 @@
           <span class="sat-securityDefinitionConfigurator__definitions-list-section-label-text">{{eachLayoutSection.data.label}}</span>
           <div class="sat-securityDefinitionConfigurator__definitions-list-section-label-line"></div>
         </div>
-        <div *ngFor="let eachDefinition of eachLayoutSection.data.list" class="sat-securityDefinitionConfigurator__definitions-list-section-item">
+        <div
+        *ngFor="let eachDefinition of eachLayoutSection.data.list"
+        [ngClass]="{
+          'sat-securityDefinitionConfigurator__definitions-list-section-item': true,
+          'sat-securityDefinitionConfigurator__definitions-list-section-item--hiddenInCoreDefinitionGroupState': eachDefinition.state.isHiddenInConfiguratorDefinitionBundle,
+          'sat-securityDefinitionConfigurator__definitions-list-section-item--selectedDefinitionState': eachDefinition.data.configuratorCoreDefinitionGroup === constants.securityDefinitionLabel.selected
+        }">
           <button
             (click)="selectDefinitionForGrouping(eachDefinition)"
             [ngClass]="{
@@ -36,13 +43,16 @@
             [groupByDisabled]="configuratorData.state.groupByDisabled"
             [isPartOfConfiguratorList]="true">
           </security-definition>
+          <button (click)="clearAllSelectedOptions(eachDefinition)"
+            class="sat-securityDefinitionConfigurator__definitions-list-section-item-clearAllOptionsBtn santaBtn--iconOnly fal fa-times santaBtn--small">
+          </button>
         </div>
       </li>
     </ul>
   </section>
   <section class="sat-securityDefinitionConfigurator__filters">
     <div class="sat-securityDefinitionConfigurator__filters-content">
-      <button (click)="onClickDefinition(configuratorData.state.showFiltersFromDefinition)" class="sat-securityDefinitionConfigurator__filters-content-closeBtn santaBtn--iconOnly fal fa-times"></button>
+      <button (click)="onClickDefinition(configuratorData.state.showFiltersFromDefinition)" class="sat-securityDefinitionConfigurator__filters-content-collapseBtn santaBtn--iconOnly fal fa-arrow-left" title="Collapse configurator"></button>
       <div class="sat-securityDefinitionConfigurator__filters-content-title">
         <security-definition
           [definitionData]="configuratorData.state.showFiltersFromDefinition"
