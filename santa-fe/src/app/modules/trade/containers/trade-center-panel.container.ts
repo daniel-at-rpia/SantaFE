@@ -321,7 +321,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       previewCopy.state.isSelected = false;
       previewCopy.state.isUserInputBlocked = true;
       this.state.currentSearch.previewShortcut = previewCopy;
-      this.state.configurator.dto.data = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto).data;
+      this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
+      if (!!targetPreset && targetPreset.data.searchFilters.length > 0) {
+        targetPreset.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
+          searchFilter.forEach((filter: DTOs.SecurityDefinitionDTO) => {
+            filter.state.isHiddenInConfiguratorDefinitionBundle = true;
+          })
+        })
+      }
       this.checkInitialPageLoadData();
       if (userTriggered) {
         this.restfulCommService.logEngagement(
@@ -390,9 +397,20 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     preloadMetricFromSeeBond: globalConstants.structuring.PortfolioMetricValues,
     targetPreset: DTOs.SearchShortcutDTO = null
   ) {
-    this.state.filters.securityFilters = params.filterList;
+    const selectedDefinitionBundle = this.utilityService.getDefinitionBundleFromConfigurator(this.state.configurator.dto, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+    this.updatedSelectedDefinitionsAfterSave(selectedDefinitionBundle);
+    const modifiedParams: AdhocPacks.DefinitionConfiguratorEmitterParams = {
+      filterList: []
+    }
+    if (params.filterList.length > 0) {
+      params.filterList.forEach((list: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+        const isExists = modifiedParams.filterList.find((parsedList: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => parsedList.key === list.key);
+        !isExists && modifiedParams.filterList.push(list);
+      })
+    }
+    this.state.filters.securityFilters = modifiedParams.filterList;
     this.state.filters.quickFilters = this.initializePageState().filters.quickFilters;
-    params.filterList.forEach((eachFilter) => {
+    modifiedParams.filterList.forEach((eachFilter) => {
       if (eachFilter.targetAttribute === 'portfolios') {
         this.state.filters.quickFilters.portfolios = eachFilter.filterBy;
       } else if (eachFilter.targetAttribute === 'owner') {
@@ -405,9 +423,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
       }
     });
-    if (params.filterList.length > 0 && (!targetPreset || targetPreset.state.isAbleToSaveAsRecentWatchlist)) {
+    if (modifiedParams.filterList.length > 0 && (!targetPreset || targetPreset.state.isAbleToSaveAsRecentWatchlist)) {
       const presetDisplayTitle = targetPreset && targetPreset.data ? targetPreset.data.displayTitle : '';
-      this.checkExistingRecentWatchlistSearches(params, this.state.presets.recentWatchlistShortcuts.fullList, presetDisplayTitle);
+      this.checkExistingRecentWatchlistSearches(modifiedParams, this.state.presets.recentWatchlistShortcuts.fullList, presetDisplayTitle);
     }
     this.updateSearchMode();
     if(!!preloadMetricFromSeeBond){
@@ -415,11 +433,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     } else {
       this.updateTableLayout();
     }
+    this.addDefinitionToSelectedDefinitionBundle(modifiedParams.filterList);
     if (!!userTriggered) {
       this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
       this.loadFreshData();
       let filterValue = '';
-      params.filterList.forEach((eachFilter) => {
+      modifiedParams.filterList.forEach((eachFilter) => {
         filterValue = `${filterValue} | ${eachFilter.targetAttribute}: ${eachFilter.filterBy.toString()}`; 
       });
       this.restfulCommService.logEngagement(
@@ -1054,7 +1073,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           const groupDefinition = isBICS ? 'BICS' : this.constants.definition.SecurityDefinitionMap[definitionItem.key].displayName;
           selectionOptionsList = [
             ...selectionOptionsList,
-            ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => isBICS ? this.bicsDictionaryLookupService.BICSCodeToBICSName(option) : option)
+            ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => this.getParsedOptionForShortcutTitle(definitionItem.key, option))
           ];
           customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
         } else {
@@ -1276,5 +1295,58 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }
       }
     });
+  }
+
+  private updatedSelectedDefinitionsAfterSave(definitionBundle: DTOs.SecurityDefinitionBundleDTO) {
+    let updatedList: Array<DTOs.SecurityDefinitionDTO> = [];
+    let removedList: Array<DTOs.SecurityDefinitionDTO> = [];
+    definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+      const listForCompare = definition.state.isFilterCapped || definition.state.isConsolidatedBICSVariant ? definition.data.highlightSelectedOptionList : definition.data.displayOptionList;
+      const isNotSelected = listForCompare.every((optionBlock: Blocks.SecurityDefinitionFilterBlock) => !optionBlock.isSelected);
+      if (!!isNotSelected) {
+        removedList = [...removedList, definition];
+      } else {
+        updatedList = [...updatedList, definition];
+      }
+    })
+    if (removedList.length > 0) {
+      removedList.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+        this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.state.configurator.dto, definition, false);
+      })
+    }
+    definitionBundle.data.list = updatedList;
+  }
+
+  private addDefinitionToSelectedDefinitionBundle(filterList: Array<AdhocPacks.DefinitionConfiguratorEmitterParamsItem>) {
+    const filterListKeys: Array<string> = filterList.map((options: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => options.key);
+    const selectedGroup = this.utilityService.getDefinitionBundleFromConfigurator(this.state.configurator.dto, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+    this.state.configurator.dto.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+      definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+        const isSelected = filterListKeys.find((key: string) => key === definition.data.key);
+        if (!!isSelected) {
+          const isExistsInSelectedGroup = selectedGroup.data.list.find((selectedDefinition: DTOs.SecurityDefinitionDTO) => selectedDefinition.data.key === definition.data.key);
+          if (!isExistsInSelectedGroup) {
+            const definitionCopy: DTOs.SecurityDefinitionDTO = this.utilityService.deepCopy(definition);
+            definitionCopy.state.isHiddenInConfiguratorDefinitionBundle = false;
+            definitionCopy.data.configuratorCoreDefinitionGroup = this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected;
+            definition.state.isHiddenInConfiguratorDefinitionBundle = true;
+            selectedGroup.data.list.push(definitionCopy);
+          }
+        }
+      })
+    })
+  }
+
+  private getParsedOptionForShortcutTitle(
+    key: string,
+    option: string
+  ): string {
+    if (key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+      return this.bicsDictionaryLookupService.BICSCodeToBICSName(option);
+    } else if (key === this.constants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
+      return option === 'Y' ? 'Quoted Today' : 'Not Quoted Today';
+    } else {
+      return option;
+    }
   }
 }

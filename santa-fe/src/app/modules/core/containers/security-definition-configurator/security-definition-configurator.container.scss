@@ -23,6 +23,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       &-section {
         display: flex;
         flex-direction: column;
+        margin-bottom: $spacing_medium;
         &-label {
           @include mix_fixed_div(relative, $z_index_base_item);
           display: flex;
@@ -38,11 +39,12 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
             @include mix_fixed_div(absolute, $z_index_base_item_solid);
             @include mix_border_generator($typical_border_width 0 0 0);
             margin-top: $spacing_large - $spacing_xx_small;
-            width: 100%;
+            width: 90%;
             height: 50%;
           }
         }
         &-item {
+          @include mix_fixed_div(relative, $z_index_base_item);
           display: flex;
           flex-direction: column;
           margin-top: $spacing_small;
@@ -63,11 +65,34 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
               background-color: inherit;
             }
           }
+          &-clearAllOptionsBtn {
+            @include mix_fixed_div(absolute, $z_index_hovering_item);
+            display: none;
+            background-color: $color_negative;
+            color: $font_color_inverse;
+            top: 50%;
+            right: $spacing_x_small;
+            transform: translateY(-50%);
+          }
           security-definition {
             align-self: flex-start;
           }
           &:last-of-type {
             margin-bottom: $spacing_medium;
+          }
+          &--hiddenInCoreDefinitionGroupState {
+            display: none;
+          }
+          &--selectedDefinitionState {
+            #{$blockName} {
+              &__definitions {
+                &-list-section-item {
+                  &-clearAllOptionsBtn {
+                    display: flex;
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -78,7 +103,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     @include mix_calculate(height, 100%, $securityDefinitionConfigurator_ctas_height, '-');
     display: flex;
     top: 0;
-    left: $securityDefinition_configuratorVariant_width + $securityDefinitionConfigurator_gapBetweenDefAndFilter;
+    left: $securityDefinition_configuratorVariant_width + $spacing_medium;
     width: $securityDefinitionConfigurator_filters_width;
     padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
     overflow: hidden;
@@ -90,12 +115,10 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       flex-direction: column;
       align-items: center;
       transform: translate(-125%, 0) scale(0.01, 1);
-      &-closeBtn {
+      &-collapseBtn {
         @include mix_fixed_div(absolute, $z_index_hovering_item);
         top: $spacing_small;
         right: $spacing_small;
-        background-color: $color_kill;
-        color: $font_color_inverse;
       }
       &-title {
         display: flex;
@@ -142,6 +165,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
       &-selectedListTitle {
         display: none;
+        align-items: center;
         &-highlightedText {
           @include mix_border_radius(3px);
           background-color: $color_filter;
@@ -153,6 +177,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
         &-text {
           color: $font_color_minor;
           font-size: $font_size_normal;
+          margin-right: $spacing_small;
         }
       }
       &-optionList {
@@ -180,7 +205,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
           flex: 0 0 auto;
           display: none;
           max-height: 11rem;
-          padding: $spacing_x_small;
+          padding: $spacing_medium $spacing_x_small;
           margin: 0 $spacing_medium;
         }
         &--selected > &-item {
@@ -312,10 +337,17 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
       }
     }
   }
+  &--includesSelectedDefinitionState {
+    #{$blockName} {
+      &__definitions {
+        @include mix_fixed_div(relative, $z_index_hovering_item)
+      }
+    }
+  }
   &--filterActiveState {
     #{$blockName} {
       &__filters {
-        @include mix_fixed_div(absolute, $z_index_hovering_item);
+        @include mix_fixed_div(absolute, $z_index_base_item_lift);
         &-content {
           @include mix_border_generator(3px, $color_active);
           transform: translate(0, 0) scale(1, 1);

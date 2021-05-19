@@ -11,7 +11,8 @@
       ConfiguratorDefinitionLayout,
       DEFINITION_CAPPED_THRESHOLD,
       SecurityDefinitionMap,
-      DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD
+      DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD,
+      SecurityDefinitionConfiguratorGroupLabels
     } from 'Core/constants/securityDefinitionConstants.constant';
     import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
   //
@@ -35,6 +36,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   constants = {
     map: SecurityDefinitionMap,
     cappedAmount: DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD,
+    securityDefinitionLabel: SecurityDefinitionConfiguratorGroupLabels
   }
 
   constructor(
@@ -153,6 +155,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       }
     });
     targetDefinition.state.filterActive = filterActive;
+    if (targetDefinition.data.configuratorCoreDefinitionGroup === SecurityDefinitionConfiguratorGroupLabels.selected) {
+      this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.configuratorData, targetDefinition, true);
+    }
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
@@ -240,21 +245,36 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
+  public clearAllSelectedOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
+    targetDefinition.data.highlightSelectedOptionList = [];
+    targetDefinition.state.filterActive = false;
+    if (targetDefinition.state.isFilterCapped) {
+      targetDefinition.data.displayOptionList = [];
+    } else {
+      targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
+        option.isSelected = false;
+      })
+    }
+    this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.configuratorData, targetDefinition, true);
+    if (this.configuratorData.state.groupByDisabled) {
+      this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
+    }
+  }
+
   private clearSearchFilter(hasAppliedFilter: boolean) {
     this.configuratorData.data.filterSearchInputValue = '';
     this.onSearchKeywordChange('', hasAppliedFilter);
   }
 
-  private clearDefinitionFilterOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
-    targetDefinition.data.displayOptionList.forEach((eachOption) => {
-      eachOption.isSelected = false;
-    });
-    targetDefinition.state.filterActive = false;
-  }
-
   private checkFilterCanApply(): boolean {
     let canApply = false;
-    this.configuratorData.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
+    const parsedLastExecueted = this.lastExecutedConfiguration.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+    const parsedcurrentConfiguration = this.configuratorData.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+    const prevCompareCopy = this.utilityService.deepCopy(this.lastExecutedConfiguration);
+    const currentCompareCopy = this.utilityService.deepCopy(this.configuratorData);
+    prevCompareCopy.data.definitionList = parsedLastExecueted;
+    currentCompareCopy.data.definitionList = parsedcurrentConfiguration;
+    currentCompareCopy.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
       eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
         const activeFilters = eachDefinition.state.isConsolidatedBICSVariant || eachDefinition.state.isFilterCapped ? eachDefinition.data.highlightSelectedOptionList.filter((eachOption) => {
           return eachOption.isSelected;
@@ -263,9 +283,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         })
         let previousListForCompare: Array<Blocks.SecurityDefinitionFilterBlock>;
         if (eachDefinition.state.isFilterCapped) {
-          previousListForCompare = this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList;
+          previousListForCompare = prevCompareCopy.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList;
         } else {
-          previousListForCompare = eachDefinition.state.isConsolidatedBICSVariant ? this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : this.lastExecutedConfiguration.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
+          previousListForCompare = eachDefinition.state.isConsolidatedBICSVariant ? prevCompareCopy.data.definitionList[bundleIndex].data.list[definitionIndex].data.highlightSelectedOptionList : prevCompareCopy.data.definitionList[bundleIndex].data.list[definitionIndex].data.displayOptionList;
         }
         const prevActiveFilters = !eachDefinition.state.isFilterCapped ? previousListForCompare.filter((eachOption) => eachOption.isSelected ) : previousListForCompare;
         if (activeFilters.length === prevActiveFilters.length) {
@@ -326,5 +346,4 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: DTOs.SecurityDefinitionDTO): boolean {
     return !!targetDefinition.data.prinstineFilterOptionList ? targetDefinition.data.prinstineFilterOptionList.length > DEFINITION_CAPPED_THRESHOLD : false;
   }
-
 }

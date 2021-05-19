@@ -222,7 +222,11 @@ export class LiveDataProcessingService {
             let securityLevelFilterResultCombined = true;
             if (panelStateFilterBlock.securityFilters.length > 0) {
               const securityLevelFilterResult = panelStateFilterBlock.securityFilters.map((eachFilter) => {
-                return this.filterBySecurityAttribute(eachRow, eachFilter, panelStateFilterBlock);
+                if (eachFilter.targetAttribute === 'quotedToday') {
+                  return this.filterByQuotedToday(eachRow);
+                } else {
+                  return this.filterBySecurityAttribute(eachRow, eachFilter, panelStateFilterBlock);
+                }
               });
               // as long as one of the filters failed, this security will not show
               securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
@@ -588,5 +592,9 @@ export class LiveDataProcessingService {
     newRow: DTOs.AlertDTO
   ): boolean {
     return (oldRow.data.unixTimestamp !== newRow.data.unixTimestamp || oldRow.data.validUntilTime !== newRow.data.validUntilTime) && oldRow.data.id === newRow.data.id;
+  }
+
+  private filterByQuotedToday(targetRow: DTOs.SecurityTableRowDTO): boolean {
+    return !!targetRow.data.bestQuotes
   }
 }
