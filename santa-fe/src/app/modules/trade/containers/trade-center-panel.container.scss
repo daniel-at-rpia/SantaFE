@@ -15,24 +15,16 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    &-title {
-      @include mix_fixed_div(absolute, $z_index_base_item);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      &-text {
-        text-align: center;
-        font-size: $font_size_x_large;
-        color: $font_color_minor;
-      }
-    }
     &-content {
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      align-items: center;
+      .sat-tradeCenterPanelSearchEngine {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        top: 20rem;
+      }
     }
   }
   &__utilities {
@@ -310,7 +302,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
 $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
 .sat-tradeCenterPresetCategoryCanvas {
   $blockName: &;
-  @include mix_fixed_div(relative, $z_index_base_item_solid);
+  @include mix_fixed_div(relative, $z_index_base_item_lift);
   @include mix_alive('custom', transform $animation_duration_normal);
   flex: 0 0 auto;
   display: flex;
@@ -460,10 +452,12 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
 $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $spacing_medium;
 .sat-tradeCenterPresetShortcutCanvas {
   $blockName: &;
+  @include mix_fixed_div(relative, $z_index_base_item_lift);
   @include mix_alive('light');
   @include mix_border_radius(15px);
   flex: 1 1 auto;
   display: flex;
+  align-self: stretch;
   margin: $spacing_xx_large 0;
   background-color: $color_active;
   overflow: hidden;
@@ -564,5 +558,150 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   }
   @include mq-xx-large-min {
     margin: $spacing_xx_large 25%;
+  }
+}
+
+$tradeCenterPanelSearchEngine_input_width: 30rem;
+.sat-tradeCenterPanelSearchEngine {
+  $blockName: &;
+  @include mix_border_radius(15px);
+  // padding: $spacing_large;
+  &__bucket {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    display: flex;
+    flex-direction: column;
+    bottom: 100%;
+    &-definition {
+      flex: 0 0 auto;
+      display: none;
+      flex-direction: column;
+      padding: $spacing_x_small 0;
+      &-label {
+        font-size: $font_size_large;
+        color: $font_color_trivial;
+        margin-bottom: $spacing_x_small;
+      }
+      &-list {
+        display: flex;
+        margin-left: $spacing_medium;
+        &-item {
+          margin-left: $spacing_medium;
+          &-text {
+          }
+          &-type {
+            @include mix_border_radius(3px);
+            @include mix_border_generator;
+            padding: 0 $spacing_x_small;
+            margin-left: $spacing_medium;
+          }
+          &-plusIcon {
+            margin-left: $spacing_medium;
+          }
+          &:last-of-type>&-plusIcon {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &__input {
+    @include mix_fixed_div(relative, $z_index_base_item_solid);
+    display: flex;
+    // width: $tradeCenterPanelSearchEngine_input_width;
+    santa-input {
+      width: $tradeCenterPanelSearchEngine_input_width;
+    }
+    &-mainCTA {
+      @include mix_alive('light');
+      margin-left: $spacing_medium;
+      user-select: none;
+      opacity: 0;
+      transform: scale(0.01);
+    }
+    // mat-form-field {
+    //   flex: 1 1 auto;
+    //   @include material_form_font_size_override('hero');
+    // }
+  }
+  &__typeahead {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_border_radius(15px, 'bottom');
+    @include mix_border_generator;
+    @include material();
+    @include mix_alive('light');
+    display: none;
+    left: 0;
+    top: 100%;
+    width: $tradeCenterPanelSearchEngine_input_width;
+    overflow: hidden;
+    background-color: $color_white;
+    &-list {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      &-item {
+        display: flex;
+        padding: $spacing_small;
+        &-displayText {
+          flex: 1 1 auto;
+        }
+        &-type {
+          @include mix_border_radius(3px);
+          @include mix_border_generator;
+          flex: 0 0 auto;
+          padding: 0 $spacing_x_small;
+          margin-left: $spacing_medium;
+        }
+        &--selected {
+          background-color: $color_active;
+        }
+        &--selected>&-displayText {
+          color: $font_color_inverse;
+        }
+        &--selected>&-type {
+          border-color: $color_white;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--typeaheadActive {
+    #{$blockName} {
+      &__typeahead {
+        display: flex;
+      }
+    }
+  }
+  &--bicsEntered {
+    #{$blockName} {
+      &__bucket {
+        &-definition--bics {
+          display: flex;
+        }
+      }
+      &__input {
+        &-mainCTA {
+          user-select: all;
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    }
+  }
+  &--tickerEntered {
+    #{$blockName} {
+      &__bucket {
+        &-definition--ticker {
+          display: flex;
+        }
+      }
+      &__input {
+        &-mainCTA {
+          user-select: all;
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    }
   }
 }

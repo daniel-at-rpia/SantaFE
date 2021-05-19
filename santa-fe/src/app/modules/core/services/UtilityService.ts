@@ -631,6 +631,20 @@ export class UtilityService {
       })
     })
   }
+
+    public highlightKeywordInParagraph(targetString: string, keyword: string): string {
+      // current algorithm only highlights the first occurrence of the keyword, if ever there is the need to highlight all occurrences, append the logic and add a flag as input to switch between two modes
+      if (targetString && keyword && targetString.length > 0 && keyword.length > 0) {
+        const startIndex = targetString.toUpperCase().indexOf(keyword.toUpperCase());
+        const endIndex = startIndex + keyword.length;
+        const beforeKeyword = targetString.slice(0, startIndex);
+        const matchedKeywordPortion = targetString.slice(startIndex, endIndex);
+        const afterKeyword = targetString.slice(endIndex);
+        return `${beforeKeyword}<kbd>${matchedKeywordPortion}</kbd>${afterKeyword}`;
+      } else {
+        return null;
+      }
+    }
   // shared end
 
   // market specific

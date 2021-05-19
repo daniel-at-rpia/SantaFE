@@ -283,3 +283,11 @@ export interface RouteHandlerStoreBlock {
   state: string;
   handle: DetachedRouteHandle;
 }
+
+
+export interface TradeCenterPanelSearchEngineIndexEntry {
+  pristineText: string;
+  displayText: string;
+  type: string;
+  bicsLevel?: number;
+}

@@ -23,20 +23,27 @@ export class SantaInput implements OnChanges{
   @Input() isGrayedOut: boolean;
   @Input() isDisabled: boolean;
   @Input() isNonEditable: boolean;
+  @Input() autoFocus: boolean;
   @Output() onInputChange = new EventEmitter<string>();
   @Output() onInputFocus = new EventEmitter();
   @Output() onInputBlur = new EventEmitter();
   @Output() onEnterKeyPressed = new EventEmitter<string>();
+  @Output() onGenericKeyPressed = new EventEmitter<KeyboardEvent>();
   constructor(
   ) {
   }
 
   public ngOnChanges() {
-    // nothing to do atm
+    console.log('test, within input, input value is', this.inputValue);
   }
 
   public onKey() {
     !!this.onInputChange && this.onInputChange.emit(this.inputValue);
+  }
+
+  public onPressedGenericKey(event: KeyboardEvent) {
+    // need to pass out entire event in case outside needs to prevent default
+    !!this.onGenericKeyPressed && this.onGenericKeyPressed.emit(event);
   }
 
   public onFocus() {

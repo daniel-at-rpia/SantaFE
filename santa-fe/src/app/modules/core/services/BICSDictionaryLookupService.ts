@@ -108,6 +108,10 @@ export class BICSDictionaryLookupService {
     }
    }
 
+  public getBICSLevel(code: string): number {
+    return Math.floor(code.length/2);
+  }
+
   private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
     for (let eachCode in data) {
       const block = data[eachCode];

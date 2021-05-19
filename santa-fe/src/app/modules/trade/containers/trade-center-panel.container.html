@@ -10,9 +10,6 @@
     'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount
   }">
   <section class="sat-tradeCenterPanel__presets">
-    <div class="sat-tradeCenterPanel__presets-title">
-      <span class="sat-tradeCenterPanel__presets-title-text">Select Preset</span>
-    </div>
     <div class="sat-tradeCenterPanel__presets-content">
       <article
         [ngClass]="{
@@ -198,6 +195,72 @@
         </ul>
         <section class="sat-tradeCenterPresetCategoryCanvas__title">
           <span class="sat-tradeCenterPresetCategoryCanvas__title-text">Explore Universe</span>
+        </section>
+      </article>
+      <article
+        [ngClass]="{
+          'sat-tradeCenterPanelSearchEngine': true,
+          'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.searchEngine.typeaheadActive,
+          'sat-tradeCenterPanelSearchEngine--bicsEntered': state.searchEngine.constructedSearchBucket.BICS.length > 0,
+          'sat-tradeCenterPanelSearchEngine--tickerEntered': state.searchEngine.constructedSearchBucket.TICKER.length > 0
+        }">
+        <section class="sat-tradeCenterPanelSearchEngine__bucket">
+          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--bics">
+            <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">BICS: </span>
+            <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
+              <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.BICS" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
+                <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-plusIcon fal fa-plus"></i>
+              </li>
+            </ul>
+          </div>
+          <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--ticker">
+            <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-label">Ticker: </span>
+            <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-list">
+              <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.TICKER" class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item">
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-text">{{eachEntry.pristineText}}</span>
+                <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-type">{{eachEntry.type}}</span>
+                <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-list-item-plusIcon fal fa-plus"></i>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <section class="sat-tradeCenterPanelSearchEngine__input">
+          <santa-input
+            [autoFocus]="true"
+            [isHero]="true"
+            [placeholder]="''"
+            [inputValue]="state.searchEngine.activeKeyword"
+            (onInputChange)="onSearchEngineInputChange($event)"
+            (onGenericKeyPressed)="onSearchEngineKeyPressed($event)">
+          </santa-input>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Tickers / BICS</mat-label>
+            <input
+              matInput
+              (onInputChange)="onSearchEngineInputChange($event)"
+              >
+          </mat-form-field> -->
+          <button (click)="onClickSearchEngineSearchBonds()" class="sat-tradeCenterPanelSearchEngine__input-mainCTA santaBtn--labelled">
+            <i class="fal fa-search"></i>
+            <span>Search</span>
+          </button>
+        </section>
+        <section class="sat-tradeCenterPanelSearchEngine__typeahead">
+          <ul class="sat-tradeCenterPanelSearchEngine__typeahead-list">
+            <li
+              (mouseover)="onHoverTypeaheadEntry(eachEntryIndex)"
+              (click)="onClickTypeaheadEntry(eachEntry)"
+              *ngFor="let eachEntry of state.searchEngine.typeaheadEntries; let eachEntryIndex = index;"
+              [ngClass]="{
+                'sat-tradeCenterPanelSearchEngine__typeahead-list-item': true,
+                'sat-tradeCenterPanelSearchEngine__typeahead-list-item--selected': state.searchEngine.selectedTypeaheadEntryIndex === eachEntryIndex
+              }">
+              <p class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-displayText" [innerHtml]="eachEntry.displayText"></p>
+              <span class="sat-tradeCenterPanelSearchEngine__typeahead-list-item-type">{{eachEntry.type}}</span>
+            </li>
+          </ul>
         </section>
       </article>
     </div>

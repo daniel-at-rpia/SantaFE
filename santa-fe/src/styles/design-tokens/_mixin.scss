@@ -238,6 +238,11 @@
     }
   }
 
+  // we need to set the styling manually for diff font size because material's native code for scaling up/down the UI for different font size supports outline input very poorly 
+  @mixin material_form_font_size_override($size){
+    // TODO: fill this
+  }
+
   //Card Gradient
   @mixin mix_gradient($primary_color, $secondary_color, $percentage, $degree){
     background: $primary_color; /* Legacy browsers */
