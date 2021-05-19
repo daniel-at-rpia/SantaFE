@@ -1396,11 +1396,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     public onClickSearchEngineSearchBonds() {
       const definitionList = [];
       if (this.state.searchEngine.constructedSearchBucket.BICS.length > 0) {
-        const BICSDefinitionDTO = this.searchEngineSearchBondsGenerateBICSDefinition();
+        const BICSDefinitionDTO = this.searchEngineSearchBondsGenerateDefinition(this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED);
         definitionList.push(BICSDefinitionDTO);
       }
       if (this.state.searchEngine.constructedSearchBucket.TICKER.length > 0) {
-        const tickerDefinitionDTO = this.searchEngineSearchBondsGenerateTickerDefinition();
+        const tickerDefinitionDTO = this.searchEngineSearchBondsGenerateDefinition(this.constants.definition.SecurityDefinitionMap.TICKER);
         definitionList.push(tickerDefinitionDTO);
       }
       const shortcut = this.dtoService.formSearchShortcutObject(
@@ -1540,37 +1540,30 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.performTypeaheadSearch();
     }
 
-    private searchEngineSearchBondsGenerateBICSDefinition(): DTOs.SecurityDefinitionDTO {
-      const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED);
-      definitionDTO.data.highlightSelectedOptionList = this.state.searchEngine.constructedSearchBucket.BICS.map((eachEntry) => {
-        const bicsLevel = eachEntry.bicsLevel;
-        const optionValue = eachEntry.pristineText;
-        const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
-          this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
-          optionValue,
-          bicsLevel
-        );
-        selectedOption.isSelected = true;
-        return selectedOption;
-      });
-      definitionDTO.state.filterActive = true;
-      return definitionDTO;
-    }
-
-    private searchEngineSearchBondsGenerateTickerDefinition(): DTOs.SecurityDefinitionDTO {
-      const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.TICKER);
-      definitionDTO.data.highlightSelectedOptionList = this.state.searchEngine.constructedSearchBucket.TICKER.map((eachEntry) => {
-        const optionValue = eachEntry.pristineText;
-        const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
-          this.constants.definition.SecurityDefinitionMap.TICKER.key,
-          optionValue,
-          null
-        );
-        selectedOption.isSelected = true;
-        return selectedOption;
-      });
-      definitionDTO.state.filterActive = true;
-      return definitionDTO;
+    private searchEngineSearchBondsGenerateDefinition(targetDefinitionStub: Stubs.SecurityDefinitionStub): DTOs.SecurityDefinitionDTO {
+      const definitionDTO = this.dtoService.formSecurityDefinitionObject(targetDefinitionStub);
+      let constructedSearchBucket: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry> = null;
+      if (definitionDTO.data.key === this.constants.definition.SecurityDefinitionMap.TICKER.key) {
+        constructedSearchBucket = this.state.searchEngine.constructedSearchBucket.TICKER;
+      } else if (definitionDTO.data.key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+        constructedSearchBucket = this.state.searchEngine.constructedSearchBucket.BICS;
+      }
+      if (!!constructedSearchBucket) {
+        definitionDTO.data.highlightSelectedOptionList = constructedSearchBucket.map((eachEntry) => {
+          const optionValue = eachEntry.pristineText;
+          const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+            this.constants.definition.SecurityDefinitionMap.TICKER.key,
+            optionValue,
+            null
+          );
+          selectedOption.isSelected = true;
+          return selectedOption;
+        });
+        definitionDTO.state.filterActive = true;
+        return definitionDTO;
+      } else {
+        return null;
+      }
     }
   // Search Engine End
 }
