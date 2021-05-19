@@ -233,13 +233,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         distinctUntilChanged()
       ).subscribe((keyword) => {
         const targetTable = this.state.fetchResult.mainTable;
-        if (!!keyword && keyword.length >= 2) {
-          this.state.filters.keyword.actualValue = keyword;
-          targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-        } else if (!keyword || keyword.length < 2) {
-          this.state.filters.keyword.actualValue = keyword;
-          targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
-        }
+        this.state.filters.keyword.actualValue = keyword;
+        targetTable.rowList = this.filterPrinstineRowList(targetTable.prinstineRowList);
       });
 
       this.subscriptions.receiveKeywordSearchInMainTable = this.store$.pipe(
