@@ -1,5 +1,8 @@
 import { DTOs, Blocks, AdhocPacks, Stubs } from 'Core/models/frontend';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+import {
+  SecurityDefinitionMap,
+  SecurityDefinitionConfiguratorGroupLabels
+} from 'Core/constants/securityDefinitionConstants.constant';
 import { BEStructuringBreakdownMetricBlock } from 'Core/models/backend/backend-models.interface';
 import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
@@ -99,7 +102,7 @@ export const BICS_DICTIONARY_KEY_PREFIX = 'item';
 
 export const CustomeBreakdownConfiguratorDefinitionLayout: Array<Stubs.SecurityDefinitionBundleStub> = [
   {
-    label: 'Common',
+    label: SecurityDefinitionConfiguratorGroupLabels.common,
     list: [
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
@@ -109,12 +112,12 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<Stubs.SecurityD
       SecurityDefinitionMap.SECURITY_SUB_TYPE
     ]
   },{
-    label: 'BICS',
+    label: SecurityDefinitionConfiguratorGroupLabels.bics,
     list: [
       SecurityDefinitionMap.BICS_CONSOLIDATED
     ]
   },{
-    label: 'Bond',
+    label: SecurityDefinitionConfiguratorGroupLabels.bond,
     list: [
       SecurityDefinitionMap.TICKER,
       SecurityDefinitionMap.COUPON_TYPE,

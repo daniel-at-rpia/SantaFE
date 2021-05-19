@@ -14,7 +14,7 @@
       BEStructuringBreakdownBlock,
       BEStructuringOverrideBaseBlock
     } from 'BEModels/backend-models.interface';
-    import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
+    import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
     import {
       GroupMetricOptions
     } from 'Core/constants/marketConstants.constant';
@@ -39,7 +39,9 @@
     import {
       SecurityDefinitionMap,
       StrategyExcludedFiltersMapping,
-      FilterOptionsTenorRange
+      FilterOptionsTenorRange,
+      SecurityDefinitionConfiguratorGroupLabels,
+      ConfiguratorDefinitionLayout
     } from 'Core/constants/securityDefinitionConstants.constant';
     import {
       traceTradeFilterAmounts,
@@ -452,6 +454,18 @@ export class UtilityService {
               if (eachShortcutDef.data.displayOptionList.length === 0) {
                 // sometimes the display options are loaded async in API, in those cases the shortcut which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
                 eachDefinition.data.highlightSelectedOptionList = eachShortcutDef.data.highlightSelectedOptionList;
+                // Definition from the configurator may have display option populated if users unselect a preset, which populates the display option from the pristine option list
+                if (eachDefinition.data.displayOptionList.length > 0) {
+                  eachDefinition.data.highlightSelectedOptionList.forEach(highlightOption => {
+                    const existingDisplayOption = eachDefinition.data.displayOptionList.find((displayOption) => displayOption.shortKey === highlightOption.shortKey);
+                    if (!!existingDisplayOption) {
+                      const index = eachDefinition.data.displayOptionList.findIndex(displayOption => displayOption.shortKey === highlightOption.shortKey);
+                      if (index >= 0) {
+                        eachDefinition.data.displayOptionList[index] = highlightOption;
+                      }
+                    }
+                  })
+                }
               } else {
                 eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
                 eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
@@ -609,6 +623,14 @@ export class UtilityService {
         return null;
       }
     }
+
+  public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
+    configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+      definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+        definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as SecurityDefinitionConfiguratorGroupLabels;
+      })
+    })
+  }
 
     public highlightKeywordInParagraph(targetString: string, keyword: string): string {
       // current algorithm only highlights the first occurrence of the keyword, if ever there is the need to highlight all occurrences, append the logic and add a flag as input to switch between two modes
@@ -842,6 +864,14 @@ export class UtilityService {
       } else {
         return null;
       }
+    }
+
+    public getDefinitionBundleFromConfigurator(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      bundleKey: string
+    ): DTOs.SecurityDefinitionBundleDTO {
+      const selectedDefinitionBundle = configurator.data.definitionList.find((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label === bundleKey);
+      return selectedDefinitionBundle;
     }
 
     // TODO: move this into a SecurityTableHelper service
@@ -1282,6 +1312,45 @@ export class UtilityService {
       } else {
         return 'n/a';
       }
+    }
+
+    public createNewCoreDefinitionFromSelectedDefinitionChanges(
+      targetDefinition: DTOs. SecurityDefinitionDTO,
+      isHiddenDefinition: boolean,
+      filterActive: boolean
+    ): DTOs.SecurityDefinitionDTO {
+      const newDefinition: DTOs.SecurityDefinitionDTO = this.deepCopy(targetDefinition);
+      newDefinition.state.isHiddenInConfiguratorDefinitionBundle = isHiddenDefinition;
+      newDefinition.state.filterActive = !!filterActive;
+      newDefinition.data.configuratorCoreDefinitionGroup = this.setCoreDefinitionBundleLabel(targetDefinition.data.key);
+      return newDefinition;
+    }
+
+    public setCoreDefinitionBundleLabel(targetKey: string): SecurityDefinitionConfiguratorGroupLabels | null {
+      const nonSelectedDefinitionLayout = ConfiguratorDefinitionLayout.filter((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+      const selectedBundle = nonSelectedDefinitionLayout.find((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.list.find((definitionStub: Stubs.SecurityDefinitionStub) => definitionStub.key === targetKey));
+      if (!!selectedBundle) {
+        return selectedBundle.label as SecurityDefinitionConfiguratorGroupLabels;
+      } else {
+        return null;
+      }
+    }
+
+    public syncDefinitionStateBetweenSelectedAndCore(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      targetDefinition: DTOs.SecurityDefinitionDTO,
+      isHiddenDefinition: boolean,
+    ) {
+      configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO, definitionBundleIndex: number) => {
+        if (definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected) {
+          definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO, definitionIndex: number) => {
+            if (definition.data.key === targetDefinition.data.key) {
+              const newCoreDefinition = this.createNewCoreDefinitionFromSelectedDefinitionChanges(targetDefinition, isHiddenDefinition, targetDefinition.state.filterActive);
+              configurator.data.definitionList[definitionBundleIndex].data.list[definitionIndex] = newCoreDefinition
+            }
+          })
+        }
+      })
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {

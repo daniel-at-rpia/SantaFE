@@ -1,5 +1,6 @@
 import { Label } from '@amcharts/amcharts4/core';
 import { AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
+import * as constants from 'Core/constants/index';
 
 export interface SearchShortcutStub {
   displayTitle: string;
@@ -29,7 +30,7 @@ export interface SecurityDefinitionStub {
 }
 
 export interface SecurityDefinitionBundleStub {
-  label: string;
+  label: constants.definition.SecurityDefinitionConfiguratorGroupLabels;
   list: Array<SecurityDefinitionStub>;
 }
 
