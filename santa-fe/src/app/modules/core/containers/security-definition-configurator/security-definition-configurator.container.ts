@@ -13,6 +13,7 @@
       SecurityDefinitionMap,
       DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD
     } from 'Core/constants/securityDefinitionConstants.constant';
+    import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
   //
 
 @Component({
@@ -40,7 +41,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     private dtoService: DTOService,
     private restfulCommService: RestfulCommService,
     private utilityService: UtilityService,
-    private bicsDataProcessingService: BICSDataProcessingService
+    private bicsDataProcessingService: BICSDataProcessingService,
+    private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {
   }
 
@@ -191,7 +193,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     if (!!consolidatedBICSDefinition) {
       consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.push(targetOption.shortKey);
       const level = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
-      const newList = this.bicsDataProcessingService.getSubLevelList(targetOption.shortKey, level-1);
+      const targetCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(targetOption.shortKey, targetOption.bicsLevel);
+      const newList = this.bicsDictionaryLookupService.getSubLevelCategoryNames(targetCode);
       consolidatedBICSDefinition.data.displayOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(consolidatedBICSDefinition.data.key, newList, level);
       consolidatedBICSDefinition.data.displayOptionList.forEach((eachOption) => {
         const existInSelected = consolidatedBICSDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
@@ -209,10 +212,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       const newLevel = consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length+1;
       let newList = [];
       if (newLevel > 1) {
-        newList = this.bicsDataProcessingService.getSubLevelList(
-          consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS[consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length-1],
-          newLevel-1
-        );
+        const parentLevelCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS[consolidatedBICSDefinition.state.currentFilterPathInConsolidatedBICS.length-1], newLevel-1);
+        newList = this.bicsDictionaryLookupService.getSubLevelCategoryNames(parentLevelCode);
       } else {
         newList = this.bicsDataProcessingService.returnAllBICSBasedOnHierarchyDepth(
           newLevel
@@ -305,7 +306,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         targetDefinition.state.isFilterCapped = this.checkIfDefinitionFilterOptionListIsCapped(targetDefinition);
       }),
       catchError(err => {
-        this.restfulCommService.logError('Cannot retrieve country data');
+        this.restfulCommService.logError('Cannot retrieve ticker data');
         return of('error');
       })
     ).subscribe();

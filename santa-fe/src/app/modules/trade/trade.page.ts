@@ -1,6 +1,6 @@
   // dependencies
     import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-    import { ActivatedRoute, Router } from '@angular/router';
+    import { ActivatedRoute, ParamMap, Router } from '@angular/router';
     import { Observable, Subscription, interval, of } from 'rxjs';
     import { tap, first, withLatestFrom, switchMap, catchError, combineLatest, filter } from 'rxjs/operators';
     import { Store, select } from '@ngrx/store';
@@ -84,7 +84,9 @@ export class TradePage extends SantaContainerComponentBase implements OnInit {
         return this.globalWorkflowIOService.fetchState(params.get(this.constants.stateId));
       })
     ).subscribe((result: DTOs.GlobalWorkflowStateDTO) => {
-      this.globalStateHandler(result);
+      if (this.initialState !== 'n/a') {
+        this.globalStateHandler(result);
+      }
     });
 
     this.subscriptions.receiveSelectedSecuritySub = this.store$.pipe(
