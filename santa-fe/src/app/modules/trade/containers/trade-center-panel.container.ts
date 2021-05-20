@@ -452,6 +452,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       } else {
         this.updateTableLayout();
       }
+      this.addDefinitionToSelectedDefinitionBundle(modifiedParams.filterList);
       if (!!userTriggered) {
         this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
         this.loadFreshData();
@@ -1469,10 +1470,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     }
 
-    public onClickClearBucket(targetBucket: string) {
+    public onClickRemoveLastInBucket(targetBucket: string) {
       // can't directly send the list cuz reassigning it would just create a new reference
       if (this.state.searchEngine.constructedSearchBucket[targetBucket]) {
-        this.state.searchEngine.constructedSearchBucket[targetBucket] = [];
+        this.state.searchEngine.constructedSearchBucket[targetBucket].pop();
       }
     }
 
