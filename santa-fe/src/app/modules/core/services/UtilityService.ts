@@ -1358,17 +1358,20 @@ export class UtilityService {
       let selectionOptionsList: Array<string> = [];
       // we only use the first (primary) set of configurations in the searchFilters to name the shortcut, ignore all the other "OR" conditions for now because it would make the name too long
       targetShortcut.data.searchFilters[0].forEach((definitionItem: DTOs.SecurityDefinitionDTO) => {
-        const isBICS = definitionItem.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key;
-        const groupDefinition = isBICS ? 'BICS' : SecurityDefinitionMap[definitionItem.data.key].displayName;
-        selectionOptionsList = [
-          ...selectionOptionsList,
-          ...definitionItem.data.highlightSelectedOptionList.length > 2
-            ? [`${groupDefinition}(${definitionItem.data.highlightSelectedOptionList.length})`]
-            : definitionItem.data.highlightSelectedOptionList.map((eachOption) => {
-              return eachOption.shortKey;
-            })
-        ];
-        customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
+        // skip "Quoted Today" in the naming since that definition is just binary at the moment
+        if (definitionItem.key !== SecurityDefinitionMap.QUOTED_TODAY.key) {
+          const isBICS = definitionItem.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key;
+          const groupDefinition = isBICS ? 'BICS' : SecurityDefinitionMap[definitionItem.data.key].displayName;
+          selectionOptionsList = [
+            ...selectionOptionsList,
+            ...definitionItem.data.highlightSelectedOptionList.length > 2
+              ? [`${groupDefinition}(${definitionItem.data.highlightSelectedOptionList.length})`]
+              : definitionItem.data.highlightSelectedOptionList.map((eachOption) => {
+                return eachOption.shortKey;
+              })
+          ];
+          customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
+        }
       })
       return customDisplayTitle;
     }
