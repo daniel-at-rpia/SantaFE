@@ -1394,6 +1394,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   // Search Engine
     public onSearchEngineInputChange(newInput: string) {
+      newInput = newInput.trim();
       if (newInput !== this.state.searchEngine.activeKeyword) {
         this.state.searchEngine.activeKeyword = newInput;
         this.performTypeaheadSearch();
@@ -1615,11 +1616,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
       if (!!constructedSearchBucket) {
         definitionDTO.data.highlightSelectedOptionList = constructedSearchBucket.map((eachEntry) => {
+          const bicsLevel = eachEntry.bicsLevel || null;
           const optionValue = eachEntry.pristineText;
           const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
-            this.constants.definition.SecurityDefinitionMap.TICKER.key,
+            definitionDTO.data.key,
             optionValue,
-            null
+            bicsLevel
           );
           selectedOption.isSelected = true;
           return selectedOption;
