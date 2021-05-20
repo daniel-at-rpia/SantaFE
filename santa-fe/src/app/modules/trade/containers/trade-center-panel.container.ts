@@ -117,6 +117,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           constructedSearchBucket: {
             TICKER: [],
             BICS: []
+          },
+          searchBucketDefinitionDTOs: {
+            TICKER: this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.TICKER),
+            BICS: this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED)
           }
         },
         configurator: {
@@ -317,6 +321,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       targetPreset: DTOs.SearchShortcutDTO,
       userTriggered: boolean
     ) {
+      this.resetSearchEngineStates();
       if (this.state.presets.selectedPreset === targetPreset) {
         targetPreset.state.isSelected = false;
         this.state.presets.selectedPreset = null;
@@ -442,6 +447,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       } else {
         this.updateTableLayout();
       }
+      this.addDefinitionToSelectedDefinitionBundle(modifiedParams.filterList);
       if (!!userTriggered) {
         this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
         this.loadFreshData();
@@ -1065,34 +1071,24 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     ) {
       if (params.filterList.length > 0) {
         const searchShortcutDefinitionList: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [];
-        let customDisplayTitle = '';
-        let selectionOptionsList: Array<string> = [];
         params.filterList.forEach((definitionItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
           const shortcutDefinition: Stubs.SearchShortcutIncludedDefinitionStub = {
             definitionKey: definitionItem.key,
             groupByActive: false,
             selectedOptions: definitionItem.key === this.constants.definition.SecurityDefinitionMap.TENOR.key ? definitionItem.filterByBlocks.map((item: Blocks.SecurityDefinitionFilterBlock) => item.shortKey) : definitionItem.filterBy.map((item: string) => item)
           }
-          if (!presetDisplayTitle) {
-            const isBICS = definitionItem.key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key;
-            const groupDefinition = isBICS ? 'BICS' : this.constants.definition.SecurityDefinitionMap[definitionItem.key].displayName;
-            selectionOptionsList = [
-              ...selectionOptionsList,
-              ...shortcutDefinition.selectedOptions.length > 2 ? [`${groupDefinition}(${shortcutDefinition.selectedOptions.length})`] : shortcutDefinition.selectedOptions.map((option: string) => this.getParsedOptionForShortcutTitle(definitionItem.key, option))
-            ];
-            customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
-          } else {
-            customDisplayTitle = presetDisplayTitle;
-          }
           searchShortcutDefinitionList.push(shortcutDefinition);
         })
         const recentShortcutStub: Stubs.SearchShortcutStub = {
-          displayTitle: customDisplayTitle,
+          displayTitle: presetDisplayTitle,
           includedDefinitions: searchShortcutDefinitionList,
           isHero: false,
           isMajor: false
         }
         const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
+        if (!presetDisplayTitle) {
+          recentShortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(recentShortcut);
+        }
         recentShortcut.state.isPreviewVariant = true;
         recentShortcut.state.isUserInputBlocked = true;
         const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
@@ -1296,7 +1292,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             eachHeader.content.tableSpecifics.default.pinned = existInOverwrite.pinned;
           }
           if (existInOverwrite.hasOwnProperty('groupBy')) {
-            eachHeader.content.tableSpecifics.default.groupByActive = existInOverwrite.groupBy;
+            if (eachHeader.key === 'ticker' && !!existInOverwrite.groupBy) {
+              const tickerDefinition = this.state.currentSearch.previewShortcut.data.searchFilters[0].find((eachDefinition) => {
+                return eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.TICKER.key;
+              });
+              if (!!tickerDefinition && tickerDefinition.data.highlightSelectedOptionList.length === 1) {
+                // if user is searching for a specific ticker, then it's counter-productive to group the table by ticker
+                eachHeader.content.tableSpecifics.default.groupByActive = false;
+              } else {
+                eachHeader.content.tableSpecifics.default.groupByActive = true;
+              }
+            } else {
+              eachHeader.content.tableSpecifics.default.groupByActive = existInOverwrite.groupBy;
+            }
           }
         }
       });
@@ -1381,7 +1389,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   // Search Engine
     public onSearchEngineInputChange(newInput: string) {
-      console.log('test, input change', newInput);
+      newInput = newInput.trim();
       if (newInput !== this.state.searchEngine.activeKeyword) {
         this.state.searchEngine.activeKeyword = newInput;
         this.performTypeaheadSearch();
@@ -1400,11 +1408,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
       const shortcut = this.dtoService.formSearchShortcutObject(
         definitionList,
-        'Test Search Engine',
+        null,
         false,
         false,
         false
       );
+      shortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(shortcut);
       this.onSelectPreset(shortcut, true);
     }
 
@@ -1414,7 +1423,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         case this.constants.trade.SEARCH_ENGINE_BREAK_KEY:
           event.preventDefault();
           if (searchEngine.activeKeyword && searchEngine.activeKeyword.length > 0 && !!searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]) {
-            console.log('test, got tab');
             this.selectTypeaheadEntry(searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]);
           }
           break;
@@ -1435,11 +1443,16 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               searchEngine.selectedTypeaheadEntryIndex = searchEngine.typeaheadEntries.length - 1;
             }
           }
+          break;
         case this.constants.trade.SEARCH_ENGINE_ENTER_KEY:
           event.preventDefault();
+          if (searchEngine.typeaheadActive && searchEngine.typeaheadEntries.length > 0 && searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]) {
+            this.selectTypeaheadEntry(searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]);
+          }
           if (searchEngine.constructedSearchBucket.BICS.length > 0 || searchEngine.constructedSearchBucket.TICKER.length > 0) {
             this.onClickSearchEngineSearchBonds();
           }
+          break;
         default:
           // code...
           break;
@@ -1453,6 +1466,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     public onHoverTypeaheadEntry(targetIndex: number) {
       if (this.state.searchEngine.selectedTypeaheadEntryIndex !== targetIndex) {
         this.state.searchEngine.selectedTypeaheadEntryIndex = targetIndex;
+      }
+    }
+
+    public onClickRemoveLastInBucket(targetBucket: string) {
+      // can't directly send the list cuz reassigning it would just create a new reference
+      if (this.state.searchEngine.constructedSearchBucket[targetBucket]) {
+        this.state.searchEngine.constructedSearchBucket[targetBucket].pop();
       }
     }
 
@@ -1494,7 +1514,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             return false;
           }
         });
-        this.performTypeaheadSearchSortResultByRelevancy();
+        this.performTypeaheadSearchSortResultByRelevancy(searchEngine.typeaheadEntries, searchEngine.activeKeyword);
         if (searchEngine.typeaheadEntries.length > this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP) {
           searchEngine.typeaheadEntries = searchEngine.typeaheadEntries.slice(0, this.constants.trade.SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP);
         } else if (searchEngine.typeaheadEntries.length === 0) {
@@ -1514,14 +1534,63 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const parsedPristineEntryText = targetEntry.pristineText.toUpperCase();
       const parsedKeyword = keyword.toUpperCase();
       if (parsedPristineEntryText.indexOf(parsedKeyword) >= 0) {
-        return true;
+        // also checks for whether the entry is already inserted into the bucket
+        if (targetEntry.type.indexOf(this.constants.trade.SEARCH_ENGINE_TYPES.BICS) >= 0) {
+          const exist = this.state.searchEngine.constructedSearchBucket.BICS.find((eachEntry) => {
+            return eachEntry.pristineText === targetEntry.pristineText;
+          });
+          return !exist;
+        } else if (targetEntry.type === this.constants.trade.SEARCH_ENGINE_TYPES.TICKER) {
+          const exist = this.state.searchEngine.constructedSearchBucket.TICKER.find((eachEntry) => {
+            return eachEntry.pristineText === targetEntry.pristineText;
+          });
+          return !exist;
+        }
+        return false;
       } else {
         return false;
       }
     }
 
-    private performTypeaheadSearchSortResultByRelevancy() {
-
+    private performTypeaheadSearchSortResultByRelevancy(
+      targetList: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>, 
+      searchKeyword: string
+    ) {
+      targetList.sort((itemA, itemB) => {
+        if (itemA.pristineText.length === searchKeyword.length && itemB.pristineText.length !== searchKeyword.length) {
+          // whether it is an exact match, because the items already have a match, if their length are the same then it is an exact match
+          return -64;
+        } else if (itemB.pristineText.length === searchKeyword.length && itemA.pristineText.length !== searchKeyword.length) {
+          return 64;
+        } else if (itemA.bicsLevel === 1 && itemB.bicsLevel !== 1) {
+          return -32;
+        } else if (itemB.bicsLevel === 1 && itemA.bicsLevel !== 1) {
+          return 32;
+        } else if (itemA.displayText.indexOf('<kbd>') === 0 && itemB.displayText.indexOf('<kbd>') !== 0) {
+          // whether it starts with the keyword
+          return -16;
+        } else if (itemB.displayText.indexOf('<kbd>') === 0 && itemA.displayText.indexOf('<kbd>') !== 0) {
+          return 16;
+        } else if (itemA.bicsLevel === 2 && itemB.bicsLevel !== 2) {
+          return -8;
+        } else if (itemB.bicsLevel === 2 && itemA.bicsLevel !== 2) {
+          return 8;
+        } else if (itemA.bicsLevel === 3 && itemB.bicsLevel !== 3) {
+          return -4;
+        } else if (itemB.bicsLevel === 3 && itemA.bicsLevel !== 3) {
+          return 4;
+        } else if (itemA.pristineText.length < itemB.pristineText.length) {
+          return -2;
+        } else if (itemA.pristineText.length > itemB.pristineText.length) {
+          return 2;
+        } else if (itemA.pristineText < itemB.pristineText) {
+          return -1;
+        } else if (itemA.pristineText > itemB.pristineText) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
     }
 
     private selectTypeaheadEntry(targetEntry: AdhocPacks.TradeCenterPanelSearchEngineIndexEntry) {
@@ -1545,11 +1614,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
       if (!!constructedSearchBucket) {
         definitionDTO.data.highlightSelectedOptionList = constructedSearchBucket.map((eachEntry) => {
+          const bicsLevel = eachEntry.bicsLevel || null;
           const optionValue = eachEntry.pristineText;
           const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
-            this.constants.definition.SecurityDefinitionMap.TICKER.key,
+            definitionDTO.data.key,
             optionValue,
-            null
+            bicsLevel
           );
           selectedOption.isSelected = true;
           return selectedOption;
@@ -1559,6 +1629,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       } else {
         return null;
       }
+    }
+
+    private resetSearchEngineStates() {
+      const indexCopy = this.state.searchEngine.indexedKeywords;
+      this.state.searchEngine = this.initializePageState().searchEngine;
+      this.state.searchEngine.indexedKeywords = indexCopy;
     }
   // Search Engine End
 }

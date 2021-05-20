@@ -225,6 +225,7 @@
       font-family: "SantaMonospace";
       padding: $spacing_minimum;
       color: $font_color_inverse;
+      margin: 0 $spacing_minimum;
     }
     &>code {
       @include mix_border_radius(3px);
@@ -232,5 +233,6 @@
       background-color: $color_gray_2;
       padding: $spacing_minimum;
       color: $font_color_major;
+      margin: 0 $spacing_minimum;
     }
   }

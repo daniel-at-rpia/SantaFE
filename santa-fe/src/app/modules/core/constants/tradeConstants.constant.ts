@@ -626,7 +626,7 @@ export const TradeUoBDefaultSecurityTableHeaderOverwriteConfigs: Array<AdhocPack
   }
 ]
 
-export const SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP = 8;
+export const SEARCH_ENGINE_TYPEAHEAD_SIZE_CAP = 25;
 export const SEARCH_ENGINE_TYPEAHEAD_MINIMUM_CHAR_LENGTH = 1;
 export const SEARCH_ENGINE_BREAK_KEY = 9;
 export const SEARCH_ENGINE_DOWNWARD_KEY = 40;
@@ -636,3 +636,4 @@ export const SEARCH_ENGINE_TYPES = {
   BICS: 'BICS',
   TICKER: 'Ticker'
 }
+export const SEARCH_ENGINE_LONG_TYPEAHEAD_THRESHOLD = 7;  // because we set the max-height on the typeahead element, more than 7 results would trigger the scrollbar

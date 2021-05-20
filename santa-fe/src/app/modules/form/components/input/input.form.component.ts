@@ -6,12 +6,13 @@ import {
   EventEmitter,
   OnChanges
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'santa-input',
   templateUrl: './input.form.component.html',
   styleUrls: ['./input.form.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.None // needs to be None because we are overwriting Angular Material's internal stylings, which has components that are generated within the "mat-form-field" component itself
 })
 
 export class SantaInput implements OnChanges{
@@ -24,20 +25,24 @@ export class SantaInput implements OnChanges{
   @Input() isDisabled: boolean;
   @Input() isNonEditable: boolean;
   @Input() autoFocus: boolean;
+  @Input() label: string;
+  @Input() inverseColored: boolean;
   @Output() onInputChange = new EventEmitter<string>();
   @Output() onInputFocus = new EventEmitter();
   @Output() onInputBlur = new EventEmitter();
   @Output() onEnterKeyPressed = new EventEmitter<string>();
   @Output() onGenericKeyPressed = new EventEmitter<KeyboardEvent>();
-  constructor(
-  ) {
-  }
+  
+  public formControl = new FormControl({value: '', disabled: !!this.isDisabled});
+  
+  constructor() {}
 
   public ngOnChanges() {
-    console.log('test, within input, input value is', this.inputValue);
+    this.formControl.setValue(this.inputValue);
   }
 
   public onKey() {
+    this.inputValue = this.formControl.value;
     !!this.onInputChange && this.onInputChange.emit(this.inputValue);
   }
 

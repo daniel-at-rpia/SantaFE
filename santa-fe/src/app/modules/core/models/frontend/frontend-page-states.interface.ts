@@ -143,6 +143,10 @@ export interface TradeCenterPanelState {
     constructedSearchBucket: {
       TICKER: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>,
       BICS: Array<AdhocPacks.TradeCenterPanelSearchEngineIndexEntry>
+    };
+    searchBucketDefinitionDTOs: {
+      TICKER: DTOs.SecurityDefinitionDTO;
+      BICS: DTOs.SecurityDefinitionDTO;
     }
   }
   configurator: {

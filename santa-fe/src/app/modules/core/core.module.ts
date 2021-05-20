@@ -56,6 +56,7 @@ import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.
 import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
 import { SantaContainerComponentBase } from './containers/santa-container-component-base';
 import { GuestPage } from './guest.page';
+import { SantaSimpleInput } from './components/simple-input/simple-input.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { GuestPage } from './guest.page';
     TraceTradeVisualizer,
     MoveVisualizer,
     GlobalWorkflow,
-    GuestPage
+    GuestPage,
+    SantaSimpleInput
   ],
   imports: [
     CommonModule,
@@ -134,7 +136,8 @@ import { GuestPage } from './guest.page';
     NumericFilter,
     GlobalNav,
     MoveVisualizer,
-    GlobalWorkflow
+    GlobalWorkflow,
+    SantaSimpleInput
   ]
 })
 export class CoreModule { }

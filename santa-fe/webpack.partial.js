@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const version = "2.3.18";
+const version = "2.3.19-searchEngine-beta-2";
 module.exports = {
   output: {
     filename: `[name].${version}.min.js`

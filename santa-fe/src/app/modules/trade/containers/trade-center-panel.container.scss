@@ -21,9 +21,9 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       flex-direction: column;
       overflow: hidden;
       align-items: center;
+      justify-content: center;
       .sat-tradeCenterPanelSearchEngine {
-        @include mix_fixed_div(absolute, $z_index_base_item_solid);
-        top: 20rem;
+        @include mix_fixed_div(absolute, $z_index_base_item);
       }
     }
   }
@@ -302,7 +302,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
 $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
 .sat-tradeCenterPresetCategoryCanvas {
   $blockName: &;
-  @include mix_fixed_div(relative, $z_index_base_item_lift);
+  @include mix_fixed_div(relative, $z_index_hovering_item);
   @include mix_alive('custom', transform $animation_duration_normal);
   flex: 0 0 auto;
   display: flex;
@@ -564,42 +564,62 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
 $tradeCenterPanelSearchEngine_input_width: 30rem;
 .sat-tradeCenterPanelSearchEngine {
   $blockName: &;
-  @include mix_border_radius(15px);
-  // padding: $spacing_large;
+  padding: $spacing_medium;
   &__bucket {
     @include mix_fixed_div(absolute, $z_index_base_item);
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     bottom: 100%;
+    padding: $spacing_small 0;
     &-definition {
+      @include mix_fixed_div(relative, $z_index_base_item);
       flex: 0 0 auto;
       display: none;
-      flex-direction: column;
       padding: $spacing_x_small 0;
-      &-label {
-        font-size: $font_size_large;
-        color: $font_color_trivial;
-        margin-bottom: $spacing_x_small;
-      }
-      &-list {
+      &-icon {
+        @include mix_border_radius(5px);
+        flex: 0 0 auto;
         display: flex;
-        margin-left: $spacing_medium;
-        &-item {
+        justify-content: center;
+        align-items: center;
+        width: 3.25rem;
+        height: 3.25rem;
+        background-color: $font_color_trivial;
+        margin-right: $spacing_medium;
+      }
+      &-content {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        &-label {
+          font-size: $font_size_large;
+          color: $font_color_trivial;
+          margin-bottom: $spacing_x_small;
+        }
+        &-list {
+          display: flex;
           margin-left: $spacing_medium;
-          &-text {
-          }
-          &-type {
-            @include mix_border_radius(3px);
-            @include mix_border_generator;
-            padding: 0 $spacing_x_small;
+          &-item {
             margin-left: $spacing_medium;
+            &-text {
+              font-size: $font_size_normal;
+            }
+            &-plusIcon {
+              margin-left: $spacing_medium;
+            }
+            &:last-of-type>&-plusIcon {
+              display: none;
+            }
           }
-          &-plusIcon {
-            margin-left: $spacing_medium;
-          }
-          &:last-of-type>&-plusIcon {
-            display: none;
-          }
+        }
+        &-clearBtn {
+          @include mix_fixed_div(absolute, $z_index_base_item);
+          left: 100%;
+          bottom: $spacing_small;
+          margin-left: $spacing_small;
+          background-color: $color_kill;
+          color: $font_color_inverse;
         }
       }
     }
@@ -607,7 +627,7 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
   &__input {
     @include mix_fixed_div(relative, $z_index_base_item_solid);
     display: flex;
-    // width: $tradeCenterPanelSearchEngine_input_width;
+    align-items: center;
     santa-input {
       width: $tradeCenterPanelSearchEngine_input_width;
     }
@@ -618,23 +638,20 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
       opacity: 0;
       transform: scale(0.01);
     }
-    // mat-form-field {
-    //   flex: 1 1 auto;
-    //   @include material_form_font_size_override('hero');
-    // }
   }
   &__typeahead {
-    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
     @include mix_border_radius(15px, 'bottom');
     @include mix_border_generator;
     @include material();
     @include mix_alive('light');
     display: none;
-    left: 0;
-    top: 100%;
+    left: $spacing_medium;
+    top: 75%;
     width: $tradeCenterPanelSearchEngine_input_width;
     overflow: hidden;
     background-color: $color_white;
+    max-height: 18rem;
     &-list {
       flex: 1 1 auto;
       display: flex;
@@ -665,6 +682,59 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
       }
     }
   }
+  &__background {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    @include mix_border_radius(15px);
+    @include mix_alive('light');
+    @include mix_calculate(width, 100%, 6.75rem, '-');
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: $color_active;
+    opacity: 0;
+    transform: scale(2);
+  }
+  &__keyboardShortcut {
+    @include mix_fixed_div(absolute, $z_index_base_item);
+    bottom: 100%;
+    left: $spacing_large;
+    display: flex;
+    flex-direction: column;
+    &-row {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      margin: $spacing_x_small;
+      &-text {
+        flex: 0 0 auto;
+        color: $font_color_minor;
+      }
+      &-key {
+        @include mix_border_radius(3px);
+        flex: 0 0 auto;
+        background-color: $font_color_minor;
+        padding: $spacing_xx_small;
+        margin: 0 $spacing_x_small;
+        &-icon {
+          color: $font_color_inverse;
+          &--enter {
+            margin: 0 $spacing_xx_small;
+          }
+        }
+        &-label {
+          margin-left: $spacing_xx_small;
+          color: $font_color_inverse;
+        }
+      }
+    }
+  }
+  &--longTypeaheadState {
+    #{$blockName} {
+      &__typeahead-list {
+        @include mix_enable_scrollbar();
+      }
+    }
+  }
   &--typeaheadActive {
     #{$blockName} {
       &__typeahead {
@@ -686,6 +756,12 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
           transform: scale(1);
         }
       }
+      &__background {
+        width: 100%;
+      }
+      &__keyboardShortcut {
+        top: 100%;
+      }
     }
   }
   &--tickerEntered {
@@ -701,6 +777,20 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
           opacity: 1;
           transform: scale(1);
         }
+      }
+      &__background {
+        width: 100%;
+      }
+      &__keyboardShortcut {
+        top: 100%;
+      }
+    }
+  }
+  &--readyState {
+    #{$blockName} {
+      &__background {
+        opacity: 1;
+        transform: scale(1);
       }
     }
   }
