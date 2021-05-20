@@ -302,7 +302,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
 $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
 .sat-tradeCenterPresetCategoryCanvas {
   $blockName: &;
-  @include mix_fixed_div(relative, $z_index_base_item_lift);
+  @include mix_fixed_div(relative, $z_index_hovering_item);
   @include mix_alive('custom', transform $animation_duration_normal);
   flex: 0 0 auto;
   display: flex;
@@ -653,7 +653,6 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
     background-color: $color_white;
     max-height: 18rem;
     &-list {
-      @include mix_enable_scrollbar();
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
@@ -708,12 +707,12 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
       margin: $spacing_x_small;
       &-text {
         flex: 0 0 auto;
-        color: $font_color_trivial;
+        color: $font_color_minor;
       }
       &-key {
         @include mix_border_radius(3px);
         flex: 0 0 auto;
-        background-color: $font_color_trivial;
+        background-color: $font_color_minor;
         padding: $spacing_xx_small;
         margin: 0 $spacing_x_small;
         &-icon {
@@ -726,6 +725,13 @@ $tradeCenterPanelSearchEngine_input_width: 30rem;
           margin-left: $spacing_xx_small;
           color: $font_color_inverse;
         }
+      }
+    }
+  }
+  &--longTypeaheadState {
+    #{$blockName} {
+      &__typeahead-list {
+        @include mix_enable_scrollbar();
       }
     }
   }

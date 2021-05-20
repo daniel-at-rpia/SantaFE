@@ -326,6 +326,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       targetPreset: DTOs.SearchShortcutDTO,
       userTriggered: boolean
     ) {
+      this.resetSearchEngineStates();
       if (this.state.presets.selectedPreset === targetPreset) {
         targetPreset.state.isSelected = false;
         this.state.presets.selectedPreset = null;
@@ -1417,9 +1418,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       );
       shortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(shortcut);
       this.onSelectPreset(shortcut, true);
-      const indexCopy = this.state.searchEngine.indexedKeywords;
-      this.state.searchEngine = this.initializePageState().searchEngine;
-      this.state.searchEngine.indexedKeywords = indexCopy;
     }
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {
@@ -1454,6 +1452,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           if (searchEngine.constructedSearchBucket.BICS.length > 0 || searchEngine.constructedSearchBucket.TICKER.length > 0) {
             this.onClickSearchEngineSearchBonds();
           }
+          break;
         default:
           // code...
           break;
@@ -1629,6 +1628,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       } else {
         return null;
       }
+    }
+
+    private resetSearchEngineStates() {
+      const indexCopy = this.state.searchEngine.indexedKeywords;
+      this.state.searchEngine = this.initializePageState().searchEngine;
+      this.state.searchEngine.indexedKeywords = indexCopy;
     }
   // Search Engine End
 }

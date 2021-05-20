@@ -636,3 +636,4 @@ export const SEARCH_ENGINE_TYPES = {
   BICS: 'BICS',
   TICKER: 'Ticker'
 }
+export const SEARCH_ENGINE_LONG_TYPEAHEAD_THRESHOLD = 7;  // because we set the max-height on the typeahead element, more than 7 results would trigger the scrollbar

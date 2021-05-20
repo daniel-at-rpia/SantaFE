@@ -203,7 +203,8 @@
           'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.searchEngine.typeaheadActive,
           'sat-tradeCenterPanelSearchEngine--bicsEntered': state.searchEngine.constructedSearchBucket.BICS.length > 0,
           'sat-tradeCenterPanelSearchEngine--tickerEntered': state.searchEngine.constructedSearchBucket.TICKER.length > 0,
-          'sat-tradeCenterPanelSearchEngine--readyState': state.presets.presetsReady
+          'sat-tradeCenterPanelSearchEngine--readyState': state.presets.presetsReady,
+          'sat-tradeCenterPanelSearchEngine--longTypeaheadState': state.searchEngine.typeaheadEntries.length > constants.trade.SEARCH_ENGINE_LONG_TYPEAHEAD_THRESHOLD
         }">
         <section class="sat-tradeCenterPanelSearchEngine__bucket">
           <div class="sat-tradeCenterPanelSearchEngine__bucket-definition sat-tradeCenterPanelSearchEngine__bucket-definition--bics">
@@ -217,7 +218,7 @@
               <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-label">BICS: </span>
               <ul class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list">
                 <li *ngFor="let eachEntry of state.searchEngine.constructedSearchBucket.BICS" class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item">
-                  <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item-text">{{eachEntry.pristineText}}</span>
+                  <span class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item-text">{{eachEntry.pristineText}} Lv. {{eachEntry.bicsLevel}}</span>
                   <i class="sat-tradeCenterPanelSearchEngine__bucket-definition-content-list-item-plusIcon fal fa-plus"></i>
                 </li>
               </ul>
@@ -254,13 +255,6 @@
             (onInputChange)="onSearchEngineInputChange($event)"
             (onGenericKeyPressed)="onSearchEngineKeyPressed($event)">
           </santa-input>
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Tickers / BICS</mat-label>
-            <input
-              matInput
-              (onInputChange)="onSearchEngineInputChange($event)"
-              >
-          </mat-form-field> -->
           <button (click)="onClickSearchEngineSearchBonds()" class="sat-tradeCenterPanelSearchEngine__input-mainCTA santaBtn--labelled">
             <i class="fal fa-search"></i>
             <span>Search</span>
