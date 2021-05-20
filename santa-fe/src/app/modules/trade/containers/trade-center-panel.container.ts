@@ -1451,6 +1451,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           break;
         case this.constants.trade.SEARCH_ENGINE_ENTER_KEY:
           event.preventDefault();
+          if (searchEngine.typeaheadActive && searchEngine.typeaheadEntries.length > 0 && searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]) {
+            this.selectTypeaheadEntry(searchEngine.typeaheadEntries[searchEngine.selectedTypeaheadEntryIndex]);
+          }
           if (searchEngine.constructedSearchBucket.BICS.length > 0 || searchEngine.constructedSearchBucket.TICKER.length > 0) {
             this.onClickSearchEngineSearchBonds();
           }
