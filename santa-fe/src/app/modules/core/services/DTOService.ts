@@ -5,77 +5,9 @@
 
     import * as BEModels from 'BEModels/backend-models.interface';
     import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
+    import * as globalConstants from 'Core/constants';
     import { SantaDatePicker } from 'Form/models/form-models.interface';
     import { UtilityService } from './UtilityService';
-    import {
-      SecurityGroupRatingColorScheme,
-      SecurityGroupSeniorityColorScheme
-    } from 'Core/constants/colorSchemes.constant';
-    import {
-      TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER,
-      AlertTypes,
-      AlertSubTypes,
-      ALERT_STATUS_SORTINGVALUE_UNIT,
-      TRACE_VOLUME_REPORTED_THRESHOLD,
-      NavigationModule,
-      FrontendKeyToBackendKeyDictionary
-    } from 'Core/constants/coreConstants.constant';
-    import { GlobalWorkflowTypes } from 'Core/constants/globalWorkflowConstants.constants';
-    import {
-      SECURITY_TABLE_QUOTE_TYPE_RUN,
-      SECURITY_TABLE_QUOTE_TYPE_AXE,
-      AGGRID_ROW_HEIGHT,
-      AGGRID_ROW_HEIGHT_SLIM,
-      AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD,
-      traceTradeNumericalFilterSymbols,
-      TRACE_SCATTER_GRAPH_ID,
-      TRACE_PIE_GRAPH_LEFT_ID,
-      TRACE_PIE_GRAPH_RIGHT_ID,
-      benchMarkHedgedDisplayOptions
-    } from 'Core/constants/securityTableConstants.constant';
-    import {
-      GroupMetricOptions
-    } from 'Core/constants/marketConstants.constant';
-    import {
-      ConfiguratorDefinitionLayout,
-      FilterOptionsPortfolioList,
-      SecurityDefinitionMap,
-      FilterOptionsCurrency,
-      FilterOptionsRating,
-      FilterOptionsTenor,
-      BICsLevel1DefinitionList,
-      FilterTraceTradesOptions,
-      DEFINITION_LONG_THRESHOLD,
-      FilterOptionsCouponType,
-      FilterOptionsTenorRange,
-      FilterOptionSecuritySubType,
-      SecurityDefinitionConfiguratorGroupLabels
-    } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      QuoteHeaderConfigList,
-      TraceTradeParty,
-      TradeSideValueEquivalent
-    } from 'Core/constants/securityTableConstants.constant';
-    import {
-      AxeAlertScope,
-      AxeAlertType,
-      SelectedShortcuts
-    } from 'Core/constants/tradeConstants.constant';
-    import {
-      PortfolioMetricValues,
-      PortfolioView,
-      BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
-      BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST,
-      BICS_OVERRIDES_IDENTIFIER,
-      BICS_OVERRIDES_TITLE,
-      DeltaScope,
-      STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID,
-      DeltaScopeDisplayText,
-      DeltaScopeBEToFEMapping,
-      StructureMetricBlockFallback
-    } from 'Core/constants/structureConstants.constants';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
     import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
   //
@@ -302,9 +234,9 @@ export class DTOService {
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
-        if ((!!currentSelectedMetric && !!TriCoreDriverConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER){
+        if ((!!currentSelectedMetric && !!globalConstants.core.TriCoreDriverConfig[object.data.mark.markDriver] && object.data.mark.markDriver === currentSelectedMetric) || currentSelectedMetric === globalConstants.core.DEFAULT_DRIVER_IDENTIFIER){
           let targetDriver = object.data.mark.markDriver;
-          if (currentSelectedMetric === DEFAULT_DRIVER_IDENTIFIER) {
+          if (currentSelectedMetric === globalConstants.core.DEFAULT_DRIVER_IDENTIFIER) {
             targetDriver = this.utility.findSecurityTargetDefaultTriCoreDriver(object);
           }
           object.data.mark.mark = this.utility.parseTriCoreDriverNumber(object.data.mark.markRaw, targetDriver, object, true) as string;
@@ -324,13 +256,13 @@ export class DTOService {
             }
           });
         }
-        if (object.data.mark.markDriver === TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
+        if (object.data.mark.markDriver === globalConstants.core.TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === globalConstants.core.TriCoreDriverConfig.Price.label) {
           object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
         }
         if (!!rawData.metrics) {
           object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
           if (!!rawData.metrics.Default) {
-            object.data.couponType = !!rawData.metrics.Default.isFloat ? FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? FilterOptionsCouponType[1] : FilterOptionsCouponType[2];
+            object.data.couponType = !!rawData.metrics.Default.isFloat ? globalConstants.definition.FilterOptionsCouponType[0] : !!rawData.metrics.Default.isFixedForLife ? globalConstants.definition.FilterOptionsCouponType[1] : globalConstants.definition.FilterOptionsCouponType[2];
             let targetSourceForRating = null;
             if (!!rawData.metrics.Default.ratingNoNotch) {
               targetSourceForRating = rawData.metrics.Default;
@@ -374,25 +306,25 @@ export class DTOService {
     };
     newBlock.costFifoSpread = this.utility.parseTriCoreDriverNumber(
       newBlock.costFifoSpread,
-      TriCoreDriverConfig.Spread.label,
+      globalConstants.core.TriCoreDriverConfig.Spread.label,
       dto,
       false
     ) as number;
     newBlock.costFifoPrice = this.utility.parseTriCoreDriverNumber(
       newBlock.costFifoPrice,
-      TriCoreDriverConfig.Price.label,
+      globalConstants.core.TriCoreDriverConfig.Price.label,
       dto,
       false
     ) as number;
     newBlock.costWeightedAvgSpread = this.utility.parseTriCoreDriverNumber(
       newBlock.costWeightedAvgSpread,
-      TriCoreDriverConfig.Spread.label,
+      globalConstants.core.TriCoreDriverConfig.Spread.label,
       dto,
       false
     ) as number;
     newBlock.costWeightedAvgPrice = this.utility.parseTriCoreDriverNumber(
       newBlock.costWeightedAvgPrice,
-      TriCoreDriverConfig.Price.label,
+      globalConstants.core.TriCoreDriverConfig.Price.label,
       dto,
       false
     ) as number;
@@ -479,8 +411,8 @@ export class DTOService {
   public appendLastTraceInfoToSecurityDTO(dto: DTOs.SecurityDTO, rawData: BEModels.BEFullSecurityDTO) {
     dto.data.lastTrace.lastTracePrice = rawData.lastTracePrice;
     dto.data.lastTrace.lastTraceSpread = rawData.lastTraceSpread;
-    dto.data.lastTrace.lastTraceVolumeEstimated = !!rawData.lastTraceVolumeEstimated ? this.utility.round(rawData.lastTraceVolumeEstimated /TRACE_VOLUME_REPORTED_THRESHOLD, 2) : null;
-    dto.data.lastTrace.lastTraceVolumeReported = !!rawData.lastTraceVolumeReported ? this.utility.round(rawData.lastTraceVolumeReported /TRACE_VOLUME_REPORTED_THRESHOLD, 2).toFixed(2) : null;
+    dto.data.lastTrace.lastTraceVolumeEstimated = !!rawData.lastTraceVolumeEstimated ? this.utility.round(rawData.lastTraceVolumeEstimated /globalConstants.core.TRACE_VOLUME_REPORTED_THRESHOLD, 2) : null;
+    dto.data.lastTrace.lastTraceVolumeReported = !!rawData.lastTraceVolumeReported ? this.utility.round(rawData.lastTraceVolumeReported /globalConstants.core.TRACE_VOLUME_REPORTED_THRESHOLD, 2).toFixed(2) : null;
   }
 
   public appendAlertInfoToSecurityDTO(
@@ -511,7 +443,7 @@ export class DTOService {
       alertTracePrice: targetAlert.data.tracePrice,
       alertTraceSpread: targetAlert.data.traceSpread,
       alertTraceBenchmarkName: targetAlert.data.traceBenchmarkName,
-      alertIsBenchmarkHedged: targetAlert.data.isBenchmarkHedged ? benchMarkHedgedDisplayOptions.yes : benchMarkHedgedDisplayOptions.no
+      alertIsBenchmarkHedged: targetAlert.data.isBenchmarkHedged ? globalConstants.table.benchMarkHedgedDisplayOptions.yes : globalConstants.table.benchMarkHedgedDisplayOptions.no
     };
   }
 
@@ -544,14 +476,14 @@ export class DTOService {
       graph: {
         leftPie: {
           name: this.utility.generateUUID(),
-          colorScheme: SecurityGroupRatingColorScheme,
+          colorScheme: globalConstants.colorScheme.SecurityGroupRatingColorScheme,
           chart: null,
           rawSupportingData: {}
           // rawSupportingData: this.utility.retrieveRawSupportingDataForLeftPie(rawData)
         },
         rightPie: {
           name: this.utility.generateUUID(),
-          colorScheme: SecurityGroupSeniorityColorScheme,
+          colorScheme: globalConstants.colorScheme.SecurityGroupSeniorityColorScheme,
           chart: null,
           rawSupportingData: {}
           // rawSupportingData: this.utility.retrieveRawSupportingDataForRightPie(rawData)
@@ -590,15 +522,15 @@ export class DTOService {
       key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`,
       isDeepestLevel: !!bicsLevel ? this.checkBICSConfiguratorOptionAsDeepestLevel(option, bicsLevel) : false
     }
-    if (definitionKey === SecurityDefinitionMap.TENOR.key) {
-      newFilterDTO.displayLabel = FilterOptionsTenorRange[newFilterDTO.shortKey].displayLabel;
+    if (definitionKey === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
+      newFilterDTO.displayLabel = globalConstants.definition.FilterOptionsTenorRange[newFilterDTO.shortKey].displayLabel;
     }
     return newFilterDTO;
   }
 
   public formSecurityDefinitionObject(
     rawData: Stubs.SecurityDefinitionStub,
-    configuratorLabel: SecurityDefinitionConfiguratorGroupLabels = null
+    configuratorLabel: globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels = null
   ): DTOs.SecurityDefinitionDTO {
     const object: DTOs.SecurityDefinitionDTO = {
       data: {
@@ -625,17 +557,17 @@ export class DTOService {
         isUnactivated: false,
         // isUnactivated: true,
         groupByActive: false,
-        filterActive: configuratorLabel ? configuratorLabel === SecurityDefinitionConfiguratorGroupLabels.selected : false,
+        filterActive: configuratorLabel ? configuratorLabel === globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected : false,
         isMiniPillVariant: false,
-        isFilterLong: rawData.optionList.length > DEFINITION_LONG_THRESHOLD,
+        isFilterLong: rawData.optionList.length > globalConstants.definition.DEFINITION_LONG_THRESHOLD,
         currentFilterPathInConsolidatedBICS: [],
         isFilterCapped: false,
-        isConsolidatedBICSVariant: rawData.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key,
-        isHiddenInConfiguratorDefinitionBundle: !!configuratorLabel ? configuratorLabel !== SecurityDefinitionConfiguratorGroupLabels.selected ? this.formSecurityDefinitionObjectCheckForWithinSelectedGroup(rawData.key) : false : null
+        isConsolidatedBICSVariant: rawData.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
+        isHiddenInConfiguratorDefinitionBundle: !!configuratorLabel ? configuratorLabel !== globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected ? this.formSecurityDefinitionObjectCheckForWithinSelectedGroup(rawData.key) : false : null
       }
     }
     if (!!configuratorLabel) {
-      const matchedSelectedStub = SelectedShortcuts.find((definitionStub: Stubs.SearchShortcutIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
+      const matchedSelectedStub = globalConstants.trade.SelectedShortcuts.find((definitionStub: Stubs.SearchShortcutIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
       !!matchedSelectedStub && this.formSecurityDefinitionObjectPrePopulateListsWithSelectedOptions(matchedSelectedStub, object);
     }
     return object;
@@ -648,7 +580,7 @@ export class DTOService {
   ): DTOs.SecurityDefinitionDTO {
     targetDefinition.data.prinstineFilterOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
     targetDefinition.data.displayOptionList = this.generateSecurityDefinitionFilterOptionList(targetDefinition.data.key, optionList, bicsLevel);
-    targetDefinition.state.isFilterLong = optionList.length > DEFINITION_LONG_THRESHOLD;
+    targetDefinition.state.isFilterLong = optionList.length > globalConstants.definition.DEFINITION_LONG_THRESHOLD;
     if (targetDefinition.data.highlightSelectedOptionList.length > 0) {
       targetDefinition.data.displayOptionList.forEach((eachOption) => {
         const exist = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
@@ -669,7 +601,7 @@ export class DTOService {
       data: {
         label: stubData.label,
         list: stubData.list.map((eachStubDefinition) => {
-          return this.formSecurityDefinitionObject(eachStubDefinition, stubData.label as SecurityDefinitionConfiguratorGroupLabels);
+          return this.formSecurityDefinitionObject(eachStubDefinition, stubData.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels);
         })
       },
       state: {
@@ -683,7 +615,7 @@ export class DTOService {
     groupByDisabled: boolean,
     noMainCTA: boolean,
     securityAttrOnly: boolean,
-    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
+    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = globalConstants.definition.ConfiguratorDefinitionLayout
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = {
       data: {
@@ -707,7 +639,7 @@ export class DTOService {
       }
     };
     this.utility.setCoreDefinitionGroupForEachConfiguratorDefinition(object);
-    const selectedDefinitionBundle = this.utility.getDefinitionBundleFromConfigurator(object, SecurityDefinitionConfiguratorGroupLabels.selected);
+    const selectedDefinitionBundle = this.utility.getDefinitionBundleFromConfigurator(object, globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
     if (selectedDefinitionBundle) {
       object.state.includesSelectedDefinitions = true;
     }
@@ -716,7 +648,7 @@ export class DTOService {
 
   public resetSecurityDefinitionConfigurator(
     targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO,
-    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = ConfiguratorDefinitionLayout
+    definitionLayoutMap: Array<Stubs.SecurityDefinitionBundleStub> = globalConstants.definition.ConfiguratorDefinitionLayout
   ): DTOs.SecurityDefinitionConfiguratorDTO {
     const object: DTOs.SecurityDefinitionConfiguratorDTO = this.createSecurityDefinitionConfigurator(
       targetConfigurator.state.groupByDisabled,
@@ -725,7 +657,7 @@ export class DTOService {
       definitionLayoutMap
     );
     object.data.definitionList = targetConfigurator.data.definitionList;
-    const selectedGroupDefinition = this.utility.getDefinitionBundleFromConfigurator(object, SecurityDefinitionConfiguratorGroupLabels.selected);
+    const selectedGroupDefinition = this.utility.getDefinitionBundleFromConfigurator(object, globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
     object.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
         eachDefinition.data.displayOptionList = this.utility.deepCopy(eachDefinition.data.prinstineFilterOptionList);
@@ -754,22 +686,22 @@ export class DTOService {
   ) {
     configuratorDTO.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
-        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+        if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List, 1);
         }
-        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_1.key) {
+        if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_LEVEL_1.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel1List);
-        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_2.key) {
+        } else if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_LEVEL_2.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel2List);
-        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_3.key) {
+        } else if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_LEVEL_3.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel3List);
-        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_4.key) {
+        } else if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_LEVEL_4.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel4List);
-        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_5.key) {
+        } else if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_LEVEL_5.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel5List);
-        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_6.key) {
+        } else if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_LEVEL_6.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel6List);
-        } else if (eachDefinition.data.key === SecurityDefinitionMap.BICS_LEVEL_7.key) {
+        } else if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_LEVEL_7.key) {
           this.loadSecurityDefinitionOptions(eachDefinition, sortedLevel7List);
         }
       });
@@ -780,9 +712,9 @@ export class DTOService {
     const object: DTOs.SecurityGroupAverageVisualizerDTO = {
       data: {
         stats: [
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Dod'),
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Wow'),
-          this.formSecurityGroupMetricObject(GroupMetricOptions[0].label, 'Mom')
+          this.formSecurityGroupMetricObject(globalConstants.market.GroupMetricOptions[0].label, 'Dod'),
+          this.formSecurityGroupMetricObject(globalConstants.market.GroupMetricOptions[0].label, 'Wow'),
+          this.formSecurityGroupMetricObject(globalConstants.market.GroupMetricOptions[0].label, 'Mom')
         ]
       },
       state: {
@@ -919,7 +851,7 @@ export class DTOService {
       return stencilObject;
     } else {
       const driverType = quantMetricType;
-      const backendTargetQuoteAttr = TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
+      const backendTargetQuoteAttr = globalConstants.core.TriCoreDriverConfig[driverType]['backendTargetQuoteAttr'];
       if (!!BEdto && !!BEdto[backendTargetQuoteAttr]) {
         const rawData = BEdto[backendTargetQuoteAttr];
         return this.populateBestQuoteComparerObject(
@@ -951,11 +883,11 @@ export class DTOService {
 
     const bidSize = bidQuantity != null ? this.utility.round(bidQuantity/1000000, 1) : 0;
     const offerSize = askQuantity != null ? this.utility.round(askQuantity/1000000, 1) : 0;
-    const tier2Shreshold = TriCoreDriverConfig[driverType]['tier2Threshold'];
-    const inversed = this.utility.isCDS(false, securityCard) ? !TriCoreDriverConfig[driverType]['inversed'] : TriCoreDriverConfig[driverType]['inversed'];
+    const tier2Shreshold = globalConstants.core.TriCoreDriverConfig[driverType]['tier2Threshold'];
+    const inversed = this.utility.isCDS(false, securityCard) ? !globalConstants.core.TriCoreDriverConfig[driverType]['inversed'] : globalConstants.core.TriCoreDriverConfig[driverType]['inversed'];
     const hasBid = !!bidValue && !!bidDealer;
     const hasOffer = !!askValue && !!askDealer;
-    const rounding = TriCoreDriverConfig[driverType]['rounding'];
+    const rounding = globalConstants.core.TriCoreDriverConfig[driverType]['rounding'];
     const bidNumber = this.utility.parseTriCoreDriverNumber(bidValue, driverType, securityCard, true) as string;
     const offerNumber = this.utility.parseTriCoreDriverNumber(askValue, driverType, securityCard, true) as string;
     const bidSkew = rawData.axeSkew * 100;
@@ -1123,7 +1055,7 @@ export class DTOService {
           secondaryQuotes: [],
           secondarySecurityName: ''
         },
-        quoteHeaders: QuoteHeaderConfigList.map((eachQuoteMetricStub) => {
+        quoteHeaders: globalConstants.table.QuoteHeaderConfigList.map((eachQuoteMetricStub) => {
           const metricBlock: Blocks.QuoteMetricBlock = {
             displayLabelList: eachQuoteMetricStub.labelList,
             isSizeTwo: eachQuoteMetricStub.size === 2,
@@ -1151,7 +1083,7 @@ export class DTOService {
         traceTradeVisualizer: null
       },
       style: {
-        rowHeight: !!isSlimRowHeight ? AGGRID_ROW_HEIGHT_SLIM : AGGRID_ROW_HEIGHT
+        rowHeight: !!isSlimRowHeight ? globalConstants.table.AGGRID_ROW_HEIGHT_SLIM : globalConstants.table.AGGRID_ROW_HEIGHT
       },
       state: {
         expandViewSortByQuoteMetric: null,
@@ -1203,26 +1135,26 @@ export class DTOService {
           }
         };
         if (alertDTO.state.isMarketListVariant) {
-          if (alertDTO.data.subType === AlertSubTypes.ask) {
+          if (alertDTO.data.subType === globalConstants.core.AlertSubTypes.ask) {
             object.data.alertSideDTO.data.side = 'BWIC';
             object.data.alertSideDTO.state.askSided = true;
-          } else if (alertDTO.data.subType === AlertSubTypes.bid) {
+          } else if (alertDTO.data.subType === globalConstants.core.AlertSubTypes.bid) {
             object.data.alertSideDTO.data.side = 'OWIC';
             object.data.alertSideDTO.state.bidSided = true;
-          } else if (alertDTO.data.subType === AlertSubTypes.mid) {
+          } else if (alertDTO.data.subType === globalConstants.core.AlertSubTypes.mid) {
             object.data.alertSideDTO.data.side = 'MID';
             object.data.alertSideDTO.state.midSided = true;
           }
-        } else if (alertDTO.data.subType === AlertSubTypes.bid) {
+        } else if (alertDTO.data.subType === globalConstants.core.AlertSubTypes.bid) {
           object.data.alertSideDTO.data.side = 'Bid';
           object.data.alertSideDTO.state.bidSided = true;
-        } else if (alertDTO.data.subType === AlertSubTypes.ask) {
+        } else if (alertDTO.data.subType === globalConstants.core.AlertSubTypes.ask) {
           object.data.alertSideDTO.data.side = 'Ask';
           object.data.alertSideDTO.state.askSided = true;
-        } else if (alertDTO.data.subType === AlertSubTypes.sell) {
+        } else if (alertDTO.data.subType === globalConstants.core.AlertSubTypes.sell) {
           object.data.alertSideDTO.data.side = 'Sell';
           object.data.alertSideDTO.state.askSided = true;
-        } else if (alertDTO.data.subType === AlertSubTypes.buy) {
+        } else if (alertDTO.data.subType === globalConstants.core.AlertSubTypes.buy) {
           object.data.alertSideDTO.data.side = 'Buy';
           object.data.alertSideDTO.state.bidSided = true;
         }
@@ -1315,22 +1247,22 @@ export class DTOService {
     };
     if (!isStencil) {
       object.data.bid = {
-        isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
+        isAxe: rawData.quoteType === globalConstants.table.SECURITY_TABLE_QUOTE_TYPE_AXE,
         size: !!rawData.bidQuantity ? this.utility.parsePositionToMM(rawData.bidQuantity, false) : null,
-        price: !!rawData.bidPrice ? this.utility.parseTriCoreDriverNumber(rawData.bidPrice, TriCoreDriverConfig.Price.label, targetSecurity, false) as number : null,
-        yield: !!rawData.bidYield ? this.utility.parseTriCoreDriverNumber(rawData.bidYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
-        tspread: !!rawData.bidSpread ? this.utility.parseTriCoreDriverNumber(rawData.bidSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
+        price: !!rawData.bidPrice ? this.utility.parseTriCoreDriverNumber(rawData.bidPrice, globalConstants.core.TriCoreDriverConfig.Price.label, targetSecurity, false) as number : null,
+        yield: !!rawData.bidYield ? this.utility.parseTriCoreDriverNumber(rawData.bidYield, globalConstants.core.TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
+        tspread: !!rawData.bidSpread ? this.utility.parseTriCoreDriverNumber(rawData.bidSpread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: bidBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.bidTime) && hasBid ? moment(rawData.bidTime).format('HH:mm') : '',
         rawTime: rawData.bidTime.slice(0, 19),  // remove timezone,
         isExecutable: !!rawData.isBidExecutable
       };
       object.data.ask = {
-        isAxe: rawData.quoteType === SECURITY_TABLE_QUOTE_TYPE_AXE,
+        isAxe: rawData.quoteType === globalConstants.table.SECURITY_TABLE_QUOTE_TYPE_AXE,
         size: !!rawData.askQuantity ? this.utility.parsePositionToMM(rawData.askQuantity, false) : null,
-        price: !!rawData.askPrice ? this.utility.parseTriCoreDriverNumber(rawData.askPrice, TriCoreDriverConfig.Price.label, targetSecurity, false) as number : null,
-        yield: !!rawData.askYield ? this.utility.parseTriCoreDriverNumber(rawData.askYield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
-        tspread: !!rawData.askSpread ? this.utility.parseTriCoreDriverNumber(rawData.askSpread, TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
+        price: !!rawData.askPrice ? this.utility.parseTriCoreDriverNumber(rawData.askPrice, globalConstants.core.TriCoreDriverConfig.Price.label, targetSecurity, false) as number : null,
+        yield: !!rawData.askYield ? this.utility.parseTriCoreDriverNumber(rawData.askYield, globalConstants.core.TriCoreDriverConfig.Yield.label, targetSecurity, false) as number : null,
+        tspread: !!rawData.askSpread ? this.utility.parseTriCoreDriverNumber(rawData.askSpread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, false) as number : null,
         benchmark: askBenchmark,
         time: this.utility.isQuoteTimeValid(rawData.askTime) && hasAsk ? moment(rawData.askTime).format('HH:mm') : '',
         rawTime: rawData.askTime.slice(0, 19),  // remove timezone
@@ -1590,8 +1522,8 @@ export class DTOService {
     const object: DTOs.AlertDTO = {
       data: {
         id: this.utility.generateUUID(),
-        type: AlertTypes.system,
-        subType: AlertSubTypes.default,
+        type: globalConstants.core.AlertTypes.system,
+        subType: globalConstants.core.AlertSubTypes.default,
         security: null,
         titleTop: titleTop,
         titleBottom: titleBottom,
@@ -1717,13 +1649,13 @@ export class DTOService {
       if (!!rawData.quote && !!alertDTO.data.security) {
         alertDTO.data.dealer = rawData.quote.dealer;
         switch (targetDriver) {
-          case TriCoreDriverConfig.Spread.label:
+          case globalConstants.core.TriCoreDriverConfig.Spread.label:
             alertDTO.data.level = rawData.quote.spread !== null ? rawData.quote.spread : rawData.quote.price;
             break;
-          case TriCoreDriverConfig.Price.label:
+          case globalConstants.core.TriCoreDriverConfig.Price.label:
             alertDTO.data.level = rawData.quote.price !== null ? rawData.quote.price : rawData.quote.spread;
             break;
-          case TriCoreDriverConfig.Yield.label:
+          case globalConstants.core.TriCoreDriverConfig.Yield.label:
             alertDTO.data.level = rawData.quote.yield !== null ? rawData.quote.yield : rawData.quote.price;
             break;
           default:
@@ -1731,7 +1663,7 @@ export class DTOService {
         }
         alertDTO.data.quantity = rawData.quote.quantity;
       }
-      if (!!rawData.trades && rawData.type === AlertTypes.tradeAlert) {
+      if (!!rawData.trades && rawData.type === globalConstants.core.AlertTypes.tradeAlert) {
         let quantity = 0;
         rawData.trades.forEach((eachRawTrade) => {
           quantity = quantity + eachRawTrade.quantity;
@@ -1742,13 +1674,13 @@ export class DTOService {
           alertDTO.data.trader = lastTrade.trader;
           alertDTO.data.dealer = lastTrade.counterpartyName;
           switch (targetDriver) {
-            case TriCoreDriverConfig.Spread.label:
+            case globalConstants.core.TriCoreDriverConfig.Spread.label:
               alertDTO.data.level = lastTrade.spread;
               break;
-            case TriCoreDriverConfig.Price.label:
+            case globalConstants.core.TriCoreDriverConfig.Price.label:
               alertDTO.data.level = lastTrade.price;
               break;
-            case TriCoreDriverConfig.Yield.label:
+            case globalConstants.core.TriCoreDriverConfig.Yield.label:
               alertDTO.data.level = null;
               break;
             default:
@@ -1756,7 +1688,7 @@ export class DTOService {
           }
         }
       }
-      if (!!rawData.trade && rawData.type === AlertTypes.traceAlert) {
+      if (!!rawData.trade && rawData.type === globalConstants.core.AlertTypes.traceAlert) {
         const { contraParty, reportingParty, volumeEstimated, volumeReported, price, spread } = rawData.trade;
         alertDTO.data.traceContraParty = contraParty;
         alertDTO.data.traceReportingParty = reportingParty;
@@ -1818,7 +1750,7 @@ export class DTOService {
   }
 
   public formAlertCountSummaryObject(
-    type: AlertTypes,
+    type: globalConstants.core.AlertTypes,
     count: number
   ): DTOs.AlertCountSummaryDTO {
     const object: DTOs.AlertCountSummaryDTO = {
@@ -1827,10 +1759,10 @@ export class DTOService {
         alertType: type
       },
       state: {
-        isAxe: type === AlertTypes.axeAlert,
-        isMark: type === AlertTypes.markAlert,
-        isTrade: type === AlertTypes.tradeAlert,
-        isTrace: type === AlertTypes.traceAlert
+        isAxe: type === globalConstants.core.AlertTypes.axeAlert,
+        isMark: type === globalConstants.core.AlertTypes.markAlert,
+        isTrade: type === globalConstants.core.AlertTypes.tradeAlert,
+        isTrace: type === globalConstants.core.AlertTypes.traceAlert
       }
     }
     return object;
@@ -1850,10 +1782,10 @@ export class DTOService {
         postTradeSumQuantity: this.utility.parseNumberToCommas(rawData.quantityAfterTrade),
         tradeDateTime: moment(rawData.tradeDateTime).unix(),
         tradeDateTimeParsed: moment(rawData.tradeDateTime).format(`YY MMM DD - HH:mm`),
-        price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
-        spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
-        wgtAvgPrice: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgPrice, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
-        wgtAvgSpread: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+        price: this.utility.parseTriCoreDriverNumber(rawData.price, globalConstants.core.TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+        spread: this.utility.parseTriCoreDriverNumber(rawData.spread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+        wgtAvgPrice: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgPrice, globalConstants.core.TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+        wgtAvgSpread: this.utility.parseTriCoreDriverNumber(rawData.wgtAvgSpread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
         vestedPortfolio: rawData.partitionOptionValue.PortfolioShortName,
         vestedStrategy: rawData.partitionOptionValue.StrategyName
       },
@@ -1876,7 +1808,7 @@ export class DTOService {
         volumeRightPieId: `${targetSecurity.data.securityID}-volumeRight`
       },
       state: {
-        disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
+        disabledPortfolio: this.utility.deepCopy(globalConstants.definition.FilterOptionsPortfolioList),
         selectedPortfolio: [],
         graphReceived: false,
         showAllTradeHistory: false,
@@ -1907,7 +1839,7 @@ export class DTOService {
           }
         }
       });
-      object.state.selectedPortfolio = FilterOptionsPortfolioList.filter((eachPortfolio) => {
+      object.state.selectedPortfolio = globalConstants.definition.FilterOptionsPortfolioList.filter((eachPortfolio) => {
         return !object.state.disabledPortfolio.includes(eachPortfolio);
       });
       object.data.displayTradeList = object.data.prinstineTradeList.filter((eachTrade) => {
@@ -1938,14 +1870,14 @@ export class DTOService {
     };
     if (alertDTO.state.isMarketListVariant) {
       if (alertDTO.data.isMarketListTraded) {
-        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - ALERT_STATUS_SORTINGVALUE_UNIT;
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - globalConstants.core.ALERT_STATUS_SORTINGVALUE_UNIT;
       } else if (alertDTO.state.isCancelled) {
-        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 2 * ALERT_STATUS_SORTINGVALUE_UNIT;
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 2 * globalConstants.core.ALERT_STATUS_SORTINGVALUE_UNIT;
       } else if (alertDTO.state.isExpired) {
-        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 3 * ALERT_STATUS_SORTINGVALUE_UNIT;
+        object.data.sortingValue = alertDTO.data.validUntilMoment.unix() - 3 * globalConstants.core.ALERT_STATUS_SORTINGVALUE_UNIT;
       }
     } else if (alertDTO.state.isCancelled) {
-      object.data.sortingValue = object.data.sortingValue - 10 * ALERT_STATUS_SORTINGVALUE_UNIT;
+      object.data.sortingValue = object.data.sortingValue - 10 * globalConstants.core.ALERT_STATUS_SORTINGVALUE_UNIT;
     }
     if (object.state.highlightedState) {
       object.data.sortingValue = 4070908800*2 - alertDTO.data.validUntilMoment.unix();
@@ -1982,8 +1914,8 @@ export class DTOService {
       data: {
         card: copy,
         groupId: null,
-        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as AxeAlertScope}) : [AxeAlertScope.ask, AxeAlertScope.bid],
-        axeAlertTypes: [AxeAlertType.normal, AxeAlertType.marketList],
+        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as globalConstants.trade.AxeAlertScope}) : [globalConstants.trade.AxeAlertScope.ask, globalConstants.trade.AxeAlertScope.bid],
+        axeAlertTypes: [globalConstants.trade.AxeAlertType.normal, globalConstants.trade.AxeAlertType.marketList],
         targetDriver: copy.data.alert.shortcutConfig.driver || null,
         targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
         sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
@@ -2000,8 +1932,8 @@ export class DTOService {
 
   public formNewAlertWatchlistEntryObject(
     rawGroupConfig: BEModels.BEAlertConfigurationDTO,
-    targetScope: AxeAlertScope,
-    watchType: AxeAlertType,
+    targetScope: globalConstants.trade.AxeAlertScope,
+    watchType: globalConstants.trade.AxeAlertType,
     populateDriversFn,
     populateRangeNumbersFn,
     checkFilled,
@@ -2011,8 +1943,8 @@ export class DTOService {
       data: {
         card: null,
         groupId: rawGroupConfig.alertConfigID,
-        scopes: targetScope === AxeAlertScope.both || targetScope === AxeAlertScope.liquidation ? [AxeAlertScope.ask, AxeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
-        axeAlertTypes: watchType === AxeAlertType.both ? [AxeAlertType.normal, AxeAlertType.marketList] : [watchType],
+        scopes: targetScope === globalConstants.trade.AxeAlertScope.both || targetScope === globalConstants.trade.AxeAlertScope.liquidation ? [globalConstants.trade.AxeAlertScope.ask, globalConstants.trade.AxeAlertScope.bid] : [targetScope],  // from now on we will remove "liquidation" as a side option, just to be backward-compatible, in code we treat liquidation the same as "both"
+        axeAlertTypes: watchType === globalConstants.trade.AxeAlertType.both ? [globalConstants.trade.AxeAlertType.normal, globalConstants.trade.AxeAlertType.marketList] : [watchType],
         targetDriver: populateDriversFn(rawGroupConfig),
         targetRange: populateRangeNumbersFn(rawGroupConfig, dtoNumericFilterObjectFn),
         sendEmail: !!rawGroupConfig.sendEmail,
@@ -2031,11 +1963,11 @@ export class DTOService {
   }
 
   public formTargetBarObject(
-    targetMetric: PortfolioMetricValues,
+    targetMetric: globalConstants.structuring.PortfolioMetricValues,
     currentValue: number,
     targetValue: number,
     isStencil: boolean,
-    activeMetricValue: PortfolioMetricValues,
+    activeMetricValue: globalConstants.structuring.PortfolioMetricValues,
     indexTotal: number,
     indexName: string
     ) {
@@ -2102,7 +2034,7 @@ export class DTOService {
     }
     
     const convertValuesForDisplay =  (targetBar: DTOs.TargetBarDTO) => {
-     if (targetBar.data.targetMetric === PortfolioMetricValues.cs01) {
+     if (targetBar.data.targetMetric === globalConstants.structuring.PortfolioMetricValues.cs01) {
         targetBar.data.displayedCurrentValue = this.utility.parseNumberToThousands(targetBar.data.currentValue, true, 0);
         targetBar.data.displayedTargetValue = this.utility.parseNumberToThousands(targetBar.data.targetValue,true, 0);
         targetBar.data.displayedResults = getDisplayedResults(targetBar.data.displayedCurrentValue, targetBar.data.displayedTargetValue);
@@ -2122,7 +2054,7 @@ export class DTOService {
     } else {
       object.data.displayedResults = this.utility.round(object.data.index, 2);
     }
-    object.state.isInactiveMetric = object.data.targetMetric === PortfolioMetricValues.creditDuration ? activeMetricValue === PortfolioMetricValues.creditLeverage : object.data.targetMetric !== activeMetricValue;
+    object.state.isInactiveMetric = object.data.targetMetric === globalConstants.structuring.PortfolioMetricValues.creditDuration ? activeMetricValue === globalConstants.structuring.PortfolioMetricValues.creditLeverage : object.data.targetMetric !== activeMetricValue;
     return object;
   }
 
@@ -2130,8 +2062,8 @@ export class DTOService {
     rawData: BEModels.BEStructuringFundBlock,
     comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues,
-    activeDelta: DeltaScope
+    selectedMetricValue: globalConstants.structuring.PortfolioMetricValues,
+    activeDelta: globalConstants.structuring.DeltaScope
   ): DTOs.PortfolioFundDTO {
     const object: DTOs.PortfolioFundDTO = {
       data: null,
@@ -2197,7 +2129,7 @@ export class DTOService {
         creditDurationIndexBar: null,
         creditLeverageIndexBar: null,
         activeDelta: activeDelta,
-        activeDeltaDisplayText: DeltaScopeBEToFEMapping[activeDelta],
+        activeDeltaDisplayText: globalConstants.structuring.DeltaScopeBEToFEMapping[activeDelta],
         originalBEData: rawData,
         currentTotalDeltaCreditDuration: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditDuration - comparedDeltaRawData.currentTotals.CreditDuration), 2) : null,
         currentTotalDeltaCreditLeverage: !!comparedDeltaRawData ? this.utility.round((rawData.currentTotals.CreditLeverage - comparedDeltaRawData.currentTotals.CreditLeverage), 2) : null,
@@ -2218,16 +2150,16 @@ export class DTOService {
         object.data.currentTotalDeltaCreditLeverageSignificantPositive = this.utility.checkIfFundDeltaIsSignificantPositive(object.data.currentTotalDeltaCreditLeverage);
         object.data.currentTotalDeltaCreditLeverageSignificantNegative = this.utility.checkIfFundDeltaIsSignificantNegative(object.data.currentTotalDeltaCreditLeverage);
       }
-      object.data.cs01TargetBar = this.formTargetBarObject(PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue, null, null);
-      object.data.creditLeverageTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue, null, null);
-      object.data.creditDurationTargetBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue, null, null);
-      object.data.creditDurationIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditDuration, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditDuration, object.data.indexShortName);
-      object.data.creditLeverageIndexBar = this.formTargetBarObject(PortfolioMetricValues.creditLeverage, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditLeverage, object.data.indexShortName);
+      object.data.cs01TargetBar = this.formTargetBarObject(globalConstants.structuring.PortfolioMetricValues.cs01, object.data.currentTotals.cs01, object.data.target.target.cs01, object.state.isStencil, selectedMetricValue, null, null);
+      object.data.creditLeverageTargetBar = this.formTargetBarObject(globalConstants.structuring.PortfolioMetricValues.creditLeverage, object.data.currentTotals.creditLeverage, object.data.target.target.creditLeverage, object.state.isStencil, selectedMetricValue, null, null);
+      object.data.creditDurationTargetBar = this.formTargetBarObject(globalConstants.structuring.PortfolioMetricValues.creditDuration, object.data.currentTotals.creditDuration, object.data.target.target.creditDuration, object.state.isStencil, selectedMetricValue, null, null);
+      object.data.creditDurationIndexBar = this.formTargetBarObject(globalConstants.structuring.PortfolioMetricValues.creditDuration, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditDuration, object.data.indexShortName);
+      object.data.creditLeverageIndexBar = this.formTargetBarObject(globalConstants.structuring.PortfolioMetricValues.creditLeverage, null, null, object.state.isStencil, selectedMetricValue, object.data.indexTotals.creditLeverage, object.data.indexShortName);
       if (!!object.data.creditDurationTargetBar) {
         const parsedCs01CurrentTotal = rawData.currentTotals.Cs01 !== null ? this.utility.parseNumberToThousands(rawData.currentTotals.Cs01, true, 0) : '-';
         const parsedCs01TargetTotal = rawData.target.target.Cs01 !== null ? this.utility.parseNumberToThousands(rawData.target.target.Cs01, true, 0) : '-';
         object.data.creditDurationTargetBar.data.additionalMetricTargetData = {
-          metric: PortfolioMetricValues.cs01,
+          metric: globalConstants.structuring.PortfolioMetricValues.cs01,
           current: parsedCs01CurrentTotal,
           target: parsedCs01TargetTotal
         }
@@ -2259,7 +2191,7 @@ export class DTOService {
     isDisplayCs01: boolean,
     isOverride = false
   ): DTOs.PortfolioBreakdownDTO {
-    const isBicsBreakdown = rawData.groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1 && !isOverride;
+    const isBicsBreakdown = rawData.groupOption.indexOf(globalConstants.structuring.BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1 && !isOverride;
     const object: DTOs.PortfolioBreakdownDTO = {
       data: {
         title: '',
@@ -2340,7 +2272,7 @@ export class DTOService {
     }
     const newBreakdown = this.formPortfolioBreakdown(false, rawData, comparedDeltaRawData, definitionList, isDisplayCs01, true);
     newBreakdown.state.isOverrideVariant = true;
-    newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap.OVERRIDE);
+    newBreakdown.data.definition = this.formSecurityDefinitionObject(globalConstants.definition.SecurityDefinitionMap.OVERRIDE);
     newBreakdown.data.title = this.utility.formOverrideTitle(newBreakdown.data.backendGroupOptionIdentifier);
     if (deltaEnabled && !comparedDeltaRawData) {
       newBreakdown.state.isViewingIndex = false;
@@ -2369,16 +2301,16 @@ export class DTOService {
   ): DTOs.StructurePortfolioBreakdownRowDTO {
     let categoryData = rawData.breakdown[categoryName];
     if (!categoryData) {
-      categoryData = StructureMetricBlockFallback;
+      categoryData = globalConstants.structuring.StructureMetricBlockFallback;
     } else {
       if (!categoryData.metricBreakdowns.CreditLeverage) {
-        categoryData.metricBreakdowns.CreditLeverage = StructureMetricBlockFallback.metricBreakdowns.CreditLeverage;
+        categoryData.metricBreakdowns.CreditLeverage = globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.CreditLeverage;
       }
       if (!categoryData.metricBreakdowns.Cs01) {
-        categoryData.metricBreakdowns.Cs01 = StructureMetricBlockFallback.metricBreakdowns.Cs01;
+        categoryData.metricBreakdowns.Cs01 = globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.Cs01;
       }
       if (!categoryData.metricBreakdowns.CreditDuration) {
-        categoryData.metricBreakdowns.CreditDuration = StructureMetricBlockFallback.metricBreakdowns.CreditDuration;
+        categoryData.metricBreakdowns.CreditDuration = globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.CreditDuration;
       }
     }
     const comparedDeltaCategoryData = !!comparedDeltaRawData ? comparedDeltaRawData.breakdown[categoryName] : null;
@@ -2386,7 +2318,7 @@ export class DTOService {
     const overrideID = isOverride ? rawData.breakdown[categoryName].portfolioOverrideId : null;
     const groupOption = rawData.groupOption;
     const parsedBEView = !!categoryData && !!categoryData.view ? categoryData.view.toLowerCase() : null;
-    const view = PortfolioView[parsedBEView];
+    const view = globalConstants.structuring.PortfolioView[parsedBEView];
     let bucket: Blocks.StructureBucketDataBlock = {};
     let isCustomLevelAvailable: string;
     let simpleBucket: Blocks.StructureBucketDataBlock = {};
@@ -2399,7 +2331,7 @@ export class DTOService {
       bucket = categoryData.bucket || {};
       simpleBucket = categoryData.simpleBucket || {};
     } else if (!!isCustomLevelAvailable) {
-      const formattedBEKey = `${BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(categoryData as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel}`;
+      const formattedBEKey = `${globalConstants.structuring.BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER}${(categoryData as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel}`;
       bucket[formattedBEKey] = [code];
     } else {
       bucket[rawData.groupOption] = [categoryName];
@@ -2444,7 +2376,7 @@ export class DTOService {
         isViewingIndex: !comparedDeltaRawData
       }
     }
-    const isBicsBreakdown = groupOption.indexOf(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
+    const isBicsBreakdown = groupOption.indexOf(globalConstants.structuring.BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER) > -1;
     object.state.isBtnDiveIn = !!isBicsBreakdown ? this.utility.checkIfDiveInIsAvailable(object) : false;
     return object;
   }
@@ -2461,7 +2393,7 @@ export class DTOService {
     groupOption: string,
     isOverride: boolean,
     diveInLevel: number,
-    view: PortfolioView,
+    view: globalConstants.structuring.PortfolioView,
     bucket: Blocks.StructureBucketDataBlock,
     simpleBucket: Blocks.StructureBucketDataBlock,
     customLevel: number = null,
@@ -2502,7 +2434,7 @@ export class DTOService {
       const eachCategoryBlock: Blocks.PortfolioBreakdownCategoryBlock = {
         category: categoryName,
         displayCategory:  this.utility.getFormattedRowDisplayCategory(categoryName, isOverride),
-        tooltipText: categoryName.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'),
+        tooltipText: categoryName.split(globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'),
         targetLevel: parsedRawData.targetLevel,
         targetPct: parsedRawData.targetPct,
         diffToTarget: parsedRawData.targetLevel != null ? diffToTarget : 0,
@@ -2554,7 +2486,7 @@ export class DTOService {
       },
       state: {
         isPresenting: false,
-        isSetBulkOverridesVariant: modalId === STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
+        isSetBulkOverridesVariant: modalId === globalConstants.structuring.STRUCTURE_SET_BULK_OVERRIDES_MODAL_ID
       },
       api: {
         openModal: null,
@@ -2584,8 +2516,8 @@ export class DTOService {
   }
 
   public formTraceTradeBlockObject(rawData: BEModels.BETraceTradesBlock, targetSecurity: DTOs.SecurityDTO) {
-    const contraParty = !!rawData.contraParty ? rawData.contraParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.contraParty] : null;
-    const reportingParty = !!rawData.reportingParty ? rawData.reportingParty === TraceTradeParty.ClientAffiliate ? TraceTradeParty.ClientAffiliate : TraceTradeParty[rawData.reportingParty] : null;
+    const contraParty = !!rawData.contraParty ? rawData.contraParty === globalConstants.table.TraceTradeParty.ClientAffiliate ? globalConstants.table.TraceTradeParty.ClientAffiliate : globalConstants.table.TraceTradeParty[rawData.contraParty] : null;
+    const reportingParty = !!rawData.reportingParty ? rawData.reportingParty === globalConstants.table.TraceTradeParty.ClientAffiliate ? globalConstants.table.TraceTradeParty.ClientAffiliate : globalConstants.table.TraceTradeParty[rawData.reportingParty] : null;
     const object: Blocks.TraceTradeBlock = {
       benchmarkName: rawData.benchmarkSecurityID ? this.securityMap.getSecurityName(`${rawData.benchmarkSecurityID}`) : null,
       traceTradeId: rawData.traceTradeID,
@@ -2595,18 +2527,18 @@ export class DTOService {
       displayReportingTime: moment(rawData.publishingTime).format(`MMM DD - HH:mm`),
       contraParty: contraParty,
       reportingParty: reportingParty,
-      side: TradeSideValueEquivalent[rawData.side],
+      side: globalConstants.table.TradeSideValueEquivalent[rawData.side],
       volumeEstimated: rawData.volumeEstimated,
       volumeReported: rawData.volumeReported,
       displayVolumeEstimated: !!rawData.volumeEstimated ? this.utility.parseNumberToCommas(rawData.volumeEstimated) : null,
       displayVolumeReported: null,
-      price: this.utility.parseTriCoreDriverNumber(rawData.price, TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
-      yield: this.utility.parseTriCoreDriverNumber(rawData.yield, TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
-      spread: this.utility.parseTriCoreDriverNumber(rawData.spread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
-      oasSpread: this.utility.parseTriCoreDriverNumber(rawData.oasSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
-      gSpread: this.utility.parseTriCoreDriverNumber(rawData.gSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
-      iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
-      parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
+      price: this.utility.parseTriCoreDriverNumber(rawData.price, globalConstants.core.TriCoreDriverConfig.Price.label, targetSecurity, true) as string,
+      yield: this.utility.parseTriCoreDriverNumber(rawData.yield, globalConstants.core.TriCoreDriverConfig.Yield.label, targetSecurity, false) as number,
+      spread: this.utility.parseTriCoreDriverNumber(rawData.spread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      oasSpread: this.utility.parseTriCoreDriverNumber(rawData.oasSpread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      gSpread: this.utility.parseTriCoreDriverNumber(rawData.gSpread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      iSpread: this.utility.parseTriCoreDriverNumber(rawData.iSpread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, true) as string,
+      parSpread: this.utility.parseTriCoreDriverNumber(rawData.parSpread, globalConstants.core.TriCoreDriverConfig.Spread.label, targetSecurity, true) as string
     }
     //Set specific display value for volume reported based on the availability of volume estimated
     if (!!object.volumeReported) {
@@ -2626,10 +2558,10 @@ export class DTOService {
       data: {
         pristineRowList: [],
         displayList: [],
-        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_SCATTER_GRAPH_ID}`,
-        pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_LEFT_ID}`,
-        pieGraphRightId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${TRACE_PIE_GRAPH_RIGHT_ID}` : `${targetRow.data.rowId}-${AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${TRACE_PIE_GRAPH_RIGHT_ID}`,
-        filterList: FilterTraceTradesOptions,
+        scatterGraphId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${globalConstants.table.TRACE_SCATTER_GRAPH_ID}` : `${targetRow.data.rowId}-${globalConstants.table.AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${globalConstants.table.TRACE_SCATTER_GRAPH_ID}`,
+        pieGraphLeftId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${globalConstants.table.TRACE_PIE_GRAPH_LEFT_ID}` : `${targetRow.data.rowId}-${globalConstants.table.AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${globalConstants.table.TRACE_PIE_GRAPH_LEFT_ID}`,
+        pieGraphRightId: !isPinnedFullWidth ? `${targetRow.data.rowId}-${globalConstants.table.TRACE_PIE_GRAPH_RIGHT_ID}` : `${targetRow.data.rowId}-${globalConstants.table.AGGRID_PINNED_FULL_WIDTH_ROW_KEYWORD}-${globalConstants.table.TRACE_PIE_GRAPH_RIGHT_ID}`,
+        filterList: globalConstants.definition.FilterTraceTradesOptions,
         availableFiltersList: []
       },
       state: {
@@ -2667,7 +2599,7 @@ export class DTOService {
         object.state.isShowingDailyTradesOnly = true;
       }
     }
-    const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
+    const numericFilter = globalConstants.table.traceTradeNumericalFilterSymbols.greaterThan;
     object.data.filterList.forEach(option => {
       const isNumericOption = option.includes(numericFilter);
       if (previousAvailableFiltersList.indexOf(option) > -1 ) {
@@ -2692,7 +2624,7 @@ export class DTOService {
   ): AdhocPacks.CustomBreakdownReturnPack {
     const customBreakdown: BEModels.BEStructuringBreakdownBlock = this.utility.deepCopy(targetBreakdown);
     for (let code in customBreakdown.breakdown) {
-      const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
+      const isCodeValid = globalConstants.structuring.BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
       if (!!customBreakdown.breakdown[code] && !!isCodeValid) {
         (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = 1;
         (customBreakdown.breakdown[code] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
@@ -2701,14 +2633,14 @@ export class DTOService {
     const selectedBreakdowns: Array<BEModels.BEStructuringBreakdownBlock> = identifiers.map(identifier => rawData.breakdowns[identifier]);
     selectedBreakdowns.forEach((selectedBreakdown, i) => {
       for (let code in selectedBreakdown.breakdown) {
-        const isCodeValid = BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
+        const isCodeValid = globalConstants.structuring.BICS_NON_DISPLAYED_CATEGORY_IDENTIFIER_LIST.every(identifier => identifier !== code);
         const eachCategory = selectedBreakdown.breakdown[code];
         if (!!eachCategory && !!eachCategory.metricBreakdowns && !!isCodeValid) {
           if (!eachCategory.metricBreakdowns.Cs01) {
-            eachCategory.metricBreakdowns.Cs01 = this.utility.deepCopy(StructureMetricBlockFallback.metricBreakdowns.Cs01);
+            eachCategory.metricBreakdowns.Cs01 = this.utility.deepCopy(globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.Cs01);
           }
           if (!eachCategory.metricBreakdowns.CreditLeverage) {
-            eachCategory.metricBreakdowns.CreditLeverage = this.utility.deepCopy(StructureMetricBlockFallback.metricBreakdowns.CreditLeverage);
+            eachCategory.metricBreakdowns.CreditLeverage = this.utility.deepCopy(globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.CreditLeverage);
           }
           if (
             eachCategory.metricBreakdowns.Cs01.targetLevel >= 1000 || 
@@ -2737,10 +2669,10 @@ export class DTOService {
   }
 
   public formGlobalWorkflow(
-    targetModule: NavigationModule,
+    targetModule: globalConstants.core.NavigationModule,
     isRedirect: boolean,
     isUpdateCurrentState: boolean,
-    workflowType: GlobalWorkflowTypes = GlobalWorkflowTypes.genericType
+    workflowType: globalConstants.globalWorkflow.GlobalWorkflowTypes = globalConstants.globalWorkflow.GlobalWorkflowTypes.genericType
   ): DTOs.GlobalWorkflowStateDTO {
     const uuid = this.utility.generateUUID();
     const object: DTOs.GlobalWorkflowStateDTO = {
@@ -2794,17 +2726,22 @@ export class DTOService {
     rawData: BEModels.BEStructuringFundBlock,
     comparedDeltaRawData: BEModels.BEStructuringFundBlock,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: globalConstants.structuring.PortfolioMetricValues
   ){
-    const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
-    const stencilBreakdownList = [SecurityDefinitionMap.CURRENCY];
-    const nonStencilBreakdownList = [SecurityDefinitionMap.CURRENCY,SecurityDefinitionMap.TENOR, SecurityDefinitionMap.RATING, SecurityDefinitionMap.SECURITY_SUB_TYPE];
+    const isDisplayCs01 = selectedMetricValue === globalConstants.structuring.PortfolioMetricValues.cs01;
+    const stencilBreakdownList = [globalConstants.definition.SecurityDefinitionMap.CURRENCY];
+    const nonStencilBreakdownList = [
+      globalConstants.definition.SecurityDefinitionMap.CURRENCY,
+      globalConstants.definition.SecurityDefinitionMap.TENOR, 
+      globalConstants.definition.SecurityDefinitionMap.RATING, 
+      globalConstants.definition.SecurityDefinitionMap.SECURITY_SUB_TYPE
+    ];
     const breakdownList = !!isStencil ? stencilBreakdownList : nonStencilBreakdownList;
     breakdownList.forEach((definition: Stubs.SecurityDefinitionStub) => {
       const newBreakdown = this.formRegularBreakdowns(rawData, comparedDeltaRawData, definition.key, isDisplayCs01, isStencil, selectedMetricValue);
-      if (definition.key === SecurityDefinitionMap.TENOR.key) {
+      if (definition.key === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
         newBreakdown.data.rawCs01CategoryList.forEach((eachCategory) => {
-          const targetRange = FilterOptionsTenorRange[eachCategory.data.displayCategory];
+          const targetRange = globalConstants.definition.FilterOptionsTenorRange[eachCategory.data.displayCategory];
           eachCategory.data.displayCategory = targetRange.displayLabel;
         });
       }
@@ -2816,7 +2753,7 @@ export class DTOService {
     object: DTOs.PortfolioFundDTO,
     rawData: BEModels.BEStructuringFundBlock,
     comparedDeltaRawData: BEModels.BEStructuringFundBlock,
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: globalConstants.structuring.PortfolioMetricValues
   ){
     if(rawData.overrides) {
       const deltaReturnPack: AdhocPacks.StructureOverrideToBreakdownConversionReturnPack = {
@@ -2840,7 +2777,7 @@ export class DTOService {
         }
       });
       overrideList.forEach((eachRawBreakdown) => {
-        const isDisplayCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+        const isDisplayCs01 = selectedMetricValue === globalConstants.structuring.PortfolioMetricValues.cs01;
         const existDeltaData = deltaReturnPack.list.find((eachDeltaRawBreakdown) => {
           return eachDeltaRawBreakdown.groupOption === eachRawBreakdown.groupOption;
         });
@@ -2869,10 +2806,10 @@ export class DTOService {
     groupOption: string,
     isDisplayCs01: boolean,
     isStencil: boolean,
-    selectedMetricValue: PortfolioMetricValues
+    selectedMetricValue: globalConstants.structuring.PortfolioMetricValues
     ): DTOs.PortfolioBreakdownDTO {
-    const BEGroupOptionKey = FrontendKeyToBackendKeyDictionary[groupOption];
-    const filterOptions = SecurityDefinitionMap[groupOption].optionList;
+    const BEGroupOptionKey = globalConstants.core.FrontendKeyToBackendKeyDictionary[groupOption];
+    const filterOptions = globalConstants.definition.SecurityDefinitionMap[groupOption].optionList;
     const newBreakdown = this.formPortfolioBreakdown(
       isStencil,
       rawData.breakdowns[BEGroupOptionKey],
@@ -2880,11 +2817,11 @@ export class DTOService {
       filterOptions,
       isDisplayCs01
     )
-    newBreakdown.data.definition = this.formSecurityDefinitionObject(SecurityDefinitionMap[groupOption]);
+    newBreakdown.data.definition = this.formSecurityDefinitionObject(globalConstants.definition.SecurityDefinitionMap[groupOption]);
     newBreakdown.data.title = newBreakdown.data.definition.data.displayName;
     newBreakdown.data.indexName = rawData.indexShortName;
     newBreakdown.data.portfolioName = rawData.portfolioShortName;
-    newBreakdown.state.isDisplayingCs01 = selectedMetricValue === PortfolioMetricValues.cs01;
+    newBreakdown.state.isDisplayingCs01 = selectedMetricValue === globalConstants.structuring.PortfolioMetricValues.cs01;
     return newBreakdown;
   }
 
@@ -2898,7 +2835,7 @@ export class DTOService {
   }
 
   private formSecurityDefinitionObjectCheckForWithinSelectedGroup(targetKey: string): boolean {
-    const selectedSecurityDefinitionBundleStub = ConfiguratorDefinitionLayout.find((definitionBundleStub: Stubs.SecurityDefinitionBundleStub) => definitionBundleStub.label === SecurityDefinitionConfiguratorGroupLabels.selected);
+    const selectedSecurityDefinitionBundleStub = globalConstants.definition.ConfiguratorDefinitionLayout.find((definitionBundleStub: Stubs.SecurityDefinitionBundleStub) => definitionBundleStub.label === globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
     if (!!selectedSecurityDefinitionBundleStub) {
       const isSelected = selectedSecurityDefinitionBundleStub.list.find((securityDefinitionStub: Stubs.SecurityDefinitionStub) => securityDefinitionStub.key === targetKey);
       return !!isSelected;
@@ -2944,7 +2881,7 @@ export class DTOService {
   ) {
     selectedGroupDefinition.data.list = [];
     const defaultSelectedList: Array<DTOs.SecurityDefinitionDTO> = [];
-    SelectedShortcuts.forEach((shortcutStubs: Stubs.SearchShortcutIncludedDefinitionStub) => {
+    globalConstants.trade.SelectedShortcuts.forEach((shortcutStubs: Stubs.SearchShortcutIncludedDefinitionStub) => {
       const { definitionKey } = shortcutStubs;
       configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
         definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
@@ -2965,7 +2902,7 @@ export class DTOService {
             definition.state.filterActive = true;
             const definitionCopy: DTOs.SecurityDefinitionDTO = this.utility.deepCopy(definition);
             definitionCopy.state.isHiddenInConfiguratorDefinitionBundle = false;
-            definitionCopy.data.configuratorCoreDefinitionGroup = SecurityDefinitionConfiguratorGroupLabels.selected;
+            definitionCopy.data.configuratorCoreDefinitionGroup = globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected;
             defaultSelectedList.push(definitionCopy);
           }
         })
