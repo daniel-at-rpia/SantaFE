@@ -15,20 +15,21 @@
       BEStructuringOverrideBaseBlock
     } from 'BEModels/backend-models.interface';
     import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
-    import {
-      GroupMetricOptions
-    } from 'Core/constants/marketConstants.constant';
-    import {
-      QUANT_COMPARER_PERCENTILE,
-      SecurityMetricOptions,
-      FrontendKeyToBackendKeyDictionary,
-      BackendKeyToDisplayLabelDictionary,
-      TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER,
-      AlertTypes,
-      AlertSubTypes,
-      TRACE_VOLUME_REPORTED_THRESHOLD
-    } from 'Core/constants/coreConstants.constant';
+    import * as globalConstants from 'Core/constants';
+    // import {
+      // GroupMetricOptions
+    // } from 'Core/constants/marketConstants.constant';
+    // import {
+    //   QUANT_COMPARER_PERCENTILE,
+    //   SecurityMetricOptions,
+    //   FrontendKeyToBackendKeyDictionary,
+    //   BackendKeyToDisplayLabelDictionary,
+    //   TriCoreDriverConfig,
+    //   DEFAULT_DRIVER_IDENTIFIER,
+    //   AlertTypes,
+    //   AlertSubTypes,
+    //   TRACE_VOLUME_REPORTED_THRESHOLD
+    // } from 'Core/constants/coreConstants.constant';
     import {
       BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
       SubPortfolioFilter,
@@ -54,11 +55,11 @@
 @Injectable()
 export class UtilityService {
   // Any code about naming stuff goes into this service
-  groupGroupMetricOptions = GroupMetricOptions;
-  securityMetricOptions = SecurityMetricOptions;
-  keyDictionary = FrontendKeyToBackendKeyDictionary;
-  labelDictionary = BackendKeyToDisplayLabelDictionary;
-  triCoreDriverConfig = TriCoreDriverConfig;
+  groupGroupMetricOptions = globalConstants.market.GroupMetricOptions;
+  securityMetricOptions = globalConstants.core.SecurityMetricOptions;
+  keyDictionary = globalConstants.core.FrontendKeyToBackendKeyDictionary;
+  labelDictionary = globalConstants.core.BackendKeyToDisplayLabelDictionary;
+  triCoreDriverConfig = globalConstants.core.TriCoreDriverConfig;
   definitionMap = SecurityDefinitionMap;
 
   constructor(
@@ -538,19 +539,19 @@ export class UtilityService {
     ): number|string {
       if (targetNumber != null && !!targetDriver) {
         if (targetDriver === 'YieldWorst') {
-          targetDriver = TriCoreDriverConfig.Yield.label;
-        } else if (targetDriver === TriCoreDriverConfig.Spread.driverLabel) {
-          targetDriver = TriCoreDriverConfig.Spread.label;
+          targetDriver = globalConstants.core.TriCoreDriverConfig.Yield.label;
+        } else if (targetDriver === globalConstants.core.TriCoreDriverConfig.Spread.driverLabel) {
+          targetDriver = globalConstants.core.TriCoreDriverConfig.Spread.label;
         }
-        const rounding = TriCoreDriverConfig[targetDriver] ? TriCoreDriverConfig[targetDriver].rounding : 0;
+        const rounding = globalConstants.core.TriCoreDriverConfig[targetDriver] ? globalConstants.core.TriCoreDriverConfig[targetDriver].rounding : 0;
         if (isToFixed) {
-          if (targetSecurity.data.isGovt && targetDriver === TriCoreDriverConfig.Spread.label) {
+          if (targetSecurity.data.isGovt && targetDriver === globalConstants.core.TriCoreDriverConfig.Spread.label) {
             return this.round(targetNumber, rounding + 1).toFixed(rounding + 1);
           } else {
             return this.round(targetNumber, rounding).toFixed(rounding);
           }
         } else {
-          if (targetSecurity.data.isGovt && targetDriver === TriCoreDriverConfig.Spread.label) {
+          if (targetSecurity.data.isGovt && targetDriver === globalConstants.core.TriCoreDriverConfig.Spread.label) {
             return this.round(targetNumber, rounding + 1);
           } else {
             return this.round(targetNumber, rounding);
@@ -561,43 +562,43 @@ export class UtilityService {
       }
     }
 
-    public mapAlertType(targetType: string): AlertTypes {
+    public mapAlertType(targetType: string): globalConstants.core.AlertTypes {
       switch (targetType) {
-        case AlertTypes.axeAlert:
-          return AlertTypes.axeAlert;
-        case AlertTypes.markAlert:
-          return AlertTypes.markAlert;
-        case AlertTypes.tradeAlert:
-          return AlertTypes.tradeAlert;
-        case AlertTypes.traceAlert:
-          return AlertTypes.traceAlert;
+        case globalConstants.core.AlertTypes.axeAlert:
+          return globalConstants.core.AlertTypes.axeAlert;
+        case globalConstants.core.AlertTypes.markAlert:
+          return globalConstants.core.AlertTypes.markAlert;
+        case globalConstants.core.AlertTypes.tradeAlert:
+          return globalConstants.core.AlertTypes.tradeAlert;
+        case globalConstants.core.AlertTypes.traceAlert:
+          return globalConstants.core.AlertTypes.traceAlert;
         default:
-          return AlertTypes.system;
+          return globalConstants.core.AlertTypes.system;
       }
     }
 
-    public mapAlertSubType(targetType: string): AlertSubTypes {
+    public mapAlertSubType(targetType: string): globalConstants.core.AlertSubTypes {
       switch (targetType) {
-        case AlertSubTypes.ask:
-          return AlertSubTypes.ask;
-        case AlertSubTypes.bid:
-          return AlertSubTypes.bid;
-        case AlertSubTypes.both:
-          return AlertSubTypes.default;  // both is not a valid type in FE
-        case AlertSubTypes.liquidation:
-          return AlertSubTypes.default;  // liquidation is not a valid type in FE
-        case AlertSubTypes.quantityChange:
-          return AlertSubTypes.quantityChange;
-        case AlertSubTypes.ratingChange:
-          return AlertSubTypes.ratingChange;
-        case AlertSubTypes.buy:
-          return AlertSubTypes.buy;
-        case AlertSubTypes.sell:
-          return AlertSubTypes.sell;
-        case AlertSubTypes.mid:
-          return AlertSubTypes.mid
+        case globalConstants.core.AlertSubTypes.ask:
+          return globalConstants.core.AlertSubTypes.ask;
+        case globalConstants.core.AlertSubTypes.bid:
+          return globalConstants.core.AlertSubTypes.bid;
+        case globalConstants.core.AlertSubTypes.both:
+          return globalConstants.core.AlertSubTypes.default;  // both is not a valid type in FE
+        case globalConstants.core.AlertSubTypes.liquidation:
+          return globalConstants.core.AlertSubTypes.default;  // liquidation is not a valid type in FE
+        case globalConstants.core.AlertSubTypes.quantityChange:
+          return globalConstants.core.AlertSubTypes.quantityChange;
+        case globalConstants.core.AlertSubTypes.ratingChange:
+          return globalConstants.core.AlertSubTypes.ratingChange;
+        case globalConstants.core.AlertSubTypes.buy:
+          return globalConstants.core.AlertSubTypes.buy;
+        case globalConstants.core.AlertSubTypes.sell:
+          return globalConstants.core.AlertSubTypes.sell;
+        case globalConstants.core.AlertSubTypes.mid:
+          return globalConstants.core.AlertSubTypes.mid
         default:
-          return AlertSubTypes.default;
+          return globalConstants.core.AlertSubTypes.default;
       }
     }
 
@@ -780,11 +781,11 @@ export class UtilityService {
     ): DTOs.SecurityTableCellDTO {
       if (targetHeader.state.isBestQuoteVariant) {
         let targetDriver = triCoreMetric;
-        if (triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
+        if (triCoreMetric === globalConstants.core.DEFAULT_DRIVER_IDENTIFIER) {
           targetDriver = this.findSecurityTargetDefaultTriCoreDriver(targetRow.data.security);
         }
         if (!!targetDriver) {
-          const targetQuantLocationFromRow = TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
+          const targetQuantLocationFromRow = globalConstants.core.TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
           newCellDTO.data.bestQuoteComparerDTO = targetRow.data.bestQuotes[targetHeader.data.blockAttrName][targetQuantLocationFromRow];
         } else {
           newCellDTO.data.bestQuoteComparerDTO = null;
@@ -884,11 +885,11 @@ export class UtilityService {
         }
         let attrName = header.data.attrName;
         let underlineAttrName = header.data.underlineAttrName;
-        if ( header.data.isDriverDependent && header.data.isAttrChangable && attrName === DEFAULT_DRIVER_IDENTIFIER ) {
+        if ( header.data.isDriverDependent && header.data.isAttrChangable && attrName === globalConstants.core.DEFAULT_DRIVER_IDENTIFIER ) {
           // when the metric is set to default, the actual metric to be used for each row depends on the driver of the mark of that particular row
           const targetDriver = this.findSecurityTargetDefaultTriCoreDriver(dto);
-          attrName = TriCoreDriverConfig[targetDriver].driverLabel;
-          underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
+          attrName = globalConstants.core.TriCoreDriverConfig[targetDriver].driverLabel;
+          underlineAttrName = globalConstants.core.TriCoreDriverConfig[targetDriver].driverLabel;
         }
         const driverLabel = attrName;
         let value;
@@ -943,7 +944,7 @@ export class UtilityService {
           const isFifo = header.data.key.indexOf('Fifo') >= 0;
           const targetInnerBlock = isFifo ? targetBlock.fifo : targetBlock.weightedAvg;
           const targetAttr = 
-            header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
+            header.data.underlineAttrName !== globalConstants.core.DEFAULT_DRIVER_IDENTIFIER 
               ? header.data.underlineAttrName 
               : dto.data.mark.markDriver === this.triCoreDriverConfig.Price.label
                 ? this.triCoreDriverConfig.Price.driverLabel 
@@ -1033,7 +1034,7 @@ export class UtilityService {
           }
         }
         if (targetSecurity.data.hasIndex) {
-          const driverLabel = TriCoreDriverConfig[activeDriver].driverLabel;
+          const driverLabel = globalConstants.core.TriCoreDriverConfig[activeDriver].driverLabel;
           markBlock.markDisIndexRaw = markBlock.markRaw - targetSecurity.data.metricPack.raw[driverLabel];
           markBlock.markDisIndex = this.parseTriCoreDriverNumber(markBlock.markDisIndexRaw, driverLabel, targetSecurity, true) as string;
         }
@@ -1103,8 +1104,8 @@ export class UtilityService {
         const bestAskNum = this.triCoreDriverConfig[filteredMetricType] ? combined[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number : null;
         targetQuote.data.currentMetric = filteredMetricType;
         targetQuote.state.filteredByPrice = filteredMetricType === this.triCoreDriverConfig.Price.label;
-        targetQuote.state.filteredBySpread = filteredMetricType === TriCoreDriverConfig.Spread.label;
-        targetQuote.state.filteredByYield = filteredMetricType === TriCoreDriverConfig.Yield.label;
+        targetQuote.state.filteredBySpread = filteredMetricType === globalConstants.core.TriCoreDriverConfig.Spread.label;
+        targetQuote.state.filteredByYield = filteredMetricType === globalConstants.core.TriCoreDriverConfig.Yield.label;
         targetQuote.state.isBestBid = targetQuote.data.bid.tspread == bestBidNum || targetQuote.data.bid.price == bestBidNum || targetQuote.data.bid.yield == bestBidNum;
         targetQuote.state.isBestOffer = targetQuote.data.ask.tspread == bestAskNum || targetQuote.data.ask.price == bestAskNum || targetQuote.data.ask.yield == bestAskNum;
         if (targetQuote.state.hasBid && targetQuote.data.bid.isAxe) {
@@ -1125,7 +1126,7 @@ export class UtilityService {
           sizeList.push(eachComparer.data.bid.size, eachComparer.data.offer.size);
         }
       });
-      const maxDelta = this.findPercentile(deltaList, QUANT_COMPARER_PERCENTILE);
+      const maxDelta = this.findPercentile(deltaList, globalConstants.core.QUANT_COMPARER_PERCENTILE);
       // const maxSize = this.utilityService.findPercentile(sizeList, QUANT_COMPARER_PERCENTILE);
       const maxSize = 50;
 
@@ -1171,7 +1172,7 @@ export class UtilityService {
 
     public formatTraceReportedValues(amount: number, isRounded: boolean = false): string {
       if (!isRounded) {
-      const reportedInteger = amount / TRACE_VOLUME_REPORTED_THRESHOLD;
+      const reportedInteger = amount / globalConstants.core.TRACE_VOLUME_REPORTED_THRESHOLD;
       const roundedVolumeReported = Math.floor(reportedInteger);
       return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
       } else {

@@ -1,31 +1,24 @@
 import { indexed } from '@amcharts/amcharts4/.internal/core/utils/Iterator';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
+
 import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
+import * as globalConstants from 'Core/constants';
+import { CoreGlobalWorkflowIndexedDBReady } from 'Core/actions/core.actions';
 import { TradeWatchlistIndexedDBReady } from 'Trade/actions/trade.actions';
-import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { Observable } from 'rxjs';
-import {
-  INDEXEDDB_WORKFLOW_VERSION,
-  INDEXEDDB_WORKFLOW_DATABASE_NAME,
-  INDEXEDDB_WATCHLIST_DATABASE_NAME,
-  INDEXEDDB_WATCHLIST_VERSION,
-  IndexedDBTableConfigs,
-  IndexedDBDatabases
-} from 'App/modules/core/constants/indexedDB.constants';
 
 
 @Injectable()
 
 export class IndexedDBService {
   constants = {
-    idbWorkflowVersion: INDEXEDDB_WORKFLOW_VERSION,
-    idbWatchlistVersion: INDEXEDDB_WATCHLIST_VERSION,
-    idbWorkflowDbName: INDEXEDDB_WORKFLOW_DATABASE_NAME,
-    idbWatchlistDbName: INDEXEDDB_WATCHLIST_DATABASE_NAME,
-    idbTableConfigs: IndexedDBTableConfigs,
-    idbDatabaseTypes: IndexedDBDatabases
+    idbWorkflowVersion: globalConstants.indexedDB.INDEXEDDB_WORKFLOW_VERSION,
+    idbWatchlistVersion: globalConstants.indexedDB.INDEXEDDB_WATCHLIST_VERSION,
+    idbWorkflowDbName: globalConstants.indexedDB.INDEXEDDB_WORKFLOW_DATABASE_NAME,
+    idbWatchlistDbName: globalConstants.indexedDB.INDEXEDDB_WATCHLIST_DATABASE_NAME,
+    idbTableConfigs: globalConstants.indexedDB.IndexedDBTableConfigs,
+    idbDatabaseTypes: globalConstants.indexedDB.IndexedDBDatabases
   }
   allDatabases: AdhocPacks.IndexedDBAllDatabaseMapping = {
     [this.constants.idbDatabaseTypes.GlobalWorkflow]: {
@@ -33,14 +26,14 @@ export class IndexedDBService {
       version: this.constants.idbWorkflowVersion,
       ngRxAction: CoreGlobalWorkflowIndexedDBReady,
       api: null,
-      configs: IndexedDBTableConfigs.GlobalWorkflow
+      configs: globalConstants.indexedDB.IndexedDBTableConfigs.GlobalWorkflow
     },
     [this.constants.idbDatabaseTypes.TradeWatchlist]: {
       name: this.constants.idbWatchlistDbName,
       version: this.constants.idbWatchlistVersion,
       ngRxAction: TradeWatchlistIndexedDBReady,
       api: null,
-      configs: IndexedDBTableConfigs.TradeWatchlist
+      configs: globalConstants.indexedDB.IndexedDBTableConfigs.TradeWatchlist
     }
   }
   constructor(
@@ -59,7 +52,7 @@ export class IndexedDBService {
     openRequest: IDBOpenDBRequest,
     databaseName: string,
     tableData: AdhocPacks.IndexedDBTableBlock,
-    databaseType: IndexedDBDatabases
+    databaseType: globalConstants.indexedDB.IndexedDBDatabases
   ) {
     openRequest.onerror = (errorEvent) => {
       console.error('IDB open request failed', errorEvent);
@@ -112,7 +105,7 @@ export class IndexedDBService {
 
   public retreiveIndexedDBTransaction(
     tableName: string,
-    databaseType: IndexedDBDatabases,
+    databaseType: globalConstants.indexedDB.IndexedDBDatabases,
     action: string,
     hasCustomHandlers: boolean,
     isReadWrite: boolean = true
@@ -135,7 +128,7 @@ export class IndexedDBService {
 
   public retrieveAndStoreDataToIndexedDB (
     tableName: string,
-    databaseType: IndexedDBDatabases,
+    databaseType: globalConstants.indexedDB.IndexedDBDatabases,
     entry: AdhocPacks.IndexedDBEntryBlock,
     action: string,
     customTransactionHandlers: boolean
@@ -149,7 +142,7 @@ export class IndexedDBService {
 
   public retrieveAndGetAllIndexedDBData(
     tableName: string,
-    databaseType: IndexedDBDatabases,
+    databaseType: globalConstants.indexedDB.IndexedDBDatabases,
     action: string,
     customTransactionHandlers: boolean
   ) {
@@ -207,7 +200,7 @@ export class IndexedDBService {
   }
 
   public initializeIndexedDB(
-    databaseType: IndexedDBDatabases
+    databaseType: globalConstants.indexedDB.IndexedDBDatabases
   ) {
     const openRequest = this.openRequestToIndexDBDatabase(this.allDatabases[databaseType].name, this.allDatabases[databaseType].version);
     const indexedDBTableBlock = this.createTableBlock(this.allDatabases[databaseType].configs);
@@ -216,9 +209,9 @@ export class IndexedDBService {
 
   public storeLastState(
     tableName: string,
-    targetModule: NavigationModule,
+    targetModule: globalConstants.core.NavigationModule,
     targetUUID: string,
-    databaseType: IndexedDBDatabases
+    databaseType: globalConstants.indexedDB.IndexedDBDatabases
   ) {
     if (!!this.allDatabases[databaseType].api) {
       // this if condition serves both as a null-check and a guard for not recording the initial state on app load, because it is unnecessary to store it
@@ -233,7 +226,7 @@ export class IndexedDBService {
   public retrieveAndDeleteDataFromIndexedDB(
     uuid: string,
     tableName: string,
-    databaseType: IndexedDBDatabases,
+    databaseType: globalConstants.indexedDB.IndexedDBDatabases,
     action: string,
     customTransactionHandlers: boolean
   ) {
