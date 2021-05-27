@@ -16,38 +16,7 @@
     } from 'BEModels/backend-models.interface';
     import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
     import * as globalConstants from 'Core/constants';
-    // import {
-      // GroupMetricOptions
-    // } from 'Core/constants/marketConstants.constant';
-    // import {
-    //   QUANT_COMPARER_PERCENTILE,
-    //   SecurityMetricOptions,
-    //   FrontendKeyToBackendKeyDictionary,
-    //   BackendKeyToDisplayLabelDictionary,
-    //   TriCoreDriverConfig,
-    //   DEFAULT_DRIVER_IDENTIFIER,
-    //   AlertTypes,
-    //   AlertSubTypes,
-    //   TRACE_VOLUME_REPORTED_THRESHOLD
-    // } from 'Core/constants/coreConstants.constant';
-    import {
-      BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
-      SubPortfolioFilter,
-      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
-      BEIdentifierToFEDisplayMapping
-    } from 'Core/constants/structureConstants.constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
-    import {
-      SecurityDefinitionMap,
-      StrategyExcludedFiltersMapping,
-      FilterOptionsTenorRange,
-      SecurityDefinitionConfiguratorGroupLabels,
-      ConfiguratorDefinitionLayout
-    } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      traceTradeFilterAmounts,
-      traceTradeNumericalFilterSymbols
-    } from '../constants/securityTableConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
     import { NavigationEnd } from '@angular/router';
   // dependencies
@@ -60,7 +29,7 @@ export class UtilityService {
   keyDictionary = globalConstants.core.FrontendKeyToBackendKeyDictionary;
   labelDictionary = globalConstants.core.BackendKeyToDisplayLabelDictionary;
   triCoreDriverConfig = globalConstants.core.TriCoreDriverConfig;
-  definitionMap = SecurityDefinitionMap;
+  definitionMap = globalConstants.definition.SecurityDefinitionMap;
 
   constructor(
     private countdownPipe: CountdownPipe,
@@ -628,7 +597,7 @@ export class UtilityService {
   public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
     configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
       definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-        definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as SecurityDefinitionConfiguratorGroupLabels;
+        definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
       })
     })
   }
@@ -1161,7 +1130,7 @@ export class UtilityService {
 
     public getTraceNumericFilterAmount(filterSymbol: string, filter: string): number {
       const parsedFilter = filter.split(filterSymbol)[1].trim();
-      const amount = parsedFilter.includes('K') ? +(parsedFilter.split('K')[0]) * traceTradeFilterAmounts.thousand : +(parsedFilter.split('M')[0]) * traceTradeFilterAmounts.million;
+      const amount = parsedFilter.includes('K') ? +(parsedFilter.split('K')[0]) * globalConstants.table.traceTradeFilterAmounts.thousand : +(parsedFilter.split('M')[0]) * globalConstants.table.traceTradeFilterAmounts.million;
       return amount;
     }
 
@@ -1174,9 +1143,9 @@ export class UtilityService {
       if (!isRounded) {
       const reportedInteger = amount / globalConstants.core.TRACE_VOLUME_REPORTED_THRESHOLD;
       const roundedVolumeReported = Math.floor(reportedInteger);
-      return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
+      return `${globalConstants.table.traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
       } else {
-        const displayValue = !!amount ? `${traceTradeNumericalFilterSymbols.greaterThan} ${Math.floor(amount)}MM` : null;
+        const displayValue = !!amount ? `${globalConstants.table.traceTradeNumericalFilterSymbols.greaterThan} ${Math.floor(amount)}MM` : null;
         return displayValue;
       }
     }
@@ -1202,7 +1171,7 @@ export class UtilityService {
     public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<Blocks.TraceTradeBlock> {
       let displayedList: Array<Blocks.TraceTradeBlock> = [];
       let numericalFiltersList: Array<number> = [];
-      const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
+      const numericFilter = globalConstants.table.traceTradeNumericalFilterSymbols.greaterThan;
       if (options.length > 0) {
         options.forEach((option) => {
           if (option.includes(numericFilter)) {
@@ -1327,11 +1296,11 @@ export class UtilityService {
       return newDefinition;
     }
 
-    public setCoreDefinitionBundleLabel(targetKey: string): SecurityDefinitionConfiguratorGroupLabels | null {
-      const nonSelectedDefinitionLayout = ConfiguratorDefinitionLayout.filter((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+    public setCoreDefinitionBundleLabel(targetKey: string): globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels | null {
+      const nonSelectedDefinitionLayout = globalConstants.definition.ConfiguratorDefinitionLayout.filter((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.label !== globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
       const selectedBundle = nonSelectedDefinitionLayout.find((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.list.find((definitionStub: Stubs.SecurityDefinitionStub) => definitionStub.key === targetKey));
       if (!!selectedBundle) {
-        return selectedBundle.label as SecurityDefinitionConfiguratorGroupLabels;
+        return selectedBundle.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
       } else {
         return null;
       }
@@ -1343,7 +1312,7 @@ export class UtilityService {
       isHiddenDefinition: boolean,
     ) {
       configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO, definitionBundleIndex: number) => {
-        if (definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected) {
+        if (definitionBundle.data.label !== globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected) {
           definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO, definitionIndex: number) => {
             if (definition.data.key === targetDefinition.data.key) {
               const newCoreDefinition = this.createNewCoreDefinitionFromSelectedDefinitionChanges(targetDefinition, isHiddenDefinition, targetDefinition.state.filterActive);
@@ -1360,9 +1329,9 @@ export class UtilityService {
       // we only use the first (primary) set of configurations in the searchFilters to name the shortcut, ignore all the other "OR" conditions for now because it would make the name too long
       targetShortcut.data.searchFilters[0].forEach((definitionItem: DTOs.SecurityDefinitionDTO) => {
         // skip "Quoted Today" in the naming since that definition is just binary at the moment
-        if (definitionItem.data.key !== SecurityDefinitionMap.QUOTED_TODAY.key) {
-          const isBICS = definitionItem.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key;
-          const groupDefinition = isBICS ? 'BICS' : SecurityDefinitionMap[definitionItem.data.key].displayName;
+        if (definitionItem.data.key !== globalConstants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
+          const isBICS = definitionItem.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key;
+          const groupDefinition = isBICS ? 'BICS' : globalConstants.definition.SecurityDefinitionMap[definitionItem.data.key].displayName;
           selectionOptionsList = [
             ...selectionOptionsList,
             ...definitionItem.data.highlightSelectedOptionList.length > 2
@@ -1443,7 +1412,7 @@ export class UtilityService {
         });
         let categoryKey = '';
         list.forEach((eachIdentifier) => {
-          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName) {
+          if (eachIdentifier === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName) {
             const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
               return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
@@ -1665,7 +1634,7 @@ export class UtilityService {
     }
 
     public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
-      const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
+      const isNonDiveInCategory = globalConstants.structuring.BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
       if (!isNonDiveInCategory && row.data.code) {
         const subLevelCategories = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(row.data.code);
         return subLevelCategories.length > 0;
@@ -1692,18 +1661,18 @@ export class UtilityService {
       return viewData;
     }
 
-    public convertFESubPortfolioTextToBEKey(subPortfolio: SubPortfolioFilter): string {
+    public convertFESubPortfolioTextToBEKey(subPortfolio: globalConstants.structuring.SubPortfolioFilter): string {
       switch (subPortfolio) {
-        case SubPortfolioFilter.all:
+        case globalConstants.structuring.SubPortfolioFilter.all:
           return 'All';
           break;
-        case SubPortfolioFilter.nonHedging:
+        case globalConstants.structuring.SubPortfolioFilter.nonHedging:
           return 'NonHedging';
           break;
-        case SubPortfolioFilter.nonShortCarry:
+        case globalConstants.structuring.SubPortfolioFilter.nonShortCarry:
           return 'NonShortCarry';
           break;
-        case SubPortfolioFilter.shortCarry:
+        case globalConstants.structuring.SubPortfolioFilter.shortCarry:
           return 'ShortCarry';
           break;
         default:
@@ -1716,10 +1685,10 @@ export class UtilityService {
       category: string,
       isOverride: boolean
       ): string {
-      const isBICSSubLevel = category.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX);
+      const isBICSSubLevel = category.includes(globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX);
       let displayCategory: string;
       if (isBICSSubLevel) {
-        displayCategory = isOverride ? category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'): category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim();
+        displayCategory = isOverride ? category.split(globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'): category.split(globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim();
       } else {
         displayCategory = category;
       }
@@ -1748,9 +1717,9 @@ export class UtilityService {
       return rawOverridesList;
     }
 
-    public filterOutExcludedStrategiesForSeeBond(definition: DTOs.SecurityDefinitionDTO, activeSubPortfolio: SubPortfolioFilter) {
+    public filterOutExcludedStrategiesForSeeBond(definition: DTOs.SecurityDefinitionDTO, activeSubPortfolio: globalConstants.structuring.SubPortfolioFilter) {
         definition.data.displayOptionList.forEach((eachOption) => {
-        const subPortfolioMapping = StrategyExcludedFiltersMapping[activeSubPortfolio];
+        const subPortfolioMapping = globalConstants.definition.StrategyExcludedFiltersMapping[activeSubPortfolio];
         const isExcluded = subPortfolioMapping.excluded.find(strategy => strategy === eachOption.displayLabel);
         if (!isExcluded) {
           eachOption.isSelected = true;
@@ -1764,7 +1733,7 @@ export class UtilityService {
       params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
         const property = this.convertFEKey(eachItem.key);
         if (!!property) {
-          if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
+          if (eachItem.key === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
             simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
               return eachBlock.shortKey;
             });
@@ -1781,7 +1750,7 @@ export class UtilityService {
     public formOverrideTitle(backendGroupOptionIdentifier: string): string {
       const identifiers = backendGroupOptionIdentifier.split(' ~ ');
       identifiers.forEach((identifier: string, index: number) => {
-        const identifierBlock = BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
+        const identifierBlock = globalConstants.structuring.BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
         if (identifierBlock) {
           identifiers[index] = identifierBlock.display;
         }

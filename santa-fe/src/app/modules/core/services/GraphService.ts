@@ -12,12 +12,6 @@ import * as moment from 'moment';
 import { UtilityService } from './UtilityService';
 import { DTOs, Blocks, PageStates, AdhocPacks } from '../models/frontend';
 import * as globalConstants from 'Core/constants';
-// import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
-// import {
-  // TradeSideValueEquivalent,
-  // traceTradePieGraphKeys
-// } from 'Core/constants/securityTableConstants.constant';
-// import { TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL } from 'Core/constants/securityTableConstants.constant';
 
 @Injectable()
 export class GraphService {
