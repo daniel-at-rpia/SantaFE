@@ -11,36 +11,13 @@
     import { DTOService } from './DTOService';
     import { RestfulCommService } from './RestfulCommService';
     import { DTOs, Blocks } from '../models/frontend';
-    import {
-      SecurityTableHeaderConfigs,
-      AGGRID_SECURITY_CARD_COLUMN_WIDTH,
-      AGGRID_QUOTE_COLUMN_WIDTH,
-      AGGRID_SIMPLE_NUM_COLUMN_WIDTH,
-      AGGRID_HEADER_CLASS,
-      AGGRID_CELL_CLASS,
-      AGGRID_DETAIL_COLUMN_KEY,
-      AGGRID_DETAIL_COLUMN_WIDTH,
-      AGGRID_SIMPLE_TEXT_COLUMN_WIDTH,
-      SecurityTableHeaderConfigGroups,
-      SECURITY_TABLE_HEADER_NO_GROUP,
-      AGGRID_ALERT_SIDE_COLUMN_WIDTH,
-      AGGRID_ALERT_MESSAGE_COLUMN_WIDTH,
-      AGGRID_ALERT_STATUS_COLUMN_WIDTH,
-      traceTradeNumericalFilterSymbols,
-      AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH,
-      AGGRID_TRACE_BENCHMARK_NAME_COLUMN
-    } from 'Core/constants/securityTableConstants.constant';
-    import {
-      TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER,
-      TRACE_VOLUME_REPORTED_THRESHOLD
-    } from 'Core/constants/coreConstants.constant';
+    import * as globalConstants from 'Core/constants';
   //
 
 @Injectable()
 export class AgGridMiddleLayerService {
-  defaultDriver = DEFAULT_DRIVER_IDENTIFIER;
-  triCoreDriverConfig = TriCoreDriverConfig;
+  defaultDriver = globalConstants.core.DEFAULT_DRIVER_IDENTIFIER;
+  triCoreDriverConfig = globalConstants.core.TriCoreDriverConfig;
   public selectedDriverType: string = this.defaultDriver;
   constructor(
     private utilityService: UtilityService,
@@ -56,10 +33,10 @@ export class AgGridMiddleLayerService {
     const groupList = [];
     // the detail column is for triggering the All Quotes table
     const detailColumn: Blocks.AgGridColumnDefinition = {
-      headerName: AGGRID_DETAIL_COLUMN_KEY,
-      field: AGGRID_DETAIL_COLUMN_KEY,
-      headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--detail ag-numeric-header`,
-      cellClass: `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--detailCTA`,
+      headerName: globalConstants.table.AGGRID_DETAIL_COLUMN_KEY,
+      field: globalConstants.table.AGGRID_DETAIL_COLUMN_KEY,
+      headerClass: `${globalConstants.table.AGGRID_HEADER_CLASS} ${globalConstants.table.AGGRID_HEADER_CLASS}--detail ag-numeric-header`,
+      cellClass: `${globalConstants.table.AGGRID_CELL_CLASS} ${globalConstants.table.AGGRID_CELL_CLASS}--detailCTA`,
       cellRenderer: 'agGroupCellRenderer',
       enableValue: false,
       sortable: false,
@@ -68,16 +45,16 @@ export class AgGridMiddleLayerService {
       enablePivot: false,
       enableRowGroup: false,
       hide: true,
-      width: AGGRID_DETAIL_COLUMN_WIDTH
+      width: globalConstants.table.AGGRID_DETAIL_COLUMN_WIDTH
     };
     list.push(detailColumn);
-    for (const eachGroupKey in SecurityTableHeaderConfigGroups) {
+    for (const eachGroupKey in globalConstants.table.SecurityTableHeaderConfigGroups) {
       // we are treating the groups as definitions as well for the sake of simplicity, since agGrid allows that
       const eachGroup: Blocks.AgGridColumnDefinition = {
-        headerName: SecurityTableHeaderConfigGroups[eachGroupKey],
+        headerName: globalConstants.table.SecurityTableHeaderConfigGroups[eachGroupKey],
         field: eachGroupKey,
-        headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${eachGroupKey}`,
-        cellClass: `${AGGRID_CELL_CLASS}`,
+        headerClass: `${globalConstants.table.AGGRID_HEADER_CLASS} ${globalConstants.table.AGGRID_HEADER_CLASS}--${eachGroupKey}`,
+        cellClass: `${globalConstants.table.AGGRID_CELL_CLASS}`,
         enableValue: false,
         hide: false,
         enableRowGroup: false,
@@ -90,17 +67,17 @@ export class AgGridMiddleLayerService {
       const isActiveByDefault = table.data.headers.find((eachActiveHeader) => {
         return eachActiveHeader.data.key === eachHeader.data.key;
       })
-      let groupName = SECURITY_TABLE_HEADER_NO_GROUP;
-      for (const eachGroupKey in SecurityTableHeaderConfigGroups) {
-        if (SecurityTableHeaderConfigGroups[eachGroupKey] === eachHeader.data.groupBelongs) {
+      let groupName = globalConstants.table.SECURITY_TABLE_HEADER_NO_GROUP;
+      for (const eachGroupKey in globalConstants.table.SecurityTableHeaderConfigGroups) {
+        if (globalConstants.table.SecurityTableHeaderConfigGroups[eachGroupKey] === eachHeader.data.groupBelongs) {
           groupName = eachGroupKey;
         }
       }
       const newAgColumn: Blocks.AgGridColumnDefinition = {
         headerName: eachHeader.data.displayLabel,
         field: eachHeader.data.key,
-        headerClass: `${AGGRID_HEADER_CLASS} ${AGGRID_HEADER_CLASS}--${groupName}`,
-        cellClass: `${AGGRID_CELL_CLASS}`,
+        headerClass: `${globalConstants.table.AGGRID_HEADER_CLASS} ${globalConstants.table.AGGRID_HEADER_CLASS}--${groupName}`,
+        cellClass: `${globalConstants.table.AGGRID_CELL_CLASS}`,
         enableValue: false,
         sortable: true,
         filter: null,
@@ -145,7 +122,7 @@ export class AgGridMiddleLayerService {
       }
       this.loadAgGridHeadersComparator(eachHeader, newAgColumn);
       this.loadAgGridHeadersUILogics(eachHeader, newAgColumn);
-      if (table.state.isGroupEnabled && eachHeader.data.groupBelongs !== SECURITY_TABLE_HEADER_NO_GROUP) {
+      if (table.state.isGroupEnabled && eachHeader.data.groupBelongs !== globalConstants.table.SECURITY_TABLE_HEADER_NO_GROUP) {
         const targetGroup = groupList.find((eachGroup) => {
           return eachGroup.headerName === eachHeader.data.groupBelongs;
         });
@@ -300,17 +277,17 @@ export class AgGridMiddleLayerService {
     if (targetHeader.state.isCustomComponent) {
       newAgColumn.cellRenderer = targetHeader.data.key;
       if (targetHeader.data.key === 'securityCard') {
-        newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--securityCard`;
-        newAgColumn.width = AGGRID_SECURITY_CARD_COLUMN_WIDTH;
+        newAgColumn.cellClass = `${globalConstants.table.AGGRID_CELL_CLASS} ${globalConstants.table.AGGRID_CELL_CLASS}--securityCard`;
+        newAgColumn.width = globalConstants.table.AGGRID_SECURITY_CARD_COLUMN_WIDTH;
       } else if (!!targetHeader.state.isBestQuoteVariant) {
-        newAgColumn.width = AGGRID_QUOTE_COLUMN_WIDTH;
+        newAgColumn.width = globalConstants.table.AGGRID_QUOTE_COLUMN_WIDTH;
       } else if (targetHeader.data.key === 'alertSide') {
-        newAgColumn.width = AGGRID_ALERT_SIDE_COLUMN_WIDTH;
+        newAgColumn.width = globalConstants.table.AGGRID_ALERT_SIDE_COLUMN_WIDTH;
       }
     } else if (!targetHeader.data.isDataTypeText) {
-      newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--numeric`;
-      newAgColumn.headerClass = `${newAgColumn.headerClass} ${AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
-      newAgColumn.width = AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
+      newAgColumn.cellClass = `${globalConstants.table.AGGRID_CELL_CLASS} ${globalConstants.table.AGGRID_CELL_CLASS}--numeric`;
+      newAgColumn.headerClass = `${newAgColumn.headerClass} ${globalConstants.table.AGGRID_HEADER_CLASS}--numeric ag-numeric-header`;
+      newAgColumn.width = globalConstants.table.AGGRID_SIMPLE_NUM_COLUMN_WIDTH;
       newAgColumn.resizable = true;
       // newAgColumn.suppressMenu = true;
       newAgColumn.enableValue = true;
@@ -322,8 +299,8 @@ export class AgGridMiddleLayerService {
         suppressFilterButton: true
       };
     } else {
-      newAgColumn.cellClass = AGGRID_CELL_CLASS;
-      newAgColumn.width = AGGRID_SIMPLE_TEXT_COLUMN_WIDTH;
+      newAgColumn.cellClass = globalConstants.table.AGGRID_CELL_CLASS;
+      newAgColumn.width = globalConstants.table.AGGRID_SIMPLE_TEXT_COLUMN_WIDTH;
       newAgColumn.resizable = true;
       newAgColumn.enableRowGroup = true;
       newAgColumn.enablePivot = true;
@@ -332,20 +309,20 @@ export class AgGridMiddleLayerService {
       newAgColumn.width = targetHeader.style.columnWidthOverride;
     }
     if (targetHeader.data.key === 'alertMessage') {
-      newAgColumn.cellClass = `${AGGRID_CELL_CLASS} ${AGGRID_CELL_CLASS}--alertMessage`;
-      newAgColumn.width = AGGRID_ALERT_MESSAGE_COLUMN_WIDTH;
+      newAgColumn.cellClass = `${globalConstants.table.AGGRID_CELL_CLASS} ${globalConstants.table.AGGRID_CELL_CLASS}--alertMessage`;
+      newAgColumn.width = globalConstants.table.AGGRID_ALERT_MESSAGE_COLUMN_WIDTH;
     }
     if (targetHeader.data.key === 'alertStatus') {
-      newAgColumn.width = AGGRID_ALERT_STATUS_COLUMN_WIDTH;
+      newAgColumn.width = globalConstants.table.AGGRID_ALERT_STATUS_COLUMN_WIDTH;
     }
     if (targetHeader.data.key === 'alertIsBenchmarkHedged') {
-      newAgColumn.width = AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH;
+      newAgColumn.width = globalConstants.table.AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH;
     }
     if (targetHeader.data.key === 'alertIsBenchmarkHedged') {
-      newAgColumn.width = AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH;
+      newAgColumn.width = globalConstants.table.AGGRID_ALERT_IS_BENCHMARK_HEDGED_COLUMN_WIDTH;
     }
     if (targetHeader.data.key === 'alertTraceBenchmarkName') {
-      newAgColumn.width = AGGRID_TRACE_BENCHMARK_NAME_COLUMN;
+      newAgColumn.width = globalConstants.table.AGGRID_TRACE_BENCHMARK_NAME_COLUMN;
     }
   }
 
@@ -380,7 +357,7 @@ export class AgGridMiddleLayerService {
       rowDTO: targetRow,
       isFullWidth: targetRow.state.isAgGridFullSizeVariant
     };
-    newAgRow[AGGRID_DETAIL_COLUMN_KEY] = '';
+    newAgRow[globalConstants.table.AGGRID_DETAIL_COLUMN_KEY] = '';
     targetHeaders.forEach((eachHeader, index) => {
       if (eachHeader.state.isCustomComponent) {
         // skip those columns as they are already instantiated above
@@ -407,7 +384,7 @@ export class AgGridMiddleLayerService {
         const targetColumn = columns.find((eachColumn) => {
           return !!eachColumn.sort && eachColumn.colId !== "ag-Grid-AutoColumn";
         })
-        const targetStub = SecurityTableHeaderConfigs.find((eachMetric) => {
+        const targetStub = globalConstants.table.SecurityTableHeaderConfigs.find((eachMetric) => {
           return eachMetric.key === targetColumn.colDef.field;
         });
         if (targetStub) {

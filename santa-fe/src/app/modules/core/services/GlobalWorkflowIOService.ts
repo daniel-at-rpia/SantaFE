@@ -4,32 +4,26 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { DTOs, AdhocPacks } from '../models/frontend';
+import * as globalConstants from 'Core/constants';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
-import { NavigationModule } from 'Core/constants/coreConstants.constant';
-import { ROUTE_REUSE_HANDLER_STORE_SIZE_CAP } from 'App/modules/core/constants/globalWorkflowConstants.constants';
-import {
-  IndexedDBDatabases,
-  INDEXEDDB_WORKFLOW_TABLE_NAME,
-  INDEXEDDB_LAST_STATE_TABLE_NAME
-} from 'Core/constants/indexedDB.constants';
 import { IndexedDBService } from 'Core/services/IndexedDBService';
 
 @Injectable()
 
 export class GlobalWorkflowIOService {
   constants = {
-    idbWorkflowAllStateTableName: INDEXEDDB_WORKFLOW_TABLE_NAME,
-    idbWorkflowLastStateTableName: INDEXEDDB_LAST_STATE_TABLE_NAME,
-    idbDatabase: IndexedDBDatabases,
-    moduleUrl: NavigationModule
+    idbWorkflowAllStateTableName: globalConstants.indexedDB.INDEXEDDB_WORKFLOW_TABLE_NAME,
+    idbWorkflowLastStateTableName: globalConstants.indexedDB.INDEXEDDB_LAST_STATE_TABLE_NAME,
+    idbDatabase: globalConstants.indexedDB.IndexedDBDatabases,
+    moduleUrl: globalConstants.core.NavigationModule
   }
   private currentState: string = 'initialState';
-  private currentModule: NavigationModule = null;
+  private currentModule: globalConstants.core.NavigationModule = null;
   private routeHandlerStore: Array<AdhocPacks.RouteHandlerStoreBlock> = [];
   private subscriptionStore: 
     Map<
-      NavigationModule,
+      globalConstants.core.NavigationModule,
       Map<
         string, 
         Array<Subscription>
@@ -95,10 +89,10 @@ export class GlobalWorkflowIOService {
       return new Observable(subscriber => {
         const results = [];
         let expectedNumOfResults = 0;
-        for (let eachModule in NavigationModule) {
+        for (let eachModule in globalConstants.core.NavigationModule) {
           expectedNumOfResults++;
         }
-        for (let eachModule in NavigationModule) {
+        for (let eachModule in globalConstants.core.NavigationModule) {
           const IOTransaction = this.indexedDBService.retreiveIndexedDBTransaction(this.constants.idbWorkflowLastStateTableName, this.constants.idbDatabase.GlobalWorkflow, null, true);
           const IOService = this.indexedDBService.retrieveIndexedDBObjectStore(this.constants.idbWorkflowLastStateTableName, IOTransaction);
           const request = IOService.get(eachModule);
@@ -119,7 +113,7 @@ export class GlobalWorkflowIOService {
 
   // Work with RouteReuseStrategy
 
-    public updateCurrentState(newModule: NavigationModule ,newStateId: string) {
+    public updateCurrentState(newModule: globalConstants.core.NavigationModule ,newStateId: string) {
       this.currentModule = newModule;
       this.currentState = newStateId;
       this.indexedDBService.storeLastState(this.constants.idbWorkflowLastStateTableName, newModule, newStateId, this.constants.idbDatabase.GlobalWorkflow);
@@ -133,7 +127,7 @@ export class GlobalWorkflowIOService {
         if (alreadyExist) {
           alreadyExist.handle = targetHandler;
         } else {
-          if (this.routeHandlerStore.length >= ROUTE_REUSE_HANDLER_STORE_SIZE_CAP) {
+          if (this.routeHandlerStore.length >= globalConstants.globalWorkflow.ROUTE_REUSE_HANDLER_STORE_SIZE_CAP) {
             const removedState = this.routeHandlerStore.shift();
             this.closeLooseSubscriptions(removedState.state);
           }
@@ -186,9 +180,9 @@ export class GlobalWorkflowIOService {
     }
 
     private initializeSubscriptionStore(){
-      this.subscriptionStore.set(NavigationModule.trade, new Map());
-      this.subscriptionStore.set(NavigationModule.structuring, new Map());
-      this.subscriptionStore.set(NavigationModule.market, new Map());
+      this.subscriptionStore.set(globalConstants.core.NavigationModule.trade, new Map());
+      this.subscriptionStore.set(globalConstants.core.NavigationModule.structuring, new Map());
+      this.subscriptionStore.set(globalConstants.core.NavigationModule.market, new Map());
     }
     
   // Work with RouteReuseStrategy End

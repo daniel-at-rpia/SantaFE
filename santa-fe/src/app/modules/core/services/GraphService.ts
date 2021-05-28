@@ -11,12 +11,7 @@ import * as moment from 'moment';
 
 import { UtilityService } from './UtilityService';
 import { DTOs, Blocks, PageStates, AdhocPacks } from '../models/frontend';
-import { MIN_OBLIGOR_CURVE_VALUES } from 'src/app/modules/core/constants/coreConstants.constant'
-import {
-  TradeSideValueEquivalent,
-  traceTradePieGraphKeys
-} from 'Core/constants/securityTableConstants.constant';
-import { TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL } from 'Core/constants/securityTableConstants.constant';
+import * as globalConstants from 'Core/constants';
 
 @Injectable()
 export class GraphService {
@@ -222,7 +217,7 @@ export class GraphService {
         // Create a dumbbell series.
         let dumbBellSeries: am4charts.ColumnSeries = this.buildObligorChartDumbells(state, category, amChartsData);
 
-        if (amChartsData.length > MIN_OBLIGOR_CURVE_VALUES) {
+        if (amChartsData.length > globalConstants.core.MIN_OBLIGOR_CURVE_VALUES) {
           // Create a trend curve.
           let curveSeries: am4charts.LineSeries = this.buildObligorChartTrendCurve(state, category, amChartsData, dumbBellSeries);
         }
@@ -834,8 +829,8 @@ export class GraphService {
         const tradeDataList: Array<AdhocPacks.TraceScatterGraphData> = [];
         if (reverseList.length > 0) {
           reverseList.forEach(trade => {
-            const isTradeSell = trade.side === TradeSideValueEquivalent.Ask;
-            const isTradeBuy = trade.side === TradeSideValueEquivalent.Bid
+            const isTradeSell = trade.side === globalConstants.table.TradeSideValueEquivalent.Ask;
+            const isTradeBuy = trade.side === globalConstants.table.TradeSideValueEquivalent.Bid
             const date = new Date(trade.tradeTime);
             const timeOnly = trade.tradeTime.split('T')[1];
             const hoursInMinutes = +(timeOnly.substring(0,2)) * 60;
@@ -904,8 +899,8 @@ export class GraphService {
               if (customDateAxisList.length > 0) {
                 customDateAxisList.forEach((customDate, i) => {
                   const label = moment(customDate).format('MMM DD');
-                  const startRange: number = i * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
-                  const endRange = (i + 1) * TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
+                  const startRange: number = i * globalConstants.table.TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
+                  const endRange = (i + 1) * globalConstants.table.TRACE_SCATTER_GRAPH_WEEKLY_TIME_INTERVAL;
                   createRange(startRange, endRange, label);
                   createRangeGrid(endRange);
                   //subsequent days after the first require reformatting of data
@@ -934,8 +929,8 @@ export class GraphService {
             const object: AdhocPacks.TraceScatterGraphData = {
               date: time.getTime(),
               contraParty: trade.contraParty,
-              ...(trade.side === TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
-              ...(trade.side === TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
+              ...(trade.side === globalConstants.table.TradeSideValueEquivalent.Ask && {sellY: +trade.spread}),
+              ...(trade.side === globalConstants.table.TradeSideValueEquivalent.Bid && {buyY: +trade.spread})
             }
             if (!!object.sellY || !!object.buyY) {
               tradeDataList.push(object);
@@ -1059,7 +1054,7 @@ export class GraphService {
       }
     }
 
-    public generateTraceTradePieGraph(dto: DTOs.TraceTradesVisualizerDTO, graphID: string, categories: Array<string>, targetKey: traceTradePieGraphKeys): am4charts.PieChart {
+    public generateTraceTradePieGraph(dto: DTOs.TraceTradesVisualizerDTO, graphID: string, categories: Array<string>, targetKey: globalConstants.table.traceTradePieGraphKeys): am4charts.PieChart {
       const chart = am4core.create(graphID, am4charts.PieChart);
       const chartData = [];
       categories.forEach(category => {
@@ -1074,7 +1069,7 @@ export class GraphService {
           const object = {
             [targetKey]: category,
             volume: total,
-            ...(targetKey === traceTradePieGraphKeys.side && {color: category === TradeSideValueEquivalent.Bid ? am4core.color("#26A77B") : am4core.color('#BC2B5D')})
+            ...(targetKey === globalConstants.table.traceTradePieGraphKeys.side && {color: category === globalConstants.table.TradeSideValueEquivalent.Bid ? am4core.color("#26A77B") : am4core.color('#BC2B5D')})
           }
           chartData.push(object);
         }
