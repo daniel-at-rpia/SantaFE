@@ -184,6 +184,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       bicsLevel6: string;
       bicsLevel7: string;
     };
+    actionMenu: SecurityActionMenuDTO;
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -986,3 +987,17 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   }
 }
 
+export interface SecurityActionMenuDTO extends BasicDTOStructure {
+  data: {
+    defaultText: string;
+    actions: Array<Blocks.SecurityActionMenuOptionBlock>;
+    selectedCoreAction: Blocks.SecurityActionMenuOptionBlock;
+    availableSubActions: Array<Blocks.SecurityActionMenuOptionBlock>;
+  },
+  state: {
+    isVisible: boolean;
+    isCoreActionSelected: boolean;
+    isTopRowVariant: boolean;
+    isBottomRowVariant: boolean;
+  }
+}

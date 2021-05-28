@@ -230,7 +230,8 @@ export class DTOService {
           lastTraceSpread: null,
           lastTraceVolumeReported: null,
           lastTraceVolumeEstimated: null
-        }
+        },
+        actionMenu: this.formSecurityActionMenuDTO()
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -2909,5 +2910,23 @@ export class DTOService {
       })
     })
     selectedGroupDefinition.data.list = defaultSelectedList;
+  }
+
+  public formSecurityActionMenuDTO(): DTOs.SecurityActionMenuDTO {
+    const object: DTOs.SecurityActionMenuDTO = {
+      data: {
+        defaultText: 'Security Actions',
+        actions: globalConstants.trade.SecurityActionMenuList,
+        selectedCoreAction: null,
+        availableSubActions: this.utility.getSecurityActionMenuSubActionsFromLevel(1)
+      },
+      state: {
+        isVisible: false,
+        isBottomRowVariant: false,
+        isTopRowVariant: false,
+        isCoreActionSelected: false
+      }
+    }
+    return object;
   }
 }
