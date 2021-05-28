@@ -210,7 +210,7 @@ export class SantaTable implements OnInit, OnChanges {
         // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
         if (
           (!targetCard.state.isSelected && !storedSelectedCard) ||
-          (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) ||
+          (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isVisible) ||
           (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
         ) {
           targetCard.state.isSelected = false;
