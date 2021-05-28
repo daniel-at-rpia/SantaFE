@@ -1,0 +1,90 @@
+@import "global.scss";
+$circleWidth: 6rem;
+$circleAlignment: $circleWidth / 2 + $spacing_x_small;
+@mixin subActionBtnPositioning($rotate, $translate: $circleAlignment) {
+  transform: rotate($rotate) translate($translate) rotate(-$rotate);
+  &:hover,
+  &:focus {
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    transform: rotate($rotate) translate($translate) rotate(-$rotate);
+  }
+}
+.sat-securityActionMenu {
+  $blockName: &;
+  @include mix_fixed_div(relative, $z_index_tooltip);
+  z-index: 1000;
+  &__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $color_active;
+    color: $font_color_inverse;
+    width: $circleWidth;
+    height: $circleWidth;
+    border-radius: 50%;
+    &-coreAction {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      flex-basis: 80%;
+      &-btn {
+        @include mix_alive('light');
+        display: none;
+        &-icon {
+          color: $color_kill;
+        }
+      }
+      &-defaultText {
+        @include mix_text_overflow_multi_line();
+        display: flex;
+        text-align: center;
+        font-size: $font_size_x_small;
+        color: $font_color_inverse;
+      }
+    }
+    &-subActionBtn {
+      @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_alive('light');
+      &--uofB,
+      &--ticker,
+      &--pinRow,
+      &--DES {
+        @include subActionBtnPositioning(220deg)
+      }
+      &--setAlert,
+      &--BICS,
+      &--sendToGraph,
+      &--QMGR {
+        @include subActionBtnPositioning(320deg);
+      }
+      &--moreActions,
+      &--bloomberg {
+        @include subActionBtnPositioning(90deg);
+      }
+      &--YAS {
+        @include subActionBtnPositioning(140deg);
+      }
+      &--TDH {
+        @include subActionBtnPositioning(40deg);
+      }
+    }
+  }
+  &--isCoreActionSelectedState {
+    #{$blockName} {
+      &__content {
+        &-coreAction {
+          &-btn {
+            display: flex;
+            background-color: $color_active;
+            color: $font_color_inverse;
+            transform: scale(1);
+          }
+          &-defaultText {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

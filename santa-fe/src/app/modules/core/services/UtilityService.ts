@@ -1346,6 +1346,11 @@ export class UtilityService {
       return customDisplayTitle;
     }
 
+    public getSecurityActionMenuSubActionsFromLevel(level: number): Array<Blocks.SecurityActionMenuOptionBlock> {
+      const selectedSubActions = globalConstants.trade.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => optionBlock.level === level);
+      return selectedSubActions;
+    }
+
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;

@@ -57,6 +57,7 @@ import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
 import { SantaContainerComponentBase } from './containers/santa-container-component-base';
 import { GuestPage } from './guest.page';
 import { SantaSimpleInput } from './components/simple-input/simple-input.component';
+import { SecurityActionMenu } from 'Core/components/security-action-menu/security-action-menu.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { SantaSimpleInput } from './components/simple-input/simple-input.compone
     MoveVisualizer,
     GlobalWorkflow,
     GuestPage,
-    SantaSimpleInput
+    SantaSimpleInput,
+    SecurityActionMenu
   ],
   imports: [
     CommonModule,

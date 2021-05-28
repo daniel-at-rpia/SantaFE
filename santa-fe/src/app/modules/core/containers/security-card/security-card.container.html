@@ -28,6 +28,14 @@
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
   <section class="sat-securityCard__actionMenu">
+    <security-action-menu
+      (clickToSetAlert)="onClickOpenShortcutConfig()"
+      (clickBloombergOptions)="onClickOpenSecurityInBloomberg($event)"
+      (clickToPinRow)="onClickPin()"
+      (clickToSendGraph)="onClickSendToGraph()"
+      (clickBloombergOptions)="onClickOpenSecurityInBloomberg($event)"
+      [actionMenu]="cardData.data.actionMenu">
+    </security-action-menu>
   </section>
   <section class="sat-securityCard__alertShortcutConfig">
     <div class="sat-securityCard__alertShortcutConfig-content">
