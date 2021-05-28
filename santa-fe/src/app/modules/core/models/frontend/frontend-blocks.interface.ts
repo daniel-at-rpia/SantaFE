@@ -12,7 +12,7 @@ import {
   ValueFormatterParams
 } from 'ag-grid-community';
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import { AxeAlertScope, AxeAlertType } from 'Core/constants/tradeConstants.constant';
+import { AxeAlertScope, AxeAlertType, SecurityActionMenuOptionsRawText, SecurityActionMenuOptionsDisplayText } from 'Core/constants/tradeConstants.constant';
 import { DTOService } from 'Core/services/DTOService';
 import { PortfolioMetricValues, PortfolioView } from 'Core/constants/structureConstants.constants';
 import { BEStructuringBreakdownBlock, BEStructuringBreakdownMetricBlock } from 'Core/models/backend/backend-models.interface';
@@ -476,4 +476,11 @@ export interface StructureClearTargetsOptionBlock {
 
 export interface StructureClearTargetsOptionMapBlock {
   [property: string]: Array<StructureClearTargetsOptionBlock>
+}
+export interface SecurityActionMenuOptionBlock {
+  displayTitle: SecurityActionMenuOptionsDisplayText;
+  icon: string;
+  level: number;
+  subActions: Array<SecurityActionMenuOptionsRawText>;
+  rawText: SecurityActionMenuOptionsRawText;
 }

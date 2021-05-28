@@ -1,4 +1,4 @@
-import { Stubs, AdhocPacks } from 'Core/models/frontend';
+import { Stubs, AdhocPacks, Blocks } from 'Core/models/frontend';
 import { SecurityDefinitionMap, FullStrategyList } from 'Core/constants/securityDefinitionConstants.constant';
 import { SecurityMetricOptions, PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
@@ -637,3 +637,132 @@ export const SEARCH_ENGINE_TYPES = {
   TICKER: 'Ticker'
 }
 export const SEARCH_ENGINE_LONG_TYPEAHEAD_THRESHOLD = 7;  // because we set the max-height on the typeahead element, more than 7 results would trigger the scrollbar
+
+
+export enum SecurityActionMenuOptionsRawText {
+  pinRow = 'pinRow',
+  sendToGraph = 'sendToGraph',
+  setAlert = 'setAlert',
+  uofB = 'uofB',
+  bloomberg = 'bloomberg',
+  moreActions = 'moreActions',
+  ticker = 'ticker',
+  bics = 'BICS',
+  bloombergDES = 'DES',
+  bloombergQMGR = 'QMGR',
+  bloombergYAS = 'YAS',
+  bloombergTDH = 'TDH'
+}
+
+export enum SecurityActionMenuOptionsDisplayText {
+  pinRow = 'Pin Row',
+  sendToGraph = 'View Graph',
+  setAlert = 'Set Alert',
+  uofB = 'U of B',
+  bloomberg = 'Bloomberg',
+  moreActions = 'More Actions',
+  ticker = 'Ticker',
+  bics = 'BICS',
+  bloombergDES = 'DES',
+  bloombergQMGR = 'QMGR',
+  bloombergYAS = 'YAS',
+  bloombergTDH = 'TDH'
+}
+
+export const SecurityActionMenuList: Array<Blocks.SecurityActionMenuOptionBlock> = [{
+    displayTitle: SecurityActionMenuOptionsDisplayText.uofB,
+    icon: 'fal fa-table',
+    level: 1,
+    subActions: [
+      SecurityActionMenuOptionsRawText.bics,
+      SecurityActionMenuOptionsRawText.ticker
+    ],
+    rawText: SecurityActionMenuOptionsRawText.uofB
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.ticker,
+    icon: SecurityDefinitionMap.TICKER.icon,
+    level: 2,
+    subActions: [],
+    rawText:  SecurityActionMenuOptionsRawText.ticker
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.bics,
+    icon: SecurityDefinitionMap.BICS_CONSOLIDATED.icon,
+    level: 2,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.bics
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.setAlert,
+    icon: 'fal fa-bell',
+    level: 1,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.setAlert
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.moreActions,
+    icon: 'fal fa-chevron-down',
+    level: 1,
+    subActions: [
+      SecurityActionMenuOptionsRawText.pinRow,
+      SecurityActionMenuOptionsRawText.sendToGraph,
+      SecurityActionMenuOptionsRawText.bloomberg
+    ],
+    rawText: SecurityActionMenuOptionsRawText.moreActions
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.pinRow,
+    icon: 'fal fa-thumbtack',
+    level: 2,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.pinRow
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.sendToGraph,
+    icon: 'fal fa-chart-line',
+    level: 2,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.sendToGraph
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.bloomberg,
+    icon: null,
+    level: 2,
+    subActions: [
+      SecurityActionMenuOptionsRawText.bloombergDES,
+      SecurityActionMenuOptionsRawText.bloombergQMGR,
+      SecurityActionMenuOptionsRawText.bloombergTDH,
+      SecurityActionMenuOptionsRawText.bloombergYAS
+    ],
+    rawText: SecurityActionMenuOptionsRawText.bloomberg
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.bloombergDES,
+    icon: null,
+    level: 3,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.bloombergDES
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.bloombergQMGR,
+    icon: null,
+    level: 3,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.bloombergQMGR
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.bloombergTDH,
+    icon: null,
+    level: 3,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.bloombergTDH
+  },
+  {
+    displayTitle: SecurityActionMenuOptionsDisplayText.bloombergYAS,
+    icon: null,
+    level: 3,
+    subActions: [],
+    rawText: SecurityActionMenuOptionsRawText.bloombergYAS
+  }
+]
