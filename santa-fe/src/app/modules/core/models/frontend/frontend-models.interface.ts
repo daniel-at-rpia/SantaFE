@@ -201,7 +201,6 @@ export interface SecurityDTO extends BasicDTOStructure {
     isWidthFlexible: boolean;
     isAtListCeiling: boolean;
     isActionMenuPrimaryActionsDisabled: boolean;
-    isActionMenuMinorActionsDisabled: boolean;
     isSlimVariant: boolean;
     configAlertState: boolean;
     isTradeAlertTableVariant: boolean;

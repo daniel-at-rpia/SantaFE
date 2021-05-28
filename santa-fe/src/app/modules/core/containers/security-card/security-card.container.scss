@@ -60,62 +60,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
     display: flex;
     flex-direction: column;
     transform: scale(0.01);
-    top: 0;
-    &-minorList {
-      @include mix_fixed_div(relative, $z_index_base_item);
-      display: flex;
-      justify-content: center;
-      &-btn {
-        @extend .santaBtn;
-        @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
-        @include mix_fixed_div(absolute, $z_index_base_item);
-        @include mix_border_radius(50%);
-        transform: scale(0.01);
-        background-color: $color_bloomberg_1;
-        color: $color_bloomberg_2;
-        padding: $spacing_xx_small;
-        word-break: break-all;  // so "QMGR" would clip into 2 lines
-        &:first-of-type {
-          left: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_xx_small;
-        }
-        &:nth-of-type(2) {
-          right: -$securityCard_actionMenu_majorCTA_size/2 + $spacing_xx_small;
-        }
-      }
-      &--top {
-        top: -$securityCard_actionMenu_majorCTA_size + $spacing_small;
-      }
-      &--bottom {
-        top: $spacing_x_small;
-      }
-    }
-    &-mainList {
-      display: flex;
-      justify-content: center;
-      margin: -$spacing_small 0;  // achieve a closer distance between the three lists
-      &-btn {
-        @extend .santaBtn;
-        @extend .santaBtn--iconOnly;  // this is necessary for usage within AgGrid
-        @include mix_fixed_div(relative, $z_index_hovering_item);
-        @include mix_border_radius(50%);
-        margin: 0 $spacing_x_small;
-        color: $font_color_major;
-        height: $securityCard_actionMenu_majorCTA_size;
-        width: $securityCard_actionMenu_majorCTA_size;
-        font-size: $font_size_large;
-        &:hover {
-          transform: scale(1.25);
-          background-color: $color_active;
-          color: $font_color_inverse;
-        }
-        &--search {
-          display: none;
-        }
-        &--pin {
-          display: none;
-        }
-      }
-    }
+    top: -$spacing_large;
   }
   &__alertShortcutConfig {
     @include mix_fixed_div(absolute, $z_index_dropdown);
@@ -397,14 +342,6 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       }
       &__actionMenu {
         transform: scale(1);
-        &-minorList-btn {
-          transform: scale(1);
-          &:hover {
-            transform: scale(1.25);
-            background-color: $color_active;
-            color: $font_color_inverse;
-          }
-        }
       }
       &__alertShortcutConfig {
         display: flex;
@@ -447,43 +384,10 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
       }
     }
   }
-  &--threePrimaryActionVariant {
-    #{$securityCardBlockName} {
-      &__actionMenu {
-        &-minorList-btn {
-          &:first-of-type {
-            left: 2.5rem;
-          }
-          &:nth-of-type(2) {
-            right: 2.5rem;
-          }
-        }
-        &-minorList--top {
-          top: -2.5rem;
-        }
-        &-minorList--bottom {
-          bottom: -2.5rem;
-        }
-      }
-    }
-  }
   &--atListCeilingVariant {
     #{$securityCardBlockName} {
       &__actionMenu {
         top: $spacing_small;
-        &-minorList--top {
-          #{$securityCardBlockName} {
-            &__actionMenu-minorList-btn {
-              top: 2.5rem;
-              &:first-of-type {
-                left: -2.5rem;
-              }
-              &:nth-of-type(2) {
-                right: -2.5rem
-              }
-            }
-          }
-        }
       }
     }
   }
@@ -495,34 +399,6 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
         width: 100%;
         left: unset;
         top: $spacing_medium;
-        &-mainList {
-          display: none;
-        }
-        &-minorList {
-          flex: 0 1 auto;
-          display: flex;
-          top: unset;
-          left: unset;
-          right: unset;
-          bottom: unset;
-          &-btn {
-            @include mix_fixed_div(relative, $z_index_base_item);
-            top: unset;
-            left: unset;
-            right: unset;
-            bottom: unset;
-            margin: 0 $spacing_x_small;
-          }
-        }
-      }
-    }
-  }
-  &--minorActionDisabledState {
-    #{$securityCardBlockName} {
-      &__actionMenu {
-        &-minorList {
-          display: none;
-        }
       }
     }
   }

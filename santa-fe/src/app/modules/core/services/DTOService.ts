@@ -45,7 +45,6 @@ export class DTOService {
         isWidthFlexible: false,
         isAtListCeiling: false,
         isActionMenuPrimaryActionsDisabled: false,
-        isActionMenuMinorActionsDisabled: false,
         isSlimVariant: isSlimVariant,
         configAlertState: false,
         isTradeAlertTableVariant: false

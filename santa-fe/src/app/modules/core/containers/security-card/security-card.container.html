@@ -9,7 +9,6 @@
     'sat-securityCard--flexibleWidthVariant': cardData.state.isWidthFlexible,
     'sat-securityCard--atListCeilingVariant': cardData.state.isAtListCeiling,
     'sat-securityCard--primaryActionDisabledState': cardData.state.isActionMenuPrimaryActionsDisabled,
-    'sat-securityCard--minorActionDisabledState': cardData.state.isActionMenuMinorActionsDisabled,
     'sat-securityCard--slimVariant': cardData.state.isSlimVariant && !cardData.state.isMultiLineVariant,
     'sat-securityCard--configAlertState': cardData.state.configAlertState,
     'sat-securityCard--tradeAlertTableVariant': cardData.state.isTradeAlertTableVariant,
@@ -29,20 +28,6 @@
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
   <section class="sat-securityCard__actionMenu">
-    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--top">
-      <button title="Open In Bloomberg DES" (click)="onClickOpenSecurityInBloomberg('DES')" class="sat-securityCard__actionMenu-minorList-btn">DES</button>
-      <button title="Open In Bloomberg QMGR" (click)="onClickOpenSecurityInBloomberg('QMGR')" class="sat-securityCard__actionMenu-minorList-btn">QMGR</button>
-    </ul>
-    <ul class="sat-securityCard__actionMenu-mainList">
-      <button (click)="onClickPin()" class="sat-securityCard__actionMenu-mainList-btn sat-securityCard__actionMenu-mainList-btn--pin fal fa-thumbtack"></button>
-      <button (click)="onClickSearch()" class="sat-securityCard__actionMenu-mainList-btn sat-securityCard__actionMenu-mainList-btn--search fal fa-search"></button>
-      <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-btn fal fa-chart-line"></button>
-      <button (click)="onClickOpenShortcutConfig()" class="sat-securityCard__actionMenu-mainList-btn fal fa-bell"></button>
-    </ul>
-    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
-      <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>
-      <button title="Open In Bloomberg TDH" (click)="onClickOpenSecurityInBloomberg('TDH')" class="sat-securityCard__actionMenu-minorList-btn">TDH</button>
-    </ul>
   </section>
   <section class="sat-securityCard__alertShortcutConfig">
     <div class="sat-securityCard__alertShortcutConfig-content">

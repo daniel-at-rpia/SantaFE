@@ -644,7 +644,6 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
             serverReturn.forEach((eachRawData) => {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false, false);
               eachCard.state.isActionMenuPrimaryActionsDisabled = true;
-              eachCard.state.isActionMenuMinorActionsDisabled = true;
               eachCard.state.isWidthFlexible = true;
               eachCard.api.onClickCard = this.onClickSearchResult.bind(this);
               this.updateTargetSecurityExist(eachCard);

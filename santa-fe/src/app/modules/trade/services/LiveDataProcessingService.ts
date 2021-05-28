@@ -94,7 +94,6 @@ export class LiveDataProcessingService {
           newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
           newSecurity.api.onClickSearch = searchCallback;
           newSecurity.state.isTradeAlertTableVariant = true;
-          newSecurity.state.isActionMenuMinorActionsDisabled = true;
           this.dtoService.appendLastTraceInfoToSecurityDTO(newSecurity, rawSecurityDTOMap[targetSecurityId]);
           if (!!rawSecurityDTOMap[targetSecurityId].positions) {
             rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
