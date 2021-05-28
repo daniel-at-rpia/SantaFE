@@ -7,7 +7,8 @@
     'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted,
     'sat-tradeCenterPanel--editingDriverState': state.editingDriver,
     'sat-tradeCenterPanel--initialDataLoaded': state.fetchResult.initialDataLoadedInternalSyncFlag,
-    'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount
+    'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount,
+    'sat-tradeCenterPanel--showPresetPreview': state.currentSearch.showPreview
   }">
   <section class="sat-tradeCenterPanel__presets">
     <div class="sat-tradeCenterPanel__presets-content">
@@ -315,7 +316,10 @@
   </section>
   <section class="sat-tradeCenterPanel__utilities">
     <div class="sat-tradeCenterPanel__utilities-selectedPreset">
-      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--iconOnly fal fa-arrow-left"></button>
+      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--labelled">
+        <i class="fal fa-arrow-left"></i>
+        <span>Back To Presets</span>
+      </button>
       <span class="sat-tradeCenterPanel__utilities-selectedPreset-label">Preset: </span>
       <search-shortcut
         *ngIf="state.currentSearch.previewShortcut"

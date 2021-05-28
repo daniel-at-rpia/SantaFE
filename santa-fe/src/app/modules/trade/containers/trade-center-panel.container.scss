@@ -28,13 +28,17 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
     }
   }
   &__utilities {
+    @include mix_fixed_div(relative, $z_index_hovering_item_lift);  // this is necessary because of the background color of "sat-securityDefinitionConfigurator__definitions-list-section-label-text", it looks bad if we don't overlay this on top of that
     display: none;
     align-items: center;
     padding: 0 $spacing_medium;
     &-selectedPreset {
       display: flex;
       align-items: center;
-      margin: $spacing_small $spacing_medium $spacing_small $page_gutter_width_for_navTrigger;
+      margin: $spacing_small $spacing_medium $spacing_small 0;
+      &-back {
+        align-self: flex-end;
+      }
       &-label {
         font-size: $font_size_large;
         color: $font_color_minor;

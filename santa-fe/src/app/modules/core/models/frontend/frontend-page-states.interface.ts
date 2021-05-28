@@ -169,6 +169,7 @@ export interface TradeCenterPanelState {
   filters: Blocks.TradeCenterPanelStateFilterBlock;
   editingDriver: boolean;
   currentSearch: {
+    showPreview: boolean;
     previewShortcut: DTOs.SearchShortcutDTO;
     redirectedFromStrurturing: boolean;
     mode: TradeCenterPanelSearchModes;
