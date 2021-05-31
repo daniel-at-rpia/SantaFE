@@ -56,11 +56,11 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
   &__actionMenu {
     @include mix_fixed_div(absolute, $z_index_tooltip);  // needs to be no less than the z-index of "sat-tradeMarketAnalysisPanel__table-content-securityList-item-numberOfSecurityTag"
     @include mix_alive('custom', transform $animation_duration_light);
-    @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size*3/2 + $spacing_x_small * 2, '-');
     display: flex;
     flex-direction: column;
     transform: scale(0.01);
     top: -$spacing_large;
+    right: $spacing_x_small;
   }
   &__alertShortcutConfig {
     @include mix_fixed_div(absolute, $z_index_dropdown);

@@ -39,7 +39,7 @@ export class SecurityActionMenu implements OnInit {
     } else {
       this.actionMenu.data.availableSubActions = this.utilityService.getSecurityActionMenuSubActionsFromLevel(1);
       this.actionMenu.data.selectedCoreAction = null;
-      this.actionMenu.state.isCoreActionSelected = false;
+      //this.actionMenu.state.isCoreActionSelected = false;
     }
   }
 

@@ -46,6 +46,21 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
     &-subActionBtn {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       @include mix_alive('light');
+      &--noIcon {
+        & > span {
+          opacity: 1;
+          font-size: $font_size_x_small;
+          bottom: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        &:hover,
+        &:focus {
+          .sat-securityActionMenu__content-subActionBtn-text {
+            transform: translate(0,0) !important;
+          }
+        }
+      }
       &--uofB,
       &--ticker,
       &--pinRow,

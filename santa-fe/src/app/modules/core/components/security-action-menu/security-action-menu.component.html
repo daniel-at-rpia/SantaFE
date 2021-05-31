@@ -6,10 +6,11 @@
     'sat-securityActionMenu--isCoreActionSelectedState': actionMenu.state.isCoreActionSelected
   }">
   <section class="sat-securityActionMenu__content">
-    <button class="santaBtn--circleLabelled sat-securityActionMenu__content-subActionBtn sat-securityActionMenu__content-subActionBtn--{{subAction.rawText}}"
+    <button class="santaBtn--circleLabelled sat-securityActionMenu__content-subActionBtn sat-securityActionMenu__content-subActionBtn--{{subAction.rawText}}" 
+    [class.sat-securityActionMenu__content-subActionBtn--noIcon]="!subAction.icon"
      *ngFor="let subAction of actionMenu.data.availableSubActions" (click)="onClickSubAction(subAction)">
-      <i class={{subAction.icon}}></i>
-      <span>{{subAction.displayTitle}}</span>
+      <i class="sat-securityActionMenu__content-subActionBtn-icon {{subAction.icon}}"></i>
+      <span class="sat-securityActionMenu__content-subActionBtn-text">{{subAction.displayTitle}}</span>
     </button>
     <div class="sat-securityActionMenu__content-coreAction">
       <span class="sat-securityActionMenu__content-coreAction-defaultText">{{actionMenu.data.defaultText}}</span>
