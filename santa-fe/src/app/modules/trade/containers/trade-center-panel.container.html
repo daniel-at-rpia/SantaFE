@@ -8,7 +8,8 @@
     'sat-tradeCenterPanel--editingDriverState': state.editingDriver,
     'sat-tradeCenterPanel--initialDataLoaded': state.fetchResult.initialDataLoadedInternalSyncFlag,
     'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount,
-    'sat-tradeCenterPanel--showPresetPreview': state.currentSearch.showPreview
+    'sat-tradeCenterPanel--presetSaveAvail': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.available,
+    'sat-tradeCenterPanel--presetSaveActive': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.active
   }">
   <section class="sat-tradeCenterPanel__presets">
     <div class="sat-tradeCenterPanel__presets-content">
@@ -320,11 +321,14 @@
         <i class="fal fa-arrow-left"></i>
         <span>Back To Presets</span>
       </button>
-      <span class="sat-tradeCenterPanel__utilities-selectedPreset-label">Preset: </span>
       <search-shortcut
         *ngIf="state.currentSearch.previewShortcut"
         [shortcutData]="state.currentSearch.previewShortcut"
       ></search-shortcut>
+      <button (click)="onActivatePresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-save santaBtn--labelled">
+        <i class="fal fa-cloud-upload"></i>
+        <span>Save This Preset</span>
+      </button>
     </div>
     <div class="sat-tradeCenterPanel__utilities-keywordSearch">
       <i class="sat-tradeCenterPanel__utilities-keywordSearch-activeIcon fal fa-search"></i>

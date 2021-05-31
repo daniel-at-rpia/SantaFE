@@ -19,7 +19,10 @@ import {
   BEGetPortfolioStructureServerReturn,
   BEFetchAllTradeDataReturn
 } from 'BEModels/backend-models.interface';
-import { TradeCenterPanelSearchModes } from 'Core/constants/tradeConstants.constant';
+import {
+  TradeCenterPanelSearchModes,
+  TradeCenterPanelSearchSaveModes
+} from 'Core/constants/tradeConstants.constant';
 
 export interface RootState {
   appReady: boolean;
@@ -169,10 +172,10 @@ export interface TradeCenterPanelState {
   filters: Blocks.TradeCenterPanelStateFilterBlock;
   editingDriver: boolean;
   currentSearch: {
-    showPreview: boolean;
     previewShortcut: DTOs.SearchShortcutDTO;
     redirectedFromStrurturing: boolean;
     mode: TradeCenterPanelSearchModes;
+    saveMode: TradeCenterPanelSearchSaveModes;
   }
   isIndexedDBReady: boolean;
 }

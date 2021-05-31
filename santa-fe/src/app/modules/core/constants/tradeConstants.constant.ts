@@ -7,6 +7,13 @@ export enum TradeCenterPanelSearchModes {
   uob = 'Universe Of Bonds'
 }
 
+export enum TradeCenterPanelSearchSaveModes {
+  default = 'Default',
+  available = 'Available',
+  active = 'Active',
+  error = 'Error'
+}
+
 const allPortfolios: Stubs.SearchShortcutIncludedDefinitionStub = {
   definitionKey: 'PORTFOLIO',
   groupByActive: false,

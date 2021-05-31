@@ -163,10 +163,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         },
         editingDriver: false,
         currentSearch: {
-          showPreview: false,
           previewShortcut: null,
           redirectedFromStrurturing: false,
-          mode: null
+          mode: null,
+          saveMode: globalConstants.trade.TradeCenterPanelSearchSaveModes.default
         },
         isIndexedDBReady: false
       };
@@ -412,6 +412,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       preloadMetricFromSeeBond: globalConstants.structuring.PortfolioMetricValues,
       targetPreset: DTOs.SearchShortcutDTO = null
     ) {
+      if (userTriggered) {
+        this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.available;
+      }
       const selectedDefinitionBundle = this.utilityService.getDefinitionBundleFromConfigurator(this.state.configurator.dto, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
       this.updatedSelectedDefinitionsAfterSave(selectedDefinitionBundle);
       const modifiedParams: AdhocPacks.DefinitionConfiguratorEmitterParams = {
@@ -1638,4 +1641,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.state.searchEngine.indexedKeywords = indexCopy;
     }
   // Search Engine End
+
+  // Save Preset
+    public onActivatePresetSave() {
+      if (this.state.currentSearch.saveMode === this.constants.trade.TradeCenterPanelSearchSaveModes.available) {
+        this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.active;
+      } else if (this.state.currentSearch.saveMode === this.constants.trade.TradeCenterPanelSearchSaveModes.active) {
+        this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.available;
+      }
+    }
+  // Save Preset End
 }
