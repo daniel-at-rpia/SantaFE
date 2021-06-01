@@ -42,6 +42,7 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
     }
     &-subActionBtn {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include material();
       @include mix_alive('light');
       &--noIcon {
         & > span {
