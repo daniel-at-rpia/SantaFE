@@ -31,9 +31,6 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
       &-btn {
         @include mix_alive('light');
         display: none;
-        &-icon {
-          color: $color_kill;
-        }
       }
       &-defaultText {
         @include mix_text_overflow_multi_line();
