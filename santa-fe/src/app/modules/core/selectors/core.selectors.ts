@@ -86,3 +86,8 @@ export const selectGlobalAlertTradeTableFetchAlertTimestamp = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.tradeTableFetchAlertLastReceiveTimestamp
 )
+
+export const selectSecurityActionToLaunchUofB = createSelector(
+  getCoreState,
+  (state: CoreState) => state.securityActionMenu.launchUofBPack
+)

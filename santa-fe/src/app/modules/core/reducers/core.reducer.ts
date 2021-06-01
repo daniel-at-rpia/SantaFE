@@ -4,7 +4,7 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { DTOs, AdhocPacks } from 'Core/models/frontend';
+import { DTOs, AdhocPacks, Blocks } from 'Core/models/frontend';
 import { CoreActions } from 'Core/actions/core.actions';
 import { FAILED_USER_INITIALS_FALLBACK } from 'Core/constants/coreConstants.constant';
 
@@ -33,6 +33,9 @@ export interface CoreState {
     apiCallForAlertFailed: boolean;
     tradeTableFetchAlertTick: number;
     tradeTableFetchAlertLastReceiveTimestamp: number;
+  },
+  securityActionMenu: {
+    launchUofBPack: AdhocPacks.SecurityActionLaunchUofBTransferPack
   }
 }
 
@@ -61,6 +64,9 @@ const initialState: CoreState = {
     apiCallForAlertFailed: false,
     tradeTableFetchAlertTick: 0,
     tradeTableFetchAlertLastReceiveTimestamp: 0
+  },
+  securityActionMenu: {
+    launchUofBPack: null
   }
 };
 
@@ -256,6 +262,13 @@ export function coreReducer(
         globalWorkflow: {
           ...state.globalWorkflow,
           indexedDBReady: true
+        }
+      };
+    case CoreActions.LaunchUofBThroughSecurityActionMenu:
+      return {
+        ...state,
+        securityActionMenu: {
+          launchUofBPack: action.pack
         }
       };
     default:
