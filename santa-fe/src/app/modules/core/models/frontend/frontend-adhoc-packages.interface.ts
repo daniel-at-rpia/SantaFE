@@ -7,8 +7,7 @@ import {
   SerializedNumberFilter
 } from 'ag-grid-community';
 import { StructureBucketDataBlock } from 'Core/models/frontend/frontend-blocks.interface';
-import * as DTOs from './frontend-models.interface';
-import * as Blocks from './frontend-blocks.interface';
+import { Blocks, DTOs, Stubs } from 'App/modules/core/models/frontend';
 import {
   BEStructuringBreakdownBlock,
   BEStructuringBreakdownMetricBlock
@@ -26,7 +25,6 @@ import { TraceTradeParty } from '../../constants/securityTableConstants.constant
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { IndexedDBDatabases } from 'Core/constants/indexedDB.constants';
 import { DetachedRouteHandle } from '@angular/router';
-
 export interface SecurityMapEntry {
   keywords: Array<string>;
   secruityId: string;
@@ -288,4 +286,20 @@ export interface TradeCenterPanelSearchEngineIndexEntry {
   displayText: string;
   type: string;
   bicsLevel?: number;
+}
+
+export interface SecurityActionLaunchUofBTransferPack {
+  type: string;
+  value: string;
+  bicsLevel?: number;
+}
+
+export interface SecurityActionMenuLaunchUofBEventEmitterBlock {
+  type: string;
+  value: string;
+  bicsLevel: number;
+}
+
+export interface UofBCategoryMappingBlock {
+  [property: string]: Stubs.SecurityDefinitionStub;
 }

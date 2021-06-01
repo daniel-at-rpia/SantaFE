@@ -766,3 +766,8 @@ export const SecurityActionMenuList: Array<Blocks.SecurityActionMenuOptionBlock>
     rawText: SecurityActionMenuOptionsRawText.bloombergYAS
   }
 ]
+
+export const UofBCategoryMapping: AdhocPacks.UofBCategoryMappingBlock = {
+  [SecurityDefinitionMap.BICS_CONSOLIDATED.key]: SecurityDefinitionMap.BICS_CONSOLIDATED,
+  [SecurityDefinitionMap.TICKER.key]: SecurityDefinitionMap.TICKER
+}

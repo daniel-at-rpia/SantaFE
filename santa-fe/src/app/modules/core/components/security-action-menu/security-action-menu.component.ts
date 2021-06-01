@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import * as globalConstants from 'Core/constants';
-import { DTOs, Blocks, PageStates, AdhocPacks, Stubs } from 'Core/models/frontend';
-import { SecurityActionMenuOptionsDisplayText, SecurityActionMenuOptionsRawText } from '../../constants/tradeConstants.constant';
+import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
+import { SecurityActionMenuOptionsRawText } from '../../constants/tradeConstants.constant';
 import { UtilityService } from 'Core/services/UtilityService';
+import { BICSDataProcessingService } from 'Core/services/BICSDataProcessingService';
 
 @Component({
   selector: 'security-action-menu',
@@ -12,19 +13,23 @@ import { UtilityService } from 'Core/services/UtilityService';
 })
 
 export class SecurityActionMenu implements OnInit {
+  @Input() securityDTO: DTOs.SecurityDTO
   @Input() actionMenu: DTOs.SecurityActionMenuDTO;
-  @Output() clickToLaunchUofBByTicker = new EventEmitter();
-  @Output() clickToLaunchUofBByBICS = new EventEmitter();
+  @Output() clickToLaunchUofBByTicker = new EventEmitter<AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock>();
+  @Output() clickToLaunchUofBByBICS = new EventEmitter<AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock>();
   @Output() clickToSetAlert = new EventEmitter();
   @Output() clickToSendGraph = new EventEmitter();
   @Output() clickToSearch = new EventEmitter();
   @Output() clickToPinRow = new EventEmitter();
   @Output() clickBloombergOptions = new EventEmitter<string>();
   constants = globalConstants;
-  constructor(private utilityService: UtilityService) {}
+  constructor(
+    private utilityService: UtilityService,
+    private bicsDataProcessingService: BICSDataProcessingService
+  ) {}
 
   public ngOnInit() {
-    if (!!this.actionMenu) {
+    if (!!this.actionMenu && !!this.securityDTO && !!this.securityDTO.data) {
       const copy = this.utilityService.deepCopy(this.actionMenu);
       this.actionMenu = copy;
     }
@@ -74,12 +79,33 @@ export class SecurityActionMenu implements OnInit {
     return selectedPreviousCoreAction;
   }
 
-  public onClickLaunchUofBTicker(){
-
+  public onClickLaunchUofBTicker(ticker: string){
+    if (!!ticker) {
+      const object: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock = {
+        type: this.constants.definition.SecurityDefinitionMap.TICKER.key,
+        value: ticker,
+        bicsLevel: null
+      }
+      !!this.clickToLaunchUofBByTicker && this.clickToLaunchUofBByTicker.emit(object);
+    }
   }
 
-  public onClickLaunchUofBBICS(){
-    !!this.clickToLaunchUofBByBICS && this.clickToLaunchUofBByBICS.emit();
+  public onClickLaunchUofBBICS(securityDTO: DTOs.SecurityDTO) {
+    if (!!securityDTO.data && !!securityDTO.data.bics && Object.keys(securityDTO.data.bics).length > 0) {
+      const category = this.bicsDataProcessingService.extractDeepestBICSCategory(securityDTO);
+      if (!!category) {
+        const identifier = Object.keys(securityDTO.data.bics).find(key => securityDTO.data.bics[key] === category);
+        const level = identifier.split(this.constants.structuring.BICS_BREAKDOWN_FRONTEND_KEY).length > 0 ? +identifier.split(this.constants.structuring.BICS_BREAKDOWN_FRONTEND_KEY)[1] : 0;
+        if (!!level) {
+          const object: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock = {
+            type: this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
+            value: category,
+            bicsLevel: level
+          }
+          !!this.clickToLaunchUofBByBICS && this.clickToLaunchUofBByBICS.emit(object);
+        }
+      }
+    }
   }
 
   public onClickSetAlert() {
@@ -111,11 +137,11 @@ export class SecurityActionMenu implements OnInit {
     } else if (targetAction.rawText === setAlert) {
       this.onClickSetAlert();
     } else if (targetAction.rawText === ticker) {
-      this.onClickLaunchUofBTicker();
+      this.onClickLaunchUofBTicker(this.securityDTO.data.ticker);
     } else if (targetAction.rawText === bloombergDES || targetAction.rawText === bloombergQMGR || targetAction.rawText === bloombergYAS || targetAction.rawText === bloombergTDH) {
       this.onClickBloombergOptions(targetAction.rawText);
     } else if (targetAction.rawText === bics) {
-      this.onClickLaunchUofBBICS();
+      this.onClickLaunchUofBBICS(this.securityDTO);
     }
   }
 }

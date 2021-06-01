@@ -34,7 +34,10 @@
       (clickToPinRow)="onClickPin()"
       (clickToSendGraph)="onClickSendToGraph()"
       (clickBloombergOptions)="onClickOpenSecurityInBloomberg($event)"
-      [actionMenu]="cardData.data.actionMenu">
+      (clickToLaunchUofBByBICS)="onClickLaunchUofB($event)"
+      (clickToLaunchUofBByTicker)="onClickLaunchUofB($event)"
+      [actionMenu]="cardData.data.actionMenu"
+      [securityDTO]="cardData">
     </security-action-menu>
   </section>
   <section class="sat-securityCard__alertShortcutConfig">

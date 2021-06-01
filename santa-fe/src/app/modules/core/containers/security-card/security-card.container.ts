@@ -12,6 +12,9 @@ import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
 import { TriCoreDriverConfig, AlertSubTypes } from 'Core/constants/coreConstants.constant';
+import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
+import { Store, select } from '@ngrx/store';
+import { CoreLaunchUofBThroughSecurityActionMenu } from 'Core/actions/core.actions';
 
 @Component({
   selector: 'security-card',
@@ -29,7 +32,8 @@ export class SecurityCard implements OnInit {
   constructor(
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private store$: Store<any>
   ) { }
 
   public ngOnInit() {
@@ -141,6 +145,15 @@ export class SecurityCard implements OnInit {
     if (!!this.cardData.api.onClickPin) {
       this.cardData.api.onClickPin(this.cardData);
     }
+  }
+
+  public onClickLaunchUofB({type, value, bicsLevel}: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock) {
+    const transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack = {
+      type,
+      value,
+      bicsLevel
+    }
+    this.store$.dispatch(new CoreLaunchUofBThroughSecurityActionMenu(transferPack));
   }
 
   private checkIsFilled() {

@@ -403,6 +403,15 @@ export class BICSDataProcessingService {
       }
     }
   }
+
+  public extractDeepestBICSCategory(securityDTO: DTOs.SecurityDTO): string {
+    if (!!securityDTO.data && !!securityDTO.data.bics && Object.keys(securityDTO.data.bics).length > 0) {
+      const category = securityDTO.data.bics.bicsLevel7 || securityDTO.data.bics.bicsLevel6 || securityDTO.data.bics.bicsLevel5 || securityDTO.data.bics.bicsLevel4 || securityDTO.data.bics.bicsLevel3 || securityDTO.data.bics.bicsLevel2 || securityDTO.data.bics.bicsLevel1;
+      return category;
+    } else {
+      return '';
+    }
+  }
   
   private setBreakdownListProperties(
     breakdownList: Array<DTOs.StructurePortfolioBreakdownRowDTO>,
