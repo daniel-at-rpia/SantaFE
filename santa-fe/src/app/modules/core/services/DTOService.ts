@@ -2920,7 +2920,7 @@ export class DTOService {
         availableSubActions: this.utility.getSecurityActionMenuSubActionsFromLevel(1)
       },
       state: {
-        isVisible: false,
+        isActive,
         isBottomRowVariant: false,
         isTopRowVariant: false,
         isCoreActionSelected: false

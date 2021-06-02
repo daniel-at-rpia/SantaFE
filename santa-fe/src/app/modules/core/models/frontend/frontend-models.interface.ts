@@ -994,7 +994,7 @@ export interface SecurityActionMenuDTO extends BasicDTOStructure {
     availableSubActions: Array<Blocks.SecurityActionMenuOptionBlock>;
   },
   state: {
-    isVisible: boolean;
+    isActive: boolean;
     isCoreActionSelected: boolean;
     isTopRowVariant: boolean;
     isBottomRowVariant: boolean;
