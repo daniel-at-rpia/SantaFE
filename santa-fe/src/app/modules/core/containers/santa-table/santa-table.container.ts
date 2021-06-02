@@ -210,7 +210,7 @@ export class SantaTable implements OnInit, OnChanges {
         // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
         if (
           (!targetCard.state.isSelected && !storedSelectedCard) ||
-          (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isVisible && !targetCard.data.actionMenu.state.isCoreActionSelected) ||
+          (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive) ||
           (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
         ) {
           targetCard.state.isSelected = false;
@@ -266,7 +266,11 @@ export class SantaTable implements OnInit, OnChanges {
             this.tableData.state.selectedSecurityCard = targetCard;
           } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
             // scenario: there is already a card selected, and it is the same card user is selecting again
-            this.tableData.state.selectedSecurityCard = null;
+
+            // make sure to not overwrite the selected security card as null value if users are diving in and out of actions and corresponding sub actions (ex. bloomberg and its sub actions)
+            if (!targetCard.data.actionMenu.state.isCoreActionSelected) {
+              this.tableData.state.selectedSecurityCard = null;
+            }
           }
           params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
         }
