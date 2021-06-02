@@ -29,10 +29,11 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
   }
   &__utilities {
     @include mix_fixed_div(relative, $z_index_hovering_item_lift);  // this is necessary because of the background color of "sat-securityDefinitionConfigurator__definitions-list-section-label-text", it looks bad if we don't overlay this on top of that
+    flex: 0 0 7.5rem; // 7.5rem leaves a good enough space for presets in the utilities section
     display: none;
     padding: 0 $spacing_medium;
-    height: 9.5rem;
     &-selectedPreset {
+      @include mix_fixed_div(relative, $z_index_base_item);
       @include mix_alive('custom', background-color $animation_duration_light);
       @include mix_border_radius(5px);
       flex: 0 0 auto;
@@ -42,20 +43,34 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       &-back {
         flex: 0 0 auto;
         align-self: flex-end;
+        margin: 0 0 $spacing_small $spacing_small;
       }
       &>search-shortcut {
         @include mix_alive('light');
         width: 0;
-        margin-right: $spacing_small;
+        margin: 0 $spacing_small;
         overflow: hidden;
-        margin-left: $spacing_medium;
       }
       &-save {
-        @extend .santaBtn--inverseLabelled;
         flex: 0 0 auto;
         align-self: flex-end;
         background-color: $color_create;
         transform: scale(0.001);
+        margin: 0 0 $spacing_small -10rem;
+      }
+      &-submit {
+        display: none;
+        align-self: flex-end;
+        background-color: $color_create;
+        margin: 0 $spacing_small $spacing_small 0;
+      }
+      &-unactivate {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        display: none;
+        top: $spacing_small;
+        right: $spacing_small;
+        background-color: $color_kill;
+        color: $font_color_inverse;
       }
     }
     &-keywordSearch {
@@ -250,6 +265,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
         &-selectedPreset {
           &-save {
             transform: scale(1.0);
+            margin-left: 0;
           }
         }
       }
@@ -267,6 +283,14 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
             @include material('none');
             background-color: $color_active;
             transform: scale(1.0);
+            margin-left: 0;
+            display: none;
+          }
+          &-submit {
+            display: flex;
+          }
+          &-unactivate {
+            display: flex;
           }
         }
       }

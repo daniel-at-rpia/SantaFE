@@ -1008,6 +1008,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.state.presets.selectedPreset.state.isSelected = false;
       this.state.presets.selectedPreset = null;
       this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
+      this.state.currentSearch = this.initializePageState().currentSearch;
       this.state.table.metrics = this.utilityService.deepCopy(this.constants.table.SecurityTableHeaderConfigs).filter((eachStub) => {
         const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
         return !targetSpecifics.disabled;
