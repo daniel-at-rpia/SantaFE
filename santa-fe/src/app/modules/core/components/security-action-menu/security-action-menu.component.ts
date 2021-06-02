@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import * as globalConstants from 'Core/constants';
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
 import { SecurityActionMenuOptionsRawText } from '../../constants/tradeConstants.constant';
-import { UtilityService } from 'Core/services/UtilityService';
 import { BICSDataProcessingService } from 'Core/services/BICSDataProcessingService';
+import { DTOService } from 'Core/services/DTOService';
 
 @Component({
   selector: 'security-action-menu',
@@ -12,7 +12,7 @@ import { BICSDataProcessingService } from 'Core/services/BICSDataProcessingServi
   encapsulation: ViewEncapsulation.Emulated
 })
 
-export class SecurityActionMenu implements OnInit {
+export class SecurityActionMenu {
   @Input() securityDTO: DTOs.SecurityDTO
   @Input() actionMenu: DTOs.SecurityActionMenuDTO;
   @Output() clickToLaunchUofBByTicker = new EventEmitter<AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock>();
@@ -24,16 +24,9 @@ export class SecurityActionMenu implements OnInit {
   @Output() clickBloombergOptions = new EventEmitter<string>();
   constants = globalConstants;
   constructor(
-    private utilityService: UtilityService,
-    private bicsDataProcessingService: BICSDataProcessingService
+    private bicsDataProcessingService: BICSDataProcessingService,
+    private dtoService: DTOService
   ) {}
-
-  public ngOnInit() {
-    if (!!this.actionMenu && !!this.securityDTO && !!this.securityDTO.data) {
-      const copy = this.utilityService.deepCopy(this.actionMenu);
-      this.actionMenu = copy;
-    }
-  }
 
   public onClickCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
     const targetLevel = targetAction.level - 1;
@@ -42,9 +35,7 @@ export class SecurityActionMenu implements OnInit {
       this.actionMenu.data.selectedCoreAction = previousCoreAction;
       this.actionMenu.data.availableSubActions = this.getSubActionsFromCoreAction(previousCoreAction.subActions);
     } else {
-      this.actionMenu.data.availableSubActions = this.utilityService.getSecurityActionMenuSubActionsFromLevel(1);
-      this.actionMenu.data.selectedCoreAction = null;
-      //this.actionMenu.state.isCoreActionSelected = false;
+      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(true);
     }
   }
 
@@ -54,6 +45,7 @@ export class SecurityActionMenu implements OnInit {
       this.onDiveInToSubAction(targetAction);
     } else {
       this.getCallbacksForActions(targetAction);
+      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(false);
     }
   }
 

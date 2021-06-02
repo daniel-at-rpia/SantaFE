@@ -42,6 +42,11 @@ export class SecurityCard implements OnInit {
   public onClickCard() {
     if (!this.cardData.state.isInteractionDisabled && !this.cardData.state.isStencil) {
       this.cardData.state.isSelected = !this.cardData.state.isSelected;
+      if (!!this.cardData.state.isSelected) {
+        this.cardData.data.actionMenu.state.isActive = true;
+      } else {
+        this.cardData.data.actionMenu = this.dtoService.formSecurityActionMenuDTO(false);
+      }
       if (!!this.cardData.api.onClickCard) {
         this.cardData.api.onClickCard(this.cardData);
       }

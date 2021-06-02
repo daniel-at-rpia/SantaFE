@@ -230,7 +230,7 @@ export class DTOService {
           lastTraceVolumeReported: null,
           lastTraceVolumeEstimated: null
         },
-        actionMenu: this.formSecurityActionMenuDTO()
+        actionMenu: this.formSecurityActionMenuDTO(false)
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -2911,7 +2911,7 @@ export class DTOService {
     selectedGroupDefinition.data.list = defaultSelectedList;
   }
 
-  public formSecurityActionMenuDTO(): DTOs.SecurityActionMenuDTO {
+  public formSecurityActionMenuDTO(isActive: boolean): DTOs.SecurityActionMenuDTO {
     const object: DTOs.SecurityActionMenuDTO = {
       data: {
         defaultText: 'Security Actions',
