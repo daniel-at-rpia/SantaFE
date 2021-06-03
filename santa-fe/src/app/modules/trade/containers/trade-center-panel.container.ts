@@ -1094,17 +1094,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         if (!presetDisplayTitle) {
           recentShortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(recentShortcut);
         }
-        recentShortcut.state.isPreviewVariant = true;
-        recentShortcut.state.isUserInputBlocked = true;
-        const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
-        this.state.currentSearch.previewShortcut = recentShortcut;
-        this.state.currentSearch.previewShortcut.data.highlightTitle = highlightTitle;
-        const recentShortcutCopy = this.utilityService.deepCopy(recentShortcut);
-        recentShortcutCopy.state.isPreviewVariant = false;
-        recentShortcutCopy.state.isUserInputBlocked = false;
-        recentShortcutCopy.data.metadata.dbStoredTime = recentShortcutCopy.data.metadata.createTime;
-        this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, recentShortcutCopy, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} - (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Store Watchlist`, false);
-        this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcutCopy);
+        this.updateCurrentSearchPreview(recentShortcut);
+        recentShortcut.data.metadata.dbStoredTime = recentShortcut.data.metadata.createTime;
+        this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, recentShortcut, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} - (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Store Watchlist`, false);
+        this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcut);
         this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
       }
     }
@@ -1195,6 +1188,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           this.storeRecentWatchList(params, presetDisplayTitle);
         } else {
           this.changeRecentWatchlistTimeStamp(params.filterList, existingWatchlist);
+          this.updateCurrentSearchPreview(existingWatchlist);
         }
       } else {
         this.indexedDBService.retrieveAndGetAllIndexedDBData(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Get All Watchlists`, true).pipe(
@@ -1206,6 +1200,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               this.storeRecentWatchList(params, presetDisplayTitle);
             } else {
               this.changeRecentWatchlistTimeStamp(params.filterList, existingWatchlist);
+              this.updateCurrentSearchPreview(existingWatchlist);
             }
           } else {
             this.storeRecentWatchList(params, presetDisplayTitle)
@@ -1389,6 +1384,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       } else {
         return option;
       }
+    }
+
+    private updateCurrentSearchPreview(newShortcut: DTOs.SearchShortcutDTO) {
+      const copy = this.utilityService.deepCopy(newShortcut);
+      copy.state.isPreviewVariant = true;
+      copy.state.isUserInputBlocked = true;
+      // const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
+      this.state.currentSearch.previewShortcut = copy;
     }
   // General End
 
@@ -1650,6 +1653,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       } else if (this.state.currentSearch.saveMode === this.constants.trade.TradeCenterPanelSearchSaveModes.active) {
         this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.available;
       }
+    }
+
+    public onUnactivate() {
+      this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.available;
+    }
+
+    public onSubmitSaveWatchlist() {
+      this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.default;
     }
   // Save Preset End
 }
