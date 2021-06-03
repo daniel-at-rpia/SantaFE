@@ -2921,8 +2921,6 @@ export class DTOService {
       },
       state: {
         isActive,
-        isBottomRowVariant: false,
-        isTopRowVariant: false,
         isCoreActionSelected: false
       }
     }

@@ -996,7 +996,5 @@ export interface SecurityActionMenuDTO extends BasicDTOStructure {
   state: {
     isActive: boolean;
     isCoreActionSelected: boolean;
-    isTopRowVariant: boolean;
-    isBottomRowVariant: boolean;
   }
 }

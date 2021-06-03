@@ -164,12 +164,9 @@ export class AgGridMiddleLayerService {
       return eachHeader.data.key === 'alertStatus';
     }) - 1;
     const list = [];
+    console.log(targetRows,' target rows')
     targetRows.forEach((eachRow, index) => {
-      if (index === 0) {
-        eachRow.data.security.state.isAtListCeiling = true;
-      } else {
-        eachRow.data.security.state.isAtListCeiling = false;
-      }
+      eachRow.data.security.state.isAtListCeiling = index === 0;
       const newAgRow = this.formAgGridRow(
         eachRow,
         targetHeaders,

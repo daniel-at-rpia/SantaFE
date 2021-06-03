@@ -387,7 +387,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
   &--atListCeilingVariant {
     #{$securityCardBlockName} {
       &__actionMenu {
-        top: $spacing_small;
+        top: $spacing_medium;
       }
     }
   }
