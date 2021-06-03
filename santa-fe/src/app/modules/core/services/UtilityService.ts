@@ -411,7 +411,8 @@ export class UtilityService {
 
     public applyShortcutToConfigurator(
       targetShortcut: DTOs.SearchShortcutDTO,
-      targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
+      targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      isActioMenuTriggered: boolean
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
       const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
@@ -448,6 +449,15 @@ export class UtilityService {
           });
         });
       });
+      // Checks to see that the shortcut is generated via the security action menu, in which case anything aside from the actual BICS, Ticker, etc value should be removed from the configurator and will not be stored as part of the new search
+      if (isActioMenuTriggered) {
+        const selectedDefinitionBundle = this.getDefinitionBundleFromConfigurator(newConfig, globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+        if (!!selectedDefinitionBundle) {
+          const presetKeys: Array<string> = primaryFilterGroup.map((selectedPresets: DTOs.SecurityDefinitionDTO) => selectedPresets.data.key);
+          const definitionToBeClearedList = selectedDefinitionBundle.data.list.filter((selectedDefinitions: DTOs.SecurityDefinitionDTO) => presetKeys.indexOf(selectedDefinitions.data.key) < 0);
+          this.clearAllSelectedOptionsInDefinition(newConfig, definitionToBeClearedList);
+        }
+      }
       return newConfig;
     }
 
@@ -1349,6 +1359,24 @@ export class UtilityService {
     public getSecurityActionMenuSubActionsFromLevel(level: number): Array<Blocks.SecurityActionMenuOptionBlock> {
       const selectedSubActions = globalConstants.trade.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => optionBlock.level === level);
       return selectedSubActions;
+    }
+
+    public clearAllSelectedOptionsInDefinition(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      targetDefinitions: Array<DTOs.SecurityDefinitionDTO>
+    ) {
+      targetDefinitions.forEach((targetDefinition: DTOs.SecurityDefinitionDTO) => {
+        targetDefinition.data.highlightSelectedOptionList = [];
+        targetDefinition.state.filterActive = false;
+        if (targetDefinition.state.isFilterCapped) {
+          targetDefinition.data.displayOptionList = [];
+        } else {
+          targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
+            option.isSelected = false;
+          })
+        }
+        this.syncDefinitionStateBetweenSelectedAndCore(configurator, targetDefinition, true);
+      })
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
