@@ -326,16 +326,12 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       if (this.state.presets.selectedPreset === targetPreset) {
         targetPreset.state.isSelected = false;
         this.state.presets.selectedPreset = null;
-        this.state.currentSearch.previewShortcut = null;
+        this.updateCurrentSearchPreview(null);
         this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
       } else {
         targetPreset.state.isSelected = true;
         this.state.presets.selectedPreset = targetPreset;
-        const previewCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(targetPreset);
-        previewCopy.state.isPreviewVariant = true;
-        previewCopy.state.isSelected = false;
-        previewCopy.state.isUserInputBlocked = true;
-        this.state.currentSearch.previewShortcut = previewCopy;
+        this.updateCurrentSearchPreview(targetPreset);
         this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
         if (!!targetPreset && targetPreset.data.searchFilters.length > 0) {
           targetPreset.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
@@ -1387,11 +1383,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     private updateCurrentSearchPreview(newShortcut: DTOs.SearchShortcutDTO) {
-      const copy = this.utilityService.deepCopy(newShortcut);
-      copy.state.isPreviewVariant = true;
-      copy.state.isUserInputBlocked = true;
-      // const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
-      this.state.currentSearch.previewShortcut = copy;
+      if (!!newShortcut) {
+        const copy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(newShortcut);
+        copy.state.isPreviewVariant = true;
+        copy.state.renameShortcutActive = true;
+        this.state.currentSearch.previewShortcut = copy;
+      } else {
+        this.state.currentSearch.previewShortcut = null;
+      }
     }
   // General End
 
@@ -1661,6 +1660,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onSubmitSaveWatchlist() {
       this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.default;
+    }
+
+    public onChangeSavePresetName(newName: string) {
+      this.state.currentSearch.previewShortcut.data.displayTitle = newName;
     }
   // Save Preset End
 }

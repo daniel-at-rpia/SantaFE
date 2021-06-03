@@ -324,9 +324,10 @@
       <search-shortcut
         *ngIf="state.currentSearch.previewShortcut"
         [shortcutData]="state.currentSearch.previewShortcut"
+        (onChangeShortcutNameCallback)="onChangeSavePresetName($event, newName)"
       ></search-shortcut>
       <button (click)="onActivatePresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-save santaBtn--labelled santaBtn--inverseLabelled">
-        <i class="fal fa-cloud-upload"></i>
+        <i class="fal fa-pencil"></i>
         <span>Save This Preset</span>
       </button>
       <button (click)="onSubmitSaveWatchlist()" class="sat-tradeCenterPanel__utilities-selectedPreset-submit santaBtn--labelled santaBtn--inverseLabelled">

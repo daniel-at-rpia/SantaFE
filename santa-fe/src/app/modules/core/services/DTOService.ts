@@ -779,7 +779,8 @@ export class DTOService {
         isMajorShortcut: !!isMajor,
         isHeroShortcut: !!isHero,
         isPreviewVariant: false,
-        isAbleToSaveAsRecentWatchlist: true
+        isAbleToSaveAsRecentWatchlist: true,
+        renameShortcutActive: false
       }
     };
     definitionList.forEach((eachDefinition, index) => {
