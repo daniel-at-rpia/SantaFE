@@ -1129,6 +1129,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         recentShortcut.state.isPreviewVariant = true;
         recentShortcut.state.isUserInputBlocked = true;
         const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
+        if (this.state.presets.selectedPreset) {
+          const isAlreadyAddedToSelected = this.checkIfPresetsAreIdentical(recentShortcut, this.state.presets.selectedPreset);
+          if (!isAlreadyAddedToSelected) {
+            this.state.presets.selectedPreset.state.isSelected = false;
+            this.state.presets.selectedPreset = recentShortcut;
+          }
+        }
         this.state.currentSearch.previewShortcut = recentShortcut;
         this.state.currentSearch.previewShortcut.data.highlightTitle = highlightTitle;
         const recentShortcutCopy = this.utilityService.deepCopy(recentShortcut);
@@ -1410,18 +1417,35 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       })
     }
 
-    private getParsedOptionForShortcutTitle(
-      key: string,
-      option: string
-    ): string {
-      if (key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
-        return this.bicsDictionaryLookupService.BICSCodeToBICSName(option);
-      } else if (key === this.constants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
-        return option === 'Y' ? 'Quoted Today' : 'Not Quoted Today';
+    private checkIfPresetsAreIdentical(
+      currentPreset: DTOs.SearchShortcutDTO,
+      targetPreset: DTOs.SearchShortcutDTO
+    ): boolean {
+      const currentPrimaryFilters = currentPreset.data.searchFilters[0];
+      const targetPrimaryFilters = targetPreset.data.searchFilters[0];
+      if (currentPrimaryFilters.length !== targetPrimaryFilters.length) {
+        return false;
       } else {
-        return option;
+        let targetOptions: Array<string> = [];
+        let currentOptions: Array<string> = [];
+        targetPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          if (definition.data.highlightSelectedOptionList.length > 0) {
+            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
+            targetOptions = [...targetOptions, ...highlightedOptions];
+          }
+        });
+        currentPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          if (definition.data.highlightSelectedOptionList.length > 0) {
+            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
+            currentOptions = [...currentOptions, ...highlightedOptions];
+          }
+        });
+        const isIdentical = currentOptions.every((currentOption: string) => targetOptions.indexOf(currentOption) >= 0);
+        return isIdentical;
       }
     }
+
+
   // General End
 
   // Search Engine
