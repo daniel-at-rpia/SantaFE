@@ -989,9 +989,8 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
 export interface SecurityActionMenuDTO extends BasicDTOStructure {
   data: {
     defaultText: string;
-    actions: Array<Blocks.SecurityActionMenuOptionBlock>;
     selectedCoreAction: Blocks.SecurityActionMenuOptionBlock;
-    availableSubActions: Array<Blocks.SecurityActionMenuOptionBlock>;
+    allActions: Array<Blocks.SecurityActionMenuOptionBlock>;
   },
   state: {
     isActive: boolean;

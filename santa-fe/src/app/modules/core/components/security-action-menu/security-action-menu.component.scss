@@ -1,19 +1,10 @@
 @import "global.scss";
 $circleWidth: 6rem;
 $circleAlignment: $circleWidth / 2 + $spacing_x_small;
-@mixin subActionBtnPositioning($rotate, $translate: $circleAlignment) {
-  transform: rotate($rotate) translate($translate) rotate(-$rotate);
-  &:hover,
-  &:focus {
-    @include mix_fixed_div(absolute, $z_index_base_item_solid);
-    transform: rotate($rotate) translate($translate) rotate(-$rotate);
-  }
-}
 .sat-securityActionMenu {
   $blockName: &;
-  @include mix_fixed_div(relative, $z_index_tooltip);
-  z-index: 1000;
   &__content {
+    @include mix_fixed_div(relative, $z_index_base_item);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,11 +31,12 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
         color: $font_color_inverse;
       }
     }
-    &-subActionBtn {
+    &-actionBtn {
       @include mix_fixed_div(absolute, $z_index_base_item_solid);
       @include material();
       @include mix_alive('light');
-      &--noIcon {
+      transform: scale(0.001);
+      &--noIconState {
         & > span {
           display: flex;
           align-items: center;
@@ -55,32 +47,65 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
         }
         &:hover,
         &:focus {
-          .sat-securityActionMenu__content-subActionBtn-text {
+          .sat-securityActionMenu__content-actionBtn-text {
             transform: translate(0,0);
           }
         }
       }
-      &--uofB,
-      &--ticker,
-      &--pinRow,
-      &--DES {
-        @include subActionBtnPositioning(220deg)
+      &--hasSubActionsState{
+        @include mix_border_generator($typical_border_width, $color_active);
+        #{$blockName} {
+          &__content {
+            &-actionBtn {
+              bottom: 0;
+              &-icon {
+                transform: translate(0, -50%) scale(0.5);
+              }
+              &-text {
+                opacity: 1;
+                transform: translate(0,0);
+                bottom: $spacing_small;
+              }
+              &:hover,
+              &:focus {
+                transform: translate(0,0);
+                bottom: 0;
+              }
+            }
+          }
+        }
       }
-      &--setAlert,
-      &--BICS,
-      &--sendToGraph,
-      &--QMGR {
-        @include subActionBtnPositioning(320deg);
+      &--oneoftwo,
+      &--oneofthree,
+      &--oneoffour {
+        top: -.5rem;
+        left: -1rem;
+        transform: scale(1);
       }
-      &--moreActions,
-      &--bloomberg {
-        @include subActionBtnPositioning(90deg);
+      &--twooftwo,
+      &--twoofthree,
+      &--twooffour {
+        top: -.5rem;
+        right: -1rem;
+        transform: scale(1);
       }
-      &--YAS {
-        @include subActionBtnPositioning(140deg);
+      &--threeofthree {
+        bottom: -1.5rem;
+        transform: scale(1);
       }
-      &--TDH {
-        @include subActionBtnPositioning(40deg);
+      &--threeoffour {
+        bottom: -1rem;
+        right: -1rem;
+        transform: scale(1);
+      }
+      &--fouroffour {
+        bottom: -1rem;
+        left: -1rem;
+        transform: scale(1);
+      }
+      &:hover,
+      &:focus {
+        @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
       }
     }
   }

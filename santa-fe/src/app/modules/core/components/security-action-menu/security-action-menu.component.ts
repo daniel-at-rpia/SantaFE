@@ -22,18 +22,25 @@ export class SecurityActionMenu {
   @Output() clickToSearch = new EventEmitter();
   @Output() clickToPinRow = new EventEmitter();
   @Output() clickBloombergOptions = new EventEmitter<string>();
-  constants = globalConstants;
+  constants = {
+    globalConstants,
+    actionBtnClass: 'sat-securityActionMenu__content-actionBtn'
+  };
   constructor(
     private bicsDataProcessingService: BICSDataProcessingService,
     private dtoService: DTOService
   ) {}
 
+  public getClassWithPositioningIdentifier(action: Blocks.SecurityActionMenuOptionBlock): string {
+    return `${this.constants.actionBtnClass}--${action.positionIdentifier}`;
+  }
+
   public onClickCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
     const targetLevel = targetAction.level - 1;
     if (targetLevel > 0) {
-      const previousCoreAction = this.getPreviousCoreAction(targetAction, targetLevel);
-      this.actionMenu.data.selectedCoreAction = previousCoreAction;
-      this.actionMenu.data.availableSubActions = this.getSubActionsFromCoreAction(previousCoreAction.subActions);
+      const previousAction = this.actionMenu.data.allActions.find((action: Blocks.SecurityActionMenuOptionBlock) => action.rawText === targetAction.parentAction);
+      this.actionMenu.data.selectedCoreAction = previousAction;
+      this.getSubActionsFromSelectedAction(previousAction);
     } else {
       this.actionMenu = this.dtoService.formSecurityActionMenuDTO(true);
     }
@@ -42,39 +49,26 @@ export class SecurityActionMenu {
   public onClickSubAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
     if (targetAction.subActions.length > 0) {
       this.actionMenu.state.isCoreActionSelected = true;
-      this.onDiveInToSubAction(targetAction);
+      targetAction.isAvailableSubAction = false;
+      this.getSubActionsFromSelectedAction(targetAction);
     } else {
       this.getCallbacksForActions(targetAction);
       this.actionMenu = this.dtoService.formSecurityActionMenuDTO(false);
     }
   }
 
-  private onDiveInToSubAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
-    this.actionMenu.data.selectedCoreAction = targetAction;
-    this.actionMenu.data.availableSubActions = this.getSubActionsFromCoreAction(targetAction.subActions);
-  }
-
-  private getSubActionsFromCoreAction(targetSubActions: Array<SecurityActionMenuOptionsRawText>): Array<Blocks.SecurityActionMenuOptionBlock> {
-    const selectedSubActions = this.constants.trade.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => targetSubActions.indexOf(optionBlock.rawText) >= 0);
-    return selectedSubActions;
-  }
-
-  private getPreviousCoreAction(
-    targetSubAction: Blocks.SecurityActionMenuOptionBlock,
-    targetLevel: number
-  ): Blocks.SecurityActionMenuOptionBlock {
-    const selectedActionsList = this.constants.trade.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => optionBlock.level === targetLevel && optionBlock.subActions.length > 0);
-    const selectedPreviousCoreAction = selectedActionsList.find((optionBlock: Blocks.SecurityActionMenuOptionBlock) => {
-      const isCoreActionBlock = optionBlock.subActions.find((subActions: SecurityActionMenuOptionsRawText) => subActions === targetSubAction.rawText);
-      return isCoreActionBlock;
+  private getSubActionsFromSelectedAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
+    this.actionMenu.data.selectedCoreAction = {...targetAction};
+    this.actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
+      action.isAvailableSubAction = targetAction.rawText === action.parentAction;
     })
-    return selectedPreviousCoreAction;
   }
+
 
   public onClickLaunchUofBTicker(ticker: string){
     if (!!ticker) {
       const object: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock = {
-        type: this.constants.definition.SecurityDefinitionMap.TICKER.key,
+        type: this.constants.globalConstants.definition.SecurityDefinitionMap.TICKER.key,
         value: ticker,
         bicsLevel: null
       }
@@ -87,10 +81,10 @@ export class SecurityActionMenu {
       const category = this.bicsDataProcessingService.extractDeepestBICSCategory(securityDTO);
       if (!!category) {
         const identifier = Object.keys(securityDTO.data.bics).find(key => securityDTO.data.bics[key] === category);
-        const level = identifier.split(this.constants.structuring.BICS_BREAKDOWN_FRONTEND_KEY).length > 0 ? +identifier.split(this.constants.structuring.BICS_BREAKDOWN_FRONTEND_KEY)[1] : 0;
+        const level = identifier.split(this.constants.globalConstants.structuring.BICS_BREAKDOWN_FRONTEND_KEY).length > 0 ? +identifier.split(this.constants.globalConstants.structuring.BICS_BREAKDOWN_FRONTEND_KEY)[1] : 0;
         if (!!level) {
           const object: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock = {
-            type: this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
+            type: this.constants.globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
             value: category,
             bicsLevel: level
           }
@@ -121,7 +115,7 @@ export class SecurityActionMenu {
   }
 
   private getCallbacksForActions(targetAction: Blocks.SecurityActionMenuOptionBlock) {
-    const { pinRow, sendToGraph, setAlert, ticker, bics, bloombergDES, bloombergQMGR, bloombergTDH, bloombergYAS } = this.constants.trade.SecurityActionMenuOptionsRawText;
+    const { pinRow, sendToGraph, setAlert, ticker, bics, bloombergDES, bloombergQMGR, bloombergTDH, bloombergYAS } = this.constants.globalConstants.trade.SecurityActionMenuOptionsRawText;
     if (targetAction.rawText === pinRow) {
       this.onClickPinRow()
     } else if (targetAction.rawText === sendToGraph) {

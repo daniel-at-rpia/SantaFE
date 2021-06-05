@@ -2912,18 +2912,45 @@ export class DTOService {
   }
 
   public formSecurityActionMenuDTO(isActive: boolean): DTOs.SecurityActionMenuDTO {
+    const menuListCopy = this.utility.deepCopy(globalConstants.trade.SecurityActionMenuList);
     const object: DTOs.SecurityActionMenuDTO = {
       data: {
         defaultText: 'Security Actions',
-        actions: globalConstants.trade.SecurityActionMenuList,
         selectedCoreAction: null,
-        availableSubActions: this.utility.getSecurityActionMenuSubActionsFromLevel(1)
+        allActions: menuListCopy
       },
       state: {
         isActive,
         isCoreActionSelected: false
       }
     }
+    this.applyPositioningIdentifiersToSubActions(object.data.allActions);
     return object;
+  }
+
+  private applyPositioningIdentifiersToSubActions(actions: Array<Blocks.SecurityActionMenuOptionBlock>) {
+    if (actions.length > 0) {
+      const actionGroupMapping: {[property:string]: Array<Blocks.SecurityActionMenuOptionBlock> } = {};
+      actions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
+        if (!actionGroupMapping[action.parentAction]) {
+          let actionGroup = actions.filter((eachAction: Blocks.SecurityActionMenuOptionBlock) => eachAction.parentAction === action.parentAction);
+          actionGroupMapping[action.parentAction] = actionGroup;
+        }
+        const selectedGroup = actionGroupMapping[action.parentAction];
+        const totalCount = selectedGroup.length;
+        const index = selectedGroup.findIndex((eachAction: Blocks.SecurityActionMenuOptionBlock) => eachAction.rawText === action.rawText);
+        if (index >= 0) {
+          this.applyPositioningIdentifier(action, index, totalCount);
+        }
+      })
+    }
+  }
+
+  private applyPositioningIdentifier(
+    action: Blocks.SecurityActionMenuOptionBlock,
+    order: number,
+    totalCount: number
+  ) {
+    action.positionIdentifier = `${globalConstants.trade.SecurityActionMenuOptionPositioningIdentifier[order + 1]}of${globalConstants.trade.SecurityActionMenuOptionPositioningIdentifier[totalCount]}`
   }
 }

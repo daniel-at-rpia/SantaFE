@@ -1,16 +1,18 @@
 <article
   [ngClass]="{
     'sat-securityActionMenu': true,
-    'sat-securityActionMenu--topVariant': actionMenu.state.isTopRowVariant,
-    'sat-securityActionMenu--bottomVariant': actionMenu.state.isBottomRowVariant,
     'sat-securityActionMenu--isCoreActionSelectedState': actionMenu.state.isCoreActionSelected
   }">
   <section class="sat-securityActionMenu__content">
-    <button class="santaBtn--circleLabelled sat-securityActionMenu__content-subActionBtn sat-securityActionMenu__content-subActionBtn--{{subAction.rawText}}" 
-    [class.sat-securityActionMenu__content-subActionBtn--noIcon]="!subAction.icon"
-     *ngFor="let subAction of actionMenu.data.availableSubActions" (click)="onClickSubAction(subAction)">
-      <i class="sat-securityActionMenu__content-subActionBtn-icon {{subAction.icon}}"></i>
-      <span class="sat-securityActionMenu__content-subActionBtn-text">{{subAction.displayTitle}}</span>
+    <button class="santaBtn--circleLabelled sat-securityActionMenu__content-actionBtn santaBtn--circleLabelled"
+    [ngClass]="[
+     !action.icon ? 'sat-securityActionMenu__content-actionBtn--noIconState' : '',
+     action.subActions.length > 0 ? 'sat-securityActionMenu__content-actionBtn--hasSubActionsState': '',
+     action.isAvailableSubAction ? getClassWithPositioningIdentifier(action) : ''
+    ]"
+     *ngFor="let action of actionMenu.data.allActions" (click)="onClickSubAction(action)">
+      <i class="sat-securityActionMenu__content-actionBtn-icon {{action.subActions.length > 0 ? 'fal fa-level-down-alt' : action.icon}}"></i>
+      <span class="sat-securityActionMenu__content-actionBtn-text">{{action.displayTitle}}</span>
     </button>
     <div class="sat-securityActionMenu__content-coreAction">
       <span class="sat-securityActionMenu__content-coreAction-defaultText">{{actionMenu.data.defaultText}}</span>

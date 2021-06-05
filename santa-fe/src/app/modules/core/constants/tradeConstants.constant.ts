@@ -669,101 +669,145 @@ export enum SecurityActionMenuOptionsDisplayText {
   bloombergTDH = 'TDH'
 }
 
+export enum SecurityActionMenuOptionPositioningIdentifier {
+  one = 1,
+  two,
+  three,
+  four,
+  five
+}
+
 export const SecurityActionMenuList: Array<Blocks.SecurityActionMenuOptionBlock> = [{
     displayTitle: SecurityActionMenuOptionsDisplayText.uofB,
     icon: 'fal fa-table',
     level: 1,
+    parentAction: null,
     subActions: [
       SecurityActionMenuOptionsRawText.bics,
       SecurityActionMenuOptionsRawText.ticker
     ],
-    rawText: SecurityActionMenuOptionsRawText.uofB
+    rawText: SecurityActionMenuOptionsRawText.uofB,
+    positionIdentifier: '',
+    isAvailableSubAction: true
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.ticker,
     icon: SecurityDefinitionMap.TICKER.icon,
+    parentAction: SecurityActionMenuOptionsRawText.uofB,
     level: 2,
     subActions: [],
-    rawText:  SecurityActionMenuOptionsRawText.ticker
+    rawText:  SecurityActionMenuOptionsRawText.ticker,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.bics,
     icon: SecurityDefinitionMap.BICS_CONSOLIDATED.icon,
     level: 2,
+    parentAction: SecurityActionMenuOptionsRawText.uofB,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.bics
+    rawText: SecurityActionMenuOptionsRawText.bics,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.setAlert,
     icon: 'fal fa-bell',
     level: 1,
+    parentAction: null,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.setAlert
+    rawText: SecurityActionMenuOptionsRawText.setAlert,
+    positionIdentifier: '',
+    isAvailableSubAction: true
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.moreActions,
     icon: 'fal fa-chevron-down',
     level: 1,
+    parentAction: null,
     subActions: [
       SecurityActionMenuOptionsRawText.pinRow,
       SecurityActionMenuOptionsRawText.sendToGraph,
       SecurityActionMenuOptionsRawText.bloomberg
     ],
-    rawText: SecurityActionMenuOptionsRawText.moreActions
+    rawText: SecurityActionMenuOptionsRawText.moreActions,
+    positionIdentifier: '',
+    isAvailableSubAction: true
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.pinRow,
     icon: 'fal fa-thumbtack',
     level: 2,
+    parentAction: SecurityActionMenuOptionsRawText.moreActions,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.pinRow
+    rawText: SecurityActionMenuOptionsRawText.pinRow,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.sendToGraph,
     icon: 'fal fa-chart-line',
     level: 2,
+    parentAction: SecurityActionMenuOptionsRawText.moreActions,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.sendToGraph
+    rawText: SecurityActionMenuOptionsRawText.sendToGraph,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.bloomberg,
     icon: null,
     level: 2,
+    parentAction: SecurityActionMenuOptionsRawText.moreActions,
     subActions: [
       SecurityActionMenuOptionsRawText.bloombergDES,
       SecurityActionMenuOptionsRawText.bloombergQMGR,
       SecurityActionMenuOptionsRawText.bloombergTDH,
       SecurityActionMenuOptionsRawText.bloombergYAS
     ],
-    rawText: SecurityActionMenuOptionsRawText.bloomberg
+    rawText: SecurityActionMenuOptionsRawText.bloomberg,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.bloombergDES,
     icon: null,
     level: 3,
+    parentAction: SecurityActionMenuOptionsRawText.bloomberg,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.bloombergDES
+    rawText: SecurityActionMenuOptionsRawText.bloombergDES,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.bloombergQMGR,
     icon: null,
     level: 3,
+    parentAction: SecurityActionMenuOptionsRawText.bloomberg,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.bloombergQMGR
+    rawText: SecurityActionMenuOptionsRawText.bloombergQMGR,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.bloombergTDH,
     icon: null,
     level: 3,
+    parentAction: SecurityActionMenuOptionsRawText.bloomberg,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.bloombergTDH
+    rawText: SecurityActionMenuOptionsRawText.bloombergTDH,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   },
   {
     displayTitle: SecurityActionMenuOptionsDisplayText.bloombergYAS,
     icon: null,
     level: 3,
+    parentAction: SecurityActionMenuOptionsRawText.bloomberg,
     subActions: [],
-    rawText: SecurityActionMenuOptionsRawText.bloombergYAS
+    rawText: SecurityActionMenuOptionsRawText.bloombergYAS,
+    positionIdentifier: '',
+    isAvailableSubAction: false
   }
 ]
 
