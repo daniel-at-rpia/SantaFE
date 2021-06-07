@@ -230,7 +230,7 @@ export class DTOService {
           lastTraceVolumeReported: null,
           lastTraceVolumeEstimated: null
         },
-        actionMenu: this.formSecurityActionMenuDTO(false)
+        actionMenu: this.formSecurityActionMenuDTO(false, null)
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -2911,17 +2911,21 @@ export class DTOService {
     selectedGroupDefinition.data.list = defaultSelectedList;
   }
 
-  public formSecurityActionMenuDTO(isActive: boolean): DTOs.SecurityActionMenuDTO {
+  public formSecurityActionMenuDTO(
+    isActive: boolean,
+    parentAction: globalConstants.trade.SecurityActionMenuOptionsRawText,
+  ): DTOs.SecurityActionMenuDTO {
     const menuListCopy = this.utility.deepCopy(globalConstants.trade.SecurityActionMenuList);
     const object: DTOs.SecurityActionMenuDTO = {
       data: {
         defaultText: 'Security Actions',
         selectedCoreAction: null,
-        allActions: menuListCopy
+        allActions: !!parentAction ? this.utility.getSpecificActionsForSecurityActionMenu(menuListCopy, parentAction) : menuListCopy
       },
       state: {
         isActive,
-        isCoreActionSelected: false
+        isCoreActionSelected: false,
+        isDisplayLimitedActions: !!parentAction
       }
     }
     this.applyPositioningIdentifiersToSubActions(object.data.allActions);

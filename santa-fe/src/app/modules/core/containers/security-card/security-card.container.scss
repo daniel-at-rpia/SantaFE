@@ -361,15 +361,7 @@ $securityCard_actionMenu_minorList_regularGutterWidth: 3rem;
   &--tradeAlertTableVariant {
     #{$securityCardBlockName} {
       &__actionMenu {
-        @include mix_calculate(left, 50%, $securityCard_actionMenu_majorCTA_size/2 + $spacing_x_small, '-');
-        &-mainList {
-          &-btn {
-            display: none;
-            &--search {
-              display: flex;
-            }
-          }
-        }
+        right: $spacing_small;
       }
     }
   }

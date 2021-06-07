@@ -59,18 +59,18 @@
         <span class="sat-securityCard__alertShortcutConfig-content-side-label">Side :</span>
         <div class="sat-securityCard__alertShortcutConfig-content-side-btnGroup santaBtnGroup">
           <button
-            (click)="onSelectSide(constants.side.bid)"
+            (click)="onSelectSide(constants.core.AlertSubTypes.bid)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.bid) >= 0
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.core.AlertSubTypes.bid) >= 0
             }">
             Bid
           </button>
           <button
-            (click)="onSelectSide(constants.side.ask)"
+            (click)="onSelectSide(constants.core.AlertSubTypes.ask)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.ask) >= 0
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.core.AlertSubTypes.ask) >= 0
             }">
             Ask
           </button>
@@ -82,16 +82,16 @@
       <div class="sat-securityCard__alertShortcutConfig-content-level">
         <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
           <button
-            (click)="onSelectShortcutConfigDriver(constants.driver.Spread.label)"
+            (click)="onSelectShortcutConfigDriver(constants.core.TriCoreDriverConfig.Spread.label)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Spread.label
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.core.TriCoreDriverConfig.Spread.label
             }">Sprd</button>
           <button
-            (click)="onSelectShortcutConfigDriver(constants.driver.Price.label)"
+            (click)="onSelectShortcutConfigDriver(constants.core.TriCoreDriverConfig.Price.label)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Price.label
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.core.TriCoreDriverConfig.Price.label
             }">Px</button>
         </div>
         <numeric-filter

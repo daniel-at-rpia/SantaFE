@@ -19,7 +19,6 @@ export class SecurityActionMenu {
   @Output() clickToLaunchUofBByBICS = new EventEmitter<AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock>();
   @Output() clickToSetAlert = new EventEmitter();
   @Output() clickToSendGraph = new EventEmitter();
-  @Output() clickToSearch = new EventEmitter();
   @Output() clickToPinRow = new EventEmitter();
   @Output() clickBloombergOptions = new EventEmitter<string>();
   constants = {
@@ -42,7 +41,7 @@ export class SecurityActionMenu {
       this.actionMenu.data.selectedCoreAction = previousAction;
       this.getSubActionsFromSelectedAction(previousAction);
     } else {
-      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(true);
+      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(true, null);
     }
   }
 
@@ -53,7 +52,7 @@ export class SecurityActionMenu {
       this.getSubActionsFromSelectedAction(targetAction);
     } else {
       this.getCallbacksForActions(targetAction);
-      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(false);
+      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(false, null);
     }
   }
 
@@ -100,10 +99,6 @@ export class SecurityActionMenu {
 
   public onClickSendToGraph() {
     !!this.clickToSendGraph && this.clickToSendGraph.emit();
-  }
-
-  public onClickSearch() {
-    !!this.clickToSearch && this.clickToSearch.emit();
   }
 
   public onClickPinRow() {

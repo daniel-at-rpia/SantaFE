@@ -6,12 +6,11 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-
+import * as globalConstants from 'Core/constants';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
-import { TriCoreDriverConfig, AlertSubTypes } from 'Core/constants/coreConstants.constant';
 import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
 import { Store, select } from '@ngrx/store';
 import { CoreLaunchUofBThroughSecurityActionMenu } from 'Core/actions/core.actions';
@@ -24,10 +23,7 @@ import { CoreLaunchUofBThroughSecurityActionMenu } from 'Core/actions/core.actio
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
-  constants = {
-    driver: TriCoreDriverConfig,
-    side: AlertSubTypes
-  };
+  constants = globalConstants;
 
   constructor(
     private utilityService: UtilityService,
@@ -45,7 +41,10 @@ export class SecurityCard implements OnInit {
       if (!!this.cardData.state.isSelected) {
         this.cardData.data.actionMenu.state.isActive = true;
       } else {
-        this.cardData.data.actionMenu = this.dtoService.formSecurityActionMenuDTO(false);
+        if (this.cardData.data.actionMenu) {
+          const parentAction = this.cardData.data.actionMenu.state.isDisplayLimitedActions ? this.constants.trade.SecurityActionMenuOptionsRawText.uofB : null;
+          this.cardData.data.actionMenu = this.dtoService.formSecurityActionMenuDTO(false, parentAction);
+        }
       }
       if (!!this.cardData.api.onClickCard) {
         this.cardData.api.onClickCard(this.cardData);
@@ -87,7 +86,7 @@ export class SecurityCard implements OnInit {
       isUrgent: true,
       sendEmail: false
     };
-    if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
+    if (this.cardData.data.mark.markDriver === this.constants.core.TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === this.constants.core.TriCoreDriverConfig.Price.label) {
       this.cardData.data.alert.shortcutConfig.driver = this.cardData.data.mark.markDriver;
     }
   }

@@ -604,13 +604,13 @@ export class UtilityService {
       }
     }
 
-  public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
-    configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
-      definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-        definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
+    public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
+      configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+        definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
+        })
       })
-    })
-  }
+    }
 
     public highlightKeywordInParagraph(targetString: string, keyword: string): string {
       // current algorithm only highlights the first occurrence of the keyword, if ever there is the need to highlight all occurrences, append the logic and add a flag as input to switch between two modes
@@ -624,6 +624,14 @@ export class UtilityService {
       } else {
         return null;
       }
+    }
+
+    public applySpecificListForActionMenu(
+      actionMenu: DTOs.SecurityActionMenuDTO,
+      parentAction: globalConstants.trade.SecurityActionMenuOptionsRawText
+    ) {
+      actionMenu.data.allActions = this.getSpecificActionsForSecurityActionMenu(actionMenu.data.allActions, parentAction);
+      actionMenu.state.isDisplayLimitedActions = true;
     }
   // shared end
 
@@ -1377,6 +1385,23 @@ export class UtilityService {
         }
         this.syncDefinitionStateBetweenSelectedAndCore(configurator, targetDefinition, true);
       })
+    }
+
+    public getSpecificActionsForSecurityActionMenu(
+      actionList: Array<Blocks.SecurityActionMenuOptionBlock>,
+      parentAction: globalConstants.trade.SecurityActionMenuOptionsRawText
+    ): Array<Blocks.SecurityActionMenuOptionBlock> {
+      if (actionList.length > 0) {
+        const selectedActions = actionList.filter((action: Blocks.SecurityActionMenuOptionBlock) => action.parentAction === parentAction);
+        if (selectedActions.length > 0) {
+          selectedActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = true);
+          return selectedActions;
+        } else {
+          return [];
+        }
+      } else {
+        return [];
+      }
     }
 
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
