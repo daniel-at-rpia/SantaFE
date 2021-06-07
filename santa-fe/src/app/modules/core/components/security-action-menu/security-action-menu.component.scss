@@ -126,4 +126,12 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
       }
     }
   }
+  // &--isDisplayLimitedActionsState {
+  //   #{$blockName} {
+  //     top: -$spacing_large;
+  //     &__content {
+  //       background-color: transparent;
+  //     }
+  //   }
+  // }
 }

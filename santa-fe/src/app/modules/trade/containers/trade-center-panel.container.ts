@@ -394,7 +394,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           this.loadFreshData();
         }
       }
-      this.store$.dispatch(new TradeTogglePresetEvent);
+      !actionMenuTriggered && this.store$.dispatch(new TradeTogglePresetEvent);
     }
 
     public onUnselectPreset() {
