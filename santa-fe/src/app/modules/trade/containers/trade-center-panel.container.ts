@@ -1688,6 +1688,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onSubmitSaveWatchlist() {
       this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.default;
+      const matchedExistingRecentWatchlist = this.state.presets.recentWatchlistShortcuts.fullList.find((eachRecentWatchlist) => {
+        // right now we can just check on the uuid because when a new search is applied, if its scope matches any recent watchlist, that watchlist is automatically being used, so it always has the uuid of an existing recent watchlist if there is a match 
+        return eachRecentWatchlist.data.uuid === this.state.currentSearch.previewShortcut.data.uuid;
+      });
+      if (!!matchedExistingRecentWatchlist) {
+        this.updateWatchlist(matchedExistingRecentWatchlist, false, this.state.currentSearch.previewShortcut.data.displayTitle);
+      }
     }
 
     public onChangeSavePresetName(newName: string) {
