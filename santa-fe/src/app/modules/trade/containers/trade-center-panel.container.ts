@@ -366,6 +366,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
       } else {
         targetPreset.state.isSelected = true;
+        if (this.state.presets.selectedPreset) {
+          this.state.presets.selectedPreset.state.isSelected = false;
+        }
         this.state.presets.selectedPreset = targetPreset;
         const previewCopy: DTOs.SearchShortcutDTO = this.utilityService.deepCopy(targetPreset);
         previewCopy.state.isPreviewVariant = true;
