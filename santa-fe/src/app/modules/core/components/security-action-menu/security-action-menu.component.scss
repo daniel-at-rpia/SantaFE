@@ -59,18 +59,25 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
             &-actionBtn {
               bottom: 0;
               &-icon {
-                transform: translate(0, -50%) scale(0.5);
+                top: $spacing_minimum;
+                transform: scale(.5);
               }
               &-text {
                 opacity: 1;
-                transform: translate(0,0);
-                bottom: $spacing_small;
+                margin-top: $spacing_medium;
+                bottom: unset;
               }
-              &:hover,
-              &:focus {
-                transform: translate(0,0);
-                bottom: 0;
-              }
+            }
+          }
+        }
+        &:hover,
+        &:focus {
+          #{$blockName} {
+            &__content-actionBtn-icon {
+              transform: translate(0,0) scale(0.7);
+            }
+            &__content-actionBtn-text {
+              transform: translate(0,0);
             }
           }
         }

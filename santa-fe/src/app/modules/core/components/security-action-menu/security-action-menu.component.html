@@ -12,7 +12,7 @@
      action.isAvailableSubAction ? getClassWithPositioningIdentifier(action) : ''
     ]"
      *ngFor="let action of actionMenu.data.allActions" (click)="onClickSubAction(action)">
-      <i class="sat-securityActionMenu__content-actionBtn-icon {{action.subActions.length > 0 ? 'fal fa-level-down-alt' : action.icon}}"></i>
+      <i class="sat-securityActionMenu__content-actionBtn-icon {{action.subActions.length > 0 ? 'fal fa-angle-double-down' : action.icon}}"></i>
       <span class="sat-securityActionMenu__content-actionBtn-text">{{action.displayTitle}}</span>
     </button>
     <div class="sat-securityActionMenu__content-coreAction">
