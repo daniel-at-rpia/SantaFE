@@ -190,9 +190,7 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    const targetCard = !!params && !!params.data && params.data.securityCard ? params.data.securityCard : null;
     params.data.securityCard.state.isAtListCeiling = !!params && !!params.node ? !!params.node.firstChild : false;
-    const storedSelectedCard = this.tableData.state.selectedSecurityCard;
     if (this.tableName === 'tradeMain') {
       // only the table in Trade Center Panel will react to row clicks
       if (!!params && !!params.rowPinned && params.data.id.indexOf(this.constants.agGridPinnedFullWidthRowKeyword) >= 0) {
@@ -206,6 +204,8 @@ export class SantaTable implements OnInit, OnChanges {
         // clicking on a regular row in
         // this if checks whether the user is clicking on the entire row, or clicking on the security card
         // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
+        const targetCard = !!params && !!params.data && params.data.securityCard ? params.data.securityCard : null;
+        const storedSelectedCard = this.tableData.state.selectedSecurityCard;
         if (
           (!targetCard.state.isSelected && !storedSelectedCard) ||
           (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive) ||
@@ -260,6 +260,8 @@ export class SantaTable implements OnInit, OnChanges {
 
     if (!!params && !!params.data && !!params.data.securityCard) {
       // user intends to interact with security card menu
+      const targetCard = !!params && !!params.data && params.data.securityCard ? params.data.securityCard : null;
+      const storedSelectedCard = this.tableData.state.selectedSecurityCard;
       if (storedSelectedCard === null) {
         this.tableData.state.selectedSecurityCard = targetCard;
       } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
