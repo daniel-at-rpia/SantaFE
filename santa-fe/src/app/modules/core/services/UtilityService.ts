@@ -633,6 +633,18 @@ export class UtilityService {
       actionMenu.data.allActions = this.getSpecificActionsForSecurityActionMenu(actionMenu.data.allActions, parentAction);
       actionMenu.state.isDisplayLimitedActions = true;
     }
+
+    public resetActionMenuToDefaultState(
+      actionMenu: DTOs.SecurityActionMenuDTO,
+      isActive: boolean
+    ) {
+      actionMenu.data.selectedCoreAction = null;
+      actionMenu.state.isActive = isActive;
+      actionMenu.state.isCoreActionSelected = false;
+      if (actionMenu.data.allActions.length > 0) {
+        actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.level === 1);
+      }
+    }
   // shared end
 
   // market specific

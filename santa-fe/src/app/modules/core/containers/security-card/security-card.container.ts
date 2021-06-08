@@ -42,8 +42,7 @@ export class SecurityCard implements OnInit {
         this.cardData.data.actionMenu.state.isActive = true;
       } else {
         if (this.cardData.data.actionMenu) {
-          const parentAction = this.cardData.data.actionMenu.state.isDisplayLimitedActions ? this.constants.trade.SecurityActionMenuOptionsRawText.uofB : null;
-          this.cardData.data.actionMenu = this.dtoService.formSecurityActionMenuDTO(false, parentAction);
+          this.utilityService.resetActionMenuToDefaultState(this.cardData.data.actionMenu, false);
         }
       }
       if (!!this.cardData.api.onClickCard) {

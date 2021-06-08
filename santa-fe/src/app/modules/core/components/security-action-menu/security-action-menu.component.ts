@@ -26,21 +26,17 @@ export class SecurityActionMenu {
   };
   constructor(
     private bicsDataProcessingService: BICSDataProcessingService,
-    private dtoService: DTOService
+    private utilityService: UtilityService
   ) {}
-
-  public getClassWithPositioningIdentifier(action: Blocks.SecurityActionMenuOptionBlock): string {
-    return `${this.constants.actionBtnClass}--${action.positionIdentifier}`;
-  }
 
   public onClickCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
     const targetLevel = targetAction.level - 1;
     if (targetLevel > 0) {
       const previousAction = this.actionMenu.data.allActions.find((action: Blocks.SecurityActionMenuOptionBlock) => action.rawText === targetAction.parentAction);
       this.actionMenu.data.selectedCoreAction = previousAction;
-      this.getSubActionsFromSelectedAction(previousAction);
+      this.showNewSubActionsFromSelectedCoreAction(previousAction);
     } else {
-      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(true, null);
+      this.utilityService.resetActionMenuToDefaultState(this.actionMenu, true);
     }
   }
 
@@ -48,18 +44,16 @@ export class SecurityActionMenu {
     if (targetAction.subActions.length > 0) {
       this.actionMenu.state.isCoreActionSelected = true;
       targetAction.isAvailableSubAction = false;
-      this.getSubActionsFromSelectedAction(targetAction);
+      this.actionMenu.data.selectedCoreAction = targetAction;
+      this.showNewSubActionsFromSelectedCoreAction(targetAction);
     } else {
       this.getCallbacksForActions(targetAction);
-      this.actionMenu = this.dtoService.formSecurityActionMenuDTO(false, null);
+      this.utilityService.resetActionMenuToDefaultState(this.actionMenu, false);
     }
   }
 
-  private getSubActionsFromSelectedAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
-    this.actionMenu.data.selectedCoreAction = {...targetAction};
-    this.actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
-      action.isAvailableSubAction = targetAction.rawText === action.parentAction;
-    })
+  private showNewSubActionsFromSelectedCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
+    this.actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.parentAction === targetAction.rawText);
   }
 
 
