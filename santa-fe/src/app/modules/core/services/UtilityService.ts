@@ -642,7 +642,13 @@ export class UtilityService {
       actionMenu.state.isActive = isActive;
       actionMenu.state.isCoreActionSelected = false;
       if (actionMenu.data.allActions.length > 0) {
-        actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.level === 1);
+        if (actionMenu.state.isDisplayLimitedActions) {
+          actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
+            action.isAvailableSubAction = !action.parentAction || !actionMenu.data.allActions.find((selectedAction: Blocks.SecurityActionMenuOptionBlock) => selectedAction.rawText === action.parentAction);
+          });
+        } else {
+          actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.level === 1);
+        }
       }
     }
   // shared end
