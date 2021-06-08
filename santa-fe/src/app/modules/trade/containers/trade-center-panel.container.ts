@@ -24,7 +24,8 @@
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn,
       BEBICsHierarchyBlock,
-      BESecurityMap
+      BESecurityMap,
+      BESaveWatchlistReturn
     } from 'BEModels/backend-models.interface';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
@@ -504,7 +505,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               this.state.configurator.dto
             );
             this.populateSearchShortcuts();
-            this.startIndexedDBSub();
             this.indexSearchEngineBICS(serverReturn);
             this.store$.dispatch(new TradeBICSDataLoadedEvent());
           }
@@ -544,6 +544,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           shortcut.state.isAbleToSaveAsRecentWatchlist = false;
         })
       }
+      this.startIndexedDBSub();
+      this.populateSaveWatchlists();
     }
 
     private populateSingleShortcutList(
@@ -1699,6 +1701,22 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onChangeSavePresetName(newName: string) {
       this.state.currentSearch.previewShortcut.data.displayTitle = newName;
+    }
+
+    private populateSaveWatchlists() {
+      const payload = {}
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSavedWatchlists, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn: BESaveWatchlistReturn) => {
+          if (!!serverReturn) {
+            
+          }
+        }),
+        catchError(err => {
+          this.restfulCommService.logError('Cannot retrieve saved watchlist data');
+          return of('error');
+        })
+      ).subscribe()
     }
   // Save Preset End
 }

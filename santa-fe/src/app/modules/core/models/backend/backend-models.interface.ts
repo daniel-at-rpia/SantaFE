@@ -813,3 +813,22 @@ interface BEStructuringSetViewReturnEntry {
     }
   }
 }
+
+export interface BESaveWatchlistReturn {
+  [property: string]: BESaveWatchlistDTO;
+}
+
+interface BESaveWatchlistDTO {
+  id: string;
+  userName: string;
+  title: string;
+  creationTime: string;
+  lastModifiedTime: string;
+  headerOverwrites: Array<object>;
+  groupFilters: {
+    [property: string]: Array<string>;
+  }
+  groupParameters: object;
+  alertConfigID: string;
+  groupFilterString: string;
+}
