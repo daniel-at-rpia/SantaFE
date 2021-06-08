@@ -1,9 +1,8 @@
 import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import * as globalConstants from 'Core/constants';
 import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
-import { SecurityActionMenuOptionsRawText } from '../../constants/tradeConstants.constant';
 import { BICSDataProcessingService } from 'Core/services/BICSDataProcessingService';
-import { DTOService } from 'Core/services/DTOService';
+import { UtilityService } from 'Core/services/UtilityService';
 
 @Component({
   selector: 'security-action-menu',

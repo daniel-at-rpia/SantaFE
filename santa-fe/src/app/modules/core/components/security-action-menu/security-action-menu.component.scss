@@ -1,6 +1,15 @@
 @import "global.scss";
 $circleWidth: 6rem;
 $circleAlignment: $circleWidth / 2 + $spacing_x_small;
+@mixin setBtnPositioning($x, $y) {
+  @include mix_fixed_div(absolute, $z_index_base_item_solid);
+  transform: translate($x, $y) scale(1);
+  &:hover,
+  &:focus {
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    transform: translate($x, $y) scale(1.5);
+  }
+}
 .sat-securityActionMenu {
   $blockName: &;
   &__content {
@@ -32,10 +41,12 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
       }
     }
     &-actionBtn {
-      @include mix_fixed_div(absolute, $z_index_base_item_solid);
+      @include mix_fixed_div(absolute, $z_index_base_item);
       @include material();
       @include mix_alive('light');
-      transform: scale(0.001);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%) scale(0.01);
       &--noIconState {
         & > span {
           display: flex;
@@ -53,7 +64,6 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
         }
       }
       &--hasSubActionsState{
-        @include mix_border_generator($typical_border_width, $color_active);
         #{$blockName} {
           &__content {
             &-actionBtn {
@@ -73,46 +83,48 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
         &:hover,
         &:focus {
           #{$blockName} {
-            &__content-actionBtn-icon {
-              transform: translate(0,0) scale(0.7);
-            }
-            &__content-actionBtn-text {
-              transform: translate(0,0);
+            &__content {
+              &-actionBtn {
+                &-icon {
+                  transform: translate(0,0) scale(0.7);
+                }
+                &-text {
+                  transform: translate(0,0);
+                }
+              }
             }
           }
         }
       }
-      &--oneoftwo,
-      &--oneofthree,
-      &--oneoffour {
-        top: -.5rem;
-        left: -1rem;
-        transform: scale(1);
-      }
-      &--twooftwo,
-      &--twoofthree,
-      &--twooffour {
-        top: -.5rem;
-        right: -1rem;
-        transform: scale(1);
-      }
-      &--threeofthree {
-        bottom: -1.5rem;
-        transform: scale(1);
-      }
-      &--threeoffour {
-        bottom: -1rem;
-        right: -1rem;
-        transform: scale(1);
-      }
-      &--fouroffour {
-        bottom: -1rem;
-        left: -1rem;
-        transform: scale(1);
-      }
+      &--isAvailableSubAction {
+        &.sat-securityActionMenu {
+          &__content {
+            &-actionBtn {
+              &--oneoftwo,
+              &--oneofthree,
+              &--oneoffour {
+                @include setBtnPositioning(-4rem, -3.5rem);
+              }
+              &--twooftwo,
+              &--twoofthree,
+              &--twooffour {
+                @include setBtnPositioning(1rem, -3.5rem);
+              }
+              &--threeofthree {
+                @include setBtnPositioning(-50%, 1.5rem);
+              }
+              &--threeoffour {
+                @include setBtnPositioning(-4rem, 1rem);
+              }
+              &--fouroffour {
+                @include setBtnPositioning(1rem, 1.5rem);}
+              }
+            }
+          }
+        }
       &:hover,
       &:focus {
-        @include mix_fixed_div(absolute, $z_index_hovering_item_lift);
+        transform: translate(-50%,-50%) scale(0.01);
       }
     }
   }
@@ -133,12 +145,4 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
       }
     }
   }
-  // &--isDisplayLimitedActionsState {
-  //   #{$blockName} {
-  //     top: -$spacing_large;
-  //     &__content {
-  //       background-color: transparent;
-  //     }
-  //   }
-  // }
 }

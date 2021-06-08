@@ -5,12 +5,23 @@
     'sat-securityActionMenu--isDisplayLimitedActionsState': actionMenu.state.isDisplayLimitedActions
   }">
   <section class="sat-securityActionMenu__content">
-    <button class="santaBtn--circleLabelled sat-securityActionMenu__content-actionBtn santaBtn--circleLabelled"
-    [ngClass]="[
-     !action.icon ? 'sat-securityActionMenu__content-actionBtn--noIconState' : '',
-     action.subActions.length > 0 ? 'sat-securityActionMenu__content-actionBtn--hasSubActionsState': '',
-     action.isAvailableSubAction ? getClassWithPositioningIdentifier(action) : ''
-    ]"
+    <button
+      [ngClass]="{
+        'santaBtn--circleLabelled': true,
+        'sat-securityActionMenu__content-actionBtn': true,
+        'sat-securityActionMenu__content-actionBtn--noIconState': !action.icon,
+        'sat-securityActionMenu__content-actionBtn--hasSubActionsState': action.subActions.length > 0,
+        'sat-securityActionMenu__content-actionBtn--isAvailableSubAction': action.isAvailableSubAction,
+        'sat-securityActionMenu__content-actionBtn--oneoftwo': action.positionIdentifier === 'oneoftwo',
+        'sat-securityActionMenu__content-actionBtn--oneofthree': action.positionIdentifier === 'oneofthree',
+        'sat-securityActionMenu__content-actionBtn--oneoffour': action.positionIdentifier === 'oneoffour',
+        'sat-securityActionMenu__content-actionBtn--twooftwo': action.positionIdentifier === 'twooftwo',
+        'sat-securityActionMenu__content-actionBtn--twoofthree': action.positionIdentifier === 'twoofthree',
+        'sat-securityActionMenu__content-actionBtn--twooffour': action.positionIdentifier === 'twooffour',
+        'sat-securityActionMenu__content-actionBtn--threeofthree': action.positionIdentifier === 'threeofthree',
+        'sat-securityActionMenu__content-actionBtn--threeoffour': action.positionIdentifier === 'threeoffour',
+        'sat-securityActionMenu__content-actionBtn--fouroffour': action.positionIdentifier === 'fouroffour'
+      }"
      *ngFor="let action of actionMenu.data.allActions" (click)="onClickSubAction(action)">
       <i class="sat-securityActionMenu__content-actionBtn-icon {{action.subActions.length > 0 ? 'fal fa-angle-double-down' : action.icon}}"></i>
       <span class="sat-securityActionMenu__content-actionBtn-text">{{action.displayTitle}}</span>
