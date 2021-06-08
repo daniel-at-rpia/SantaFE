@@ -107,7 +107,7 @@ export class StructureSetBulkOverrides extends SantaContainerComponentBase imple
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
       this.state.configurator.newOverrideNameCache = null;
-      const simpleBucket: AdhocPacks.GenericKeyWithStringArrayBlock = this.utilityService.getSimpleBucketFromConfigurator(params);
+      const simpleBucket: AdhocPacks.GenericKeyWithStringArrayBlock = this.utilityService.getBackendGroupFilterFrom(params);
       let bucketToString = '';
       params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
         eachItem.filterBy.forEach((eachValue: string, index: number) => {

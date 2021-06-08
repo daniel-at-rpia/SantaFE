@@ -296,6 +296,33 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       }
     }
   }
+  &--presetSaveCallingAPI {
+    #{$blockName} {
+      &__utilities {
+        &-selectedPreset {
+          background-color: $color_active;
+          &>search-shortcut {
+            width: 30rem;
+          }
+          &-save {
+            @include material('none');
+            background-color: $color_active;
+            transform: scale(1.0);
+            margin-left: 0;
+            display: none;
+          }
+          &-submit {
+            @include material('none');
+            display: flex;
+            background-color: $color_active;
+          }
+          &-unactivate {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
   &--editingDriverState {
     #{$blockName} {
       &__utilities-driver {

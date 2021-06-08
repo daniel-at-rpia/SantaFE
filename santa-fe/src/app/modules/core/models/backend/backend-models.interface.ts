@@ -818,17 +818,17 @@ export interface BESaveWatchlistReturn {
   [property: string]: BESaveWatchlistDTO;
 }
 
-interface BESaveWatchlistDTO {
-  id: string;
-  userName: string;
+export interface BESaveWatchlistDTO {
   title: string;
-  creationTime: string;
-  lastModifiedTime: string;
   headerOverwrites: Array<object>;
   groupFilters: {
     [property: string]: Array<string>;
   }
   groupParameters: object;
-  alertConfigID: string;
-  groupFilterString: string;
+  id?: string;
+  userName?: string;
+  creationTime?: string;
+  lastModifiedTime?: string;
+  alertConfigID?: string;
+  groupFilterString?: string;
 }

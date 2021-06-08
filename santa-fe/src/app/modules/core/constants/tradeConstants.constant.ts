@@ -11,7 +11,8 @@ export enum TradeCenterPanelSearchSaveModes {
   default = 'Default',
   available = 'Available',
   active = 'Active',
-  error = 'Error'
+  error = 'Error',
+  callingAPI = 'CallingAPI'
 }
 
 const allPortfolios: Stubs.SearchShortcutIncludedDefinitionStub = {

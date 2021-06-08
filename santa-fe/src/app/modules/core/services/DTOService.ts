@@ -507,6 +507,22 @@ export class DTOService {
     })
   };
 
+  public populateHighlightSelectedOptionListForDefinition(
+    targetDefinition: DTOs.SecurityDefinitionDTO,
+    options: Array<string>,
+    bicsLevel?: number
+  ) {
+    targetDefinition.data.highlightSelectedOptionList = this.generateSecurityDefinitionFilterOptionList(
+      targetDefinition.data.key,
+      options,
+      bicsLevel
+    );
+    targetDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+      eachOption.isSelected = true;
+    });
+    targetDefinition.state.filterActive = options.length > 0;
+  }
+
   public generateSecurityDefinitionFilterIndividualOption(
     definitionKey: string,
     option: string,
@@ -2831,8 +2847,14 @@ export class DTOService {
     bicsLevel: number
   ): boolean {
     const code = this.bicsDictionaryLookupService.BICSNameToBICSCode(option, bicsLevel);
-    const subCodes = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(code);
-    return subCodes.length === 0;
+    if(!!code) {
+      const subCodes = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(code);
+      return subCodes.length === 0;
+    } else {
+      // need to flag this manually because sometimes it get caught by the "catchError" Rxjs operator
+      console.warn('issue at checkBICSConfiguratorOptionAsDeepestLevel(), code is null');
+      return true;
+    }
   }
 
   private formSecurityDefinitionObjectCheckForWithinSelectedGroup(targetKey: string): boolean {

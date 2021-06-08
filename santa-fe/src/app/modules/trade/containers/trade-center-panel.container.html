@@ -9,7 +9,8 @@
     'sat-tradeCenterPanel--initialDataLoaded': state.fetchResult.initialDataLoadedInternalSyncFlag,
     'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount,
     'sat-tradeCenterPanel--presetSaveAvail': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.available,
-    'sat-tradeCenterPanel--presetSaveActive': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.active
+    'sat-tradeCenterPanel--presetSaveActive': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.active,
+    'sat-tradeCenterPanel--presetCallingAPI': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.callingAPI
   }">
   <section class="sat-tradeCenterPanel__presets">
     <div class="sat-tradeCenterPanel__presets-content">
@@ -331,7 +332,13 @@
         <span>Save This Preset</span>
       </button>
       <button (click)="onSubmitSaveWatchlist()" class="sat-tradeCenterPanel__utilities-selectedPreset-submit santaBtn--labelled santaBtn--inverseLabelled">
-        <i class="fal fa-cloud-upload"></i>
+        <i
+          [ngClass]="{
+            'fal': true,
+            'fa-cloud-upload': state.currentSearch.saveMode !== constants.trade.TradeCenterPanelSearchSaveModes.callingAPI,
+            'fa-circle-notch fa-spin': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.callingAPI
+          }">
+        </i>
         <span>Submit</span>
       </button>
       <button (click)="onUnactivate()" class="sat-tradeCenterPanel__utilities-selectedPreset-unactivate santaBtn--small santaBtn--iconOnly fal fa-times"></button>

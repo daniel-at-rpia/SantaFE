@@ -25,12 +25,14 @@
       BEFetchAllTradeDataReturn,
       BEBICsHierarchyBlock,
       BESecurityMap,
-      BESaveWatchlistReturn
+      BESaveWatchlistReturn,
+      BESaveWatchlistDTO
     } from 'BEModels/backend-models.interface';
     import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
     import {
       CoreUserLoggedIn,
-      CoreGlobalWorkflowSendNewState
+      CoreGlobalWorkflowSendNewState,
+      CoreSendNewAlerts
     } from 'Core/actions/core.actions';
     import {
       selectLiveUpdateTick,
@@ -628,7 +630,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     private fetchAllData(isInitialFetch: boolean) {
-      const packedGroupFilters = this.utilityService.getSimpleBucketFromConfigurator({filterList: this.state.filters.securityFilters});
+      const packedGroupFilters = this.utilityService.getBackendGroupFilterFrom({filterList: this.state.filters.securityFilters});
       if (isInitialFetch && this.existFetchResultContainsNewSearchFilters(packedGroupFilters)) {
         this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
         this.loadDataForMainTable(this.state.fetchResult.lastFetchServerReturn);
@@ -1689,14 +1691,59 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     public onSubmitSaveWatchlist() {
-      this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.default;
+      this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.callingAPI;
+      const targetWatchlist = this.state.currentSearch.previewShortcut;
       const matchedExistingRecentWatchlist = this.state.presets.recentWatchlistShortcuts.fullList.find((eachRecentWatchlist) => {
         // right now we can just check on the uuid because when a new search is applied, if its scope matches any recent watchlist, that watchlist is automatically being used, so it always has the uuid of an existing recent watchlist if there is a match 
-        return eachRecentWatchlist.data.uuid === this.state.currentSearch.previewShortcut.data.uuid;
+        return eachRecentWatchlist.data.uuid === targetWatchlist.data.uuid;
       });
       if (!!matchedExistingRecentWatchlist) {
-        this.updateWatchlist(matchedExistingRecentWatchlist, false, this.state.currentSearch.previewShortcut.data.displayTitle);
+        this.updateWatchlist(matchedExistingRecentWatchlist, false, targetWatchlist.data.displayTitle);
       }
+      const payload: BESaveWatchlistDTO = {
+        title: targetWatchlist.data.displayTitle,
+        id: targetWatchlist.data.uuid,
+        groupParameters: {},
+        headerOverwrites: [],
+        groupFilters: {}
+      }
+      payload.groupFilters = this.utilityService.getBackendGroupFilterFromWatchlist(targetWatchlist);
+      this.restfulCommService.callAPI(this.restfulCommService.apiMap.createSavedWatchlist, {req: 'POST'}, payload).pipe(
+        first(),
+        tap((serverReturn: boolean) => {
+          if (!!serverReturn) {
+            const alert = this.dtoService.formSystemAlertObject(
+              'Watchlist',
+              'Saved',
+              `${this.state.currentSearch.previewShortcut.data.displayTitle}`,
+              null
+            );
+            this.store$.dispatch(new CoreSendNewAlerts([alert]));
+            this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.default;
+            this.populateSaveWatchlists();
+          } else {
+            const alert = this.dtoService.formSystemAlertObject(
+              'Watchlist',
+              'Save Failed',
+              `${this.state.currentSearch.previewShortcut.data.displayTitle}`,
+              null
+            );
+            this.store$.dispatch(new CoreSendNewAlerts([alert]));
+            this.restfulCommService.logError('Cannot saved watchlist');
+          }
+        }),
+        catchError(err => {
+          const alert = this.dtoService.formSystemAlertObject(
+            'Failed Save Watchlist',
+            '',
+            `${this.state.currentSearch.previewShortcut.data.displayTitle}`,
+            null
+          );
+          this.store$.dispatch(new CoreSendNewAlerts([alert]));
+          this.restfulCommService.logError('Cannot saved watchlist');
+          return of('error');
+        })
+      ).subscribe();
     }
 
     public onChangeSavePresetName(newName: string) {
@@ -1705,11 +1752,43 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     private populateSaveWatchlists() {
       const payload = {}
+      this.state.presets.savedWatchlistShortcutList = [];
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSavedWatchlists, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: BESaveWatchlistReturn) => {
           if (!!serverReturn) {
-            
+            for (const eachKey in serverReturn) {
+              const definitionList = [];
+              if (serverReturn[eachKey].groupFilters) {
+                for (const eachFilterKey in serverReturn[eachKey].groupFilters) {
+                  const eachFilter = serverReturn[eachKey].groupFilters[eachFilterKey];
+                  const eachFEKey = this.utilityService.convertBEKey(eachFilterKey);
+                  if (eachFEKey !== 'n/a' && !!this.constants.definition.SecurityDefinitionMap[eachFEKey]) {
+                    const eachDefinition = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap[eachFEKey]);
+                    this.dtoService.populateHighlightSelectedOptionListForDefinition(eachDefinition, eachFilter);
+                    if (eachFEKey === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+                      eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.highlightSelectedOptionList.map((eachOptionBlock) => {
+                        return this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+                            eachFEKey,
+                            this.bicsDictionaryLookupService.BICSCodeToBICSName(eachOptionBlock.shortKey),
+                            this.bicsDictionaryLookupService.getBICSLevel(eachOptionBlock.shortKey)
+                          );
+                      });
+                    }
+                    definitionList.push(eachDefinition);
+                  }
+                } 
+              }
+              const eachWatchList = this.dtoService.formSearchShortcutObject(
+                definitionList,
+                serverReturn[eachKey].title,
+                false,
+                false,
+                false
+              );
+              eachWatchList.data.uuid = serverReturn[eachKey].id;
+              this.state.presets.savedWatchlistShortcutList.push(eachWatchList);
+            }
           }
         }),
         catchError(err => {
