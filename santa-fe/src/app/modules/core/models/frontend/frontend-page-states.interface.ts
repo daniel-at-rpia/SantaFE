@@ -135,6 +135,7 @@ export interface TradeCenterPanelState {
       lastWeekList: Array<DTOs.SearchShortcutDTO>
     }
     savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    savedWatchlistDeleteActivated: boolean;
     trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
   }
   searchEngine: {

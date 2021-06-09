@@ -109,6 +109,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             lastWeekList: []
           },
           savedWatchlistShortcutList: [],
+          savedWatchlistDeleteActivated: false,
           trendingWatchlistShortcutList: []
         },
         searchEngine: {
@@ -1452,6 +1453,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       );
       shortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(shortcut);
       this.onSelectPreset(shortcut, true);
+      this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.available;
     }
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {
@@ -1746,6 +1748,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onChangeSavePresetName(newName: string) {
       this.state.currentSearch.previewShortcut.data.displayTitle = newName;
+    }
+
+    public onToggleSavedWatchlistDeleteMode() {
+      this.state.presets.savedWatchlistDeleteActivated = !this.state.presets.savedWatchlistDeleteActivated;
+      this.state.presets.savedWatchlistShortcutList.forEach((eachWatchlist) => {
+        eachWatchlist.state.isUserInputBlocked = this.state.presets.savedWatchlistDeleteActivated;
+      });
+    }
+
+    public onClickDeleteWatchlist(targetWatchlist: DTOs.SearchShortcutDTO) {
+      if (this.state.presets.savedWatchlistDeleteActivated) {
+        
+      }
     }
 
     private populateSaveWatchlists() {

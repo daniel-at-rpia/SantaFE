@@ -75,9 +75,17 @@
           'sat-tradeCenterPresetShortcutCanvas--categorySelectedState': state.presets.selectedList,
           'sat-tradeCenterPresetShortcutCanvas--topCategorySelectedState': !!state.presets.selectedCategoryFromTop,
           'sat-tradeCenterPresetShortcutCanvas--bottomCategorySelectedState': !!state.presets.selectedCategoryFromBottom,
-          'sat-tradeCenterPresetShortcutCanvas--timeSpecificCategoryState': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList
+          'sat-tradeCenterPresetShortcutCanvas--timeSpecificCategoryState': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList,
+          'sat-tradeCenterPresetShortcutCanvas--utilitiesAvailable': state.presets.selectedList === state.presets.savedWatchlistShortcutList,
+          'sat-tradeCenterPresetShortcutCanvas--deleteModeActivated': state.presets.savedWatchlistDeleteActivated
         }">
-        <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay">
+        <section class="sat-tradeCenterPresetShortcutCanvas__utilities">
+          <button (click)="onToggleSavedWatchlistDeleteMode()" class="sat-tradeCenterPresetShortcutCanvas__utilities-deleteMode santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="fal fa-eraser"></i>
+            <span>Delete Mode</span>
+          </button>
+        </section>
+        <section class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay">
           <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block">
             <span class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-title">Today:</span>
             <ul class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list">
@@ -129,7 +137,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </section>
         <ul class="sat-tradeCenterPresetShortcutCanvas__list">
           <li
             *ngFor="let eachShortcut of state.presets.selectedList"
@@ -138,6 +146,7 @@
               'sat-tradeCenterPresetShortcutCanvas__list-item--major': eachShortcut.state.isMajorShortcut,
               'sat-tradeCenterPresetShortcutCanvas__list-item--hero': eachShortcut.state.isHeroShortcut
             }">
+            <button (click)="onClickDeleteWatchlist(eachShortcut)" class="sat-tradeCenterPresetShortcutCanvas__list-item-deleteBtn santaBtn--iconOnly fal fa-eraser"></button>
             <search-shortcut
               [shortcutData]="eachShortcut"
               (onClickShortcutCallback)="onSelectPreset($event, true)"
