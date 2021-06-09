@@ -844,6 +844,20 @@ export class UtilityService {
       return selectedDefinitionBundle;
     }
 
+    public getDefinitionFromDefinitionBundle(
+      targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      targetBundleKey: globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels,
+      targetKey: string
+    ): DTOs.SecurityDefinitionDTO {
+      const definitionBundle = this.getDefinitionBundleFromConfigurator(targetConfigurator, targetBundleKey);
+      if (!!definitionBundle) {
+        const definition = definitionBundle.data.list.find((definition: DTOs.SecurityDefinitionDTO) => definition.data.key === targetKey);
+        return definition;
+      } else {
+        return null;
+      }
+    }
+
     // TODO: move this into a SecurityTableHelper service
     private retrieveSecurityMetricFromMetricPack(dto: DTOs.SecurityDTO, header: DTOs.SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {

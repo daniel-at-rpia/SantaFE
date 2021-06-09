@@ -186,6 +186,14 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public triggerApplyFilter() {
+    // Quoted Today to be selected if user clears all definitions from select group and clicks Apply
+    const selectedDefinitionBundle = this.utilityService.getDefinitionBundleFromConfigurator(this.configuratorData, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+    if (selectedDefinitionBundle.data.list.length === 0) {
+      const quotedTodayDefinition = this.utilityService.getDefinitionFromDefinitionBundle(this.configuratorData, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.standard, this.constants.definition.SecurityDefinitionMap.QUOTED_TODAY.key);
+      const activeOption = quotedTodayDefinition.data.displayOptionList.find((option: Blocks.SecurityDefinitionFilterBlock) => option.shortKey === 'Y');
+      quotedTodayDefinition.data.highlightSelectedOptionList.push(activeOption);
+      activeOption.isSelected = true;
+    }
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.groupByDisabled && this.onClickDefinition(this.configuratorData.state.showFiltersFromDefinition, true);
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.configuratorData);
