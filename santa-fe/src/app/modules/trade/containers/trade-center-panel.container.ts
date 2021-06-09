@@ -573,12 +573,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
                   return selectedOption;
               });
             } else {
-              definitionDTO.data.displayOptionList.forEach((eachFilterOption) => {
-                if (eachIncludedDef.selectedOptions.indexOf(eachFilterOption.shortKey) >= 0) {
-                  eachFilterOption.isSelected = true;
-                  definitionDTO.data.highlightSelectedOptionList.push(eachFilterOption);
-                }
-              });
+              this.dtoService.populateHighlightSelectedOptionListForDefinition(
+                definitionDTO,
+                eachIncludedDef.selectedOptions
+              );
             }
           }
           return definitionDTO;

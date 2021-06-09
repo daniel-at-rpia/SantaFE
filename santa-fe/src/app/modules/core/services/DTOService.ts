@@ -507,6 +507,7 @@ export class DTOService {
     })
   };
 
+  // we are writing this logic to populate highlightSelectedOptionList natively in many places now, let's push for some consistency so it's easier to maintain. This should be the standard way to ingest a list of strings into a definition as filters, whether that list of strings is from backend, or from our FE stubs
   public populateHighlightSelectedOptionListForDefinition(
     targetDefinition: DTOs.SecurityDefinitionDTO,
     options: Array<string>,
@@ -519,6 +520,12 @@ export class DTOService {
     );
     targetDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
       eachOption.isSelected = true;
+    });
+    targetDefinition.data.displayOptionList.forEach((eachOption) => {
+      const isSelected = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+        return eachSelectedOption.key === eachOption.key;
+      });
+      eachOption.isSelected = !!isSelected;
     });
     targetDefinition.state.filterActive = options.length > 0;
   }
@@ -535,7 +542,7 @@ export class DTOService {
       displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
       bicsLevel: bicsLevel || null,
       shortKey: normalizedOption,
-      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`,
+      key: !!bicsLevel ? `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}` : `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}`,
       isDeepestLevel: !!bicsLevel ? this.checkBICSConfiguratorOptionAsDeepestLevel(option, bicsLevel) : false
     }
     if (definitionKey === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
