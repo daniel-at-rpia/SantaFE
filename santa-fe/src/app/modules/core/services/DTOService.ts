@@ -2913,19 +2913,19 @@ export class DTOService {
 
   public formSecurityActionMenuDTO(
     isActive: boolean,
-    parentAction: globalConstants.trade.SecurityActionMenuOptionsRawText,
+    coreAction: globalConstants.trade.SecurityActionMenuOptionsRawText,
   ): DTOs.SecurityActionMenuDTO {
     const menuListCopy = this.utility.deepCopy(globalConstants.trade.SecurityActionMenuList);
     const object: DTOs.SecurityActionMenuDTO = {
       data: {
         defaultText: 'Security Actions',
         selectedCoreAction: null,
-        allActions: !!parentAction ? this.utility.getSpecificActionsForSecurityActionMenu(menuListCopy, parentAction) : menuListCopy
+        allActions: !!coreAction ? this.utility.getSpecificActionsForSecurityActionMenu(menuListCopy, coreAction) : menuListCopy
       },
       state: {
         isActive,
         isCoreActionSelected: false,
-        isDisplayLimitedActions: !!parentAction
+        isDisplayLimitedActions: !!coreAction
       }
     }
     this.applyPositioningIdentifiersToSubActions(object.data.allActions);
@@ -2936,11 +2936,11 @@ export class DTOService {
     if (actions.length > 0) {
       const actionGroupMapping: {[property:string]: Array<Blocks.SecurityActionMenuOptionBlock> } = {};
       actions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
-        if (!actionGroupMapping[action.parentAction]) {
-          let actionGroup = actions.filter((eachAction: Blocks.SecurityActionMenuOptionBlock) => eachAction.parentAction === action.parentAction);
-          actionGroupMapping[action.parentAction] = actionGroup;
+        if (!actionGroupMapping[action.coreAction]) {
+          let actionGroup = actions.filter((eachAction: Blocks.SecurityActionMenuOptionBlock) => eachAction.coreAction === action.coreAction);
+          actionGroupMapping[action.coreAction] = actionGroup;
         }
-        const selectedGroup = actionGroupMapping[action.parentAction];
+        const selectedGroup = actionGroupMapping[action.coreAction];
         const totalCount = selectedGroup.length;
         const index = selectedGroup.findIndex((eachAction: Blocks.SecurityActionMenuOptionBlock) => eachAction.rawText === action.rawText);
         if (index >= 0) {

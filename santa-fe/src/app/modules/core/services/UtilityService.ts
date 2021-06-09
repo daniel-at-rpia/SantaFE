@@ -628,9 +628,9 @@ export class UtilityService {
 
     public applySpecificListForActionMenu(
       actionMenu: DTOs.SecurityActionMenuDTO,
-      parentAction: globalConstants.trade.SecurityActionMenuOptionsRawText
+      coreAction: globalConstants.trade.SecurityActionMenuOptionsRawText
     ) {
-      actionMenu.data.allActions = this.getSpecificActionsForSecurityActionMenu(actionMenu.data.allActions, parentAction);
+      actionMenu.data.allActions = this.getSpecificActionsForSecurityActionMenu(actionMenu.data.allActions, coreAction);
       actionMenu.state.isDisplayLimitedActions = true;
     }
 
@@ -644,7 +644,7 @@ export class UtilityService {
       if (actionMenu.data.allActions.length > 0) {
         if (actionMenu.state.isDisplayLimitedActions) {
           actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
-            action.isAvailableSubAction = !action.parentAction || !actionMenu.data.allActions.find((selectedAction: Blocks.SecurityActionMenuOptionBlock) => selectedAction.rawText === action.parentAction);
+            action.isAvailableSubAction = !action.coreAction || !actionMenu.data.allActions.find((selectedAction: Blocks.SecurityActionMenuOptionBlock) => selectedAction.rawText === action.coreAction);
           });
         } else {
           actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.level === 1);
@@ -1407,10 +1407,10 @@ export class UtilityService {
 
     public getSpecificActionsForSecurityActionMenu(
       actionList: Array<Blocks.SecurityActionMenuOptionBlock>,
-      parentAction: globalConstants.trade.SecurityActionMenuOptionsRawText
+      coreAction: globalConstants.trade.SecurityActionMenuOptionsRawText
     ): Array<Blocks.SecurityActionMenuOptionBlock> {
       if (actionList.length > 0) {
-        const selectedActions = actionList.filter((action: Blocks.SecurityActionMenuOptionBlock) => action.parentAction === parentAction);
+        const selectedActions = actionList.filter((action: Blocks.SecurityActionMenuOptionBlock) => action.coreAction === coreAction);
         if (selectedActions.length > 0) {
           selectedActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = true);
           return selectedActions;

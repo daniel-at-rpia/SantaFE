@@ -481,7 +481,7 @@ export interface SecurityActionMenuOptionBlock {
   displayTitle: SecurityActionMenuOptionsDisplayText;
   icon: string;
   level: number;
-  parentAction: SecurityActionMenuOptionsRawText;
+  coreAction: SecurityActionMenuOptionsRawText;
   subActions: Array<SecurityActionMenuOptionsRawText>;
   rawText: SecurityActionMenuOptionsRawText;
   positionIdentifier: string;

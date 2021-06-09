@@ -32,9 +32,9 @@ export class SecurityActionMenu {
   public onClickCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
     const targetLevel = targetAction.level - 1;
     if (targetLevel > 0) {
-      const previousAction = this.actionMenu.data.allActions.find((action: Blocks.SecurityActionMenuOptionBlock) => action.rawText === targetAction.parentAction);
-      this.actionMenu.data.selectedCoreAction = previousAction;
-      this.showNewSubActionsFromSelectedCoreAction(previousAction);
+      const coreAction = this.actionMenu.data.allActions.find((action: Blocks.SecurityActionMenuOptionBlock) => action.rawText === targetAction.coreAction);
+      this.actionMenu.data.selectedCoreAction = coreAction;
+      this.showNewSubActionsFromSelectedCoreAction(coreAction);
     } else {
       this.utilityService.resetActionMenuToDefaultState(this.actionMenu, true);
     }
@@ -53,7 +53,7 @@ export class SecurityActionMenu {
   }
 
   private showNewSubActionsFromSelectedCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
-    this.actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.parentAction === targetAction.rawText);
+    this.actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.coreAction === targetAction.rawText);
   }
 
 
