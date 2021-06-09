@@ -1,19 +1,13 @@
   // dependencies
-    import { Component, OnInit, OnChanges, ViewEncapsulation, Input, Output, EventEmitter, isDevMode } from '@angular/core';
+    import { Component, OnInit, OnChanges, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
     import { of } from 'rxjs';
-    import { tap, first, delay, catchError } from 'rxjs/operators';
+    import { tap, first, catchError } from 'rxjs/operators';
     import { DTOs, Blocks, AdhocPacks } from 'Core/models/frontend';
     import { DTOService } from 'Core/services/DTOService';
     import { RestfulCommService } from 'Core/services/RestfulCommService';
     import { UtilityService } from 'Core/services/UtilityService';
     import { BICSDataProcessingService } from 'App/modules/core/services/BICSDataProcessingService';
-    import {
-      ConfiguratorDefinitionLayout,
-      DEFINITION_CAPPED_THRESHOLD,
-      SecurityDefinitionMap,
-      DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD,
-      SecurityDefinitionConfiguratorGroupLabels
-    } from 'Core/constants/securityDefinitionConstants.constant';
+    import * as globalConstants from 'Core/constants';
     import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
   //
 
@@ -33,11 +27,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   lastExecutedConfiguration: DTOs.SecurityDefinitionConfiguratorDTO;
   @Output() buryConfigurator = new EventEmitter();
   @Output() boostConfigurator = new EventEmitter();
-  constants = {
-    map: SecurityDefinitionMap,
-    cappedAmount: DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD,
-    securityDefinitionLabel: SecurityDefinitionConfiguratorGroupLabels
-  }
+  constants = globalConstants;
 
   constructor(
     private dtoService: DTOService,
@@ -69,10 +59,10 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         // no last executed config means it is being initialized for the first time
         this.configuratorData.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
-            if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
+            if (eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.COUNTRY.key) {
               this.fetchCountryCode(eachDefinition);
             }
-            if (eachDefinition.data.key === this.constants.map.TICKER.key) {
+            if (eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.TICKER.key) {
               this.fetchTicker(eachDefinition);
             }
           });
@@ -155,7 +145,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       }
     });
     targetDefinition.state.filterActive = filterActive;
-    if (targetDefinition.data.configuratorCoreDefinitionGroup === SecurityDefinitionConfiguratorGroupLabels.selected) {
+    if (targetDefinition.data.configuratorCoreDefinitionGroup === this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected) {
       this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.configuratorData, targetDefinition, true);
     }
     if (this.configuratorData.state.groupByDisabled) {
@@ -170,7 +160,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       if (newKeyword.length >= 0) {
         if (this.configuratorData.state.showFiltersFromDefinition.state.isFilterCapped) {
           if (!hasAppliedFilter) {
-            this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = newKeyword !== '' ? this.utilityService.getCustomDisplayOptionListForConfiguator(newKeyword, this.configuratorData, this.constants.cappedAmount) : [];
+            this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList = newKeyword !== '' ? this.utilityService.getCustomDisplayOptionListForConfiguator(newKeyword, this.configuratorData, this.constants.definition.DEFINITION_DISPLAY_OPTION_CAPPED_THRESHOLD) : [];
           }
         } else {
           this.configuratorData.state.showFiltersFromDefinition.data.displayOptionList.forEach((eachOption) => {
@@ -268,12 +258,12 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
 
   private checkFilterCanApply(): boolean {
     let canApply = false;
-    const parsedLastExecueted = this.lastExecutedConfiguration.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
-    const parsedcurrentConfiguration = this.configuratorData.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== SecurityDefinitionConfiguratorGroupLabels.selected);
+    const parsedLastExecueted = this.lastExecutedConfiguration.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+    const parsedCurrentConfiguration = this.configuratorData.data.definitionList.filter((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label !== this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
     const prevCompareCopy = this.utilityService.deepCopy(this.lastExecutedConfiguration);
     const currentCompareCopy = this.utilityService.deepCopy(this.configuratorData);
     prevCompareCopy.data.definitionList = parsedLastExecueted;
-    currentCompareCopy.data.definitionList = parsedcurrentConfiguration;
+    currentCompareCopy.data.definitionList = parsedCurrentConfiguration;
     currentCompareCopy.data.definitionList.forEach((eachDefinitionBundle, bundleIndex) => {
       eachDefinitionBundle.data.list.forEach((eachDefinition, definitionIndex) => {
         const activeFilters = eachDefinition.state.isConsolidatedBICSVariant || eachDefinition.state.isFilterCapped ? eachDefinition.data.highlightSelectedOptionList.filter((eachOption) => {
@@ -344,6 +334,6 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: DTOs.SecurityDefinitionDTO): boolean {
-    return !!targetDefinition.data.prinstineFilterOptionList ? targetDefinition.data.prinstineFilterOptionList.length > DEFINITION_CAPPED_THRESHOLD : false;
+    return !!targetDefinition.data.prinstineFilterOptionList ? targetDefinition.data.prinstineFilterOptionList.length > this.constants.definition.DEFINITION_CAPPED_THRESHOLD : false;
   }
 }

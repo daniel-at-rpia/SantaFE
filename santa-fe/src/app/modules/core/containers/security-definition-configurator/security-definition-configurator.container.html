@@ -7,7 +7,7 @@
     'sat-securityDefinitionConfigurator--canApplyFilterState': configuratorData.state.canApplyFilter,
     'sat-securityDefinitionConfigurator--noMainCTAState': configuratorData.state.noMainCTA,
     'sat-securityDefinitionConfigurator--filterLongState': configuratorData.state.showFiltersFromDefinition?.state.isFilterLong,
-    'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.map.BICS_CONSOLIDATED.key,
+    'sat-securityDefinitionConfigurator--filterShowingBICSConsolidatedState': configuratorData.state.showFiltersFromDefinition?.data.key === constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
     'sat-securityDefinitionConfigurator--cappedFilterListState': configuratorData.state.showFiltersFromDefinition?.state.isFilterCapped,
     'sat-securityDefinitionConfigurator--includesSelectedDefinitionState': configuratorData.state.includesSelectedDefinitions
   }">
@@ -23,7 +23,7 @@
         [ngClass]="{
           'sat-securityDefinitionConfigurator__definitions-list-section-item': true,
           'sat-securityDefinitionConfigurator__definitions-list-section-item--hiddenInCoreDefinitionGroupState': eachDefinition.state.isHiddenInConfiguratorDefinitionBundle,
-          'sat-securityDefinitionConfigurator__definitions-list-section-item--selectedDefinitionState': eachDefinition.data.configuratorCoreDefinitionGroup === constants.securityDefinitionLabel.selected
+          'sat-securityDefinitionConfigurator__definitions-list-section-item--selectedDefinitionState': eachDefinition.data.configuratorCoreDefinitionGroup === constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected
         }">
           <button
             (click)="selectDefinitionForGrouping(eachDefinition)"
