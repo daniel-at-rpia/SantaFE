@@ -23,12 +23,14 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
     height: $circleWidth;
     border-radius: 50%;
     &-coreAction {
+      @include mix_fixed_div(absolute, $z_index_base_item);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       flex-basis: 80%;
       &-btn {
+        @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_alive('light');
         display: none;
       }
@@ -38,6 +40,7 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
         text-align: center;
         font-size: $font_size_x_small;
         color: $font_color_inverse;
+        width: 80%;
       }
     }
     &-actionBtn {
