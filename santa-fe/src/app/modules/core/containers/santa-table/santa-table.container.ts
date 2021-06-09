@@ -209,7 +209,7 @@ export class SantaTable implements OnInit, OnChanges {
         if (
           (!targetCard.state.isSelected && !storedSelectedCard) ||
           (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive) ||
-          (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID)
+          (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive)
         ) {
           targetCard.state.isSelected = false;
           targetCard.state.configAlertState = false;
@@ -274,7 +274,7 @@ export class SantaTable implements OnInit, OnChanges {
         // scenario: there is already a card selected, and it is the same card user is selecting again
 
         // make sure to not overwrite the selected security card as null value if users are diving in and out of actions and corresponding sub actions (ex. bloomberg and its sub actions)
-        if (!targetCard.data.actionMenu.state.isCoreActionSelected) {
+        if (!!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isCoreActionSelected && !targetCard.data.actionMenu.state.isActive) {
           this.tableData.state.selectedSecurityCard = null;
         }
       }
