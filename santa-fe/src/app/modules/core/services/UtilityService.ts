@@ -448,6 +448,11 @@ export class UtilityService {
           });
         });
       });
+      const isIncludesQuotedToday = shortcutCopy.data.searchFilters[0].find((definitionBundle: DTOs.SecurityDefinitionDTO) => definitionBundle.data.key === globalConstants.definition.SecurityDefinitionMap.QUOTED_TODAY.key);
+      if (!isIncludesQuotedToday && targetShortcut.state.isSavedThroughConfigurator) {
+        const quotedTodayDefinition = this.getDefinitionFromDefinitionBundle(newConfig, globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.standard, globalConstants.definition.SecurityDefinitionMap.QUOTED_TODAY.key);
+        this.clearSelectedOptionsFromDefinition(quotedTodayDefinition, newConfig);
+      }
       return newConfig;
     }
 

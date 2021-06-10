@@ -1086,6 +1086,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           isMajor: false
         }
         const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
+        recentShortcut.state.isSavedThroughConfigurator = true;
         if (!presetDisplayTitle) {
           recentShortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(recentShortcut);
         }
