@@ -327,38 +327,31 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       userTriggered: boolean
     ) {
       this.resetSearchEngineStates();
-      if (this.state.presets.selectedPreset === targetPreset) {
-        targetPreset.state.isSelected = false;
-        this.state.presets.selectedPreset = null;
-        this.updateCurrentSearchPreview(null);
-        this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
-      } else {
-        targetPreset.state.isSelected = true;
-        this.state.presets.selectedPreset = targetPreset;
-        this.updateCurrentSearchPreview(targetPreset);
-        this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
-        if (!!targetPreset && targetPreset.data.searchFilters.length > 0) {
-          targetPreset.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
-            searchFilter.forEach((filter: DTOs.SecurityDefinitionDTO) => {
-              filter.state.isHiddenInConfiguratorDefinitionBundle = true;
-            })
+      this.state.presets.selectedPreset = targetPreset;
+      this.updateCurrentSearchPreview(targetPreset);
+      this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
+      if (!!targetPreset && targetPreset.data.searchFilters.length > 0) {
+        targetPreset.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
+          searchFilter.forEach((filter: DTOs.SecurityDefinitionDTO) => {
+            filter.state.isHiddenInConfiguratorDefinitionBundle = true;
           })
-        }
-        this.checkInitialPageLoadData();
-        if (userTriggered) {
-          this.restfulCommService.logEngagement(
-            this.constants.core.EngagementActionList.selectPreset,
-            'n/a',
-            targetPreset.data.displayTitle,
-            'Trade - Center Panel'
-          );
-          const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
-          this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
-          this.onApplyFilter(params, false, null, targetPreset);
-          this.loadFreshData();
-        }
+        })
+      }
+      this.checkInitialPageLoadData();
+      if (userTriggered) {
+        this.restfulCommService.logEngagement(
+          this.constants.core.EngagementActionList.selectPreset,
+          'n/a',
+          targetPreset.data.displayTitle,
+          'Trade - Center Panel'
+        );
+        const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.state.configurator.dto);
+        this.bicsDataProcessingService.convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params);
+        this.onApplyFilter(params, false, null, targetPreset);
+        this.loadFreshData();
       }
       this.store$.dispatch(new TradeTogglePresetEvent);
+      this.state.presets.selectedList = null;
     }
 
     public onUnselectPreset() {
@@ -1734,13 +1727,13 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         }),
         catchError(err => {
           const alert = this.dtoService.formSystemAlertObject(
-            'Failed Save Watchlist',
-            '',
+            'Watchlist',
+            'Save Failed',
             `${this.state.currentSearch.previewShortcut.data.displayTitle}`,
             null
           );
           this.store$.dispatch(new CoreSendNewAlerts([alert]));
-          this.restfulCommService.logError('Cannot saved watchlist');
+          this.restfulCommService.logError('Cannot save watchlist');
           return of('error');
         })
       ).subscribe();
@@ -1759,7 +1752,42 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onClickDeleteWatchlist(targetWatchlist: DTOs.SearchShortcutDTO) {
       if (this.state.presets.savedWatchlistDeleteActivated) {
-        
+        if (this.state.presets.savedWatchlistShortcutList.includes(targetWatchlist)) {
+          const payload: BESaveWatchlistDTO = {
+            title: targetWatchlist.data.displayTitle,
+            id: targetWatchlist.data.uuid,
+            groupParameters: {},
+            headerOverwrites: [],
+            groupFilters: {},
+          };
+          payload.groupFilters = this.utilityService.getBackendGroupFilterFromWatchlist(targetWatchlist);
+          console.log('test', payload);
+          this.restfulCommService.callAPI(this.restfulCommService.apiMap.deleteSavedWatchlist, {req: 'POST'}, payload).pipe(
+            first(),
+            tap((serverReturn: boolean) => {
+              const alert = this.dtoService.formSystemAlertObject(
+                'Watchlist',
+                'Deleted',
+                `${targetWatchlist.data.displayTitle}`,
+                null
+              );
+              this.store$.dispatch(new CoreSendNewAlerts([alert]));
+              this.populateSaveWatchlists();
+              this.state.presets.selectedList = this.state.presets.savedWatchlistShortcutList;
+            }),
+            catchError(err => {
+              const alert = this.dtoService.formSystemAlertObject(
+                'Watchlist',
+                'Delete Failed',
+                `${targetWatchlist.data.displayTitle}`,
+                null
+              );
+              this.store$.dispatch(new CoreSendNewAlerts([alert]));
+              this.restfulCommService.logError('Cannot delete watchlist');
+              return of ('error');
+            })
+          ).subscribe();
+        }
       }
     }
 
