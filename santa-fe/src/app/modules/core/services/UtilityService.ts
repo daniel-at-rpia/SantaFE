@@ -1364,6 +1364,24 @@ export class UtilityService {
       return customDisplayTitle;
     }
 
+    public clearSelectedOptionsFromDefinition(
+      targetDefinition: DTOs.SecurityDefinitionDTO,
+      targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
+    ) {
+      targetDefinition.data.highlightSelectedOptionList = [];
+      targetDefinition.state.filterActive = false;
+      if (targetDefinition.state.isFilterCapped) {
+        targetDefinition.data.displayOptionList = [];
+      } else {
+        targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
+          option.isSelected = false;
+        })
+      }
+      const selectedDefinitionBundle = this.getDefinitionBundleFromConfigurator(targetConfigurator, globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+      selectedDefinitionBundle.data.list = selectedDefinitionBundle.data.list.filter((definition: DTOs.SecurityDefinitionDTO) => definition.data.key !== targetDefinition.data.key);
+      this.syncDefinitionStateBetweenSelectedAndCore(targetConfigurator, targetDefinition, false);
+    }
+
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;

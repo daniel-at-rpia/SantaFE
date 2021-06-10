@@ -244,18 +244,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public clearAllSelectedOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
-    targetDefinition.data.highlightSelectedOptionList = [];
-    targetDefinition.state.filterActive = false;
-    if (targetDefinition.state.isFilterCapped) {
-      targetDefinition.data.displayOptionList = [];
-    } else {
-      targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
-        option.isSelected = false;
-      })
-    }
-    const selectedDefinitionBundle = this.utilityService.getDefinitionBundleFromConfigurator(this.configuratorData, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
-    selectedDefinitionBundle.data.list = selectedDefinitionBundle.data.list.filter((definition: DTOs.SecurityDefinitionDTO) => definition.data.key !== targetDefinition.data.key);
-    this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.configuratorData, targetDefinition, false);
+    this.utilityService.clearSelectedOptionsFromDefinition(targetDefinition, this.configuratorData);
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
