@@ -186,14 +186,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public triggerApplyFilter() {
-    // Quoted Today to be selected if user clears all definitions from select group and clicks Apply
-    const selectedDefinitionBundle = this.utilityService.getDefinitionBundleFromConfigurator(this.configuratorData, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
-    if (selectedDefinitionBundle.data.list.length === 0) {
-      const quotedTodayDefinition = this.utilityService.getDefinitionFromDefinitionBundle(this.configuratorData, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.standard, this.constants.definition.SecurityDefinitionMap.QUOTED_TODAY.key);
-      const activeOption = quotedTodayDefinition.data.displayOptionList.find((option: Blocks.SecurityDefinitionFilterBlock) => option.shortKey === 'Y');
-      quotedTodayDefinition.data.highlightSelectedOptionList.push(activeOption);
-      activeOption.isSelected = true;
-    }
+    // Prevents selected group from having no definitions
+    this.checkAndApplyChangesToEmptySelectedGroup();
     this.lastExecutedConfiguration = this.utilityService.deepCopy(this.configuratorData);
     this.configuratorData.state.groupByDisabled && this.onClickDefinition(this.configuratorData.state.showFiltersFromDefinition, true);
     const params = this.utilityService.packDefinitionConfiguratorEmitterParams(this.configuratorData);
@@ -334,5 +328,29 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
 
   private checkIfDefinitionFilterOptionListIsCapped(targetDefinition: DTOs.SecurityDefinitionDTO): boolean {
     return !!targetDefinition.data.prinstineFilterOptionList ? targetDefinition.data.prinstineFilterOptionList.length > this.constants.definition.DEFINITION_CAPPED_THRESHOLD : false;
+  }
+
+  private checkAndApplyChangesToEmptySelectedGroup() {
+    // If no changes were made in the other definitions and everything in the configurator is unselected, then apply Quoted Today definition to be in selected group
+    const selectedDefinitionBundle = this.utilityService.getDefinitionBundleFromConfigurator(this.configuratorData, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+    if (selectedDefinitionBundle.data.list.length === 0) {
+      // check if user clears everything in selected group, but makes changes within the definitions in the core groups 
+      let isUpdatedDefinitionExists = false;
+      this.configuratorData.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+        if (definitionBundle.data.label !== this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.selected && !isUpdatedDefinitionExists) {
+          definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+            if (definition.data.highlightSelectedOptionList.length > 0 && !isUpdatedDefinitionExists) {
+              isUpdatedDefinitionExists = true;
+            }
+          })
+        }
+      })
+      if (!isUpdatedDefinitionExists) {
+        const quotedTodayDefinition = this.utilityService.getDefinitionFromDefinitionBundle(this.configuratorData, this.constants.definition.SecurityDefinitionConfiguratorGroupLabels.standard, this.constants.definition.SecurityDefinitionMap.QUOTED_TODAY.key);
+        const activeOption = quotedTodayDefinition.data.displayOptionList.find((option: Blocks.SecurityDefinitionFilterBlock) => option.shortKey === 'Y');
+        quotedTodayDefinition.data.highlightSelectedOptionList.push(activeOption);
+        activeOption.isSelected = true;
+      }
+    }
   }
 }
