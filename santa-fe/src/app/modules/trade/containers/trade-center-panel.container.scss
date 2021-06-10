@@ -560,12 +560,22 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   opacity: 0;
   visibility: hidden;
   &__utilities {
+    @include mix_fixed_div(relative, $z_index_base_item);
     display: none;
     flex: 0 0 auto;
     padding: $spacing_medium $spacing_medium 0 $spacing_medium;
     &-deleteMode {
       margin-left: auto;
       background-color: $color_kill;
+    }
+    &-deleteModeIcon {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include mix_alive('light');
+      right: $spacing_medium;
+      top: $spacing_medium;
+      font-size: $font_size_hero;
+      color: $color_kill;
+      opacity: 0;
     }
   }
   &__timeSpecificDisplay {
@@ -649,11 +659,16 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
     }
   }
   &--deleteModeActivated {
+    background-color: $color_red_1;
     #{$blockName} {
       &__utilities {
         &-deleteMode {
           @include material('none');
           background-color: $color_active;
+        }
+        &-deleteModeIcon {
+          opacity: 1;
+          transform: translate(0, $spacing_x_large);
         }
       }
       &__list {
