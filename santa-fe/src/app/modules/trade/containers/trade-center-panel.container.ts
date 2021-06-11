@@ -1761,7 +1761,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             groupFilters: {},
           };
           payload.groupFilters = this.utilityService.getBackendGroupFilterFromWatchlist(targetWatchlist);
-          console.log('test', payload);
           this.restfulCommService.callAPI(this.restfulCommService.apiMap.deleteSavedWatchlist, {req: 'POST'}, payload).pipe(
             first(),
             tap((serverReturn: boolean) => {
