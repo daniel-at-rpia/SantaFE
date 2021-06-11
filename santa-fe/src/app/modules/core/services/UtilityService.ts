@@ -45,6 +45,7 @@
       traceTradeFilterAmounts,
       traceTradeNumericalFilterSymbols
     } from '../constants/securityTableConstants.constant';
+    import { EXCLUDED_KEYWORD_SEARCH_TERMS } from 'Core/constants/tradeConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
     import { NavigationEnd } from '@angular/router';
   // dependencies
