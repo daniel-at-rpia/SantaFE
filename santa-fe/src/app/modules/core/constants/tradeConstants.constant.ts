@@ -421,5 +421,7 @@ export enum AxeAlertType {
 
 export const EXCLUDED_KEYWORD_SEARCH_TERMS = [
   'HOLDINGS',
-  'INC'
+  'INC',
+  'LLC',
+  'LTD'
 ]
