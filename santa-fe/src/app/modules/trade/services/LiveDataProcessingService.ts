@@ -214,8 +214,8 @@ export class LiveDataProcessingService {
     targetPrinstineList.forEach((eachRow) => {
       try {
         if (!!eachRow && !!eachRow.data && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
-          if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, panelStateFilterBlock.keyword.actualValue)
-          || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, panelStateFilterBlock.keyword.actualValue)) {
+          if (this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, panelStateFilterBlock.keyword.actualValue, false)
+          || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, panelStateFilterBlock.keyword.actualValue, true)) {
             let portfolioIncludeFlag = this.filterByPortfolio(eachRow, panelStateFilterBlock);
             let ownerFlag = this.filterByOwner(eachRow, panelStateFilterBlock);
             let strategyFlag = this.filterByStrategy(eachRow, panelStateFilterBlock);

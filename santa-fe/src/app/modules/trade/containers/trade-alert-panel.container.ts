@@ -517,7 +517,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           for (let i = 0; i < map.length; ++i) {
             const eachEntry = map[i];
             for (let keywordIndex = 0; keywordIndex < eachEntry.keywords.length; ++keywordIndex) {
-              if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword)) {
+              if (this.utilityService.caseInsensitiveKeywordMatch(eachEntry.keywords[keywordIndex], keyword, false)) {
                 result.push(map[i]);
                 break;
               }
@@ -961,9 +961,9 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         try {
           if (!!eachRow && !!eachRow.data.security && !eachRow.data.security.state.isStencil) {
             if (
-              this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword)
-              || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword)
-              || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.alert.alertMessage, this.state.filters.quickFilters.keyword)) {
+              this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.name, this.state.filters.quickFilters.keyword, false)
+              || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.obligorName, this.state.filters.quickFilters.keyword, true)
+              || this.utilityService.caseInsensitiveKeywordMatch(eachRow.data.security.data.alert.alertMessage, this.state.filters.quickFilters.keyword, true)) {
               if (!this.state.alert.scopedAlertType || eachRow.data.alert.data.type == this.state.alert.scopedAlertType) {
                 if (this.state.alert.scopedAlertType === this.constants.alertTypes.axeAlert) {
                   // the axe tab only have non-marketList alerts, the inquiry tab only have marketList alerts

@@ -418,3 +418,10 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
+
+export const EXCLUDED_KEYWORD_SEARCH_TERMS = [
+  'HOLDINGS',
+  'INC',
+  'LLC',
+  'LTD'
+]

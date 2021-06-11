@@ -45,6 +45,7 @@
       traceTradeFilterAmounts,
       traceTradeNumericalFilterSymbols
     } from '../constants/securityTableConstants.constant';
+    import { EXCLUDED_KEYWORD_SEARCH_TERMS } from 'Core/constants/tradeConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
     import { NavigationEnd } from '@angular/router';
   // dependencies
@@ -486,13 +487,27 @@ export class UtilityService {
       return input * input;
     }
 
-    public caseInsensitiveKeywordMatch(targetText: string, keyword: string): boolean {
+    public caseInsensitiveKeywordMatch(
+      targetText: string,
+      keyword: string,
+      isNaturalText: boolean
+    ): boolean {
       if (targetText === null) {
         return false;
       } else if ((!!targetText || targetText === '') && !!keyword && keyword.length >= 2) {
         const targetTextUpperCase = targetText.toUpperCase();
         const keywordUpperCase = keyword.toUpperCase();
-        return targetTextUpperCase.indexOf(keywordUpperCase) >= 0;
+        let parsedTargetText = '';
+        if (isNaturalText) {
+          const regExp = new RegExp(EXCLUDED_KEYWORD_SEARCH_TERMS.join("|"), "g");
+          parsedTargetText = targetTextUpperCase.replace(regExp, "").replace(/\s+/g, " ").trim();
+        } else {
+          parsedTargetText = targetTextUpperCase;
+        }
+        const keywordList = keywordUpperCase.split(' ');
+        // attempts to find relevant securities when terms are entered in a differnt order then in the name or issuer (ex. 5Y HY)
+        const isContainsAllTerms = keywordList.every(keyword => parsedTargetText.indexOf(keyword) >= 0)
+        return isContainsAllTerms ? isContainsAllTerms : parsedTargetText.indexOf(keywordUpperCase) >= 0;
       } else {
         return true;
       }
