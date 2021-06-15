@@ -1133,7 +1133,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         recentShortcut.state.isUserInputBlocked = true;
         const { highlightTitle } = this.state.currentSearch.previewShortcut.data;
         if (this.state.presets.selectedPreset) {
-          const isAlreadyAddedToSelected = this.checkIfPresetsAreIdentical(recentShortcut, this.state.presets.selectedPreset);
+          const isAlreadyAddedToSelected = this.utilityService.checkIfPresetsAreIdentical(recentShortcut, this.state.presets.selectedPreset);
           if (!isAlreadyAddedToSelected) {
             this.state.presets.selectedPreset.state.isSelected = false;
             this.state.presets.selectedPreset = recentShortcut;
@@ -1419,35 +1419,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         })
       })
     }
-
-    private checkIfPresetsAreIdentical(
-      currentPreset: DTOs.SearchShortcutDTO,
-      targetPreset: DTOs.SearchShortcutDTO
-    ): boolean {
-      const currentPrimaryFilters = currentPreset.data.searchFilters[0];
-      const targetPrimaryFilters = targetPreset.data.searchFilters[0];
-      if (currentPrimaryFilters.length !== targetPrimaryFilters.length) {
-        return false;
-      } else {
-        let targetOptions: Array<string> = [];
-        let currentOptions: Array<string> = [];
-        targetPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-          if (definition.data.highlightSelectedOptionList.length > 0) {
-            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
-            targetOptions = [...targetOptions, ...highlightedOptions];
-          }
-        });
-        currentPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-          if (definition.data.highlightSelectedOptionList.length > 0) {
-            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
-            currentOptions = [...currentOptions, ...highlightedOptions];
-          }
-        });
-        const isIdentical = currentOptions.every((currentOption: string) => targetOptions.indexOf(currentOption) >= 0);
-        return isIdentical;
-      }
-    }
-
 
   // General End
 
