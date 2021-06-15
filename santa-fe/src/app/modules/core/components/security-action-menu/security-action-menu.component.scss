@@ -14,6 +14,7 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
   $blockName: &;
   &__content {
     @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_border_radius(50%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,14 +22,14 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
     color: $font_color_inverse;
     width: $circleWidth;
     height: $circleWidth;
-    border-radius: 50%;
     &-coreAction {
       @include mix_fixed_div(absolute, $z_index_base_item);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      flex-basis: 80%;
+      flex: 0 1 auto;
+      margin: 0 $spacing_small;
       &-btn {
         @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_alive('light');
@@ -40,7 +41,8 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
         text-align: center;
         font-size: $font_size_x_small;
         color: $font_color_inverse;
-        width: 80%;
+        flex: 0 1 auto;
+        margin: 0 $spacing_small;
       }
     }
     &-actionBtn {
