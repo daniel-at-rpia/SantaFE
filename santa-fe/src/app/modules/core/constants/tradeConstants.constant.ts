@@ -142,6 +142,15 @@ export const OwnershipShortcuts: Array<SearchShortcutStub> = [
       }
     ]
   },{
+    displayTitle: 'Colin',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['CD']
+      }
+    ]
+  },{
     displayTitle: 'Daanish',
     includedDefinitions: [
       {

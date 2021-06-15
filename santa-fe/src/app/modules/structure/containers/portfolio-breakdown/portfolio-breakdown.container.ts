@@ -85,6 +85,9 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
     ).subscribe((initials) => {
       this.breakdownData.state.isEditable = this.constants.structuringTeamPMList.indexOf(initials) >= 0;
       this.breakdownData.state.isEditingViewAvail = StructuringEditingViewAvilableList.includes(initials);
+      if (this.breakdownData.data.rawCs01CategoryList.length > 0 && this.breakdownData.data.rawLeverageCategoryList.length > 0) {
+        this.updateRowEditingViewAvailState();
+      }
     });
     this.subscriptions.dataDatestampSub = this.store$.pipe(
       filter((tick) => {

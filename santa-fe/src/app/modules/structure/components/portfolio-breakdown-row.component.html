@@ -29,7 +29,8 @@
     'sat-portfolioBreakdownRow--hasEditedSubLevels': breakdownRow.data.editedSubLevelRowsWithTargets.length > 0 && !!breakdownRow.state.isWithinEditRow,
     'sat-portfolioBreakdownRow--deltaSignificantPositive': breakdownRow.data.delta > 5,
     'sat-portfolioBreakdownRow--deltaSignificantNegative': breakdownRow.data.delta < -5,
-    'sat-portfolioBreakdownRow--isViewingIndex': breakdownRow.state.isViewingIndex
+    'sat-portfolioBreakdownRow--isViewingIndex': breakdownRow.state.isViewingIndex,
+    'sat-portfolioBreakdownRow--isEditingViewAvail': breakdownRow.state.isEditingViewAvail
   }">
   <section class="sat-portfolioBreakdownRow__branch" *ngIf="breakdownRow.data.bicsLevel >= 2 && !breakdownRow.state.isWithinPopover" [ngStyle]="{'height': breakdownRow.style.branchHeight, 'top': breakdownRow.style.top}"></section>
   <section class="sat-portfolioBreakdownRow__cta">
