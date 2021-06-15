@@ -418,6 +418,7 @@ export interface BICSMainRowDataBlock {
   level: number;
   isCs01?: boolean;
   isIndex: boolean;
+  isEditingViewAvail: boolean;
 }
 
 export interface TradeCenterPanelStateFilterBlock {

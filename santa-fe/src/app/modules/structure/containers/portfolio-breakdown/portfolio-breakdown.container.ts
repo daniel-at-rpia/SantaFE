@@ -165,7 +165,8 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
         code: breakdownRow.data.code,
         portfolioID: this.breakdownData.data.portfolioId,
         level: breakdownRow.data.bicsLevel,
-        isIndex: this.breakdownData.state.isViewingIndex
+        isIndex: this.breakdownData.state.isViewingIndex,
+        isEditingViewAvail: breakdownRow.state.isEditingViewAvail
       }
       this.breakdownData.data.popoverMainRow = rowProcessingData;
       this.breakdownData.state.isDisplayPopover = true;
