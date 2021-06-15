@@ -2913,9 +2913,9 @@ export class DTOService {
 
   public formSecurityActionMenuDTO(
     isActive: boolean,
-    coreAction: globalConstants.trade.SecurityActionMenuOptionsRawText,
+    coreAction: globalConstants.security.SecurityActionMenuOptionsRawText,
   ): DTOs.SecurityActionMenuDTO {
-    const menuListCopy = this.utility.deepCopy(globalConstants.trade.SecurityActionMenuList);
+    const menuListCopy = this.utility.deepCopy(globalConstants.security.SecurityActionMenuList);
     const object: DTOs.SecurityActionMenuDTO = {
       data: {
         defaultText: 'Security Actions',
@@ -2955,6 +2955,6 @@ export class DTOService {
     order: number,
     totalCount: number
   ) {
-    action.positionIdentifier = `${globalConstants.trade.SecurityActionMenuOptionPositioningIdentifier[order + 1]}of${globalConstants.trade.SecurityActionMenuOptionPositioningIdentifier[totalCount]}`
+    action.positionIdentifier = `${globalConstants.security.SecurityActionMenuOptionPositioningIdentifier[order + 1]}of${globalConstants.security.SecurityActionMenuOptionPositioningIdentifier[totalCount]}`
   }
 }

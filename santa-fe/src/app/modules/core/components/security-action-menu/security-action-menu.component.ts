@@ -20,10 +20,7 @@ export class SecurityActionMenu {
   @Output() clickToSendGraph = new EventEmitter();
   @Output() clickToPinRow = new EventEmitter();
   @Output() clickBloombergOptions = new EventEmitter<string>();
-  constants = {
-    globalConstants,
-    actionBtnClass: 'sat-securityActionMenu__content-actionBtn'
-  };
+  constants = globalConstants;
   constructor(
     private bicsDataProcessingService: BICSDataProcessingService,
     private utilityService: UtilityService
@@ -60,7 +57,7 @@ export class SecurityActionMenu {
   public onClickLaunchUofBTicker(ticker: string){
     if (!!ticker) {
       const object: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock = {
-        type: this.constants.globalConstants.definition.SecurityDefinitionMap.TICKER.key,
+        type: this.constants.definition.SecurityDefinitionMap.TICKER.key,
         value: ticker,
         bicsLevel: null
       }
@@ -73,10 +70,10 @@ export class SecurityActionMenu {
       const category = this.bicsDataProcessingService.extractDeepestBICSCategory(securityDTO);
       if (!!category) {
         const identifier = Object.keys(securityDTO.data.bics).find(key => securityDTO.data.bics[key] === category);
-        const level = identifier.split(this.constants.globalConstants.structuring.BICS_BREAKDOWN_FRONTEND_KEY).length > 0 ? +identifier.split(this.constants.globalConstants.structuring.BICS_BREAKDOWN_FRONTEND_KEY)[1] : 0;
+        const level = identifier.split(this.constants.structuring.BICS_BREAKDOWN_FRONTEND_KEY).length > 0 ? +identifier.split(this.constants.structuring.BICS_BREAKDOWN_FRONTEND_KEY)[1] : 0;
         if (!!level) {
           const object: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock = {
-            type: this.constants.globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
+            type: this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key,
             value: category,
             bicsLevel: level
           }
@@ -103,7 +100,7 @@ export class SecurityActionMenu {
   }
 
   private getCallbacksForActions(targetAction: Blocks.SecurityActionMenuOptionBlock) {
-    const { pinRow, sendToGraph, setAlert, ticker, bics, bloombergDES, bloombergQMGR, bloombergTDH, bloombergYAS } = this.constants.globalConstants.trade.SecurityActionMenuOptionsRawText;
+    const { pinRow, sendToGraph, setAlert, ticker, bics, bloombergDES, bloombergQMGR, bloombergTDH, bloombergYAS } = this.constants.security.SecurityActionMenuOptionsRawText;
     if (targetAction.rawText === pinRow) {
       this.onClickPinRow()
     } else if (targetAction.rawText === sendToGraph) {

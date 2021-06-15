@@ -628,7 +628,7 @@ export class UtilityService {
 
     public applySpecificListForActionMenu(
       actionMenu: DTOs.SecurityActionMenuDTO,
-      coreAction: globalConstants.trade.SecurityActionMenuOptionsRawText
+      coreAction: globalConstants.security.SecurityActionMenuOptionsRawText
     ) {
       actionMenu.data.allActions = this.getSpecificActionsForSecurityActionMenu(actionMenu.data.allActions, coreAction);
       actionMenu.state.isDisplayLimitedActions = true;
@@ -1383,7 +1383,7 @@ export class UtilityService {
     }
 
     public getSecurityActionMenuSubActionsFromLevel(level: number): Array<Blocks.SecurityActionMenuOptionBlock> {
-      const selectedSubActions = globalConstants.trade.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => optionBlock.level === level);
+      const selectedSubActions = globalConstants.security.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => optionBlock.level === level);
       return selectedSubActions;
     }
 
@@ -1407,7 +1407,7 @@ export class UtilityService {
 
     public getSpecificActionsForSecurityActionMenu(
       actionList: Array<Blocks.SecurityActionMenuOptionBlock>,
-      coreAction: globalConstants.trade.SecurityActionMenuOptionsRawText
+      coreAction: globalConstants.security.SecurityActionMenuOptionsRawText
     ): Array<Blocks.SecurityActionMenuOptionBlock> {
       if (actionList.length > 0) {
         const selectedActions = actionList.filter((action: Blocks.SecurityActionMenuOptionBlock) => action.coreAction === coreAction);
