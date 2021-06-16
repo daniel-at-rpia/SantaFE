@@ -192,6 +192,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
     onClickSearch: (card: SecurityDTO) => void;
     onClickPin: (card: SecurityDTO) => void;
+    onClickSendToLaunchUofB: (transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) => void
   }
   state: {
     isStencil: boolean;

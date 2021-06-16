@@ -5,7 +5,6 @@ import {
   AlertCountSummaryDTO,
   GlobalWorkflowStateDTO
 } from 'FEModels/frontend-models.interface';
-import { AdhocPacks } from 'App/modules/core/models/frontend';
 
 export enum CoreActions {
   UserLoggedIn = '[Core] User Logged In',
@@ -30,7 +29,6 @@ export enum CoreActions {
   GlobalWorkflowUpdateCurrentTradeState = '[Core] Global Workflow Update Current Trade State',
   GlobalWorkflowUpdateCurrentStructureState = '[Core] Global Workflow Update Current Structure State',
   GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready',
-  LaunchUofBThroughSecurityActionMenu = '[Core] Launch Universe of Bonds Through Security Action Menu'
 }
 
 export class CoreUserLoggedIn implements Action {
@@ -192,13 +190,4 @@ export class CoreGlobalWorkflowUpdateCurrentStructureState implements Action {
 export class CoreGlobalWorkflowIndexedDBReady implements Action {
   readonly type = CoreActions.GlobalWorkflowIndexedDBReady;
   constructor(){}
-}
-export class CoreLaunchUofBThroughSecurityActionMenu implements Action {
-  readonly type = CoreActions.LaunchUofBThroughSecurityActionMenu;
-  readonly pack: AdhocPacks.SecurityActionLaunchUofBTransferPack;
-  constructor(
-    pack: AdhocPacks.SecurityActionLaunchUofBTransferPack
-  ) {
-    this.pack = pack;
-  }
 }

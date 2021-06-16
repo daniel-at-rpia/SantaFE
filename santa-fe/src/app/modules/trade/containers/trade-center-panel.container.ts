@@ -27,8 +27,7 @@
       BESecurityMap
     } from 'BEModels/backend-models.interface';
     import {
-      selectUserInitials,
-      selectSecurityActionToLaunchUofB
+      selectUserInitials
     } from 'Core/selectors/core.selectors';
     import {
       CoreUserLoggedIn,
@@ -44,7 +43,8 @@
       selectKeywordSearchInMainTable,
       selectCenterPanelFilterListForTableLoad,
       selectBICSDataLoaded,
-      selectWatchlistIndexedDBReady
+      selectWatchlistIndexedDBReady,
+      selectSecurityActionToLaunchUofB
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdatePassRawDataToMainTableEvent,
@@ -55,7 +55,8 @@
       TradeTogglePresetEvent,
       TradeAlertTableReceiveNewAlertsEvent,
       TradeBICSDataLoadedEvent,
-      TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent
+      TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent,
+      TradeLaunchUofBThroughSecurityActionMenu
     } from 'Trade/actions/trade.actions';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
     import { IndexedDBService } from 'Core/services/IndexedDBService';
@@ -534,6 +535,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.state.editingDriver = true;
     }
 
+    public onSelectSecurityLaunchUofB(transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) {
+      this.store$.dispatch(new TradeLaunchUofBThroughSecurityActionMenu(transferPack));
+    }
+
     private fetchBICsHierarchy() {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsCodeDictionary, {req: 'GET'}).pipe(
         first(),
@@ -726,6 +731,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),
         this.onSelectSecurityForAlertConfig.bind(this),
+        this.onSelectSecurityLaunchUofB.bind(this),
         this.state.filters
       );
       this.state.fetchResult.totalCount = serverReturn.totalNumberOfSecurities;

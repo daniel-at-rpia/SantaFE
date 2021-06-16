@@ -13,7 +13,7 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
 import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
 import { Store, select } from '@ngrx/store';
-import { CoreLaunchUofBThroughSecurityActionMenu } from 'Core/actions/core.actions';
+import { TradeLaunchUofBThroughSecurityActionMenu } from 'Trade/actions/trade.actions';
 
 @Component({
   selector: 'security-card',
@@ -156,7 +156,9 @@ export class SecurityCard implements OnInit {
       value,
       bicsLevel
     }
-    this.store$.dispatch(new CoreLaunchUofBThroughSecurityActionMenu(transferPack));
+    if (!!this.cardData.api.onClickSendToLaunchUofB) {
+      this.cardData.api.onClickSendToLaunchUofB(transferPack);
+    }
   }
 
   private checkIsFilled() {

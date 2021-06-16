@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { DTOs } from 'Core/models/frontend';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
+import { AdhocPacks } from 'App/modules/core/models/frontend';
 
 export enum TradeActions {
   TradeStoreReset = '[Trade] Reset Store Upon Entering',
@@ -25,7 +26,8 @@ export enum TradeActions {
   KeywordSearchThisSecurity = '[Trade] Keyword Search This Security',
   CenterPanelLoadTableWithFilter = '[Trade] Center Panel Load Table With Filter',
   BICSDataLoaded = '[Trade] BICS Data Loaded',
-  WatchlistIndexedDBReady = '[Trade] Watchlist IndexedDB Ready'
+  WatchlistIndexedDBReady = '[Trade] Watchlist IndexedDB Ready',
+  LaunchUofBThroughSecurityActionMenu = '[Trade] Launch Universe of Bonds Through Security Action Menu'
 }
 
 export class TradeStoreResetEvent implements Action {
@@ -175,4 +177,14 @@ export class TradeBICSDataLoadedEvent implements Action {
 export class TradeWatchlistIndexedDBReady implements Action {
   readonly type = TradeActions.WatchlistIndexedDBReady;
   constructor(){}
+}
+
+export class TradeLaunchUofBThroughSecurityActionMenu implements Action {
+  readonly type = TradeActions.LaunchUofBThroughSecurityActionMenu;
+  readonly pack: AdhocPacks.SecurityActionLaunchUofBTransferPack;
+  constructor(
+    pack: AdhocPacks.SecurityActionLaunchUofBTransferPack
+  ) {
+    this.pack = pack;
+  }
 }

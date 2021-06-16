@@ -35,7 +35,8 @@ export class DTOService {
         onClickSendToGraph: null,
         onClickSendToAlertConfig: null,
         onClickSearch: null,
-        onClickPin: null
+        onClickPin: null,
+        onClickSendToLaunchUofB: null
       },
       state: {
         isSelected: false,

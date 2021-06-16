@@ -4,7 +4,7 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { DTOs } from 'Core/models/frontend';
+import { DTOs, AdhocPacks } from 'Core/models/frontend';
 import { TradeActions } from 'Trade/actions/trade.actions';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
@@ -40,9 +40,12 @@ export interface TradeState {
       metric: PortfolioMetricValues;
       presetDisplayTitle: string;
     }
-  }
+  },
   watchlist: {
     indexedDBReady: boolean;
+  },
+  securityActionMenu: {
+    launchUofBPack: AdhocPacks.SecurityActionLaunchUofBTransferPack
   }
 }
 
@@ -80,6 +83,9 @@ const initialState: TradeState = {
   },
   watchlist: {
     indexedDBReady: false
+  },
+  securityActionMenu: {
+    launchUofBPack: null
   }
 };
 
@@ -258,6 +264,13 @@ export function tradeReducer(
           indexedDBReady: true
         }
       }
+    case TradeActions.LaunchUofBThroughSecurityActionMenu:
+      return {
+        ...state,
+        securityActionMenu: {
+          launchUofBPack: action.pack
+        }
+      };
     default:
       return state;
   }

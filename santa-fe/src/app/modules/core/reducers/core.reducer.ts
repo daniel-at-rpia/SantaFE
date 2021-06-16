@@ -33,9 +33,6 @@ export interface CoreState {
     apiCallForAlertFailed: boolean;
     tradeTableFetchAlertTick: number;
     tradeTableFetchAlertLastReceiveTimestamp: number;
-  },
-  securityActionMenu: {
-    launchUofBPack: AdhocPacks.SecurityActionLaunchUofBTransferPack
   }
 }
 
@@ -64,9 +61,6 @@ const initialState: CoreState = {
     apiCallForAlertFailed: false,
     tradeTableFetchAlertTick: 0,
     tradeTableFetchAlertLastReceiveTimestamp: 0
-  },
-  securityActionMenu: {
-    launchUofBPack: null
   }
 };
 
@@ -262,13 +256,6 @@ export function coreReducer(
         globalWorkflow: {
           ...state.globalWorkflow,
           indexedDBReady: true
-        }
-      };
-    case CoreActions.LaunchUofBThroughSecurityActionMenu:
-      return {
-        ...state,
-        securityActionMenu: {
-          launchUofBPack: action.pack
         }
       };
     default:
