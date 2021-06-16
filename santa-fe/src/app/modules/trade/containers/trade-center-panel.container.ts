@@ -324,6 +324,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               false,
               false
             );
+            this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
             this.onSelectPreset(shortcut, true, true);
           }
         }
@@ -357,7 +358,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     public onSelectPreset(
       targetPreset: DTOs.SearchShortcutDTO,
       userTriggered: boolean,
-      actionMenuTriggered: boolean
+      actionMenuTriggered: boolean = false
     ) {
       this.resetSearchEngineStates();
       if (this.state.presets.selectedPreset === targetPreset) {
@@ -376,7 +377,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         previewCopy.state.isSelected = false;
         previewCopy.state.isUserInputBlocked = true;
         this.state.currentSearch.previewShortcut = previewCopy;
-        this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto, actionMenuTriggered);
+        this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
         if (!!targetPreset && targetPreset.data.searchFilters.length > 0) {
           targetPreset.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
             searchFilter.forEach((filter: DTOs.SecurityDefinitionDTO) => {
@@ -912,9 +913,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           targetPresetCopy = this.utilityService.deepCopy(targetPreset);
           targetPresetCopy.data.displayTitle = `${targetPresetCopy.data.displayTitle} - ${presetDisplayTitle}`;
           targetPresetCopy.state.isAbleToSaveAsRecentWatchlist = true;
-          this.onSelectPreset(targetPresetCopy, false, false);
+          this.onSelectPreset(targetPresetCopy, false);
         } else {
-          this.onSelectPreset(this.state.presets.portfolioShortcutList[0], false, false);
+          this.onSelectPreset(this.state.presets.portfolioShortcutList[0], false);
         }
         filterList.forEach((eachFilterDefinition) => {
           this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
@@ -1455,7 +1456,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         false
       );
       shortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(shortcut);
-      this.onSelectPreset(shortcut, true, false);
+      this.onSelectPreset(shortcut, true);
     }
 
     public onSearchEngineKeyPressed(event: KeyboardEvent) {

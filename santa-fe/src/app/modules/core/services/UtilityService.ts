@@ -411,8 +411,7 @@ export class UtilityService {
 
     public applyShortcutToConfigurator(
       targetShortcut: DTOs.SearchShortcutDTO,
-      targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO,
-      isActioMenuTriggered: boolean
+      targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
       const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
@@ -449,15 +448,6 @@ export class UtilityService {
           });
         });
       });
-      // Checks to see that the shortcut is generated via the security action menu, in which case anything aside from Quoted Today and the actual BICS, Ticker, etc value should be removed from the configurator and will not be stored as part of the new search
-      if (isActioMenuTriggered) {
-        const selectedDefinitionBundle = this.getDefinitionBundleFromConfigurator(newConfig, globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
-        if (!!selectedDefinitionBundle) {
-          const presetKeys: Array<string> = primaryFilterGroup.map((selectedPresets: DTOs.SecurityDefinitionDTO) => selectedPresets.data.key);
-          const definitionToBeClearedList = selectedDefinitionBundle.data.list.filter((selectedDefinitions: DTOs.SecurityDefinitionDTO) => presetKeys.indexOf(selectedDefinitions.data.key) < 0 && selectedDefinitions.data.key !== globalConstants.definition.SecurityDefinitionMap.QUOTED_TODAY.key);
-          this.clearAllSelectedOptionsInDefinition(newConfig, definitionToBeClearedList);
-        }
-      }
       return newConfig;
     }
 
