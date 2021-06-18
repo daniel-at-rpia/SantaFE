@@ -174,6 +174,9 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       '',
       'Trade Center Panel'
     );
+    if (!!this.rowData.data.historicalTradeVisualizer && this.rowData.data.historicalTradeVisualizer.data.displayTradeList.length === 0) {
+      this.fetchTradeAllHistory();
+    }
   }
 
   public onClickSwitchViewToQuote() {
