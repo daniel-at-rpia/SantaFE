@@ -32,7 +32,6 @@
   </section>
   <section class="santaTableDetailAllQuotes__history">
     <historical-trade-visualizer
-      [showAllTradeHistoryButton]="showAllTradeHistoryButton"
       (allTradeHistoryData)="onClickGetAllTradeHistory($event)"
       [historyData]="rowData.data.historicalTradeVisualizer"
       [showGraph]="rowData.state.viewHistoryState">

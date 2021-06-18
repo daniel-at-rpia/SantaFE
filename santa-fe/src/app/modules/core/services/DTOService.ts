@@ -1843,7 +1843,7 @@ export class DTOService {
         disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
         selectedPortfolio: [],
         graphReceived: false,
-        showAllTradeHistory: false,
+        isShowAllTradeHistory: false,
         isCDSVariant: isCDS
       },
       graph: {

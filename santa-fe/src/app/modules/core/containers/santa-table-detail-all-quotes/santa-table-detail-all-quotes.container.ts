@@ -45,7 +45,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   private parentNode: AgGridRowNode;
   private parent: any; // a hacky way to talk to "santa-table.container.ts"
   private params: AgGridRowParams;
-  public showAllTradeHistoryButton: boolean =  true;
   constructor(
     private dtoService: DTOService,
     private utilityService: UtilityService,
@@ -228,10 +227,8 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     })
   }
 
-  public onClickGetAllTradeHistory(showAllTradeHistory: boolean) {
-    if (showAllTradeHistory) {
-      this.fetchTradeAllHistory();
-    }
+  public onClickGetAllTradeHistory(isShowAllTradeHistory: boolean) {
+    isShowAllTradeHistory && this.fetchTradeAllHistory()
   }
 
   public filterTraceTradesByOptions(options: Array<string>) {
@@ -261,7 +258,6 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
   }
 
   private fetchTradeAllHistory() {
-    this.showAllTradeHistoryButton = false;
     const securityID = this.rowData.data.security.data.securityID;
     const payload = {
       "identifier": securityID
@@ -297,7 +293,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       }
     }
     this.setHistoricalTradeVisualizer(targetSecurity)
-    this.rowData.data.historicalTradeVisualizer.state.showAllTradeHistory = true;
+    this.rowData.data.historicalTradeVisualizer.state.isShowAllTradeHistory = true;
   }
 
   private setHistoricalTradeVisualizer(targetSecurity: DTOs.SecurityDTO) {

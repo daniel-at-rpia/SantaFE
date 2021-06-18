@@ -699,7 +699,7 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     disabledPortfolio: Array<string>;
     selectedPortfolio: Array<string>;
     graphReceived: boolean;
-    showAllTradeHistory: boolean;
+    isShowAllTradeHistory: boolean;
     isCDSVariant: boolean;
   };
   graph: {

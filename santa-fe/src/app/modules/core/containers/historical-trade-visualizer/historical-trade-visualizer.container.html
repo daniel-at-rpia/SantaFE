@@ -1,7 +1,7 @@
 <article
   [ngClass]="{
     'sat-historicalTradeVisualizer': true,
-    'sat-historicalTradeVisualizer--showingAllHistory': showAllTradeHistoryButton,
+    'sat-historicalTradeVisualizer--showingAllHistory': historyData.state.isShowAllTradeHistory,
     'sat-historicalTradeVisualizer--displayGraphsState': historyData.state.graphReceived,
     'sat-historicalTradeVisualizer--isCDSVariantState': historyData.state.isCDSVariant
   }">
@@ -51,8 +51,8 @@
           </div>
         </li>
       </ul>
-      <button class="sat-historicalTradeVisualizer__table-content-allTradeHistoryBtn" (click)="getAllTradeHistory()">View All Trade History</button>
     </div>
+    <button class="sat-historicalTradeVisualizer__table-allTradeHistoryBtn" (click)="getAllTradeHistory()">View All Historical Trades</button>
   </section>
   <section class="sat-historicalTradeVisualizer__graphs">
     <div class="sat-historicalTradeVisualizer__graphs-positionPie">

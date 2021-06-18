@@ -17,7 +17,6 @@
 export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   @Input() historyData: HistoricalTradeVisualizerDTO;
   @Input() showGraph: boolean;
-  @Input() showAllTradeHistoryButton: boolean;
   @Output() allTradeHistoryData = new EventEmitter<boolean>();
   
   public constants = {
@@ -46,10 +45,6 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
 
   public ngOnChanges() {
     if (!!this.showGraph && !this.historyData.state.graphReceived) {
-
-      if (this.historyData.state.showAllTradeHistory) {
-        this.showAllTradeHistoryButton = false;
-      }
       const renderGraphs = () => {
         if (!this.historyData.graph.positionPie) {
           this.historyData.state.graphReceived = true;
@@ -79,6 +74,7 @@ export class HistoricalTradeVisualizer implements OnDestroy, OnChanges {
   }
 
   public getAllTradeHistory() {
+    this.historyData.state.isShowAllTradeHistory = true;
     this.historyData && this.allTradeHistoryData.emit(true);
   }
 }
