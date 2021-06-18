@@ -1837,12 +1837,12 @@ export class DTOService {
         timeSeriesId: `${targetSecurity.data.securityID}-tradeTimeSeries`,
         positionPieId: `${targetSecurity.data.securityID}-position`,
         volumeLeftPieId: `${targetSecurity.data.securityID}-volumeLeft`,
-        volumeRightPieId: `${targetSecurity.data.securityID}-volumeRight`
+        volumeRightPieId: `${targetSecurity.data.securityID}-volumeRight`,
+        disabledFilters: this.utility.deepCopy(FilterOptionsPortfolioList),
+        selectedFilters: [],
       },
       state: {
-        disabledPortfolio: this.utility.deepCopy(FilterOptionsPortfolioList),
-        selectedPortfolio: [],
-        graphReceived: false,
+        isGraphReceived: false,
         isShowAllTradeHistory: false,
         isCDSVariant: isCDS
       },
@@ -1865,17 +1865,17 @@ export class DTOService {
       });
       object.data.prinstineTradeList.forEach((eachTrade) => {
         if (!!eachTrade.data.vestedPortfolio) {
-          const indexInDisabledList = object.state.disabledPortfolio.indexOf(eachTrade.data.vestedPortfolio);
+          const indexInDisabledList = object.data.disabledFilters.indexOf(eachTrade.data.vestedPortfolio);
           if (indexInDisabledList >= 0) {
-            object.state.disabledPortfolio.splice(indexInDisabledList, 1);
+            object.data.disabledFilters.splice(indexInDisabledList, 1);
           }
         }
       });
-      object.state.selectedPortfolio = FilterOptionsPortfolioList.filter((eachPortfolio) => {
-        return !object.state.disabledPortfolio.includes(eachPortfolio);
+      object.data.selectedFilters = FilterOptionsPortfolioList.filter((eachPortfolio) => {
+        return !object.data.disabledFilters.includes(eachPortfolio);
       });
       object.data.displayTradeList = object.data.prinstineTradeList.filter((eachTrade) => {
-        return object.state.selectedPortfolio.includes(eachTrade.data.vestedPortfolio);
+        return object.data.selectedFilters.includes(eachTrade.data.vestedPortfolio);
       });
     }
     return object;

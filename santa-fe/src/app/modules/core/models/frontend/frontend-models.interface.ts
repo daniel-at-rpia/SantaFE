@@ -694,11 +694,11 @@ export interface HistoricalTradeVisualizerDTO extends BasicDTOStructure {
     positionPieId: string;
     volumeLeftPieId: string;
     volumeRightPieId: string;
+    disabledFilters: Array<string>;
+    selectedFilters: Array<string>;
   };
   state: {
-    disabledPortfolio: Array<string>;
-    selectedPortfolio: Array<string>;
-    graphReceived: boolean;
+    isGraphReceived: boolean;
     isShowAllTradeHistory: boolean;
     isCDSVariant: boolean;
   };

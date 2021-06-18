@@ -73,7 +73,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
     this.parentNode && this.parentNode.setExpanded(false);
     this.parent.onRowClickedToCollapse(this.rowData, !this.parentNode, this.params);
     this.rowData.state.isExpanded = false;
-    this.rowData.data.historicalTradeVisualizer.state.graphReceived = false;
+    this.rowData.data.historicalTradeVisualizer.state.isGraphReceived = false;
     this.rowData.state.viewTraceState = false;
     this.rowData.state.viewHistoryState = false;
     if (!!this.rowData.data.traceTradeVisualizer) {
@@ -263,7 +263,7 @@ export class SantaTableDetailAllQuotes implements ICellRendererAngularComp {
       "identifier": securityID
     }
     const security = this.rowData.data.security;
-    this.rowData.data.historicalTradeVisualizer.state.graphReceived = true;
+    this.rowData.data.historicalTradeVisualizer.state.isGraphReceived = true;
     this.graphService.destroyMultipleGraphs(this.rowData.data.historicalTradeVisualizer.graph)
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getAllTradeHistory, { req: 'POST' }, payload, false, false).pipe(
       first(),
