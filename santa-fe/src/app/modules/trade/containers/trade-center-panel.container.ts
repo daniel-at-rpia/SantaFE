@@ -324,8 +324,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               false,
               false
             );
-            this.state.configurator.dto = this.dtoService.resetSecurityDefinitionConfigurator(this.state.configurator.dto);
-            this.onSelectPreset(shortcut, true, true);
+            this.performUnselectPresetInBackground();
+            this.onSelectPreset(shortcut, true);
           }
         }
       })
@@ -358,7 +358,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     public onSelectPreset(
       targetPreset: DTOs.SearchShortcutDTO,
       userTriggered: boolean,
-      actionMenuTriggered: boolean = false
     ) {
       this.resetSearchEngineStates();
       if (this.state.presets.selectedPreset === targetPreset) {
@@ -399,7 +398,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           this.loadFreshData();
         }
       }
-      !actionMenuTriggered && this.store$.dispatch(new TradeTogglePresetEvent);
+      this.store$.dispatch(new TradeTogglePresetEvent);
     }
 
     public onUnselectPreset() {
