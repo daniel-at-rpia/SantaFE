@@ -13,7 +13,6 @@ import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
 import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
 import { Store, select } from '@ngrx/store';
-import { TradeLaunchUofBThroughSecurityActionMenu } from 'Trade/actions/trade.actions';
 
 @Component({
   selector: 'security-card',
