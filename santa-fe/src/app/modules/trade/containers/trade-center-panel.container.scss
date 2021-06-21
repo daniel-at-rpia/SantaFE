@@ -216,7 +216,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
     display: none;
     flex-direction: column;
     align-items: center;
-    background-color: $color_red_1;
+    background-color: $color_kill_background;
     padding: $spacing_large;
     margin: $spacing_small;
     &-icon {
@@ -306,10 +306,6 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
             width: 30rem;
           }
           &-save {
-            @include material('none');
-            background-color: $color_active;
-            transform: scale(1.0);
-            margin-left: 0;
             display: none;
           }
           &-submit {
@@ -651,15 +647,25 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
       }
     }
   }
-  &--utilitiesAvailable {
+  &--savedWatchlistVariant {
     #{$blockName} {
       &__utilities {
         display: flex;
       }
     }
   }
-  &--deleteModeActivated {
-    background-color: $color_red_1;
+  &--recentWatchlistVariant {
+    #{$blockName} {
+      &__timeSpecificDisplay {
+        display: flex;
+      }
+      &__list {
+        display: none;
+      }
+    }
+  }
+  &--savedWatchlistVariant#{$blockName}--deleteModeActivated {
+    background-color: $color_kill_background;
     #{$blockName} {
       &__utilities {
         &-deleteMode {
@@ -686,22 +692,10 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
   &--topCategorySelectedState {
     transform: translate(0, -$tradeCenterPresetShortcutCanvas_selected_movement_length);
     justify-content: flex-start;
-    // align-items: flex-start;;
   }
   &--bottomCategorySelectedState {
     transform: translate(0, $tradeCenterPresetShortcutCanvas_selected_movement_length);
     justify-content: flex-end;
-    // align-items: flex-end;
-  }
-  &--timeSpecificCategoryState {
-    #{$blockName} {
-      &__timeSpecificDisplay {
-        display: flex;
-      }
-      &__list {
-        display: none;
-      }
-    }
   }
   @include mq-large-min {
     margin: $spacing_xx_large;

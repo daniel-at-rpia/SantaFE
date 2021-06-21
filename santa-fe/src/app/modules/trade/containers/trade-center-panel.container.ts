@@ -622,7 +622,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     private fetchAllData(isInitialFetch: boolean) {
-      const packedGroupFilters = this.utilityService.getBackendGroupFilterFrom({filterList: this.state.filters.securityFilters});
+      const packedGroupFilters = this.utilityService.getBackendGroupFilterFromParams({filterList: this.state.filters.securityFilters});
       if (isInitialFetch && this.existFetchResultContainsNewSearchFilters(packedGroupFilters)) {
         this.updateStage(0, this.state.fetchResult.mainTable, this.state.table.dto);
         this.loadDataForMainTable(this.state.fetchResult.lastFetchServerReturn);
@@ -1679,7 +1679,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     }
 
-    public onUnactivate() {
+    public onCancelPresetSave() {
       this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.available;
     }
 
@@ -1803,7 +1803,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
                 for (const eachFilterKey in serverReturn[eachKey].groupFilters) {
                   const eachFilter = serverReturn[eachKey].groupFilters[eachFilterKey];
                   const eachFEKey = this.utilityService.convertBEKey(eachFilterKey);
-                  if (eachFEKey !== 'n/a' && !!this.constants.definition.SecurityDefinitionMap[eachFEKey]) {
+                  if (eachFEKey !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG && !!this.constants.definition.SecurityDefinitionMap[eachFEKey]) {
                     const eachDefinition = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap[eachFEKey]);
                     this.dtoService.populateHighlightSelectedOptionListForDefinition(eachDefinition, eachFilter);
                     if (eachFEKey === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {

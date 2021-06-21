@@ -267,7 +267,7 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
       }
       this.state.config.activeOptions.forEach((eachOption) => {
         const backendKey = this.utilityService.convertFEKey(eachOption.data.key);
-        if (backendKey !== 'n/a') {
+        if (backendKey !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
           payload.groupIdentifier[backendKey] = [];
         }
       });

@@ -228,7 +228,6 @@ export const FrontendKeyToBackendKeyDictionary = {
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
 };
-
 export const BackendKeyToDisplayLabelDictionary = {
   'SecurityType': 'Security Type',
   'RatingNoNotch': 'Rating',
@@ -258,6 +257,7 @@ export const BackendKeyToDisplayLabelDictionary = {
   'BicsLevel7': 'BICS Lv.7',
   'BicsCode': 'BicsCode'
 }
+export const KEY_CONVERSION_FAILURE_FLAG = 'n/a';
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;
 

@@ -367,7 +367,7 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
       this.store$.dispatch(new CoreSendNewAlerts([alert]));
     } else {
       this.state.configurator.newOverrideNameCache = null;
-      const simpleBucket = this.utilityService.getBackendGroupFilterFrom(params);
+      const simpleBucket = this.utilityService.getBackendGroupFilterFromParams(params);
       let bucketToString = '';
       params.filterList.forEach((eachItem) => {
         eachItem.filterBy.forEach((eachValue) => {

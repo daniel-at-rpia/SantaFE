@@ -280,7 +280,7 @@ export class UtilityService {
         return this.keyDictionary[frontendKey];
       } else {
         console.warn('failed to find key for', frontendKey);
-        return 'n/a';
+        return globalConstants.core.KEY_CONVERSION_FAILURE_FLAG;
       }
     }
 
@@ -616,7 +616,7 @@ export class UtilityService {
       }
     }
 
-    public getBackendGroupFilterFrom(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
+    public getBackendGroupFilterFromParams(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
       const simpleBucket = {};
       params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
         const property = this.convertFEKey(eachItem.key);
@@ -626,7 +626,7 @@ export class UtilityService {
               return eachBlock.shortKey;
             });
           } else {
-            if (property !== 'n/a') {
+            if (property !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
               simpleBucket[property] = eachItem.filterBy;
             }
           }
@@ -1379,7 +1379,7 @@ export class UtilityService {
       if (!!shortcut && !!shortcut.data.searchFilters && shortcut.data.searchFilters.length > 0) {
         shortcut.data.searchFilters[0].forEach((eachDefinition: DTOs.SecurityDefinitionDTO) => {
           const property = this.convertFEKey(eachDefinition.data.key);
-          if (!!property && property !== 'n/a') {
+          if (!!property && property !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
             simpleBucket[property] = eachDefinition.data.highlightSelectedOptionList.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
               if (eachBlock.bicsLevel > 0){
                 return this.bicsDictionaryLookupService.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);

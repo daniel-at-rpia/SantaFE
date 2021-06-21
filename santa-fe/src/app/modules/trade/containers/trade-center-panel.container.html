@@ -75,8 +75,8 @@
           'sat-tradeCenterPresetShortcutCanvas--categorySelectedState': state.presets.selectedList,
           'sat-tradeCenterPresetShortcutCanvas--topCategorySelectedState': !!state.presets.selectedCategoryFromTop,
           'sat-tradeCenterPresetShortcutCanvas--bottomCategorySelectedState': !!state.presets.selectedCategoryFromBottom,
-          'sat-tradeCenterPresetShortcutCanvas--timeSpecificCategoryState': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList,
-          'sat-tradeCenterPresetShortcutCanvas--utilitiesAvailable': state.presets.selectedList === state.presets.savedWatchlistShortcutList,
+          'sat-tradeCenterPresetShortcutCanvas--recentWatchlistVariant': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList,
+          'sat-tradeCenterPresetShortcutCanvas--savedWatchlistVariant': state.presets.selectedList === state.presets.savedWatchlistShortcutList,
           'sat-tradeCenterPresetShortcutCanvas--deleteModeActivated': state.presets.savedWatchlistDeleteActivated
         }">
         <section class="sat-tradeCenterPresetShortcutCanvas__utilities">
@@ -335,7 +335,7 @@
       <search-shortcut
         *ngIf="state.currentSearch.previewShortcut"
         [shortcutData]="state.currentSearch.previewShortcut"
-        (onChangeShortcutNameCallback)="onChangeSavePresetName($event, newName)"
+        (onChangeShortcutNameCallback)="onChangeSavePresetName($event)"
       ></search-shortcut>
       <button (click)="onActivatePresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-save santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-pencil"></i>
@@ -351,7 +351,7 @@
         </i>
         <span>Submit</span>
       </button>
-      <button (click)="onUnactivate()" class="sat-tradeCenterPanel__utilities-selectedPreset-unactivate santaBtn--small santaBtn--iconOnly fal fa-times"></button>
+      <button (click)="onCancelPresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-unactivate santaBtn--small santaBtn--iconOnly fal fa-times"></button>
     </div>
     <div class="sat-tradeCenterPanel__utilities-keywordSearch">
       <i class="sat-tradeCenterPanel__utilities-keywordSearch-activeIcon fal fa-search"></i>
