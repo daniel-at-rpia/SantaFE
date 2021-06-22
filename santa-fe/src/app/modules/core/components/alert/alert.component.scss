@@ -478,7 +478,7 @@ $alert_type_size: $iconButton_size_regular;
     #{$alertBlockName} {
       &__thumbnail {
         &-main {
-          background-color: $color_red_1;
+          background-color: $color_kill_background;
           &-upper,
           &-lower {
             &-text{

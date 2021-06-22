@@ -724,7 +724,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         security.groupFilters.SecurityIdentifier.forEach(securityID => allIdentifiers.push(securityID));
         const { WatchType } = security.parameters;
         const targetScope = security.subType as globalConstants.trade.AxeAlertScope;
-        const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(security, targetScope, WatchType, this.populateWatchDriverFromRawConfig, this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
+        const newEntry = this.dtoService.formNewAlertWatchlistEntryObject(security, targetScope, WatchType, this.populateWatchDriverFromRawConfig.bind(this), this.populateRangeNumberFilterFromRawConfig, this.checkIsFilled, this.checkRangeActive);
         this.state.configuration.axe.securityList.unshift(newEntry);
       })
 

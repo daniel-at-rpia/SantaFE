@@ -123,7 +123,7 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
     &-message {
       @include mix_border_radius(5px);
       display: none;
-      background-color: $color_red_1;
+      background-color: $color_kill_background;
       padding: $spacing_x_small;
       color: $color_negative;
       margin: 0 $spacing_small $spacing_small 0;

@@ -194,9 +194,6 @@ export class IndexedDBService {
     requestUpdate.onerror = (event) => {
       console.error(`${action} error`, event)
     }
-    requestUpdate.onsuccess = (event) => {
-      console.log(`${action} success`, event)
-    }
   }
 
   public initializeIndexedDB(

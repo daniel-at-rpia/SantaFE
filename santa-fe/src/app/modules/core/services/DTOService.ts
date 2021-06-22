@@ -508,6 +508,29 @@ export class DTOService {
     })
   };
 
+  // we are writing this logic to populate highlightSelectedOptionList natively in many places now, let's push for some consistency so it's easier to maintain. This should be the standard way to ingest a list of strings into a definition as filters, whether that list of strings is from backend, or from our FE stubs
+  public populateHighlightSelectedOptionListForDefinition(
+    targetDefinition: DTOs.SecurityDefinitionDTO,
+    options: Array<string>,
+    bicsLevel?: number
+  ) {
+    targetDefinition.data.highlightSelectedOptionList = this.generateSecurityDefinitionFilterOptionList(
+      targetDefinition.data.key,
+      options,
+      bicsLevel
+    );
+    targetDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
+      eachOption.isSelected = true;
+    });
+    targetDefinition.data.displayOptionList.forEach((eachOption) => {
+      const isSelected = targetDefinition.data.highlightSelectedOptionList.find((eachSelectedOption) => {
+        return eachSelectedOption.key === eachOption.key;
+      });
+      eachOption.isSelected = !!isSelected;
+    });
+    targetDefinition.state.filterActive = options.length > 0;
+  }
+
   public generateSecurityDefinitionFilterIndividualOption(
     definitionKey: string,
     option: string,
@@ -520,7 +543,7 @@ export class DTOService {
       displayLabel: !!bicsLevel ? `Lv.${bicsLevel} ${option}` : option,
       bicsLevel: bicsLevel || null,
       shortKey: normalizedOption,
-      key: `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}`,
+      key: !!bicsLevel ? `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}~${bicsLevel}` : `${this.utility.formDefinitionFilterOptionKey(definitionKey, normalizedOption)}`,
       isDeepestLevel: !!bicsLevel ? this.checkBICSConfiguratorOptionAsDeepestLevel(option, bicsLevel) : false
     }
     if (definitionKey === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
@@ -780,7 +803,8 @@ export class DTOService {
         isMajorShortcut: !!isMajor,
         isHeroShortcut: !!isHero,
         isPreviewVariant: false,
-        isAbleToSaveAsRecentWatchlist: true
+        isAbleToSaveAsRecentWatchlist: true,
+        renameShortcutActive: false
       }
     };
     definitionList.forEach((eachDefinition, index) => {
@@ -2831,8 +2855,14 @@ export class DTOService {
     bicsLevel: number
   ): boolean {
     const code = this.bicsDictionaryLookupService.BICSNameToBICSCode(option, bicsLevel);
-    const subCodes = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(code);
-    return subCodes.length === 0;
+    if(!!code) {
+      const subCodes = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(code);
+      return subCodes.length === 0;
+    } else {
+      // need to flag this manually because sometimes it get caught by the "catchError" Rxjs operator
+      console.warn('issue at checkBICSConfiguratorOptionAsDeepestLevel(), code is null');
+      return true;
+    }
   }
 
   private formSecurityDefinitionObjectCheckForWithinSelectedGroup(targetKey: string): boolean {

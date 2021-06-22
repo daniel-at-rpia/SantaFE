@@ -48,6 +48,7 @@ $color_active: $color_gray_85;
 $color_highlight: $color_blue_5;
 $color_disabled: $color_gray_5;
 $color_kill: $color_red_5;
+$color_kill_background: $color_red_1;
 $color_negative: $color_red_5;
 $color_positive: $color_green_5;
 $color_create: $color_green_5;
@@ -164,7 +165,7 @@ $alert_width: 40rem;
 $alert_thumbnail_width: 8rem;
 $page_gutter_width_for_alerts: $alert_thumbnail_width + $spacing_medium;
 
-$globalNav_navTrigger_size: 3rem;
+$globalNav_navTrigger_size: 2.5rem;
 $page_gutter_width_for_navTrigger: $globalNav_navTrigger_size + $spacing_small;
 
 $tradeAxeAlertColor: $color_axe;

@@ -339,6 +339,7 @@ export interface SearchShortcutDTO extends BasicDTOStructure {
     isHeroShortcut: boolean;
     isPreviewVariant: boolean;
     isAbleToSaveAsRecentWatchlist: boolean;
+    renameShortcutActive: boolean;
   }
 }
 

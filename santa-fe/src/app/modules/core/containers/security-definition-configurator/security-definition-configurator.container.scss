@@ -105,7 +105,7 @@ $securityDefinitionConfigurator_ctas_height: 6rem;
     top: 0;
     left: $securityDefinition_configuratorVariant_width + $spacing_medium;
     width: $securityDefinitionConfigurator_filters_width;
-    padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_xx_small;  // $spacing_xx_small for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
+    padding-left: $securityDefinitionConfigurator_gapBetweenDefAndFilter - $spacing_minimum;  // $spacing_minimum for covering the undesirable border radius look on the left upper corner when not aligned perfectly with the definition
     overflow: hidden;
     &-content {
       @include mix_alive('custom', $animation_duration_light transform);
