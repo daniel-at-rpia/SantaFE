@@ -375,14 +375,11 @@ export class BICSDataProcessingService {
         if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
           const selectedOptionList = [];
           selectedOptionList.push(targetRow.data.displayCategory);
-          eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
-            eachDefinition.data.key,
+          this.dtoService.populateHighlightSelectedOptionListForDefinition(
+            eachDefinition,
             selectedOptionList,
             targetRow.data.bicsLevel
           );
-          eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
-            eachOption.isSelected = true;
-          });
           filterList.push(eachDefinition);
         }
       });

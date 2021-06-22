@@ -7,7 +7,10 @@
     'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted,
     'sat-tradeCenterPanel--editingDriverState': state.editingDriver,
     'sat-tradeCenterPanel--initialDataLoaded': state.fetchResult.initialDataLoadedInternalSyncFlag,
-    'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount
+    'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount,
+    'sat-tradeCenterPanel--presetSaveAvail': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.available,
+    'sat-tradeCenterPanel--presetSaveActive': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.active,
+    'sat-tradeCenterPanel--presetCallingAPI': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.callingAPI
   }">
   <section class="sat-tradeCenterPanel__presets">
     <div class="sat-tradeCenterPanel__presets-content">
@@ -72,9 +75,18 @@
           'sat-tradeCenterPresetShortcutCanvas--categorySelectedState': state.presets.selectedList,
           'sat-tradeCenterPresetShortcutCanvas--topCategorySelectedState': !!state.presets.selectedCategoryFromTop,
           'sat-tradeCenterPresetShortcutCanvas--bottomCategorySelectedState': !!state.presets.selectedCategoryFromBottom,
-          'sat-tradeCenterPresetShortcutCanvas--timeSpecificCategoryState': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList
+          'sat-tradeCenterPresetShortcutCanvas--recentWatchlistVariant': state.presets.selectedList === state.presets.recentWatchlistShortcuts.fullList,
+          'sat-tradeCenterPresetShortcutCanvas--savedWatchlistVariant': state.presets.selectedList === state.presets.savedWatchlistShortcutList,
+          'sat-tradeCenterPresetShortcutCanvas--deleteModeActivated': state.presets.savedWatchlistDeleteActivated
         }">
-        <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay">
+        <section class="sat-tradeCenterPresetShortcutCanvas__utilities">
+          <button (click)="onToggleSavedWatchlistDeleteMode()" class="sat-tradeCenterPresetShortcutCanvas__utilities-deleteMode santaBtn--labelled santaBtn--inverseLabelled">
+            <i class="fal fa-eraser"></i>
+            <span>Delete Mode</span>
+          </button>
+          <i class="sat-tradeCenterPresetShortcutCanvas__utilities-deleteModeIcon fal fa-eraser"></i>
+        </section>
+        <section class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay">
           <div class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block">
             <span class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-title">Today:</span>
             <ul class="sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list">
@@ -126,7 +138,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </section>
         <ul class="sat-tradeCenterPresetShortcutCanvas__list">
           <li
             *ngFor="let eachShortcut of state.presets.selectedList"
@@ -135,6 +147,7 @@
               'sat-tradeCenterPresetShortcutCanvas__list-item--major': eachShortcut.state.isMajorShortcut,
               'sat-tradeCenterPresetShortcutCanvas__list-item--hero': eachShortcut.state.isHeroShortcut
             }">
+            <button (click)="onClickDeleteWatchlist(eachShortcut)" class="sat-tradeCenterPresetShortcutCanvas__list-item-deleteBtn santaBtn--iconOnly fal fa-eraser"></button>
             <search-shortcut
               [shortcutData]="eachShortcut"
               (onClickShortcutCallback)="onSelectPreset($event, true)"
@@ -315,12 +328,30 @@
   </section>
   <section class="sat-tradeCenterPanel__utilities">
     <div class="sat-tradeCenterPanel__utilities-selectedPreset">
-      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--iconOnly fal fa-arrow-left"></button>
-      <span class="sat-tradeCenterPanel__utilities-selectedPreset-label">Preset: </span>
+      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--labelled">
+        <i class="fal fa-arrow-left"></i>
+        <span>Back To Presets</span>
+      </button>
       <search-shortcut
         *ngIf="state.currentSearch.previewShortcut"
         [shortcutData]="state.currentSearch.previewShortcut"
+        (onChangeShortcutNameCallback)="onChangeSavePresetName($event)"
       ></search-shortcut>
+      <button (click)="onActivatePresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-save santaBtn--labelled santaBtn--inverseLabelled">
+        <i class="fal fa-pencil"></i>
+        <span>Save This Preset</span>
+      </button>
+      <button (click)="onSubmitSaveWatchlist()" class="sat-tradeCenterPanel__utilities-selectedPreset-submit santaBtn--labelled santaBtn--inverseLabelled">
+        <i
+          [ngClass]="{
+            'fal': true,
+            'fa-cloud-upload': state.currentSearch.saveMode !== constants.trade.TradeCenterPanelSearchSaveModes.callingAPI,
+            'fa-circle-notch fa-spin': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.callingAPI
+          }">
+        </i>
+        <span>Submit</span>
+      </button>
+      <button (click)="onCancelPresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-unactivate santaBtn--small santaBtn--iconOnly fal fa-times"></button>
     </div>
     <div class="sat-tradeCenterPanel__utilities-keywordSearch">
       <i class="sat-tradeCenterPanel__utilities-keywordSearch-activeIcon fal fa-search"></i>

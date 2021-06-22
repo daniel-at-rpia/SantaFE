@@ -280,7 +280,7 @@ export class UtilityService {
         return this.keyDictionary[frontendKey];
       } else {
         console.warn('failed to find key for', frontendKey);
-        return 'n/a';
+        return globalConstants.core.KEY_CONVERSION_FAILURE_FLAG;
       }
     }
 
@@ -594,13 +594,13 @@ export class UtilityService {
       }
     }
 
-  public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
-    configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
-      definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
-        definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
+    public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
+      configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+        definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
+        })
       })
-    })
-  }
+    }
 
     public highlightKeywordInParagraph(targetString: string, keyword: string): string {
       // current algorithm only highlights the first occurrence of the keyword, if ever there is the need to highlight all occurrences, append the logic and add a flag as input to switch between two modes
@@ -614,6 +614,25 @@ export class UtilityService {
       } else {
         return null;
       }
+    }
+
+    public getBackendGroupFilterFromParams(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
+      const simpleBucket = {};
+      params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+        const property = this.convertFEKey(eachItem.key);
+        if (!!property) {
+          if (eachItem.key === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
+            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
+              return eachBlock.shortKey;
+            });
+          } else {
+            if (property !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
+              simpleBucket[property] = eachItem.filterBy;
+            }
+          }
+        }
+      })
+      return simpleBucket;
     }
   // shared end
 
@@ -1354,6 +1373,25 @@ export class UtilityService {
         return result;
       }
     }
+
+    public getBackendGroupFilterFromWatchlist(shortcut: DTOs.SearchShortcutDTO): AdhocPacks.GenericKeyWithStringArrayBlock {
+      const simpleBucket = {};
+      if (!!shortcut && !!shortcut.data.searchFilters && shortcut.data.searchFilters.length > 0) {
+        shortcut.data.searchFilters[0].forEach((eachDefinition: DTOs.SecurityDefinitionDTO) => {
+          const property = this.convertFEKey(eachDefinition.data.key);
+          if (!!property && property !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
+            simpleBucket[property] = eachDefinition.data.highlightSelectedOptionList.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
+              if (eachBlock.bicsLevel > 0){
+                return this.bicsDictionaryLookupService.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
+              } else {
+                return eachBlock.shortKey;
+              }
+            });
+          }
+        })
+      }
+      return simpleBucket;
+    }
   // trade specific end
 
   // structuring specific
@@ -1726,25 +1764,6 @@ export class UtilityService {
           definition.data.highlightSelectedOptionList.push(eachOption);
         }
       })
-    }
-
-    public getSimpleBucketFromConfigurator(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
-      const simpleBucket = {};
-      params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
-        const property = this.convertFEKey(eachItem.key);
-        if (!!property) {
-          if (eachItem.key === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
-            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
-              return eachBlock.shortKey;
-            });
-          } else {
-            if (property !== 'n/a') {
-              simpleBucket[property] = eachItem.filterBy;
-            }
-          }
-        }
-      })
-      return simpleBucket;
     }
 
     public formOverrideTitle(backendGroupOptionIdentifier: string): string {

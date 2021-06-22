@@ -5,11 +5,17 @@
     'sat-searchShortcut--selectedState': shortcutData.state.isSelected,
     'sat-searchShortcut--userInputBlockedState': shortcutData.state.isUserInputBlocked,
     'sat-searchShortcut--previewVariant': shortcutData.state.isPreviewVariant,
-    'sat-searchShortcut--hasHighlightTitle': shortcutData.data.highlightTitle.length > 0
+    'sat-searchShortcut--hasHighlightTitle': shortcutData.data.highlightTitle.length > 0,
+    'sat-searchShortcut--renameShortcutState': shortcutData.state.renameShortcutActive
   }">
   <section class="sat-searchShortcut__title">
     <span class="sat-searchShortcut__title-highlightText">{{shortcutData.data.highlightTitle}}</span>
     <span class="sat-searchShortcut__title-text">{{shortcutData.data.displayTitle}}</span>
+    <santa-textarea
+      class="sat-searchShortcut__title-input"
+      [inputValue]="shortcutData.data.displayTitle"
+      (onInputChange)="onChangeShortcutName($event, newName)">
+    </santa-textarea>
   </section>
   <section class="sat-searchShortcut__configOverview">
     <ul class="sat-searchShortcut__configOverview-slotList">

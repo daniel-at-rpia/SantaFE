@@ -54,7 +54,11 @@ export const APIUrlMap = {
   setView: 'portfolioStructuring/set-analyst-views',
   getAllTraceTrades: 'TraceTrade/get-all-trace-trades',
   clearPortfolioBreakdown: 'portfolioStructuring/clear-portfolio-breakdown',
-  createPortfolioOverridesForAllPortfolios: 'portfolioStructuring/create-portfolio-overrides-for-all-portfolios'
+  createPortfolioOverridesForAllPortfolios: 'portfolioStructuring/create-portfolio-overrides-for-all-portfolios',
+  getSavedWatchlists: 'WatchList/get',
+  createSavedWatchlist: 'WatchList/create',
+  updateSavedWatchlist: 'WatchList/update',
+  deleteSavedWatchlist: 'Watchlist/delete'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
@@ -224,7 +228,6 @@ export const FrontendKeyToBackendKeyDictionary = {
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
 };
-
 export const BackendKeyToDisplayLabelDictionary = {
   'SecurityType': 'Security Type',
   'RatingNoNotch': 'Rating',
@@ -254,6 +257,7 @@ export const BackendKeyToDisplayLabelDictionary = {
   'BicsLevel7': 'BICS Lv.7',
   'BicsCode': 'BicsCode'
 }
+export const KEY_CONVERSION_FAILURE_FLAG = 'n/a';
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;
 

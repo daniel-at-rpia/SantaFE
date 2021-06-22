@@ -345,13 +345,10 @@ export class PortfolioBreakdown extends SantaContainerComponentBase implements O
             });
             filterList.push(eachDefinition);
           } else {
-            eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
-              eachDefinition.data.key,
+            this.dtoService.populateHighlightSelectedOptionListForDefinition(
+              eachDefinition,
               targetRow.data.simpleBucket[backendKey]
             );
-            eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
-              eachOption.isSelected = true;
-            });
             filterList.push(eachDefinition);
           }
         }
