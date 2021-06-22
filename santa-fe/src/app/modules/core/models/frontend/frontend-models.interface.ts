@@ -308,7 +308,7 @@ export interface SecurityGroupAverageVisualizerDTO extends BasicDTOStructure {
   }
 }
 
-export interface SearchShortcutDTO extends BasicDTOStructure {
+export interface WatchlistDTO extends BasicDTOStructure {
   data: {
     uuid: string;
     displayTitle: string;

@@ -45,7 +45,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
         align-self: flex-end;
         margin: 0 0 $spacing_small $spacing_small;
       }
-      &>search-shortcut {
+      &>watchlist {
         @include mix_alive('light');
         width: 0;
         margin: 0 $spacing_small;
@@ -277,7 +277,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       &__utilities {
         &-selectedPreset {
           background-color: $color_active;
-          &>search-shortcut {
+          &>watchlist {
             width: 30rem;
           }
           &-save {
@@ -302,7 +302,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       &__utilities {
         &-selectedPreset {
           background-color: $color_active;
-          &>search-shortcut {
+          &>watchlist {
             width: 30rem;
           }
           &-save {
@@ -597,7 +597,7 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
           flex: 0 1 25%;
           display: flex;
           padding: $spacing_x_small $spacing_medium $spacing_medium 0;
-          search-shortcut {
+          watchlist {
             display: flex;
             flex: 1 1 auto;
           }
@@ -635,7 +635,7 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
         color: $font_color_inverse;
         transform: scale(0.001);
       }
-      search-shortcut {
+      watchlist {
         display: flex;
         flex: 1 1 auto;
       }

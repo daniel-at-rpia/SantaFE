@@ -3,7 +3,7 @@ import {
   SecurityDefinitionBundleStub,
   SecurityDefinitionMapStub,
   SecurityMetricOptionStub,
-  SearchShortcutStub
+  WatchlistStub
 } from 'FEModels/frontend-stub-models.interface';
 import { FrontendKeyToBackendKeyDictionary } from 'Core/constants/coreConstants.constant';
 import {

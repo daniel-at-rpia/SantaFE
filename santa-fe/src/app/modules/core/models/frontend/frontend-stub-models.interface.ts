@@ -2,14 +2,14 @@ import { Label } from '@amcharts/amcharts4/core';
 import { AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
 import * as constants from 'Core/constants/index';
 
-export interface SearchShortcutStub {
+export interface WatchlistStub {
   displayTitle: string;
-  includedDefinitions: Array<SearchShortcutIncludedDefinitionStub>;
+  includedDefinitions: Array<WatchlistIncludedDefinitionStub>;
   isMajor?: boolean;
   isHero?: boolean;
 }
 
-export interface SearchShortcutIncludedDefinitionStub {
+export interface WatchlistIncludedDefinitionStub {
   definitionKey: string;
   groupByActive: boolean;
   selectedOptions: Array<string>;

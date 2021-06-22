@@ -410,11 +410,11 @@ export class UtilityService {
     }
 
     public applyShortcutToConfigurator(
-      targetShortcut: DTOs.SearchShortcutDTO,
+      targetShortcut: DTOs.WatchlistDTO,
       targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
-      const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
+      const shortcutCopy: DTOs.WatchlistDTO = this.deepCopy(targetShortcut);
       // currently the configurator does not support multiple groups of filters chained together, we will change that when we need to utilize this feature
       const primaryFilterGroup = shortcutCopy.data.searchFilters[0];
       primaryFilterGroup.forEach((eachShortcutDef) => {
@@ -1342,7 +1342,7 @@ export class UtilityService {
       })
     }
 
-    public generateCustomizedTitleForShortcut(targetShortcut: DTOs.SearchShortcutDTO): string {
+    public generateCustomizedTitleForShortcut(targetShortcut: DTOs.WatchlistDTO): string {
       let customDisplayTitle = '';
       let selectionOptionsList: Array<string> = [];
       // we only use the first (primary) set of configurations in the searchFilters to name the shortcut, ignore all the other "OR" conditions for now because it would make the name too long
@@ -1374,7 +1374,7 @@ export class UtilityService {
       }
     }
 
-    public getBackendGroupFilterFromWatchlist(shortcut: DTOs.SearchShortcutDTO): AdhocPacks.GenericKeyWithStringArrayBlock {
+    public getBackendGroupFilterFromWatchlist(shortcut: DTOs.WatchlistDTO): AdhocPacks.GenericKeyWithStringArrayBlock {
       const simpleBucket = {};
       if (!!shortcut && !!shortcut.data.searchFilters && shortcut.data.searchFilters.length > 0) {
         shortcut.data.searchFilters[0].forEach((eachDefinition: DTOs.SecurityDefinitionDTO) => {

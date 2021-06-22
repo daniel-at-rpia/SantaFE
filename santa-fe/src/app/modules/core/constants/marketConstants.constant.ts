@@ -2,14 +2,14 @@ import {
   SecurityDefinitionStub,
   SecurityDefinitionBundleStub,
   SecurityMetricOptionStub,
-  SearchShortcutStub
+  WatchlistStub
 } from 'FEModels/frontend-stub-models.interface';
 
 import { SecurityMetricOptions } from './coreConstants.constant';
 
 export const MetricRenderDelay = 300;
 
-export const SearchShortcuts: Array<SearchShortcutStub> = [
+export const Watchlists: Array<WatchlistStub> = [
   {
     displayTitle: 'Grouped by rating',
     includedDefinitions: [

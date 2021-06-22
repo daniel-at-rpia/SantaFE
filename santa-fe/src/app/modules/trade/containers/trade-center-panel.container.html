@@ -97,10 +97,10 @@
                 'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--major': eachShortcut.state.isMajorShortcut,
                 'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--hero': eachShortcut.state.isHeroShortcut
               }">
-              <search-shortcut
+              <watchlist
                 [shortcutData]="eachShortcut"
                 (onClickShortcutCallback)="onSelectPreset($event, true)"
-              ></search-shortcut>
+              ></watchlist>
               </li>
             </ul>
           </div>
@@ -114,10 +114,10 @@
                 'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--major': eachShortcut.state.isMajorShortcut,
                 'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--hero': eachShortcut.state.isHeroShortcut
               }">
-              <search-shortcut
+              <watchlist
                 [shortcutData]="eachShortcut"
                 (onClickShortcutCallback)="onSelectPreset($event, true)"
-              ></search-shortcut>
+              ></watchlist>
               </li>
             </ul>
           </div>
@@ -131,10 +131,10 @@
                 'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--major': eachShortcut.state.isMajorShortcut,
                 'sat-tradeCenterPresetShortcutCanvas__timeSpecificDisplay-block-list-item--hero': eachShortcut.state.isHeroShortcut
               }">
-              <search-shortcut
+              <watchlist
                 [shortcutData]="eachShortcut"
                 (onClickShortcutCallback)="onSelectPreset($event, true)"
-              ></search-shortcut>
+              ></watchlist>
               </li>
             </ul>
           </div>
@@ -148,10 +148,10 @@
               'sat-tradeCenterPresetShortcutCanvas__list-item--hero': eachShortcut.state.isHeroShortcut
             }">
             <button (click)="onClickDeleteWatchlist(eachShortcut)" class="sat-tradeCenterPresetShortcutCanvas__list-item-deleteBtn santaBtn--iconOnly fal fa-eraser"></button>
-            <search-shortcut
+            <watchlist
               [shortcutData]="eachShortcut"
               (onClickShortcutCallback)="onSelectPreset($event, true)"
-            ></search-shortcut>
+            ></watchlist>
           </li>
         </ul>
       </article>
@@ -332,11 +332,11 @@
         <i class="fal fa-arrow-left"></i>
         <span>Back To Presets</span>
       </button>
-      <search-shortcut
+      <watchlist
         *ngIf="state.currentSearch.previewShortcut"
         [shortcutData]="state.currentSearch.previewShortcut"
         (onChangeShortcutNameCallback)="onChangeSavePresetName($event)"
-      ></search-shortcut>
+      ></watchlist>
       <button (click)="onActivatePresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-save santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-pencil"></i>
         <span>Save This Preset</span>

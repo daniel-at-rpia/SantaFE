@@ -590,7 +590,7 @@ export class DTOService {
       }
     }
     if (!!configuratorLabel) {
-      const matchedSelectedStub = globalConstants.trade.SelectedShortcuts.find((definitionStub: Stubs.SearchShortcutIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
+      const matchedSelectedStub = globalConstants.trade.SelectedShortcuts.find((definitionStub: Stubs.WatchlistIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
       !!matchedSelectedStub && this.formSecurityDefinitionObjectPrePopulateListsWithSelectedOptions(matchedSelectedStub, object);
     }
     return object;
@@ -769,14 +769,14 @@ export class DTOService {
     return object;
   }
 
-  public formSearchShortcutObject(
+  public formWatchlistObject(
     definitionList: Array<DTOs.SecurityDefinitionDTO>,
     title: string,
     skipFirstForDefaultGroupBy: boolean,
     isMajor: boolean,
     isHero: boolean
-  ): DTOs.SearchShortcutDTO {
-    const object: DTOs.SearchShortcutDTO = {
+  ): DTOs.WatchlistDTO {
+    const object: DTOs.WatchlistDTO = {
       data: {
         uuid: this.utility.generateUUID(),
         displayTitle: title,
@@ -2891,7 +2891,7 @@ export class DTOService {
   }
 
   private formSecurityDefinitionObjectPrePopulateListsWithSelectedOptions(
-    selectedStub: Stubs.SearchShortcutIncludedDefinitionStub,
+    selectedStub: Stubs.WatchlistIncludedDefinitionStub,
     targetDefinition: DTOs.SecurityDefinitionDTO
   ) {
     const selectedKeys = selectedStub.selectedOptions;
@@ -2911,7 +2911,7 @@ export class DTOService {
   ) {
     selectedGroupDefinition.data.list = [];
     const defaultSelectedList: Array<DTOs.SecurityDefinitionDTO> = [];
-    globalConstants.trade.SelectedShortcuts.forEach((shortcutStubs: Stubs.SearchShortcutIncludedDefinitionStub) => {
+    globalConstants.trade.SelectedShortcuts.forEach((shortcutStubs: Stubs.WatchlistIncludedDefinitionStub) => {
       const { definitionKey } = shortcutStubs;
       configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
         definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {

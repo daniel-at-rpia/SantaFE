@@ -33,7 +33,7 @@
       SecurityGroupDTO,
       SecurityDefinitionDTO,
       SecurityDefinitionConfiguratorDTO,
-      SearchShortcutDTO
+      WatchlistDTO
     } from 'FEModels/frontend-models.interface';
     import { BESecurityGroupDTO } from 'BEModels/backend-models.interface';
     import { PayloadGetSantaGroups } from 'BEModels/backend-payloads.interface';
@@ -44,7 +44,7 @@
     import {
       PieChartConfiguratorOptions,
       MetricRenderDelay,
-      SearchShortcuts
+      Watchlists
     } from 'Core/constants/marketConstants.constant';
     import {  
       SecurityDefinitionMap
@@ -66,7 +66,7 @@ export class MarketGroupPanel implements OnDestroy {
   PieChartConfigurationOptions = PieChartConfiguratorOptions;
   constants = {
     securityGroupDefinitionMap: SecurityDefinitionMap,
-    searchShortcuts: SearchShortcuts,
+    watchlists: Watchlists,
     securityMetricOptions: SecurityMetricOptions
   }
 
@@ -118,7 +118,7 @@ export class MarketGroupPanel implements OnDestroy {
     });
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.left, this.state.utility.pieConfigurator.left.options[5]);
     this.onSelectPieConfiguratorMetric(this.state.utility.pieConfigurator.right, this.state.utility.pieConfigurator.right.options[2]);
-    this.populateSearchShortcuts();
+    this.populateWatchlists();
   }
 
   constructor(
@@ -153,7 +153,7 @@ export class MarketGroupPanel implements OnDestroy {
     }
   }
 
-  public onClickSearchShortcut(targetShortcut: SearchShortcutDTO){
+  public onClickWatchlist(targetShortcut: WatchlistDTO){
     if (this.state.configurator.selectedShortcut && this.state.configurator.selectedShortcut !== targetShortcut) {
       this.state.configurator.selectedShortcut.state.isSelected = false;
     }
@@ -276,8 +276,8 @@ export class MarketGroupPanel implements OnDestroy {
     document.body.removeChild(downloadLink);
   }
 
-  private populateSearchShortcuts(){
-    this.constants.searchShortcuts.forEach((eachShortcutStub) => {
+  private populateWatchlists(){
+    this.constants.watchlists.forEach((eachShortcutStub) => {
       const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO: SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
@@ -291,7 +291,7 @@ export class MarketGroupPanel implements OnDestroy {
         }
         return definitionDTO;
       });
-      this.state.configurator.shortcutList.push(this.dtoService.formSearchShortcutObject(definitionList, eachShortcutStub.displayTitle, true, !!eachShortcutStub.isMajor, !!eachShortcutStub.isHero));
+      this.state.configurator.shortcutList.push(this.dtoService.formWatchlistObject(definitionList, eachShortcutStub.displayTitle, true, !!eachShortcutStub.isMajor, !!eachShortcutStub.isHero));
     });
   }
 

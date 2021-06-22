@@ -30,7 +30,7 @@ import { BestQuoteComparer } from 'Core/components/best-quote-comparer/best-quot
 import { SecurityQuote } from 'Core/components/security-quote/security-quote.component';
 import { SecurityTableRow } from 'Core/components/security-table-row/security-table-row.component';
 import { SecurityDefinition } from 'Core/components/security-definition/security-definition.component';
-import { SearchShortcut } from 'Core/components/search-shortcut/search-shortcut.component';
+import { Watchlist } from 'Core/components/watchlist/watchlist.component';
 
 import { SecurityDefinitionConfigurator } from 'Core/containers/security-definition-configurator/security-definition-configurator.container';
 import { SecurityTable } from 'Core/containers/security-table/security-table.container';
@@ -68,7 +68,7 @@ import { SantaSimpleInput } from './components/simple-input/simple-input.compone
     SecurityTableRow,
     SecurityDefinition,
     SecurityDefinitionConfigurator,
-    SearchShortcut,
+    Watchlist,
     SantaTable,
     SantaTableSecurityCell,
     SantaTableQuoteCell,
@@ -130,7 +130,7 @@ import { SantaSimpleInput } from './components/simple-input/simple-input.compone
     SecurityTable,
     SecurityDefinition,
     SecurityDefinitionConfigurator,
-    SearchShortcut,
+    Watchlist,
     GlobalAlert,
     Alert,
     NumericFilter,

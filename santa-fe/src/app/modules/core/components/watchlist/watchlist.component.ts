@@ -8,19 +8,19 @@ import {
 } from '@angular/core';
 
 import {
-  SearchShortcutDTO
+  WatchlistDTO
 } from 'FEModels/frontend-models.interface';
 
 @Component({
-  selector: 'search-shortcut',
-  templateUrl: './search-shortcut.component.html',
-  styleUrls: ['./search-shortcut.component.scss'],
+  selector: 'watchlist',
+  templateUrl: './watchlist.component.html',
+  styleUrls: ['./watchlist.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
-export class SearchShortcut {
-  @Input() shortcutData: SearchShortcutDTO;
-  @Output() onClickShortcutCallback = new EventEmitter<SearchShortcutDTO>();
+export class Watchlist {
+  @Input() shortcutData: WatchlistDTO;
+  @Output() onClickShortcutCallback = new EventEmitter<WatchlistDTO>();
   @Output() onChangeShortcutNameCallback = new EventEmitter<string>();
   constructor(
   ) {

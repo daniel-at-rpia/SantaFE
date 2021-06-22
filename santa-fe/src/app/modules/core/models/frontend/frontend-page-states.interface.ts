@@ -80,8 +80,8 @@ export interface MarketGroupPanelState {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;
     showSelectedGroupConfig: boolean;
     cachedOriginalConfig: DTOs.SecurityDefinitionConfiguratorDTO;
-    shortcutList: Array<DTOs.SearchShortcutDTO>;
-    selectedShortcut: DTOs.SearchShortcutDTO;
+    shortcutList: Array<DTOs.WatchlistDTO>;
+    selectedShortcut: DTOs.WatchlistDTO;
   }
   searchResult: {
     securityGroupList: Array<DTOs.SecurityGroupDTO>;
@@ -121,22 +121,22 @@ export interface TradeCenterPanelState {
   bestQuoteValidWindow: number;
   presets : {
     presetsReady: boolean;
-    selectedPreset: DTOs.SearchShortcutDTO;
-    selectedList: Array<DTOs.SearchShortcutDTO>;
+    selectedPreset: DTOs.WatchlistDTO;
+    selectedList: Array<DTOs.WatchlistDTO>;
     selectedCategoryFromTop: boolean;
     selectedCategoryFromBottom: boolean;  // the reason we want to do two flags instead of one is so that we can have the default set to be "neither" which is more correct in the UI
-    portfolioShortcutList: Array<DTOs.SearchShortcutDTO>;
-    ownershipShortcutList: Array<DTOs.SearchShortcutDTO>;
-    strategyShortcutList: Array<DTOs.SearchShortcutDTO>;
+    portfolioShortcutList: Array<DTOs.WatchlistDTO>;
+    ownershipShortcutList: Array<DTOs.WatchlistDTO>;
+    strategyShortcutList: Array<DTOs.WatchlistDTO>;
     recentWatchlistShortcuts: {
-      fullList: Array<DTOs.SearchShortcutDTO>;
-      todayList: Array<DTOs.SearchShortcutDTO>,
-      thisWeekList: Array<DTOs.SearchShortcutDTO>,
-      lastWeekList: Array<DTOs.SearchShortcutDTO>
+      fullList: Array<DTOs.WatchlistDTO>;
+      todayList: Array<DTOs.WatchlistDTO>,
+      thisWeekList: Array<DTOs.WatchlistDTO>,
+      lastWeekList: Array<DTOs.WatchlistDTO>
     }
-    savedWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    savedWatchlistShortcutList: Array<DTOs.WatchlistDTO>;
     savedWatchlistDeleteActivated: boolean;
-    trendingWatchlistShortcutList: Array<DTOs.SearchShortcutDTO>;
+    trendingWatchlistShortcutList: Array<DTOs.WatchlistDTO>;
   }
   searchEngine: {
     typeaheadActive: boolean;
@@ -173,7 +173,7 @@ export interface TradeCenterPanelState {
   filters: Blocks.TradeCenterPanelStateFilterBlock;
   editingDriver: boolean;
   currentSearch: {
-    previewShortcut: DTOs.SearchShortcutDTO;
+    previewShortcut: DTOs.WatchlistDTO;
     redirectedFromStrurturing: boolean;
     mode: TradeCenterPanelSearchModes;
     saveMode: TradeCenterPanelSearchSaveModes;

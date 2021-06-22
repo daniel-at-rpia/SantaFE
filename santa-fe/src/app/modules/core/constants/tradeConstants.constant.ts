@@ -15,13 +15,13 @@ export enum TradeCenterPanelSearchSaveModes {
   callingAPI = 'CallingAPI'
 }
 
-const allPortfolios: Stubs.SearchShortcutIncludedDefinitionStub = {
+const allPortfolios: Stubs.WatchlistIncludedDefinitionStub = {
   definitionKey: 'PORTFOLIO',
   groupByActive: false,
   selectedOptions: [PortfolioShortNames.DOF, PortfolioShortNames.SOF, PortfolioShortNames.STIP, PortfolioShortNames.FIP, PortfolioShortNames.CIP, PortfolioShortNames.AGB, PortfolioShortNames.BBB]
 };
 
-export const SelectedShortcuts: Array<Stubs.SearchShortcutIncludedDefinitionStub> = [
+export const SelectedShortcuts: Array<Stubs.WatchlistIncludedDefinitionStub> = [
   {
     definitionKey: 'QUOTED_TODAY',
     groupByActive: false,
@@ -29,7 +29,7 @@ export const SelectedShortcuts: Array<Stubs.SearchShortcutIncludedDefinitionStub
   }
 ]
 
-export const PortfolioShortcuts: Array<Stubs.SearchShortcutStub> = [{
+export const PortfolioShortcuts: Array<Stubs.WatchlistStub> = [{
     displayTitle: 'All Portfolios',
     includedDefinitions: [
       allPortfolios
@@ -122,7 +122,7 @@ export const PortfolioShortcuts: Array<Stubs.SearchShortcutStub> = [{
   }
 ];
 
-export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
+export const OwnershipShortcuts: Array<Stubs.WatchlistStub> = [
   {
     displayTitle: 'All Securties I Own',
     includedDefinitions: [
@@ -287,7 +287,7 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
   }
 ];
 
-export const StrategyShortcuts: Array<Stubs.SearchShortcutStub> = [
+export const StrategyShortcuts: Array<Stubs.WatchlistStub> = [
   {
     displayTitle: `${FullStrategyList[0]} in DOF`,
     includedDefinitions: [
@@ -411,7 +411,7 @@ export const StrategyShortcuts: Array<Stubs.SearchShortcutStub> = [
   }
 ];
 
-export const TrendingShortcuts: Array<Stubs.SearchShortcutStub> = [
+export const TrendingShortcuts: Array<Stubs.WatchlistStub> = [
   {
     displayTitle: 'COVID Sensitive',
     includedDefinitions: [

@@ -34,9 +34,9 @@
     <div class="sat-marketGroupPanel__configurator-mainCanvas">
       <ul class="sat-marketGroupPanel__configurator-mainCanvas-shortcutList">
         <li *ngFor="let eachShortcut of state.configurator.shortcutList" class="sat-marketGroupPanel__configurator-mainCanvas-shortcutList-item">
-          <search-shortcut
+          <watchlist
             [shortcutData]="eachShortcut"
-            (onClickShortcutCallback)="onClickSearchShortcut($event)"></search-shortcut>
+            (onClickShortcutCallback)="onClickWatchlist($event)"></watchlist>
         </li>
       </ul>
       <div class="sat-marketGroupPanel__configurator-mainCanvas-configurator">

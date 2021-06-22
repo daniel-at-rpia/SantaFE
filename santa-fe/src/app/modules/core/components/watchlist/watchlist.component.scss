@@ -1,7 +1,7 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
-.sat-searchShortcut {
+.sat-watchlist {
   $blockName: &;
   @include material();
   @include mix_alive('material');
