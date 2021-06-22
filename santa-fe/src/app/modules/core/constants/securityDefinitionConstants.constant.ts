@@ -581,7 +581,7 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
   },
   BICS_CONSOLIDATED: {
     key: 'BICS_CONSOLIDATED',
-    displayName: 'All BICS',
+    displayName: 'BICS',
     icon: 'fas fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'code',

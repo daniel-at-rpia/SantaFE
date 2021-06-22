@@ -21,6 +21,7 @@ import {
 export class SearchShortcut {
   @Input() shortcutData: SearchShortcutDTO;
   @Output() onClickShortcutCallback = new EventEmitter<SearchShortcutDTO>();
+  @Output() onChangeShortcutNameCallback = new EventEmitter<string>();
   constructor(
   ) {
   }
@@ -29,6 +30,10 @@ export class SearchShortcut {
     if (!this.shortcutData.state.isUserInputBlocked) {
       this.onClickShortcutCallback.emit(this.shortcutData);
     }
+  }
+
+  public onChangeShortcutName(newName: string) {
+    !!this.onChangeShortcutNameCallback && this.onChangeShortcutNameCallback.emit(newName);
   }
 
 }

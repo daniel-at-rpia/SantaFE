@@ -36,6 +36,9 @@
       user-select: none;
       font-size: $font_size_normal;
     }
+    &-input {
+      display: none;
+    }
   }
   &__configOverview {
     display: flex;
@@ -99,6 +102,18 @@
       &__title {
         &-highlightText {
           display: inline-block;
+        }
+      }
+    }
+  }
+  &--renameShortcutState {
+    #{$blockName} {
+      &__title {
+        &-text {
+          display: none;
+        }
+        &-input {
+          display: flex;
         }
       }
     }
