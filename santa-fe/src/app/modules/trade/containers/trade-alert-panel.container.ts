@@ -43,6 +43,7 @@
       TradeLiveUpdatePassRawDataToAlertTableEvent,
       TradeLiveUpdateProcessDataCompleteInAlertTableEvent,
       TradeKeywordSearchThisSecurityEvent,
+      TradeLaunchUofBThroughSecurityActionMenu
     } from 'Trade/actions/trade.actions';
     import {
       selectNewAlertsForAlertTable,
@@ -1096,7 +1097,8 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),
         null,
-        this.onClickedSecurityCardSearch.bind(this)
+        this.onClickedSecurityCardSearch.bind(this),
+        this.onSelectSecurityLaunchUofB.bind(this)
       );
       this.calculateBestQuoteComparerWidthAndHeight();
       this.updateStage(this.constants.table.SECURITY_TABLE_FINAL_STAGE, this.state.fetchResult.alertTable, this.state.table.alertDto);
@@ -1296,6 +1298,10 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         }
       }
       this.state.alertUpdateInProgress = false;
+    }
+
+    private onSelectSecurityLaunchUofB(transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) {
+      this.store$.dispatch(new TradeLaunchUofBThroughSecurityActionMenu(transferPack));
     }
   // table section end
 

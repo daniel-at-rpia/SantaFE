@@ -535,10 +535,6 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.state.editingDriver = true;
     }
 
-    public onSelectSecurityLaunchUofB(transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) {
-      this.store$.dispatch(new TradeLaunchUofBThroughSecurityActionMenu(transferPack));
-    }
-
     private fetchBICsHierarchy() {
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getBICsCodeDictionary, {req: 'GET'}).pipe(
         first(),
@@ -1426,6 +1422,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       })
     }
 
+    private onSelectSecurityLaunchUofB(transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) {
+      this.store$.dispatch(new TradeLaunchUofBThroughSecurityActionMenu(transferPack));
+    }
   // General End
 
   // Search Engine

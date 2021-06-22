@@ -80,7 +80,8 @@ export class LiveDataProcessingService {
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
-    searchCallback: (card: DTOs.SecurityDTO) => void
+    searchCallback: (card: DTOs.SecurityDTO) => void,
+    sendToLaunchUofBCallback: (transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) => void,
   ): Array<DTOs.SecurityTableRowDTO> {
     const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
@@ -95,6 +96,7 @@ export class LiveDataProcessingService {
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
           newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
           newSecurity.api.onClickSearch = searchCallback;
+          newSecurity.api.onClickSendToLaunchUofB = sendToLaunchUofBCallback;
           !!newSecurity.data.actionMenu && this.utilityService.applySpecificListForActionMenu(newSecurity.data.actionMenu, globalConstants.security.SecurityActionMenuOptionsRawText.uofB);
           this.dtoService.appendLastTraceInfoToSecurityDTO(newSecurity, rawSecurityDTOMap[targetSecurityId]);
           if (!!rawSecurityDTOMap[targetSecurityId].positions) {

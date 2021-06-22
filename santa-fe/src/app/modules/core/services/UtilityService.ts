@@ -1439,7 +1439,6 @@ export class UtilityService {
         return isIdentical;
       }
     }
-
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;
