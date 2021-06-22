@@ -20,7 +20,7 @@ export enum SecurityActionMenuOptionsDisplayText {
   pinRow = 'Pin Row',
   sendToGraph = 'View Graph',
   setAlert = 'Set Alert',
-  uofB = 'U of B',
+  uofB = 'Search',
   bloomberg = 'Bloomberg',
   moreActions = 'More Actions',
   ticker = 'Ticker',
