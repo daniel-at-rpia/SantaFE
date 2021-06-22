@@ -257,12 +257,14 @@ export class SantaTable implements OnInit, OnChanges {
                 console.error(`Could't find targetRow`, params);
               }
             } else {
+              // gets to here if the user clicked on the security card (trade main)
               this.onRowClickedOnSecurityCard(targetCard, storedSelectedCard, params);
             }
           } else {
             console.warn('AgGrid data issue, if you see this call Daniel');
           }
         } else {
+          // gets to here if the user clicked on the security card (trade alert)
           this.onRowClickedOnSecurityCard(targetCard, storedSelectedCard, params);
         }
       }
@@ -1036,7 +1038,6 @@ export class SantaTable implements OnInit, OnChanges {
     storedSelectedCard: SecurityDTO,
     params: AgGridRowParams
   ) {
-    // gets to here if the user clicked on the security card
     if (!!params) {
       if (!!params.node) {
         params.data.securityCard.state.isAtListCeiling = !params.node.parent['key'] ? !!params.node.firstChild : false;
@@ -1046,14 +1047,7 @@ export class SantaTable implements OnInit, OnChanges {
       } else if (!!storedSelectedCard && (storedSelectedCard.data.securityID !== targetCard.data.securityID || (!!storedSelectedCard.data.alert && !!targetCard.data.alert && storedSelectedCard.data.alert.alertId !== targetCard.data.alert.alertId))) {
         // scenario: there is already a card selected, and the user is selecting a diff card
         this.tableData.state.selectedSecurityCard.state.isSelected = false;
-        if (storedSelectedCard.data.alert) {
-          const storedRow = this.tableData.data.rows.find(row => row.data.alert.data.id === storedSelectedCard.data.alert.alertId);
-          if (!!storedRow) {
-            const storedAgGridRow = this.tableData.data.agGridRowData.find(agRow => agRow.id === storedRow.data.rowId);
-            const storedNode = this.tableData.api.gridApi.getRowNode(storedRow.data.rowId);
-            !!storedNode && storedNode.setData(storedAgGridRow);
-          }
-        }
+        this.updateRowSecurityCardInAgGrid(storedSelectedCard);
         this.tableData.state.selectedSecurityCard.state.configAlertState = false;
         this.utilityService.resetActionMenuToDefaultState(this.tableData.state.selectedSecurityCard.data.actionMenu, false);
         this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
