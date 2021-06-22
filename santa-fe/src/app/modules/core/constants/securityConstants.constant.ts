@@ -22,7 +22,7 @@ export enum SecurityActionMenuOptionsDisplayText {
   setAlert = 'Set Alert',
   uofB = 'Search',
   bloomberg = 'Bloomberg',
-  moreActions = 'More Actions',
+  moreActions = 'More',
   ticker = 'Ticker',
   bics = 'BICS',
   bloombergDES = 'DES',
