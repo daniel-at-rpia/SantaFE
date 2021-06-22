@@ -190,91 +190,81 @@ export class SantaTable implements OnInit, OnChanges {
   }
 
   public onRowClicked(params: AgGridRowParams) {
-    if (!!params && !!params.node && !!params.node.group) {
-      // clicked on group row in pivoting or grouping mode
-      params.node.setExpanded(!params.node.expanded);
-    } else {
-      // only the table in Trade Center Panel will react to row clicks
-      if (!!params && !!params.rowPinned && params.data.id.indexOf(this.constants.agGridPinnedFullWidthRowKeyword) >= 0 && this.tableName === 'tradeMain') {
-        // clicking on a pinned full width row, just ignore
-      } else if (!!params && !!params.node && params.node.detail && this.tableName === 'tradeMain'){
-        // this onRowClicked function gets triggered both when parent and child are being clicked, so it gets here if it is the detail table being clicked, then just ignore
-      } else if (!!params && !!params.data && !!params.data.securityCard) {
-        // clicking on a regular row in
-        const targetCard = params.data.securityCard;
-        if (!!params.node) {
-          params.data.securityCard.state.isAtListCeiling = !params.node.parent['key'] ? !!params.node.firstChild : false;
-        }
+    if (!!params) {
+      if (!!params.node && !!params.node.group) {
+        // clicked on group row in pivoting or grouping mode
+        params.node.setExpanded(!params.node.expanded);
+      } else {
+        const targetCard = !!params.data ? params.data.securityCard : null;
         const storedSelectedCard = this.tableData.state.selectedSecurityCard;
-        // this if checks whether the user is clicking on the entire row, or clicking on the security card
-        // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
-        if (
-          this.tableName === 'tradeMain' &&
-          (!targetCard.state.isSelected && !storedSelectedCard) ||
-          (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive) ||
-          (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive)
-        ) {
-          targetCard.state.isSelected = false;
-          targetCard.state.configAlertState = false;
-          if (!!storedSelectedCard) {
-            if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
-              // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
-              storedSelectedCard.state.isSelected = false;
-              storedSelectedCard.state.configAlertState = false;
-              this.updateRowSecurityCardInAgGrid(storedSelectedCard);
-            }
-            this.tableData.state.selectedSecurityCard = null;
-          }
-          const targetRow = params.rowPinned
-            ? this.tableData.data.agGridPinnedTopRowData.find((eachRow) => {
-              return eachRow.id === `${params.node.data.id}-${this.constants.agGridPinnedFullWidthRowKeyword}`
-            }).rowDTO 
-            : params.node.data.rowDTO;
-          if (!!targetRow) {
-            params.node.setExpanded(!params.node.expanded);
-            targetRow.state.isExpanded = !targetRow.state.isExpanded;
-            // just set it to false for now, since the fetch will update it to true anyways
-            targetRow.state.quotesLoaded = false;
-            if (targetRow.data.security) {
-              // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
-              if (targetRow.state.isExpanded) {
-                const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(targetRow);
-                if (!!isTraceSecurity) {
-                  this.getAllTraceTrades(targetRow, !!params.rowPinned)
-                }
-                this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, this.constants.agGridDetailRowHeightMinimum);
-                this.fetchSecurityQuotes(targetRow, params);
-              } else {
-                targetRow.state.presentingAllQuotes = false;
-                if (params.rowPinned) {
-                  this.onRowClickedToCollapse(targetRow, true, params);
-                }
+        if (this.tableName === 'tradeMain') {
+          // only the table in Trade Center Panel will react to row clicks
+          if (!!params.rowPinned && params.data.id.indexOf(this.constants.agGridPinnedFullWidthRowKeyword) >= 0) {
+            // clicking on a pinned full width row, just ignore
+          } else if (!!params.node && params.node.detail){
+            // this onRowClicked function gets triggered both when parent and child are being clicked, so it gets here if it is the detail table being clicked, then just ignore
+          } else if (!!params.data && !!params.data.securityCard) {
+            // clicking on a regular row in
+            // this if checks whether the user is clicking on the entire row, or clicking on the security card
+            // IMPORTANT: If this logic ever needs to be modified, please test all scenarios on Daniel's notebook's page 10
+            if (
+              (!targetCard.state.isSelected && !storedSelectedCard) ||
+              (targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState && targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive) ||
+              (!targetCard.state.isSelected && storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID && !!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isActive)
+            ) {
+              targetCard.state.isSelected = false;
+              targetCard.state.configAlertState = false;
+              if (targetCard.data.actionMenu.state.isActive) {
+                this.utilityService.resetActionMenuToDefaultState(targetCard.data.actionMenu, true);
               }
+              if (!!storedSelectedCard) {
+                if (storedSelectedCard.data.securityID !== targetCard.data.securityID) {
+                  // if the card selected is in a diff row, that row also needs to be updated through AgGrid's life cycle
+                  storedSelectedCard.state.isSelected = false;
+                  storedSelectedCard.state.configAlertState = false;
+                  this.updateRowSecurityCardInAgGrid(storedSelectedCard);
+                }
+                this.tableData.state.selectedSecurityCard = null;
+              }
+              const targetRow = params.rowPinned
+                ? this.tableData.data.agGridPinnedTopRowData.find((eachRow) => {
+                  return eachRow.id === `${params.node.data.id}-${this.constants.agGridPinnedFullWidthRowKeyword}`
+                }).rowDTO 
+                : params.node.data.rowDTO;
+              if (!!targetRow) {
+                params.node.setExpanded(!params.node.expanded);
+                targetRow.state.isExpanded = !targetRow.state.isExpanded;
+                // just set it to false for now, since the fetch will update it to true anyways
+                targetRow.state.quotesLoaded = false;
+                if (targetRow.data.security) {
+                  // targetRow.data.security.state.isMultiLineVariant = params.node.expanded;
+                  if (targetRow.state.isExpanded) {
+                    const isTraceSecurity = this.utilityService.checkIfTraceIsAvailable(targetRow);
+                    if (!!isTraceSecurity) {
+                      this.getAllTraceTrades(targetRow, !!params.rowPinned)
+                    }
+                    this.setAgGridRowHeight(targetRow, params, !!params.rowPinned, this.constants.agGridDetailRowHeightMinimum);
+                    this.fetchSecurityQuotes(targetRow, params);
+                  } else {
+                    targetRow.state.presentingAllQuotes = false;
+                    if (params.rowPinned) {
+                      this.onRowClickedToCollapse(targetRow, true, params);
+                    }
+                  }
+                }
+              } else {
+                this.restfulCommService.logError(`[Santa Table] Could't find targetRow - ${params}`);
+                console.error(`Could't find targetRow`, params);
+              }
+            } else {
+              this.onRowClickedOnSecurityCard(targetCard, storedSelectedCard, params);
             }
           } else {
-            this.restfulCommService.logError(`[Santa Table] Could't find targetRow - ${params}`);
-            console.error(`Could't find targetRow`, params);
+            console.warn('AgGrid data issue, if you see this call Daniel');
           }
         } else {
-          // gets to here if the user clicked on the security card
-          if (storedSelectedCard === null) {
-            this.tableData.state.selectedSecurityCard = targetCard;
-          } else if (!!storedSelectedCard && storedSelectedCard.data.securityID !== targetCard.data.securityID) {
-            // scenario: there is already a card selected, and the user is selecting a diff card
-            this.tableData.state.selectedSecurityCard.state.isSelected = false;
-            this.tableData.state.selectedSecurityCard.state.configAlertState = false;
-            this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
-            this.tableData.state.selectedSecurityCard = targetCard;
-          } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
-            // make sure to not overwrite the selected security card as null value if users are diving in and out of actions and corresponding sub actions (ex. bloomberg and its sub actions)
-            if (!!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isCoreActionSelected && !targetCard.data.actionMenu.state.isActive) {
-              this.tableData.state.selectedSecurityCard = null;
-            }
-          }
-          params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
+          this.onRowClickedOnSecurityCard(targetCard, storedSelectedCard, params);
         }
-      } else {
-        console.warn('AgGrid data issue, if you see this call Daniel');
       }
     }
   }
@@ -1039,5 +1029,43 @@ export class SantaTable implements OnInit, OnChanges {
         return of('error')
       })
     ).subscribe()
+  }
+
+  private onRowClickedOnSecurityCard(
+    targetCard: SecurityDTO,
+    storedSelectedCard: SecurityDTO,
+    params: AgGridRowParams
+  ) {
+    // gets to here if the user clicked on the security card
+    if (!!params) {
+      if (!!params.node) {
+        params.data.securityCard.state.isAtListCeiling = !params.node.parent['key'] ? !!params.node.firstChild : false;
+      }
+      if (storedSelectedCard === null) {
+        this.tableData.state.selectedSecurityCard = targetCard;
+      } else if (!!storedSelectedCard && (storedSelectedCard.data.securityID !== targetCard.data.securityID || (!!storedSelectedCard.data.alert && !!targetCard.data.alert && storedSelectedCard.data.alert.alertId !== targetCard.data.alert.alertId))) {
+        // scenario: there is already a card selected, and the user is selecting a diff card
+        this.tableData.state.selectedSecurityCard.state.isSelected = false;
+        if (storedSelectedCard.data.alert) {
+          const storedRow = this.tableData.data.rows.find(row => row.data.alert.data.id === storedSelectedCard.data.alert.alertId);
+          if (!!storedRow) {
+            const storedAgGridRow = this.tableData.data.agGridRowData.find(agRow => agRow.id === storedRow.data.rowId);
+            const storedNode = this.tableData.api.gridApi.getRowNode(storedRow.data.rowId);
+            !!storedNode && storedNode.setData(storedAgGridRow);
+          }
+        }
+        this.tableData.state.selectedSecurityCard.state.configAlertState = false;
+        this.utilityService.resetActionMenuToDefaultState(this.tableData.state.selectedSecurityCard.data.actionMenu, false);
+        this.updateRowSecurityCardInAgGrid(this.tableData.state.selectedSecurityCard);
+        this.tableData.state.selectedSecurityCard = targetCard;
+      } else if (!!storedSelectedCard && storedSelectedCard.data.securityID === targetCard.data.securityID && !targetCard.state.configAlertState) {
+         // scenario: there is already a card selected, and it is the same card user is selecting again
+          // make sure to not overwrite the selected security card as null value if users are diving in and out of actions and sub actions (ex. bloomberg and its sub actions)
+        if (!!targetCard.data.actionMenu && !targetCard.data.actionMenu.state.isCoreActionSelected && !targetCard.data.actionMenu.state.isActive) {
+          this.tableData.state.selectedSecurityCard = null;
+        }
+      }
+      params.node.setData(params.data);  // need this to trigger a refresh so the row can adopt new classname from the agGridRowClassRules
+    }
   }
 }
