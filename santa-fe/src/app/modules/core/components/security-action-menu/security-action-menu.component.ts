@@ -27,13 +27,16 @@ export class SecurityActionMenu {
   ) {}
 
   public onClickCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
-    const targetLevel = targetAction.level - 1;
-    if (targetLevel > 0) {
-      const coreAction = this.actionMenu.data.allActions.find((action: Blocks.SecurityActionMenuOptionBlock) => action.rawText === targetAction.coreAction);
+    if (!!targetAction) {
+      const coreAction = targetAction.level > 0 ? this.actionMenu.data.allActions.find((action: Blocks.SecurityActionMenuOptionBlock) => action.rawText === targetAction.coreAction) : null;
       this.actionMenu.data.selectedCoreAction = coreAction;
       this.showNewSubActionsFromSelectedCoreAction(coreAction);
+      if (!this.actionMenu.data.selectedCoreAction) {
+        this.actionMenu.state.isCoreActionSelected = false;
+      }
     } else {
-      this.utilityService.resetActionMenuToDefaultState(this.actionMenu, true);
+      this.utilityService.resetActionMenuToDefaultState(this.actionMenu, false);
+      this.securityDTO.state.isSelected = false;
     }
   }
 
@@ -50,7 +53,9 @@ export class SecurityActionMenu {
   }
 
   private showNewSubActionsFromSelectedCoreAction(targetAction: Blocks.SecurityActionMenuOptionBlock) {
-    this.actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.coreAction === targetAction.rawText);
+    this.actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
+      action.isAvailableSubAction = !targetAction ? action.level === 1 : action.coreAction === targetAction.rawText;
+    });
   }
 
 

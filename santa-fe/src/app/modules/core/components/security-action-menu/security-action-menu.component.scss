@@ -33,7 +33,24 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
       &-btn {
         @include mix_fixed_div(absolute, $z_index_base_item);
         @include mix_alive('light');
-        display: none;
+        display: flex;
+        background-color: $color_active;
+        &-icon {
+          color: $color_kill;
+        }
+        &-text {
+          color: $color_kill;
+        }
+        &:hover,
+        &:focus {
+          transform: scale(1);
+          & > i {
+            color: $color_kill;
+          }
+          &> span {
+            color: $color_kill;
+          }
+        }
       }
       &-defaultText {
         @include mix_text_overflow_multi_line();
@@ -138,10 +155,23 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
       &__content {
         &-coreAction {
           &-btn {
-            display: flex;
             background-color: $color_active;
             color: $font_color_inverse;
-            transform: scale(1);
+            &-icon {
+              color: $font_color_inverse;
+            }
+            &-text {
+              color: $font_color_inverse;
+            }
+            &:hover,
+            &:focus {
+              & > i {
+                color: $font_color_inverse;
+              }
+              &> span {
+                color: $font_color_inverse;
+              }
+            }
           }
           &-defaultText {
             display: none;

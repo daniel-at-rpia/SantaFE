@@ -28,10 +28,14 @@
       <span class="sat-securityActionMenu__content-actionBtn-text">{{action.displayTitle}}</span>
     </button>
     <div class="sat-securityActionMenu__content-coreAction">
-      <span class="sat-securityActionMenu__content-coreAction-defaultText">{{actionMenu.data.defaultText}}</span>
       <button class="sat-securityActionMenu__content-coreAction-btn santaBtn--circleLabelled" (click)="onClickCoreAction(actionMenu.data.selectedCoreAction)">
-        <i class="fal fa-arrow-up sat-securityActionMenu__content-coreAction-btn-icon"></i>
-        <span class="sat-securityActionMenu__content-coreAction-btn-text">{{actionMenu.data.selectedCoreAction?.displayTitle}}</span>
+        <i [ngClass]="{
+            'fal': true,
+            'fa-arrow-up': actionMenu.state.isCoreActionSelected,
+            'fa-times': !actionMenu.state.isCoreActionSelected,
+            'sat-securityActionMenu__content-coreAction-btn-icon': true
+          }"></i>
+        <span class="sat-securityActionMenu__content-coreAction-btn-text">{{actionMenu.state.isCoreActionSelected ? actionMenu.data.selectedCoreAction.displayTitle : 'Close'}}</span>
       </button>
     </div>
   </section>
