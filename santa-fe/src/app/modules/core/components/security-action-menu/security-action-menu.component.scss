@@ -139,7 +139,7 @@ $circleAlignment: $circleWidth / 2 + $spacing_x_small;
                 @include setBtnPositioning(-4rem, 1rem);
               }
               &--fouroffour {
-                @include setBtnPositioning(1rem, 1.5rem);}
+                @include setBtnPositioning(1rem, 1rem);}
               }
             }
           }
