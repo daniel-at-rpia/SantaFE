@@ -26,13 +26,13 @@ export class Watchlist {
   ) {
   }
 
-  public onClickShortcut() {
+  public onClickWatchlist() {
     if (!this.watchlistData.state.isUserInputBlocked) {
       this.onClickWatchlistCallback.emit(this.watchlistData);
     }
   }
 
-  public onChangeShortcutName(newName: string) {
+  public onChangeWatchlistName(newName: string) {
     !!this.onChangeWatchlistNameCallback && this.onChangeWatchlistNameCallback.emit(newName);
   }
 

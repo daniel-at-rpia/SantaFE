@@ -410,11 +410,11 @@ export class UtilityService {
     }
 
     public applyWatchlistToConfigurator(
-      targetShortcut: DTOs.WatchlistDTO,
+      targetWatchlist: DTOs.WatchlistDTO,
       targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
-      const watchlistCopy: DTOs.WatchlistDTO = this.deepCopy(targetShortcut);
+      const watchlistCopy: DTOs.WatchlistDTO = this.deepCopy(targetWatchlist);
       // currently the configurator does not support multiple groups of filters chained together, we will change that when we need to utilize this feature
       const primaryFilterGroup = watchlistCopy.data.searchFilters[0];
       primaryFilterGroup.forEach((eachWatchlistDef) => {
@@ -1368,11 +1368,11 @@ export class UtilityService {
       })
     }
 
-    public generateCustomizedTitleForWatchlist(targetShortcut: DTOs.WatchlistDTO): string {
+    public generateCustomizedTitleForWatchlist(targetWatchlist: DTOs.WatchlistDTO): string {
       let customDisplayTitle = '';
       let selectionOptionsList: Array<string> = [];
       // we only use the first (primary) set of configurations in the searchFilters to name the watchlist, ignore all the other "OR" conditions for now because it would make the name too long
-      targetShortcut.data.searchFilters[0].forEach((definitionItem: DTOs.SecurityDefinitionDTO) => {
+      targetWatchlist.data.searchFilters[0].forEach((definitionItem: DTOs.SecurityDefinitionDTO) => {
         // skip "Quoted Today" in the naming since that definition is just binary at the moment
         if (definitionItem.data.key !== globalConstants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
           const isBICS = definitionItem.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key;
@@ -1432,8 +1432,8 @@ export class UtilityService {
     }
 
     public checkIfPresetsAreIdentical(
-      currentPreset: DTOs.SearchShortcutDTO,
-      targetPreset: DTOs.SearchShortcutDTO
+      currentPreset: DTOs.WatchlistDTO,
+      targetPreset: DTOs.WatchlistDTO
     ): boolean {
       const currentPrimaryFilters = currentPreset.data.searchFilters[0];
       const targetPrimaryFilters = targetPreset.data.searchFilters[0];

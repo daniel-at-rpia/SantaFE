@@ -322,7 +322,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               return selectedOption;
             });
             definitionDTO.state.filterActive = true;
-            const shortcut = this.dtoService.formSearchShortcutObject(
+            const watchlist = this.dtoService.formWatchlistObject(
               [definitionDTO],
               null,
               false,
@@ -330,7 +330,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               false
             );
             this.performUnselectPresetInBackground();
-            this.onSelectPreset(shortcut, true);
+            this.onSelectPreset(watchlist, true);
           }
         }
       })
@@ -1440,7 +1440,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       if (!!newWatchlist) {
         const copy: DTOs.WatchlistDTO = this.utilityService.deepCopy(newWatchlist);
         copy.state.isPreviewVariant = true;
-        copy.state.renameShortcutActive = true;
+        copy.state.renameWatchlistActive = true;
         this.state.currentSearch.previewWatchlist = copy;
       } else {
         this.state.currentSearch.previewWatchlist = null;

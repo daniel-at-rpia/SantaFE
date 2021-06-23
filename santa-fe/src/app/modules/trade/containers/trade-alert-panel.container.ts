@@ -676,7 +676,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
       copy.state.isInteractionDisabled = true;
       copy.state.isMultiLineVariant = false;
       copy.state.isWidthFlexible = true;
-      const newEntry: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = this.dtoService.formWatchListObject(copy);
+      const newEntry: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = this.dtoService.formTradeAlertAxeConfigurationBlock(copy);
       this.state.configuration.axe.securityList.unshift(newEntry);
       this.restfulCommService.logEngagement(
         this.restfulCommService.engagementMap.tradeAlertAddSingleSecurity,

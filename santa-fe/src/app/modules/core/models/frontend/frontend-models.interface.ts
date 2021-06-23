@@ -339,7 +339,7 @@ export interface WatchlistDTO extends BasicDTOStructure {
     isHeroWatchlist: boolean;
     isPreviewVariant: boolean;
     isAbleToSaveAsRecentWatchlist: boolean;
-    renameShortcutActive: boolean;
+    renameWatchlistActive: boolean;
   }
 }
 

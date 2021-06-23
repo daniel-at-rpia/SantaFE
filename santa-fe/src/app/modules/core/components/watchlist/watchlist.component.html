@@ -1,12 +1,12 @@
 <article
-  (click)="onClickShortcut()"
+  (click)="onClickWatchlist()"
   [ngClass]="{
     'sat-watchlist': true,
     'sat-watchlist--selectedState': watchlistData.state.isSelected,
     'sat-watchlist--userInputBlockedState': watchlistData.state.isUserInputBlocked,
     'sat-watchlist--previewVariant': watchlistData.state.isPreviewVariant,
     'sat-watchlist--hasHighlightTitle': watchlistData.data.highlightTitle.length > 0,
-    'sat-watchlist--renameShortcutState': watchlistData.state.renameShortcutActive
+    'sat-watchlist--renameWatchlistState': watchlistData.state.renameWatchlistActive
   }">
   <section class="sat-watchlist__title">
     <span class="sat-watchlist__title-highlightText">{{watchlistData.data.highlightTitle}}</span>
@@ -14,7 +14,7 @@
     <santa-textarea
       class="sat-watchlist__title-input"
       [inputValue]="watchlistData.data.displayTitle"
-      (onInputChange)="onChangeShortcutName($event, newName)">
+      (onInputChange)="onChangeWatchlistName($event, newName)">
     </santa-textarea>
   </section>
   <section class="sat-watchlist__configOverview">

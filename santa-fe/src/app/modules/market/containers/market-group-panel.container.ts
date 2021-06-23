@@ -153,12 +153,12 @@ export class MarketGroupPanel implements OnDestroy {
     }
   }
 
-  public onClickWatchlist(targetShortcut: WatchlistDTO){
-    if (this.state.configurator.selectedWatchlist && this.state.configurator.selectedWatchlist !== targetShortcut) {
+  public onClickWatchlist(targetWatchlist: WatchlistDTO){
+    if (this.state.configurator.selectedWatchlist && this.state.configurator.selectedWatchlist !== targetWatchlist) {
       this.state.configurator.selectedWatchlist.state.isSelected = false;
     }
-    targetShortcut.state.isSelected = !targetShortcut.state.isSelected;
-    this.state.configurator.selectedWatchlist = this.state.configurator.selectedWatchlist === targetShortcut ? null : targetShortcut;
+    targetWatchlist.state.isSelected = !targetWatchlist.state.isSelected;
+    this.state.configurator.selectedWatchlist = this.state.configurator.selectedWatchlist === targetWatchlist ? null : targetWatchlist;
     if (this.state.configurator.selectedWatchlist) {
       this.state.configurator.watchlistArray.forEach((eachWatchlist) => {
         eachWatchlist.state.isUserInputBlocked = true;

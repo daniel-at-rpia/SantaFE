@@ -591,7 +591,7 @@ export class DTOService {
       }
     }
     if (!!configuratorLabel) {
-      const matchedSelectedStub = globalConstants.trade.SelectedShortcuts.find((definitionStub: Stubs.WatchlistIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
+      const matchedSelectedStub = globalConstants.trade.SelectedWatchlists.find((definitionStub: Stubs.WatchlistIncludedDefinitionStub) => definitionStub.definitionKey === object.data.key);
       !!matchedSelectedStub && this.formSecurityDefinitionObjectPrePopulateListsWithSelectedOptions(matchedSelectedStub, object);
     }
     return object;
@@ -804,7 +804,7 @@ export class DTOService {
         isHeroWatchlist: !!isHero,
         isPreviewVariant: false,
         isAbleToSaveAsRecentWatchlist: true,
-        renameShortcutActive: false
+        renameWatchlistActive: false
       }
     };
     definitionList.forEach((eachDefinition, index) => {
@@ -1934,7 +1934,7 @@ export class DTOService {
     return object;
   }
 
-  public formWatchListObject(copy: DTOs.SecurityDTO) {
+  public formTradeAlertAxeConfigurationBlock(copy: DTOs.SecurityDTO) {
     const object: DTOs.TradeAlertConfigurationAxeGroupBlockDTO = {
       data: {
         card: copy,
@@ -2912,7 +2912,7 @@ export class DTOService {
   ) {
     selectedGroupDefinition.data.list = [];
     const defaultSelectedList: Array<DTOs.SecurityDefinitionDTO> = [];
-    globalConstants.trade.SelectedShortcuts.forEach((watchlistStubs: Stubs.WatchlistIncludedDefinitionStub) => {
+    globalConstants.trade.SelectedWatchlists.forEach((watchlistStubs: Stubs.WatchlistIncludedDefinitionStub) => {
       const { definitionKey } = watchlistStubs;
       configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
         definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {

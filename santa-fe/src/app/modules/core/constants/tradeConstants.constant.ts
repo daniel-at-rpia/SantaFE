@@ -21,7 +21,7 @@ const allPortfolios: Stubs.WatchlistIncludedDefinitionStub = {
   selectedOptions: [PortfolioShortNames.DOF, PortfolioShortNames.SOF, PortfolioShortNames.STIP, PortfolioShortNames.FIP, PortfolioShortNames.CIP, PortfolioShortNames.AGB, PortfolioShortNames.BBB]
 };
 
-export const SelectedShortcuts: Array<Stubs.WatchlistIncludedDefinitionStub> = [
+export const SelectedWatchlists: Array<Stubs.WatchlistIncludedDefinitionStub> = [
   {
     definitionKey: 'QUOTED_TODAY',
     groupByActive: false,
