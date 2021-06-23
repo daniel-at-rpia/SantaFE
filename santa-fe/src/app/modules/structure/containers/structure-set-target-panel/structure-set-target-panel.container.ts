@@ -1239,37 +1239,45 @@ export class StructureSetTargetPanel extends SantaContainerComponentBase impleme
     }
   }
 
-  private updateDisplayedSubLevelsListWithTargets(row: DTOs.StructurePortfolioBreakdownRowDTO, isCs01List: boolean, isDisplayCs01: boolean) {
-    const subCategoryCodes = this.bicsDictionaryLookupService.getAllBICSSubLevelCodesPerCategory(row.data.code);
-    const customRawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, 1);
-    if (!!customRawBreakdown) {
-      const definitionList: Array<string> = [];
-      subCategoryCodes.forEach(code => {
-        const level = code.length / BICS_CODE_DELIMITER_AMOUNT;
-        const rawDataByCode = this.bicsService.getBICSCategoryRawData(this.state.targetFund.data.portfolioId, level, code);
-        if (!!rawDataByCode && (rawDataByCode.metricBreakdowns.CreditLeverage.targetLevel !== null || rawDataByCode.metricBreakdowns.Cs01.targetLevel != null)) {
-          const displayCategory = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
-          if (!!displayCategory) {
-            customRawBreakdown.breakdown[displayCategory] = rawDataByCode;
-            definitionList.push(displayCategory);
-            (customRawBreakdown.breakdown[displayCategory] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
-            (customRawBreakdown.breakdown[displayCategory] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
+  private updateDisplayedSubLevelsListWithTargets(
+    row: DTOs.StructurePortfolioBreakdownRowDTO,
+    isCs01List: boolean,
+    isDisplayCs01: boolean
+  ) {
+    if (!!row.data.code) {
+      const subCategoryCodes = this.bicsDictionaryLookupService.getAllBICSSubLevelCodesPerCategory(row.data.code);
+      const customRawBreakdown = this.bicsService.formRawBreakdownDetailsObject(this.state.targetBreakdown.data.portfolioId, 1);
+      if (!!customRawBreakdown) {
+        const definitionList: Array<string> = [];
+        subCategoryCodes.forEach(code => {
+          const level = code.length / BICS_CODE_DELIMITER_AMOUNT;
+          const rawDataByCode = this.bicsService.getBICSCategoryRawData(this.state.targetFund.data.portfolioId, level, code);
+          if (!!rawDataByCode && (rawDataByCode.metricBreakdowns.CreditLeverage.targetLevel !== null || rawDataByCode.metricBreakdowns.Cs01.targetLevel != null)) {
+            const displayCategory = this.bicsDictionaryLookupService.BICSCodeToBICSName(code);
+            if (!!displayCategory) {
+              customRawBreakdown.breakdown[displayCategory] = rawDataByCode;
+              definitionList.push(displayCategory);
+              (customRawBreakdown.breakdown[displayCategory] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).customLevel = level;
+              (customRawBreakdown.breakdown[displayCategory] as AdhocPacks.AdhocExtensionBEStructuringBreakdownMetricBlock).code = code;
+            }
           }
-        }
-      })
-      const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, definitionList, isDisplayCs01, false);
-      if (!!customBreakdown) {
-        const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
-        const listWithTargets = list.filter(newRow => newRow.data.targetLevel !== null);
-        row.data.displayedSubLevelRowsWithTargets = listWithTargets;
-        const isCorrectListForEditRow = this.state.activeMetric === PortfolioMetricValues.cs01 ? isCs01List : !isCs01List;
-        if (!!isCorrectListForEditRow) {
-          const editRowEquivalent = this.state.editRowList.find(editRow => editRow.rowDTO.data.code === row.data.code);
-          if (!!editRowEquivalent) {
-            editRowEquivalent.rowDTO.data.displayedSubLevelRowsWithTargets = row.data.displayedSubLevelRowsWithTargets;
+        })
+        const customBreakdown: DTOs.PortfolioBreakdownDTO = this.dtoService.formPortfolioBreakdown(false, customRawBreakdown, null, definitionList, isDisplayCs01, false);
+        if (!!customBreakdown) {
+          const list = !!isCs01List ? customBreakdown.data.rawCs01CategoryList : customBreakdown.data.rawLeverageCategoryList;
+          const listWithTargets = list.filter(newRow => newRow.data.targetLevel !== null);
+          row.data.displayedSubLevelRowsWithTargets = listWithTargets;
+          const isCorrectListForEditRow = this.state.activeMetric === PortfolioMetricValues.cs01 ? isCs01List : !isCs01List;
+          if (!!isCorrectListForEditRow) {
+            const editRowEquivalent = this.state.editRowList.find(editRow => editRow.rowDTO.data.code === row.data.code);
+            if (!!editRowEquivalent) {
+              editRowEquivalent.rowDTO.data.displayedSubLevelRowsWithTargets = row.data.displayedSubLevelRowsWithTargets;
+            }
           }
         }
       }
+    } else {
+      this.restfulCommService.logError(`Unable to update sub level list with targets. Cannot retrieve BICS code from row: ${row}`);
     }
   }
 

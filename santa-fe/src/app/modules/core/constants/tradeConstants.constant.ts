@@ -165,6 +165,15 @@ export const OwnershipShortcuts: Array<Stubs.SearchShortcutStub> = [
       allPortfolios
     ]
   },{
+    displayTitle: 'Colin',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['CD']
+      }
+    ]
+  },{
     displayTitle: 'Daanish',
     includedDefinitions: [
       {
@@ -534,6 +543,13 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
+
+export const EXCLUDED_KEYWORD_SEARCH_TERMS = [
+  'HOLDINGS',
+  'INC',
+  'LLC',
+  'LTD'
+]
 
 export const DISPLAY_DRIVER_MAP  = {
   'DEFAULT': 'Combined',

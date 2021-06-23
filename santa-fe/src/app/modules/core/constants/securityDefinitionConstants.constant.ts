@@ -299,6 +299,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
   export const FilterOptionsPortfolioResearchList = [
     'AG',
+    'CD',
     'LC',
     'LP',
     'PD',
@@ -310,6 +311,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'AG',
     'AY',
     'BT',
+    'CD',
     'DA',
     'DG',
     'DJ',
