@@ -500,7 +500,7 @@ export class UtilityService {
         const keywordUpperCase = keyword.toUpperCase();
         let parsedTargetText = '';
         if (isNaturalText) {
-          const regExp = new RegExp(EXCLUDED_KEYWORD_SEARCH_TERMS.join("|"), "g");
+          const regExp = new RegExp(globalConstants.trade.EXCLUDED_KEYWORD_SEARCH_TERMS.join("|"), "g");
           parsedTargetText = targetTextUpperCase.replace(regExp, "").replace(/\s+/g, " ").trim();
         } else {
           parsedTargetText = targetTextUpperCase;
