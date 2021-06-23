@@ -2,6 +2,7 @@
 
 @import 'global';
 
+@import '~@angular/material/theming';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 // angular material styling resets
@@ -11,7 +12,7 @@
 
 html {
   font-size: 14px;
-  // @include mq-x-large-min {
+  // @include mq-xx-large-min {
   //   font-size: 16px;
   // }
 }
@@ -30,6 +31,11 @@ html {
 @font-face {
   font-family: SantaBlackOps;
   src: url(fonts/BlackOpsOne-Regular.ttf);
+}
+
+@font-face {
+  font-family: SantaMonospace;
+  src: url(fonts/AnonymousPro-Regular.ttf);
 }
 
 .santa-margin-right{
@@ -117,5 +123,12 @@ html {
       font-weight: 400;
       font-family: "SantaOpenSans";
     }
+
+    // override material's font with our font
+    $config: mat-typography-config(
+      $font-family: "SantaOpenSans"
+    );
+
+    @include mat-core($config);
   }
   

@@ -4,7 +4,7 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { DTOs } from 'Core/models/frontend';
+import { DTOs, AdhocPacks } from 'Core/models/frontend';
 import { TradeActions } from 'Trade/actions/trade.actions';
 import { PortfolioMetricValues } from 'Core/constants/structureConstants.constants';
 
@@ -38,7 +38,14 @@ export interface TradeState {
     autoLoadTable: {
       filterList: Array<DTOs.SecurityDefinitionDTO>;
       metric: PortfolioMetricValues;
+      presetDisplayTitle: string;
     }
+  },
+  watchlist: {
+    indexedDBReady: boolean;
+  },
+  securityActionMenu: {
+    launchUofBPack: AdhocPacks.SecurityActionLaunchUofBTransferPack
   }
 }
 
@@ -70,8 +77,15 @@ const initialState: TradeState = {
   centerPanel: {
     autoLoadTable: {
       filterList: [],
-      metric: null
+      metric: null,
+      presetDisplayTitle: ''
     }
+  },
+  watchlist: {
+    indexedDBReady: false
+  },
+  securityActionMenu: {
+    launchUofBPack: null
   }
 };
 
@@ -157,6 +171,14 @@ export function tradeReducer(
           }
         }
       };
+    case TradeActions.TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent:
+      return {
+        ...state,
+        tradeMainTable: {
+          ...state.tradeMainTable,
+          initialDataLoaded: false
+        }
+      }
     case TradeActions.LiveUpdateProcessingDataCompleteInAlertTableEvent:
       if (state.tradeAlertTable.initialDataLoaded) {
         return {
@@ -225,7 +247,8 @@ export function tradeReducer(
           ...state.centerPanel,
           autoLoadTable: {
             filterList: action.filterList,
-            metric: action.metric
+            metric: action.metric,
+            presetDisplayTitle: action.presetDisplayTitle
           }
         }
       }
@@ -234,6 +257,20 @@ export function tradeReducer(
         ...state,
         bicsDataLoaded: true
       }
+    case TradeActions.WatchlistIndexedDBReady:
+      return {
+        ...state,
+        watchlist: {
+          indexedDBReady: true
+        }
+      }
+    case TradeActions.LaunchUofBThroughSecurityActionMenu:
+      return {
+        ...state,
+        securityActionMenu: {
+          launchUofBPack: action.pack
+        }
+      };
     default:
       return state;
   }

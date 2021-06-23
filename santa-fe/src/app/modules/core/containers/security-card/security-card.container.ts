@@ -6,12 +6,13 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-
+import * as globalConstants from 'Core/constants';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
-import { TriCoreDriverConfig, AlertSubTypes } from 'Core/constants/coreConstants.constant';
+import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
+import { Store, select } from '@ngrx/store';
 
 @Component({
   selector: 'security-card',
@@ -21,15 +22,13 @@ import { TriCoreDriverConfig, AlertSubTypes } from 'Core/constants/coreConstants
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
-  constants = {
-    driver: TriCoreDriverConfig,
-    side: AlertSubTypes
-  };
+  constants = globalConstants;
 
   constructor(
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private store$: Store<any>
   ) { }
 
   public ngOnInit() {
@@ -38,6 +37,13 @@ export class SecurityCard implements OnInit {
   public onClickCard() {
     if (!this.cardData.state.isInteractionDisabled && !this.cardData.state.isStencil) {
       this.cardData.state.isSelected = !this.cardData.state.isSelected;
+      if (!!this.cardData.state.isSelected) {
+        this.cardData.data.actionMenu.state.isActive = true;
+      } else {
+        if (this.cardData.data.actionMenu) {
+          this.utilityService.resetActionMenuToDefaultState(this.cardData.data.actionMenu, false);
+        }
+      }
       if (!!this.cardData.api.onClickCard) {
         this.cardData.api.onClickCard(this.cardData);
       }
@@ -78,7 +84,7 @@ export class SecurityCard implements OnInit {
       isUrgent: true,
       sendEmail: false
     };
-    if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
+    if (this.cardData.data.mark.markDriver === this.constants.core.TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === this.constants.core.TriCoreDriverConfig.Price.label) {
       this.cardData.data.alert.shortcutConfig.driver = this.cardData.data.mark.markDriver;
     }
   }
@@ -140,6 +146,17 @@ export class SecurityCard implements OnInit {
     this.cardData.state.isSelected = false;
     if (!!this.cardData.api.onClickPin) {
       this.cardData.api.onClickPin(this.cardData);
+    }
+  }
+
+  public onClickLaunchUofB({type, value, bicsLevel}: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock) {
+    const transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack = {
+      type,
+      value,
+      bicsLevel
+    }
+    if (!!this.cardData.api.onClickSendToLaunchUofB) {
+      this.cardData.api.onClickSendToLaunchUofB(transferPack);
     }
   }
 

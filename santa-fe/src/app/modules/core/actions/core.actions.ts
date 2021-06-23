@@ -28,7 +28,7 @@ export enum CoreActions {
   GlobalAlertsTradeAlertTableReadyToReceiveAdditionalAlerts = '[Core] Alert Table Fetch For Alerts',
   GlobalWorkflowUpdateCurrentTradeState = '[Core] Global Workflow Update Current Trade State',
   GlobalWorkflowUpdateCurrentStructureState = '[Core] Global Workflow Update Current Structure State',
-  GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready'
+  GlobalWorkflowIndexedDBReady = '[Core] Global Workflow IndexedDB Ready',
 }
 
 export class CoreUserLoggedIn implements Action {

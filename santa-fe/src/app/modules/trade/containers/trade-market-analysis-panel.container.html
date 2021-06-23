@@ -14,12 +14,12 @@
       <span class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-label">Scope :</span>
       <ul class="sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list">
         <button
-          (click)="onClickTimeScope('Yoy')"
+          (click)="onClickTimeScope('TMinusTwo')"
           [ngClass]="{
             'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item': true,
-            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item--selected': state.config.timeScope === 'Yoy'
+            'sat-tradeMarketAnalysisPanel__timeScopeAndDriver-timeScope-list-item--selected': state.config.timeScope === 'TMinusTwo'
           }">
-          YoY
+          TMinusTwo
         </button>
         <button
           (click)="onClickTimeScope('Ytd')"

@@ -1,0 +1,24 @@
+<article
+  [ngClass]="{
+    'santaSimpleInput': true,
+    'santaSimpleInput--numericVariant': !!isNumeric,
+    'santaSimpleInput--grayedOutState': !!isGrayedOut,
+    'santaSimpleInput--disabledState': !!isDisabled,
+    'santaSimpleInput--nonEditable': !!isNonEditable
+  }">
+  <input
+    type="{{ isNumeric ? 'number' : 'text' }}"
+    [ngClass]="{
+      'santaSimpleInput__inputElement': true,
+      'santaSimpleInput__inputElement--error': hasError,
+      'santaSimpleInput__inputElement--numeric': isNumeric
+    }"
+    [(ngModel)]="inputValue"
+    [placeholder]="placeholder"
+    [disabled]="!!isDisabled"
+    (keyup)="onKey()"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (keyup.enter)="onPressedEnterKey()"
+  >
+</article>

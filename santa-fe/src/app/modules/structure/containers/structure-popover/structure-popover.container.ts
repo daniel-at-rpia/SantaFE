@@ -18,11 +18,12 @@
       SubPortfolioFilter
     } from 'App/modules/core/constants/structureConstants.constants';
     import { selectMetricLevel, selectActiveSubPortfolioFilter } from 'Structure/selectors/structure.selectors';
-    import { NavigationModule, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { NavigationModule } from 'Core/constants/coreConstants.constant';
     import { CoreGlobalWorkflowSendNewState } from 'Core/actions/core.actions';
     import { StructureSetView } from 'Structure/actions/structure.actions';
     import { UtilityService } from 'Core/services/UtilityService';
     import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
+    import { GlobalWorkflowTypes } from 'Core/constants/globalWorkflowConstants.constants';
   //
 
 @Component({
@@ -163,6 +164,7 @@ export class StructurePopover extends SantaContainerComponentBase implements OnI
       filterList.push(subPortfolioDefinition);
     }
     newWorkflowState.data.stateInfo.filterList = filterList;
+    newWorkflowState.data.stateInfo.associatedDisplayTitle = targetRow.data.displayCategory;
     this.store$.dispatch(new CoreGlobalWorkflowSendNewState(newWorkflowState));
   }
 

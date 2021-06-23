@@ -4,11 +4,11 @@
     'sat-tradeAlertPanel--keywordSearchActiveState': !!state.filters.quickFilters.keyword && state.filters.quickFilters.keyword.length >= 2,
     'sat-tradeAlertPanel--displayAlertTableState': state.displayAlertTable,
     'sat-tradeAlertPanel--scopeAllAlertsState': state.displayAlertTable && !state.alert.scopedAlertType,
-    'sat-tradeAlertPanel--scopeAxeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.axeAlert && !state.alert.scopedForMarketListOnly,
-    'sat-tradeAlertPanel--scopeMarketListAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.axeAlert && state.alert.scopedForMarketListOnly,
-    'sat-tradeAlertPanel--scopeMarkAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.markAlert,
-    'sat-tradeAlertPanel--scopeTradeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
-    'sat-tradeAlertPanel--scopeTraceAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.alertTypes.traceAlert,
+    'sat-tradeAlertPanel--scopeAxeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.core.AlertTypes.axeAlert && !state.alert.scopedForMarketListOnly,
+    'sat-tradeAlertPanel--scopeMarketListAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.core.AlertTypes.axeAlert && state.alert.scopedForMarketListOnly,
+    'sat-tradeAlertPanel--scopeMarkAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.core.AlertTypes.markAlert,
+    'sat-tradeAlertPanel--scopeTradeAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.core.AlertTypes.tradeAlert,
+    'sat-tradeAlertPanel--scopeTraceAlertsState': state.displayAlertTable && state.alert.scopedAlertType === constants.core.AlertTypes.traceAlert,
     'sat-tradeAlertPanel--alertReadyState': state.fetchResult.alertTable.fetchComplete,
     'sat-tradeAlertPanel--configureAlertState': state.configureAlert
   }">
@@ -17,13 +17,13 @@
       <i
         [ngClass]="{
           'sat-tradeAlertPanel__overview-tabIndicate-icon': true,
-          'fal': !state.alert.scopedAlertType || state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
-          'fas': state.alert.scopedAlertType === constants.alertTypes.axeAlert || state.alert.scopedAlertType === constants.alertTypes.traceAlert,
+          'fal': !state.alert.scopedAlertType || state.alert.scopedAlertType === constants.core.AlertTypes.tradeAlert,
+          'fas': state.alert.scopedAlertType === constants.core.AlertTypes.axeAlert || state.alert.scopedAlertType === constants.core.AlertTypes.traceAlert,
           'fa-bell': !state.alert.scopedAlertType,
-          'fa-axe': state.alert.scopedAlertType === constants.alertTypes.axeAlert,
-          'far fa-bullseye-arrow': state.alert.scopedAlertType === constants.alertTypes.markAlert,
-          'fa-handshake': state.alert.scopedAlertType === constants.alertTypes.tradeAlert,
-          'fa-analytics': state.alert.scopedAlertType === constants.alertTypes.traceAlert
+          'fa-axe': state.alert.scopedAlertType === constants.core.AlertTypes.axeAlert,
+          'far fa-bullseye-arrow': state.alert.scopedAlertType === constants.core.AlertTypes.markAlert,
+          'fa-handshake': state.alert.scopedAlertType === constants.core.AlertTypes.tradeAlert,
+          'fa-analytics': state.alert.scopedAlertType === constants.core.AlertTypes.traceAlert
         }">
       </i>
     </div>
@@ -39,7 +39,7 @@
           'sat-tradeAlertPanel__overview-tabList-tab--axe': true,
           'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.nonMarketListAxeAlertCount === 0
         }">
-        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert)">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.core.AlertTypes.axeAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fas fa-axe"></i>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.nonMarketListAxeAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Axe Alerts</span>
@@ -51,7 +51,7 @@
           'sat-tradeAlertPanel__overview-tabList-tab--marketList': true,
           'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.marketListAxeAlertCount === 0
         }">
-        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.axeAlert, true)">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.core.AlertTypes.axeAlert, true)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-alarm-clock"></i>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.marketListAxeAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Inquiry Alerts</span>
@@ -63,7 +63,7 @@
           'sat-tradeAlertPanel__overview-tabList-tab--mark': true,
           'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.markAlertCount === 0
         }">
-        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.markAlert)">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.core.AlertTypes.markAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon far fa-bullseye-arrow"></i>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.markAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Mark Alerts</span>
@@ -75,7 +75,7 @@
           'sat-tradeAlertPanel__overview-tabList-tab--trade': true,
           'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.tradeAlertCount === 0
         }">
-        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.tradeAlert)">
+        <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.core.AlertTypes.tradeAlert)">
           <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-handshake"></i>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.tradeAlertCount}}</span>
           <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trade Alerts</span>
@@ -87,7 +87,7 @@
         'sat-tradeAlertPanel__overview-tabList-tab--trace': true,
         'sat-tradeAlertPanel__overview-tabList-tab--empty': state.alert.traceAlertCount === 0
       }">
-      <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.alertTypes.traceAlert)">
+      <div class="sat-tradeAlertPanel__overview-tabList-tab-cta" (click)="onClickSpecificAlertTypeTab(constants.core.AlertTypes.traceAlert)">
         <i class="sat-tradeAlertPanel__overview-tabList-tab-cta-icon fal fa-analytics"></i>
         <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-countText">{{state.alert.traceAlertCount}}</span>
         <span class="sat-tradeAlertPanel__overview-tabList-tab-cta-regText">Trace Alerts</span>
@@ -98,8 +98,7 @@
       <i class="sat-tradeAlertPanel__overview-keywordSearch-activeIcon fal fa-search"></i>
       <santa-input
         [inputValue]="state.filters.keyword.defaultValueForUI"
-        [placeholder]="'filter security name and alert message'"
-        [isHero]="true"
+        [label]="'filter security name and alert message'"
         (onInputChange)="onTableSearchKeywordChange($event)">
       </santa-input>
     </div>
@@ -158,11 +157,10 @@
           </div>
           <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search">
             <div class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search-utility">
-              <span class="sat-tradeAlertAxeAlertConfiguration__singleSecurities-search-utility-label">Search For Securities :</span>
               <santa-input
                 [inputValue]="state.configuration.axe.securitySearchKeyword"
-                [placeholder]="'find security by name / CUSIP / ISIN'"
-                [isHero]="true"
+                [label]="'Search For Securities'"
+                [placeholder]="'name / CUSIP / ISIN'"
                 (onInputChange)="onConfigSearchKeywordChange($event)">
               </santa-input>
             </div>

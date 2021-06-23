@@ -18,7 +18,8 @@ import {
   BICSDataProcessingService,
   GlobalWorkflowIOService,
   BICSDictionaryLookupService,
-  SecurityMapService
+  SecurityMapService,
+  IndexedDBService
 } from 'Core/services';
 import { CoreEffect } from 'Core/effects/core.effects';
 import { EffectsModule } from '@ngrx/effects';
@@ -55,6 +56,8 @@ import { GlobalWorkflow } from 'Core/containers/global-workflow/global-workflow.
 import { SantaRouteReuseStrategy } from './SantaRouteReuseStrategy';
 import { SantaContainerComponentBase } from './containers/santa-container-component-base';
 import { GuestPage } from './guest.page';
+import { SantaSimpleInput } from './components/simple-input/simple-input.component';
+import { SecurityActionMenu } from 'Core/components/security-action-menu/security-action-menu.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +87,9 @@ import { GuestPage } from './guest.page';
     TraceTradeVisualizer,
     MoveVisualizer,
     GlobalWorkflow,
-    GuestPage
+    GuestPage,
+    SantaSimpleInput,
+    SecurityActionMenu
   ],
   imports: [
     CommonModule,
@@ -115,6 +120,7 @@ import { GuestPage } from './guest.page';
     GlobalWorkflowIOService,
     BICSDictionaryLookupService,
     SecurityMapService,
+    IndexedDBService,
     {
       provide: RouteReuseStrategy,
       useClass: SantaRouteReuseStrategy
@@ -132,7 +138,8 @@ import { GuestPage } from './guest.page';
     NumericFilter,
     GlobalNav,
     MoveVisualizer,
-    GlobalWorkflow
+    GlobalWorkflow,
+    SantaSimpleInput
   ]
 })
 export class CoreModule { }

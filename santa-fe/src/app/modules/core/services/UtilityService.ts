@@ -14,38 +14,9 @@
       BEStructuringBreakdownBlock,
       BEStructuringOverrideBaseBlock
     } from 'BEModels/backend-models.interface';
-    import { DTOs, Blocks, AdhocPacks } from '../models/frontend';
-    import {
-      GroupMetricOptions
-    } from 'Core/constants/marketConstants.constant';
-    import {
-      QUANT_COMPARER_PERCENTILE,
-      SecurityMetricOptions,
-      FrontendKeyToBackendKeyDictionary,
-      BackendKeyToDisplayLabelDictionary,
-      TriCoreDriverConfig,
-      DEFAULT_DRIVER_IDENTIFIER,
-      AlertTypes,
-      AlertSubTypes,
-      TRACE_VOLUME_REPORTED_THRESHOLD
-    } from 'Core/constants/coreConstants.constant';
-    import {
-      BICS_DIVE_IN_UNAVAILABLE_CATEGORIES,
-      SubPortfolioFilter,
-      BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
-      BEIdentifierToFEDisplayMapping
-    } from 'Core/constants/structureConstants.constants';
+    import { DTOs, Blocks, AdhocPacks, Stubs } from '../models/frontend';
+    import * as globalConstants from 'Core/constants';
     import { CountdownPipe } from 'App/pipes/Countdown.pipe';
-    import {
-      SecurityDefinitionMap,
-      StrategyExcludedFiltersMapping,
-      FilterOptionsTenorRange
-    } from 'Core/constants/securityDefinitionConstants.constant';
-    import {
-      traceTradeFilterAmounts,
-      traceTradeNumericalFilterSymbols
-    } from '../constants/securityTableConstants.constant';
-    import { EXCLUDED_KEYWORD_SEARCH_TERMS } from 'Core/constants/tradeConstants.constant';
     import { BICSDictionaryLookupService } from '../services/BICSDictionaryLookupService';
     import { NavigationEnd } from '@angular/router';
   // dependencies
@@ -53,12 +24,12 @@
 @Injectable()
 export class UtilityService {
   // Any code about naming stuff goes into this service
-  groupGroupMetricOptions = GroupMetricOptions;
-  securityMetricOptions = SecurityMetricOptions;
-  keyDictionary = FrontendKeyToBackendKeyDictionary;
-  labelDictionary = BackendKeyToDisplayLabelDictionary;
-  triCoreDriverConfig = TriCoreDriverConfig;
-  definitionMap = SecurityDefinitionMap;
+  groupGroupMetricOptions = globalConstants.market.GroupMetricOptions;
+  securityMetricOptions = globalConstants.core.SecurityMetricOptions;
+  keyDictionary = globalConstants.core.FrontendKeyToBackendKeyDictionary;
+  labelDictionary = globalConstants.core.BackendKeyToDisplayLabelDictionary;
+  triCoreDriverConfig = globalConstants.core.TriCoreDriverConfig;
+  definitionMap = globalConstants.definition.SecurityDefinitionMap;
 
   constructor(
     private countdownPipe: CountdownPipe,
@@ -309,7 +280,7 @@ export class UtilityService {
         return this.keyDictionary[frontendKey];
       } else {
         console.warn('failed to find key for', frontendKey);
-        return 'n/a';
+        return globalConstants.core.KEY_CONVERSION_FAILURE_FLAG;
       }
     }
 
@@ -347,14 +318,26 @@ export class UtilityService {
     }
 
     public packMetricData(rawData: BESecurityGroupDTO | BESecurityDTO): Blocks.SecurityGroupMetricPackBlock {
-      const object: Blocks.SecurityGroupMetricPackBlock = {
-        raw: {},
+      const object = {
+        raw: {
+          index: {}
+        },
         delta: {
-          Dod: {},
-          Wow: {},
-          Mom: {},
-          Ytd: {},
-          Yoy: {}
+          Dod: {
+            index: {}
+          },
+          Wow: {
+            index: {}
+          },
+          Mom: {
+            index: {}
+          },
+          Ytd: {
+            index: {}
+          },
+          TMinusTwo: {
+            index: {}
+          }
         }
       };
       if (!!rawData && !!rawData.deltaMetrics && !!rawData.metrics) {
@@ -364,29 +347,28 @@ export class UtilityService {
           let keyToRetrieveMetric = eachMetric.backendDtoAttrName;
           if (eachMetric.label === 'Default Spread') {
             keyToRetrieveMetric = 'spread';
-            // this logic is disabled, since after BE cut off Citi, we no longer have those spread metrics
-            // if (this.isCDS(isGroup, rawData)) {
-            //   keyToRetrieveMetric = 'spread';
-            //  } else if (this.isFloat(isGroup, rawData)) {
-            //    keyToRetrieveMetric = 'zSpread';
-            // } else {
-            //   keyToRetrieveMetric = 'gSpread';
-            // }
           };
+          const metricBlock = rawData.metrics['Default'];
           const indexMetricBlock = rawData.ccy === 'CAD' ? rawData.metrics['FTSE'] : rawData.metrics['BB'];
-          const rawValue = indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
+          let rawValue = !!metricBlock ? metricBlock[keyToRetrieveMetric] : null;
+          let rawIndexValue = !!indexMetricBlock ? indexMetricBlock[keyToRetrieveMetric] : null;
           if (rawValue === null || rawValue === undefined) {
-            object.raw[eachMetric.label] = null;
+            object.raw[eachMetric.backendDtoAttrName] = null;
           } else {
-            object.raw[eachMetric.label] = rawValue;
+            object.raw[eachMetric.backendDtoAttrName] = rawValue;
+          }
+          if (rawIndexValue === null || rawIndexValue === undefined) {
+            object.raw.index[eachMetric.backendDtoAttrName] = null;
+          } else {
+            object.raw.index[eachMetric.backendDtoAttrName] = rawIndexValue;
           }
           eachMetric.deltaOptions.forEach((eachDeltaScope) => {
             const deltaSubPack = rawData.deltaMetrics[eachDeltaScope];
             const deltaValue = !!deltaSubPack ? deltaSubPack[keyToRetrieveMetric] : null;
             if (deltaValue === null || deltaValue === undefined) {
-              object.delta[eachDeltaScope][eachMetric.label] = null;
+              object.delta[eachDeltaScope][eachMetric.backendDtoAttrName] = null;
             } else {
-              object.delta[eachDeltaScope][eachMetric.label] = deltaValue;
+              object.delta[eachDeltaScope][eachMetric.backendDtoAttrName] = deltaValue;
             }
           })
         });
@@ -433,14 +415,33 @@ export class UtilityService {
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
       const shortcutCopy: DTOs.SearchShortcutDTO = this.deepCopy(targetShortcut);
-      shortcutCopy.data.configuration.forEach((eachShortcutDef) => {
+      // currently the configurator does not support multiple groups of filters chained together, we will change that when we need to utilize this feature
+      const primaryFilterGroup = shortcutCopy.data.searchFilters[0];
+      primaryFilterGroup.forEach((eachShortcutDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
             if (eachDefinition.data.key === eachShortcutDef.data.key) {
-              eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
-              eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
-                return !!eachFilter.isSelected;
-              });
+              if (eachShortcutDef.data.displayOptionList.length === 0) {
+                // sometimes the display options are loaded async in API, in those cases the shortcut which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
+                eachDefinition.data.highlightSelectedOptionList = eachShortcutDef.data.highlightSelectedOptionList;
+                // Definition from the configurator may have display option populated if users unselect a preset, which populates the display option from the pristine option list
+                if (eachDefinition.data.displayOptionList.length > 0) {
+                  eachDefinition.data.highlightSelectedOptionList.forEach(highlightOption => {
+                    const existingDisplayOption = eachDefinition.data.displayOptionList.find((displayOption) => displayOption.shortKey === highlightOption.shortKey);
+                    if (!!existingDisplayOption) {
+                      const index = eachDefinition.data.displayOptionList.findIndex(displayOption => displayOption.shortKey === highlightOption.shortKey);
+                      if (index >= 0) {
+                        eachDefinition.data.displayOptionList[index] = highlightOption;
+                      }
+                    }
+                  })
+                }
+              } else {
+                eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
+                eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
+                  return !!eachFilter.isSelected;
+                });
+              }
               eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
               eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
             }
@@ -499,7 +500,7 @@ export class UtilityService {
         const keywordUpperCase = keyword.toUpperCase();
         let parsedTargetText = '';
         if (isNaturalText) {
-          const regExp = new RegExp(EXCLUDED_KEYWORD_SEARCH_TERMS.join("|"), "g");
+          const regExp = new RegExp(globalConstants.trade.EXCLUDED_KEYWORD_SEARCH_TERMS.join("|"), "g");
           parsedTargetText = targetTextUpperCase.replace(regExp, "").replace(/\s+/g, " ").trim();
         } else {
           parsedTargetText = targetTextUpperCase;
@@ -521,19 +522,19 @@ export class UtilityService {
     ): number|string {
       if (targetNumber != null && !!targetDriver) {
         if (targetDriver === 'YieldWorst') {
-          targetDriver = TriCoreDriverConfig.Yield.label;
-        } else if (targetDriver === TriCoreDriverConfig.Spread.driverLabel) {
-          targetDriver = TriCoreDriverConfig.Spread.label;
+          targetDriver = globalConstants.core.TriCoreDriverConfig.Yield.label;
+        } else if (targetDriver === globalConstants.core.TriCoreDriverConfig.Spread.driverLabel) {
+          targetDriver = globalConstants.core.TriCoreDriverConfig.Spread.label;
         }
-        const rounding = TriCoreDriverConfig[targetDriver] ? TriCoreDriverConfig[targetDriver].rounding : 0;
+        const rounding = globalConstants.core.TriCoreDriverConfig[targetDriver] ? globalConstants.core.TriCoreDriverConfig[targetDriver].rounding : 0;
         if (isToFixed) {
-          if (targetSecurity.data.isGovt && targetDriver === TriCoreDriverConfig.Spread.label) {
+          if (targetSecurity.data.isGovt && targetDriver === globalConstants.core.TriCoreDriverConfig.Spread.label) {
             return this.round(targetNumber, rounding + 1).toFixed(rounding + 1);
           } else {
             return this.round(targetNumber, rounding).toFixed(rounding);
           }
         } else {
-          if (targetSecurity.data.isGovt && targetDriver === TriCoreDriverConfig.Spread.label) {
+          if (targetSecurity.data.isGovt && targetDriver === globalConstants.core.TriCoreDriverConfig.Spread.label) {
             return this.round(targetNumber, rounding + 1);
           } else {
             return this.round(targetNumber, rounding);
@@ -544,43 +545,43 @@ export class UtilityService {
       }
     }
 
-    public mapAlertType(targetType: string): AlertTypes {
+    public mapAlertType(targetType: string): globalConstants.core.AlertTypes {
       switch (targetType) {
-        case AlertTypes.axeAlert:
-          return AlertTypes.axeAlert;
-        case AlertTypes.markAlert:
-          return AlertTypes.markAlert;
-        case AlertTypes.tradeAlert:
-          return AlertTypes.tradeAlert;
-        case AlertTypes.traceAlert:
-          return AlertTypes.traceAlert;
+        case globalConstants.core.AlertTypes.axeAlert:
+          return globalConstants.core.AlertTypes.axeAlert;
+        case globalConstants.core.AlertTypes.markAlert:
+          return globalConstants.core.AlertTypes.markAlert;
+        case globalConstants.core.AlertTypes.tradeAlert:
+          return globalConstants.core.AlertTypes.tradeAlert;
+        case globalConstants.core.AlertTypes.traceAlert:
+          return globalConstants.core.AlertTypes.traceAlert;
         default:
-          return AlertTypes.system;
+          return globalConstants.core.AlertTypes.system;
       }
     }
 
-    public mapAlertSubType(targetType: string): AlertSubTypes {
+    public mapAlertSubType(targetType: string): globalConstants.core.AlertSubTypes {
       switch (targetType) {
-        case AlertSubTypes.ask:
-          return AlertSubTypes.ask;
-        case AlertSubTypes.bid:
-          return AlertSubTypes.bid;
-        case AlertSubTypes.both:
-          return AlertSubTypes.default;  // both is not a valid type in FE
-        case AlertSubTypes.liquidation:
-          return AlertSubTypes.default;  // liquidation is not a valid type in FE
-        case AlertSubTypes.quantityChange:
-          return AlertSubTypes.quantityChange;
-        case AlertSubTypes.ratingChange:
-          return AlertSubTypes.ratingChange;
-        case AlertSubTypes.buy:
-          return AlertSubTypes.buy;
-        case AlertSubTypes.sell:
-          return AlertSubTypes.sell;
-        case AlertSubTypes.mid:
-          return AlertSubTypes.mid
+        case globalConstants.core.AlertSubTypes.ask:
+          return globalConstants.core.AlertSubTypes.ask;
+        case globalConstants.core.AlertSubTypes.bid:
+          return globalConstants.core.AlertSubTypes.bid;
+        case globalConstants.core.AlertSubTypes.both:
+          return globalConstants.core.AlertSubTypes.default;  // both is not a valid type in FE
+        case globalConstants.core.AlertSubTypes.liquidation:
+          return globalConstants.core.AlertSubTypes.default;  // liquidation is not a valid type in FE
+        case globalConstants.core.AlertSubTypes.quantityChange:
+          return globalConstants.core.AlertSubTypes.quantityChange;
+        case globalConstants.core.AlertSubTypes.ratingChange:
+          return globalConstants.core.AlertSubTypes.ratingChange;
+        case globalConstants.core.AlertSubTypes.buy:
+          return globalConstants.core.AlertSubTypes.buy;
+        case globalConstants.core.AlertSubTypes.sell:
+          return globalConstants.core.AlertSubTypes.sell;
+        case globalConstants.core.AlertSubTypes.mid:
+          return globalConstants.core.AlertSubTypes.mid
         default:
-          return AlertSubTypes.default;
+          return globalConstants.core.AlertSubTypes.default;
       }
     }
 
@@ -605,6 +606,73 @@ export class UtilityService {
       } else {
         return null;
       }
+    }
+
+    public setCoreDefinitionGroupForEachConfiguratorDefinition(configurator: DTOs.SecurityDefinitionConfiguratorDTO) {
+      configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
+        definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          definition.data.configuratorCoreDefinitionGroup = definitionBundle.data.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
+        })
+      })
+    }
+
+    public highlightKeywordInParagraph(targetString: string, keyword: string): string {
+      // current algorithm only highlights the first occurrence of the keyword, if ever there is the need to highlight all occurrences, append the logic and add a flag as input to switch between two modes
+      if (targetString && keyword && targetString.length > 0 && keyword.length > 0) {
+        const startIndex = targetString.toUpperCase().indexOf(keyword.toUpperCase());
+        const endIndex = startIndex + keyword.length;
+        const beforeKeyword = targetString.slice(0, startIndex);
+        const matchedKeywordPortion = targetString.slice(startIndex, endIndex);
+        const afterKeyword = targetString.slice(endIndex);
+        return `${beforeKeyword}<kbd>${matchedKeywordPortion}</kbd>${afterKeyword}`;
+      } else {
+        return null;
+      }
+    }
+
+    public applySpecificListForActionMenu(
+      actionMenu: DTOs.SecurityActionMenuDTO,
+      coreAction: globalConstants.security.SecurityActionMenuOptionsRawText
+    ) {
+      actionMenu.data.allActions = this.getSpecificActionsForSecurityActionMenu(actionMenu.data.allActions, coreAction);
+      actionMenu.state.isDisplayLimitedActions = true;
+    }
+
+    public resetActionMenuToDefaultState(
+      actionMenu: DTOs.SecurityActionMenuDTO,
+      isActive: boolean
+    ) {
+      actionMenu.data.selectedCoreAction = null;
+      actionMenu.state.isActive = isActive;
+      actionMenu.state.isCoreActionSelected = false;
+      if (actionMenu.data.allActions.length > 0) {
+        if (actionMenu.state.isDisplayLimitedActions) {
+          actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
+            action.isAvailableSubAction = !action.coreAction || !actionMenu.data.allActions.find((selectedAction: Blocks.SecurityActionMenuOptionBlock) => selectedAction.rawText === action.coreAction);
+          });
+        } else {
+          actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.level === 1);
+        }
+      }
+    }
+    
+    public getBackendGroupFilterFromParams(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
+      const simpleBucket = {};
+      params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
+        const property = this.convertFEKey(eachItem.key);
+        if (!!property) {
+          if (eachItem.key === globalConstants.definition.SecurityDefinitionMap.TENOR.key) {
+            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
+              return eachBlock.shortKey;
+            });
+          } else {
+            if (property !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
+              simpleBucket[property] = eachItem.filterBy;
+            }
+          }
+        }
+      })
+      return simpleBucket;
     }
   // shared end
 
@@ -741,11 +809,11 @@ export class UtilityService {
     ): DTOs.SecurityTableCellDTO {
       if (targetHeader.state.isBestQuoteVariant) {
         let targetDriver = triCoreMetric;
-        if (triCoreMetric === DEFAULT_DRIVER_IDENTIFIER) {
+        if (triCoreMetric === globalConstants.core.DEFAULT_DRIVER_IDENTIFIER) {
           targetDriver = this.findSecurityTargetDefaultTriCoreDriver(targetRow.data.security);
         }
         if (!!targetDriver) {
-          const targetQuantLocationFromRow = TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
+          const targetQuantLocationFromRow = globalConstants.core.TriCoreDriverConfig[targetDriver].backendTargetQuoteAttr;
           newCellDTO.data.bestQuoteComparerDTO = targetRow.data.bestQuotes[targetHeader.data.blockAttrName][targetQuantLocationFromRow];
         } else {
           newCellDTO.data.bestQuoteComparerDTO = null;
@@ -827,6 +895,14 @@ export class UtilityService {
       }
     }
 
+    public getDefinitionBundleFromConfigurator(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      bundleKey: string
+    ): DTOs.SecurityDefinitionBundleDTO {
+      const selectedDefinitionBundle = configurator.data.definitionList.find((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => definitionBundle.data.label === bundleKey);
+      return selectedDefinitionBundle;
+    }
+
     // TODO: move this into a SecurityTableHelper service
     private retrieveSecurityMetricFromMetricPack(dto: DTOs.SecurityDTO, header: DTOs.SecurityTableHeaderDTO): number {
       if (!!dto && !!header) {
@@ -837,22 +913,26 @@ export class UtilityService {
         }
         let attrName = header.data.attrName;
         let underlineAttrName = header.data.underlineAttrName;
-        if ( header.data.isDriverDependent && header.data.isAttrChangable && attrName === DEFAULT_DRIVER_IDENTIFIER ) {
+        if ( header.data.isDriverDependent && header.data.isAttrChangable && attrName === globalConstants.core.DEFAULT_DRIVER_IDENTIFIER ) {
           // when the metric is set to default, the actual metric to be used for each row depends on the driver of the mark of that particular row
           const targetDriver = this.findSecurityTargetDefaultTriCoreDriver(dto);
-          attrName = TriCoreDriverConfig[targetDriver].driverLabel;
-          underlineAttrName = TriCoreDriverConfig[targetDriver].driverLabel;
+          attrName = globalConstants.core.TriCoreDriverConfig[targetDriver].driverLabel;
+          underlineAttrName = globalConstants.core.TriCoreDriverConfig[targetDriver].driverLabel;
         }
         const driverLabel = attrName;
-        let value, deltaSubPack;
+        let value;
         if (!!header.data.metricPackDeltaScope) {
-          deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
+          const deltaSubPack = dto.data.metricPack.delta[header.data.metricPackDeltaScope];
           value = !!deltaSubPack ? deltaSubPack[driverLabel] : null;
         } else {
-          value = dto.data.metricPack.raw[driverLabel];
+          const rawPack = header.data.key === 'indexMark' ? dto.data.metricPack.raw.index : dto.data.metricPack.raw;
+          value = !!rawPack ? rawPack[driverLabel] : null;
         }
         if (header.data.isDriverDependent && header.data.isAttrChangable) {
           value = this.parseTriCoreDriverNumber(value, attrName, dto, false);
+        }
+        if (header.data.key === 'workoutTerm' && value !== null && value !== undefined) {
+          value = this.round(value, 3).toFixed(3);
         }
         return value;
       } else {
@@ -876,10 +956,10 @@ export class UtilityService {
                 return eachPortfolioBlock.portfolioName === eachPortfolio;
               });
               if (!!portfolioExist) {
-                dto.data.cost.current.fifo['Default Spread'] = dto.data.cost.current.fifo['Default Spread'] + portfolioExist.costFifoSpread;
-                dto.data.cost.current.fifo.Price = dto.data.cost.current.fifo.Price + portfolioExist.costFifoPrice;
-                dto.data.cost.current.weightedAvg['Default Spread'] = dto.data.cost.current.weightedAvg['Default Spread'] + portfolioExist.costFifoSpread;
-                dto.data.cost.current.weightedAvg.Price = dto.data.cost.current.weightedAvg.Price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.fifo.defaultSpread = dto.data.cost.current.fifo.defaultSpread + portfolioExist.costFifoSpread;
+                dto.data.cost.current.fifo.price = dto.data.cost.current.fifo.price + portfolioExist.costFifoPrice;
+                dto.data.cost.current.weightedAvg.defaultSpread = dto.data.cost.current.weightedAvg.defaultSpread + portfolioExist.costFifoSpread;
+                dto.data.cost.current.weightedAvg.price = dto.data.cost.current.weightedAvg.price + portfolioExist.costFifoPrice;
               }
             });
           } else {
@@ -892,7 +972,7 @@ export class UtilityService {
           const isFifo = header.data.key.indexOf('Fifo') >= 0;
           const targetInnerBlock = isFifo ? targetBlock.fifo : targetBlock.weightedAvg;
           const targetAttr = 
-            header.data.underlineAttrName !== DEFAULT_DRIVER_IDENTIFIER 
+            header.data.underlineAttrName !== globalConstants.core.DEFAULT_DRIVER_IDENTIFIER 
               ? header.data.underlineAttrName 
               : dto.data.mark.markDriver === this.triCoreDriverConfig.Price.label
                 ? this.triCoreDriverConfig.Price.driverLabel 
@@ -982,7 +1062,7 @@ export class UtilityService {
           }
         }
         if (targetSecurity.data.hasIndex) {
-          const driverLabel = TriCoreDriverConfig[activeDriver].driverLabel;
+          const driverLabel = globalConstants.core.TriCoreDriverConfig[activeDriver].driverLabel;
           markBlock.markDisIndexRaw = markBlock.markRaw - targetSecurity.data.metricPack.raw[driverLabel];
           markBlock.markDisIndex = this.parseTriCoreDriverNumber(markBlock.markDisIndexRaw, driverLabel, targetSecurity, true) as string;
         }
@@ -1052,8 +1132,8 @@ export class UtilityService {
         const bestAskNum = this.triCoreDriverConfig[filteredMetricType] ? combined[this.triCoreDriverConfig[filteredMetricType].backendTargetQuoteAttr].data.offer.number : null;
         targetQuote.data.currentMetric = filteredMetricType;
         targetQuote.state.filteredByPrice = filteredMetricType === this.triCoreDriverConfig.Price.label;
-        targetQuote.state.filteredBySpread = filteredMetricType === TriCoreDriverConfig.Spread.label;
-        targetQuote.state.filteredByYield = filteredMetricType === TriCoreDriverConfig.Yield.label;
+        targetQuote.state.filteredBySpread = filteredMetricType === globalConstants.core.TriCoreDriverConfig.Spread.label;
+        targetQuote.state.filteredByYield = filteredMetricType === globalConstants.core.TriCoreDriverConfig.Yield.label;
         targetQuote.state.isBestBid = targetQuote.data.bid.tspread == bestBidNum || targetQuote.data.bid.price == bestBidNum || targetQuote.data.bid.yield == bestBidNum;
         targetQuote.state.isBestOffer = targetQuote.data.ask.tspread == bestAskNum || targetQuote.data.ask.price == bestAskNum || targetQuote.data.ask.yield == bestAskNum;
         if (targetQuote.state.hasBid && targetQuote.data.bid.isAxe) {
@@ -1074,7 +1154,7 @@ export class UtilityService {
           sizeList.push(eachComparer.data.bid.size, eachComparer.data.offer.size);
         }
       });
-      const maxDelta = this.findPercentile(deltaList, QUANT_COMPARER_PERCENTILE);
+      const maxDelta = this.findPercentile(deltaList, globalConstants.core.QUANT_COMPARER_PERCENTILE);
       // const maxSize = this.utilityService.findPercentile(sizeList, QUANT_COMPARER_PERCENTILE);
       const maxSize = 50;
 
@@ -1109,7 +1189,7 @@ export class UtilityService {
 
     public getTraceNumericFilterAmount(filterSymbol: string, filter: string): number {
       const parsedFilter = filter.split(filterSymbol)[1].trim();
-      const amount = parsedFilter.includes('K') ? +(parsedFilter.split('K')[0]) * traceTradeFilterAmounts.thousand : +(parsedFilter.split('M')[0]) * traceTradeFilterAmounts.million;
+      const amount = parsedFilter.includes('K') ? +(parsedFilter.split('K')[0]) * globalConstants.table.traceTradeFilterAmounts.thousand : +(parsedFilter.split('M')[0]) * globalConstants.table.traceTradeFilterAmounts.million;
       return amount;
     }
 
@@ -1120,11 +1200,11 @@ export class UtilityService {
 
     public formatTraceReportedValues(amount: number, isRounded: boolean = false): string {
       if (!isRounded) {
-      const reportedInteger = amount / TRACE_VOLUME_REPORTED_THRESHOLD;
+      const reportedInteger = amount / globalConstants.core.TRACE_VOLUME_REPORTED_THRESHOLD;
       const roundedVolumeReported = Math.floor(reportedInteger);
-      return `${traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
+      return `${globalConstants.table.traceTradeNumericalFilterSymbols.greaterThan} ${roundedVolumeReported}MM`;
       } else {
-        const displayValue = !!amount ? `${traceTradeNumericalFilterSymbols.greaterThan} ${Math.floor(amount)}MM` : null;
+        const displayValue = !!amount ? `${globalConstants.table.traceTradeNumericalFilterSymbols.greaterThan} ${Math.floor(amount)}MM` : null;
         return displayValue;
       }
     }
@@ -1150,7 +1230,7 @@ export class UtilityService {
     public filterTraceTrades(options: Array<string>, rowData: DTOs.SecurityTableRowDTO): Array<Blocks.TraceTradeBlock> {
       let displayedList: Array<Blocks.TraceTradeBlock> = [];
       let numericalFiltersList: Array<number> = [];
-      const numericFilter = traceTradeNumericalFilterSymbols.greaterThan;
+      const numericFilter = globalConstants.table.traceTradeNumericalFilterSymbols.greaterThan;
       if (options.length > 0) {
         options.forEach((option) => {
           if (option.includes(numericFilter)) {
@@ -1263,6 +1343,135 @@ export class UtilityService {
       }
     }
 
+    public createNewCoreDefinitionFromSelectedDefinitionChanges(
+      targetDefinition: DTOs. SecurityDefinitionDTO,
+      isHiddenDefinition: boolean,
+      filterActive: boolean
+    ): DTOs.SecurityDefinitionDTO {
+      const newDefinition: DTOs.SecurityDefinitionDTO = this.deepCopy(targetDefinition);
+      newDefinition.state.isHiddenInConfiguratorDefinitionBundle = isHiddenDefinition;
+      newDefinition.state.filterActive = !!filterActive;
+      newDefinition.data.configuratorCoreDefinitionGroup = this.setCoreDefinitionBundleLabel(targetDefinition.data.key);
+      return newDefinition;
+    }
+
+    public setCoreDefinitionBundleLabel(targetKey: string): globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels | null {
+      const nonSelectedDefinitionLayout = globalConstants.definition.ConfiguratorDefinitionLayout.filter((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.label !== globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected);
+      const selectedBundle = nonSelectedDefinitionLayout.find((bundleStub: Stubs.SecurityDefinitionBundleStub) => bundleStub.list.find((definitionStub: Stubs.SecurityDefinitionStub) => definitionStub.key === targetKey));
+      if (!!selectedBundle) {
+        return selectedBundle.label as globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels;
+      } else {
+        return null;
+      }
+    }
+
+    public syncDefinitionStateBetweenSelectedAndCore(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      targetDefinition: DTOs.SecurityDefinitionDTO,
+      isHiddenDefinition: boolean,
+    ) {
+      configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO, definitionBundleIndex: number) => {
+        if (definitionBundle.data.label !== globalConstants.definition.SecurityDefinitionConfiguratorGroupLabels.selected) {
+          definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO, definitionIndex: number) => {
+            if (definition.data.key === targetDefinition.data.key) {
+              const newCoreDefinition = this.createNewCoreDefinitionFromSelectedDefinitionChanges(targetDefinition, isHiddenDefinition, targetDefinition.state.filterActive);
+              configurator.data.definitionList[definitionBundleIndex].data.list[definitionIndex] = newCoreDefinition
+            }
+          })
+        }
+      })
+    }
+
+    public generateCustomizedTitleForShortcut(targetShortcut: DTOs.SearchShortcutDTO): string {
+      let customDisplayTitle = '';
+      let selectionOptionsList: Array<string> = [];
+      // we only use the first (primary) set of configurations in the searchFilters to name the shortcut, ignore all the other "OR" conditions for now because it would make the name too long
+      targetShortcut.data.searchFilters[0].forEach((definitionItem: DTOs.SecurityDefinitionDTO) => {
+        // skip "Quoted Today" in the naming since that definition is just binary at the moment
+        if (definitionItem.data.key !== globalConstants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
+          const isBICS = definitionItem.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key;
+          const groupDefinition = isBICS ? 'BICS' : globalConstants.definition.SecurityDefinitionMap[definitionItem.data.key].displayName;
+          selectionOptionsList = [
+            ...selectionOptionsList,
+            ...definitionItem.data.highlightSelectedOptionList.length > 2
+              ? [`${groupDefinition}(${definitionItem.data.highlightSelectedOptionList.length})`]
+              : definitionItem.data.highlightSelectedOptionList.map((eachOption) => {
+                return eachOption.shortKey;
+              })
+          ];
+          customDisplayTitle = selectionOptionsList.length > 0 ? selectionOptionsList.join(' - ') : '';
+        }
+      })
+      return customDisplayTitle;
+    }
+
+    public getSecurityActionMenuSubActionsFromLevel(level: number): Array<Blocks.SecurityActionMenuOptionBlock> {
+      const selectedSubActions = globalConstants.security.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => optionBlock.level === level);
+      return selectedSubActions;
+    }
+
+    public clearAllSelectedOptionsInDefinition(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      targetDefinitions: Array<DTOs.SecurityDefinitionDTO>
+    ) {
+      targetDefinitions.forEach((targetDefinition: DTOs.SecurityDefinitionDTO) => {
+        targetDefinition.data.highlightSelectedOptionList = [];
+        targetDefinition.state.filterActive = false;
+        if (targetDefinition.state.isFilterCapped) {
+          targetDefinition.data.displayOptionList = [];
+        } else {
+          targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
+            option.isSelected = false;
+          })
+        }
+        this.syncDefinitionStateBetweenSelectedAndCore(configurator, targetDefinition, true);
+      })
+    }
+
+    public getSpecificActionsForSecurityActionMenu(
+      actionList: Array<Blocks.SecurityActionMenuOptionBlock>,
+      coreAction: globalConstants.security.SecurityActionMenuOptionsRawText
+    ): Array<Blocks.SecurityActionMenuOptionBlock> {
+      if (actionList.length > 0) {
+        const selectedActions = actionList.filter((action: Blocks.SecurityActionMenuOptionBlock) => action.coreAction === coreAction);
+        if (selectedActions.length > 0) {
+          selectedActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = true);
+          return selectedActions;
+        } else {
+          return [];
+        }
+      } else {
+        return [];
+      }
+    }
+
+    public checkIfPresetsAreIdentical(
+      currentPreset: DTOs.SearchShortcutDTO,
+      targetPreset: DTOs.SearchShortcutDTO
+    ): boolean {
+      const currentPrimaryFilters = currentPreset.data.searchFilters[0];
+      const targetPrimaryFilters = targetPreset.data.searchFilters[0];
+      if (currentPrimaryFilters.length !== targetPrimaryFilters.length) {
+        return false;
+      } else {
+        let targetOptions: Array<string> = [];
+        let currentOptions: Array<string> = [];
+        targetPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          if (definition.data.highlightSelectedOptionList.length > 0) {
+            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
+            targetOptions = [...targetOptions, ...highlightedOptions];
+          }
+        });
+        currentPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          if (definition.data.highlightSelectedOptionList.length > 0) {
+            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
+            currentOptions = [...currentOptions, ...highlightedOptions];
+          }
+        });
+        const isIdentical = currentOptions.every((currentOption: string) => targetOptions.indexOf(currentOption) >= 0);
+        return isIdentical;
+      }
+    }
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;
@@ -1270,6 +1479,25 @@ export class UtilityService {
         const result = 100 - Math.round(delta / maxAbsDelta * 100);
         return result;
       }
+    }
+
+    public getBackendGroupFilterFromWatchlist(shortcut: DTOs.SearchShortcutDTO): AdhocPacks.GenericKeyWithStringArrayBlock {
+      const simpleBucket = {};
+      if (!!shortcut && !!shortcut.data.searchFilters && shortcut.data.searchFilters.length > 0) {
+        shortcut.data.searchFilters[0].forEach((eachDefinition: DTOs.SecurityDefinitionDTO) => {
+          const property = this.convertFEKey(eachDefinition.data.key);
+          if (!!property && property !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
+            simpleBucket[property] = eachDefinition.data.highlightSelectedOptionList.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
+              if (eachBlock.bicsLevel > 0){
+                return this.bicsDictionaryLookupService.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
+              } else {
+                return eachBlock.shortKey;
+              }
+            });
+          }
+        })
+      }
+      return simpleBucket;
     }
   // trade specific end
 
@@ -1329,7 +1557,7 @@ export class UtilityService {
         });
         let categoryKey = '';
         list.forEach((eachIdentifier) => {
-          if (eachIdentifier === SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName) {
+          if (eachIdentifier === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.backendDtoAttrName) {
             const valueArray = rawData.simpleBucket[eachIdentifier].map((eachBicsCode) => {
               return this.bicsDictionaryLookupService.BICSCodeToBICSName(eachBicsCode, true);
             });
@@ -1551,7 +1779,7 @@ export class UtilityService {
     }
 
     public checkIfDiveInIsAvailable(row: DTOs.StructurePortfolioBreakdownRowDTO): boolean {
-      const isNonDiveInCategory = BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
+      const isNonDiveInCategory = globalConstants.structuring.BICS_DIVE_IN_UNAVAILABLE_CATEGORIES.find(categoryCode => categoryCode === row.data.code);
       if (!isNonDiveInCategory && row.data.code) {
         const subLevelCategories = this.bicsDictionaryLookupService.getNextBICSSubLevelCodesByPerCategory(row.data.code);
         return subLevelCategories.length > 0;
@@ -1578,18 +1806,18 @@ export class UtilityService {
       return viewData;
     }
 
-    public convertFESubPortfolioTextToBEKey(subPortfolio: SubPortfolioFilter): string {
+    public convertFESubPortfolioTextToBEKey(subPortfolio: globalConstants.structuring.SubPortfolioFilter): string {
       switch (subPortfolio) {
-        case SubPortfolioFilter.all:
+        case globalConstants.structuring.SubPortfolioFilter.all:
           return 'All';
           break;
-        case SubPortfolioFilter.nonHedging:
+        case globalConstants.structuring.SubPortfolioFilter.nonHedging:
           return 'NonHedging';
           break;
-        case SubPortfolioFilter.nonShortCarry:
+        case globalConstants.structuring.SubPortfolioFilter.nonShortCarry:
           return 'NonShortCarry';
           break;
-        case SubPortfolioFilter.shortCarry:
+        case globalConstants.structuring.SubPortfolioFilter.shortCarry:
           return 'ShortCarry';
           break;
         default:
@@ -1602,10 +1830,10 @@ export class UtilityService {
       category: string,
       isOverride: boolean
       ): string {
-      const isBICSSubLevel = category.includes(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX);
+      const isBICSSubLevel = category.includes(globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX);
       let displayCategory: string;
       if (isBICSSubLevel) {
-        displayCategory = isOverride ? category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'): category.split(BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim();
+        displayCategory = isOverride ? category.split(globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX).join('Lv.'): category.split(globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX)[0].trim();
       } else {
         displayCategory = category;
       }
@@ -1634,9 +1862,9 @@ export class UtilityService {
       return rawOverridesList;
     }
 
-    public filterOutExcludedStrategiesForSeeBond(definition: DTOs.SecurityDefinitionDTO, activeSubPortfolio: SubPortfolioFilter) {
+    public filterOutExcludedStrategiesForSeeBond(definition: DTOs.SecurityDefinitionDTO, activeSubPortfolio: globalConstants.structuring.SubPortfolioFilter) {
         definition.data.displayOptionList.forEach((eachOption) => {
-        const subPortfolioMapping = StrategyExcludedFiltersMapping[activeSubPortfolio];
+        const subPortfolioMapping = globalConstants.definition.StrategyExcludedFiltersMapping[activeSubPortfolio];
         const isExcluded = subPortfolioMapping.excluded.find(strategy => strategy === eachOption.displayLabel);
         if (!isExcluded) {
           eachOption.isSelected = true;
@@ -1645,27 +1873,10 @@ export class UtilityService {
       })
     }
 
-    public getSimpleBucketFromConfigurator(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
-      const simpleBucket = {};
-      params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
-        const property = this.convertFEKey(eachItem.key);
-        if (!!property) {
-          if (eachItem.key === SecurityDefinitionMap.TENOR.key) {
-            simpleBucket[property] = eachItem.filterByBlocks.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {
-              return eachBlock.shortKey;
-            });
-          } else {
-            simpleBucket[property] = eachItem.filterBy;
-          }
-        }
-      })
-      return simpleBucket;
-    }
-
     public formOverrideTitle(backendGroupOptionIdentifier: string): string {
       const identifiers = backendGroupOptionIdentifier.split(' ~ ');
       identifiers.forEach((identifier: string, index: number) => {
-        const identifierBlock = BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
+        const identifierBlock = globalConstants.structuring.BEIdentifierToFEDisplayMapping.find((block: AdhocPacks.BEIdentifierToFEMappingBlock) => block.identifier === identifier);
         if (identifierBlock) {
           identifiers[index] = identifierBlock.display;
         }

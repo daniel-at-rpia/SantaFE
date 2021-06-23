@@ -1,5 +1,6 @@
 import { Label } from '@amcharts/amcharts4/core';
 import { AggridSortOptions } from 'Core/constants/securityTableConstants.constant';
+import * as constants from 'Core/constants/index';
 
 export interface SearchShortcutStub {
   displayTitle: string;
@@ -8,7 +9,7 @@ export interface SearchShortcutStub {
   isHero?: boolean;
 }
 
-interface SearchShortcutIncludedDefinitionStub {
+export interface SearchShortcutIncludedDefinitionStub {
   definitionKey: string;
   groupByActive: boolean;
   selectedOptions: Array<string>;
@@ -25,10 +26,11 @@ export interface SecurityDefinitionStub {
   urlForGetLongOptionListFromServer?: string;
   securityDTOAttr?: string;
   securityDTOAttrBlock?: string;
+  internalOnly: boolean;  // only our internal securities would have this definition
 }
 
 export interface SecurityDefinitionBundleStub {
-  label: string;
+  label: constants.definition.SecurityDefinitionConfiguratorGroupLabels;
   list: Array<SecurityDefinitionStub>;
 }
 
@@ -127,6 +129,7 @@ interface SecurityTableHeaderConfigStubTableSpecificsBlock {
   disabled?: boolean;
   groupShow?: boolean;
   sortActivated?: AggridSortOptions;
+  groupByActive?: boolean;
 }
 
 export interface TriCoreDriverConfigStub {

@@ -89,3 +89,13 @@ export const selectBICSDataLoaded = createSelector(
   getTradeState,
   (state: TradeState) => state.bicsDataLoaded
 );
+
+export const selectWatchlistIndexedDBReady = createSelector(
+  getTradeState,
+  (state: TradeState) => state.watchlist.indexedDBReady
+)
+
+export const selectSecurityActionToLaunchUofB = createSelector(
+  getTradeState,
+  (state: TradeState) => state.securityActionMenu.launchUofBPack
+)

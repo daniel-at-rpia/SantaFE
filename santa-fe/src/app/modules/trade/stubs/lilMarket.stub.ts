@@ -36,15 +36,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
       "BicsCodeLevel4": [
         "14111110"
       ],
-      "BicsCodeLevel5": [
-        "1411111010"
-      ],
-      "BicsCodeLevel6": [
-        "141111101010"
-      ],
-      "BicsCodeLevel7": [
-        ""
-      ],
       "BicsLevel1": [
         "Financials"
       ],
@@ -56,15 +47,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
       ],
       "BicsLevel4": [
         "Commercial Finance"
-      ],
-      "BicsLevel5": [
-        "Comml Equip Finance & Leasing"
-      ],
-      "BicsLevel6": [
-        "General Equip Finance & Leasing"
-      ],
-      "BicsLevel7": [
-        ""
       ],
       "Country": [
         "Ireland"
@@ -135,18 +117,18 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
   "Mom": {
     "BaseSecurity": {
       "sourceInDb": "RP",
-      "startDate": "2020-11-20T00:00:00-05:00",
-      "endDate": "2020-12-21T00:00:00-05:00",
+      "startDate": "2021-02-17T00:00:00-05:00",
+      "endDate": "2021-03-17T00:00:00-04:00",
       "metricName": "Spread",
       "historicalLevel": {
         "targetSecurityIdentifier": null,
-        "startMetric": 286.0165,
-        "endMetric": 198.75,
-        "maxMetric": 286.0165,
-        "minMetric": 198.75,
+        "startMetric": 177.613,
+        "endMetric": 194.214,
+        "maxMetric": 194.214,
+        "minMetric": 177.613,
         "timeSeries": {
-          "2020-11-20T00:00:00-05:00": 286.0165,
-          "2020-12-21T00:00:00-05:00": 198.75
+          "2021-02-17T00:00:00-05:00": 177.613,
+          "2021-03-17T00:00:00-04:00": 194.214
         },
         "isLevelRange": true,
         "isBasisRange": false,
@@ -155,99 +137,9 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
       "historicalBasis": null,
       "security": {
         "securityIdentifier": "29868",
-        "metrics": {
-          "FO": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "97247",
-            "benchmarkName": "T 0.125 12/15/2023 USD",
-            "underlyingSecurityId": -1,
-            "yieldWorst": 2.199898,
-            "tenor": "2Y",
-            "amtOutstanding": 414580000.0,
-            "marketValue": 450841066.0,
-            "workoutTerm": 1.983562,
-            "ratingDouble": 14.0,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 106.424236,
-            "spread": 200.0
-          },
-          "BB": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": null,
-            "benchmarkName": null,
-            "underlyingSecurityId": -1,
-            "yieldWorst": 2.24007,
-            "tenor": "2Y",
-            "amtOutstanding": 414580000.0,
-            "marketValue": 450481708.0,
-            "workoutTerm": 1.991781,
-            "ratingDouble": 14.0,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 106.307,
-            "spread": 210.488
-          },
-          "Default": {
-            "isFixedForLife": true,
-            "isFixedToFloatInFixed": false,
-            "isFloat": false,
-            "isNewIssue": false,
-            "benchmarkSecurityIdentifier": "97247",
-            "benchmarkName": "T 0.125 12/15/2023 USD",
-            "underlyingSecurityId": -1,
-            "yieldWorst": 2.164452,
-            "tenor": "2Y",
-            "amtOutstanding": 414580000.0,
-            "marketValue": 450481708.0,
-            "workoutTerm": 1.983562,
-            "ratingDouble": 14.0,
-            "isRated": true,
-            "rating": "BBB-",
-            "ratingNoNotch": "BBB",
-            "ratingBucket": "IG",
-            "price": 106.424526,
-            "spread": 198.75
-          }
-        },
-        "deltaMetrics": {
-          "Dod": {
-            "yieldWorst": 0.018378,
-            "ratingDouble": 0.0,
-            "price": -0.045224,
-            "spread": 2.0685
-          },
-          "Wow": {
-            "yieldWorst": -0.205813,
-            "ratingDouble": 0.0,
-            "price": 0.353238,
-            "spread": -21.1925
-          },
-          "Mtd": {
-            "yieldWorst": -0.491753,
-            "ratingDouble": 0.0,
-            "price": 0.824443,
-            "spread": -48.265
-          },
-          "Mom": {
-            "yieldWorst": -0.907169,
-            "ratingDouble": 0.0,
-            "price": 1.617609,
-            "spread": -87.2665
-          },
-          "Ytd": null,
-          "Yoy": null
-        },
+        "name": "AVOL 5.5 01/15/2023 USD 144A SENIOR_UNSECURED",
+        "securityType": "Bond",
+        "securitySubType": "Corp",
         "ccy": "USD",
         "obligorId": 1290,
         "obligorName": "AVOLON HOLDINGS LTD",
@@ -261,54 +153,92 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
         "bicsLevel2": "Financial Services",
         "bicsLevel3": "Specialty Finance",
         "bicsLevel4": "Commercial Finance",
-        "bicsLevel5": "Comml Equip Finance & Leasing",
-        "bicsLevel6": "General Equip Finance & Leasing",
+        "bicsLevel5": "Corporate Banks",
+        "bicsLevel6": "",
         "bicsLevel7": "",
-        "name": "AVOL 5.5 01/15/2023 USD 144A SENIOR_UNSECURED",
+        "driver": "Spread",
         "genericSeniority": "SR",
         "globalIdentifier": "US05401AAA97",
         "paymentRank": "SR UNSECURED",
-        "securitySubType": "Bond",
         "ticker": "AVOL",
-        "unitPosition": {
-          "securityIdentifier": "29868",
-          "partitionOptionValues": {
-            "PortfolioShortName": [
-              "STIP",
-              "DOF",
-              "BBB",
-              "AGB",
-              ""
-            ],
-            "StrategyName": [
-              "LTOV - Spread"
-            ]
-          },
-          "strategyAsOfDate": "2020-12-18T00:00:00",
-          "mark": {
-            "enteredTime": "2020-12-21T00:00:00-05:00",
-            "user": null,
-            "value": 200.0,
-            "spread": 200.0,
-            "price": 106.424236,
-            "yield": 2.199898
-          },
-          "hedgeFactor": 0.0,
-          "strategies": [
-            "LTOV - Spread"
-          ],
-          "owners": [
-            "DM",
-            "TW",
-            "LP"
-          ],
-          "primaryPmName": "DM",
-          "backupPmName": "TW",
-          "researchName": "LP"
-        },
-        "securityType": "Bond",
         "maturityType": "Callable",
-        "driver": "Spread"
+        "metrics": {
+          "BB": {
+            "isFixedForLife": true,
+            "isFixedToFloatInFixed": false,
+            "isFloat": false,
+            "isNewIssue": false,
+            "benchmarkSecurityIdentifier": null,
+            "benchmarkName": null,
+            "underlyingSecurityId": -1,
+            "yieldWorst": 2.09811,
+            "tenor": null,
+            "amtOutstanding": 414580000.0,
+            "marketValue": 442536050.0,
+            "workoutTerm": null,
+            "ratingDouble": null,
+            "isRated": true,
+            "rating": null,
+            "ratingNoNotch": null,
+            "ratingBucket": "NR",
+            "price": 105.796,
+            "spread": 194.214
+          },
+          "Default": {
+            "isFixedForLife": true,
+            "isFixedToFloatInFixed": false,
+            "isFloat": false,
+            "isNewIssue": false,
+            "benchmarkSecurityIdentifier": null,
+            "benchmarkName": null,
+            "underlyingSecurityId": -1,
+            "yieldWorst": 2.09811,
+            "tenor": null,
+            "amtOutstanding": 414580000.0,
+            "marketValue": 442536050.0,
+            "workoutTerm": null,
+            "ratingDouble": null,
+            "isRated": true,
+            "rating": null,
+            "ratingNoNotch": null,
+            "ratingBucket": "NR",
+            "price": 105.796,
+            "spread": 194.214
+          }
+        },
+        "deltaMetrics": {
+          "Dod": {
+            "yieldWorst": 0.148695,
+            "ratingDouble": null,
+            "price": -0.253999,
+            "spread": 14.214
+          },
+          "TMinusTwo": {
+            "yieldWorst": 0.14616,
+            "ratingDouble": null,
+            "price": -0.259,
+            "spread": 14.214
+          },
+          "Wow": {
+            "yieldWorst": 0.07304,
+            "ratingDouble": null,
+            "price": -0.119251,
+            "spread": 3.964
+          },
+          "Mom": {
+            "yieldWorst": 0.20605,
+            "ratingDouble": null,
+            "price": -0.646,
+            "spread": 16.601
+          },
+          "Ytd": {
+            "yieldWorst": -0.0699,
+            "ratingDouble": null,
+            "price": -0.551,
+            "spread": -9.71
+          }
+        },
+        "unitPosition": null
       },
       "rank": 0,
       "name": "AVOL 5.5 01/15/2023 USD 144A SENIOR_UNSECURED",
@@ -412,23 +342,6 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
               "MarketValue": 139
             }
           },
-          "Mtd": {
-            "ratingDouble": 0.0,
-            "price": -0.0740227080680666,
-            "spread": -2.64563251663803,
-            "yieldWorst": -0.05778761795909415,
-            "backendTenor": null,
-            "propertyToNumSecurities": {
-              "WorkoutTerm": 138,
-              "RatingDouble": 138,
-              "Price": 124,
-              "BackendWorkoutTerm": 138,
-              "Spread": 138,
-              "YieldWorst": 124,
-              "AmtOutstanding": 138,
-              "MarketValue": 138
-            }
-          },
           "Mom": {
             "ratingDouble": 0.0,
             "price": -0.04175028210890233,
@@ -463,7 +376,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
               "MarketValue": 6
             }
           },
-          "Yoy": {
+          "TMinusTwo": {
             "ratingDouble": -0.41476625190921934,
             "price": 0.5756188941116697,
             "spread": -14.649414658219385,
@@ -635,7 +548,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
               "price": 0.575787,
               "spread": -28.25
             },
-            "Mtd": {
+            "TMinusTwo": {
               "yieldWorst": -1.028325,
               "ratingDouble": 0.0,
               "price": 2.228,
@@ -647,8 +560,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
               "price": 3.226124,
               "spread": -144.5685
             },
-            "Ytd": null,
-            "Yoy": null
+            "Ytd": null
           },
           "ccy": "USD",
           "obligorId": 1684,
@@ -663,8 +575,8 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "bicsLevel2": "Financial Services",
           "bicsLevel3": "Specialty Finance",
           "bicsLevel4": "Commercial Finance",
-          "bicsLevel5": "Comml Equip Finance & Leasing",
-          "bicsLevel6": "General Equip Finance & Leasing",
+          "bicsLevel5": "Corporate Banks",
+          "bicsLevel6": "",
           "bicsLevel7": "",
           "name": "AYR 5 04/01/2023 USD SENIOR_UNSECURED",
           "genericSeniority": "SR",
@@ -809,7 +721,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
               "price": 0.019,
               "spread": 7.6501
             },
-            "Mtd": {
+            "TMinusTwo": {
               "yieldWorst": 1.7936,
               "ratingDouble": 0.0,
               "price": -1.691,
@@ -821,8 +733,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
               "price": -3.065,
               "spread": 308.88
             },
-            "Ytd": null,
-            "Yoy": null
+            "Ytd": null
           },
           "ccy": "USD",
           "obligorId": 6932,
@@ -837,7 +748,7 @@ export const HistoricalSummarySampleReturn: BEHistoricalSummaryOverviewDTO = {
           "bicsLevel2": "Financial Services",
           "bicsLevel3": "Asset Management",
           "bicsLevel4": "Investment Companies",
-          "bicsLevel5": "Investment Holding Companies",
+          "bicsLevel5": "Corporate Banks",
           "bicsLevel6": "",
           "bicsLevel7": "",
           "name": "BJHAIG 4.3 10/08/22",

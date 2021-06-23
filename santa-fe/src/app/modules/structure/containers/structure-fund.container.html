@@ -64,27 +64,25 @@
     </div>
     <span class="sat-fundStructuring__editFund-message">{{ fund.state.hasErrors.errorMessage }}</span>
     <div class="sat-fundStructuring__editFund-group">
-      <label for="creditDurationTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Duration:</label>
       <santa-input
         [inputValue]="fund.data.target.target.creditDuration"
         [placeholder]="''"
+        [label]="'Target Credit Duration'"
+        [inverseColored]="true"
         (onInputChange)="onChangeValue($event, constants.creditDuration)"
         [hasError]="fund.state.hasErrors.updatedCreditDuration"
-        [ngClass]="{
-          'sat-fundStructuring__editFund-group-input': true
-        }">
+        class="sat-fundStructuring__editFund-group-input">
       </santa-input>
     </div>
     <div class="sat-fundStructuring__editFund-group">
-      <label for="leverageTarget" class="sat-fundStructuring__editFund-group-label">Target Credit Leverage:</label>
       <santa-input
         [inputValue]="fund.data.target.target.creditLeverage"
         [placeholder]="''"
+        [label]="'Target Credit Leverage'"
+        [inverseColored]="true"
         (onInputChange)="onChangeValue($event, constants.creditLeverage)"
         [hasError]="fund.state.hasErrors.updatedCreditLeverage"
-        [ngClass]="{
-          'sat-fundStructuring__editFund-group-input': true
-        }">
+        class="sat-fundStructuring__editFund-group-input">
       </santa-input>
     </div>
     <button (click)="onToggleEditTargetAutoScaling()" class="santaBtn--labelled sat-fundStructuring__editFund-autoScalingToggle">

@@ -11,6 +11,16 @@ export enum NavigationModule {
   guest = 'guest'
 }
 
+export enum PortfolioShortNames {
+  DOF = 'DOF',
+  SOF = 'SOF',
+  STIP = 'STIP',
+  FIP = 'FIP',
+  CIP = 'CIP',
+  AGB = 'AGB',
+  BBB = 'BBB'
+}
+
 export const APIUrlMap = {
   getUserInitials: `user/get-user-initials`,
   getSecurityIdMap: `security/get-security-identifiers`,
@@ -45,7 +55,11 @@ export const APIUrlMap = {
   setView: 'portfolioStructuring/set-analyst-views',
   getAllTraceTrades: 'TraceTrade/get-all-trace-trades',
   clearPortfolioBreakdown: 'portfolioStructuring/clear-portfolio-breakdown',
-  createPortfolioOverridesForAllPortfolios: 'portfolioStructuring/create-portfolio-overrides-for-all-portfolios'
+  createPortfolioOverridesForAllPortfolios: 'portfolioStructuring/create-portfolio-overrides-for-all-portfolios',
+  getSavedWatchlists: 'WatchList/get',
+  createSavedWatchlist: 'WatchList/create',
+  updateSavedWatchlist: 'WatchList/update',
+  deleteSavedWatchlist: 'Watchlist/delete'
 };
 
 export const FAILED_USER_INITIALS_FALLBACK = 'n/a';
@@ -60,7 +74,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -71,7 +85,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -82,18 +96,18 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
-    label: 'G Spread',
+    label: 'G-Spread',
     backendDtoAttrName: 'gSpread',
     deltaOptions: [
       'Dod',
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -104,7 +118,7 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -115,18 +129,18 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
-    label: 'YieldWorst',
+    label: 'Yield Worst',
     backendDtoAttrName: 'yieldWorst',
     deltaOptions: [
       'Dod',
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
   },
   {
@@ -137,8 +151,13 @@ export const SecurityMetricOptions: Array<SecurityMetricOptionStub> = [
       'Wow',
       'Mom',
       'Ytd',
-      'Yoy'
+      'TMinusTwo'
     ]
+  },
+  {
+    label: 'Workout Term',
+    backendDtoAttrName: 'workoutTerm',
+    deltaOptions: []  // it doesn't make sense to track workout term's delta, workout term is time-based already
   }
 ];
 
@@ -149,7 +168,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
     tier2Threshold: 20,
     inversed: false,
     rounding: 0,
-    driverLabel: SecurityMetricOptions[0].label,
+    driverLabel: SecurityMetricOptions[0].backendDtoAttrName,
     backendTargetQuoteAttr: 'bestSpreadQuote'
   },
   Yield: {
@@ -157,7 +176,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
     tier2Threshold: 1,
     inversed: false,
     rounding: 3,
-    driverLabel: SecurityMetricOptions[6].label,
+    driverLabel: SecurityMetricOptions[6].backendDtoAttrName,
     backendTargetQuoteAttr: 'bestYieldQuote'
   },
   Price: {
@@ -165,7 +184,7 @@ export const TriCoreDriverConfig: TriCoreDriverConfigStub = {
     tier2Threshold: 3,
     inversed: true,
     rounding: 3,
-    driverLabel: SecurityMetricOptions[1].label,
+    driverLabel: SecurityMetricOptions[1].backendDtoAttrName,
     backendTargetQuoteAttr: 'bestPriceQuote'
   }
 }
@@ -201,14 +220,16 @@ export const FrontendKeyToBackendKeyDictionary = {
   'BICS_LEVEL_6': 'BicsLevel6',
   'BICS_LEVEL_7': 'BicsLevel7',
   'BICS_CONSOLIDATED': 'BicsCode',
-
+  'PORTFOLIO': 'PortfolioShortName',
+  'STRATEGY': 'StrategyName',
+  'OWNER': 'Owner',
+  'PRIMARY_PORTFOLIO_MANAGER': 'PrimaryPmName',
   // metrics
   'SPREAD': 'oasSpread',
   'PRICE': 'price',
   'YIELD': 'yieldWorst',
   'SIZE': 'marketValue'
 };
-
 export const BackendKeyToDisplayLabelDictionary = {
   'SecurityType': 'Security Type',
   'RatingNoNotch': 'Rating',
@@ -239,6 +260,7 @@ export const BackendKeyToDisplayLabelDictionary = {
   'BicsLevel7': 'BICS Lv.7',
   'BicsCode': 'BicsCode'
 }
+export const KEY_CONVERSION_FAILURE_FLAG = 'n/a';
 
 export const MIN_OBLIGOR_CURVE_VALUES = 2;
 
@@ -300,13 +322,3 @@ export const TRACE_VOLUME_REPORTED_THRESHOLD = 1000000;
 
 export const QUANT_COMPARER_PERCENTILE = 90;
 export const KEYWORDSEARCH_DEBOUNCE_TIME = 500;
-
-export enum GlobalWorkflowTypes {
-  genericType = 'Generic',
-  launchTradeToSeeBonds = 'Launch Trade To See Bonds',
-  routeHandlerPlaceholder = 'Placeholder for Route Handler',
-  changedStructureUtilityConfig = 'Changed Structure Utility Config',
-  unselectPreset = 'Unselect Trade Preset'
-}
-
-export const GLOBAL_WORKFLOW_STATE_ID_KEY = 'stateId';

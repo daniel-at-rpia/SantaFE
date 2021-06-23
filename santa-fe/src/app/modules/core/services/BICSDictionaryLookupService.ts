@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { AdhocPacks } from '../models/frontend';
 import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
-import { BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX } from 'Core/constants/structureConstants.constants';
+import * as globalConstants from 'Core/constants';
 
 @Injectable()
 
@@ -57,7 +57,7 @@ export class BICSDictionaryLookupService {
           bicsName = targetItemBlock.item1;
         }
       }
-      const formattedName = bicsCode.length > 2 ? `${bicsName} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${Math.floor(bicsCode.length/2)}` : bicsName;
+      const formattedName = bicsCode.length > 2 ? `${bicsName} ${globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${Math.floor(bicsCode.length/2)}` : bicsName;
       return containSubLevelSuffixIdentifier ? formattedName : bicsName;
     } else {
       return null;
@@ -107,6 +107,10 @@ export class BICSDictionaryLookupService {
       return [];
     }
    }
+
+  public getBICSLevel(code: string): number {
+    return Math.floor(code.length/2);
+  }
 
   private buildReversedBICSHierarchyDictionary(data: BEBICsHierarchyBlock) {
     for (let eachCode in data) {
