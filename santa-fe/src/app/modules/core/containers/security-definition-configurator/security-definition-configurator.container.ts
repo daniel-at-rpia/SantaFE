@@ -67,8 +67,8 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         // no last executed config means it is being initialized for the first time
         this.configuratorData.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
-            if (eachDefinition.data.key === this.constants.map.COUNTRY.key) {
-              this.fetchCountryCode(eachDefinition);
+            if (eachDefinition.data.key === this.constants.map.COUNTRY_RISK.key) {
+              this.fetchCountryRisk(eachDefinition);
             }
             if (eachDefinition.data.key === this.constants.map.TICKER.key) {
               this.fetchTicker(eachDefinition);
@@ -285,14 +285,14 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
     }
   }
 
-  private fetchCountryCode(targetDefinition: DTOs.SecurityDefinitionDTO) {
-    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getCountries, {req: 'GET'}).pipe(
+  private fetchCountryRisk(targetDefinition: DTOs.SecurityDefinitionDTO) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getCountryRisks, {req: 'GET'}).pipe(
       first(),
       tap((serverReturn: Array<string>) => {
         this.dtoService.loadSecurityDefinitionOptions(targetDefinition, serverReturn);
       }),
       catchError(err => {
-        this.restfulCommService.logError('Cannot retrieve country data');
+        this.restfulCommService.logError('Cannot retrieve country risk data');
         return of('error');
       })
     ).subscribe();
