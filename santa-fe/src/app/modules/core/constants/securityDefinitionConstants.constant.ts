@@ -280,6 +280,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
   const FilterOptionsPortfolioManagerList = [
+    'AG',
     'AY',
     'BT',
     'DA',
@@ -287,7 +288,11 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'DJ',
     'DM',
     'IL',
+    'LC',
+    'LP',
+    'PD',
     'PM',
+    'RV',
     'SP',
     'TW'
   ];
@@ -354,7 +359,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
   ];
 
 
-  const FullStrategyList = [
+  export const FullStrategyList = [
     'Short Carry',
     'STOV',
     'Relative Value',
@@ -374,7 +379,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsSecurityType,
     locked: true,
     securityDTOAttr: 'securityType',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SECURITY_TYPE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SECURITY_TYPE'],
+    internalOnly: false
   },
   SECURITY_SUB_TYPE: {
     key: 'SECURITY_SUB_TYPE',
@@ -382,21 +388,24 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-slash',
     optionList: FilterOptionSecuritySubType,
     securityDTOAttr: 'securitySubType',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SECURITY_SUB_TYPE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SECURITY_SUB_TYPE'],
+    internalOnly: false
   },
   BACKEND_TENOR: {
     key: 'BACKEND_TENOR',
     displayName: 'Backend Tenor',
     icon: 'fal fa-desktop',
     secondaryIcon: 'fas fa-history',
-    optionList: FilterOptionsTenor
+    optionList: FilterOptionsTenor,
+    internalOnly: false
   },
   BAIL_IN_STATUS: {
     key: 'BAIL_IN_STATUS',
     displayName: 'Bail-in Status',
     icon: 'fas fa-shield-alt',
     optionList: FilterOptionsBailInStatus,
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['BAIL_IN_STATUS']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['BAIL_IN_STATUS'],
+    internalOnly: false
   },
   COUPON_TYPE: {
     key: 'COUPON_TYPE',
@@ -405,7 +414,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsCouponType,
     locked: true,
     securityDTOAttr: 'couponType',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUPON_TYPE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUPON_TYPE'],
+    internalOnly: false
   },
   CURRENCY: {
     key: 'CURRENCY',
@@ -414,35 +424,40 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsCurrency,
     securityDTOAttr: 'currency',
     locked: true,
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['CURRENCY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['CURRENCY'],
+    internalOnly: false
   },
   INDUSTRY: {
     key: 'INDUSTRY',
     displayName: 'Industry',
     icon: 'fal fa-city',
     optionList: FilterOptionsIndustryType,
-    securityDTOAttr: 'industry'
+    securityDTOAttr: 'industry',
+    internalOnly: false
   },
   MATURITY: {
     key: 'MATURITY',
     displayName: 'Maturity Type',
     icon: 'fal fa-seedling',
     optionList: FilterOptionsMaturityType,
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['MATURITY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['MATURITY'],
+    internalOnly: false
   },
   IS_NEWISSUE: {
     key: 'IS_NEWISSUE',
     displayName: 'New Issue',
     icon: 'far fa-sparkles',
     optionList: FilterOptionsBoolean,
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['IS_NEWISSUE']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['IS_NEWISSUE'],
+    internalOnly: false
   },
   IS_ONTHERUN: {
     key: 'IS_ONTHERUN',
     displayName: 'On-the-Run',
     icon: 'fal fa-handshake',
     optionList: FilterOptionsBoolean,
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['IS_ONTHERUN']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['IS_ONTHERUN'],
+    internalOnly: false
   },
   RATING: {
     key: 'RATING',
@@ -450,7 +465,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-award',
     optionList: FilterOptionsRating,
     securityDTOAttr: 'ratingValue',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['RATING']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['RATING'],
+    internalOnly: false
   },
   RATING_BUCKET: {
     key: 'RATING_BUCKET',
@@ -459,14 +475,16 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FilterOptionsRatingBucket,
     secondaryIcon: 'fas fa-award',
     securityDTOAttr: 'ratingBucket',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['RATING_BUCKET']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['RATING_BUCKET'],
+    internalOnly: false
   },
   SECTOR: {
     key: 'SECTOR',
     displayName: 'Sector',
     icon: 'fas fa-chart-pie',
     optionList: FilterOptionsSectorType,
-    securityDTOAttr: 'sector'
+    securityDTOAttr: 'sector',
+    internalOnly: false
   },
   SENIORITY: {
     key: 'SENIORITY',
@@ -474,7 +492,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-gavel',
     optionList: FilterOptionsSeniorityType,
     securityDTOAttr: 'seniority',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SENIORITY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['SENIORITY'],
+    internalOnly: false
   },
   TENOR: {
     key: 'TENOR',
@@ -482,49 +501,60 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-history',
     optionList: FilterOptionsTenor,
     securityDTOAttr: 'tenor',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['TENOR']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['TENOR'],
+    internalOnly: false
   },
   PORTFOLIO: {
     key: 'PORTFOLIO',
     displayName: 'Portfolio',
     icon: 'fal fa-file-invoice-dollar',
     optionList: FilterOptionsPortfolioList,
-    securityDTOAttr: 'portfolios'
+    securityDTOAttr: 'portfolios',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['PORTFOLIO'],
+    internalOnly: true
   },
   PRIMARY_PORTFOLIO_MANAGER: {
     key: 'PRIMARY_PORTFOLIO_MANAGER',
     displayName: 'Primary',
     icon: 'fas fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
-    securityDTOAttr: 'primaryPmName'
+    securityDTOAttr: 'primaryPmName',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['PRIMARY'],
+    internalOnly: true
   },
   BACKUP_PORTFOLIO_MANAGER: {
     key: 'BACKUP_PORTFOLIO_MANAGER',
     displayName: 'Backup',
     icon: 'fal fa-user-tie',
     optionList: FilterOptionsPortfolioManagerList,
-    securityDTOAttr: 'backupPmName'
+    securityDTOAttr: 'backupPmName',
+    internalOnly: true
   },
   RESEARCH: {
     key: 'RESEARCH',
     displayName: 'Research',
     icon: 'fas fa-user-chart',
     optionList: FilterOptionsPortfolioResearchList,
-    securityDTOAttr: 'researchName'
+    securityDTOAttr: 'researchName',
+    internalOnly: true
   },
   OWNER: {
     key: 'OWNER',
     displayName: 'Owner',
     icon: 'fad fa-users',
     optionList: FullOwnerList,
-    securityDTOAttr: 'owner'
+    securityDTOAttr: 'owner',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['OWNER'],
+    internalOnly: true
   },
   STRATEGY: {
     key: 'STRATEGY',
     displayName: 'Strategy',
     icon: 'fal fa-chess',
     optionList: FullStrategyList,
-    securityDTOAttr: 'strategyList'
+    securityDTOAttr: 'strategyList',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['STRATEGY'],
+    internalOnly: true
   },
   COUNTRY: {
     key: 'COUNTRY',
@@ -532,29 +562,34 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-globe-americas',
     optionList: [],
     securityDTOAttr: 'country',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY'],
+    internalOnly: false
   },
   QUOTED_TODAY: {
     key: 'QUOTED_TODAY',
     displayName: 'Quoted Today',
     icon: 'far fa-calendar-day',
+    securityDTOAttr: 'quotedToday',
     optionList: FilterOptionsBoolean,
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['QUOTED_TODAY']
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['QUOTED_TODAY'],
+    internalOnly: false
   },
   OVERRIDE: {
     key: 'OVERRIDE',
     displayName: 'Custom',
     icon: 'fas fa-star',
-    optionList: []
+    optionList: [],
+    internalOnly: true
   },
   BICS_CONSOLIDATED: {
     key: 'BICS_CONSOLIDATED',
-    displayName: 'All BICS',
+    displayName: 'BICS',
     icon: 'fas fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'code',
     securityDTOAttrBlock: 'bics',
-    backendDtoAttrName: 'BicsCode'
+    backendDtoAttrName: 'BicsCode',
+    internalOnly: false
   },
   BICS_LEVEL_1: {
     key: 'BICS_LEVEL_1',
@@ -562,7 +597,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel1',
-    securityDTOAttrBlock: 'bics'
+    securityDTOAttrBlock: 'bics',
+    internalOnly: false
   },
   BICS_LEVEL_2: {
     key: 'BICS_LEVEL_2',
@@ -570,7 +606,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel2',
-    securityDTOAttrBlock: 'bics'
+    securityDTOAttrBlock: 'bics',
+    internalOnly: false
   },
   BICS_LEVEL_3: {
     key: 'BICS_LEVEL_3',
@@ -578,7 +615,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel3',
-    securityDTOAttrBlock: 'bics'
+    securityDTOAttrBlock: 'bics',
+    internalOnly: false
   },
   BICS_LEVEL_4: {
     key: 'BICS_LEVEL_4',
@@ -586,7 +624,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel4',
-    securityDTOAttrBlock: 'bics'
+    securityDTOAttrBlock: 'bics',
+    internalOnly: false
   },
   BICS_LEVEL_5: {
     key: 'BICS_LEVEL_5',
@@ -594,7 +633,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel5',
-    securityDTOAttrBlock: 'bics'
+    securityDTOAttrBlock: 'bics',
+    internalOnly: false
   },
   BICS_LEVEL_6: {
     key: 'BICS_LEVEL_6',
@@ -602,7 +642,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel6',
-    securityDTOAttrBlock: 'bics'
+    securityDTOAttrBlock: 'bics',
+    internalOnly: false
   },
   BICS_LEVEL_7: {
     key: 'BICS_LEVEL_7',
@@ -610,7 +651,8 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fal fa-industry-alt',
     optionList: [],
     securityDTOAttr: 'bicsLevel7',
-    securityDTOAttrBlock: 'bics'
+    securityDTOAttrBlock: 'bics',
+    internalOnly: false
   },
   TICKER: {
     key: 'TICKER',
@@ -618,55 +660,61 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     icon: 'fas fa-user-tie',
     optionList: [],
     securityDTOAttr: 'ticker',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['TICKER']
-  },
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['TICKER'],
+    internalOnly: false
+  }
 };
+
+export enum SecurityDefinitionConfiguratorGroupLabels {
+  selected = 'Selected',
+  popular = 'Popular',
+  standard = 'Standard',
+  internal = 'Internal',
+  common = 'Common',
+  bics = 'BICS',
+  bond = 'Bond'
+}
 
 export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> = [
   {
-    label: 'Basic',
+    label: SecurityDefinitionConfiguratorGroupLabels.selected,
     list: [
-      SecurityDefinitionMap.PORTFOLIO,
-      SecurityDefinitionMap.CURRENCY,
-      SecurityDefinitionMap.RATING,
-      SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.COUNTRY,
-      SecurityDefinitionMap.SECURITY_TYPE,
-      SecurityDefinitionMap.SECURITY_SUB_TYPE
+      SecurityDefinitionMap.QUOTED_TODAY
     ]
-  }, {
-    label: 'BICS',
-    list: [
-      SecurityDefinitionMap.BICS_CONSOLIDATED
-    ]
-  },{
-    label: 'Owner',
-    list: [
-      SecurityDefinitionMap.OWNER,
-      SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER,
-      SecurityDefinitionMap.BACKUP_PORTFOLIO_MANAGER,
-      SecurityDefinitionMap.RESEARCH
-    ]
-  },{
-    label: 'Quality',
-    list: [
-      SecurityDefinitionMap.RATING_BUCKET,
-      SecurityDefinitionMap.SENIORITY
-    ]
-  },{
-    label: 'Bond',
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.popular,
     list: [
       SecurityDefinitionMap.TICKER,
+      SecurityDefinitionMap.CURRENCY,
+      SecurityDefinitionMap.BICS_CONSOLIDATED,
+      SecurityDefinitionMap.SENIORITY,
+      SecurityDefinitionMap.RATING,
+    ]
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.standard,
+    list: [
+      SecurityDefinitionMap.TENOR,
+      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.RATING_BUCKET,
+      SecurityDefinitionMap.SECURITY_TYPE,
+      SecurityDefinitionMap.SECURITY_SUB_TYPE,
       SecurityDefinitionMap.COUPON_TYPE,
-      SecurityDefinitionMap.BACKEND_TENOR,
-      SecurityDefinitionMap.BAIL_IN_STATUS,
       SecurityDefinitionMap.MATURITY,
-      SecurityDefinitionMap.IS_NEWISSUE,
-      SecurityDefinitionMap.IS_ONTHERUN
+      SecurityDefinitionMap.QUOTED_TODAY
+    ]
+  },
+  {
+    label: SecurityDefinitionConfiguratorGroupLabels.internal,
+    list: [
+      SecurityDefinitionMap.PORTFOLIO,
+      SecurityDefinitionMap.STRATEGY,
+      SecurityDefinitionMap.OWNER,
+      SecurityDefinitionMap.PRIMARY_PORTFOLIO_MANAGER
     ]
   }
-];
+]
 
 export const SeniorityValueToLevelMapping = [
   {

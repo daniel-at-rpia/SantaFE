@@ -20,7 +20,7 @@ import { TriCoreDriverConfig } from 'Core/constants/coreConstants.constant';
 import { ObligorChartCategoryColorScheme } from 'App/modules/core/constants/colorSchemes.constant';
 import {
   BESingleBestQuoteDTO,
-  BEFullSecurityCollection,
+  BEFetchAllTradeDataReturn,
   BEFullSecurityDTO
 } from 'BEModels/backend-models.interface';
 
@@ -121,7 +121,7 @@ export class TradeObligorGraphPanel extends SantaContainerComponentBase implemen
   
     this.restfulCommService.callAPI(this.restfulCommService.apiMap.getObligorCurves, { req: 'POST' }, payload).pipe(
       first(),
-      tap((serverReturn: Array<BEFullSecurityCollection>) => {
+      tap((serverReturn: Array<BEFetchAllTradeDataReturn>) => {
         serverReturn.forEach((eachFullSecurityCollection) => {
           // Initialize a null chart category.
           const rawCurveData = eachFullSecurityCollection.securityDtos;

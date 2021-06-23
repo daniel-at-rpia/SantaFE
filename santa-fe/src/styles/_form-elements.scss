@@ -213,6 +213,7 @@
   }
 
   .santa-paragraph {
+    font-family: "SantaMonospace";
     text-align: justify;
     color: $font_color_minor;
     font-size: $font_size_small;
@@ -221,13 +222,17 @@
     &>kbd {
       @include mix_theme_background;
       @include mix_border_radius(3px);
-      padding: 0 $spacing_x_small;
+      font-family: "SantaMonospace";
+      padding: $spacing_minimum;
       color: $font_color_inverse;
+      margin: 0 $spacing_minimum;
     }
     &>code {
       @include mix_border_radius(3px);
+      font-family: "SantaMonospace";
       background-color: $color_gray_2;
-      padding: 0 $spacing_x_small;
+      padding: $spacing_minimum;
       color: $font_color_major;
+      margin: 0 $spacing_minimum;
     }
   }

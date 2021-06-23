@@ -4,7 +4,7 @@ import {
   ActionReducerMap
 } from '@ngrx/store';
 
-import { DTOs, AdhocPacks } from 'Core/models/frontend';
+import { DTOs, AdhocPacks, Blocks } from 'Core/models/frontend';
 import { CoreActions } from 'Core/actions/core.actions';
 import { FAILED_USER_INITIALS_FALLBACK } from 'Core/constants/coreConstants.constant';
 

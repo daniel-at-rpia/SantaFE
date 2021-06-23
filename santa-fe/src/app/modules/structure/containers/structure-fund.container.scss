@@ -116,20 +116,17 @@ $fundStructuring_setTarget_backgroundIcon_gutter: ($fundStructuring_setTarget_he
       justify-content: flex-end;
       margin-bottom: $spacing_x_small;
       padding-right: $spacing_medium;
-      &-label {
-        margin-right: $spacing_small;
-      }
       &-input {
-        width: 5rem;
+        width: 12rem;
       }
     }
     &-message {
       @include mix_border_radius(5px);
       display: none;
-      background-color: $color_red_1;
+      background-color: $color_kill_background;
       padding: $spacing_x_small;
       color: $color_negative;
-      margin: 0 $spacing_small  $spacing_small 0;
+      margin: 0 $spacing_small $spacing_small 0;
     }
     &-backgroundIcon {
       @include mix_fixed_div(absolute, $z_index_base_item);

@@ -48,6 +48,7 @@ $color_active: $color_gray_85;
 $color_highlight: $color_blue_5;
 $color_disabled: $color_gray_5;
 $color_kill: $color_red_5;
+$color_kill_background: $color_red_1;
 $color_negative: $color_red_5;
 $color_positive: $color_green_5;
 $color_create: $color_green_5;
@@ -126,7 +127,8 @@ $animation_duration_debug: 20s;
 $mediaQuery_size_small: 30rem;
 $mediaQuery_size_medium: 48rem;
 $mediaQuery_size_large: 64rem;
-$mediaQuery_size_xLarge: 140rem;
+$mediaQuery_size_xLarge: 100rem;
+$mediaQuery_size_xxLarge: 140rem;
 // Store variables that are used globally, in order to avoid hierarchy problem
 $iconButton_size_large: 3rem;
 $iconButton_size_regular: 2.25rem;
@@ -153,7 +155,7 @@ $securityQuote_tags_size: 6.5rem;
 
 $securityDefinition_configuratorVariant_width: 6.5rem;
 $securityDefinitionConfigurator_filters_width: 15rem;
-$securityDefinitionConfigurator_gapBetweenDefAndFilter: $spacing_large;
+$securityDefinitionConfigurator_gapBetweenDefAndFilter: $spacing_x_large;
 $securityDefinitionConfigurator_width:
   $securityDefinition_configuratorVariant_width +
   $securityDefinitionConfigurator_gapBetweenDefAndFilter +
@@ -162,6 +164,9 @@ $securityDefinitionConfigurator_width:
 $alert_width: 40rem;
 $alert_thumbnail_width: 8rem;
 $page_gutter_width_for_alerts: $alert_thumbnail_width + $spacing_medium;
+
+$globalNav_navTrigger_size: 2.5rem;
+$page_gutter_width_for_navTrigger: $globalNav_navTrigger_size + $spacing_small;
 
 $tradeAxeAlertColor: $color_axe;
 $tradeAxeAlertBackgroundColor: $color_blue_1;

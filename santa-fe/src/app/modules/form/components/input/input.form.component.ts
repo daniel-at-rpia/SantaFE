@@ -6,12 +6,13 @@ import {
   EventEmitter,
   OnChanges
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'santa-input',
   templateUrl: './input.form.component.html',
   styleUrls: ['./input.form.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.None // needs to be None because we are overwriting Angular Material's internal stylings, which has components that are generated within the "mat-form-field" component itself
 })
 
 export class SantaInput implements OnChanges{
@@ -23,20 +24,31 @@ export class SantaInput implements OnChanges{
   @Input() isGrayedOut: boolean;
   @Input() isDisabled: boolean;
   @Input() isNonEditable: boolean;
+  @Input() autoFocus: boolean;
+  @Input() label: string;
+  @Input() inverseColored: boolean;
   @Output() onInputChange = new EventEmitter<string>();
   @Output() onInputFocus = new EventEmitter();
   @Output() onInputBlur = new EventEmitter();
   @Output() onEnterKeyPressed = new EventEmitter<string>();
-  constructor(
-  ) {
-  }
+  @Output() onGenericKeyPressed = new EventEmitter<KeyboardEvent>();
+  
+  public formControl = new FormControl({value: '', disabled: !!this.isDisabled});
+  
+  constructor() {}
 
   public ngOnChanges() {
-    // nothing to do atm
+    this.formControl.setValue(this.inputValue);
   }
 
   public onKey() {
+    this.inputValue = this.formControl.value;
     !!this.onInputChange && this.onInputChange.emit(this.inputValue);
+  }
+
+  public onPressedGenericKey(event: KeyboardEvent) {
+    // need to pass out entire event in case outside needs to prevent default
+    !!this.onGenericKeyPressed && this.onGenericKeyPressed.emit(event);
   }
 
   public onFocus() {

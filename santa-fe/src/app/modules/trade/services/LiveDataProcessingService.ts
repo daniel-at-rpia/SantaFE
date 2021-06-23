@@ -10,8 +10,7 @@
       BEBestQuoteDTO,
       BEFetchAllTradeDataReturn
     } from 'BEModels/backend-models.interface';
-    import { TriCoreDriverConfig, DEFAULT_DRIVER_IDENTIFIER } from 'Core/constants/coreConstants.constant';
-    import { SecurityDefinitionMap, FilterOptionsTenorRange } from 'Core/constants/securityDefinitionConstants.constant';
+    import * as globalConstants from 'Core/constants';
   // dependencies
 
 @Injectable()
@@ -33,9 +32,10 @@ export class LiveDataProcessingService {
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
+    sendToLaunchUofBCallback: (transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) => void,
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachKey in rawSecurityDTOMap){
@@ -44,6 +44,7 @@ export class LiveDataProcessingService {
       const newSecurity = this.dtoService.formSecurityCardObject(eachKey, newBESecurity, false, false, selectedDriver);
       newSecurity.api.onClickSendToGraph = sendToGraphCallback;
       newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
+      newSecurity.api.onClickSendToLaunchUofB = sendToLaunchUofBCallback;
       this.dtoService.appendLastTraceInfoToSecurityDTO(newSecurity, rawSecurityDTOMap[eachKey]);
       if (!!rawSecurityDTOMap[eachKey].positions) {
         rawSecurityDTOMap[eachKey].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
@@ -79,9 +80,10 @@ export class LiveDataProcessingService {
     serverReturn: BEFetchAllTradeDataReturn,
     sendToGraphCallback: (card: DTOs.SecurityDTO) => void,
     sendToAlertConfigCallback: (card: DTOs.SecurityDTO) => void,
-    searchCallback: (card: DTOs.SecurityDTO) => void
+    searchCallback: (card: DTOs.SecurityDTO) => void,
+    sendToLaunchUofBCallback: (transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) => void,
   ): Array<DTOs.SecurityTableRowDTO> {
-    const rawSecurityDTOMap = serverReturn.securityDtos.securityDtos;
+    const rawSecurityDTOMap = serverReturn.securityDtos;
     const prinstineRowList: Array<DTOs.SecurityTableRowDTO> = [];
     const securityList = [];
     for (const eachAlertId in alertDTOMap) {
@@ -94,8 +96,8 @@ export class LiveDataProcessingService {
           newSecurity.api.onClickSendToGraph = sendToGraphCallback;
           newSecurity.api.onClickSendToAlertConfig = sendToAlertConfigCallback;
           newSecurity.api.onClickSearch = searchCallback;
-          newSecurity.state.isTradeAlertTableVariant = true;
-          newSecurity.state.isActionMenuMinorActionsDisabled = true;
+          newSecurity.api.onClickSendToLaunchUofB = sendToLaunchUofBCallback;
+          !!newSecurity.data.actionMenu && this.utilityService.applySpecificListForActionMenu(newSecurity.data.actionMenu, globalConstants.security.SecurityActionMenuOptionsRawText.uofB);
           this.dtoService.appendLastTraceInfoToSecurityDTO(newSecurity, rawSecurityDTOMap[targetSecurityId]);
           if (!!rawSecurityDTOMap[targetSecurityId].positions) {
             rawSecurityDTOMap[targetSecurityId].positions.forEach((eachPortfolio: BEPortfolioDTO) => {
@@ -223,7 +225,11 @@ export class LiveDataProcessingService {
             let securityLevelFilterResultCombined = true;
             if (panelStateFilterBlock.securityFilters.length > 0) {
               const securityLevelFilterResult = panelStateFilterBlock.securityFilters.map((eachFilter) => {
-                return this.filterBySecurityAttribute(eachRow, eachFilter, panelStateFilterBlock);
+                if (eachFilter.targetAttribute === 'quotedToday') {
+                  return this.filterByQuotedToday(eachRow);
+                } else {
+                  return this.filterBySecurityAttribute(eachRow, eachFilter, panelStateFilterBlock);
+                }
               });
               // as long as one of the filters failed, this security will not show
               securityLevelFilterResultCombined = securityLevelFilterResult.filter((eachResult) => {
@@ -281,7 +287,7 @@ export class LiveDataProcessingService {
     const newPriceQuant = !!quote 
       ? this.dtoService.formBestQuoteComparerObject(
           false,
-          TriCoreDriverConfig.Price.label,
+          globalConstants.core.TriCoreDriverConfig.Price.label,
           quote,
           targetRow.data.security,
           false
@@ -290,7 +296,7 @@ export class LiveDataProcessingService {
     const newSpreadQuant = !!quote 
       ? this.dtoService.formBestQuoteComparerObject(
           false,
-          TriCoreDriverConfig.Spread.label,
+          globalConstants.core.TriCoreDriverConfig.Spread.label,
           quote,
           targetRow.data.security,
           false
@@ -299,7 +305,7 @@ export class LiveDataProcessingService {
     const newYieldQuant = !!quote 
     ? this.dtoService.formBestQuoteComparerObject(
         false,
-        TriCoreDriverConfig.Yield.label,
+        globalConstants.core.TriCoreDriverConfig.Yield.label,
         quote,
         targetRow.data.security,
         false
@@ -308,7 +314,7 @@ export class LiveDataProcessingService {
     const newAxePriceQuant = !!quote 
       ? this.dtoService.formBestQuoteComparerObject(
           false,
-          TriCoreDriverConfig.Price.label,
+          globalConstants.core.TriCoreDriverConfig.Price.label,
           quote,
           targetRow.data.security,
           true
@@ -317,7 +323,7 @@ export class LiveDataProcessingService {
     const newAxeSpreadQuant = !!quote
       ? this.dtoService.formBestQuoteComparerObject(
         false,
-        TriCoreDriverConfig.Spread.label,
+        globalConstants.core.TriCoreDriverConfig.Spread.label,
         quote,
         targetRow.data.security,
         true
@@ -326,7 +332,7 @@ export class LiveDataProcessingService {
     const newAxeYieldQuant = !!quote
       ? this.dtoService.formBestQuoteComparerObject(
         false,
-        TriCoreDriverConfig.Yield.label,
+        globalConstants.core.TriCoreDriverConfig.Yield.label,
         quote,
         targetRow.data.security,
         true
@@ -432,7 +438,7 @@ export class LiveDataProcessingService {
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): boolean {
     const targetSecurity = targetRow.data.security;
-    let includeFlag = false;
+    let includeFlag = panelStateFilterBlock.quickFilters.portfolios.length === 0;  // if no portfolio filter is specified, then the user is look at external securities, therefore the includeFlag will default to true
     targetSecurity.data.weight.fundCS01Pct = null;
     targetSecurity.data.weight.fundCS01PctDisplay = null;
     targetSecurity.data.weight.fundBEVPct = null;
@@ -524,7 +530,7 @@ export class LiveDataProcessingService {
     panelStateFilterBlock: Blocks.TradeCenterPanelStateFilterBlock
   ): boolean {
     let includeFlag = false;
-    if (targetFilter.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+    if (targetFilter.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
       targetFilter.filterBy.forEach((eachValue) => {
         if (targetRow.data.security.data.bics[targetFilter.targetAttribute].indexOf(eachValue) === 0) {
           includeFlag = true;
@@ -547,7 +553,7 @@ export class LiveDataProcessingService {
     let includeFlag = false;
     if (panelStateFilterBlock.quickFilters.tenor.length > 0) {
       panelStateFilterBlock.quickFilters.tenor.forEach((eachTenor) => {
-        const targetRange = FilterOptionsTenorRange[eachTenor];
+        const targetRange = globalConstants.definition.FilterOptionsTenorRange[eachTenor];
         if (!!targetRow && !!targetRow.data.security && targetRow.data.security.data.tenor >= targetRange.min && targetRow.data.security.data.tenor <= targetRange.max) {
           includeFlag = true;
         }
@@ -589,5 +595,9 @@ export class LiveDataProcessingService {
     newRow: DTOs.AlertDTO
   ): boolean {
     return (oldRow.data.unixTimestamp !== newRow.data.unixTimestamp || oldRow.data.validUntilTime !== newRow.data.validUntilTime) && oldRow.data.id === newRow.data.id;
+  }
+
+  private filterByQuotedToday(targetRow: DTOs.SecurityTableRowDTO): boolean {
+    return !!targetRow.data.bestQuotes
   }
 }

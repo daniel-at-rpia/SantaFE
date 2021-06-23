@@ -2,24 +2,28 @@
   [ngClass]="{
     'santaInput': true,
     'santaInput--heroVariant': !!isHero,
-    'santaInput--numericVariant': !!isNumeric,
-    'santaInput--grayedOutState': !!isGrayedOut,
     'santaInput--disabledState': !!isDisabled,
-    'santaInput--nonEditable': !!isNonEditable
+    'santaInput--inverseColored': !!inverseColored
   }">
-  <input
-    type="{{ isNumeric ? 'number' : 'text' }}"
-    [ngClass]="{
-      'santaInput__inputElement': true,
-      'santaInput__inputElement--error': hasError,
-      'santaInput__inputElement--numeric': isNumeric
-    }"
-    [(ngModel)]="inputValue"
-    [placeholder]="placeholder"
-    [disabled]="!!isDisabled"
-    (keyup)="onKey()"
-    (focus)="onFocus()"
-    (blur)="onBlur()"
-    (keyup.enter)="onPressedEnterKey()"
-  >
+  <!-- tie onPressedGenericKey() with "keyDown" because otherwise special keys won't be detected, such as tab -->
+  <mat-form-field class="santaInput__matForm" appearance="outline">
+    <mat-label class="santaInput__matForm-matLabel">{{label}}</mat-label>
+    <input
+      matInput
+
+      class="santaInput__matForm-input"
+      type="{{ isNumeric ? 'number' : 'text' }}"
+      autofocus="!!autoFocus"
+      autocomplete="off"
+
+      [placeholder]="placeholder"
+      [formControl]="formControl"
+      
+      (keyup)="onKey()"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keyup.enter)="onPressedEnterKey()"
+      (keydown)="onPressedGenericKey($event)"
+    >
+  </mat-form-field>
 </article>

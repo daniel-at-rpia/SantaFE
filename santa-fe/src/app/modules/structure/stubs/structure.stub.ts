@@ -3,7 +3,7 @@ import {
   BEStructuringBreakdownMetricBlockWithSubPortfolios,
   BEStructuringSetViewReturn
 } from 'BEModels/backend-models.interface';
-import { PortfolioShortNames } from 'Core/constants/structureConstants.constants';
+import { PortfolioShortNames } from 'Core/constants/coreConstants.constant';
 
 // always remove bics lv 2+ to save space
 

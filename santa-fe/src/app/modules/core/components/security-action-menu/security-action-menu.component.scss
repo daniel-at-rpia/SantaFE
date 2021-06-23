@@ -1,0 +1,183 @@
+@import "global.scss";
+$circleWidth: 6rem;
+$circleAlignment: $circleWidth / 2 + $spacing_x_small;
+@mixin setBtnPositioning($x, $y) {
+  @include mix_fixed_div(absolute, $z_index_base_item_solid);
+  transform: translate($x, $y) scale(1);
+  &:hover,
+  &:focus {
+    @include mix_fixed_div(absolute, $z_index_base_item_solid);
+    transform: translate($x, $y) scale(1.5);
+  }
+}
+.sat-securityActionMenu {
+  $blockName: &;
+  &__content {
+    @include mix_fixed_div(relative, $z_index_base_item);
+    @include mix_border_radius(50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $color_active;
+    color: $font_color_inverse;
+    width: $circleWidth;
+    height: $circleWidth;
+    &-coreAction {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      flex: 0 1 auto;
+      margin: 0 $spacing_small;
+      &-btn {
+        @include mix_fixed_div(absolute, $z_index_base_item);
+        @include mix_alive('light');
+        display: flex;
+        background-color: $color_active;
+        &-icon {
+          color: $color_kill;
+        }
+        &-text {
+          color: $color_kill;
+        }
+        &:hover,
+        &:focus {
+          transform: scale(1);
+          & > i {
+            color: $color_kill;
+          }
+          &> span {
+            color: $color_kill;
+          }
+        }
+      }
+      &-defaultText {
+        @include mix_text_overflow_multi_line();
+        display: flex;
+        text-align: center;
+        font-size: $font_size_x_small;
+        color: $font_color_inverse;
+        flex: 0 1 auto;
+        margin: 0 $spacing_small;
+      }
+    }
+    &-actionBtn {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      @include material();
+      @include mix_alive('light');
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%) scale(0.01);
+      &--noIconState {
+        & > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 1;
+          font-size: $font_size_x_small;
+          bottom: auto;
+        }
+        &:hover,
+        &:focus {
+          .sat-securityActionMenu__content-actionBtn-text {
+            transform: translate(0,0);
+          }
+        }
+      }
+      &--hasSubActionsState{
+        #{$blockName} {
+          &__content {
+            &-actionBtn {
+              bottom: 0;
+              &-icon {
+                top: $spacing_minimum;
+                transform: scale(.5);
+              }
+              &-text {
+                opacity: 1;
+                margin-top: $spacing_medium;
+                bottom: unset;
+              }
+            }
+          }
+        }
+        &:hover,
+        &:focus {
+          #{$blockName} {
+            &__content {
+              &-actionBtn {
+                &-icon {
+                  transform: translate(0,0) scale(0.7);
+                }
+                &-text {
+                  transform: translate(0,0);
+                }
+              }
+            }
+          }
+        }
+      }
+      &--isAvailableSubAction {
+        &.sat-securityActionMenu {
+          &__content {
+            &-actionBtn {
+              &--oneoftwo,
+              &--oneofthree,
+              &--oneoffour {
+                @include setBtnPositioning(-4rem, -3.5rem);
+              }
+              &--twooftwo,
+              &--twoofthree,
+              &--twooffour {
+                @include setBtnPositioning(1rem, -3.5rem);
+              }
+              &--threeofthree {
+                @include setBtnPositioning(-50%, 1.5rem);
+              }
+              &--threeoffour {
+                @include setBtnPositioning(-4rem, 1rem);
+              }
+              &--fouroffour {
+                @include setBtnPositioning(1rem, 1rem);}
+              }
+            }
+          }
+        }
+      &:hover,
+      &:focus {
+        transform: translate(-50%,-50%) scale(0.01);
+      }
+    }
+  }
+  &--isCoreActionSelectedState {
+    #{$blockName} {
+      &__content {
+        &-coreAction {
+          &-btn {
+            background-color: $color_active;
+            color: $font_color_inverse;
+            &-icon {
+              color: $font_color_inverse;
+            }
+            &-text {
+              color: $font_color_inverse;
+            }
+            &:hover,
+            &:focus {
+              & > i {
+                color: $font_color_inverse;
+              }
+              &> span {
+                color: $font_color_inverse;
+              }
+            }
+          }
+          &-defaultText {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

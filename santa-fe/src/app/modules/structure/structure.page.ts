@@ -16,7 +16,7 @@
     } from 'Core/constants/structureConstants.constants';
     import { BEBICsHierarchyBlock } from 'Core/models/backend/backend-models.interface';
     import { BICSDataProcessingService } from 'App/modules/core/services/BICSDataProcessingService';
-    import { GLOBAL_WORKFLOW_STATE_ID_KEY, GlobalWorkflowTypes } from 'Core/constants/coreConstants.constant';
+    import { GLOBAL_WORKFLOW_STATE_ID_KEY, GlobalWorkflowTypes } from 'Core/constants/globalWorkflowConstants.constants';
 
   //
 

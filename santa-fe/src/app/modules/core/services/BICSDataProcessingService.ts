@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { DTOs, Blocks, AdhocPacks, PageStates } from '../models/frontend';
+import { DTOs, Blocks, AdhocPacks, PageStates, Stubs } from '../models/frontend';
+import * as globalConstants from 'Core/constants';
 import {
   BEBICsHierarchyBlock,
   BEStructuringFundBlock,
@@ -8,21 +9,8 @@ import {
   BEStructuringBreakdownMetricBlock,
   BEStructuringBreakdownBlockWithSubPortfolios
 } from 'Core/models/backend/backend-models.interface';
-import {
-  BICS_BRANCH_DEFAULT_HEIGHT,
-  BICS_BRANCH_DEFAULT_HEIGHT_LARGE,
-  BICS_BRANCH_CHARACTER_LIMIT,
-  BICS_DICTIONARY_KEY_PREFIX,
-  BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX,
-  BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER,
-  BICS_BREAKDOWN_FRONTEND_KEY,
-  DeltaScope,
-  StructureMetricBlockFallback
-} from 'Core/constants/structureConstants.constants';
 import { DTOService } from 'Core/services/DTOService';
-import { BICsLevels } from 'Core/constants/structureConstants.constants';
 import { UtilityService } from './UtilityService';
-import { SecurityDefinitionMap } from 'Core/constants/securityDefinitionConstants.constant';
 import { BICSDictionaryLookupService } from 'Core/services/BICSDictionaryLookupService';
 import { PortfolioStructureBreakdownRowEmptySample } from 'Structure/stubs/structure.stub';
 @Injectable()
@@ -38,9 +26,13 @@ export class BICSDataProcessingService {
     private bicsDictionaryLookupService: BICSDictionaryLookupService
   ) {}
 
-  public loadBICSData(data: BEBICsHierarchyBlock) {
+  public loadBICSData(
+    data: BEBICsHierarchyBlock,
+    immediatelyLoadBICSToConfigurator?: DTOs.SecurityDefinitionConfiguratorDTO
+  ) {
     this.bicsRawCategoryCodes = [...Object.keys(data)];
     this.bicsDictionaryLookupService.loadBICSData(data);
+    !!immediatelyLoadBICSToConfigurator && this.loadBICSOptionsIntoConfigurator(immediatelyLoadBICSToConfigurator);
   }
 
   public getTargetSpecificHierarchyList(
@@ -51,7 +43,7 @@ export class BICSDataProcessingService {
     const hierarchyDataList: Array<Blocks.BICsHierarchyBlock> = [];
     for (let item in data) {
       if (!!data[item]) {
-        const itemLevel: number = +(item.split(BICS_DICTIONARY_KEY_PREFIX)[1]);
+        const itemLevel: number = +(item.split(globalConstants.structuring.BICS_DICTIONARY_KEY_PREFIX)[1]);
         if (itemLevel < childBicsLevel) {
           const object: Blocks.BICsHierarchyBlock = {
             name: data[item],
@@ -207,24 +199,24 @@ export class BICSDataProcessingService {
   ): BEStructuringBreakdownMetricBlock {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioId);
     if (!!rawData) {
-      const groupOption = `${BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
+      const groupOption = `${globalConstants.structuring.BICS_BREAKDOWN_FRONTEND_KEY}${level}`;
       const targetRawData: BEStructuringBreakdownMetricBlock = rawData[groupOption].breakdown[code];
       if (!!targetRawData && !!targetRawData.metricBreakdowns) {
         if (!targetRawData.metricBreakdowns.CreditDuration) {
-          targetRawData.metricBreakdowns.CreditDuration = StructureMetricBlockFallback.metricBreakdowns.CreditDuration;
+          targetRawData.metricBreakdowns.CreditDuration = globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.CreditDuration;
         }
         if (!targetRawData.metricBreakdowns.Cs01) {
-          targetRawData.metricBreakdowns.Cs01 = StructureMetricBlockFallback.metricBreakdowns.Cs01;
+          targetRawData.metricBreakdowns.Cs01 = globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.Cs01;
         }
         if (!targetRawData.metricBreakdowns.CreditLeverage) {
-          targetRawData.metricBreakdowns.CreditLeverage = StructureMetricBlockFallback.metricBreakdowns.CreditLeverage;
+          targetRawData.metricBreakdowns.CreditLeverage = globalConstants.structuring.StructureMetricBlockFallback.metricBreakdowns.CreditLeverage;
         }
         return targetRawData ? this.utilityService.deepCopy(targetRawData) : null;
       } else {
-        return this.utilityService.deepCopy(StructureMetricBlockFallback);
+        return this.utilityService.deepCopy(globalConstants.structuring.StructureMetricBlockFallback);
       }
     } else {
-      return this.utilityService.deepCopy(StructureMetricBlockFallback);
+      return this.utilityService.deepCopy(globalConstants.structuring.StructureMetricBlockFallback);
     }
   }
 
@@ -234,7 +226,7 @@ export class BICSDataProcessingService {
   ): BEStructuringBreakdownBlock {
     const rawData = this.bicsRawData.find(bicsRawData => bicsRawData.portfolioID === portfolioID);
     if (!!rawData) {
-      const targetedRawBreakdown: BEStructuringBreakdownBlock = rawData[`${BICS_BREAKDOWN_FRONTEND_KEY}${level}`];
+      const targetedRawBreakdown: BEStructuringBreakdownBlock = rawData[`${globalConstants.structuring.BICS_BREAKDOWN_FRONTEND_KEY}${level}`];
       const breakdown: BEStructuringBreakdownBlock = {
         groupOption: targetedRawBreakdown.groupOption,
         indexId: targetedRawBreakdown.indexId,
@@ -276,9 +268,9 @@ export class BICSDataProcessingService {
     // Doesnt affect the actual breakdown being created since that's derived from the definition list
     if (!!existingDisplayList && existingDisplayList.length > 0) {
       existingDisplayList.forEach(existingRow => {
-        const selectedRawData = selectedSubRawBICsData[`${BICS_BREAKDOWN_FRONTEND_KEY}${existingRow.data.bicsLevel}`];
+        const selectedRawData = selectedSubRawBICsData[`${globalConstants.structuring.BICS_BREAKDOWN_FRONTEND_KEY}${existingRow.data.bicsLevel}`];
         if (!!selectedRawData.breakdown[existingRow.data.code]) {
-          const parsedCategoryName = `${existingRow.data.displayCategory} ${BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${existingRow.data.bicsLevel}`;
+          const parsedCategoryName = `${existingRow.data.displayCategory} ${globalConstants.structuring.BICS_BREAKDOWN_SUBLEVEL_CATEGORY_PREFIX}${existingRow.data.bicsLevel}`;
           customRawBreakdown.breakdown[parsedCategoryName] = selectedRawData.breakdown[existingRow.data.code];
         }
       })
@@ -350,7 +342,7 @@ export class BICSDataProcessingService {
 
   public convertSecurityDefinitionConfiguratorBICSOptionsEmitterParamsToCode(params: AdhocPacks.DefinitionConfiguratorEmitterParams) {
     params.filterList.forEach((eachFilter) => {
-      if (eachFilter.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+      if (eachFilter.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
         eachFilter.filterBy = [];
         eachFilter.filterByBlocks.forEach((eachBlock) => {
           const targetCode = this.bicsDictionaryLookupService.BICSNameToBICSCode(eachBlock.shortKey, eachBlock.bicsLevel);
@@ -382,17 +374,14 @@ export class BICSDataProcessingService {
   ) {
     configurator.data.definitionList.forEach((eachBundle) => {
       eachBundle.data.list.forEach((eachDefinition) => {
-        if (eachDefinition.data.key === SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
+        if (eachDefinition.data.key === globalConstants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
           const selectedOptionList = [];
           selectedOptionList.push(targetRow.data.displayCategory);
-          eachDefinition.data.highlightSelectedOptionList = this.dtoService.generateSecurityDefinitionFilterOptionList(
-            eachDefinition.data.key,
+          this.dtoService.populateHighlightSelectedOptionListForDefinition(
+            eachDefinition,
             selectedOptionList,
             targetRow.data.bicsLevel
           );
-          eachDefinition.data.highlightSelectedOptionList.forEach((eachOption) => {
-            eachOption.isSelected = true;
-          });
           filterList.push(eachDefinition);
         }
       });
@@ -401,7 +390,7 @@ export class BICSDataProcessingService {
 
   public populateServerReturnBICSBreakdownWithRemainingEmptyRows(rawData: BEStructuringBreakdownBlockWithSubPortfolios) {
     // this is to allow FE to populate all rows that are not sent by the BE due to performance-related reasons
-    const level = rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER).length === 2 ? +(rawData.groupOption.split(BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1]) : null;
+    const level = rawData.groupOption.split(globalConstants.structuring.BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER).length === 2 ? +(rawData.groupOption.split(globalConstants.structuring.BICS_BREAKDOWN_BACKEND_GROUPOPTION_IDENTIFER)[1]) : null;
     if (level) {
       const categoryCodes = this.getCategoryCodesBasedOnLevel(level);
       if (categoryCodes.length > 0) {
@@ -411,6 +400,15 @@ export class BICSDataProcessingService {
           }
         })
       }
+    }
+  }
+
+  public extractDeepestBICSCategory(securityDTO: DTOs.SecurityDTO): string {
+    if (!!securityDTO.data && !!securityDTO.data.bics && Object.keys(securityDTO.data.bics).length > 0) {
+      const category = securityDTO.data.bics.bicsLevel7 || securityDTO.data.bics.bicsLevel6 || securityDTO.data.bics.bicsLevel5 || securityDTO.data.bics.bicsLevel4 || securityDTO.data.bics.bicsLevel3 || securityDTO.data.bics.bicsLevel2 || securityDTO.data.bics.bicsLevel1;
+      return category;
+    } else {
+      return '';
     }
   }
   
@@ -490,7 +488,7 @@ export class BICSDataProcessingService {
     level: number,
     targetCodeList: Array<string>
   ): BEStructuringBreakdownBlock | null {
-    const bicsLevel = BICsLevels[level];
+    const bicsLevel = globalConstants.structuring.BICsLevels[level];
     if (!!rawData && !!rawData[bicsLevel]) {
       const rawBreakdown: BEStructuringBreakdownBlock = rawData[bicsLevel];
       const { groupOption, indexId, portfolioBreakdownId, portfolioId } = rawBreakdown;
@@ -529,7 +527,7 @@ export class BICSDataProcessingService {
     rowListCopy.forEach((row: DTOs.StructurePortfolioBreakdownRowDTO, i) => {
       if (row.data.bicsLevel >= 2) {
         const previousRow: DTOs.StructurePortfolioBreakdownRowDTO = rowListCopy[i-1];
-        const branchHeight = previousRow.data.displayCategory.length >= BICS_BRANCH_CHARACTER_LIMIT ? BICS_BRANCH_DEFAULT_HEIGHT_LARGE : BICS_BRANCH_DEFAULT_HEIGHT;
+        const branchHeight = previousRow.data.displayCategory.length >= globalConstants.structuring.BICS_BRANCH_CHARACTER_LIMIT ? globalConstants.structuring.BICS_BRANCH_DEFAULT_HEIGHT_LARGE : globalConstants.structuring.BICS_BRANCH_DEFAULT_HEIGHT;
         if (previousRow.data.bicsLevel === row.data.bicsLevel - 1 || previousRow.data.bicsLevel === row.data.bicsLevel) {
           // previous row is a parent or sibling element, so the branch needs to only extend to the button before it
           row.style.branchHeight = `${branchHeight}px`;
