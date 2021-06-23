@@ -285,7 +285,7 @@ export class BICSDataProcessingService {
   }
 
   public formBICSRow(mainRowData: Blocks.BICSMainRowDataBlock): Array<DTOs.StructurePortfolioBreakdownRowDTO> {
-    const { code, portfolioID, level, isCs01} = mainRowData;
+    const { code, portfolioID, level, isCs01, isEditingViewAvail} = mainRowData;
     const rawData: Blocks.BICSCategorizationBlock = this.bicsRawData.find(bicsData => bicsData.portfolioID === portfolioID);
     const deltaRawData: Blocks.BICSCategorizationBlock = this.bicsComparedDeltaRawData && this.bicsComparedDeltaRawData.length > 0 ? this.bicsComparedDeltaRawData.find(bicsData => bicsData.portfolioID === portfolioID) : null;
     const customRawBreakdown: BEStructuringBreakdownBlock = this.formBEBreakdownRawDataFromCategorizationBlock(rawData, level, [code]);
@@ -305,8 +305,10 @@ export class BICSDataProcessingService {
       if (!!cs01Row && !!creditLeverageRow) {
         cs01Row.state.isStencil = false;
         cs01Row.data.moveVisualizer.state.isStencil = false;
+        cs01Row.state.isEditingViewAvail = isEditingViewAvail;
         creditLeverageRow.state.isStencil = false;
         creditLeverageRow.data.moveVisualizer.state.isStencil = false;
+        creditLeverageRow.state.isEditingViewAvail = isEditingViewAvail;
       }
       return [cs01Row, creditLeverageRow];
     } else {
@@ -421,6 +423,7 @@ export class BICSDataProcessingService {
       breakdown.state.isStencil = false;
       breakdown.data.moveVisualizer.data.diveInLevel = breakdown.data.diveInLevel;
       breakdown.state.isWithinPopover = true;
+      breakdown.state.isEditingViewAvail = parentRow.state.isEditingViewAvail;
       this.applyPopoverStencilMasks(breakdown.data.moveVisualizer);
       if (breakdown.data.bicsLevel >= 7) {
         breakdown.state.isBtnDiveIn = false;

@@ -328,7 +328,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
         targetDefinition.state.isFilterCapped = this.checkIfDefinitionFilterOptionListIsCapped(targetDefinition);
       }),
       catchError(err => {
-        this.restfulCommService.logError('Cannot retrieve country data');
+        this.restfulCommService.logError('Cannot retrieve ticker data');
         return of('error');
       })
     ).subscribe();
