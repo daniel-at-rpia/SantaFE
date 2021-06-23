@@ -402,7 +402,8 @@ export const MarketAnalysisGroupByOptions: Array<SecurityDefinitionStub> = [
   SecurityDefinitionMap.BICS_LEVEL_1,
   SecurityDefinitionMap.BICS_LEVEL_2,
   SecurityDefinitionMap.TENOR,
-  SecurityDefinitionMap.COUNTRY,
+  SecurityDefinitionMap.COUNTRY_RISK,
+  SecurityDefinitionMap.COUNTRY_DOMICILE,
   SecurityDefinitionMap.QUOTED_TODAY
 ];
 

@@ -113,7 +113,8 @@ export const CustomeBreakdownConfiguratorDefinitionLayout: Array<Stubs.SecurityD
       SecurityDefinitionMap.CURRENCY,
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.COUNTRY_RISK,
+      SecurityDefinitionMap.COUNTRY_DOMICILE,
       SecurityDefinitionMap.SECURITY_TYPE,
       SecurityDefinitionMap.SECURITY_SUB_TYPE
     ]

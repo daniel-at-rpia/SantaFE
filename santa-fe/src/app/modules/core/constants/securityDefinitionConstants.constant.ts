@@ -526,13 +526,21 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     optionList: FullStrategyList,
     securityDTOAttr: 'strategyList'
   },
-  COUNTRY: {
-    key: 'COUNTRY',
-    displayName: 'Country',
+  COUNTRY_RISK: {
+    key: 'COUNTRY_RISK',
+    displayName: 'Country Risk',
     icon: 'fal fa-globe-americas',
     optionList: [],
-    securityDTOAttr: 'country',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY']
+    securityDTOAttr: 'countryRisk',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY_RISK']
+  },
+  COUNTRY_DOMICILE: {
+    key: 'COUNTRY_DOMICILE',
+    displayName: 'Country Domicile',
+    icon: 'fas fa-globe-americas',
+    optionList: [],
+    securityDTOAttr: 'countryDomicile',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY_DOMICILE']
   },
   QUOTED_TODAY: {
     key: 'QUOTED_TODAY',
@@ -631,7 +639,8 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
       SecurityDefinitionMap.RATING,
       SecurityDefinitionMap.TENOR,
       SecurityDefinitionMap.STRATEGY,
-      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.COUNTRY_RISK,
+      SecurityDefinitionMap.COUNTRY_DOMICILE,
       SecurityDefinitionMap.SECURITY_TYPE,
       SecurityDefinitionMap.SECURITY_SUB_TYPE
     ]

@@ -60,7 +60,8 @@ export interface BESecurityDTO {
   securityType: string;
   securitySubType: string;
   ccy: string;
-  country: string;
+  countryRisk: string;
+  countryDomicile: string;
   sector: string;
   genericSeniority: string;
   maturityType?: string;

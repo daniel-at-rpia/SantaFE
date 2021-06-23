@@ -40,7 +40,8 @@ export interface SecurityDTO extends BasicDTOStructure {
     name: string;
     ticker: string;
     obligorName: string;
-    country: string;
+    countryRisk: string;
+    countryDomicile: string;
     isGovt: boolean;
     ratingLevel: number;
     ratingValue: string;

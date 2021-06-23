@@ -70,6 +70,9 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
             if (eachDefinition.data.key === this.constants.map.COUNTRY_RISK.key) {
               this.fetchCountryRisk(eachDefinition);
             }
+            if (eachDefinition.data.key === this.constants.map.COUNTRY_DOMICILE.key) {
+              this.fetchCountryDomicile(eachDefinition);
+            }
             if (eachDefinition.data.key === this.constants.map.TICKER.key) {
               this.fetchTicker(eachDefinition);
             }
@@ -293,6 +296,19 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
       }),
       catchError(err => {
         this.restfulCommService.logError('Cannot retrieve country risk data');
+        return of('error');
+      })
+    ).subscribe();
+  }
+
+  private fetchCountryDomicile(targetDefinition: DTOs.SecurityDefinitionDTO) {
+    this.restfulCommService.callAPI(this.restfulCommService.apiMap.getCountryDomicile, {req: 'GET'}).pipe(
+      first(),
+      tap((serverReturn: Array<string>) => {
+        this.dtoService.loadSecurityDefinitionOptions(targetDefinition, serverReturn);
+      }),
+      catchError(err => {
+        this.restfulCommService.logError('Cannot retrieve country domicile data');
         return of('error');
       })
     ).subscribe();

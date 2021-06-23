@@ -54,7 +54,8 @@ export interface SecurityDefinitionMapStub {
   RESEARCH: SecurityDefinitionStub;
   OWNER: SecurityDefinitionStub;
   STRATEGY: SecurityDefinitionStub;
-  COUNTRY: SecurityDefinitionStub;
+  COUNTRY_RISK: SecurityDefinitionStub;
+  COUNTRY_DOMICILE: SecurityDefinitionStub;
   QUOTED_TODAY: SecurityDefinitionStub;
   OVERRIDE: SecurityDefinitionStub;
   BICS_CONSOLIDATED: SecurityDefinitionStub;
