@@ -119,9 +119,9 @@ export interface TradeState {
 
 export interface TradeCenterPanelState {
   bestQuoteValidWindow: number;
-  presets : {
-    presetsReady: boolean;
-    selectedPreset: DTOs.WatchlistDTO;
+  watchlists : {
+    watchlistsReady: boolean;
+    selectedWatchlist: DTOs.WatchlistDTO;
     selectedList: Array<DTOs.WatchlistDTO>;
     selectedCategoryFromTop: boolean;
     selectedCategoryFromBottom: boolean;  // the reason we want to do two flags instead of one is so that we can have the default set to be "neither" which is more correct in the UI
@@ -209,7 +209,7 @@ export interface TradeUtilityPanelState {
   isPaused: boolean;
   isCallingAPI: boolean;
   isProcessingData: boolean;
-  isPresetSelected: boolean;
+  isWatchlistSelected: boolean;
   isInitialDataLoaded: boolean;
   validWindowConfig: {
     valueRaw: number;
@@ -288,7 +288,7 @@ export interface TradeAlertPanelState {
     }
   }
   alertUpdateInProgress: boolean;
-  isCenterPanelPresetSelected: boolean;
+  isCenterPanelWatchlistSelected: boolean;
   displayAlertTable: boolean;
   table: {
     alertMetrics: Array<Stubs.SecurityTableHeaderConfigStub>;

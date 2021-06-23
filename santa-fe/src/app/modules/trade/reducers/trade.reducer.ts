@@ -10,7 +10,7 @@ import { PortfolioMetricValues } from 'Core/constants/structureConstants.constan
 
 // TODO: technical debt, re-org this by putting specific things for particular panels
 export interface TradeState {
-  presetSelected: boolean;
+  watchlistSelected: boolean;
   liveUpdateSecondCount: number;
   liveUpdateTick: number;
   tableRowUpdateList: Array<DTOs.SecurityTableRowDTO>;
@@ -38,7 +38,7 @@ export interface TradeState {
     autoLoadTable: {
       filterList: Array<DTOs.SecurityDefinitionDTO>;
       metric: PortfolioMetricValues;
-      presetDisplayTitle: string;
+      watchlistDisplayTitle: string;
     }
   },
   watchlist: {
@@ -50,7 +50,7 @@ export interface TradeState {
 }
 
 const initialState: TradeState = {
-  presetSelected: false,
+  watchlistSelected: false,
   liveUpdateSecondCount: 0,
   liveUpdateTick: 0,
   tableRowUpdateList: [],
@@ -78,7 +78,7 @@ const initialState: TradeState = {
     autoLoadTable: {
       filterList: [],
       metric: null,
-      presetDisplayTitle: ''
+      watchlistDisplayTitle: ''
     }
   },
   watchlist: {
@@ -96,17 +96,17 @@ export function tradeReducer(
   switch (action.type) {
     case TradeActions.TradeStoreReset:
       return initialState;
-    case TradeActions.TogglePresetEvent:
-      const oldFlag = state.presetSelected;
+    case TradeActions.ToggleWatchlistEvent:
+      const oldFlag = state.watchlistSelected;
       if (!oldFlag) {
         return {
           ...state,
-          presetSelected: !oldFlag
+          watchlistSelected: !oldFlag
         };
       } else {
         return {
           ...state,
-          presetSelected: !oldFlag,
+          watchlistSelected: !oldFlag,
           tradeMainTable: {
             ...state.tradeMainTable,
             initialDataLoaded: false
@@ -248,7 +248,7 @@ export function tradeReducer(
           autoLoadTable: {
             filterList: action.filterList,
             metric: action.metric,
-            presetDisplayTitle: action.presetDisplayTitle
+            watchlistDisplayTitle: action.watchlistDisplayTitle
           }
         }
       }

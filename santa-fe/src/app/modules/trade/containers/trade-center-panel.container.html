@@ -2,33 +2,33 @@
   [ngClass]="{
     'sat-tradeCenterPanel': true,
     'sat-tradeCenterPanel--keywordSearchActiveState': !!state.filters.keyword.actualValue && state.filters.keyword.actualValue.length >= 2,
-    'sat-tradeCenterPanel--presetSelectedState': state.presets.selectedPreset,
+    'sat-tradeCenterPanel--watchlistSelectedState': state.watchlists.selectedWatchlist,
     'sat-tradeCenterPanel--fetchDataFailedState': state.fetchResult.fetchTableDataFailed,
     'sat-tradeCenterPanel--boostConfiguratorState': state.configurator.boosted,
     'sat-tradeCenterPanel--editingDriverState': state.editingDriver,
     'sat-tradeCenterPanel--initialDataLoaded': state.fetchResult.initialDataLoadedInternalSyncFlag,
     'sat-tradeCenterPanel--viewingIncompleteResultState': state.fetchResult.initialDataLoadedInternalSyncFlag && state.fetchResult.mainTable.prinstineRowList.length < state.fetchResult.totalCount,
-    'sat-tradeCenterPanel--presetSaveAvail': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.available,
-    'sat-tradeCenterPanel--presetSaveActive': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.active,
-    'sat-tradeCenterPanel--presetCallingAPI': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.callingAPI
+    'sat-tradeCenterPanel--watchlistSaveAvail': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.available,
+    'sat-tradeCenterPanel--watchlistSaveActive': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.active,
+    'sat-tradeCenterPanel--watchlistCallingAPI': state.currentSearch.saveMode === constants.trade.TradeCenterPanelSearchSaveModes.callingAPI
   }">
-  <section class="sat-tradeCenterPanel__presets">
-    <div class="sat-tradeCenterPanel__presets-content">
+  <section class="sat-tradeCenterPanel__watchlists">
+    <div class="sat-tradeCenterPanel__watchlists-content">
       <article
         [ngClass]="{
-          'sat-tradeCenterPresetCategoryCanvas': true,
-          'sat-tradeCenterPresetCategoryCanvas--top': true,
-          'sat-tradeCenterPresetCategoryCanvas--readyState': state.presets.presetsReady
+          'sat-tradeCenterWatchlistCategoryCanvas': true,
+          'sat-tradeCenterWatchlistCategoryCanvas--top': true,
+          'sat-tradeCenterWatchlistCategoryCanvas--readyState': state.watchlists.watchlistsReady
         }">
-        <section class="sat-tradeCenterPresetCategoryCanvas__ribbon"></section>
-        <ul class="sat-tradeCenterPresetCategoryCanvas__list">
-          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+        <section class="sat-tradeCenterWatchlistCategoryCanvas__ribbon"></section>
+        <ul class="sat-tradeCenterWatchlistCategoryCanvas__list">
+          <li class="sat-tradeCenterWatchlistCategoryCanvas__list-item">
             <button
-              (click)="onSelectPresetCategory(state.presets.portfolioWatchlistArray, true)"
+              (click)="onSelectWatchlistCategory(state.watchlists.portfolioWatchlistArray, true)"
               [ngClass]="{
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--first': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.portfolioWatchlistArray,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--first': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--selected': state.watchlists.selectedList === state.watchlists.portfolioWatchlistArray,
                 'santaBtn--labelled': true,
                 'santaBtn--inverseLabelled': true
               }">
@@ -36,13 +36,13 @@
               <span>Portfolio</span>
             </button>
           </li>
-          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+          <li class="sat-tradeCenterWatchlistCategoryCanvas__list-item">
             <button
-              (click)="onSelectPresetCategory(state.presets.ownershipWatchlistArray, true)"
+              (click)="onSelectWatchlistCategory(state.watchlists.ownershipWatchlistArray, true)"
               [ngClass]="{
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--second': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.ownershipWatchlistArray,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--second': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--selected': state.watchlists.selectedList === state.watchlists.ownershipWatchlistArray,
                 'santaBtn--labelled': true,
                 'santaBtn--inverseLabelled': true
               }">
@@ -50,13 +50,13 @@
               <span>Ownership</span>
             </button>
           </li>
-          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+          <li class="sat-tradeCenterWatchlistCategoryCanvas__list-item">
             <button
-              (click)="onSelectPresetCategory(state.presets.strategyWatchlistArray, true)"
+              (click)="onSelectWatchlistCategory(state.watchlists.strategyWatchlistArray, true)"
               [ngClass]="{
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--third': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.strategyWatchlistArray,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--third': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--selected': state.watchlists.selectedList === state.watchlists.strategyWatchlistArray,
                 'santaBtn--labelled': true,
                 'santaBtn--inverseLabelled': true
               }">
@@ -65,19 +65,19 @@
             </button>
           </li>
         </ul>
-        <section class="sat-tradeCenterPresetCategoryCanvas__title">
-          <span class="sat-tradeCenterPresetCategoryCanvas__title-text">RPIA's Portfolios</span>
+        <section class="sat-tradeCenterWatchlistCategoryCanvas__title">
+          <span class="sat-tradeCenterWatchlistCategoryCanvas__title-text">RPIA's Portfolios</span>
         </section>
       </article>
       <article
         [ngClass]="{
           'sat-tradeCenterWatchlistCanvas': true,
-          'sat-tradeCenterWatchlistCanvas--categorySelectedState': state.presets.selectedList,
-          'sat-tradeCenterWatchlistCanvas--topCategorySelectedState': !!state.presets.selectedCategoryFromTop,
-          'sat-tradeCenterWatchlistCanvas--bottomCategorySelectedState': !!state.presets.selectedCategoryFromBottom,
-          'sat-tradeCenterWatchlistCanvas--recentWatchlistVariant': state.presets.selectedList === state.presets.recentWatchlistArrays.fullList,
-          'sat-tradeCenterWatchlistCanvas--savedWatchlistVariant': state.presets.selectedList === state.presets.savedWatchlistArray,
-          'sat-tradeCenterWatchlistCanvas--deleteModeActivated': state.presets.savedWatchlistDeleteActivated
+          'sat-tradeCenterWatchlistCanvas--categorySelectedState': state.watchlists.selectedList,
+          'sat-tradeCenterWatchlistCanvas--topCategorySelectedState': !!state.watchlists.selectedCategoryFromTop,
+          'sat-tradeCenterWatchlistCanvas--bottomCategorySelectedState': !!state.watchlists.selectedCategoryFromBottom,
+          'sat-tradeCenterWatchlistCanvas--recentWatchlistVariant': state.watchlists.selectedList === state.watchlists.recentWatchlistArrays.fullList,
+          'sat-tradeCenterWatchlistCanvas--savedWatchlistVariant': state.watchlists.selectedList === state.watchlists.savedWatchlistArray,
+          'sat-tradeCenterWatchlistCanvas--deleteModeActivated': state.watchlists.savedWatchlistDeleteActivated
         }">
         <section class="sat-tradeCenterWatchlistCanvas__utilities">
           <button (click)="onToggleSavedWatchlistDeleteMode()" class="sat-tradeCenterWatchlistCanvas__utilities-deleteMode santaBtn--labelled santaBtn--inverseLabelled">
@@ -91,7 +91,7 @@
             <span class="sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-title">Today:</span>
             <ul class="sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list">
               <li
-              *ngFor="let eachWatchlist of state.presets.recentWatchlistArrays.todayList"
+              *ngFor="let eachWatchlist of state.watchlists.recentWatchlistArrays.todayList"
               [ngClass]="{
                 'sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list-item': true,
                 'sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list-item--major': eachWatchlist.state.isMajorWatchlist,
@@ -99,7 +99,7 @@
               }">
               <watchlist
                 [watchlistData]="eachWatchlist"
-                (onClickWatchlistCallback)="onSelectPreset($event, true)"
+                (onClickWatchlistCallback)="onSelectWatchlist($event, true)"
               ></watchlist>
               </li>
             </ul>
@@ -108,7 +108,7 @@
             <span class="sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-title">This Week:</span>
             <ul class="sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list">
               <li
-              *ngFor="let eachWatchlist of state.presets.recentWatchlistArrays.thisWeekList"
+              *ngFor="let eachWatchlist of state.watchlists.recentWatchlistArrays.thisWeekList"
               [ngClass]="{
                 'sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list-item': true,
                 'sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list-item--major': eachWatchlist.state.isMajorWatchlist,
@@ -116,7 +116,7 @@
               }">
               <watchlist
                 [watchlistData]="eachWatchlist"
-                (onClickWatchlistCallback)="onSelectPreset($event, true)"
+                (onClickWatchlistCallback)="onSelectWatchlist($event, true)"
               ></watchlist>
               </li>
             </ul>
@@ -125,7 +125,7 @@
             <span class="sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-title">Last Week:</span>
             <ul class="sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list">
               <li
-              *ngFor="let eachWatchlist of state.presets.recentWatchlistArrays.lastWeekList"
+              *ngFor="let eachWatchlist of state.watchlists.recentWatchlistArrays.lastWeekList"
               [ngClass]="{
                 'sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list-item': true,
                 'sat-tradeCenterWatchlistCanvas__timeSpecificDisplay-block-list-item--major': eachWatchlist.state.isMajorWatchlist,
@@ -133,7 +133,7 @@
               }">
               <watchlist
                 [watchlistData]="eachWatchlist"
-                (onClickWatchlistCallback)="onSelectPreset($event, true)"
+                (onClickWatchlistCallback)="onSelectWatchlist($event, true)"
               ></watchlist>
               </li>
             </ul>
@@ -141,7 +141,7 @@
         </section>
         <ul class="sat-tradeCenterWatchlistCanvas__list">
           <li
-            *ngFor="let eachWatchlist of state.presets.selectedList"
+            *ngFor="let eachWatchlist of state.watchlists.selectedList"
             [ngClass]="{
               'sat-tradeCenterWatchlistCanvas__list-item': true,
               'sat-tradeCenterWatchlistCanvas__list-item--major': eachWatchlist.state.isMajorWatchlist,
@@ -150,26 +150,26 @@
             <button (click)="onClickDeleteWatchlist(eachWatchlist)" class="sat-tradeCenterWatchlistCanvas__list-item-deleteBtn santaBtn--iconOnly fal fa-eraser"></button>
             <watchlist
               [watchlistData]="eachWatchlist"
-              (onClickWatchlistCallback)="onSelectPreset($event, true)"
+              (onClickWatchlistCallback)="onSelectWatchlist($event, true)"
             ></watchlist>
           </li>
         </ul>
       </article>
       <article
         [ngClass]="{
-          'sat-tradeCenterPresetCategoryCanvas': true,
-          'sat-tradeCenterPresetCategoryCanvas--bottom': true,
-          'sat-tradeCenterPresetCategoryCanvas--readyState': state.presets.presetsReady
+          'sat-tradeCenterWatchlistCategoryCanvas': true,
+          'sat-tradeCenterWatchlistCategoryCanvas--bottom': true,
+          'sat-tradeCenterWatchlistCategoryCanvas--readyState': state.watchlists.watchlistsReady
         }">
-        <section class="sat-tradeCenterPresetCategoryCanvas__ribbon"></section>
-        <ul class="sat-tradeCenterPresetCategoryCanvas__list">
-          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+        <section class="sat-tradeCenterWatchlistCategoryCanvas__ribbon"></section>
+        <ul class="sat-tradeCenterWatchlistCategoryCanvas__list">
+          <li class="sat-tradeCenterWatchlistCategoryCanvas__list-item">
             <button
-              (click)="onSelectPresetCategory(state.presets.trendingWatchlistArray, false)"
+              (click)="onSelectWatchlistCategory(state.watchlists.trendingWatchlistArray, false)"
               [ngClass]="{
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--first': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.trendingWatchlistArray,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--first': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--selected': state.watchlists.selectedList === state.watchlists.trendingWatchlistArray,
                 'santaBtn--labelled': true,
                 'santaBtn--inverseLabelled': true
               }">
@@ -177,13 +177,13 @@
               <span>Trending</span>
             </button>
           </li>
-          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+          <li class="sat-tradeCenterWatchlistCategoryCanvas__list-item">
             <button
-              (click)="onSelectPresetCategory(state.presets.savedWatchlistArray, false)"
+              (click)="onSelectWatchlistCategory(state.watchlists.savedWatchlistArray, false)"
               [ngClass]="{
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--second': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.savedWatchlistArray,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--second': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--selected': state.watchlists.selectedList === state.watchlists.savedWatchlistArray,
                 'santaBtn--labelled': true,
                 'santaBtn--inverseLabelled': true
               }">
@@ -191,13 +191,13 @@
               <span>Saved</span>
             </button>
           </li>
-          <li class="sat-tradeCenterPresetCategoryCanvas__list-item">
+          <li class="sat-tradeCenterWatchlistCategoryCanvas__list-item">
             <button
-              (click)="onSelectPresetCategory(state.presets.recentWatchlistArrays.fullList, false)"
+              (click)="onSelectWatchlistCategory(state.watchlists.recentWatchlistArrays.fullList, false)"
               [ngClass]="{
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--third': true,
-                'sat-tradeCenterPresetCategoryCanvas__list-item-btn--selected': state.presets.selectedList === state.presets.recentWatchlistArrays.fullList,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--third': true,
+                'sat-tradeCenterWatchlistCategoryCanvas__list-item-btn--selected': state.watchlists.selectedList === state.watchlists.recentWatchlistArrays.fullList,
                 'santaBtn--labelled': true,
                 'santaBtn--inverseLabelled': true
               }">
@@ -206,8 +206,8 @@
             </button>
           </li>
         </ul>
-        <section class="sat-tradeCenterPresetCategoryCanvas__title">
-          <span class="sat-tradeCenterPresetCategoryCanvas__title-text">Explore Universe</span>
+        <section class="sat-tradeCenterWatchlistCategoryCanvas__title">
+          <span class="sat-tradeCenterWatchlistCategoryCanvas__title-text">Explore Universe</span>
         </section>
       </article>
       <article
@@ -216,7 +216,7 @@
           'sat-tradeCenterPanelSearchEngine--typeaheadActive': state.searchEngine.typeaheadActive,
           'sat-tradeCenterPanelSearchEngine--bicsEntered': state.searchEngine.constructedSearchBucket.BICS.length > 0,
           'sat-tradeCenterPanelSearchEngine--tickerEntered': state.searchEngine.constructedSearchBucket.TICKER.length > 0,
-          'sat-tradeCenterPanelSearchEngine--readyState': state.presets.presetsReady,
+          'sat-tradeCenterPanelSearchEngine--readyState': state.watchlists.watchlistsReady,
           'sat-tradeCenterPanelSearchEngine--longTypeaheadState': state.searchEngine.typeaheadEntries.length > constants.trade.SEARCH_ENGINE_LONG_TYPEAHEAD_THRESHOLD
         }">
         <section class="sat-tradeCenterPanelSearchEngine__bucket">
@@ -327,21 +327,21 @@
     </div>
   </section>
   <section class="sat-tradeCenterPanel__utilities">
-    <div class="sat-tradeCenterPanel__utilities-selectedPreset">
-      <button (click)="onUnselectPreset()" class="sat-tradeCenterPanel__utilities-selectedPreset-back santaBtn--labelled">
+    <div class="sat-tradeCenterPanel__utilities-selectedWatchlist">
+      <button (click)="onUnselectWatchlist()" class="sat-tradeCenterPanel__utilities-selectedWatchlist-back santaBtn--labelled">
         <i class="fal fa-arrow-left"></i>
-        <span>Back To Presets</span>
+        <span>Back To Home</span>
       </button>
       <watchlist
         *ngIf="state.currentSearch.previewWatchlist"
         [watchlistData]="state.currentSearch.previewWatchlist"
-        (onChangeWatchlistNameCallback)="onChangeSavePresetName($event)"
+        (onChangeWatchlistNameCallback)="onChangeSaveWatchlistName($event)"
       ></watchlist>
-      <button (click)="onActivatePresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-save santaBtn--labelled santaBtn--inverseLabelled">
+      <button (click)="onActivateWatchlistSave()" class="sat-tradeCenterPanel__utilities-selectedWatchlist-save santaBtn--labelled santaBtn--inverseLabelled">
         <i class="fal fa-pencil"></i>
-        <span>Save This Preset</span>
+        <span>Save This Watchlist</span>
       </button>
-      <button (click)="onSubmitSaveWatchlist()" class="sat-tradeCenterPanel__utilities-selectedPreset-submit santaBtn--labelled santaBtn--inverseLabelled">
+      <button (click)="onSubmitSaveWatchlist()" class="sat-tradeCenterPanel__utilities-selectedWatchlist-submit santaBtn--labelled santaBtn--inverseLabelled">
         <i
           [ngClass]="{
             'fal': true,
@@ -351,7 +351,7 @@
         </i>
         <span>Submit</span>
       </button>
-      <button (click)="onCancelPresetSave()" class="sat-tradeCenterPanel__utilities-selectedPreset-unactivate santaBtn--small santaBtn--iconOnly fal fa-times"></button>
+      <button (click)="onCancelWatchlistSave()" class="sat-tradeCenterPanel__utilities-selectedWatchlist-unactivate santaBtn--small santaBtn--iconOnly fal fa-times"></button>
     </div>
     <div class="sat-tradeCenterPanel__utilities-keywordSearch">
       <i class="sat-tradeCenterPanel__utilities-keywordSearch-activeIcon fal fa-search"></i>
@@ -434,7 +434,7 @@
     <div class="sat-tradeCenterPanel__main-table">
       <santa-table
         [tableName]="'tradeMain'"
-        [activated]="!!state.presets.selectedPreset"
+        [activated]="!!state.watchlists.selectedWatchlist"
         [activePortfolios]="state.filters.quickFilters.portfolios"
         [tableData]="state.table.dto"
         [newRows]="state.fetchResult.mainTable.rowList"

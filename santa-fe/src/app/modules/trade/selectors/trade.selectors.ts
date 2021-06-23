@@ -13,9 +13,9 @@ export const selectLiveUpdateCount = createSelector(
   (state: TradeState) => state.liveUpdateSecondCount
 );
 
-export const selectPresetSelected = createSelector(
+export const selectWatchlistSelected = createSelector(
   getTradeState,
-  (state: TradeState) => state.presetSelected
+  (state: TradeState) => state.watchlistSelected
 );
 
 export const selectLiveUpdateInProgress = createSelector(

@@ -424,7 +424,7 @@ export class UtilityService {
               if (eachWatchlistDef.data.displayOptionList.length === 0) {
                 // sometimes the display options are loaded async in API, in those cases the watchlist which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
                 eachDefinition.data.highlightSelectedOptionList = eachWatchlistDef.data.highlightSelectedOptionList;
-                // Definition from the configurator may have display option populated if users unselect a preset, which populates the display option from the pristine option list
+                // Definition from the configurator may have display option populated if users unselect a watchlist, which populates the display option from the pristine option list
                 if (eachDefinition.data.displayOptionList.length > 0) {
                   eachDefinition.data.highlightSelectedOptionList.forEach(highlightOption => {
                     const existingDisplayOption = eachDefinition.data.displayOptionList.find((displayOption) => displayOption.shortKey === highlightOption.shortKey);
@@ -1431,12 +1431,12 @@ export class UtilityService {
       }
     }
 
-    public checkIfPresetsAreIdentical(
-      currentPreset: DTOs.WatchlistDTO,
-      targetPreset: DTOs.WatchlistDTO
+    public checkIfWatchlistsAreIdentical(
+      currentWatchlist: DTOs.WatchlistDTO,
+      targetWatchlist: DTOs.WatchlistDTO
     ): boolean {
-      const currentPrimaryFilters = currentPreset.data.searchFilters[0];
-      const targetPrimaryFilters = targetPreset.data.searchFilters[0];
+      const currentPrimaryFilters = currentWatchlist.data.searchFilters[0];
+      const targetPrimaryFilters = targetWatchlist.data.searchFilters[0];
       if (currentPrimaryFilters.length !== targetPrimaryFilters.length) {
         return false;
       } else {

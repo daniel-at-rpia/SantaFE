@@ -10,7 +10,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  &__presets {
+  &__watchlists {
     flex: 0 0 100%;
     display: flex;
     flex-direction: column;
@@ -29,10 +29,10 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
   }
   &__utilities {
     @include mix_fixed_div(relative, $z_index_hovering_item_lift);  // this is necessary because of the background color of "sat-securityDefinitionConfigurator__definitions-list-section-label-text", it looks bad if we don't overlay this on top of that
-    flex: 0 0 7.5rem; // 7.5rem leaves a good enough space for presets in the utilities section
+    flex: 0 0 7.5rem; // 7.5rem leaves a good enough space for watchlists in the utilities section
     display: none;
     padding: 0 $spacing_medium;
-    &-selectedPreset {
+    &-selectedWatchlist {
       @include mix_fixed_div(relative, $z_index_base_item);
       @include mix_alive('custom', background-color $animation_duration_light);
       @include mix_border_radius(5px);
@@ -260,10 +260,10 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       }
     }
   }
-  &--presetSaveAvail {
+  &--watchlistSaveAvail {
     #{$blockName} {
       &__utilities {
-        &-selectedPreset {
+        &-selectedWatchlist {
           &-save {
             transform: scale(1.0);
             margin-left: 0;
@@ -272,10 +272,10 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       }
     }
   }
-  &--presetSaveActive {
+  &--watchlistSaveActive {
     #{$blockName} {
       &__utilities {
-        &-selectedPreset {
+        &-selectedWatchlist {
           background-color: $color_active;
           &>watchlist {
             width: 30rem;
@@ -297,10 +297,10 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       }
     }
   }
-  &--presetSaveCallingAPI {
+  &--watchlistSaveCallingAPI {
     #{$blockName} {
       &__utilities {
-        &-selectedPreset {
+        &-selectedWatchlist {
           background-color: $color_active;
           &>watchlist {
             width: 30rem;
@@ -359,9 +359,9 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
       }
     }
   }
-  &--presetSelectedState {
+  &--watchlistSelectedState {
     #{$blockName} {
-      &__presets {
+      &__watchlists {
         display: none;
       }
       &__utilities {
@@ -374,7 +374,7 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
   }
   &--fetchDataFailedState {
     #{$blockName} {
-      &__presets {
+      &__watchlists {
         display: none;
       }
       &__utilities {
@@ -390,19 +390,19 @@ $tradeCenterPanel_main_configurator_width: $securityDefinition_configuratorVaria
   }
 }
 
-$tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
-.sat-tradeCenterPresetCategoryCanvas {
+$tradeCenterWatchlistCategoryCanvas_ribbon_width: 6rem;
+.sat-tradeCenterWatchlistCategoryCanvas {
   $blockName: &;
   @include mix_fixed_div(relative, $z_index_hovering_item);
   @include mix_alive('custom', transform $animation_duration_normal);
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  height: $tradeCenterPresetCategoryCanvas_ribbon_width;
+  height: $tradeCenterWatchlistCategoryCanvas_ribbon_width;
   &__ribbon {
     @include mix_fixed_div(absolute, $z_index_base_item);
     top: 0;
-    height: $tradeCenterPresetCategoryCanvas_ribbon_width;
+    height: $tradeCenterWatchlistCategoryCanvas_ribbon_width;
     width: 100%;
     background-color: $color_gray_85;
   }
@@ -457,7 +457,7 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
     transform: translate(-100%, 0%);
     #{$blockName} {
       &__list {
-        @include mix_calculate(top, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
+        @include mix_calculate(top, $tradeCenterWatchlistCategoryCanvas_ribbon_width, 50%, '-');
         transform: translate(0, -100%);
         &-item:hover {
           transform: translate(0, $spacing_small);
@@ -473,7 +473,7 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
     direction: rtl;
     #{$blockName} {
       &__list {
-        @include mix_calculate(bottom, $tradeCenterPresetCategoryCanvas_ribbon_width, 50%, '-');
+        @include mix_calculate(bottom, $tradeCenterWatchlistCategoryCanvas_ribbon_width, 50%, '-');
         transform: translate(0, 100%);
         &-item {
           direction: ltr;

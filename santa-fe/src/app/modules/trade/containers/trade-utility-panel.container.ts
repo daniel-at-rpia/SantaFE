@@ -20,7 +20,7 @@
       selectLiveUpdateInProgress,
       selectLiveUpdateProcessingRawDataToMainTable,
       selectLiveUpdateCount,
-      selectPresetSelected,
+      selectWatchlistSelected,
       selectInitialDataLoadedInMainTable
     } from 'Trade/selectors/trade.selectors';
   //
@@ -41,7 +41,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
     internalCountSub: null,
     externalCountSub: null,
     processingRawDataSub: null,
-    presetSelectedSub: null,
+    watchlistSelectedSub: null,
     initialDataLoadedSub: null
   };
 
@@ -53,7 +53,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
       isPaused: true,
       isCallingAPI: false,
       isProcessingData: false,
-      isPresetSelected: false,
+      isWatchlistSelected: false,
       isInitialDataLoaded: false,
       validWindowConfig: {
         valueRaw: 2,
@@ -83,7 +83,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
       })
     ).subscribe(internalCount => {
       if (internalCount > 0 && this.stateActive) {  // skip the first beat to sync both counts
-        if (this.state.isPresetSelected && !this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
+        if (this.state.isWatchlistSelected && !this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData) {
           const newCountdown = parseInt(this.state.updateCountdown) - 1;
           this.state.updateCountdown = newCountdown < 10 ? `0${newCountdown}` : `${newCountdown}`;
           this.store$.dispatch(new TradeLiveUpdateUtilityInternalCountEvent());
@@ -97,11 +97,11 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
       }),
       select(selectLiveUpdateCount),
       withLatestFrom(
-        this.store$.pipe(select(selectPresetSelected)),
+        this.store$.pipe(select(selectWatchlistSelected)),
         this.store$.pipe(select(selectInitialDataLoadedInMainTable))
       )
-    ).subscribe(([count, isPresetSelected, isInitialDataLoaded]) => {
-      if (isPresetSelected && isInitialDataLoaded && count >= this.constants.trade.LIVE_UPDATE_COUNTDOWN) {
+    ).subscribe(([count, isWatchlistSelected, isInitialDataLoaded]) => {
+      if (isWatchlistSelected && isInitialDataLoaded && count >= this.constants.trade.LIVE_UPDATE_COUNTDOWN) {
         this.startUpdate();
       }
     });
@@ -122,14 +122,14 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
       }
     });
 
-    this.subscriptions.presetSelectedSub = this.store$.pipe(
+    this.subscriptions.watchlistSelectedSub = this.store$.pipe(
       filter((flag) => {
         return this.stateActive;
       }),
-      select(selectPresetSelected)
+      select(selectWatchlistSelected)
     ).subscribe(flag => {
-      this.state.isPresetSelected = flag;
-      this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
+      this.state.isWatchlistSelected = flag;
+      this.state.isPaused = !this.state.isWatchlistSelected || !this.state.isInitialDataLoaded;
     });
 
     this.subscriptions.initialDataLoadedSub = this.store$.pipe(
@@ -139,7 +139,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
       select(selectInitialDataLoadedInMainTable)
     ).subscribe(flag => {
       this.state.isInitialDataLoaded = flag;
-      this.state.isPaused = !this.state.isPresetSelected || !this.state.isInitialDataLoaded;
+      this.state.isPaused = !this.state.isWatchlistSelected || !this.state.isInitialDataLoaded;
     });
 
     return super.ngOnInit();
@@ -147,7 +147,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
 
   // disabled temporarily
   // public onClickPause() {
-  //   if (!this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
+  //   if (!this.state.isCallingAPI && !this.state.isProcessingData && this.state.isWatchlistSelected) {
   //     this.state.isPaused = !this.state.isPaused;
   //   }
   // }
@@ -175,7 +175,7 @@ export class TradeUtilityPanel extends SantaContainerComponentBase implements On
   }
 
   private startUpdate() {
-    if (!this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData && this.state.isPresetSelected) {
+    if (!this.state.isPaused && !this.state.isCallingAPI && !this.state.isProcessingData && this.state.isWatchlistSelected) {
       this.state.updateCountdown = this.constants.trade.LIVE_UPDATE_COUNTDOWN.toString();
       this.state.isCallingAPI = true;
       this.store$.dispatch(new TradeLiveUpdateStartEvent());

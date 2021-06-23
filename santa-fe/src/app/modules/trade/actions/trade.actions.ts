@@ -15,7 +15,7 @@ export enum TradeActions {
   LiveUpdateProcessingDataCompleteInAlertTableEvent = '[Trade] Live Update Processing Data Complete in Alert Table',
   LiveUpdateUtilityInternalCountEvent = '[Trade] Live Update Utility Internal Count',
   LiveUpdateCount = '[Trade] Live Update Count',
-  TogglePresetEvent = '[Trade] Toggle Preset Event',
+  ToggleWatchlistEvent = '[Trade] Toggle Watchlist Event',
   SelectSecurityForAnalysisEvent = '[Trade] Select Security For Analysis Event',
   SecurityIDListFromAnalysisEvent = '[Trade] Security ID List From Analysis Event',
   SecurityTableRowDTOListForAnalysisEvent = '[Trade] SecurityTableRowDTO List For Analysis Event',
@@ -75,8 +75,8 @@ export class TradeLiveUpdateProcessDataCompleteInAlertTableEvent implements Acti
   constructor(){}
 }
 
-export class TradeTogglePresetEvent implements Action {
-  readonly type = TradeActions.TogglePresetEvent;
+export class TradeToggleWatchlistEvent implements Action {
+  readonly type = TradeActions.ToggleWatchlistEvent;
   constructor(){}
 }
 
@@ -157,15 +157,15 @@ export class TradeCenterPanelLoadTableWithFilterEvent implements Action {
   readonly type = TradeActions.CenterPanelLoadTableWithFilter;
   readonly filterList: Array<DTOs.SecurityDefinitionDTO>;
   readonly metric: PortfolioMetricValues;
-  readonly presetDisplayTitle: string;
+  readonly watchlistDisplayTitle: string;
   constructor(
     filterList: Array<DTOs.SecurityDefinitionDTO>,
     metric: PortfolioMetricValues,
-    presetDisplayTitle: string
+    watchlistDisplayTitle: string
   ){
     this.filterList = filterList;
     this.metric = metric;
-    this.presetDisplayTitle = presetDisplayTitle;
+    this.watchlistDisplayTitle = watchlistDisplayTitle;
   }
 }
 

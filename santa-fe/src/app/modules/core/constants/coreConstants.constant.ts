@@ -263,7 +263,7 @@ export const MIN_OBLIGOR_CURVE_VALUES = 2;
 
 export const EngagementActionList = {
   sendEmail: 'Send Email',
-  selectPreset: 'Select Preset',
+  selectWatchlist: 'Select Watchlist',
   switchDriver: 'Switch Driver',
   applyFilter: 'Apply Filter',
   applyKeywordSearch: 'Apply Keyword Search',

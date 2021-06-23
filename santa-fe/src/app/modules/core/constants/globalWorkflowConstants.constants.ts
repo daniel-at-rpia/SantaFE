@@ -3,7 +3,7 @@ export enum GlobalWorkflowTypes {
   launchTradeToSeeBonds = 'Launch Trade To See Bonds',
   routeHandlerPlaceholder = 'Placeholder for Route Handler',
   changedStructureUtilityConfig = 'Changed Structure Utility Config',
-  unselectPreset = 'Unselect Trade Preset'
+  unselectWatchlist = 'Unselect Trade Watchlist'
 }
 
 export const ROUTE_REUSE_HANDLER_STORE_SIZE_CAP = 5;

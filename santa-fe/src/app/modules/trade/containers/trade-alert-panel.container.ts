@@ -51,7 +51,7 @@
       selectInitialDataLoadedInAlertTable,
       selectLiveUpdateProcessingRawDataInAlertTable,
       selectSelectedSecurityForAlertConfig,
-      selectPresetSelected
+      selectWatchlistSelected
     } from 'Trade/selectors/trade.selectors';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
   //
@@ -75,7 +75,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
   subscriptions = {
     userInitialsSub: null,
     selectedSecurityForAlertConfigSub: null,
-    centerPanelPresetSelectedSub: null,
+    centerPanelWatchlistSelectedSub: null,
     startNewUpdateSub: null,
     keywordSearchSub: null,
     newAlertSubscription: null,
@@ -125,7 +125,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           }
         },
         alertUpdateInProgress: false,
-        isCenterPanelPresetSelected: false,
+        isCenterPanelWatchlistSelected: false,
         displayAlertTable: false,
         table: {
           alertMetrics: alertTableMetrics,
@@ -206,13 +206,13 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
           }
       });
 
-      this.subscriptions.centerPanelPresetSelectedSub = this.store$.pipe(
+      this.subscriptions.centerPanelWatchlistSelectedSub = this.store$.pipe(
         filter((tick) => {
           return this.stateActive;
         }),
-        select(selectPresetSelected)
+        select(selectWatchlistSelected)
       ).subscribe(flag => {
-        this.state.isCenterPanelPresetSelected = flag;
+        this.state.isCenterPanelWatchlistSelected = flag;
       });
 
       this.subscriptions.startNewUpdateSub = this.store$.pipe(
