@@ -1111,11 +1111,29 @@ export const SecurityTableHeaderConfigs: Array<SecurityTableHeaderConfigStub> = 
       }
     }
   },{
-    key: 'country',
+    key: 'countryRisk',
     content: {
-      label: 'Country',
-      attrName: 'country',
-      underlineAttrName: 'country',
+      label: 'Country Risk',
+      attrName: 'countryRisk',
+      underlineAttrName: 'countryRisk',
+      readyStage: SECURITY_TABLE_FINAL_STAGE,
+      isDataTypeText: true,
+      groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
+      tableSpecifics: {
+        default: {
+          active: true
+        },
+        tradeAlert: {
+          active: false
+        }
+      }
+    }
+  },{
+    key: 'countryDomicile',
+    content: {
+      label: 'Country Domicile',
+      attrName: 'countryDomicile',
+      underlineAttrName: 'countryDomicile',
       readyStage: SECURITY_TABLE_FINAL_STAGE,
       isDataTypeText: true,
       groupBelongs: SecurityTableHeaderConfigGroups.securityInfo,
