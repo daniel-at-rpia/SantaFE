@@ -368,7 +368,6 @@ export class TradeMarketAnalysisPanel extends SantaContainerComponentBase implem
       this.state.table.moveDistanceBasisList.push('');
       const groupDTO = this.dtoService.formSecurityCardObject('', null, true, false);
       groupDTO.state.isStencil = false;
-      groupDTO.state.isActionMenuMinorActionsDisabled = true;
       groupDTO.data.name = rawData.Group.group.name;
       this.applyStatesToSecurityCards(groupDTO);
       this.state.table.presentList.push(groupDTO);

@@ -9,7 +9,6 @@
     'sat-securityCard--flexibleWidthVariant': cardData.state.isWidthFlexible,
     'sat-securityCard--atListCeilingVariant': cardData.state.isAtListCeiling,
     'sat-securityCard--primaryActionDisabledState': cardData.state.isActionMenuPrimaryActionsDisabled,
-    'sat-securityCard--minorActionDisabledState': cardData.state.isActionMenuMinorActionsDisabled,
     'sat-securityCard--slimVariant': cardData.state.isSlimVariant && !cardData.state.isMultiLineVariant,
     'sat-securityCard--configAlertState': cardData.state.configAlertState,
     'sat-securityCard--tradeAlertTableVariant': cardData.state.isTradeAlertTableVariant,
@@ -29,20 +28,17 @@
     <span class="sat-securityCard__rating-text">{{cardData.data.ratingValue}}</span>
   </section>
   <section class="sat-securityCard__actionMenu">
-    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--top">
-      <button title="Open In Bloomberg DES" (click)="onClickOpenSecurityInBloomberg('DES')" class="sat-securityCard__actionMenu-minorList-btn">DES</button>
-      <button title="Open In Bloomberg QMGR" (click)="onClickOpenSecurityInBloomberg('QMGR')" class="sat-securityCard__actionMenu-minorList-btn">QMGR</button>
-    </ul>
-    <ul class="sat-securityCard__actionMenu-mainList">
-      <button (click)="onClickPin()" class="sat-securityCard__actionMenu-mainList-btn sat-securityCard__actionMenu-mainList-btn--pin fal fa-thumbtack"></button>
-      <button (click)="onClickSearch()" class="sat-securityCard__actionMenu-mainList-btn sat-securityCard__actionMenu-mainList-btn--search fal fa-search"></button>
-      <button (click)="onClickSendToGraph()" class="sat-securityCard__actionMenu-mainList-btn fal fa-chart-line"></button>
-      <button (click)="onClickOpenShortcutConfig()" class="sat-securityCard__actionMenu-mainList-btn fal fa-bell"></button>
-    </ul>
-    <ul class="sat-securityCard__actionMenu-minorList sat-securityCard__actionMenu-minorList--bottom">
-      <button title="Open In Bloomberg YAS" (click)="onClickOpenSecurityInBloomberg('YAS')" class="sat-securityCard__actionMenu-minorList-btn">YAS</button>
-      <button title="Open In Bloomberg TDH" (click)="onClickOpenSecurityInBloomberg('TDH')" class="sat-securityCard__actionMenu-minorList-btn">TDH</button>
-    </ul>
+    <security-action-menu
+      (clickToSetAlert)="onClickOpenShortcutConfig()"
+      (clickBloombergOptions)="onClickOpenSecurityInBloomberg($event)"
+      (clickToPinRow)="onClickPin()"
+      (clickToSendGraph)="onClickSendToGraph()"
+      (clickBloombergOptions)="onClickOpenSecurityInBloomberg($event)"
+      (clickToLaunchUofBByBICS)="onClickLaunchUofB($event)"
+      (clickToLaunchUofBByTicker)="onClickLaunchUofB($event)"
+      [actionMenu]="cardData.data.actionMenu"
+      [securityDTO]="cardData">
+    </security-action-menu>
   </section>
   <section class="sat-securityCard__alertShortcutConfig">
     <div class="sat-securityCard__alertShortcutConfig-content">
@@ -63,18 +59,18 @@
         <span class="sat-securityCard__alertShortcutConfig-content-side-label">Side :</span>
         <div class="sat-securityCard__alertShortcutConfig-content-side-btnGroup santaBtnGroup">
           <button
-            (click)="onSelectSide(constants.side.bid)"
+            (click)="onSelectSide(constants.core.AlertSubTypes.bid)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.bid) >= 0
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.core.AlertSubTypes.bid) >= 0
             }">
             Bid
           </button>
           <button
-            (click)="onSelectSide(constants.side.ask)"
+            (click)="onSelectSide(constants.core.AlertSubTypes.ask)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.ask) >= 0
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.core.AlertSubTypes.ask) >= 0
             }">
             Ask
           </button>
@@ -86,16 +82,16 @@
       <div class="sat-securityCard__alertShortcutConfig-content-level">
         <div class="santaBtnGroup sat-securityCard__alertShortcutConfig-content-level-btnGroup">
           <button
-            (click)="onSelectShortcutConfigDriver(constants.driver.Spread.label)"
+            (click)="onSelectShortcutConfigDriver(constants.core.TriCoreDriverConfig.Spread.label)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Spread.label
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.core.TriCoreDriverConfig.Spread.label
             }">Sprd</button>
           <button
-            (click)="onSelectShortcutConfigDriver(constants.driver.Price.label)"
+            (click)="onSelectShortcutConfigDriver(constants.core.TriCoreDriverConfig.Price.label)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Price.label
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.core.TriCoreDriverConfig.Price.label
             }">Px</button>
         </div>
         <numeric-filter

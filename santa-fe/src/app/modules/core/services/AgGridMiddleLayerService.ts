@@ -165,11 +165,7 @@ export class AgGridMiddleLayerService {
     }) - 1;
     const list = [];
     targetRows.forEach((eachRow, index) => {
-      if (index === 0) {
-        eachRow.data.security.state.isAtListCeiling = true;
-      } else {
-        eachRow.data.security.state.isAtListCeiling = false;
-      }
+      eachRow.data.security.state.isAtListCeiling = index === 0;
       const newAgRow = this.formAgGridRow(
         eachRow,
         targetHeaders,

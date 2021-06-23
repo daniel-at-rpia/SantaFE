@@ -35,7 +35,8 @@ export class DTOService {
         onClickSendToGraph: null,
         onClickSendToAlertConfig: null,
         onClickSearch: null,
-        onClickPin: null
+        onClickPin: null,
+        onClickSendToLaunchUofB: null
       },
       state: {
         isSelected: false,
@@ -45,7 +46,6 @@ export class DTOService {
         isWidthFlexible: false,
         isAtListCeiling: false,
         isActionMenuPrimaryActionsDisabled: false,
-        isActionMenuMinorActionsDisabled: false,
         isSlimVariant: isSlimVariant,
         configAlertState: false,
         isTradeAlertTableVariant: false
@@ -230,7 +230,8 @@ export class DTOService {
           lastTraceSpread: null,
           lastTraceVolumeReported: null,
           lastTraceVolumeEstimated: null
-        }
+        },
+        actionMenu: this.formSecurityActionMenuDTO(false, null)
       }
       if (!isStencil) {
         // only show mark if the current selected metric is the mark's driver, unless the selected metric is default
@@ -2939,5 +2940,52 @@ export class DTOService {
       })
     })
     selectedGroupDefinition.data.list = defaultSelectedList;
+  }
+
+  public formSecurityActionMenuDTO(
+    isActive: boolean,
+    coreAction: globalConstants.security.SecurityActionMenuOptionsRawText,
+  ): DTOs.SecurityActionMenuDTO {
+    const menuListCopy = this.utility.deepCopy(globalConstants.security.SecurityActionMenuList);
+    const object: DTOs.SecurityActionMenuDTO = {
+      data: {
+        defaultText: 'Security Actions',
+        selectedCoreAction: null,
+        allActions: !!coreAction ? this.utility.getSpecificActionsForSecurityActionMenu(menuListCopy, coreAction) : menuListCopy
+      },
+      state: {
+        isActive,
+        isCoreActionSelected: false,
+        isDisplayLimitedActions: !!coreAction
+      }
+    }
+    this.applyPositioningIdentifiersToSubActions(object.data.allActions);
+    return object;
+  }
+
+  private applyPositioningIdentifiersToSubActions(actions: Array<Blocks.SecurityActionMenuOptionBlock>) {
+    if (actions.length > 0) {
+      const actionGroupMapping: {[property:string]: Array<Blocks.SecurityActionMenuOptionBlock> } = {};
+      actions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
+        if (!actionGroupMapping[action.coreAction]) {
+          let actionGroup = actions.filter((eachAction: Blocks.SecurityActionMenuOptionBlock) => eachAction.coreAction === action.coreAction);
+          actionGroupMapping[action.coreAction] = actionGroup;
+        }
+        const selectedGroup = actionGroupMapping[action.coreAction];
+        const totalCount = selectedGroup.length;
+        const index = selectedGroup.findIndex((eachAction: Blocks.SecurityActionMenuOptionBlock) => eachAction.rawText === action.rawText);
+        if (index >= 0) {
+          this.applyPositioningIdentifier(action, index, totalCount);
+        }
+      })
+    }
+  }
+
+  private applyPositioningIdentifier(
+    action: Blocks.SecurityActionMenuOptionBlock,
+    order: number,
+    totalCount: number
+  ) {
+    action.positionIdentifier = `${globalConstants.security.SecurityActionMenuOptionPositioningIdentifier[order + 1]}of${globalConstants.security.SecurityActionMenuOptionPositioningIdentifier[totalCount]}`
   }
 }

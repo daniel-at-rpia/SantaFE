@@ -7,6 +7,7 @@ import * as definition from './securityDefinitionConstants.constant';
 import * as indexedDB from './indexedDB.constants';
 import * as globalWorkflow from './globalWorkflowConstants.constants';
 import * as colorScheme from './colorSchemes.constant';
+import * as security from './securityConstants.constant';
 
 export {
   core,
@@ -17,5 +18,6 @@ export {
   definition,
   indexedDB,
   globalWorkflow,
-  colorScheme
+  colorScheme,
+  security
 };
