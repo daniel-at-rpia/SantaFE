@@ -28,7 +28,9 @@
       BESaveWatchlistReturn,
       BESaveWatchlistDTO
     } from 'BEModels/backend-models.interface';
-    import { selectAlertCounts, selectUserInitials } from 'Core/selectors/core.selectors';
+    import {
+      selectUserInitials
+    } from 'Core/selectors/core.selectors';
     import {
       CoreUserLoggedIn,
       CoreGlobalWorkflowSendNewState,
@@ -44,7 +46,8 @@
       selectKeywordSearchInMainTable,
       selectCenterPanelFilterListForTableLoad,
       selectBICSDataLoaded,
-      selectWatchlistIndexedDBReady
+      selectWatchlistIndexedDBReady,
+      selectSecurityActionToLaunchUofB
     } from 'Trade/selectors/trade.selectors';
     import {
       TradeLiveUpdatePassRawDataToMainTableEvent,
@@ -55,7 +58,8 @@
       TradeTogglePresetEvent,
       TradeAlertTableReceiveNewAlertsEvent,
       TradeBICSDataLoadedEvent,
-      TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent
+      TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent,
+      TradeLaunchUofBThroughSecurityActionMenu
     } from 'Trade/actions/trade.actions';
     import { SecurityMapService } from 'Core/services/SecurityMapService';
     import { IndexedDBService } from 'Core/services/IndexedDBService';
@@ -79,7 +83,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     keywordSearchSub: null,
     receiveKeywordSearchInMainTable: null,
     selectCenterPanelFilterListForTableLoadSub: null,
-    indexedDBReadySub: null
+    indexedDBReadySub: null,
+    securityActionLaunchUofB: null
   };
   keywordChanged$: Subject<string> = new Subject<string>();
   constants = globalConstants;
@@ -295,7 +300,40 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           }
         }
       });
-
+      this.subscriptions.securityActionLaunchUofB = this.store$.pipe(
+        filter((pack) => {
+          return this.stateActive
+        }),
+        select(selectSecurityActionToLaunchUofB)
+      ).subscribe((pack: AdhocPacks.SecurityActionLaunchUofBTransferPack) => {
+        if (!!pack) {
+          const definitionType = this.constants.definition.SecurityDefinitionMap[pack.type];
+          if (!!definitionType) {
+            const definitionDTO = this.dtoService.formSecurityDefinitionObject(definitionType);
+            definitionDTO.data.highlightSelectedOptionList = [pack].map((eachEntry: AdhocPacks.SecurityActionLaunchUofBTransferPack) => {
+              const bicsLevel = eachEntry.bicsLevel || null;
+              const optionValue = eachEntry.value;
+              const selectedOption = this.dtoService.generateSecurityDefinitionFilterIndividualOption(
+                definitionDTO.data.key,
+                optionValue,
+                bicsLevel
+              );
+              selectedOption.isSelected = true;
+              return selectedOption;
+            });
+            definitionDTO.state.filterActive = true;
+            const shortcut = this.dtoService.formSearchShortcutObject(
+              [definitionDTO],
+              null,
+              false,
+              false,
+              false
+            );
+            this.performUnselectPresetInBackground();
+            this.onSelectPreset(shortcut, true);
+          }
+        }
+      })
       return super.ngOnInit();
     }
 
@@ -682,6 +720,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),
         this.onSelectSecurityForAlertConfig.bind(this),
+        this.onSelectSecurityLaunchUofB.bind(this),
         this.state.filters
       );
       this.state.fetchResult.totalCount = serverReturn.totalNumberOfSecurities;
@@ -1391,6 +1430,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           }
         })
       })
+    }
+
+    private onSelectSecurityLaunchUofB(transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) {
+      this.store$.dispatch(new TradeLaunchUofBThroughSecurityActionMenu(transferPack));
     }
 
     private updateCurrentSearchPreview(newWatchlist: DTOs.WatchlistDTO) {

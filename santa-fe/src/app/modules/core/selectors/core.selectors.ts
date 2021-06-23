@@ -86,3 +86,4 @@ export const selectGlobalAlertTradeTableFetchAlertTimestamp = createSelector(
   getCoreState,
   (state: CoreState) => state.globalAlert.tradeTableFetchAlertLastReceiveTimestamp
 )
+

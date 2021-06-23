@@ -43,6 +43,7 @@
       TradeLiveUpdatePassRawDataToAlertTableEvent,
       TradeLiveUpdateProcessDataCompleteInAlertTableEvent,
       TradeKeywordSearchThisSecurityEvent,
+      TradeLaunchUofBThroughSecurityActionMenu
     } from 'Trade/actions/trade.actions';
     import {
       selectNewAlertsForAlertTable,
@@ -644,7 +645,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
             serverReturn.forEach((eachRawData) => {
               const eachCard = this.dtoService.formSecurityCardObject(eachRawData.securityIdentifier, eachRawData, false, false);
               eachCard.state.isActionMenuPrimaryActionsDisabled = true;
-              eachCard.state.isActionMenuMinorActionsDisabled = true;
+              !!eachCard.data.actionMenu && this.utilityService.applySpecificListForActionMenu(eachCard.data.actionMenu, this.constants.security.SecurityActionMenuOptionsRawText.uofB);
               eachCard.state.isWidthFlexible = true;
               eachCard.api.onClickCard = this.onClickSearchResult.bind(this);
               this.updateTargetSecurityExist(eachCard);
@@ -1096,7 +1097,8 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         serverReturn,
         this.onSelectSecurityForAnalysis.bind(this),
         null,
-        this.onClickedSecurityCardSearch.bind(this)
+        this.onClickedSecurityCardSearch.bind(this),
+        this.onSelectSecurityLaunchUofB.bind(this)
       );
       this.calculateBestQuoteComparerWidthAndHeight();
       this.updateStage(this.constants.table.SECURITY_TABLE_FINAL_STAGE, this.state.fetchResult.alertTable, this.state.table.alertDto);
@@ -1296,6 +1298,10 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         }
       }
       this.state.alertUpdateInProgress = false;
+    }
+
+    private onSelectSecurityLaunchUofB(transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) {
+      this.store$.dispatch(new TradeLaunchUofBThroughSecurityActionMenu(transferPack));
     }
   // table section end
 

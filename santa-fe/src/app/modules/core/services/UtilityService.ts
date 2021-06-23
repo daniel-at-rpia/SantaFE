@@ -616,6 +616,32 @@ export class UtilityService {
       }
     }
 
+    public applySpecificListForActionMenu(
+      actionMenu: DTOs.SecurityActionMenuDTO,
+      coreAction: globalConstants.security.SecurityActionMenuOptionsRawText
+    ) {
+      actionMenu.data.allActions = this.getSpecificActionsForSecurityActionMenu(actionMenu.data.allActions, coreAction);
+      actionMenu.state.isDisplayLimitedActions = true;
+    }
+
+    public resetActionMenuToDefaultState(
+      actionMenu: DTOs.SecurityActionMenuDTO,
+      isActive: boolean
+    ) {
+      actionMenu.data.selectedCoreAction = null;
+      actionMenu.state.isActive = isActive;
+      actionMenu.state.isCoreActionSelected = false;
+      if (actionMenu.data.allActions.length > 0) {
+        if (actionMenu.state.isDisplayLimitedActions) {
+          actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => {
+            action.isAvailableSubAction = !action.coreAction || !actionMenu.data.allActions.find((selectedAction: Blocks.SecurityActionMenuOptionBlock) => selectedAction.rawText === action.coreAction);
+          });
+        } else {
+          actionMenu.data.allActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = action.level === 1);
+        }
+      }
+    }
+    
     public getBackendGroupFilterFromParams(params: AdhocPacks.DefinitionConfiguratorEmitterParams): AdhocPacks.GenericKeyWithStringArrayBlock {
       const simpleBucket = {};
       params.filterList.forEach((eachItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
@@ -1365,6 +1391,73 @@ export class UtilityService {
       return customDisplayTitle;
     }
 
+    public getSecurityActionMenuSubActionsFromLevel(level: number): Array<Blocks.SecurityActionMenuOptionBlock> {
+      const selectedSubActions = globalConstants.security.SecurityActionMenuList.filter((optionBlock: Blocks.SecurityActionMenuOptionBlock) => optionBlock.level === level);
+      return selectedSubActions;
+    }
+
+    public clearAllSelectedOptionsInDefinition(
+      configurator: DTOs.SecurityDefinitionConfiguratorDTO,
+      targetDefinitions: Array<DTOs.SecurityDefinitionDTO>
+    ) {
+      targetDefinitions.forEach((targetDefinition: DTOs.SecurityDefinitionDTO) => {
+        targetDefinition.data.highlightSelectedOptionList = [];
+        targetDefinition.state.filterActive = false;
+        if (targetDefinition.state.isFilterCapped) {
+          targetDefinition.data.displayOptionList = [];
+        } else {
+          targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
+            option.isSelected = false;
+          })
+        }
+        this.syncDefinitionStateBetweenSelectedAndCore(configurator, targetDefinition, true);
+      })
+    }
+
+    public getSpecificActionsForSecurityActionMenu(
+      actionList: Array<Blocks.SecurityActionMenuOptionBlock>,
+      coreAction: globalConstants.security.SecurityActionMenuOptionsRawText
+    ): Array<Blocks.SecurityActionMenuOptionBlock> {
+      if (actionList.length > 0) {
+        const selectedActions = actionList.filter((action: Blocks.SecurityActionMenuOptionBlock) => action.coreAction === coreAction);
+        if (selectedActions.length > 0) {
+          selectedActions.forEach((action: Blocks.SecurityActionMenuOptionBlock) => action.isAvailableSubAction = true);
+          return selectedActions;
+        } else {
+          return [];
+        }
+      } else {
+        return [];
+      }
+    }
+
+    public checkIfPresetsAreIdentical(
+      currentPreset: DTOs.SearchShortcutDTO,
+      targetPreset: DTOs.SearchShortcutDTO
+    ): boolean {
+      const currentPrimaryFilters = currentPreset.data.searchFilters[0];
+      const targetPrimaryFilters = targetPreset.data.searchFilters[0];
+      if (currentPrimaryFilters.length !== targetPrimaryFilters.length) {
+        return false;
+      } else {
+        let targetOptions: Array<string> = [];
+        let currentOptions: Array<string> = [];
+        targetPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          if (definition.data.highlightSelectedOptionList.length > 0) {
+            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
+            targetOptions = [...targetOptions, ...highlightedOptions];
+          }
+        });
+        currentPrimaryFilters.forEach((definition: DTOs.SecurityDefinitionDTO) => {
+          if (definition.data.highlightSelectedOptionList.length > 0) {
+            const highlightedOptions = definition.data.highlightSelectedOptionList.map((optionBlock: Blocks.SecurityDefinitionFilterBlock) => optionBlock.shortKey);
+            currentOptions = [...currentOptions, ...highlightedOptions];
+          }
+        });
+        const isIdentical = currentOptions.every((currentOption: string) => targetOptions.indexOf(currentOption) >= 0);
+        return isIdentical;
+      }
+    }
     private calculateSingleBestQuoteComparerWidth(delta: number, maxAbsDelta: number): number {
       if (delta < 0) {
         return 100;

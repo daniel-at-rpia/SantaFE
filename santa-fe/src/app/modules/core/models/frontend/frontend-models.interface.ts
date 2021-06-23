@@ -151,7 +151,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertTradeTrader: string;
       alertStatus: string;
       alertIsBenchmarkHedged?: string;
-      watchlistConfig: {
+      shortcutConfig: {
         numericFilterDTO: NumericFilterDTO;
         driver: string;
         side: Array<string>;
@@ -184,6 +184,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       bicsLevel6: string;
       bicsLevel7: string;
     };
+    actionMenu: SecurityActionMenuDTO;
   }
   api: {
     onClickCard: (card: SecurityDTO) => void;
@@ -191,6 +192,7 @@ export interface SecurityDTO extends BasicDTOStructure {
     onClickSendToAlertConfig: (card: SecurityDTO) => void;
     onClickSearch: (card: SecurityDTO) => void;
     onClickPin: (card: SecurityDTO) => void;
+    onClickSendToLaunchUofB: (transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack) => void
   }
   state: {
     isStencil: boolean;
@@ -200,7 +202,6 @@ export interface SecurityDTO extends BasicDTOStructure {
     isWidthFlexible: boolean;
     isAtListCeiling: boolean;
     isActionMenuPrimaryActionsDisabled: boolean;
-    isActionMenuMinorActionsDisabled: boolean;
     isSlimVariant: boolean;
     configAlertState: boolean;
     isTradeAlertTableVariant: boolean;
@@ -987,3 +988,15 @@ export interface GlobalWorkflowStateDTO extends BasicDTOStructure {
   }
 }
 
+export interface SecurityActionMenuDTO extends BasicDTOStructure {
+  data: {
+    defaultText: string;
+    selectedCoreAction: Blocks.SecurityActionMenuOptionBlock;
+    allActions: Array<Blocks.SecurityActionMenuOptionBlock>;
+  },
+  state: {
+    isActive: boolean;
+    isCoreActionSelected: boolean;
+    isDisplayLimitedActions: boolean;
+  }
+}

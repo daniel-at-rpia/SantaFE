@@ -6,12 +6,13 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-
+import * as globalConstants from 'Core/constants';
 import { UtilityService } from 'Core/services/UtilityService';
 import { DTOService } from 'Core/services/DTOService';
 import { RestfulCommService } from 'Core/services/RestfulCommService';
 import { SecurityDTO } from 'FEModels/frontend-models.interface';
-import { TriCoreDriverConfig, AlertSubTypes } from 'Core/constants/coreConstants.constant';
+import { AdhocPacks, Blocks, DTOs, PageStates } from 'App/modules/core/models/frontend';
+import { Store, select } from '@ngrx/store';
 
 @Component({
   selector: 'security-card',
@@ -21,15 +22,13 @@ import { TriCoreDriverConfig, AlertSubTypes } from 'Core/constants/coreConstants
 })
 export class SecurityCard implements OnInit {
   @Input() cardData: SecurityDTO;
-  constants = {
-    driver: TriCoreDriverConfig,
-    side: AlertSubTypes
-  };
+  constants = globalConstants;
 
   constructor(
     private utilityService: UtilityService,
     private restfulCommService: RestfulCommService,
-    private dtoService: DTOService
+    private dtoService: DTOService,
+    private store$: Store<any>
   ) { }
 
   public ngOnInit() {
@@ -38,6 +37,13 @@ export class SecurityCard implements OnInit {
   public onClickCard() {
     if (!this.cardData.state.isInteractionDisabled && !this.cardData.state.isStencil) {
       this.cardData.state.isSelected = !this.cardData.state.isSelected;
+      if (!!this.cardData.state.isSelected) {
+        this.cardData.data.actionMenu.state.isActive = true;
+      } else {
+        if (this.cardData.data.actionMenu) {
+          this.utilityService.resetActionMenuToDefaultState(this.cardData.data.actionMenu, false);
+        }
+      }
       if (!!this.cardData.api.onClickCard) {
         this.cardData.api.onClickCard(this.cardData);
       }
@@ -71,15 +77,15 @@ export class SecurityCard implements OnInit {
 
   public onClickOpenShortcutConfig() {
     this.cardData.state.configAlertState = true;
-    this.cardData.data.alert.watchlistConfig = {
+    this.cardData.data.alert.shortcutConfig = {
       driver: null,
       numericFilterDTO: this.dtoService.formNumericFilterObject(),
       side: [],
       isUrgent: true,
       sendEmail: false
     };
-    if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
-      this.cardData.data.alert.watchlistConfig.driver = this.cardData.data.mark.markDriver;
+    if (this.cardData.data.mark.markDriver === this.constants.core.TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === this.constants.core.TriCoreDriverConfig.Price.label) {
+      this.cardData.data.alert.shortcutConfig.driver = this.cardData.data.mark.markDriver;
     }
   }
 
@@ -97,17 +103,17 @@ export class SecurityCard implements OnInit {
   }
 
   public onShortcutConfigFilterChangeMin(newValue) {
-    this.cardData.data.alert.watchlistConfig.numericFilterDTO.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
     this.checkIsFilled();
   }
 
   public onShortcutConfigFilterChangeMax(newValue) {
-    this.cardData.data.alert.watchlistConfig.numericFilterDTO.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
     this.checkIsFilled();
   }
 
   public onShortcutConfigFilterClickedClear() {
-    this.cardData.data.alert.watchlistConfig.numericFilterDTO.data = {
+    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data = {
       minNumber: "",
       maxNumber: ""
     };
@@ -115,25 +121,25 @@ export class SecurityCard implements OnInit {
   }
 
   public onSelectShortcutConfigDriver(driver: string) {
-    this.cardData.data.alert.watchlistConfig.driver = driver;
+    this.cardData.data.alert.shortcutConfig.driver = driver;
   }
 
   public onSelectSide(targetSide: string) {
-    if (this.cardData.data.alert.watchlistConfig.side.indexOf(targetSide) >= 0) {
-      this.cardData.data.alert.watchlistConfig.side = this.cardData.data.alert.watchlistConfig.side.filter((eachSide) => {
+    if (this.cardData.data.alert.shortcutConfig.side.indexOf(targetSide) >= 0) {
+      this.cardData.data.alert.shortcutConfig.side = this.cardData.data.alert.shortcutConfig.side.filter((eachSide) => {
         return eachSide !== targetSide;
       });
     } else {
-      this.cardData.data.alert.watchlistConfig.side.push(targetSide);
+      this.cardData.data.alert.shortcutConfig.side.push(targetSide);
     }
   }
 
   public onToggleUrgentFlag() {
-    this.cardData.data.alert.watchlistConfig.isUrgent = !this.cardData.data.alert.watchlistConfig.isUrgent;
+    this.cardData.data.alert.shortcutConfig.isUrgent = !this.cardData.data.alert.shortcutConfig.isUrgent;
   }
 
   public onToggleSendEmailFlag() {
-    this.cardData.data.alert.watchlistConfig.sendEmail = !this.cardData.data.alert.watchlistConfig.sendEmail;
+    this.cardData.data.alert.shortcutConfig.sendEmail = !this.cardData.data.alert.shortcutConfig.sendEmail;
   }
 
   public onClickPin() {
@@ -143,8 +149,19 @@ export class SecurityCard implements OnInit {
     }
   }
 
+  public onClickLaunchUofB({type, value, bicsLevel}: AdhocPacks.SecurityActionMenuLaunchUofBEventEmitterBlock) {
+    const transferPack: AdhocPacks.SecurityActionLaunchUofBTransferPack = {
+      type,
+      value,
+      bicsLevel
+    }
+    if (!!this.cardData.api.onClickSendToLaunchUofB) {
+      this.cardData.api.onClickSendToLaunchUofB(transferPack);
+    }
+  }
+
   private checkIsFilled() {
-    const dto = this.cardData.data.alert.watchlistConfig.numericFilterDTO;
+    const dto = this.cardData.data.alert.shortcutConfig.numericFilterDTO;
     if (dto.data.minNumber !== "" || dto.data.maxNumber !== "") {
       dto.state.isFilled = true;
     } else {

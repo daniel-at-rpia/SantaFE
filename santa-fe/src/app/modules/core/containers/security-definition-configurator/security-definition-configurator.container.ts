@@ -246,16 +246,7 @@ export class SecurityDefinitionConfigurator implements OnInit, OnChanges {
   }
 
   public clearAllSelectedOptions(targetDefinition: DTOs.SecurityDefinitionDTO) {
-    targetDefinition.data.highlightSelectedOptionList = [];
-    targetDefinition.state.filterActive = false;
-    if (targetDefinition.state.isFilterCapped) {
-      targetDefinition.data.displayOptionList = [];
-    } else {
-      targetDefinition.data.displayOptionList.forEach((option: Blocks.SecurityDefinitionFilterBlock) => {
-        option.isSelected = false;
-      })
-    }
-    this.utilityService.syncDefinitionStateBetweenSelectedAndCore(this.configuratorData, targetDefinition, true);
+    this.utilityService.clearAllSelectedOptionsInDefinition(this.configuratorData, [targetDefinition])
     if (this.configuratorData.state.groupByDisabled) {
       this.configuratorData.state.canApplyFilter = this.checkFilterCanApply();
     }
