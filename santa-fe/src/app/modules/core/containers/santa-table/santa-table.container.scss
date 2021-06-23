@@ -61,6 +61,9 @@ $alt-background: $color_white;
     }
   }
 
+
+$santaTable_agGrid_row_cardSelected_zIndex: $z_index_hovering_item_lift;
+$santaTable_agGrid_left_pinned_column_zIndex: $santaTable_agGrid_row_cardSelected_zIndex + 1;
 .santaTable {
   $santaTableBlockName: &;
   @include mix_fixed_div(relative, $z_index_base_item);
@@ -186,12 +189,12 @@ $alt-background: $color_white;
       }
       &-row {
         &:hover {
-          z-index: $z_index_hovering_item;  // override AgGrid's style
+          z-index: $santaTable_agGrid_row_cardSelected_zIndex;  // override AgGrid's style
         }
         &--cardSelected {
-          z-index: $z_index_hovering_item_lift;  // override AgGrid's style
+          z-index: $santaTable_agGrid_row_cardSelected_zIndex;  // override AgGrid's style
           &:hover {
-            z-index: $z_index_hovering_item_lift;  // override default state's hover
+            z-index: $santaTable_agGrid_row_cardSelected_zIndex;  // override default state's hover
           }
         }
       }
@@ -249,6 +252,9 @@ $alt-background: $color_white;
             color: $font_color_inverse;
           }
         }
+      }
+      .ag-pinned-left-cols-container {
+        z-index: $santaTable_agGrid_left_pinned_column_zIndex;
       }
     }
   }
