@@ -25,6 +25,7 @@ import { TraceTradeParty } from '../../constants/securityTableConstants.constant
 import { NavigationModule } from 'Core/constants/coreConstants.constant';
 import { IndexedDBDatabases } from 'Core/constants/indexedDB.constants';
 import { DetachedRouteHandle } from '@angular/router';
+
 export interface SecurityMapEntry {
   keywords: Array<string>;
   secruityId: string;
@@ -238,6 +239,12 @@ export interface StructureSetTargetOverrideTransferPack {
 export interface StructureSetBulkOverrideTransferPack {
   pack: PayloadBulkCreateOverrides;
 }
+
+export interface RouteHandlerStoreBlock {
+  state: string;
+  handle: DetachedRouteHandle;
+}
+
 /*
 The overwrite is for "overwriting" the default configurations. Current use of it is to embed it into WatchlistDTO, so when apply a "watchlist" or "watchlist", the FE will tune the table layout to that search's specific context. 
 The reason we develop this overwrite instead of just using an array of <SecurityTableHeaderConfigStub> to act as an overwrite is for two reasons:

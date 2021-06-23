@@ -299,6 +299,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
 
   export const FilterOptionsPortfolioResearchList = [
     'AG',
+    'CD',
     'LC',
     'LP',
     'PD',
@@ -310,6 +311,7 @@ import { APIUrlMap } from 'Core/constants/coreConstants.constant';
     'AG',
     'AY',
     'BT',
+    'CD',
     'DA',
     'DG',
     'DJ',
@@ -554,13 +556,22 @@ export const SecurityDefinitionMap: SecurityDefinitionMapStub = {
     backendDtoAttrName: FrontendKeyToBackendKeyDictionary['STRATEGY'],
     internalOnly: true
   },
-  COUNTRY: {
-    key: 'COUNTRY',
-    displayName: 'Country',
+  COUNTRY_RISK: {
+    key: 'COUNTRY_RISK',
+    displayName: 'Country Risk',
     icon: 'fal fa-globe-americas',
     optionList: [],
-    securityDTOAttr: 'country',
-    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY'],
+    securityDTOAttr: 'countryRisk',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY_RISK'],
+    internalOnly: false
+  },
+  COUNTRY_DOMICILE: {
+    key: 'COUNTRY_DOMICILE',
+    displayName: 'Country Domicile',
+    icon: 'fas fa-globe-americas',
+    optionList: [],
+    securityDTOAttr: 'countryDomicile',
+    backendDtoAttrName: FrontendKeyToBackendKeyDictionary['COUNTRY_DOMICILE'],
     internalOnly: false
   },
   QUOTED_TODAY: {
@@ -694,7 +705,8 @@ export const ConfiguratorDefinitionLayout: Array<SecurityDefinitionBundleStub> =
     label: SecurityDefinitionConfiguratorGroupLabels.standard,
     list: [
       SecurityDefinitionMap.TENOR,
-      SecurityDefinitionMap.COUNTRY,
+      SecurityDefinitionMap.COUNTRY_RISK,
+      SecurityDefinitionMap.COUNTRY_DOMICILE,
       SecurityDefinitionMap.RATING_BUCKET,
       SecurityDefinitionMap.SECURITY_TYPE,
       SecurityDefinitionMap.SECURITY_SUB_TYPE,

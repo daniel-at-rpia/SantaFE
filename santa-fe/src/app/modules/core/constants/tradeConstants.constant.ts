@@ -165,6 +165,15 @@ export const OwnershipWatchlists: Array<Stubs.WatchlistStub> = [
       allPortfolios
     ]
   },{
+    displayTitle: 'Colin',
+    includedDefinitions: [
+      {
+        definitionKey: 'RESEARCH',
+        groupByActive: false,
+        selectedOptions: ['CD']
+      }
+    ]
+  },{
     displayTitle: 'Daanish',
     includedDefinitions: [
       {
@@ -509,7 +518,8 @@ export const MarketAnalysisGroupByOptions: Array<Stubs.SecurityDefinitionStub> =
   SecurityDefinitionMap.BICS_LEVEL_1,
   SecurityDefinitionMap.BICS_LEVEL_2,
   SecurityDefinitionMap.TENOR,
-  SecurityDefinitionMap.COUNTRY,
+  SecurityDefinitionMap.COUNTRY_RISK,
+  SecurityDefinitionMap.COUNTRY_DOMICILE,
   SecurityDefinitionMap.QUOTED_TODAY
 ];
 
@@ -534,6 +544,13 @@ export enum AxeAlertType {
   normal = 'Axe',
   both = 'Both'
 }
+
+export const EXCLUDED_KEYWORD_SEARCH_TERMS = [
+  'HOLDINGS',
+  'INC',
+  'LLC',
+  'LTD'
+]
 
 export const DISPLAY_DRIVER_MAP  = {
   'DEFAULT': 'Combined',
