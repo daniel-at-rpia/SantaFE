@@ -7,9 +7,7 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import {
-  WatchlistDTO
-} from 'FEModels/frontend-models.interface';
+import { DTOs } from 'Core/models/frontend';
 
 @Component({
   selector: 'watchlist',
@@ -19,8 +17,8 @@ import {
 })
 
 export class Watchlist {
-  @Input() watchlistData: WatchlistDTO;
-  @Output() onClickWatchlistCallback = new EventEmitter<WatchlistDTO>();
+  @Input() watchlistData: DTOs.WatchlistDTO;
+  @Output() onClickWatchlistCallback = new EventEmitter<DTOs.WatchlistDTO>();
   @Output() onChangeWatchlistNameCallback = new EventEmitter<string>();
   constructor(
   ) {
@@ -34,6 +32,18 @@ export class Watchlist {
 
   public onChangeWatchlistName(newName: string) {
     !!this.onChangeWatchlistNameCallback && this.onChangeWatchlistNameCallback.emit(newName);
+  }
+
+  public onEnterDefinitionHover(targetDefinition: DTOs.SecurityDefinitionDTO) {
+    if (!!targetDefinition) {
+      this.watchlistData.state.hoveringSlot = targetDefinition;
+    }
+  }
+
+  public onLeaveDefinitionHover(targetDefinition: DTOs.SecurityDefinitionDTO) {
+    if (!!targetDefinition) {
+      this.watchlistData.state.hoveringSlot = null;
+    }
   }
 
 }

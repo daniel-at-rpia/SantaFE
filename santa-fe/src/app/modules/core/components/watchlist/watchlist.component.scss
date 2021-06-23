@@ -41,6 +41,7 @@
     }
   }
   &__configOverview {
+    @include mix_fixed_div(relative, $z_index_base_item);
     display: flex;
     &-slotList {
       flex: 1 1 auto;
@@ -94,6 +95,16 @@
             }
           }
         }
+      }
+    }
+    &-valueTooltip {
+      @include mix_fixed_div(absolute, $z_index_base_item);
+      top: 75%;
+      &-content {
+        @include mix_border_radius(5px);
+        @include mix_border_generator($typical_border_width, $color_white);
+        background-color: $color_active;
+        padding: $spacing_small;
       }
     }
   }

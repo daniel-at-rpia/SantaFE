@@ -804,7 +804,8 @@ export class DTOService {
         isHeroWatchlist: !!isHero,
         isPreviewVariant: false,
         isAbleToSaveAsRecentWatchlist: true,
-        renameWatchlistActive: false
+        renameWatchlistActive: false,
+        hoveringSlot: null
       }
     };
     definitionList.forEach((eachDefinition, index) => {

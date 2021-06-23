@@ -21,6 +21,8 @@
     <ul class="sat-watchlist__configOverview-slotList">
       <li
         *ngFor="let eachSlot of watchlistData.style.slotList"
+        (mouseenter)="onEnterDefinitionHover(eachSlot)"
+        (mouseleave)="onLeaveDefinitionHover(eachSlot)"
         [ngClass]="{
           'sat-watchlist__configOverview-slotList-item': true,
           'sat-watchlist__configOverview-slotList-item--filterActive': eachSlot?.state.filterActive,
@@ -38,5 +40,11 @@
         <span class="sat-watchlist__configOverview-slotList-item-label">{{eachSlot?.data.name}}</span>
       </li>
     </ul>
+    <div class="sat-watchlist__configOverview-valueTooltip">
+      <div *ngIf="watchlistData.state.hoveringSlot" class="sat-watchlist__configOverview-valueTooltip-content">
+        <span *ngFor="let eachOption of watchlistData.state.hoveringSlot?.data.highlightSelectedOptionList" class="sat-watchlist__configOverview-valueTooltip-content-text">
+        {{eachOption.displayLabel}}</span>
+      </div>
+    </div>
   </section>
 </article>

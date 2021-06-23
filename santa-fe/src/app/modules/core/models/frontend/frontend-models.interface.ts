@@ -330,7 +330,7 @@ export interface WatchlistDTO extends BasicDTOStructure {
     }
   },
   style: {
-    slotList: Array<SecurityDefinitionDTO>
+    slotList: Array<SecurityDefinitionDTO>;
   },
   state: {
     isSelected: boolean;
@@ -340,6 +340,7 @@ export interface WatchlistDTO extends BasicDTOStructure {
     isPreviewVariant: boolean;
     isAbleToSaveAsRecentWatchlist: boolean;
     renameWatchlistActive: boolean;
+    hoveringSlot: SecurityDefinitionDTO;
   }
 }
 
