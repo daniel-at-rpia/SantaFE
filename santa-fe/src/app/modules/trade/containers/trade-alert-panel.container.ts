@@ -810,7 +810,7 @@ export class TradeAlertPanel extends SantaContainerComponentBase implements OnIn
         this.restfulCommService.callAPI(this.restfulCommService.apiMap.updateAlertConfiguration, {req: 'POST'}, entirePayload).pipe(
           first(),
           tap(() => {
-            // this is necessary because after the save, the newly added config from shortcut would need to receive its groupId popualted from BE, otherwise FE would not be able to distinguish the newly-created and already-saved-to-be alerts from the ones that user can add manually from the keyWord search
+            // this is necessary because after the save, the newly added config from watchlist would need to receive its groupId popualted from BE, otherwise FE would not be able to distinguish the newly-created and already-saved-to-be alerts from the ones that user can add manually from the keyWord search
             this.loadAllConfigurations();
           }),
           catchError(err => {

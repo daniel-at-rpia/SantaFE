@@ -409,21 +409,21 @@ export class UtilityService {
       return percentileList[0];
     }
 
-    public applyShortcutToConfigurator(
+    public applyWatchlistToConfigurator(
       targetShortcut: DTOs.WatchlistDTO,
       targetConfigurator: DTOs.SecurityDefinitionConfiguratorDTO
     ): DTOs.SecurityDefinitionConfiguratorDTO {
       const newConfig: DTOs.SecurityDefinitionConfiguratorDTO = this.deepCopy(targetConfigurator);
-      const shortcutCopy: DTOs.WatchlistDTO = this.deepCopy(targetShortcut);
+      const watchlistCopy: DTOs.WatchlistDTO = this.deepCopy(targetShortcut);
       // currently the configurator does not support multiple groups of filters chained together, we will change that when we need to utilize this feature
-      const primaryFilterGroup = shortcutCopy.data.searchFilters[0];
-      primaryFilterGroup.forEach((eachShortcutDef) => {
+      const primaryFilterGroup = watchlistCopy.data.searchFilters[0];
+      primaryFilterGroup.forEach((eachWatchlistDef) => {
         newConfig.data.definitionList.forEach((eachBundle) => {
           eachBundle.data.list.forEach((eachDefinition) => {
-            if (eachDefinition.data.key === eachShortcutDef.data.key) {
-              if (eachShortcutDef.data.displayOptionList.length === 0) {
-                // sometimes the display options are loaded async in API, in those cases the shortcut which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
-                eachDefinition.data.highlightSelectedOptionList = eachShortcutDef.data.highlightSelectedOptionList;
+            if (eachDefinition.data.key === eachWatchlistDef.data.key) {
+              if (eachWatchlistDef.data.displayOptionList.length === 0) {
+                // sometimes the display options are loaded async in API, in those cases the watchlist which were generated at app load won't have the display options populated, but they will still have selected options explicitly defined
+                eachDefinition.data.highlightSelectedOptionList = eachWatchlistDef.data.highlightSelectedOptionList;
                 // Definition from the configurator may have display option populated if users unselect a preset, which populates the display option from the pristine option list
                 if (eachDefinition.data.displayOptionList.length > 0) {
                   eachDefinition.data.highlightSelectedOptionList.forEach(highlightOption => {
@@ -437,13 +437,13 @@ export class UtilityService {
                   })
                 }
               } else {
-                eachDefinition.data.displayOptionList = eachShortcutDef.data.displayOptionList;
+                eachDefinition.data.displayOptionList = eachWatchlistDef.data.displayOptionList;
                 eachDefinition.data.highlightSelectedOptionList = eachDefinition.data.displayOptionList.filter((eachFilter) => {
                   return !!eachFilter.isSelected;
                 });
               }
-              eachDefinition.state.groupByActive = eachShortcutDef.state.groupByActive;
-              eachDefinition.state.filterActive = eachShortcutDef.state.filterActive;
+              eachDefinition.state.groupByActive = eachWatchlistDef.state.groupByActive;
+              eachDefinition.state.filterActive = eachWatchlistDef.state.filterActive;
             }
           });
         });
@@ -1342,10 +1342,10 @@ export class UtilityService {
       })
     }
 
-    public generateCustomizedTitleForShortcut(targetShortcut: DTOs.WatchlistDTO): string {
+    public generateCustomizedTitleForWatchlist(targetShortcut: DTOs.WatchlistDTO): string {
       let customDisplayTitle = '';
       let selectionOptionsList: Array<string> = [];
-      // we only use the first (primary) set of configurations in the searchFilters to name the shortcut, ignore all the other "OR" conditions for now because it would make the name too long
+      // we only use the first (primary) set of configurations in the searchFilters to name the watchlist, ignore all the other "OR" conditions for now because it would make the name too long
       targetShortcut.data.searchFilters[0].forEach((definitionItem: DTOs.SecurityDefinitionDTO) => {
         // skip "Quoted Today" in the naming since that definition is just binary at the moment
         if (definitionItem.data.key !== globalConstants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
@@ -1374,10 +1374,10 @@ export class UtilityService {
       }
     }
 
-    public getBackendGroupFilterFromWatchlist(shortcut: DTOs.WatchlistDTO): AdhocPacks.GenericKeyWithStringArrayBlock {
+    public getBackendGroupFilterFromWatchlist(watchlist: DTOs.WatchlistDTO): AdhocPacks.GenericKeyWithStringArrayBlock {
       const simpleBucket = {};
-      if (!!shortcut && !!shortcut.data.searchFilters && shortcut.data.searchFilters.length > 0) {
-        shortcut.data.searchFilters[0].forEach((eachDefinition: DTOs.SecurityDefinitionDTO) => {
+      if (!!watchlist && !!watchlist.data.searchFilters && watchlist.data.searchFilters.length > 0) {
+        watchlist.data.searchFilters[0].forEach((eachDefinition: DTOs.SecurityDefinitionDTO) => {
           const property = this.convertFEKey(eachDefinition.data.key);
           if (!!property && property !== globalConstants.core.KEY_CONVERSION_FAILURE_FLAG) {
             simpleBucket[property] = eachDefinition.data.highlightSelectedOptionList.map((eachBlock: Blocks.SecurityDefinitionFilterBlock) => {

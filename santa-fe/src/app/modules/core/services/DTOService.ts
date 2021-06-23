@@ -205,7 +205,7 @@ export class DTOService {
           alertQuoteDealer: null,
           alertTradeTrader: null,
           alertStatus: null,
-          shortcutConfig: {
+          watchlistConfig: {
             numericFilterDTO: this.formNumericFilterObject(),
             driver: null,
             side: [],
@@ -257,7 +257,7 @@ export class DTOService {
           });
         }
         if (object.data.mark.markDriver === globalConstants.core.TriCoreDriverConfig.Spread.label || object.data.mark.markDriver === globalConstants.core.TriCoreDriverConfig.Price.label) {
-          object.data.alert.shortcutConfig.driver = object.data.mark.markDriver;
+          object.data.alert.watchlistConfig.driver = object.data.mark.markDriver;
         }
         if (!!rawData.metrics) {
           object.data.hasIndex = rawData.ccy === 'CAD' ? !!rawData.metrics.FTSE : !!rawData.metrics.BB;
@@ -435,7 +435,7 @@ export class DTOService {
       alertQuoteDealer: targetAlert.data.dealer,
       alertTradeTrader: targetAlert.data.trader,
       alertStatus: targetAlert.data.status,
-      shortcutConfig: dto.data.alert.shortcutConfig,
+      watchlistConfig: dto.data.alert.watchlistConfig,
       alertTraceContraParty: targetAlert.data.traceContraParty,
       alertTraceReportingParty: targetAlert.data.traceReportingParty,
       alertTraceVolumeEstimated: targetAlert.data.traceVolumeEstimated,
@@ -799,8 +799,8 @@ export class DTOService {
       state: {
         isSelected: false,
         isUserInputBlocked: false,
-        isMajorShortcut: !!isMajor,
-        isHeroShortcut: !!isHero,
+        isMajorWatchlist: !!isMajor,
+        isHeroWatchlist: !!isHero,
         isPreviewVariant: false,
         isAbleToSaveAsRecentWatchlist: true,
         renameShortcutActive: false
@@ -1938,16 +1938,16 @@ export class DTOService {
       data: {
         card: copy,
         groupId: null,
-        scopes: copy.data.alert.shortcutConfig.side.length > 0 ? copy.data.alert.shortcutConfig.side.map((eachSide) => {return eachSide as globalConstants.trade.AxeAlertScope}) : [globalConstants.trade.AxeAlertScope.ask, globalConstants.trade.AxeAlertScope.bid],
+        scopes: copy.data.alert.watchlistConfig.side.length > 0 ? copy.data.alert.watchlistConfig.side.map((eachSide) => {return eachSide as globalConstants.trade.AxeAlertScope}) : [globalConstants.trade.AxeAlertScope.ask, globalConstants.trade.AxeAlertScope.bid],
         axeAlertTypes: [globalConstants.trade.AxeAlertType.normal, globalConstants.trade.AxeAlertType.marketList],
-        targetDriver: copy.data.alert.shortcutConfig.driver || null,
-        targetRange: copy.data.alert.shortcutConfig.numericFilterDTO,
-        sendEmail: !!copy.data.alert.shortcutConfig.sendEmail
+        targetDriver: copy.data.alert.watchlistConfig.driver || null,
+        targetRange: copy.data.alert.watchlistConfig.numericFilterDTO,
+        sendEmail: !!copy.data.alert.watchlistConfig.sendEmail
       },
       state: {
         isDeleted: false,
         isDisabled: false,
-        isUrgent: !!copy.data.alert.shortcutConfig.isUrgent,
+        isUrgent: !!copy.data.alert.watchlistConfig.isUrgent,
         isRangeActive: false
       }
     }
@@ -2911,12 +2911,12 @@ export class DTOService {
   ) {
     selectedGroupDefinition.data.list = [];
     const defaultSelectedList: Array<DTOs.SecurityDefinitionDTO> = [];
-    globalConstants.trade.SelectedShortcuts.forEach((shortcutStubs: Stubs.WatchlistIncludedDefinitionStub) => {
-      const { definitionKey } = shortcutStubs;
+    globalConstants.trade.SelectedShortcuts.forEach((watchlistStubs: Stubs.WatchlistIncludedDefinitionStub) => {
+      const { definitionKey } = watchlistStubs;
       configurator.data.definitionList.forEach((definitionBundle: DTOs.SecurityDefinitionBundleDTO) => {
         definitionBundle.data.list.forEach((definition: DTOs.SecurityDefinitionDTO) => {
           if (definition.data.key === definitionKey) {
-            shortcutStubs.selectedOptions.forEach(option => {
+            watchlistStubs.selectedOptions.forEach(option => {
               const optionMatch = definition.data.prinstineFilterOptionList.find((prinstineOption: Blocks.SecurityDefinitionFilterBlock) => prinstineOption.shortKey === option);
               if (!!optionMatch) {
                 const optionMatchCopy: Blocks.SecurityDefinitionFilterBlock = this.utility.deepCopy(optionMatch);

@@ -151,7 +151,7 @@ export interface SecurityDTO extends BasicDTOStructure {
       alertTradeTrader: string;
       alertStatus: string;
       alertIsBenchmarkHedged?: string;
-      shortcutConfig: {
+      watchlistConfig: {
         numericFilterDTO: NumericFilterDTO;
         driver: string;
         side: Array<string>;
@@ -334,8 +334,8 @@ export interface WatchlistDTO extends BasicDTOStructure {
   state: {
     isSelected: boolean;
     isUserInputBlocked: boolean;
-    isMajorShortcut: boolean;
-    isHeroShortcut: boolean;
+    isMajorWatchlist: boolean;
+    isHeroWatchlist: boolean;
     isPreviewVariant: boolean;
     isAbleToSaveAsRecentWatchlist: boolean;
     renameShortcutActive: boolean;

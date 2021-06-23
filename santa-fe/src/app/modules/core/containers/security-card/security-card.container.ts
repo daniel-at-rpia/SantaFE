@@ -71,7 +71,7 @@ export class SecurityCard implements OnInit {
 
   public onClickOpenShortcutConfig() {
     this.cardData.state.configAlertState = true;
-    this.cardData.data.alert.shortcutConfig = {
+    this.cardData.data.alert.watchlistConfig = {
       driver: null,
       numericFilterDTO: this.dtoService.formNumericFilterObject(),
       side: [],
@@ -79,7 +79,7 @@ export class SecurityCard implements OnInit {
       sendEmail: false
     };
     if (this.cardData.data.mark.markDriver === TriCoreDriverConfig.Spread.label || this.cardData.data.mark.markDriver === TriCoreDriverConfig.Price.label) {
-      this.cardData.data.alert.shortcutConfig.driver = this.cardData.data.mark.markDriver;
+      this.cardData.data.alert.watchlistConfig.driver = this.cardData.data.mark.markDriver;
     }
   }
 
@@ -97,17 +97,17 @@ export class SecurityCard implements OnInit {
   }
 
   public onShortcutConfigFilterChangeMin(newValue) {
-    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.cardData.data.alert.watchlistConfig.numericFilterDTO.data.minNumber = newValue === "" ? newValue : parseFloat(newValue);
     this.checkIsFilled();
   }
 
   public onShortcutConfigFilterChangeMax(newValue) {
-    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
+    this.cardData.data.alert.watchlistConfig.numericFilterDTO.data.maxNumber = newValue === "" ? newValue : parseFloat(newValue);
     this.checkIsFilled();
   }
 
   public onShortcutConfigFilterClickedClear() {
-    this.cardData.data.alert.shortcutConfig.numericFilterDTO.data = {
+    this.cardData.data.alert.watchlistConfig.numericFilterDTO.data = {
       minNumber: "",
       maxNumber: ""
     };
@@ -115,25 +115,25 @@ export class SecurityCard implements OnInit {
   }
 
   public onSelectShortcutConfigDriver(driver: string) {
-    this.cardData.data.alert.shortcutConfig.driver = driver;
+    this.cardData.data.alert.watchlistConfig.driver = driver;
   }
 
   public onSelectSide(targetSide: string) {
-    if (this.cardData.data.alert.shortcutConfig.side.indexOf(targetSide) >= 0) {
-      this.cardData.data.alert.shortcutConfig.side = this.cardData.data.alert.shortcutConfig.side.filter((eachSide) => {
+    if (this.cardData.data.alert.watchlistConfig.side.indexOf(targetSide) >= 0) {
+      this.cardData.data.alert.watchlistConfig.side = this.cardData.data.alert.watchlistConfig.side.filter((eachSide) => {
         return eachSide !== targetSide;
       });
     } else {
-      this.cardData.data.alert.shortcutConfig.side.push(targetSide);
+      this.cardData.data.alert.watchlistConfig.side.push(targetSide);
     }
   }
 
   public onToggleUrgentFlag() {
-    this.cardData.data.alert.shortcutConfig.isUrgent = !this.cardData.data.alert.shortcutConfig.isUrgent;
+    this.cardData.data.alert.watchlistConfig.isUrgent = !this.cardData.data.alert.watchlistConfig.isUrgent;
   }
 
   public onToggleSendEmailFlag() {
-    this.cardData.data.alert.shortcutConfig.sendEmail = !this.cardData.data.alert.shortcutConfig.sendEmail;
+    this.cardData.data.alert.watchlistConfig.sendEmail = !this.cardData.data.alert.watchlistConfig.sendEmail;
   }
 
   public onClickPin() {
@@ -144,7 +144,7 @@ export class SecurityCard implements OnInit {
   }
 
   private checkIsFilled() {
-    const dto = this.cardData.data.alert.shortcutConfig.numericFilterDTO;
+    const dto = this.cardData.data.alert.watchlistConfig.numericFilterDTO;
     if (dto.data.minNumber !== "" || dto.data.maxNumber !== "") {
       dto.state.isFilled = true;
     } else {

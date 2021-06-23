@@ -86,7 +86,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
   // General
     private initializePageState(): PageStates.TradeCenterPanelState {
-      const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistShortcuts.fullList : [];
+      const existingRecentWatchlist = this.state && this.state.presets ? this.state.presets.recentWatchlistArrays.fullList : [];
       const mainTableMetrics = this.constants.table.SecurityTableHeaderConfigs.filter((eachStub) => {
         const targetSpecifics = eachStub.content.tableSpecifics.tradeMain || eachStub.content.tableSpecifics.default;
         return !targetSpecifics.disabled;
@@ -99,18 +99,18 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           selectedList: null,
           selectedCategoryFromTop: false,
           selectedCategoryFromBottom: false,
-          portfolioShortcutList: [],
-          ownershipShortcutList: [],
-          strategyShortcutList: [],
-          recentWatchlistShortcuts: {
+          portfolioWatchlistArray: [],
+          ownershipWatchlistArray: [],
+          strategyWatchlistArray: [],
+          recentWatchlistArrays: {
             fullList: existingRecentWatchlist,
             todayList: [],
             thisWeekList: [],
             lastWeekList: []
           },
-          savedWatchlistShortcutList: [],
+          savedWatchlistArray: [],
           savedWatchlistDeleteActivated: false,
-          trendingWatchlistShortcutList: []
+          trendingWatchlistArray: []
         },
         searchEngine: {
           typeaheadActive: false,
@@ -167,7 +167,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         },
         editingDriver: false,
         currentSearch: {
-          previewShortcut: null,
+          previewWatchlist: null,
           redirectedFromStrurturing: false,
           mode: null,
           saveMode: globalConstants.trade.TradeCenterPanelSearchSaveModes.default
@@ -269,9 +269,9 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           if (!!matchedInitial) {
             const filter = [];
             filter.push(userInitials);
-            this.constants.trade.OwnershipShortcuts[0].includedDefinitions[0].selectedOptions = filter;
+            this.constants.trade.OwnershipWatchlists[0].includedDefinitions[0].selectedOptions = filter;
           } else {
-            this.constants.trade.OwnershipShortcuts.splice(0, 1);
+            this.constants.trade.OwnershipWatchlists.splice(0, 1);
           }
           this.fetchBICsHierarchy();
           this.fetchTickers();
@@ -329,7 +329,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       this.resetSearchEngineStates();
       this.state.presets.selectedPreset = targetPreset;
       this.updateCurrentSearchPreview(targetPreset);
-      this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(targetPreset, this.state.configurator.dto);
+      this.state.configurator.dto = this.utilityService.applyWatchlistToConfigurator(targetPreset, this.state.configurator.dto);
       if (!!targetPreset && targetPreset.data.searchFilters.length > 0) {
         targetPreset.data.searchFilters.forEach((searchFilter: Array<DTOs.SecurityDefinitionDTO>) => {
           searchFilter.forEach((filter: DTOs.SecurityDefinitionDTO) => {
@@ -356,11 +356,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onUnselectPreset() {
       this.performUnselectPresetInBackground();
-      if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
-        this.state.presets.recentWatchlistShortcuts.todayList = [];
-        this.state.presets.recentWatchlistShortcuts.thisWeekList = [];
-        this.state.presets.recentWatchlistShortcuts.lastWeekList = [];
-        this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.WatchlistDTO) => this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist));
+      if (this.state.presets.recentWatchlistArrays.fullList.length > 0) {
+        this.state.presets.recentWatchlistArrays.todayList = [];
+        this.state.presets.recentWatchlistArrays.thisWeekList = [];
+        this.state.presets.recentWatchlistArrays.lastWeekList = [];
+        this.state.presets.recentWatchlistArrays.fullList.forEach((watchlist: DTOs.WatchlistDTO) => this.addRecentWatchlistToTimeSpecificWatchlistArray(watchlist));
       }
     }
 
@@ -529,27 +529,27 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     private populateWatchlists() {
       this.state.presets = this.initializePageState().presets;
-      this.state.presets.portfolioShortcutList = this.populateSingleShortcutList(this.constants.trade.PortfolioShortcuts);
-      this.state.presets.ownershipShortcutList = this.populateSingleShortcutList(this.constants.trade.OwnershipShortcuts);
-      this.state.presets.strategyShortcutList = this.populateSingleShortcutList(this.constants.trade.StrategyShortcuts);
-      this.state.presets.trendingWatchlistShortcutList = this.populateSingleShortcutList(this.constants.trade.TrendingShortcuts);
+      this.state.presets.portfolioWatchlistArray = this.populateSingleWatchlistArray(this.constants.trade.PortfolioWatchlists);
+      this.state.presets.ownershipWatchlistArray = this.populateSingleWatchlistArray(this.constants.trade.OwnershipWatchlists);
+      this.state.presets.strategyWatchlistArray = this.populateSingleWatchlistArray(this.constants.trade.StrategyWatchlists);
+      this.state.presets.trendingWatchlistArray = this.populateSingleWatchlistArray(this.constants.trade.TrendingWatchlists);
       this.state.presets.presetsReady = true;
-      const prepopulatedShortcutList = [...this.state.presets.portfolioShortcutList, ...this.state.presets.ownershipShortcutList, ...this.state.presets.strategyShortcutList, ...this.state.presets.trendingWatchlistShortcutList];
-      if (prepopulatedShortcutList.length > 0) {
-        prepopulatedShortcutList.forEach((shortcut: DTOs.WatchlistDTO) => {
-          shortcut.state.isAbleToSaveAsRecentWatchlist = false;
+      const prepopulatedWatchlistArray = [...this.state.presets.portfolioWatchlistArray, ...this.state.presets.ownershipWatchlistArray, ...this.state.presets.strategyWatchlistArray, ...this.state.presets.trendingWatchlistArray];
+      if (prepopulatedWatchlistArray.length > 0) {
+        prepopulatedWatchlistArray.forEach((watchlist: DTOs.WatchlistDTO) => {
+          watchlist.state.isAbleToSaveAsRecentWatchlist = false;
         })
       }
       this.startIndexedDBSub();
       this.populateSaveWatchlists();
     }
 
-    private populateSingleShortcutList(
+    private populateSingleWatchlistArray(
       stubList: Array<Stubs.WatchlistStub>
     ): Array<DTOs.WatchlistDTO> {
       const list: Array<DTOs.WatchlistDTO> = [];
-      stubList.forEach((eachShortcutStub) => {
-        const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
+      stubList.forEach((eachWatchlistStub) => {
+        const definitionList = eachWatchlistStub.includedDefinitions.map((eachIncludedDef) => {
           const definitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.definition.SecurityDefinitionMap[eachIncludedDef.definitionKey]);
           definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
           if (eachIncludedDef.selectedOptions.length > 0) {
@@ -577,10 +577,10 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         });
         list.push(this.dtoService.formWatchlistObject(
           definitionList,
-          eachShortcutStub.displayTitle,
+          eachWatchlistStub.displayTitle,
           false,
-          !!eachShortcutStub.isMajor,
-          !!eachShortcutStub.isHero
+          !!eachWatchlistStub.isMajor,
+          !!eachWatchlistStub.isHero
         ));
       });
       return list;
@@ -847,14 +847,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         return eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.PORTFOLIO.key;
       });
       if (!!targetPortfolioDefinition) {
-        const targetPreset = this.state.presets.portfolioShortcutList.find((eachShortcut) => {
-          const primaryFilterGroupInShortcut = eachShortcut.data.searchFilters[0];
-          const portfolioDefinitionInThisShortcut = primaryFilterGroupInShortcut.find((eachDefinition) => {
+        const targetPreset = this.state.presets.portfolioWatchlistArray.find((eachWatchlist) => {
+          const primaryFilterGroupInWatchlist = eachWatchlist.data.searchFilters[0];
+          const portfolioDefinitionInThisWatchlist = primaryFilterGroupInWatchlist.find((eachDefinition) => {
             return eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.PORTFOLIO.key;
           });
-          if (portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList.length === 1) {
+          if (portfolioDefinitionInThisWatchlist.data.highlightSelectedOptionList.length === 1) {
             // always use the individual-fund presets, since "see bond" is always on a singular fund
-            return portfolioDefinitionInThisShortcut.data.highlightSelectedOptionList[0].shortKey === targetPortfolioDefinition.data.highlightSelectedOptionList[0].shortKey;
+            return portfolioDefinitionInThisWatchlist.data.highlightSelectedOptionList[0].shortKey === targetPortfolioDefinition.data.highlightSelectedOptionList[0].shortKey;
           }
         });
         let targetPresetCopy: DTOs.WatchlistDTO;
@@ -864,7 +864,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           targetPresetCopy.state.isAbleToSaveAsRecentWatchlist = true;
           this.onSelectPreset(targetPresetCopy, false);
         } else {
-          this.onSelectPreset(this.state.presets.portfolioShortcutList[0], false);
+          this.onSelectPreset(this.state.presets.portfolioWatchlistArray[0], false);
         }
         filterList.forEach((eachFilterDefinition) => {
           this.state.configurator.dto.data.definitionList.forEach((eachBundle) => {
@@ -893,7 +893,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         this.store$.dispatch(new TradeLiveUpdateInitiateNewDataFetchFromBackendInMainTableEvent());
         this.loadFreshData();
         this.state.currentSearch.redirectedFromStrurturing = true;
-        this.state.currentSearch.previewShortcut.data.highlightTitle = 'From Structuring';
+        this.state.currentSearch.previewWatchlist.data.highlightTitle = 'From Structuring';
         this.autoLoadTableFillCurrentSearchPresetSlotlist(filterList);
       } else {
         console.warn('see bond does not have a portfolio definition', filterList);
@@ -1042,20 +1042,20 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     private autoLoadTableFillCurrentSearchPresetSlotlist(filterList: Array<DTOs.SecurityDefinitionDTO>) {
-      if (!!this.state.currentSearch.previewShortcut && filterList.length > 0) {
+      if (!!this.state.currentSearch.previewWatchlist && filterList.length > 0) {
         filterList.forEach((eachFilterDefinition) => {
-          const alreadyExist = this.state.currentSearch.previewShortcut.style.slotList.find((eachSlot) => {
+          const alreadyExist = this.state.currentSearch.previewWatchlist.style.slotList.find((eachSlot) => {
             return !!eachSlot && eachSlot.data.key === eachFilterDefinition.data.key;
           });
           if (!alreadyExist) {
             const copy = this.utilityService.deepCopy(eachFilterDefinition);  // the original is read-only
             copy.state.filterActive = true;
             copy.state.isMiniPillVariant = false;
-            const indexToEmptySlot = this.state.currentSearch.previewShortcut.style.slotList.findIndex((eachSlot) => {
+            const indexToEmptySlot = this.state.currentSearch.previewWatchlist.style.slotList.findIndex((eachSlot) => {
               return eachSlot === null;
             });
             if (indexToEmptySlot < 4) {
-              this.state.currentSearch.previewShortcut.style.slotList[indexToEmptySlot] = copy;
+              this.state.currentSearch.previewWatchlist.style.slotList[indexToEmptySlot] = copy;
             }
           }
         });
@@ -1069,28 +1069,28 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       if (params.filterList.length > 0) {
         const watchlistDefinitionList: Array<Stubs.WatchlistIncludedDefinitionStub> = [];
         params.filterList.forEach((definitionItem: AdhocPacks.DefinitionConfiguratorEmitterParamsItem) => {
-          const shortcutDefinition: Stubs.WatchlistIncludedDefinitionStub = {
+          const watchlistDefinition: Stubs.WatchlistIncludedDefinitionStub = {
             definitionKey: definitionItem.key,
             groupByActive: false,
             selectedOptions: definitionItem.key === this.constants.definition.SecurityDefinitionMap.TENOR.key ? definitionItem.filterByBlocks.map((item: Blocks.SecurityDefinitionFilterBlock) => item.shortKey) : definitionItem.filterBy.map((item: string) => item)
           }
-          watchlistDefinitionList.push(shortcutDefinition);
+          watchlistDefinitionList.push(watchlistDefinition);
         })
-        const recentShortcutStub: Stubs.WatchlistStub = {
+        const recentWatchlistStub: Stubs.WatchlistStub = {
           displayTitle: presetDisplayTitle,
           includedDefinitions: watchlistDefinitionList,
           isHero: false,
           isMajor: false
         }
-        const [ recentShortcut ] = this.populateSingleShortcutList([recentShortcutStub]);
+        const [ recentWatchlist ] = this.populateSingleWatchlistArray([recentWatchlistStub]);
         if (!presetDisplayTitle) {
-          recentShortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(recentShortcut);
+          recentWatchlist.data.displayTitle = this.utilityService.generateCustomizedTitleForWatchlist(recentWatchlist);
         }
-        this.updateCurrentSearchPreview(recentShortcut);
-        recentShortcut.data.metadata.dbStoredTime = recentShortcut.data.metadata.createTime;
-        this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, recentShortcut, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} - (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Store Watchlist`, false);
-        this.state.presets.recentWatchlistShortcuts.fullList.push(recentShortcut);
-        this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
+        this.updateCurrentSearchPreview(recentWatchlist);
+        recentWatchlist.data.metadata.dbStoredTime = recentWatchlist.data.metadata.createTime;
+        this.indexedDBService.retrieveAndStoreDataToIndexedDB(this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, recentWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} - (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Store Watchlist`, false);
+        this.state.presets.recentWatchlistArrays.fullList.push(recentWatchlist);
+        this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistArrays.fullList, true);
       }
     }
 
@@ -1186,7 +1186,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           }
           this.indexedDBService.addDataToIndexedDB(objectStore, storedWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Updating time stamp for uuid: ${watchlist.data.uuid}`);
         };
-        this.state.presets.recentWatchlistShortcuts.fullList.length > 0 && this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
+        this.state.presets.recentWatchlistArrays.fullList.length > 0 && this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistArrays.fullList, true);
       }
     }
 
@@ -1194,8 +1194,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       params: AdhocPacks.DefinitionConfiguratorEmitterParams,
       presetDisplayTitle: string
     ) {
-      if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
-        const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, this.state.presets.recentWatchlistShortcuts.fullList);
+      if (this.state.presets.recentWatchlistArrays.fullList.length > 0) {
+        const existingWatchlist = this.checkIfWatchlistSearchExists(params.filterList, this.state.presets.recentWatchlistArrays.fullList);
         if (!existingWatchlist) {
           this.storeRecentWatchList(params, presetDisplayTitle);
         } else {
@@ -1229,7 +1229,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       }
     }
 
-    private addRecentWatchlistToTimeSpecificShortcutlist(watchlist: DTOs.WatchlistDTO) {
+    private addRecentWatchlistToTimeSpecificWatchlistArray(watchlist: DTOs.WatchlistDTO) {
       const { lastUseTime } = watchlist.data.metadata;
       const watchlistTime = moment.unix(lastUseTime).format('YYYY-MM-DD');
       const isSameCurrentDate = moment(watchlistTime).isSame(moment(), 'day');
@@ -1237,11 +1237,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       const oneWeekAgo = moment().subtract(7, 'days');
       const isWithinLastWeek = moment(watchlistTime).isSame(moment(oneWeekAgo), 'week');
       if (isSameCurrentDate) {
-        this.state.presets.recentWatchlistShortcuts.todayList.push(watchlist);
+        this.state.presets.recentWatchlistArrays.todayList.push(watchlist);
       } else if (isWithinThisWeek) {
-        this.state.presets.recentWatchlistShortcuts.thisWeekList.push(watchlist);
+        this.state.presets.recentWatchlistArrays.thisWeekList.push(watchlist);
       } else if (isWithinLastWeek) {
-        this.state.presets.recentWatchlistShortcuts.lastWeekList.push(watchlist);
+        this.state.presets.recentWatchlistArrays.lastWeekList.push(watchlist);
       } else {
         // Delete older watchlists from IndexedDB
         this.indexedDBService.retrieveAndDeleteDataFromIndexedDB(watchlist.data.uuid, this.constants.indexedDB.INDEXEDDB_WATCHLIST_RECENT_TABLE_NAME, this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist, `${this.constants.indexedDB.IndexedDBDatabases.TradeWatchlist} (${this.constants.indexedDB.IndexedDBWatchListType.recent}) - Delete stored watchlist for uuid: ${watchlist.data.uuid}`, false);
@@ -1313,7 +1313,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           }
           if (existInOverwrite.hasOwnProperty('groupBy')) {
             if (eachHeader.key === 'ticker' && !!existInOverwrite.groupBy) {
-              const tickerDefinition = this.state.currentSearch.previewShortcut.data.searchFilters[0].find((eachDefinition) => {
+              const tickerDefinition = this.state.currentSearch.previewWatchlist.data.searchFilters[0].find((eachDefinition) => {
                 return eachDefinition.data.key === this.constants.definition.SecurityDefinitionMap.TICKER.key;
               });
               if (!!tickerDefinition && tickerDefinition.data.highlightSelectedOptionList.length === 1) {
@@ -1340,11 +1340,11 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             first()
           ).subscribe((storedRecentWatchlists: Array<DTOs.WatchlistDTO>) => {
             if (storedRecentWatchlists.length > 0) {
-              this.state.presets.recentWatchlistShortcuts.fullList = [...this.state.presets.recentWatchlistShortcuts.fullList, ...storedRecentWatchlists];
-              if (this.state.presets.recentWatchlistShortcuts.fullList.length > 0) {
-                this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistShortcuts.fullList, true);
-                this.state.presets.recentWatchlistShortcuts.fullList.forEach((watchlist: DTOs.WatchlistDTO) => {
-                  this.addRecentWatchlistToTimeSpecificShortcutlist(watchlist);
+              this.state.presets.recentWatchlistArrays.fullList = [...this.state.presets.recentWatchlistArrays.fullList, ...storedRecentWatchlists];
+              if (this.state.presets.recentWatchlistArrays.fullList.length > 0) {
+                this.sortWatchlistFromLastUseTime(this.state.presets.recentWatchlistArrays.fullList, true);
+                this.state.presets.recentWatchlistArrays.fullList.forEach((watchlist: DTOs.WatchlistDTO) => {
+                  this.addRecentWatchlistToTimeSpecificWatchlistArray(watchlist);
                 })
               }
             }
@@ -1393,27 +1393,14 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
       })
     }
 
-    private getParsedOptionForShortcutTitle(
-      key: string,
-      option: string
-    ): string {
-      if (key === this.constants.definition.SecurityDefinitionMap.BICS_CONSOLIDATED.key) {
-        return this.bicsDictionaryLookupService.BICSCodeToBICSName(option);
-      } else if (key === this.constants.definition.SecurityDefinitionMap.QUOTED_TODAY.key) {
-        return option === 'Y' ? 'Quoted Today' : 'Not Quoted Today';
-      } else {
-        return option;
-      }
-    }
-
-    private updateCurrentSearchPreview(newShortcut: DTOs.WatchlistDTO) {
-      if (!!newShortcut) {
-        const copy: DTOs.WatchlistDTO = this.utilityService.deepCopy(newShortcut);
+    private updateCurrentSearchPreview(newWatchlist: DTOs.WatchlistDTO) {
+      if (!!newWatchlist) {
+        const copy: DTOs.WatchlistDTO = this.utilityService.deepCopy(newWatchlist);
         copy.state.isPreviewVariant = true;
         copy.state.renameShortcutActive = true;
-        this.state.currentSearch.previewShortcut = copy;
+        this.state.currentSearch.previewWatchlist = copy;
       } else {
-        this.state.currentSearch.previewShortcut = null;
+        this.state.currentSearch.previewWatchlist = null;
       }
     }
   // General End
@@ -1437,15 +1424,15 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
         const tickerDefinitionDTO = this.searchEngineSearchBondsGenerateDefinition(this.constants.definition.SecurityDefinitionMap.TICKER);
         definitionList.push(tickerDefinitionDTO);
       }
-      const shortcut = this.dtoService.formWatchlistObject(
+      const watchlist = this.dtoService.formWatchlistObject(
         definitionList,
         null,
         false,
         false,
         false
       );
-      shortcut.data.displayTitle = this.utilityService.generateCustomizedTitleForShortcut(shortcut);
-      this.onSelectPreset(shortcut, true);
+      watchlist.data.displayTitle = this.utilityService.generateCustomizedTitleForWatchlist(watchlist);
+      this.onSelectPreset(watchlist, true);
       this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.available;
     }
 
@@ -1685,8 +1672,8 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     public onSubmitSaveWatchlist() {
       this.state.currentSearch.saveMode = this.constants.trade.TradeCenterPanelSearchSaveModes.callingAPI;
-      const targetWatchlist = this.state.currentSearch.previewShortcut;
-      const matchedExistingRecentWatchlist = this.state.presets.recentWatchlistShortcuts.fullList.find((eachRecentWatchlist) => {
+      const targetWatchlist = this.state.currentSearch.previewWatchlist;
+      const matchedExistingRecentWatchlist = this.state.presets.recentWatchlistArrays.fullList.find((eachRecentWatchlist) => {
         // right now we can just check on the uuid because when a new search is applied, if its scope matches any recent watchlist, that watchlist is automatically being used, so it always has the uuid of an existing recent watchlist if there is a match 
         return eachRecentWatchlist.data.uuid === targetWatchlist.data.uuid;
       });
@@ -1708,7 +1695,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             const alert = this.dtoService.formSystemAlertObject(
               'Watchlist',
               'Saved',
-              `${this.state.currentSearch.previewShortcut.data.displayTitle}`,
+              `${this.state.currentSearch.previewWatchlist.data.displayTitle}`,
               null
             );
             this.store$.dispatch(new CoreSendNewAlerts([alert]));
@@ -1718,7 +1705,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
             const alert = this.dtoService.formSystemAlertObject(
               'Watchlist',
               'Save Failed',
-              `${this.state.currentSearch.previewShortcut.data.displayTitle}`,
+              `${this.state.currentSearch.previewWatchlist.data.displayTitle}`,
               null
             );
             this.store$.dispatch(new CoreSendNewAlerts([alert]));
@@ -1729,7 +1716,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
           const alert = this.dtoService.formSystemAlertObject(
             'Watchlist',
             'Save Failed',
-            `${this.state.currentSearch.previewShortcut.data.displayTitle}`,
+            `${this.state.currentSearch.previewWatchlist.data.displayTitle}`,
             null
           );
           this.store$.dispatch(new CoreSendNewAlerts([alert]));
@@ -1740,19 +1727,19 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
     }
 
     public onChangeSavePresetName(newName: string) {
-      this.state.currentSearch.previewShortcut.data.displayTitle = newName;
+      this.state.currentSearch.previewWatchlist.data.displayTitle = newName;
     }
 
     public onToggleSavedWatchlistDeleteMode() {
       this.state.presets.savedWatchlistDeleteActivated = !this.state.presets.savedWatchlistDeleteActivated;
-      this.state.presets.savedWatchlistShortcutList.forEach((eachWatchlist) => {
+      this.state.presets.savedWatchlistArray.forEach((eachWatchlist) => {
         eachWatchlist.state.isUserInputBlocked = this.state.presets.savedWatchlistDeleteActivated;
       });
     }
 
     public onClickDeleteWatchlist(targetWatchlist: DTOs.WatchlistDTO) {
       if (this.state.presets.savedWatchlistDeleteActivated) {
-        if (this.state.presets.savedWatchlistShortcutList.includes(targetWatchlist)) {
+        if (this.state.presets.savedWatchlistArray.includes(targetWatchlist)) {
           const payload: BESaveWatchlistDTO = {
             title: targetWatchlist.data.displayTitle,
             id: targetWatchlist.data.uuid,
@@ -1772,7 +1759,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
               );
               this.store$.dispatch(new CoreSendNewAlerts([alert]));
               this.populateSaveWatchlists();
-              this.state.presets.selectedList = this.state.presets.savedWatchlistShortcutList;
+              this.state.presets.selectedList = this.state.presets.savedWatchlistArray;
             }),
             catchError(err => {
               const alert = this.dtoService.formSystemAlertObject(
@@ -1792,7 +1779,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
 
     private populateSaveWatchlists() {
       const payload = {}
-      this.state.presets.savedWatchlistShortcutList = [];
+      this.state.presets.savedWatchlistArray = [];
       this.restfulCommService.callAPI(this.restfulCommService.apiMap.getSavedWatchlists, {req: 'POST'}, payload).pipe(
         first(),
         tap((serverReturn: BESaveWatchlistReturn) => {
@@ -1827,7 +1814,7 @@ export class TradeCenterPanel extends SantaContainerComponentBase implements OnI
                 false
               );
               eachWatchList.data.uuid = serverReturn[eachKey].id;
-              this.state.presets.savedWatchlistShortcutList.push(eachWatchList);
+              this.state.presets.savedWatchlistArray.push(eachWatchList);
             }
           }
         }),

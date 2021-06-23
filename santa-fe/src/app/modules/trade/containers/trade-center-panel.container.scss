@@ -540,8 +540,8 @@ $tradeCenterPresetCategoryCanvas_ribbon_width: 6rem;
   }
 }
 
-$tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $spacing_medium;
-.sat-tradeCenterPresetShortcutCanvas {
+$tradeCenterWatchlistCanvas_selected_movement_length: $spacing_xx_large - $spacing_medium;
+.sat-tradeCenterWatchlistCanvas {
   $blockName: &;
   @include mix_fixed_div(relative, $z_index_base_item_lift);
   @include mix_alive('light');
@@ -690,11 +690,11 @@ $tradeCenterPresetShortcutCanvas_selected_movement_length: $spacing_xx_large - $
     transform: translate(0, 0);
   }
   &--topCategorySelectedState {
-    transform: translate(0, -$tradeCenterPresetShortcutCanvas_selected_movement_length);
+    transform: translate(0, -$tradeCenterWatchlistCanvas_selected_movement_length);
     justify-content: flex-start;
   }
   &--bottomCategorySelectedState {
-    transform: translate(0, $tradeCenterPresetShortcutCanvas_selected_movement_length);
+    transform: translate(0, $tradeCenterWatchlistCanvas_selected_movement_length);
     justify-content: flex-end;
   }
   @include mq-large-min {

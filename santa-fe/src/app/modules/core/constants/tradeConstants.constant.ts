@@ -29,7 +29,7 @@ export const SelectedShortcuts: Array<Stubs.WatchlistIncludedDefinitionStub> = [
   }
 ]
 
-export const PortfolioShortcuts: Array<Stubs.WatchlistStub> = [{
+export const PortfolioWatchlists: Array<Stubs.WatchlistStub> = [{
     displayTitle: 'All Portfolios',
     includedDefinitions: [
       allPortfolios
@@ -122,7 +122,7 @@ export const PortfolioShortcuts: Array<Stubs.WatchlistStub> = [{
   }
 ];
 
-export const OwnershipShortcuts: Array<Stubs.WatchlistStub> = [
+export const OwnershipWatchlists: Array<Stubs.WatchlistStub> = [
   {
     displayTitle: 'All Securties I Own',
     includedDefinitions: [
@@ -287,7 +287,7 @@ export const OwnershipShortcuts: Array<Stubs.WatchlistStub> = [
   }
 ];
 
-export const StrategyShortcuts: Array<Stubs.WatchlistStub> = [
+export const StrategyWatchlists: Array<Stubs.WatchlistStub> = [
   {
     displayTitle: `${FullStrategyList[0]} in DOF`,
     includedDefinitions: [
@@ -411,7 +411,7 @@ export const StrategyShortcuts: Array<Stubs.WatchlistStub> = [
   }
 ];
 
-export const TrendingShortcuts: Array<Stubs.WatchlistStub> = [
+export const TrendingWatchlists: Array<Stubs.WatchlistStub> = [
   {
     displayTitle: 'COVID Sensitive',
     includedDefinitions: [

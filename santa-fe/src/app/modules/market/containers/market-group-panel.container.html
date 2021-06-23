@@ -32,11 +32,11 @@
       </div>
     </div>
     <div class="sat-marketGroupPanel__configurator-mainCanvas">
-      <ul class="sat-marketGroupPanel__configurator-mainCanvas-shortcutList">
-        <li *ngFor="let eachShortcut of state.configurator.shortcutList" class="sat-marketGroupPanel__configurator-mainCanvas-shortcutList-item">
+      <ul class="sat-marketGroupPanel__configurator-mainCanvas-watchlist">
+        <li *ngFor="let eachWatchlist of state.configurator.watchlist" class="sat-marketGroupPanel__configurator-mainCanvas-watchlist-item">
           <watchlist
-            [shortcutData]="eachShortcut"
-            (onClickShortcutCallback)="onClickWatchlist($event)"></watchlist>
+            [watchlistData]="eachWatchlist"
+            (onClickWatchlistCallback)="onClickWatchlist($event)"></watchlist>
         </li>
       </ul>
       <div class="sat-marketGroupPanel__configurator-mainCanvas-configurator">

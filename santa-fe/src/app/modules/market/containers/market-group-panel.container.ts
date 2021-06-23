@@ -80,8 +80,8 @@ export class MarketGroupPanel implements OnDestroy {
         dto: this.dtoService.createSecurityDefinitionConfigurator(false, false, false),
         showSelectedGroupConfig: false,
         cachedOriginalConfig: null,
-        shortcutList: [],
-        selectedShortcut: null
+        watchlistArray: [],
+        selectedWatchlist: null
       },
       utility: {
         selectedWidget: 'AVERAGE_VISUALIZER',
@@ -136,9 +136,9 @@ export class MarketGroupPanel implements OnDestroy {
   public switchMode() {
     this.state.powerModeActivated = !this.state.powerModeActivated;
     if (this.state.powerModeActivated) {
-      if (this.state.configurator.selectedShortcut) {
+      if (this.state.configurator.selectedWatchlist) {
         this.onClearConfig();
-        this.state.configurator.dto = this.utilityService.applyShortcutToConfigurator(this.state.configurator.selectedShortcut, this.state.configurator.dto);
+        this.state.configurator.dto = this.utilityService.applyWatchlistToConfigurator(this.state.configurator.selectedWatchlist, this.state.configurator.dto);
       }
       this.toggleLandscapeView(true, false);
     }
@@ -154,16 +154,16 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   public onClickWatchlist(targetShortcut: WatchlistDTO){
-    if (this.state.configurator.selectedShortcut && this.state.configurator.selectedShortcut !== targetShortcut) {
-      this.state.configurator.selectedShortcut.state.isSelected = false;
+    if (this.state.configurator.selectedWatchlist && this.state.configurator.selectedWatchlist !== targetShortcut) {
+      this.state.configurator.selectedWatchlist.state.isSelected = false;
     }
     targetShortcut.state.isSelected = !targetShortcut.state.isSelected;
-    this.state.configurator.selectedShortcut = this.state.configurator.selectedShortcut === targetShortcut ? null : targetShortcut;
-    if (this.state.configurator.selectedShortcut) {
-      this.state.configurator.shortcutList.forEach((eachShortcut) => {
-        eachShortcut.state.isUserInputBlocked = true;
+    this.state.configurator.selectedWatchlist = this.state.configurator.selectedWatchlist === targetShortcut ? null : targetShortcut;
+    if (this.state.configurator.selectedWatchlist) {
+      this.state.configurator.watchlistArray.forEach((eachWatchlist) => {
+        eachWatchlist.state.isUserInputBlocked = true;
       });
-      this.startSearch(this.state.configurator.selectedShortcut.data.searchFilters[0]);
+      this.startSearch(this.state.configurator.selectedWatchlist.data.searchFilters[0]);
     } else {
       this.state.searchResult.securityGroupList = [];
       this.state.isGroupDataLoaded = false;
@@ -277,8 +277,8 @@ export class MarketGroupPanel implements OnDestroy {
   }
 
   private populateWatchlists(){
-    this.constants.watchlists.forEach((eachShortcutStub) => {
-      const definitionList = eachShortcutStub.includedDefinitions.map((eachIncludedDef) => {
+    this.constants.watchlists.forEach((eachWatchlistStub) => {
+      const definitionList = eachWatchlistStub.includedDefinitions.map((eachIncludedDef) => {
         const definitionDTO: SecurityDefinitionDTO = this.dtoService.formSecurityDefinitionObject(this.constants.securityGroupDefinitionMap[eachIncludedDef.definitionKey]);
         definitionDTO.state.groupByActive = !!eachIncludedDef.groupByActive;
         if (eachIncludedDef.selectedOptions.length > 0) {
@@ -291,7 +291,7 @@ export class MarketGroupPanel implements OnDestroy {
         }
         return definitionDTO;
       });
-      this.state.configurator.shortcutList.push(this.dtoService.formWatchlistObject(definitionList, eachShortcutStub.displayTitle, true, !!eachShortcutStub.isMajor, !!eachShortcutStub.isHero));
+      this.state.configurator.watchlistArray.push(this.dtoService.formWatchlistObject(definitionList, eachWatchlistStub.displayTitle, true, !!eachWatchlistStub.isMajor, !!eachWatchlistStub.isHero));
     });
   }
 
@@ -412,9 +412,9 @@ export class MarketGroupPanel implements OnDestroy {
   // }
 
   private searchComplete(){
-    if (this.state.configurator.selectedShortcut) {
-      this.state.configurator.shortcutList.forEach((eachShortcut) => {
-        eachShortcut.state.isUserInputBlocked = false;
+    if (this.state.configurator.selectedWatchlist) {
+      this.state.configurator.watchlistArray.forEach((eachWatchlist) => {
+        eachWatchlist.state.isUserInputBlocked = false;
       });
     }
     if (this.state.searchResult.securityGroupList.length > 0) {

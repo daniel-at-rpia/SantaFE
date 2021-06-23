@@ -19,21 +19,21 @@ import {
 })
 
 export class Watchlist {
-  @Input() shortcutData: WatchlistDTO;
-  @Output() onClickShortcutCallback = new EventEmitter<WatchlistDTO>();
-  @Output() onChangeShortcutNameCallback = new EventEmitter<string>();
+  @Input() watchlistData: WatchlistDTO;
+  @Output() onClickWatchlistCallback = new EventEmitter<WatchlistDTO>();
+  @Output() onChangeWatchlistNameCallback = new EventEmitter<string>();
   constructor(
   ) {
   }
 
   public onClickShortcut() {
-    if (!this.shortcutData.state.isUserInputBlocked) {
-      this.onClickShortcutCallback.emit(this.shortcutData);
+    if (!this.watchlistData.state.isUserInputBlocked) {
+      this.onClickWatchlistCallback.emit(this.watchlistData);
     }
   }
 
   public onChangeShortcutName(newName: string) {
-    !!this.onChangeShortcutNameCallback && this.onChangeShortcutNameCallback.emit(newName);
+    !!this.onChangeWatchlistNameCallback && this.onChangeWatchlistNameCallback.emit(newName);
   }
 
 }

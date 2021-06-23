@@ -71,7 +71,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
       flex: 1 1 auto;
       display: flex;
       overflow: hidden;
-      &-shortcutList {
+      &-watchlistArray {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
         @include mix_alive('custom', transform $animation_duration_light);
         @include mix_enable_scrollbar('vertical');
@@ -469,7 +469,7 @@ $marketGroupPanel_configurator_width: $securityDefinitionConfigurator_width + $s
           }
         }
         &-mainCanvas {
-          &-shortcutList {
+          &-watchlistArray {
             transform: translate(-100%, 0);
           }
           &-configurator {

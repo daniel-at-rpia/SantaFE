@@ -2,25 +2,25 @@
   (click)="onClickShortcut()"
   [ngClass]="{
     'sat-watchlist': true,
-    'sat-watchlist--selectedState': shortcutData.state.isSelected,
-    'sat-watchlist--userInputBlockedState': shortcutData.state.isUserInputBlocked,
-    'sat-watchlist--previewVariant': shortcutData.state.isPreviewVariant,
-    'sat-watchlist--hasHighlightTitle': shortcutData.data.highlightTitle.length > 0,
-    'sat-watchlist--renameShortcutState': shortcutData.state.renameShortcutActive
+    'sat-watchlist--selectedState': watchlistData.state.isSelected,
+    'sat-watchlist--userInputBlockedState': watchlistData.state.isUserInputBlocked,
+    'sat-watchlist--previewVariant': watchlistData.state.isPreviewVariant,
+    'sat-watchlist--hasHighlightTitle': watchlistData.data.highlightTitle.length > 0,
+    'sat-watchlist--renameShortcutState': watchlistData.state.renameShortcutActive
   }">
   <section class="sat-watchlist__title">
-    <span class="sat-watchlist__title-highlightText">{{shortcutData.data.highlightTitle}}</span>
-    <span class="sat-watchlist__title-text">{{shortcutData.data.displayTitle}}</span>
+    <span class="sat-watchlist__title-highlightText">{{watchlistData.data.highlightTitle}}</span>
+    <span class="sat-watchlist__title-text">{{watchlistData.data.displayTitle}}</span>
     <santa-textarea
       class="sat-watchlist__title-input"
-      [inputValue]="shortcutData.data.displayTitle"
+      [inputValue]="watchlistData.data.displayTitle"
       (onInputChange)="onChangeShortcutName($event, newName)">
     </santa-textarea>
   </section>
   <section class="sat-watchlist__configOverview">
     <ul class="sat-watchlist__configOverview-slotList">
       <li
-        *ngFor="let eachSlot of shortcutData.style.slotList"
+        *ngFor="let eachSlot of watchlistData.style.slotList"
         [ngClass]="{
           'sat-watchlist__configOverview-slotList-item': true,
           'sat-watchlist__configOverview-slotList-item--filterActive': eachSlot?.state.filterActive,

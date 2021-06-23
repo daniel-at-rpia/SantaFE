@@ -80,8 +80,8 @@ export interface MarketGroupPanelState {
     dto: DTOs.SecurityDefinitionConfiguratorDTO;
     showSelectedGroupConfig: boolean;
     cachedOriginalConfig: DTOs.SecurityDefinitionConfiguratorDTO;
-    shortcutList: Array<DTOs.WatchlistDTO>;
-    selectedShortcut: DTOs.WatchlistDTO;
+    watchlistArray: Array<DTOs.WatchlistDTO>;
+    selectedWatchlist: DTOs.WatchlistDTO;
   }
   searchResult: {
     securityGroupList: Array<DTOs.SecurityGroupDTO>;
@@ -125,18 +125,18 @@ export interface TradeCenterPanelState {
     selectedList: Array<DTOs.WatchlistDTO>;
     selectedCategoryFromTop: boolean;
     selectedCategoryFromBottom: boolean;  // the reason we want to do two flags instead of one is so that we can have the default set to be "neither" which is more correct in the UI
-    portfolioShortcutList: Array<DTOs.WatchlistDTO>;
-    ownershipShortcutList: Array<DTOs.WatchlistDTO>;
-    strategyShortcutList: Array<DTOs.WatchlistDTO>;
-    recentWatchlistShortcuts: {
+    portfolioWatchlistArray: Array<DTOs.WatchlistDTO>;
+    ownershipWatchlistArray: Array<DTOs.WatchlistDTO>;
+    strategyWatchlistArray: Array<DTOs.WatchlistDTO>;
+    recentWatchlistArrays: {
       fullList: Array<DTOs.WatchlistDTO>;
       todayList: Array<DTOs.WatchlistDTO>,
       thisWeekList: Array<DTOs.WatchlistDTO>,
       lastWeekList: Array<DTOs.WatchlistDTO>
     }
-    savedWatchlistShortcutList: Array<DTOs.WatchlistDTO>;
+    savedWatchlistArray: Array<DTOs.WatchlistDTO>;
     savedWatchlistDeleteActivated: boolean;
-    trendingWatchlistShortcutList: Array<DTOs.WatchlistDTO>;
+    trendingWatchlistArray: Array<DTOs.WatchlistDTO>;
   }
   searchEngine: {
     typeaheadActive: boolean;
@@ -173,7 +173,7 @@ export interface TradeCenterPanelState {
   filters: Blocks.TradeCenterPanelStateFilterBlock;
   editingDriver: boolean;
   currentSearch: {
-    previewShortcut: DTOs.WatchlistDTO;
+    previewWatchlist: DTOs.WatchlistDTO;
     redirectedFromStrurturing: boolean;
     mode: TradeCenterPanelSearchModes;
     saveMode: TradeCenterPanelSearchSaveModes;

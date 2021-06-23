@@ -66,7 +66,7 @@
             (click)="onSelectSide(constants.side.bid)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.bid) >= 0
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.watchlistConfig.side.indexOf(constants.side.bid) >= 0
             }">
             Bid
           </button>
@@ -74,7 +74,7 @@
             (click)="onSelectSide(constants.side.ask)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.side.indexOf(constants.side.ask) >= 0
+              'sat-securityCard__alertShortcutConfig-content-side-btnGroup-btn--selected': cardData.data.alert.watchlistConfig.side.indexOf(constants.side.ask) >= 0
             }">
             Ask
           </button>
@@ -89,17 +89,17 @@
             (click)="onSelectShortcutConfigDriver(constants.driver.Spread.label)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Spread.label
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.watchlistConfig.driver === constants.driver.Spread.label
             }">Sprd</button>
           <button
             (click)="onSelectShortcutConfigDriver(constants.driver.Price.label)"
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn': true,
-              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.shortcutConfig.driver === constants.driver.Price.label
+              'sat-securityCard__alertShortcutConfig-content-level-btnGroup-btn--selected': cardData.data.alert.watchlistConfig.driver === constants.driver.Price.label
             }">Px</button>
         </div>
         <numeric-filter
-          [filterData]="cardData.data.alert.shortcutConfig.numericFilterDTO"
+          [filterData]="cardData.data.alert.watchlistConfig.numericFilterDTO"
           (detectedMinChange)="onShortcutConfigFilterChangeMin($event)"
           (detectedMaxChange)="onShortcutConfigFilterChangeMax($event)"
           (detectedClickedClear)="onShortcutConfigFilterClickedClear()"
@@ -117,7 +117,7 @@
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag-btn': true,
               'fal fa-exclamation': true,
-              'sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag-btn--selected': cardData.data.alert.shortcutConfig.isUrgent
+              'sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag-btn--selected': cardData.data.alert.watchlistConfig.isUrgent
             }">
           </button>
           <div class="sat-securityCard__alertShortcutConfig-content-ctas-urgentFlag-borderMask"></div>
@@ -133,7 +133,7 @@
             [ngClass]="{
               'sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag-btn': true,
               'fal fa-envelope': true,
-              'sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag-btn--selected': cardData.data.alert.shortcutConfig.sendEmail
+              'sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag-btn--selected': cardData.data.alert.watchlistConfig.sendEmail
             }"></button>
           <div class="sat-securityCard__alertShortcutConfig-content-ctas-sendEmailFlag-borderMask"></div>
         </div>
