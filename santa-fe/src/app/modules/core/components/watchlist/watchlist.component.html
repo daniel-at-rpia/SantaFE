@@ -1,12 +1,14 @@
 <article
   (click)="onClickWatchlist()"
+  class="sat-watchlist--hoveringSlot{{watchlistData.state.hoveringSlotNumber}}"
   [ngClass]="{
     'sat-watchlist': true,
     'sat-watchlist--selectedState': watchlistData.state.isSelected,
     'sat-watchlist--userInputBlockedState': watchlistData.state.isUserInputBlocked,
     'sat-watchlist--previewVariant': watchlistData.state.isPreviewVariant,
     'sat-watchlist--hasHighlightTitle': watchlistData.data.highlightTitle.length > 0,
-    'sat-watchlist--renameWatchlistState': watchlistData.state.renameWatchlistActive
+    'sat-watchlist--renameWatchlistState': watchlistData.state.renameWatchlistActive,
+    'sat-watchlist--hoveringDefinitionState': !!watchlistData.state.hoveringSlot
   }">
   <section class="sat-watchlist__title">
     <span class="sat-watchlist__title-highlightText">{{watchlistData.data.highlightTitle}}</span>
@@ -41,9 +43,13 @@
       </li>
     </ul>
     <div class="sat-watchlist__configOverview-valueTooltip">
-      <div *ngIf="watchlistData.state.hoveringSlot" class="sat-watchlist__configOverview-valueTooltip-content">
-        <span *ngFor="let eachOption of watchlistData.state.hoveringSlot?.data.highlightSelectedOptionList" class="sat-watchlist__configOverview-valueTooltip-content-text">
-        {{eachOption.displayLabel}}</span>
+      <div class="sat-watchlist__configOverview-valueTooltip-arrow"></div>
+      <div class="sat-watchlist__configOverview-valueTooltip-content">
+        <span class="sat-watchlist__configOverview-valueTooltip-content-title">Filtering By:</span>
+        <ul class="sat-watchlist__configOverview-valueTooltip-content-list">
+          <span *ngFor="let eachOption of watchlistData.state.hoveringSlot?.data.highlightSelectedOptionList" class="sat-watchlist__configOverview-valueTooltip-content-list-item">
+          {{eachOption.displayLabel}}</span>
+        </ul>
       </div>
     </div>
   </section>

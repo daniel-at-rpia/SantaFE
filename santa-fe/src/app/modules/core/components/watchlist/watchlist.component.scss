@@ -1,6 +1,7 @@
 @import "global.scss";
 @import "modules/market/market.scss";
 
+$watchlist_configOverview_valueTooltip_triangle_size: 0.75rem;
 .sat-watchlist {
   $blockName: &;
   @include material();
@@ -99,21 +100,53 @@
     }
     &-valueTooltip {
       @include mix_fixed_div(absolute, $z_index_hovering_item);
-      top: 75%;
+      @include mix_border_radius(5px);
+      @include mix_calculate(top, 100%, $spacing_small, '-');
+      display: none;
+      flex-direction: column;
+      left: 5%; // make sure it is centered
+      width: 90%;
+      padding: $spacing_xx_small;
+      background-color: $color_active;
+      &-arrow {
+        @include mix_fixed_div(absolute, $z_index_base_item_solid);
+        @include mix_triangle(0.75rem);
+        top: -$watchlist_configOverview_valueTooltip_triangle_size + $spacing_xx_small;
+      }
       &-content {
         @include mix_border_radius(5px);
         @include mix_border_generator($typical_border_width, $color_white);
         display: flex;
-        flex-wrap: wrap;
-        background-color: $color_active;
-        padding: $spacing_small;
-        &-text {
-          @include mix_border_radius(3px);
-          @include mix_border_generator($typical_border_width, $color_white);
+        flex-direction: column;
+        padding: $spacing_x_small;
+        &-title {
+          display: flex;
+          justify-content: center;
+          text-align: center;
           color: $font_color_inverse;
-          flex: 1 1 auto;
-          margin: $spacing_x_small;
-          padding: $spacing_x_small;
+          margin-bottom: $spacing_x_small;
+        }
+        &-list {
+          @include mix_enable_scrollbar();
+          display: flex;
+          flex-wrap: wrap;
+          &-item {
+            @include mix_border_radius(3px);
+            @include mix_border_generator($typical_border_width, $color_white);
+            color: $font_color_inverse;
+            flex: 1 1 auto;
+            margin: $spacing_x_small;
+            padding: $spacing_x_small;
+          }
+        }
+      }
+    }
+  }
+  &--hoveringDefinitionState {
+    #{$blockName} {
+      &__configOverview {
+        &-valueTooltip {
+          display: flex;
         }
       }
     }

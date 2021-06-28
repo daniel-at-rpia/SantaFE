@@ -806,7 +806,8 @@ export class DTOService {
         isPreviewVariant: false,
         isAbleToSaveAsRecentWatchlist: true,
         renameWatchlistActive: false,
-        hoveringSlot: null
+        hoveringSlot: null,
+        hoveringSlotNumber: null
       }
     };
     definitionList.forEach((eachDefinition, index) => {

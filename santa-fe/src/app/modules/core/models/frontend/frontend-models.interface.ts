@@ -342,6 +342,7 @@ export interface WatchlistDTO extends BasicDTOStructure {
     isAbleToSaveAsRecentWatchlist: boolean;
     renameWatchlistActive: boolean;
     hoveringSlot: SecurityDefinitionDTO;
+    hoveringSlotNumber: number;
   }
 }
 

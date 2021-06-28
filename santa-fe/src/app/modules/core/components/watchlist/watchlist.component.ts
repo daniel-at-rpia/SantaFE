@@ -37,12 +37,14 @@ export class Watchlist {
   public onEnterDefinitionHover(targetDefinition: DTOs.SecurityDefinitionDTO) {
     if (!!targetDefinition) {
       this.watchlistData.state.hoveringSlot = targetDefinition;
+      this.watchlistData.state.hoveringSlotNumber = this.watchlistData.style.slotList.indexOf(targetDefinition) + 1;
     }
   }
 
   public onLeaveDefinitionHover(targetDefinition: DTOs.SecurityDefinitionDTO) {
     if (!!targetDefinition) {
       this.watchlistData.state.hoveringSlot = null;
+      this.watchlistData.state.hoveringSlotNumber = null;
     }
   }
 

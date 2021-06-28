@@ -279,3 +279,17 @@
     background-color: $color_active;
     color: $font_color_inverse;
   }
+
+  @mixin mix_triangle($triangle_size: 5px, $direction: 'up', $color: $color_active) {
+    width: 0;
+    height: 0;
+    @if $direction == 'up' {
+      border-left: $triangle_size solid transparent;
+      border-right: $triangle_size solid transparent;
+      border-bottom: $triangle_size solid $color;
+    } @else if $direction == 'down' {
+      border-left: $triangle_size solid transparent;
+      border-right: $triangle_size solid transparent;
+      border-top: $triangle_size solid $color;
+    }
+  }
