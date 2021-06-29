@@ -31,9 +31,6 @@
           'sat-watchlist__configOverview-slotList-item--groupByActive': eachSlot?.state.groupByActive,
           'sat-watchlist__configOverview-slotList-item--empty': !eachSlot
         }">
-        <div class="sat-watchlist__configOverview-slotList-item-filterActive">
-          <i class="fal fa-filter"></i>
-        </div>
         <security-definition
           *ngIf="!!eachSlot"
           [definitionData]="eachSlot"

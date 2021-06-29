@@ -108,6 +108,8 @@ $watchlist_configOverview_valueTooltip_triangle_size: 0.75rem;
       width: 90%;
       padding: $spacing_xx_small;
       background-color: $color_active;
+      overflow: hidden;
+      max-height: 10rem;
       &-arrow {
         @include mix_fixed_div(absolute, $z_index_base_item_solid);
         @include mix_triangle(0.75rem);
@@ -119,6 +121,7 @@ $watchlist_configOverview_valueTooltip_triangle_size: 0.75rem;
         display: flex;
         flex-direction: column;
         padding: $spacing_x_small;
+        overflow: hidden;
         &-title {
           display: flex;
           justify-content: center;
@@ -139,6 +142,41 @@ $watchlist_configOverview_valueTooltip_triangle_size: 0.75rem;
             padding: $spacing_x_small;
           }
         }
+      }
+    }
+  }
+  &--hoveringSlot1 {
+    #{$blockName} {
+      &__configOverview-valueTooltip-arrow {
+        left: 3%;
+      }
+    }
+  }
+  &--hoveringSlot2 {
+    #{$blockName} {
+      &__configOverview-valueTooltip-arrow {
+        left: 24.5%;
+      }
+    }
+  }
+  &--hoveringSlot3 {
+    #{$blockName} {
+      &__configOverview-valueTooltip-arrow {
+        left: 46%;
+      }
+    }
+  }
+  &--hoveringSlot4 {
+    #{$blockName} {
+      &__configOverview-valueTooltip-arrow {
+        left: 67.5%;
+      }
+    }
+  }
+  &--hoveringSlot5 {
+    #{$blockName} {
+      &__configOverview-valueTooltip-arrow {
+        left: 89%;
       }
     }
   }
